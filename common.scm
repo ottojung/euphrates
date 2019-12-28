@@ -19,7 +19,6 @@
    mdict?
    mass
    mdict-has?
-   mdict-set!
    mdict-keys
    with-bracket
    ]
@@ -40,6 +39,7 @@
    letin-parameterize
    letin-with-full-parameterized
    letin-with
+   letin-with-identity
    dom
    domid
    domf
@@ -147,11 +147,6 @@
   (letin
    [h (set! (h-func) 0)]
    (hash-get-handle h key)))
-
-(define [mdict-set! h-func key value]
-  (letin
-   [h (set! (h-func) 0)]
-   (hash-set! h key value)))
 
 (define [mdict-keys h-func]
   (letin

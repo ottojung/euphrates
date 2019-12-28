@@ -18,6 +18,7 @@
    letin-parameterize
    letin-with-full-parameterized
    letin-with
+   letin-with-identity
    dom
    domid
    domf
