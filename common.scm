@@ -1,56 +1,57 @@
-(define-module [my-guile-std common])
+(define-module [my-guile-std common]
+  #:export
+  [
+   letin
+   defloop
+   apploop
+   reversed-args
+   fn
+   fn-list
+   with-return
+   monoids*
+   monoids-r*
+   monoid-r*
+   monoid*
+   letin-with-full
+   letin-parameterize
+   letin-with-full-parameterized
+   letin-with
+   dom
+   domid
+   domf
+   dom-default
+   dom-print
+   generate-prefixed-name
+   gfunc/define
+   gfunc/instance
+   gfunc/parameterize
+   printf
+   global-debug-mode-filter
+   debug
+   stringf
+   ~a
+   range
+   list-init
+   read-file
+   write-file
+   mdict
+   mdict?
+   mass
+   mdict-has?
+   mdict-set!
+   mdict-keys
+   with-bracket
+   ]
 
-(export
- letin
- defloop
- apploop
- reversed-args
- fn
- fn-list
- with-return
- monoids*
- monoids-r*
- monoid-r*
- monoid*
- letin-with-full
- letin-parameterize
- letin-with-full-parameterized
- letin-with
- dom
- domid
- domf
- dom-default
- dom-print
- generate-prefixed-name
- gfunc/define
- gfunc/instance
- gfunc/parameterize
- printf
- global-debug-mode-filter
- debug
- stringf
- ~a
- range
- list-init
- read-file
- write-file
- mdict
- mdict?
- mass
- mdict-has?
- mdict-set!
- mdict-keys
- with-bracket
- )
-
-(use-modules [ice-9 format]
-             [ice-9 textual-ports]
-             [srfi srfi-1]
-             [srfi srfi-13]
-             [ice-9 hash-table]
-             [srfi srfi-18]
-             [srfi srfi-42]
-             [srfi srfi-16])
+  #:use-module [ice-9 format]
+  #:use-module [ice-9 textual-ports]
+  #:use-module [srfi srfi-1]
+  #:use-module [srfi srfi-13]
+  #:use-module [ice-9 hash-table]
+  #:use-module [srfi srfi-18]
+  #:use-module [srfi srfi-42]
+  #:use-module [srfi srfi-16]
+  )
 
 (define-syntax letin
   (syntax-rules ()
