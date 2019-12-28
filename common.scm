@@ -1,4 +1,4 @@
-(define-module [common])
+(define-module [my-guile-std common])
 
 (export
  letin

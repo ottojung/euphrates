@@ -1,9 +1,22 @@
 
-;; (load "myguileutils.scm")
+;; USAGE:
 
-(add-to-load-path ".")
+(add-to-load-path "..")
+;; OR
 
-(use-modules [common])
+;; (use-modules [srfi srfi-98]) ;; get-environment-variable
+;; (add-to-load-path
+;;  (string-join
+;;   (list
+;;    (get-environment-variable "HOME")
+;;    "lib")
+;;   "/"))
+
+;; OR
+;; set GUILE_LOAD_PATH+=$HOME/lib
+
+;; then:
+(use-modules [my-guile-std common])
 
 (define k (letin
            [i 2]
