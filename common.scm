@@ -125,8 +125,13 @@
 (define [mdict alist]
   (letin
    [h (alist->hash-table alist)]
+   [unique (lambda [x] (* x (+ x x)))] ;; for unique address
    (make-procedure-with-setter
-    (lambda [key] (hash-ref h key 'mdict-not-found))
+    (lambda [key]
+      (let [[g (hash-ref h key unique)]]
+        (if (eq? g unique)
+            (throw 'mdict-key-not-found key h)
+            g)))
     (lambda [new] h))))
 
 (define [mass *mdict key value]
