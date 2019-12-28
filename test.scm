@@ -3,7 +3,7 @@
 
 (add-to-load-path ".")
 
-(use-modules [myguilemacros])
+(use-modules [common])
 
 (define k (letin
            [i 2]

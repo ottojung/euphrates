@@ -1,4 +1,4 @@
-(define-module [myguilemacros])
+(define-module [common])
 
 (export
  letin
