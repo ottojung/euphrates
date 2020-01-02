@@ -14,6 +14,12 @@
    ~a
    range
    list-init
+   time-to-nanoseconds
+   time-get-monotonic-timestamp
+   second-to-microsecond
+   microsecond-to-nanosecond
+   second-to-nanosecond
+   nanosecond-to-microsecond
    read-file
    write-file
    mdict
@@ -25,6 +31,9 @@
    np-thread-start
    np-thread-yield
    np-thread-initiate
+   np-thread-sleep-rate-ms
+   np-thread-sleep-rate-ms-set!
+   np-thread-usleep
    ]
 
   :re-export
@@ -60,6 +69,7 @@
   :use-module [srfi srfi-18]
   :use-module [srfi srfi-42]
   :use-module [srfi srfi-16]
+  :use-module [srfi srfi-19] ;; time
   )
 
 ;; Logs computations
@@ -207,6 +217,24 @@
 (define [list-init lst]
   (take lst (1- (length lst))))
 
+(define [time-to-nanoseconds time]
+  (+ (time-nanosecond time) (* 1000000000 (time-second time))))
+
+(define [time-get-monotonic-timestamp]
+  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
+
+(define [second-to-microsecond s]
+  (* 1000000 s))
+
+(define [microsecond-to-nanosecond ms]
+  (* 1000 ms))
+
+(define [second-to-nanosecond s]
+  (microsecond-to-nanosecond (second-to-microsecond s)))
+
+(define [nanosecond-to-microsecond ns]
+  (quotient ns 1000))
+
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
@@ -345,4 +373,30 @@
       (lambda []
        (thunk)
        (np-thread-end))))))
+
+(define-values
+  [np-thread-sleep-rate-ms
+   np-thread-sleep-rate-ms-set!]
+  (let [[p (make-parameter (second-to-microsecond 1/100))]]
+    (values
+     (lambda [] (p))
+     (lambda [value body]
+       (parameterize [[p value]] (body))))))
+
+(define [np-thread-usleep micro-seconds]
+  (let* [[nano-seconds (microsecond-to-nanosecond micro-seconds)]
+         [start-time (time-get-monotonic-timestamp)]
+         [end-time (+ start-time nano-seconds)]
+         [sleep-rate (np-thread-sleep-rate-ms)]]
+    (letrec
+        [[lapse
+          (lambda []
+            (let* [[t (time-get-monotonic-timestamp)]]
+              (unless (> t end-time)
+                (let [[s (max sleep-rate
+                              (nanosecond-to-microsecond (- end-time t)))]]
+                  (np-thread-yield)
+                  (usleep s)
+                  (lapse)))))]]
+      (lapse))))
 
