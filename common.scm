@@ -247,7 +247,9 @@
   "
   (with-bracket-l expr finally))
 
-;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;
+;; FILE IO ;;
+;;;;;;;;;;;;;
 
 (define* [read-file path #:optional [mode 'r]]
   (letin-with-identity
