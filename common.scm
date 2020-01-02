@@ -393,7 +393,7 @@
           (lambda []
             (let* [[t (time-get-monotonic-timestamp)]]
               (unless (> t end-time)
-                (let [[s (max sleep-rate
+                (let [[s (min sleep-rate
                               (nanosecond-to-microsecond (- end-time t)))]]
                   (np-thread-yield)
                   (usleep s)
