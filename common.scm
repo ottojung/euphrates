@@ -278,14 +278,21 @@
 ;; NON PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define g-initiate-point (make-parameter #f))
+(define-values
+  [np-thread-get-initiate-point
+   np-thread-set-initiate-point]
+  (let [[p (make-parameter (lambda [] 0))]]
+    (values
+     (lambda [] (p))
+     (lambda [value thunk]
+       (parameterize [[p value]]
+         (thunk))))))
 
 (define-values
   [
    np-thread-list-add
    np-thread-list-remove
    np-thread-list-pop
-   np-thread-list-get
    ]
   (let [[lst (list)] ;; list of functions of 0 arity
         [mut (make-mutex)]]
@@ -307,41 +314,22 @@
          (unless (null? lst)
            (set! lst (list-init lst)))
          (mutex-unlock! mut)
-         head))
-     (lambda [] lst)
-     )))
+         head)))))
 
 (define [np-thread-end]
   (let [[p (np-thread-list-pop)]]
     (if (eq? p 'np-thread-empty-list)
+        ((np-thread-get-initiate-point))
         (begin
-          (println "EMPTY")
-          ((g-initiate-point))
-          )
-        (begin
-          ;; (println "trying to apply ~a" p)
           (p #t)
-          ;; (println "applied ~a" p)
-          ;; 0))))
           (np-thread-end)))))
-
-(define mem (list))
 
 (define [np-thread-yield]
   (let* [[kk #f]
          [repl (call/cc (lambda [k] (set! kk k) #f))]]
-    ;; (println "im here with repl = ~a (kk = ~a)" repl kk)
     (unless repl
       (np-thread-list-add kk) ;; save
-      (np-thread-end))
-
-    ;; (println "len = ~a" (length (np-thread-list-get)))
-
-    (when (member kk mem)
-      (println "MEMEBER!")
-      )
-    (set! mem (cons kk mem))
-    ))
+      (np-thread-end))))
 
 (define [np-thread-start thunk]
   (np-thread-list-add
@@ -352,8 +340,9 @@
 (define [np-thread-initiate thunk]
   (call/cc
    (lambda [k]
-     (parameterize [[g-initiate-point k]]
+     (np-thread-set-initiate-point
+      k
+      (lambda []
        (thunk)
-       (np-thread-end)
-       ))))
+       (np-thread-end))))))
 
