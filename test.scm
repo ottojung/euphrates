@@ -166,13 +166,16 @@
  (lambda []
    (printf "composite unlocked\n")))
 
-(begin
+(np-thread-initiate
+ (lambda []
   (define [kek]
     (println "in kek"))
 
+  (define cycles 3)
+
   (define [lol]
     (apploop [n] [0]
-             (if (> n 5)
+             (if (> n cycles)
                  (println "lol ended")
                  (begin
                    (println "lol at ~a" n)
@@ -182,7 +185,7 @@
 
   (define [zulul]
     (apploop [n] [0]
-             (if (> n 5)
+             (if (> n cycles)
                  (println "zulul ended")
                  (begin
                    (println "zulul at ~a" n)
@@ -194,8 +197,5 @@
   (np-thread-start lol)
   (np-thread-start zulul)
 
-  (np-thread-yield)
-  (np-thread-end)
-
-  (println "end"))
+  (println "end")))
 
