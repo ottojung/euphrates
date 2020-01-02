@@ -165,3 +165,37 @@
    (printf "maybe should happend\n"))
  (lambda []
    (printf "composite unlocked\n")))
+
+(begin
+  (define [kek]
+    (println "in kek"))
+
+  (define [lol]
+    (apploop [n] [0]
+             (if (> n 5)
+                 (println "lol ended")
+                 (begin
+                   (println "lol at ~a" n)
+                   (np-thread-yield)
+                   (println "lol after ~a" n)
+                   (loop (1+ n))))))
+
+  (define [zulul]
+    (apploop [n] [0]
+             (if (> n 5)
+                 (println "zulul ended")
+                 (begin
+                   (println "zulul at ~a" n)
+                   (np-thread-yield)
+                   (println "zulul after ~a" n)
+                   (loop (1+ n))))))
+
+  (np-thread-start kek)
+  (np-thread-start lol)
+  (np-thread-start zulul)
+
+  (np-thread-yield)
+  (np-thread-end)
+
+  (println "end"))
+

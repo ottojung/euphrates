@@ -7,6 +7,7 @@
    gfunc/instance
    gfunc/parameterize
    printf
+   println
    global-debug-mode-filter
    debug
    stringf
@@ -21,7 +22,11 @@
    mdict-has?
    mdict-keys
    with-bracket
+   np-thread-start
+   np-thread-yield
+   np-thread-end
    ]
+
   :re-export
   [
    letin
@@ -183,6 +188,9 @@
 (define-syntax-rule [printf fmt . args]
   (local-print (stringf fmt . args)))
 
+(define-syntax-rule [println fmt . args]
+  (printf (string-append fmt "\n") . args))
+
 (define global-debug-mode-filter (make-parameter #f))
 
 (define-syntax-rule [debug fmt . args]
@@ -265,4 +273,60 @@
    [re (format out fmt data)]
    (do (close-port out))
    re))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; NON PREEMPTIVE THREADS ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-values
+  [
+   np-thread-list-add
+   np-thread-list-remove
+   np-thread-list-pop
+   ]
+  (let [[lst (list)] ;; list of functions of 0 arity
+        [mut (make-mutex)]]
+    (values
+     (lambda [th]
+       (mutex-lock! mut)
+       (set! lst (cons th lst))
+       (mutex-unlock! mut))
+     (lambda [th]
+       (mutex-lock! mut)
+       (set! lst (filter (lambda [o] (not (equal? th o))) lst))
+       (mutex-unlock! mut))
+     (lambda []
+       (mutex-lock! mut)
+       (let [[head
+              (if (null? lst)
+                  'np-thread-empty-list
+                  (last lst))]]
+         (unless (null? lst)
+           (set! lst (list-init lst)))
+         (mutex-unlock! mut)
+         head)))))
+
+(define [np-thread-end]
+  (let [[p (np-thread-list-pop)]]
+    (if (eq? p 'np-thread-empty-list)
+        p
+        (begin
+          ;; (println "trying to apply ~a" p)
+          (p #t)
+          ;; (println "applied ~a" p)
+          (np-thread-end)))))
+
+(define [np-thread-yield]
+  (let* [[kk #f]
+         [repl (call/cc (lambda [k] (set! kk k) #f))]]
+    ;; (println "im here with repl = ~a" repl)
+    (unless repl
+      (np-thread-list-add kk) ;; save
+      (np-thread-end))))
+
+(define [np-thread-start thunk]
+  (np-thread-list-add
+   (lambda [tru]
+     (thunk)
+     (np-thread-end))))
 
