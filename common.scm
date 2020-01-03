@@ -243,7 +243,7 @@
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
 
-(define [with-bracket expr finally]
+(define [with-bracket-dw expr finally]
   (call/cc
    (lambda [k]
      (dynamic-wind
@@ -282,7 +282,7 @@
         (when normal? (finally-wraped))
         (when err (apply throw err))))))
 
-(define [with-bracket-l expr finally]
+(define [with-bracket expr finally]
   "
   Applies `return' function to expr.
   `return' is a call/cc function, but it ensures that `finally' is called.
@@ -292,6 +292,7 @@
 
   This is different from `with-bracket'
   because it executes `finally' before returning the control
+  and it does not catch any non local jumps except the `return' and throws
 
   expr ::= ((Any -> Any) -> Any)
   finally ::= (-> Any)
