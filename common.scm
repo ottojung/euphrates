@@ -319,16 +319,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-values
-  [np-thread-get-start-point
-   np-thread-set-start-point]
-  (let [[p (make-parameter (lambda [] 0))]]
-    (values
-     (lambda [] (p))
-     (lambda [value thunk]
-       (parameterize [[p value]]
-         (np-thread-list-init thunk))))))
-
-(define-values
   [np-thread-list-add
    np-thread-list-pop
    np-thread-list-init
@@ -354,6 +344,16 @@
      (lambda [body]
        (parameterize [[lst-p (box (list))]]
          (body))))))
+
+(define-values
+  [np-thread-get-start-point
+   np-thread-set-start-point]
+  (let [[p (make-parameter (lambda [] 0))]]
+    (values
+     (lambda [] (p))
+     (lambda [value thunk]
+       (parameterize [[p value]]
+         (np-thread-list-init thunk))))))
 
 (define [np-thread-end]
   (let [[p (np-thread-list-pop)]]
