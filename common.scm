@@ -34,8 +34,8 @@
    np-thread-sleep-rate-ms
    np-thread-sleep-rate-ms-set!
    np-thread-usleep
-   mp-thread-yield
-   mp-thread-yield-me
+   i-thread-yield
+   i-thread-yield-me
    ]
 
   :re-export
@@ -448,7 +448,7 @@
   (usleep 1000000)
   (interruptor-loop))
 
-(define mp-thread-yield
+(define i-thread-yield
   (let [[interruptor-thread #f]]
     (lambda [thread]
 
@@ -458,6 +458,6 @@
 
       (global-interrupt-list-append! thread))))
 
-(define [mp-thread-yield-me]
-  (mp-thread-yield (current-thread)))
+(define [i-thread-yield-me]
+  (i-thread-yield (current-thread)))
 

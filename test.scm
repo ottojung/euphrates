@@ -201,11 +201,11 @@
    (println "end")))
 
 (define cur (current-thread))
-(mp-thread-yield cur)
+(i-thread-yield cur)
 
 (np-thread-start
  (lambda []
-   ;; (mp-thread-yield-me)
+   ;; (i-thread-yield-me)
 
    (define [kek]
      (println "in kek"))
@@ -235,6 +235,4 @@
    (np-thread-fork zulul)
 
    (println "end")))
-
-;; (mp-thread-yield-me)
 
