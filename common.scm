@@ -34,6 +34,8 @@
    np-thread-sleep-rate-ms
    np-thread-sleep-rate-ms-set!
    np-thread-usleep
+   mp-thread-yield
+   mp-thread-yield-me
    ]
 
   :re-export
@@ -66,6 +68,7 @@
   :use-module [srfi srfi-1]
   :use-module [srfi srfi-13]
   :use-module [ice-9 hash-table]
+  :use-module [ice-9 threads]
   :use-module [srfi srfi-18]
   :use-module [srfi srfi-42]
   :use-module [srfi srfi-16]
@@ -322,6 +325,7 @@
   [np-thread-list-add
    np-thread-list-pop
    np-thread-list-init
+   np-thread-list-initialized?
    ]
   (let [[lst-p (make-parameter #f)]
         [mut (make-mutex)]]
@@ -343,7 +347,9 @@
          head))
      (lambda [body]
        (parameterize [[lst-p (box (list))]]
-         (body))))))
+         (body)))
+     (lambda []
+       (if (lst-p) #t #f)))))
 
 (define-values
   [np-thread-get-start-point
@@ -364,11 +370,12 @@
           (np-thread-end)))))
 
 (define [np-thread-yield]
-  (let* [[kk #f]
-         [repl (call/cc (lambda [k] (set! kk k) #f))]]
-    (unless repl
-      (np-thread-list-add kk) ;; save
-      (np-thread-end))))
+  (when (np-thread-list-initialized?)
+    (let* [[kk #f]
+           [repl (call/cc (lambda [k] (set! kk k) #f))]]
+      (unless repl
+        (np-thread-list-add kk) ;; save
+        (np-thread-end)))))
 
 (define [np-thread-fork thunk]
   (np-thread-list-add
@@ -410,4 +417,46 @@
                   (usleep s)
                   (lapse)))))]]
       (lapse))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; PREEMPTIVE THREADS ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-values
+  [global-interrupt-list-get
+   global-interrupt-list-append!]
+  (let [[mut (make-mutex)]
+        [lst (list)]]
+    (values
+     (lambda [] lst)
+     (lambda [th]
+       (dynamic-wind
+         (lambda [] (mutex-lock! mut))
+         (lambda [] (set! lst (cons th lst)))
+         (lambda [] (mutex-unlock! mut)))))))
+
+(define global-interrupt-frequency-p (make-parameter 1000000))
+
+(define [interruptor-loop]
+  (map
+   (lambda [th]
+     (system-async-mark
+      (lambda [] (np-thread-yield))
+      th))
+   (global-interrupt-list-get))
+  (usleep 1000000)
+  (interruptor-loop))
+
+(define mp-thread-yield
+  (let [[interruptor-thread #f]]
+    (lambda [thread]
+
+      (unless interruptor-thread
+        (set! interruptor-thread
+          (call-with-new-thread interruptor-loop)))
+
+      (global-interrupt-list-append! thread))))
+
+(define [mp-thread-yield-me]
+  (mp-thread-yield (current-thread)))
 

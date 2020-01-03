@@ -17,6 +17,7 @@
 
 ;; then:
 (use-modules [my-guile-std common])
+(use-modules [ice-9 threads])
 
 (define k (letin
            [i 2]
@@ -168,34 +169,72 @@
 
 (np-thread-start
  (lambda []
-  (define [kek]
-    (println "in kek"))
+   (define [kek]
+     (println "in kek"))
 
-  (define cycles 3)
+   (define cycles 3)
 
-  (define [lol]
-    (apploop [n] [0]
-             (if (> n cycles)
-                 (println "lol ended")
-                 (begin
-                   (println "lol at ~a" n)
-                   (np-thread-yield)
-                   (println "lol after ~a" n)
-                   (loop (1+ n))))))
+   (define [lol]
+     (apploop [n] [0]
+              (if (> n cycles)
+                  (println "lol ended")
+                  (begin
+                    (println "lol at ~a" n)
+                    (np-thread-yield)
+                    (println "lol after ~a" n)
+                    (loop (1+ n))))))
 
-  (define [zulul]
-    (apploop [n] [0]
-             (if (> n cycles)
-                 (println "zulul ended")
-                 (begin
-                   (println "zulul at ~a" n)
-                   (np-thread-yield)
-                   (println "zulul after ~a" n)
-                   (loop (1+ n))))))
+   (define [zulul]
+     (apploop [n] [0]
+              (if (> n cycles)
+                  (println "zulul ended")
+                  (begin
+                    (println "zulul at ~a" n)
+                    (np-thread-yield)
+                    (println "zulul after ~a" n)
+                    (loop (1+ n))))))
 
-  (np-thread-fork kek)
-  (np-thread-fork lol)
-  (np-thread-fork zulul)
+   (np-thread-fork kek)
+   (np-thread-fork lol)
+   (np-thread-fork zulul)
 
-  (println "end")))
+   (println "end")))
+
+(define cur (current-thread))
+(mp-thread-yield cur)
+
+(np-thread-start
+ (lambda []
+   ;; (mp-thread-yield-me)
+
+   (define [kek]
+     (println "in kek"))
+
+   (define cycles 100)
+
+   (define [lol]
+     (apploop [n] [0]
+              (if (> n cycles)
+                  (println "lol ended")
+                  (begin
+                    (println "lol at ~a" n)
+                    (usleep 100000)
+                    (loop (1+ n))))))
+
+   (define [zulul]
+     (apploop [n] [0]
+              (if (> n cycles)
+                  (println "zulul ended")
+                  (begin
+                    (println "zulul at ~a" n)
+                    (usleep 100000)
+                    (loop (1+ n))))))
+
+   (np-thread-fork kek)
+   (np-thread-fork lol)
+   (np-thread-fork zulul)
+
+   (println "end")))
+
+;; (mp-thread-yield-me)
 
