@@ -239,7 +239,15 @@
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
 
-(define with-bracket-l
+(define [with-bracket expr finally]
+  (call/cc
+   (lambda [k]
+     (dynamic-wind
+       (lambda [] 0)
+       (lambda [] (expr k))
+       finally))))
+
+(define with-bracket-lf
   (let [[dynamic-stack (make-parameter (list))]]
     (lambda [expr finally]
       (let* [[err #f] [normal? #t]
@@ -270,7 +278,7 @@
         (when normal? (finally-wraped))
         (when err (apply throw err))))))
 
-(define [with-bracket expr finally]
+(define [with-bracket-l expr finally]
   "
   Applies `return' function to expr.
   `return' is a call/cc function, but it ensures that `finally' is called.
@@ -278,10 +286,13 @@
   Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
   Returns unspecified
 
+  This is different from `with-bracket'
+  because it executes `finally' before returning the control
+
   expr ::= ((Any -> Any) -> Any)
   finally ::= (-> Any)
   "
-  (with-bracket-l expr finally))
+  (with-bracket-lf expr finally))
 
 ;;;;;;;;;;;;;
 ;; FILE IO ;;
