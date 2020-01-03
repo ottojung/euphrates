@@ -70,6 +70,7 @@
   :use-module [srfi srfi-42]
   :use-module [srfi srfi-16]
   :use-module [srfi srfi-19] ;; time
+  :use-module [srfi srfi-111] ;; box
   )
 
 ;; Logs computations
@@ -325,28 +326,34 @@
      (lambda [] (p))
      (lambda [value thunk]
        (parameterize [[p value]]
-         (thunk))))))
+         (np-thread-list-init thunk))))))
 
 (define-values
   [np-thread-list-add
-   np-thread-list-pop]
-  (let [[lst (list)] ;; list of functions of 0 arity
+   np-thread-list-pop
+   np-thread-list-init
+   ]
+  (let [[lst-p (make-parameter #f)]
         [mut (make-mutex)]]
     (values
      (lambda [th]
        (mutex-lock! mut)
-       (set! lst (cons th lst))
+       (set-box! (lst-p) (cons th (unbox (lst-p))))
        (mutex-unlock! mut))
      (lambda []
        (mutex-lock! mut)
-       (let [[head
+       (let* [[lst (unbox (lst-p))]
+              [head
               (if (null? lst)
                   'np-thread-empty-list
                   (last lst))]]
          (unless (null? lst)
-           (set! lst (list-init lst)))
+           (set-box! (lst-p) (list-init lst)))
          (mutex-unlock! mut)
-         head)))))
+         head))
+     (lambda [body]
+       (parameterize [[lst-p (box (list))]]
+         (body))))))
 
 (define [np-thread-end]
   (let [[p (np-thread-list-pop)]]
