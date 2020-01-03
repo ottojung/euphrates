@@ -328,10 +328,8 @@
          (thunk))))))
 
 (define-values
-  [
-   np-thread-list-add
-   np-thread-list-pop
-   ]
+  [np-thread-list-add
+   np-thread-list-pop]
   (let [[lst (list)] ;; list of functions of 0 arity
         [mut (make-mutex)]]
     (values
