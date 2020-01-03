@@ -330,7 +330,6 @@
 (define-values
   [
    np-thread-list-add
-   np-thread-list-remove
    np-thread-list-pop
    ]
   (let [[lst (list)] ;; list of functions of 0 arity
@@ -339,10 +338,6 @@
      (lambda [th]
        (mutex-lock! mut)
        (set! lst (cons th lst))
-       (mutex-unlock! mut))
-     (lambda [th]
-       (mutex-lock! mut)
-       (set! lst (filter (lambda [o] (not (equal? th o))) lst))
        (mutex-unlock! mut))
      (lambda []
        (mutex-lock! mut)
