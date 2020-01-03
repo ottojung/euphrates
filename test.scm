@@ -166,7 +166,7 @@
  (lambda []
    (printf "composite unlocked\n")))
 
-(np-thread-initiate
+(np-thread-start
  (lambda []
   (define [kek]
     (println "in kek"))
@@ -193,9 +193,9 @@
                    (println "zulul after ~a" n)
                    (loop (1+ n))))))
 
-  (np-thread-start kek)
-  (np-thread-start lol)
-  (np-thread-start zulul)
+  (np-thread-fork kek)
+  (np-thread-fork lol)
+  (np-thread-fork zulul)
 
   (println "end")))
 

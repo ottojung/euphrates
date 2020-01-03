@@ -28,9 +28,9 @@
    mdict-has?
    mdict-keys
    with-bracket
-   np-thread-start
+   np-thread-fork
    np-thread-yield
-   np-thread-initiate
+   np-thread-start
    np-thread-sleep-rate-ms
    np-thread-sleep-rate-ms-set!
    np-thread-usleep
@@ -318,8 +318,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-values
-  [np-thread-get-initiate-point
-   np-thread-set-initiate-point]
+  [np-thread-get-start-point
+   np-thread-set-start-point]
   (let [[p (make-parameter (lambda [] 0))]]
     (values
      (lambda [] (p))
@@ -358,7 +358,7 @@
 (define [np-thread-end]
   (let [[p (np-thread-list-pop)]]
     (if (eq? p 'np-thread-empty-list)
-        ((np-thread-get-initiate-point))
+        ((np-thread-get-start-point))
         (begin
           (p #t)
           (np-thread-end)))))
@@ -370,16 +370,16 @@
       (np-thread-list-add kk) ;; save
       (np-thread-end))))
 
-(define [np-thread-start thunk]
+(define [np-thread-fork thunk]
   (np-thread-list-add
    (lambda [tru]
      (thunk)
      (np-thread-end))))
 
-(define [np-thread-initiate thunk]
+(define [np-thread-start thunk]
   (call/cc
    (lambda [k]
-     (np-thread-set-initiate-point
+     (np-thread-set-start-point
       k
       (lambda []
        (thunk)
