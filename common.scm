@@ -493,7 +493,7 @@
             (map
              (lambda [th]
                (system-async-mark
-                (lambda [] (np-thread-yield))
+                np-thread-yield
                 th))
              lst)
             (usleep 900000)
