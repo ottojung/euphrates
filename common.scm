@@ -557,7 +557,7 @@
         lst)
        (format #t "--- END CRITICAL POINTS ---\n")))))
 
-(define [i-thread-critical! thunk]
+(define-syntax-rule [i-thread-critical! . thunk]
   "
   Will not interrupt during execution of `thunk'
   Unsafe: must finish quick!
@@ -566,12 +566,12 @@
    (lambda []
      (let [[st (make-stack #t)]]
        (i-thread-critical-points-append! st)
-       (thunk)
+       (begin . thunk)
        (i-thread-critical-points-remove! st)))))
 
 (define [i-thread-critical-b! thunk finally]
   "
   Same as `i-thread-critical' but also puts `thunk' and `finally' to `with-bracket' clause
   "
-  (i-thread-critical! (lambda [] (with-bracket thunk finally))))
+  (i-thread-critical! (with-bracket thunk finally)))
 
