@@ -498,7 +498,7 @@
       (global-interrupt-list-append! thread))))
 
 (define [i-thread-yield-me]
-  (i-thread-yield ((@ (srfi srfi-18) current-thread))))
+  (i-thread-yield ((@ [ice-9 threads] current-thread))))
 
 (define [i-thread-critical! thunk]
   "

@@ -203,12 +203,12 @@
 
    (println "end")))
 
-(define cur (current-thread))
-(i-thread-yield cur)
+;; (define cur (current-thread))
+;; (i-thread-yield cur)
 
 (np-thread-start
  (lambda []
-   ;; (i-thread-yield-me)
+   (i-thread-yield-me)
 
    (define [kek]
      (println "in kek"))
@@ -241,7 +241,7 @@
 
 (np-thread-start
  (lambda []
-   ;; (i-thread-yield-me)
+   (i-thread-yield-me)
 
    (define [kek]
      (println "in kek"))
