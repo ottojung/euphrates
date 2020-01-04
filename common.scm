@@ -439,9 +439,10 @@
     (values
      (lambda [] lst)
      (lambda [th]
+       (unless (member th lst)
          (mutex-lock! mut)
          (set! lst (cons th lst))
-         (mutex-unlock! mut)))))
+         (mutex-unlock! mut))))))
 
 (define global-interrupt-frequency-p (make-parameter 1000000))
 
