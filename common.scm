@@ -96,15 +96,17 @@
 (define local-print
   (let [[mu (my-make-mutex)]]
     (lambda [s]
-      (let [[err #f]]
-        (mutex-lock! mu)
-        (catch #t
-          (lambda []
-            (display s))
-          (lambda argv
-            (set! err argv)))
-        (mutex-unlock! mu)
-        (when err (apply throw err))))))
+      (call-with-blocked-asyncs
+       (lambda []
+         (let [[err #f]]
+           (mutex-lock! mu)
+           (catch #t
+             (lambda []
+               (display s))
+             (lambda argv
+               (set! err argv)))
+           (mutex-unlock! mu)
+           (when err (apply throw err))))))))
 
 (define-syntax-rule [printf fmt . args]
   (local-print (stringf fmt . args)))
@@ -185,13 +187,15 @@
                     (if m
                         (apply (cdr m) args)
                         (throw 'gfunc-no-instance-found
-                                (string-append "No gfunc instance of "
-                                               (symbol->string (syntax->datum #'name))
-                                               " accepts required arguments")))))
+                               (string-append "No gfunc instance of "
+                                              (symbol->string (syntax->datum #'name))
+                                              " accepts required arguments")))))
                 (lambda [args func]
-                  (mutex-lock! sem)
-                  (set! internal-list (make-parameter (append (internal-list) (list (cons args func)))))
-                  (mutex-unlock! sem))
+                  (call-with-blocked-asyncs
+                   (lambda []
+                     (mutex-lock! sem)
+                     (set! internal-list (make-parameter (append (internal-list) (list (cons args func)))))
+                     (mutex-unlock! sem))))
                 (lambda [args func body]
                   (let [[new-list (cons (cons args func) (internal-list))]]
                     (parameterize [[internal-list new-list]]
