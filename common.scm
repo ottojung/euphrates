@@ -40,6 +40,8 @@
    i-thread-yield-me
    i-thread-critical!
    i-thread-critical-b!
+   i-thread-critical-points
+   i-thread-critical-points-print
    ]
 
   :re-export
@@ -508,12 +510,45 @@
 (define [i-thread-yield-me]
   (i-thread-yield ((@ [ice-9 threads] current-thread))))
 
+;; For debug purposes
+(define-values
+  [i-thread-critical-points
+   i-thread-critical-points-append!
+   i-thread-critical-points-remove!
+   i-thread-critical-points-print]
+  (let [[lst (list)]
+        [mut (make-mutex)]]
+    (values
+     (lambda [] lst)
+     (lambda [st]
+       (mutex-lock! mut)
+       (set! lst (cons st lst))
+       (mutex-unlock! mut))
+     (lambda [st]
+       (mutex-lock! mut)
+       (set! lst
+         (filter (lambda [el] (not (equal? el st)))
+                 lst))
+       (mutex-unlock! mut))
+     (lambda []
+       (format #t "--- CRITICAL POINTS ---\n")
+       (for-each
+        (lambda [st]
+          (display-backtrace st (current-output-port)))
+        lst)
+       (format #t "--- END CRITICAL POINTS ---\n")))))
+
 (define [i-thread-critical! thunk]
   "
   Will not interrupt during execution of `thunk'
   Unsafe: must finish quick!
   "
-  (call-with-blocked-asyncs thunk))
+  (call-with-blocked-asyncs
+   (lambda []
+     (let [[st (make-stack #t)]]
+       (i-thread-critical-points-append! st)
+       (thunk)
+       (i-thread-critical-points-remove! st)))))
 
 (define [i-thread-critical-b! thunk finally]
   "
