@@ -18,6 +18,9 @@
 ;; then:
 (use-modules [my-guile-std common])
 (use-modules [ice-9 threads])
+(use-modules [[srfi srfi-18]
+              #:select [make-mutex mutex-lock! mutex-unlock!]
+              #:prefix srfi::])
 
 (define k (letin
            [i 2]

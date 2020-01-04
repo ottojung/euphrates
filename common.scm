@@ -442,9 +442,20 @@
   (np-thread-list-remove (const #t))
   (np-thread-end))
 
+;; TODO: cancel chosen thread
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Enable asynchronous auto-yield
+;; making non-preemptive threads to preemptive ones (or `i-thread's - "interuptible threads")
+;;
+;; NOTE:
+;; * `mutex-lock!' is not interruptible
+;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `mutex-unlock!'
+;; * `sleep' (`usleep') is not interruptible
+;;   use `np-thread-usleep' instead
 
 (define-values
   [global-interrupt-list-get
