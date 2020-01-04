@@ -76,10 +76,78 @@
   :use-module [srfi srfi-111] ;; box
   )
 
+;;;;;;;;;;;;;;;;
+;; SHORTHANDS ;;
+;;;;;;;;;;;;;;;;
+
+(define my-make-mutex (@ (srfi srfi-18) make-mutex))
+
+(define-syntax-rule [stringf fmt . args]
+  (with-output-to-string
+    (lambda []
+      (format #t fmt . args))))
+
+(define local-print
+  (let [[mu (my-make-mutex)]]
+    (lambda [s]
+      (let [[err #f]]
+        (mutex-lock! mu)
+        (catch #t
+          (lambda []
+            (display s))
+          (lambda argv
+            (set! err argv)))
+        (mutex-unlock! mu)
+        (when err (apply throw err))))))
+
+(define-syntax-rule [printf fmt . args]
+  (local-print (stringf fmt . args)))
+
+(define-syntax-rule [println fmt . args]
+  (printf (string-append fmt "\n") . args))
+
+(define global-debug-mode-filter (make-parameter #f))
+
+(define-syntax-rule [debug fmt . args]
+  (let [[p (global-debug-mode-filter)]]
+    (when (or (not p) (and p (p fmt (list . args))))
+      (printf fmt . args))))
+
+(define-syntax-rule [~a x]
+  (stringf "~a" x))
+
+(define [range end]
+  (list-ec (:range i end) i))
+
+(define [list-init lst]
+  (take lst (1- (length lst))))
+
+(define [time-to-nanoseconds time]
+  (+ (time-nanosecond time) (* 1000000000 (time-second time))))
+
+(define [time-get-monotonic-timestamp]
+  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
+
+(define [second-to-microsecond s]
+  (* 1000000 s))
+
+(define [microsecond-to-nanosecond ms]
+  (* 1000 ms))
+
+(define [second-to-nanosecond s]
+  (microsecond-to-nanosecond (second-to-microsecond s)))
+
+(define [nanosecond-to-microsecond ns]
+  (quotient ns 1000))
+
 ;; Logs computations
 (define [dom-print name result x cont]
   (format #t "(~a = ~a = ~a)\n" name x result)
   (cont x))
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; GENERIC FUNCTIONS ;;
+;;;;;;;;;;;;;;;;;;;;;;;
 
 (define [check-list-contract check-list args]
   (or (not check-list)
@@ -104,7 +172,7 @@
                      [param-name (generate-param-name name)])
          #'(define-values [name add-name param-name]
              (let [[internal-list (make-parameter '())]
-                   [sem (make-mutex)]]
+                   [sem (my-make-mutex)]]
                (values
                 (lambda args
                   (let [[m (find (lambda [p] (check-list-contract (car p) args)) (internal-list))]]
@@ -176,68 +244,6 @@
   (letin
    [h (set! (h-func) 0)]
    (map car (hash-map->list cons h))))
-
-;;;;;;;;;;;;;;;;
-;; SHORTHANDS ;;
-;;;;;;;;;;;;;;;;
-
-(define-syntax-rule [stringf fmt . args]
-  (with-output-to-string
-    (lambda []
-      (format #t fmt . args))))
-
-(define local-print
-  (let [[mu (make-mutex)]]
-    (lambda [s]
-      (let [[err #f]]
-        (mutex-lock! mu)
-        (catch #t
-          (lambda []
-            (display s))
-          (lambda argv
-            (set! err argv)))
-        (mutex-unlock! mu)
-        (when err (apply throw err))))))
-
-(define-syntax-rule [printf fmt . args]
-  (local-print (stringf fmt . args)))
-
-(define-syntax-rule [println fmt . args]
-  (printf (string-append fmt "\n") . args))
-
-(define global-debug-mode-filter (make-parameter #f))
-
-(define-syntax-rule [debug fmt . args]
-  (let [[p (global-debug-mode-filter)]]
-    (when (or (not p) (and p (p fmt (list . args))))
-      (printf fmt . args))))
-
-(define-syntax-rule [~a x]
-  (stringf "~a" x))
-
-(define [range end]
-  (list-ec (:range i end) i))
-
-(define [list-init lst]
-  (take lst (1- (length lst))))
-
-(define [time-to-nanoseconds time]
-  (+ (time-nanosecond time) (* 1000000000 (time-second time))))
-
-(define [time-get-monotonic-timestamp]
-  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
-
-(define [second-to-microsecond s]
-  (* 1000000 s))
-
-(define [microsecond-to-nanosecond ms]
-  (* 1000 ms))
-
-(define [second-to-nanosecond s]
-  (microsecond-to-nanosecond (second-to-microsecond s)))
-
-(define [nanosecond-to-microsecond ns]
-  (quotient ns 1000))
 
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
@@ -329,7 +335,7 @@
    np-thread-list-initialized?
    ]
   (let [[lst-p (make-parameter #f)]
-        [mut (make-mutex)]]
+        [mut (my-make-mutex)]]
     (values
      (lambda [th]
        (mutex-lock! mut)
@@ -426,7 +432,7 @@
 (define-values
   [global-interrupt-list-get
    global-interrupt-list-append!]
-  (let [[mut (make-mutex)]
+  (let [[mut (my-make-mutex)]
         [lst (list)]]
     (values
      (lambda [] lst)
@@ -459,5 +465,5 @@
       (global-interrupt-list-append! thread))))
 
 (define [i-thread-yield-me]
-  (i-thread-yield (current-thread)))
+  (i-thread-yield ((@ (srfi srfi-18) current-thread))))
 
