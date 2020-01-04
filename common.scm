@@ -38,6 +38,7 @@
    np-thread-cancel-all!
    i-thread-yield
    i-thread-yield-me
+   i-thread-start
    i-thread-critical!
    i-thread-critical-b!
    i-thread-critical-points
@@ -521,6 +522,12 @@
 
 (define [i-thread-yield-me]
   (i-thread-yield ((@ [ice-9 threads] current-thread))))
+
+(define [i-thread-start thunk]
+  (np-thread-start
+   (lambda []
+     (i-thread-yield-me)
+     (thunk))))
 
 ;; For debug purposes
 (define-values
