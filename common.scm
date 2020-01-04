@@ -34,6 +34,7 @@
    np-thread-sleep-rate-ms
    np-thread-sleep-rate-ms-set!
    np-thread-usleep
+   np-thread-cancel!
    np-thread-cancel-all!
    i-thread-yield
    i-thread-yield-me
@@ -434,6 +435,10 @@
                   (usleep s)
                   (lapse)))))]]
       (lapse))))
+
+(define [np-thread-cancel!]
+  "Terminates current np-thread"
+  (np-thread-end))
 
 (define [np-thread-cancel-all!]
   "
