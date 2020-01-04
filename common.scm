@@ -472,40 +472,48 @@
 ;; * `sleep' (`usleep') is not interruptible
 ;;   use `np-thread-usleep' instead
 
-(define-values
-  [global-interrupt-list-get
-   global-interrupt-list-append!]
-  (let [[mut (my-make-mutex)]
-        [lst (list)]]
-    (values
-     (lambda [] lst)
-     (lambda [th]
-       (unless (member th lst)
-         (mutex-lock! mut)
-         (set! lst (cons th lst))
-         (mutex-unlock! mut))))))
-
 (define global-interrupt-frequency-p (make-parameter 1000000))
 
-(define [interruptor-loop]
-  (map
-   (lambda [th]
-     (system-async-mark
-      (lambda [] (np-thread-yield))
-      th))
-   (global-interrupt-list-get))
-  (usleep 1000000)
-  (interruptor-loop))
+(define-values
+  [i-thread-yield
+   i-thread-dont-yield]
+  (let [[interruptor-thread #f]
+        [lst (list)]
+        [interruptor-finished? #t]]
 
-(define i-thread-yield
-  (let [[interruptor-thread #f]]
-    (lambda [thread]
+    (define [interruptor-loop]
+      (if (null? lst)
+          (set! interruptor-finished? #t)
+          (begin
+            (map
+             (lambda [th]
+               (system-async-mark
+                (lambda [] (np-thread-yield))
+                th))
+             lst)
+            (usleep 900000)
+            (interruptor-loop))))
 
-      (unless interruptor-thread
-        (set! interruptor-thread
-          (call-with-new-thread interruptor-loop)))
+    (values
+     (lambda [thread]
 
-      (global-interrupt-list-append! thread))))
+       (when interruptor-finished?
+         (set! interruptor-thread
+           (call-with-new-thread interruptor-loop)))
+
+       (system-async-mark
+        (lambda []
+          (unless (member thread lst)
+            (set! lst (cons thread lst))))
+        interruptor-thread))
+
+     (lambda [thread]
+       (unless interruptor-finished?
+         (system-async-mark
+          (lambda []
+            (set! lst
+              (filter (lambda [th] (not (equal? th thread))))))
+          interruptor-thread))))))
 
 (define [i-thread-yield-me]
   (i-thread-yield ((@ [ice-9 threads] current-thread))))
@@ -517,7 +525,7 @@
    i-thread-critical-points-remove!
    i-thread-critical-points-print]
   (let [[lst (list)]
-        [mut (make-mutex)]]
+        [mut (my-make-mutex)]]
     (values
      (lambda [] lst)
      (lambda [st]
