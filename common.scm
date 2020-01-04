@@ -339,35 +339,43 @@
    np-thread-list-initialized?
    np-thread-list-remove
    ]
-  (let [[lst-p (make-parameter #f)]
-        [mut (my-make-mutex)]]
+  (let* [[lst-p (make-parameter #f)]
+         [mut (my-make-mutex)]
+         [with-lock
+          (lambda [thunk]
+            (call-with-blocked-asyncs
+             (lambda []
+               (mutex-lock! mut)
+               (let [[ret (thunk)]]
+                 (mutex-unlock! mut)
+                 ret))))]]
     (values
      (lambda [th]
-       (mutex-lock! mut)
-       (set-box! (lst-p) (cons th (unbox (lst-p))))
-       (mutex-unlock! mut))
+       (with-lock
+        (lambda []
+          (set-box! (lst-p) (cons th (unbox (lst-p)))))))
      (lambda []
-       (mutex-lock! mut)
-       (let* [[lst (unbox (lst-p))]
-              [head
-              (if (null? lst)
-                  'np-thread-empty-list
-                  (last lst))]]
-         (unless (null? lst)
-           (set-box! (lst-p) (list-init lst)))
-         (mutex-unlock! mut)
-         head))
+       (with-lock
+        (lambda []
+          (let* [[lst (unbox (lst-p))]
+                 [head
+                  (if (null? lst)
+                      'np-thread-empty-list
+                      (last lst))]]
+            (unless (null? lst)
+              (set-box! (lst-p) (list-init lst)))
+            head))))
      (lambda [body]
        (parameterize [[lst-p (box (list))]]
          (body)))
      (lambda []
        (if (lst-p) #t #f))
      (lambda [predicate]
-       (mutex-lock! mut)
-       (set-box! (lst-p)
-                 (filter (negate predicate)
-                         (unbox (lst-p))))
-       (mutex-unlock! mut)))))
+       (with-lock
+        (lambda []
+          (set-box! (lst-p)
+                    (filter (negate predicate)
+                            (unbox (lst-p))))))))))
 
 (define-values
   [np-thread-get-start-point
