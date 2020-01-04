@@ -36,6 +36,8 @@
    np-thread-usleep
    i-thread-yield
    i-thread-yield-me
+   i-thread-critical!
+   i-thread-critical-b!
    ]
 
   :re-export
@@ -296,7 +298,7 @@
   Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
   Returns unspecified
 
-  This is different from `with-bracket'
+  This is different from `with-bracket-dw' (dynamic-wind)
   because it executes `finally' before returning the control
   and it does not catch any non local jumps except the `return' and throws
 
@@ -466,4 +468,17 @@
 
 (define [i-thread-yield-me]
   (i-thread-yield ((@ (srfi srfi-18) current-thread))))
+
+(define [i-thread-critical! thunk]
+  "
+  Will not interrupt during execution of `thunk'
+  Unsafe: must finish quick!
+  "
+  (call-with-blocked-asyncs thunk))
+
+(define [i-thread-critical-b! thunk finally]
+  "
+  Same as `i-thread-critical' but also puts `thunk' and `finally' to `with-bracket' clause
+  "
+  (i-thread-critical! (lambda [] (with-bracket thunk finally))))
 

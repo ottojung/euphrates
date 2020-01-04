@@ -210,7 +210,7 @@
    (define [kek]
      (println "in kek"))
 
-   (define cycles 100)
+   (define cycles 20)
 
    (define [lol]
      (apploop [n] [0]
@@ -229,6 +229,41 @@
                     (println "zulul at ~a" n)
                     (usleep 100000)
                     (loop (1+ n))))))
+
+   (np-thread-fork kek)
+   (np-thread-fork lol)
+   (np-thread-fork zulul)
+
+   (println "end")))
+
+(np-thread-start
+ (lambda []
+   ;; (i-thread-yield-me)
+
+   (define [kek]
+     (println "in kek"))
+
+   (define cycles 20)
+
+   (define [lol]
+     (i-thread-critical! (lambda []
+     (apploop [n] [0]
+              (if (> n cycles)
+                  (println "lol ended")
+                  (begin
+                    (println "lol at ~a" n)
+                    (usleep 100000)
+                    (loop (1+ n))))))))
+
+   (define [zulul]
+     (i-thread-critical! (lambda []
+     (apploop [n] [0]
+              (if (> n cycles)
+                  (println "zulul ended")
+                  (begin
+                    (println "zulul at ~a" n)
+                    (usleep 100000)
+                    (loop (1+ n))))))))
 
    (np-thread-fork kek)
    (np-thread-fork lol)
