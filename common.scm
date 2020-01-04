@@ -34,6 +34,7 @@
    np-thread-sleep-rate-ms
    np-thread-sleep-rate-ms-set!
    np-thread-usleep
+   np-thread-cancel-all!
    i-thread-yield
    i-thread-yield-me
    i-thread-critical!
@@ -335,6 +336,7 @@
    np-thread-list-pop
    np-thread-list-init
    np-thread-list-initialized?
+   np-thread-list-remove
    ]
   (let [[lst-p (make-parameter #f)]
         [mut (my-make-mutex)]]
@@ -358,7 +360,13 @@
        (parameterize [[lst-p (box (list))]]
          (body)))
      (lambda []
-       (if (lst-p) #t #f)))))
+       (if (lst-p) #t #f))
+     (lambda [predicate]
+       (mutex-lock! mut)
+       (set-box! (lst-p)
+                 (filter (negate predicate)
+                         (unbox (lst-p))))
+       (mutex-unlock! mut)))))
 
 (define-values
   [np-thread-get-start-point
@@ -426,6 +434,13 @@
                   (usleep s)
                   (lapse)))))]]
       (lapse))))
+
+(define [np-thread-cancel-all!]
+  "
+  Terminates all threads on current thread group
+  "
+  (np-thread-list-remove (const #t))
+  (np-thread-end))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PREEMPTIVE THREADS ;;
