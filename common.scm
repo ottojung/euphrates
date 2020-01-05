@@ -23,6 +23,8 @@
    np-thread-usleep
    np-thread-cancel!
    np-thread-cancel-all!
+   np-thread-lockr!
+   np-thread-unlockr!
    i-thread-yield
    i-thread-yield-me
    i-thread-start
@@ -342,6 +344,27 @@
 
 ;; TODO: cancel chosen thread
 
+(define-values
+  [np-thread-lockr! np-thread-unlockr!]
+  (let [[mut (my-make-mutex)]
+        [h (make-hash-table)]]
+    (values
+     (lambda [resource]
+       (let lp []
+         ((with-lock
+           mut
+           (if (hash-ref h resource #f)
+               (lambda []
+                 (np-thread-usleep (np-thread-sleep-rate-ms))
+                 (lp))
+               (begin
+                 (hash-set! h resource #t)
+                 (lambda [] 0)))))))
+     (lambda [resource]
+       (with-lock
+        mut
+        (hash-set! h resource #f))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -352,6 +375,7 @@
 ;; NOTE:
 ;; * `mutex-lock!' is not interruptible
 ;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `mutex-unlock!'
+;;   Or use `np-thread-lockr' and `np-thread-unlockr' instead
 ;; * `sleep' (`usleep') is not interruptible
 ;;   use `np-thread-usleep' instead
 
