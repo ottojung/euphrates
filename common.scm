@@ -1,6 +1,7 @@
 (define-module [my-guile-std common]
   :export
   [
+   with-lock
    dom-print
    gfunc/define
    gfunc/instance
@@ -90,6 +91,14 @@
 ;;;;;;;;;;;;;;;;
 
 (define my-make-mutex (@ (srfi srfi-18) make-mutex))
+
+(define-syntax-rule [with-lock mutex . bodies]
+  (call-with-blocked-asyncs
+   (lambda []
+     (mutex-lock! mutex)
+     (let [[ret (begin . bodies)]]
+       (mutex-unlock! mutex)
+       ret))))
 
 (define-syntax-rule [stringf fmt . args]
   (with-output-to-string
@@ -224,31 +233,23 @@
    np-thread-list-remove
    ]
   (let* [[lst-p (make-parameter #f)]
-         [mut (my-make-mutex)]
-         [with-lock
-          (lambda [thunk]
-            (call-with-blocked-asyncs
-             (lambda []
-               (mutex-lock! mut)
-               (let [[ret (thunk)]]
-                 (mutex-unlock! mut)
-                 ret))))]]
+         [mut (my-make-mutex)]]
     (values
      (lambda [th]
        (with-lock
-        (lambda []
-          (set-box! (lst-p) (cons th (unbox (lst-p)))))))
+        mut
+        (set-box! (lst-p) (cons th (unbox (lst-p))))))
      (lambda []
        (with-lock
-        (lambda []
-          (let* [[lst (unbox (lst-p))]
-                 [head
-                  (if (null? lst)
-                      'np-thread-empty-list
-                      (last lst))]]
-            (unless (null? lst)
-              (set-box! (lst-p) (list-init lst)))
-            head))))
+        mut
+        (let* [[lst (unbox (lst-p))]
+               [head
+                (if (null? lst)
+                    'np-thread-empty-list
+                    (last lst))]]
+          (unless (null? lst)
+            (set-box! (lst-p) (list-init lst)))
+          head)))
      (lambda [body]
        (parameterize [[lst-p (box (list))]]
          (body)))
@@ -256,10 +257,10 @@
        (if (lst-p) #t #f))
      (lambda [predicate]
        (with-lock
-        (lambda []
-          (set-box! (lst-p)
-                    (filter (negate predicate)
-                            (unbox (lst-p))))))))))
+        mut
+        (set-box! (lst-p)
+                  (filter (negate predicate)
+                          (unbox (lst-p)))))))))
 
 (define-values
   [np-thread-get-start-point
