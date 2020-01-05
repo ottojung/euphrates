@@ -23,9 +23,29 @@
    domid
    domf
    dom-default
+   ~a
+   range
+   list-init
+   second-to-microsecond
+   microsecond-to-nanosecond
+   second-to-nanosecond
+   nanosecond-to-microsecond
+   generate-prefixed-name
+   list-bb
+   with-bracket
+   with-bracket-dw
+   mdict
+   mdict?
+   mass
+   mdict-has?
+   mdict-keys
    ]
   #:use-module [guile]
   )
+
+;;;;;;;;;;;;
+;; SYNTAX ;;
+;;;;;;;;;;;;
 
 (define-syntax letin
   (syntax-rules ()
@@ -151,4 +171,147 @@
       (if (default? x)
           x
           (cont x))))
+
+;;;;;;;;;;;;;;;;
+;; SHORTHANDS ;;
+;;;;;;;;;;;;;;;;
+
+(define [~a x]
+  (with-output-to-string
+    (display x)))
+
+(define [range start count]
+  (if (>= count 0)
+      (cons start (range (1+ start) (1- count)))
+      (list)))
+
+(define [list-init lst]
+  (list-head lst (1- (length lst))))
+
+(define [second-to-microsecond s]
+  (* 1000000 s))
+
+(define [microsecond-to-nanosecond ms]
+  (* 1000 ms))
+
+(define [second-to-nanosecond s]
+  (microsecond-to-nanosecond (second-to-microsecond s)))
+
+(define [nanosecond-to-microsecond ns]
+  (quotient ns 1000))
+
+(define-syntax-rule [generate-prefixed-name prefix name]
+  (datum->syntax #'name
+                 (symbol-append prefix (syntax->datum #'name))))
+
+;;;;;;;;;;;;;
+;; BRACKET ;;
+;;;;;;;;;;;;;
+
+(define [with-bracket-dw expr finally]
+  (call/cc
+   (lambda [k]
+     (dynamic-wind
+       (lambda [] 0)
+       (lambda [] (expr k))
+       finally))))
+
+(define with-bracket-lf
+  (let [[dynamic-stack (make-parameter (list))]]
+    (lambda [expr finally]
+      (let* [[err #f] [normal? #t]
+             [finally-executed? #f]
+             [finally-wraped
+              (lambda args
+                (unless finally-executed?
+                  (set! finally-executed? #t)
+                  (apply finally args)))]]
+        (catch #t
+          (lambda []
+            (call/cc
+             (lambda [k]
+               (parameterize
+                   [[dynamic-stack
+                     (cons (cons k finally-wraped) (dynamic-stack))]]
+                 (expr (lambda argv
+                         (set! normal? #f)
+
+                         (let lp [[st (dynamic-stack)]]
+                           (unless (null? st)
+                             (let [[p (car st)]]
+                               ((cdr p))
+                               (when (not (eq? (car p) k))
+                                 (lp (cdr st))))))
+
+                         (apply k argv)
+                         ))))))
+          (lambda args
+            (set! err args)))
+        (when normal? (finally-wraped))
+        (when err (apply throw err))))))
+
+(define [with-bracket expr finally]
+  "
+  Applies `return' function to expr.
+  `return' is a call/cc function, but it ensures that `finally' is called.
+  Also, if exception is raised, `finally' executes.
+  Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
+  Returns unspecified
+
+  This is different from `with-bracket-dw' (dynamic-wind)
+  because it executes `finally' before returning the control
+  and it does not catch any non local jumps except the `return' and throws
+
+  expr ::= ((Any -> Any) -> Any)
+  finally ::= (-> Any)
+  "
+  (with-bracket-lf expr finally))
+
+;;;;;;;;;;;;;;;;;;;;
+;; HASHED RECORDS ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(define [alist->hash-table lst]
+  (let [[h (make-hash-table)]]
+    (for-each
+     (lambda (pair)
+       (hash-set! h (car pair) (cdr pair)))
+     lst)
+    h))
+
+(define [mdict alist]
+  (letin
+   [h (alist->hash-table alist)]
+   [unique (lambda [x] (* x (+ x x)))] ;; for unique address
+   (make-procedure-with-setter
+    (lambda [key]
+      (let [[g (hash-ref h key unique)]]
+        (if (eq? g unique)
+            (throw 'mdict-key-not-found key h)
+            g)))
+    (lambda [new] h))))
+
+(define [mass *mdict key value]
+  (letin
+   [h (set! (*mdict) #f)]
+   [lst (hash-map->list cons h)]
+   [new-f (mdict lst)]
+   [new (set! (new-f) #f)]
+   (do (hash-set! new key value))
+   new-f))
+
+(define [mdict? x]
+  (and
+   (procedure-with-setter? x)
+   (hash-table? (set! (x) #f))))
+
+(define [mdict-has? h-func key]
+  (letin
+   [h (set! (h-func) 0)]
+   (hash-get-handle h key)))
+
+(define [mdict-keys h-func]
+  (letin
+   [h (set! (h-func) 0)]
+   (map car (hash-map->list cons h))))
 

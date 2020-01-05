@@ -2,7 +2,6 @@
   :export
   [
    dom-print
-   generate-prefixed-name
    gfunc/define
    gfunc/instance
    gfunc/parameterize
@@ -11,23 +10,10 @@
    global-debug-mode-filter
    debug
    stringf
-   ~a
-   range
-   list-init
    time-to-nanoseconds
    time-get-monotonic-timestamp
-   second-to-microsecond
-   microsecond-to-nanosecond
-   second-to-nanosecond
-   nanosecond-to-microsecond
    read-file
    write-file
-   mdict
-   mdict?
-   mass
-   mdict-has?
-   mdict-keys
-   with-bracket
    np-thread-fork
    np-thread-yield
    np-thread-start
@@ -67,6 +53,20 @@
    domid
    domf
    dom-default
+   range
+   list-init
+   second-to-microsecond
+   microsecond-to-nanosecond
+   second-to-nanosecond
+   nanosecond-to-microsecond
+   generate-prefixed-name
+   with-bracket
+   with-bracket-dw
+   mdict
+   mdict?
+   mass
+   mdict-has?
+   mdict-keys
    ]
 
   :use-module [my-guile-std pure]
@@ -122,37 +122,16 @@
     (when (or (not p) (and p (p fmt (list . args))))
       (printf fmt . args))))
 
-(define-syntax-rule [~a x]
-  (stringf "~a" x))
-
-(define [range end]
-  (list-ec (:range i end) i))
-
-(define [list-init lst]
-  (take lst (1- (length lst))))
-
-(define [time-to-nanoseconds time]
-  (+ (time-nanosecond time) (* 1000000000 (time-second time))))
-
-(define [time-get-monotonic-timestamp]
-  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
-
-(define [second-to-microsecond s]
-  (* 1000000 s))
-
-(define [microsecond-to-nanosecond ms]
-  (* 1000 ms))
-
-(define [second-to-nanosecond s]
-  (microsecond-to-nanosecond (second-to-microsecond s)))
-
-(define [nanosecond-to-microsecond ns]
-  (quotient ns 1000))
-
 ;; Logs computations
 (define [dom-print name result x cont]
   (format #t "(~a = ~a = ~a)\n" name x result)
   (cont x))
+
+(define [time-get-monotonic-timestamp]
+  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
+
+(define [time-to-nanoseconds time]
+  (+ (time-nanosecond time) (* 1000000000 (time-second time))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; GENERIC FUNCTIONS ;;
@@ -162,10 +141,6 @@
   (or (not check-list)
       (and (= (length check-list) (length args))
            (fold (lambda [p x c] (and c (p x))) #t check-list args))))
-
-(define-syntax-rule [generate-prefixed-name prefix name]
-  (datum->syntax #'name
-                 (symbol-append prefix (syntax->datum #'name))))
 
 (define-syntax-rule [generate-add-name name]
   (generate-prefixed-name 'gfunc/instantiate- name))
@@ -215,106 +190,6 @@
       [[gfunc/instance name check-list func]
        (with-syntax [[add-name (generate-add-name name)]]
          #'(add-name (list . check-list) func))])))
-
-;;;;;;;;;;;;;;;;;;;;
-;; HASHED RECORDS ;;
-;;;;;;;;;;;;;;;;;;;;
-
-(define [mdict alist]
-  (letin
-   [h (alist->hash-table alist)]
-   [unique (lambda [x] (* x (+ x x)))] ;; for unique address
-   (make-procedure-with-setter
-    (lambda [key]
-      (let [[g (hash-ref h key unique)]]
-        (if (eq? g unique)
-            (throw 'mdict-key-not-found key h)
-            g)))
-    (lambda [new] h))))
-
-(define [mass *mdict key value]
-  (letin
-   [h (set! (*mdict) #f)]
-   [lst (hash-map->list cons h)]
-   [new-f (mdict lst)]
-   [new (set! (new-f) #f)]
-   (do (hash-set! new key value))
-   new-f))
-
-(define [mdict? x]
-  (and
-   (procedure-with-setter? x)
-   (hash-table? (set! (x) #f))))
-
-(define [mdict-has? h-func key]
-  (letin
-   [h (set! (h-func) 0)]
-   (hash-get-handle h key)))
-
-(define [mdict-keys h-func]
-  (letin
-   [h (set! (h-func) 0)]
-   (map car (hash-map->list cons h))))
-
-;;;;;;;;;;;;;
-;; BRACKET ;;
-;;;;;;;;;;;;;
-
-(define [with-bracket-dw expr finally]
-  (call/cc
-   (lambda [k]
-     (dynamic-wind
-       (lambda [] 0)
-       (lambda [] (expr k))
-       finally))))
-
-(define with-bracket-lf
-  (let [[dynamic-stack (make-parameter (list))]]
-    (lambda [expr finally]
-      (let* [[err #f] [normal? #t]
-             [finally-executed? #f]
-             [finally-wraped
-              (lambda args
-                (unless finally-executed?
-                  (set! finally-executed? #t)
-                  (apply finally args)))]]
-        (catch #t
-          (lambda []
-            (call/cc
-             (lambda [k]
-               (parameterize
-                   [[dynamic-stack
-                     (cons (cons k finally-wraped) (dynamic-stack))]]
-                 (expr (lambda argv
-                         (set! normal? #f)
-                         (take-while
-                          (lambda [p]
-                            ((cdr p)) ;; execute finally
-                            (not (eq? (car p) k)))
-                          (dynamic-stack))
-                         (apply k argv)
-                         ))))))
-          (lambda args
-            (set! err args)))
-        (when normal? (finally-wraped))
-        (when err (apply throw err))))))
-
-(define [with-bracket expr finally]
-  "
-  Applies `return' function to expr.
-  `return' is a call/cc function, but it ensures that `finally' is called.
-  Also, if exception is raised, `finally' executes.
-  Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
-  Returns unspecified
-
-  This is different from `with-bracket-dw' (dynamic-wind)
-  because it executes `finally' before returning the control
-  and it does not catch any non local jumps except the `return' and throws
-
-  expr ::= ((Any -> Any) -> Any)
-  finally ::= (-> Any)
-  "
-  (with-bracket-lf expr finally))
 
 ;;;;;;;;;;;;;
 ;; FILE IO ;;
@@ -517,7 +392,8 @@
          (system-async-mark
           (lambda []
             (set! lst
-              (filter (lambda [th] (not (equal? th thread))))))
+              (filter (lambda [th] (not (equal? th thread)))
+                      lst)))
           interruptor-thread))))))
 
 (define [i-thread-yield-me]
