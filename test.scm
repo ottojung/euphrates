@@ -95,12 +95,10 @@
 
 (format #t "haha<int>(5) = ~a\n" (haha 5)) ;; TODO: fix
 
-(define zz (mdict '((1 . 2) (3 . 4))))
-(printf "mdict? ~a\n" (mdict? zz))
+(define zz (mdict 1 2 3 4))
 (printf "call(3) = ~a\n" (zz 3))
 (printf "set(3, 5) = ~a\n" (set! (zz) 5))
 (define z2 (mass zz 3 99))
-(printf "mdict? ~a\n" (mdict? z2))
 (printf "call(3) = ~a\n" (z2 3))
 (printf "set(3, 5) = ~a\n" (set! (z2) 5))
 (printf "has(3) = ~a\n" (mdict-has? z2 3))

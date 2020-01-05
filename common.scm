@@ -63,10 +63,11 @@
    make-unique
    with-bracket
    with-bracket-dw
+   alist->mdict
    mdict
-   mdict?
    mass
    mdict-has?
+   mdict->alist
    mdict-keys
    ]
 

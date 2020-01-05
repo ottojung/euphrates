@@ -35,10 +35,11 @@
    list-bb
    with-bracket
    with-bracket-dw
+   alist->mdict
    mdict
-   mdict?
    mass
    mdict-has?
+   mdict->alist
    mdict-keys
    ]
   #:use-module [guile]
@@ -284,9 +285,8 @@
      lst)
     h))
 
-(define [mdict alist]
+(define [hash->mdict h]
   (letin
-   [h (alist->hash-table alist)]
    [unique (make-unique)]
    (make-procedure-with-setter
     (lambda [key]
@@ -296,27 +296,35 @@
             g)))
     (lambda [new] h))))
 
-(define [mass *mdict key value]
-  (letin
-   [h (set! (*mdict) #f)]
-   [lst (hash-map->list cons h)]
-   [new-f (mdict lst)]
-   [new (set! (new-f) #f)]
-   (do (hash-set! new key value))
-   new-f))
+(define [alist->mdict alist]
+  (hash->mdict (alist->hash-table alist)))
 
-(define [mdict? x]
-  (and
-   (procedure-with-setter? x)
-   (hash-table? (set! (x) #f))))
+(define-syntax mdict-c
+  (syntax-rules ()
+    [(mdict-c carry) (alist->mdict carry)]
+    [(mdict-c carry key value . rest)
+     (mdict-c (cons (cons key value) carry) . rest)]))
+
+(define-syntax-rule [mdict . entries]
+  (mdict-c '() . entries))
 
 (define [mdict-has? h-func key]
   (letin
    [h (set! (h-func) 0)]
    (hash-get-handle h key)))
 
-(define [mdict-keys h-func]
+(define [mdict->alist h-func]
   (letin
    [h (set! (h-func) 0)]
-   (map car (hash-map->list cons h))))
+   (hash-map->list cons h)))
+
+(define [mass *mdict key value]
+  (letin
+   [new (alist->hash-table (mdict->alist *mdict))]
+   [new-f (hash->mdict new)]
+   (do (hash-set! new key value))
+   new-f))
+
+(define [mdict-keys h-func]
+  (map car (mdict->alist h-func)))
 
