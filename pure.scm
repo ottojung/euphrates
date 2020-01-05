@@ -1,7 +1,7 @@
 
 (define-module [my-guile-std pure]
-  ;; :pure ;; TODO
-  :export
+  #:pure
+  #:export
   [
    letin
    defloop
@@ -24,6 +24,7 @@
    domf
    dom-default
    ]
+  #:use-module [guile]
   )
 
 (define-syntax letin
