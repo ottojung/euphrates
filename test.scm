@@ -204,10 +204,8 @@
 ;; (define cur (current-thread))
 ;; (i-thread-yield cur)
 
-(np-thread-start
+(i-thread-start
  (lambda []
-   (i-thread-yield-me)
-
    (println "preemptive test")
 
    (define [kek]
@@ -239,9 +237,9 @@
 
    (println "end")))
 
-(np-thread-start
+(i-thread-start
  (lambda []
-   (i-thread-yield-me)
+   ;; (i-thread-yield-me)
 
    (println "critical test")
 
@@ -251,24 +249,24 @@
    (define cycles 20)
 
    (define [lol]
-     (i-thread-critical! (lambda []
-     (apploop [n] [0]
-              (if (> n cycles)
-                  (println "lol ended")
-                  (begin
-                    (println "lol at ~a" n)
-                    (usleep 100000)
-                    (loop (1+ n))))))))
+     (i-thread-critical!
+      (apploop [n] [0]
+               (if (> n cycles)
+                   (println "lol ended")
+                   (begin
+                     (println "lol at ~a" n)
+                     (usleep 100000)
+                     (loop (1+ n)))))))
 
    (define [zulul]
-     (i-thread-critical! (lambda []
-     (apploop [n] [0]
-              (if (> n cycles)
-                  (println "zulul ended")
-                  (begin
-                    (println "zulul at ~a" n)
-                    (usleep 100000)
-                    (loop (1+ n))))))))
+     (i-thread-critical!
+      (apploop [n] [0]
+               (if (> n cycles)
+                   (println "zulul ended")
+                   (begin
+                     (println "zulul at ~a" n)
+                     (usleep 100000)
+                     (loop (1+ n)))))))
 
    (np-thread-fork kek)
    (np-thread-fork lol)
