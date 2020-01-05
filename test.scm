@@ -208,6 +208,8 @@
  (lambda []
    (i-thread-yield-me)
 
+   (println "preemptive test")
+
    (define [kek]
      (println "in kek"))
 
@@ -240,6 +242,8 @@
 (np-thread-start
  (lambda []
    (i-thread-yield-me)
+
+   (println "critical test")
 
    (define [kek]
      (println "in kek"))
