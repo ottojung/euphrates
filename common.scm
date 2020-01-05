@@ -56,6 +56,7 @@
    domid
    domf
    dom-default
+   ~a
    range
    list-init
    second-to-microsecond

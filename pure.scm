@@ -24,8 +24,6 @@
    domf
    dom-default
    ~a
-   take
-   drop
    range
    list-init
    second-to-microsecond
@@ -188,9 +186,6 @@
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
 
-(define [take n lst] (list-head lst n))
-(define [drop n lst] (list-tail lst n))
-
 (define [~a x]
   (with-output-to-string
     (display x)))
@@ -258,7 +253,7 @@
                 (let [[cur (car rest)]
                       [next (car (cdr rest))]]
                   (if (string=? next "..")
-                      (lp buf (drop 2 rest))
+                      (lp buf (list-tail rest 2))
                       (if (string=? cur ".")
                           (lp buf (cdr rest))
                           (lp (cons cur buf) (cdr rest)))))))]
