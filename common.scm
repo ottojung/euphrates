@@ -60,6 +60,7 @@
    second-to-nanosecond
    nanosecond-to-microsecond
    generate-prefixed-name
+   make-unique
    with-bracket
    with-bracket-dw
    mdict

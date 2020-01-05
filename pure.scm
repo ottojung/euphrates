@@ -31,6 +31,7 @@
    second-to-nanosecond
    nanosecond-to-microsecond
    generate-prefixed-name
+   make-unique
    list-bb
    with-bracket
    with-bracket-dw
@@ -204,6 +205,10 @@
   (datum->syntax #'name
                  (symbol-append prefix (syntax->datum #'name))))
 
+(define [make-unique]
+  "Returns procedure that returns #t if applied to itself, #f otherwise"
+  (letrec [[me (lambda [other] (eq? other me))]] me))
+
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
@@ -282,11 +287,11 @@
 (define [mdict alist]
   (letin
    [h (alist->hash-table alist)]
-   [unique (lambda [x] (* x (+ x x)))] ;; for unique address
+   [unique (make-unique)]
    (make-procedure-with-setter
     (lambda [key]
       (let [[g (hash-ref h key unique)]]
-        (if (eq? g unique)
+        (if (unique g)
             (throw 'mdict-key-not-found key h)
             g)))
     (lambda [new] h))))
