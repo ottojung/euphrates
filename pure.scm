@@ -24,6 +24,8 @@
    domf
    dom-default
    ~a
+   take
+   drop
    range
    list-init
    second-to-microsecond
@@ -32,6 +34,13 @@
    nanosecond-to-microsecond
    generate-prefixed-name
    make-unique
+   generic-fold
+   generic-fold-macro
+   list-fold
+   list-fold/rest
+   lfold
+   simplify-posix-path
+   append-posix-path
    list-bb
    with-bracket
    with-bracket-dw
@@ -41,6 +50,7 @@
    mdict-has?
    mdict->alist
    mdict-keys
+   lfold
    ]
   #:use-module [guile]
   )
@@ -178,12 +188,15 @@
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
 
+(define [take n lst] (list-head lst n))
+(define [drop n lst] (list-tail lst n))
+
 (define [~a x]
   (with-output-to-string
     (display x)))
 
 (define [range start count]
-  (if (>= count 0)
+  (if (> count 0)
       (cons start (range (1+ start) (1- count)))
       (list)))
 
@@ -209,6 +222,61 @@
 (define [make-unique]
   "Returns procedure that returns #t if applied to itself, #f otherwise"
   (letrec [[me (lambda [other] (eq? other me))]] me))
+
+(define [generic-fold first-f rest-f stop-predicate initial collection function]
+  (let lp [[acc initial]
+           [rest collection]]
+    (if (stop-predicate rest)
+        acc
+        (lp (function acc (first-f rest) rest) (rest-f rest)))))
+
+(define-macro [generic-fold-macro first-f
+                                  rest-f
+                                  stop-predicate
+                                  initial
+                                  collection
+                                  . body]
+  `(generic-fold ,first-f ,rest-f ,stop-predicate ,initial ,collection
+                   (lambda [acc x rest] ,@ body)))
+
+(define [list-fold initial lst function]
+  (generic-fold car cdr null? initial lst
+                (lambda [acc x rest] (function acc x))))
+
+(define [list-fold/rest initial lst function]
+  (generic-fold car cdr null? initial lst function))
+
+(define-macro [lfold initial lst . body]
+  `(generic-fold-macro car cdr null? ,initial ,lst ,@ body))
+
+(define [simplify-posix-path path]
+  (let* [[splits (string-split path #\/)]
+         [rev
+          (let lp [[buf (list)] [rest splits]]
+            (if (null? (cdr rest))
+                (cons (car rest) buf)
+                (let [[cur (car rest)]
+                      [next (car (cdr rest))]]
+                  (if (string=? next "..")
+                      (lp buf (drop 2 rest))
+                      (if (string=? cur ".")
+                          (lp buf (cdr rest))
+                          (lp (cons cur buf) (cdr rest)))))))]
+         [norm (reverse rev)]
+         [ret (string-join norm "/")]]
+    ret))
+
+(define [append-posix-path2 a b]
+  (when (char=? (string-ref b 0) #\/)
+    (throw 'append-posix-path-error `(args: ,a ,b) '(trying to append root path)))
+  (if (= (string-length a) 0)
+      b
+      (if (char=? #\/ (string-ref a (1- (string-length a))))
+          (string-append a b)
+          (string-append a "/" b))))
+
+(define* [append-posix-path #:rest paths]
+  (list-fold "" paths append-posix-path2))
 
 ;;;;;;;;;;;;;
 ;; BRACKET ;;

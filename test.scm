@@ -105,6 +105,17 @@
 (printf "has(52) = ~a\n" (mdict-has? z2 52))
 (printf "keys(z2) = ~a\n" (mdict-keys z2))
 
+(println "~a" (list-fold 1 (range 1 5) *))
+(println "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
+(println "~a" (lfold 1 (range 1 5) (* acc x)))
+
+(println (simplify-posix-path "/hello/../there/./bro/"))
+(println (append-posix-path "hello/there/" "bro"))
+(println (append-posix-path "hello/there" "bro"))
+(println (append-posix-path "hello/there" ".." "and/" "bro" "." "hello"))
+(println (simplify-posix-path (append-posix-path "hello/there" ".." "and/" "bro" "." "hello")))
+;; (println (append-posix-path "hello/there" "/bro"))
+
 (define [hell2 x]
   (with-return
    (printf "hahaha\n")

@@ -64,6 +64,13 @@
    nanosecond-to-microsecond
    generate-prefixed-name
    make-unique
+   generic-fold
+   generic-fold-macro
+   list-fold
+   list-fold/rest
+   lfold
+   simplify-posix-path
+   append-posix-path
    with-bracket
    with-bracket-dw
    alist->mdict
