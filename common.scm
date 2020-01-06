@@ -360,17 +360,14 @@
          [start-time (time-get-monotonic-timestamp)]
          [end-time (+ start-time nano-seconds)]
          [sleep-rate (np-thread-sleep-rate-ms)]]
-    (letrec
-        [[lapse
-          (lambda []
-            (let* [[t (time-get-monotonic-timestamp)]]
-              (unless (> t end-time)
-                (let [[s (min sleep-rate
-                              (nanosecond-to-microsecond (- end-time t)))]]
-                  (np-thread-yield)
-                  (usleep s)
-                  (lapse)))))]]
-      (lapse))))
+    (let lp []
+      (let [[t (time-get-monotonic-timestamp)]]
+        (unless (> t end-time)
+          (let [[s (min sleep-rate
+                        (nanosecond-to-microsecond (- end-time t)))]]
+            (np-thread-yield)
+            (usleep s)
+            (lp)))))))
 
 (define [np-thread-cancel!]
   "Terminates current np-thread"
@@ -420,6 +417,7 @@
 ;; * `sleep' (`usleep') is not interruptible
 ;;   use `np-thread-usleep' instead
 
+;; TODO: [variable interrupt frequency] use this somehow
 (define global-interrupt-frequency-p (make-parameter 1000000))
 
 (define-values
@@ -439,7 +437,7 @@
                 np-thread-yield
                 th))
              lst)
-            (usleep 900000)
+            (usleep 900000) ;; TODO: [variable interrupt frequency]
             (interruptor-loop))))
 
     (values
