@@ -18,6 +18,7 @@
 ;; then:
 (use-modules [my-guile-std common])
 (use-modules [ice-9 threads])
+(use-modules [ice-9 textual-ports])
 (use-modules [[srfi srfi-18]
               #:select [make-mutex mutex-lock! mutex-unlock!]
               #:prefix srfi::])
@@ -284,4 +285,8 @@
    (np-thread-fork zulul)
 
    (println "end")))
+
+(let [[p (run-process OPEN_BOTH "echo" "hello" "from" "echo")]]
+  (display
+   (get-string-all (pipe:process p))))
 

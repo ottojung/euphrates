@@ -32,6 +32,17 @@
    i-thread-critical-b!
    i-thread-critical-points
    i-thread-critical-points-print
+
+   process?
+   command:process
+   args:process
+   mode:process
+   pipe:process
+   pid:process
+   status:process
+   exited?:process
+
+   run-process
    ]
 
   :re-export
@@ -85,14 +96,16 @@
   :use-module [my-guile-std pure]
   :use-module [ice-9 format]
   :use-module [ice-9 textual-ports]
-  :use-module [srfi srfi-1]
-  :use-module [srfi srfi-13]
   :use-module [ice-9 hash-table]
   :use-module [ice-9 threads]
-  :use-module [srfi srfi-18]
-  :use-module [srfi srfi-42]
+  :use-module [ice-9 popen]
+  :use-module [srfi srfi-1]
+  :use-module [srfi srfi-9] ;; records
+  :use-module [srfi srfi-13]
   :use-module [srfi srfi-16]
+  :use-module [srfi srfi-18]
   :use-module [srfi srfi-19] ;; time
+  :use-module [srfi srfi-42]
   :use-module [srfi srfi-111] ;; box
   )
 
@@ -485,4 +498,65 @@
   Same as `i-thread-critical' but also puts `thunk' and `finally' to `with-bracket' clause
   "
   (i-thread-critical! (with-bracket thunk finally)))
+
+;;;;;;;;;;;;;;;
+;; PROCESSES ;;
+;;;;;;;;;;;;;;;
+
+(define-record-type <process>
+  [construct-process
+   command
+   args
+   mode
+   pipe
+   pid
+   status
+   exited?]
+
+  process?
+
+  [command command:process]
+  [args args:process]
+  [mode mode:process]
+  [pipe pipe:process set!pipe:process]
+  [pid pid:process set!pid:process]
+  [status status:process set!status:process]
+  [exited? exited?:process set!exited?:process]
+  )
+
+(define [run-process mode command . args]
+  "Run process in background
+   Input and Output ports are represented by `pipe:process'
+   They are new, not related to `(current-input-port)' or `(current-ouput-porn)'
+
+   type ::= mode -> string -> list of string -> process
+   mode ::= OPEN_READ | OPEN_WRITE | OPEN_BOTH
+  "
+  (let [[p
+         (construct-process
+          command
+          args
+          mode
+          #f
+          #f
+          #f
+          #f)]]
+    (call-with-new-thread
+     (lambda []
+       (let* [[pipe (apply open-pipe*
+                           (cons* (mode:process p)
+                                  (command:process p)
+                                  (args:process p)))]
+              [pid (hashq-ref port/pid-table pipe)]]
+         (set!pipe:process p pipe)
+         (set!pid:process p pid)
+         (set!status:process p (waitpid pid)) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
+         (set!exited?:process p #t))))
+
+    ;; wait for pipe to initialize
+    (let lp []
+      (unless (pid:process p)
+        (usleep 100)
+        (lp)))
+    p))
 
