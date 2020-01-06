@@ -290,3 +290,8 @@
   (display
    (get-string-all (pipe:process p))))
 
+(let [[p (run-process OPEN_BOTH "sl")]]
+  (port-redirect
+   (pipe:process p)
+   (current-output-port)))
+

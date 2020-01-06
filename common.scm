@@ -3,9 +3,11 @@
   [
    with-lock
    dom-print
+
    gfunc/define
    gfunc/instance
    gfunc/parameterize
+
    printf
    println
    global-debug-mode-filter
@@ -13,8 +15,11 @@
    stringf
    time-to-nanoseconds
    time-get-monotonic-timestamp
+   port-redirect
+
    read-file
    write-file
+
    np-thread-fork
    np-thread-yield
    np-thread-start
@@ -25,6 +30,7 @@
    np-thread-cancel-all!
    np-thread-lockr!
    np-thread-unlockr!
+
    i-thread-yield
    i-thread-yield-me
    i-thread-start
@@ -41,7 +47,6 @@
    pid:process
    status:process
    exited?:process
-
    run-process
    ]
 
@@ -95,6 +100,7 @@
 
   :use-module [my-guile-std pure]
   :use-module [ice-9 format]
+  :use-module [ice-9 binary-ports]
   :use-module [ice-9 textual-ports]
   :use-module [ice-9 hash-table]
   :use-module [ice-9 threads]
@@ -166,6 +172,20 @@
 
 (define [time-to-nanoseconds time]
   (+ (time-nanosecond time) (* 1000000000 (time-second time))))
+
+(define [port-redirect from to]
+  "Redirect from `from' to `to' byte by byte, until `eof-object?'
+   Returns count of written bytes
+
+   type ::= port -> port -> int
+  "
+  (let lp [[count 0]]
+    (let [[byte (get-u8 from)]]
+      (if (eof-object? byte)
+          count
+          (begin
+            (put-u8 to byte)
+            (lp (1+ count)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; GENERIC FUNCTIONS ;;
