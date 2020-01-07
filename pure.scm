@@ -188,7 +188,8 @@
 
 (define [~a x]
   (with-output-to-string
-    (display x)))
+    (lambda []
+      (display x))))
 
 (define [range start count]
   (if (> count 0)
@@ -391,4 +392,3 @@
 
 (define [mdict-keys h-func]
   (map car (mdict->alist h-func)))
-
