@@ -597,13 +597,14 @@
     p))
 
 (define [kill-process* p . sigs-timings]
-  (call-with-new-thread
-   (lambda []
-     (let lp [[lst sigs-timings]]
-       (unless (or (null? lst)
-                   (exited?:process p))
-         (kill (pid:process p) (car lst))
-         (unless (null? (cdr lst))
-           (usleep (car (cdr lst)))
-           (lp (cdr (cdr lst)))))))))
+  (unless (exited?:process p)
+    (call-with-new-thread
+     (lambda []
+       (let lp [[lst sigs-timings]]
+         (unless (or (null? lst)
+                     (exited?:process p))
+           (kill (pid:process p) (car lst))
+           (unless (null? (cdr lst))
+             (usleep (car (cdr lst)))
+             (lp (cdr (cdr lst))))))))))
 
