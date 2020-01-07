@@ -262,13 +262,14 @@
     ret))
 
 (define [append-posix-path2 a b]
-  (when (char=? (string-ref b 0) #\/)
-    (throw 'append-posix-path-error `(args: ,a ,b) '(trying to append root path)))
   (if (= (string-length a) 0)
       b
-      (if (char=? #\/ (string-ref a (1- (string-length a))))
-          (string-append a b)
-          (string-append a "/" b))))
+      (begin
+        (when (char=? (string-ref b 0) #\/)
+          (throw 'append-posix-path-error `(args: ,a ,b) '(trying to append root path)))
+        (if (char=? #\/ (string-ref a (1- (string-length a))))
+            (string-append a b)
+            (string-append a "/" b)))))
 
 (define* [append-posix-path #:rest paths]
   (list-fold "" paths append-posix-path2))
