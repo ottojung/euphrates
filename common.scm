@@ -131,10 +131,10 @@
        (mutex-unlock! mutex)
        ret))))
 
-(define-syntax-rule [stringf fmt . args]
+(define [stringf fmt . args]
   (with-output-to-string
     (lambda []
-      (format #t fmt . args))))
+      (apply format (cons* #t fmt args)))))
 
 (define local-print
   (let [[mu (my-make-mutex)]]
@@ -151,18 +151,18 @@
            (mutex-unlock! mu)
            (when err (apply throw err))))))))
 
-(define-syntax-rule [printf fmt . args]
-  (local-print (stringf fmt . args)))
+(define [printf fmt . args]
+  (local-print (apply stringf (cons* fmt args))))
 
-(define-syntax-rule [println fmt . args]
-  (printf (string-append fmt "\n") . args))
+(define [println fmt . args]
+  (apply printf (cons* (string-append fmt "\n") args)))
 
 (define global-debug-mode-filter (make-parameter #f))
 
-(define-syntax-rule [debug fmt . args]
+(define [debug fmt . args]
   (let [[p (global-debug-mode-filter)]]
-    (when (or (not p) (and p (p fmt (list . args))))
-      (printf fmt . args))))
+    (when (or (not p) (and p (p fmt args)))
+      (apply printf (cons* fmt args)))))
 
 ;; Logs computations
 (define [dom-print name result x cont]
