@@ -48,6 +48,8 @@
    status:process
    exited?:process
    run-process
+   run-process-with-output-to
+   kill-process*
    ]
 
   :re-export
@@ -577,4 +579,31 @@
         (usleep 100)
         (lp)))
     p))
+
+(define [run-process-with-output-to output mode command . args]
+  "Run process in background
+   Input and Output ports are represented by `pipe:process'
+   Output port will be redirected to `output', input is unchanged
+
+   type ::= port -> mode -> string -> list of string -> process
+   mode ::= OPEN_READ | OPEN_WRITE | OPEN_BOTH
+  "
+  (let [[p (apply run-process (cons* mode command args))]]
+    (call-with-new-thread
+     (lambda []
+       (port-redirect
+        (pipe:process p)
+        output)))
+    p))
+
+(define [kill-process* p . sigs-timings]
+  (call-with-new-thread
+   (lambda []
+     (let lp [[lst sigs-timings]]
+       (unless (or (null? lst)
+                   (exited?:process p))
+         (kill (pid:process p) (car lst))
+         (unless (null? (cdr lst))
+           (usleep (car (cdr lst)))
+           (lp (cdr (cdr lst)))))))))
 

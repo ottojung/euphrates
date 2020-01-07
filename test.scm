@@ -295,3 +295,14 @@
    (pipe:process p)
    (current-output-port)))
 
+(let [[p (run-process-with-output-to
+          (current-output-port)
+          OPEN_BOTH
+          "sl")]]
+  (let lp []
+    (usleep (second-to-microsecond 1/2))
+    (kill-process* p SIGINT 1 SIGTERM)
+    (unless (exited?:process p)
+      (usleep 100)
+      (lp))))
+
