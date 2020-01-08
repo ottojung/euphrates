@@ -570,7 +570,7 @@
               [pid (hashq-ref port/pid-table pipe)]]
          (set!pipe:process p pipe)
          (set!pid:process p pid)
-         (set!status:process p (waitpid pid)) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
+         (set!status:process p (cdr (waitpid pid))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
          (set!exited?:process p #t))))
 
     ;; wait for pipe to initialize
