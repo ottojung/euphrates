@@ -420,6 +420,11 @@
         (np-thread-end)))))
 
 (define [np-thread-fork thunk]
+  (unless (np-thread-list-initialized?)
+    (throw 'np-thread-forking-before-run!
+           `(args: ,thunk)
+           `(tried to fork np-thread before np-thread-run!)))
+
   (np-thread-list-add
    (lambda [tru]
      (thunk)
