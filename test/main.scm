@@ -1,7 +1,7 @@
 
 ;; USAGE:
 
-(add-to-load-path "..")
+(add-to-load-path "../..")
 ;; OR
 
 ;; (use-modules [srfi srfi-98]) ;; get-environment-variable
@@ -35,6 +35,11 @@
 (+ 5 10)
 
 (display "Hello, Guile!\n")
+
+(println "tree:\n~a\n\n" (directory-tree "."))
+(println "files:\n~a\n\n" (directory-files "."))
+(println "files-rec:\n~a\n\n" (directory-files-rec "."))
+(println "rec only names:\n~a\n\n" (map cadr (directory-files-rec ".")))
 
 ;; scoping test
 (apploop [x] [20]

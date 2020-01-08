@@ -19,6 +19,9 @@
 
    read-file
    write-file
+   directory-tree
+   directory-files
+   directory-files-rec
 
    np-thread-fork
    np-thread-yield
@@ -109,6 +112,8 @@
   :use-module [ice-9 hash-table]
   :use-module [ice-9 threads]
   :use-module [ice-9 popen]
+  :use-module [ice-9 ftw]
+  :use-module [ice-9 match]
   :use-module [srfi srfi-1]
   :use-module [srfi srfi-9] ;; records
   :use-module [srfi srfi-13]
@@ -267,6 +272,85 @@
    [re (format out fmt data)]
    (do (close-port out))
    re))
+
+(define remove-stat
+  ;; Remove the `stat' object the `file-system-tree' provides
+  ;; for each file in the tree.
+  (match-lambda
+    ((name stat)              ; flat file
+     name)
+    ((name stat children ...) ; directory
+     (list name (map remove-stat children)))))
+
+(define [directory-tree directory]
+  "Returns object like this:
+   '((dir1 (dir1/file1 dir1/file2))
+     (dir2)
+     (dir3 (dir3/dir2 ..
+  "
+  (remove-stat (file-system-tree directory)))
+
+(define [directory-files directory]
+  "Returns object like this:
+   ((fullname name)
+    (fullname name)
+     ....
+  "
+
+  ;; Skip everything
+  (define (enter? name stat result)
+    (string=? name directory))
+
+  (define (leaf name stat result)
+    (cons (cons* name (basename name)) result))
+
+  (define (down name stat result)
+    result)
+  (define (up name stat result)
+    result)
+  (define (skip name stat result)
+    result)
+
+  ;; ignore errors
+  (define (error name stat errno result) result)
+
+  (file-system-fold enter? leaf down up skip error
+                    '()
+                    directory))
+
+(define [directory-files-rec directory]
+  "Returns object like this:
+   ((fullname name dirname1 dirname2 dirname3...
+    (fullname name ....
+
+   Where dirname1 is the parent dir of the file
+  "
+
+  ;; Don't skip anything
+  (define (enter? name stat result)
+    #t)
+
+  (define current '())
+
+  (define (leaf name stat result)
+    (cons (cons* name (basename name) current)
+          result))
+
+  (define (down name stat result)
+    (set! current (cons name current))
+    result)
+  (define (up name stat result)
+    (set! current (cdr current))
+    result)
+
+  (define (skip name stat result) result)
+
+  ;; ignore errors
+  (define (error name stat errno result) result)
+
+  (file-system-fold enter? leaf down up skip error
+                    '()
+                    directory))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NON PREEMPTIVE THREADS ;;
