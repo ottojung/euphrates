@@ -22,7 +22,7 @@
 
    np-thread-fork
    np-thread-yield
-   np-thread-start
+   np-thread-run!
    np-thread-sleep-rate-ms
    np-thread-sleep-rate-ms-set!
    np-thread-usleep
@@ -32,8 +32,10 @@
    np-thread-unlockr!
 
    i-thread-yield
+   i-thread-dont-yield
    i-thread-yield-me
-   i-thread-start
+   i-thread-dont-yield-me
+   i-thread-run!
    i-thread-critical!
    i-thread-critical-b!
    i-thread-critical-points
@@ -339,13 +341,13 @@
      (thunk)
      (np-thread-end))))
 
-(define [np-thread-start thunk]
+(define-syntax-rule [np-thread-run! . thunk]
   (call/cc
    (lambda [k]
      (np-thread-set-start-point
       k
       (lambda []
-       (thunk)
+       (begin . thunk)
        (np-thread-end))))))
 
 (define-values
@@ -467,11 +469,15 @@
 (define [i-thread-yield-me]
   (i-thread-yield ((@ [ice-9 threads] current-thread))))
 
-(define [i-thread-start thunk]
-  (np-thread-start
-   (lambda []
-     (i-thread-yield-me)
-     (thunk))))
+(define [i-thread-dont-yield-me]
+  (i-thread-dont-yield ((@ [ice-9 threads] current-thread))))
+
+(define-syntax-rule [i-thread-run! . thunk]
+  (np-thread-run!
+   (dynamic-wind
+     i-thread-yield-me
+     (lambda [] (begin . thunk))
+     i-thread-dont-yield-me)))
 
 ;; For debug purposes
 (define-values

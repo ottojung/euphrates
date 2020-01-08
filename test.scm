@@ -180,111 +180,108 @@
  (lambda []
    (printf "composite unlocked\n")))
 
-(np-thread-start
- (lambda []
-   (define [kek]
-     (println "in kek"))
+(np-thread-run!
+ (println "hello")
 
-   (define cycles 3)
+ (define [kek]
+   (println "in kek"))
 
-   (define [lol]
-     (apploop [n] [0]
-              (if (> n cycles)
-                  (println "lol ended")
-                  (begin
-                    (println "lol at ~a" n)
-                    (np-thread-yield)
-                    (println "lol after ~a" n)
-                    (loop (1+ n))))))
+ (define cycles 3)
 
-   (define [zulul]
-     (apploop [n] [0]
-              (if (> n cycles)
-                  (println "zulul ended")
-                  (begin
-                    (println "zulul at ~a" n)
-                    (np-thread-yield)
-                    (println "zulul after ~a" n)
-                    (loop (1+ n))))))
+ (define [lol]
+   (apploop [n] [0]
+            (if (> n cycles)
+                (println "lol ended")
+                (begin
+                  (println "lol at ~a" n)
+                  (np-thread-yield)
+                  (println "lol after ~a" n)
+                  (loop (1+ n))))))
 
-   (np-thread-fork kek)
-   (np-thread-fork lol)
-   (np-thread-fork zulul)
+ (define [zulul]
+   (apploop [n] [0]
+            (if (> n cycles)
+                (println "zulul ended")
+                (begin
+                  (println "zulul at ~a" n)
+                  (np-thread-yield)
+                  (println "zulul after ~a" n)
+                  (loop (1+ n))))))
 
-   (println "end")))
+ (np-thread-fork kek)
+ (np-thread-fork lol)
+ (np-thread-fork zulul)
+
+ (println "end"))
 
 ;; (define cur (current-thread))
 ;; (i-thread-yield cur)
 
-(i-thread-start
- (lambda []
-   (println "preemptive test")
+(i-thread-run!
+ (println "preemptive test")
 
-   (define [kek]
-     (println "in kek"))
+ (define [kek]
+   (println "in kek"))
 
-   (define cycles 20)
+ (define cycles 20)
 
-   (define [lol]
-     (apploop [n] [0]
-              (if (> n cycles)
-                  (println "lol ended")
-                  (begin
-                    (println "lol at ~a" n)
-                    (usleep 100000)
-                    (loop (1+ n))))))
+ (define [lol]
+   (apploop [n] [0]
+            (if (> n cycles)
+                (println "lol ended")
+                (begin
+                  (println "lol at ~a" n)
+                  (usleep 100000)
+                  (loop (1+ n))))))
 
-   (define [zulul]
-     (apploop [n] [0]
-              (if (> n cycles)
-                  (println "zulul ended")
-                  (begin
-                    (println "zulul at ~a" n)
-                    (usleep 100000)
-                    (loop (1+ n))))))
+ (define [zulul]
+   (apploop [n] [0]
+            (if (> n cycles)
+                (println "zulul ended")
+                (begin
+                  (println "zulul at ~a" n)
+                  (usleep 100000)
+                  (loop (1+ n))))))
 
-   (np-thread-fork kek)
-   (np-thread-fork lol)
-   (np-thread-fork zulul)
+ (np-thread-fork kek)
+ (np-thread-fork lol)
+ (np-thread-fork zulul)
 
-   (println "end")))
+ (println "end"))
 
-(i-thread-start
- (lambda []
-   ;; (i-thread-yield-me)
+(i-thread-run!
+ (println "critical test")
 
-   (println "critical test")
+ (define [kek]
+   (println "in kek"))
 
-   (define [kek]
-     (println "in kek"))
+ (define cycles 20)
 
-   (define cycles 20)
+ (define [lol]
+   (i-thread-critical!
+    (apploop [n] [0]
+             (if (> n cycles)
+                 (println "lol ended")
+                 (begin
+                   (println "lol at ~a" n)
+                   (usleep 100000)
+                   (loop (1+ n)))))))
 
-   (define [lol]
-     (i-thread-critical!
-      (apploop [n] [0]
-               (if (> n cycles)
-                   (println "lol ended")
-                   (begin
-                     (println "lol at ~a" n)
-                     (usleep 100000)
-                     (loop (1+ n)))))))
+ (define [zulul]
+   (i-thread-critical!
+    (apploop [n] [0]
+             (if (> n cycles)
+                 (println "zulul ended")
+                 (begin
+                   (println "zulul at ~a" n)
+                   (usleep 100000)
+                   (loop (1+ n)))))))
 
-   (define [zulul]
-     (i-thread-critical!
-      (apploop [n] [0]
-               (if (> n cycles)
-                   (println "zulul ended")
-                   (begin
-                     (println "zulul at ~a" n)
-                     (usleep 100000)
-                     (loop (1+ n)))))))
+ (np-thread-fork kek)
+ (np-thread-fork lol)
+ (np-thread-fork zulul)
 
-   (np-thread-fork kek)
-   (np-thread-fork lol)
-   (np-thread-fork zulul)
-
-   (println "end")))
+ (println "end"))
 
 (let [[p (run-process OPEN_BOTH "echo" "hello" "from" "echo")]]
   (display
