@@ -55,6 +55,9 @@
    run-process
    run-process-with-output-to
    kill-process*
+
+   define-rec-strs
+   define-rec
    ]
 
   :re-export
@@ -103,6 +106,8 @@
    mdict-has?
    mdict->alist
    mdict-keys
+
+   define-record-type
    ]
 
   :use-module [my-guile-std pure]
@@ -702,4 +707,35 @@
            (unless (null? (cdr lst))
              (usleep (car (cdr lst)))
              (lp (cdr (cdr lst))))))))))
+
+;;;;;;;;;;;;;
+;; RECORDS ;;
+;;;;;;;;;;;;;
+
+;; compatibility layer with other schemes
+
+(define-macro [define-rec-strs name . fields]
+  (let* [[sname (make-symbol name)]
+         [cname (symbol-append 'construct- sname)]
+         [?name (symbol-append sname '?)]
+         [sfields (map make-symbol fields)]
+         [getters (map (lambda [field] (symbol-append field ': sname)) sfields)]
+         [setters (map (lambda [get] (symbol-append 'set! get)) getters)]
+         [pairs (map list sfields getters setters)]
+         [result
+          (primitive-eval
+           `(define-record-type ,sname
+              [ ,cname
+                ,@sfields
+                ]
+              ,?name
+
+              ,@pairs
+              ))]]
+    result))
+
+(define-macro [define-rec name . fields]
+  (let [[sname (primitive-eval (~a name))]
+        [sfields (primitive-eval (cons list (map ~a fields)))]]
+    `(define-rec-strs ,sname ,@sfields)))
 

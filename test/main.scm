@@ -1,7 +1,7 @@
 
 ;; USAGE:
 
-(add-to-load-path "../..")
+(add-to-load-path "..")
 ;; OR
 
 ;; (use-modules [srfi srfi-98]) ;; get-environment-variable
@@ -27,6 +27,17 @@
            [i 2]
            [c 3]
            (+ i c)))
+
+;; (define-rec-strs "rec1" "aa" "bb")
+(define-rec rec1 aa bb)
+
+(define rec (construct-rec1 1 2))
+
+(println "record? ~a" (record? rec))
+(println "aa = ~a" (aa:rec1 rec))
+(set!aa:rec1 rec 10)
+(println "aa = ~a" (aa:rec1 rec))
+(exit)
 
 (format #t "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
 
