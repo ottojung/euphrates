@@ -56,7 +56,6 @@
    run-process-with-output-to
    kill-process*
 
-   define-rec-strs
    define-rec
    ]
 
@@ -106,8 +105,6 @@
    mdict-has?
    mdict->alist
    mdict-keys
-
-   define-record-type
    ]
 
   :use-module [my-guile-std pure]
@@ -714,28 +711,42 @@
 
 ;; compatibility layer with other schemes
 
-(define-macro [define-rec-strs name . fields]
-  (let* [[sname (make-symbol name)]
-         [cname (symbol-append 'construct- sname)]
-         [?name (symbol-append sname '?)]
-         [sfields (map make-symbol fields)]
-         [getters (map (lambda [field] (symbol-append field '/ sname)) sfields)]
-         [setters (map (lambda [get] (symbol-append 'set! get)) getters)]
-         [pairs (map list sfields getters setters)]
-         [result
-          (primitive-eval
-           `(define-record-type ,sname
-              [ ,cname
-                ,@sfields
-                ]
-              ,?name
+(define-syntax rec-fields
+  (lambda (stx)
+    (syntax-case stx ()
+      [(rec-fields fiii name buf)
+       (with-syntax
+           [[con (generate-prefixed-name 'construct- name)]
+            [predi (datum->syntax #'name
+                                  (symbol-append
+                                   (syntax->datum #'name)
+                                   '?))]]
+         #'(define-record-type name (con . fiii) predi . buf))]
+      [(rec-fields fiii name buf field . fields)
+       (with-syntax
 
-              ,@pairs
-              ))]]
-    result))
+           [[gname (datum->syntax #'field
+                                  (symbol-append
+                                   (syntax->datum #'field)
+                                   '/
+                                   (syntax->datum #'name)))]
+            [sname (datum->syntax #'field
+                                  (symbol-append
+                                   'set!
+                                   (syntax->datum #'field)
+                                   '/
+                                   (syntax->datum #'name)))]]
 
-(define-macro [define-rec name . fields]
-  (let [[sname (primitive-eval (~a name))]
-        [sfields (primitive-eval (cons list (map ~a fields)))]]
-    `(define-rec-strs ,sname ,@sfields)))
+         #'(rec-fields fiii
+                       name
+                       ((field gname sname) . buf)
+                       .
+                       fields))])))
+
+(define-syntax-rule [define-rec name . fields]
+  (rec-fields
+   fields
+   name
+   ()
+   . fields))
 
