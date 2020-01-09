@@ -34,10 +34,9 @@
 (define rec (construct-rec1 1 2))
 
 (println "record? ~a" (record? rec))
-(println "aa = ~a" (aa:rec1 rec))
-(set!aa:rec1 rec 10)
-(println "aa = ~a" (aa:rec1 rec))
-(exit)
+(println "aa = ~a" (aa/rec1 rec))
+(set!aa/rec1 rec 10)
+(println "aa = ~a" (aa/rec1 rec))
 
 (format #t "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
 

@@ -719,7 +719,7 @@
          [cname (symbol-append 'construct- sname)]
          [?name (symbol-append sname '?)]
          [sfields (map make-symbol fields)]
-         [getters (map (lambda [field] (symbol-append field ': sname)) sfields)]
+         [getters (map (lambda [field] (symbol-append field '/ sname)) sfields)]
          [setters (map (lambda [get] (symbol-append 'set! get)) getters)]
          [pairs (map list sfields getters setters)]
          [result
