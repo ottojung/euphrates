@@ -81,6 +81,7 @@
    domid
    domf
    dom-default
+   define-default
    ~a
    range
    list-init

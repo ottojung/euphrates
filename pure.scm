@@ -23,6 +23,7 @@
    domid
    domf
    dom-default
+   define-default
    ~a
    range
    list-init
@@ -181,6 +182,13 @@
       (if (default? x)
           x
           (cont x))))
+
+;; if already defined, skip
+(define-syntax-rule [define-default name value]
+  (define name
+    (if (defined? (quote name))
+        name
+        value)))
 
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;

@@ -46,6 +46,11 @@
 
 (display "Hello, Guile!\n")
 
+(define-default default-test1 5)
+(println "default-test1 = ~a" default-test1)
+(define-default default-test1 15)
+(println "default-test1 = ~a" default-test1)
+
 (println "tree:\n~a\n\n" (directory-tree "."))
 (println "files:\n~a\n\n" (directory-files "."))
 (println "files-rec:\n~a\n\n" (directory-files-rec "."))
