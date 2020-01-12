@@ -142,7 +142,7 @@
       (list)))
 
 (define [list-init lst]
-  (list-head lst (1- (length lst))))
+  (take lst (1- (length lst))))
 
 (define [second-to-microsecond s]
   (* 1000000 s))
