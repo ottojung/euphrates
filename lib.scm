@@ -217,7 +217,7 @@
             (string-append a b)
             (string-append a "/" b)))))
 
-(define* [append-posix-path #:rest paths]
+(define [append-posix-path . paths]
   (list-fold "" paths append-posix-path2))
 
 ;;;;;;;;;;;;;
@@ -242,7 +242,7 @@
                 (unless finally-executed?
                   (set! finally-executed? #t)
                   (apply finally args)))]]
-        (catch #t
+        (catch-any
           (lambda []
             (call/cc
              (lambda [k]

@@ -122,3 +122,7 @@
   :use-module [srfi srfi-42]
   :use-module [srfi srfi-111] ;; box
   )
+
+(define [catch-any body handler]
+  (catch #t body handler))
+
