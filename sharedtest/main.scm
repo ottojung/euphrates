@@ -203,7 +203,7 @@
 
 (let [[p (run-comprocess-with-output-to
           (current-output-port)
-          "/usr/games/sl")]]
+          "sl")]]
   (let lp []
     (usleep 10000)
     (unless (comprocess-exited? p)
