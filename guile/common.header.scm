@@ -328,6 +328,7 @@
   exited?
   )
 
+;; TODO: (guile2.9.7) why stderr is redicted to (current-error-port) but not stdout?
 (define [run-comprocess#private mode command . args]
   "Run process in background
    Input and Output ports are represented by `comprocess-pipe'
