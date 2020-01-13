@@ -110,3 +110,56 @@
   (add-name (list . check-list) (lambda [] . body)))
 
 
+
+;;;;;;;;;;;;;
+;; FILE IO ;;
+;;;;;;;;;;;;;
+
+(define [read-file readf filepath]
+  (let* [[file (open-input-file filepath #:mode 'binary)]
+         (do (file-position file eof))
+         [len (file-position file)]
+         (do (file-position file 0))
+         [out (readf len file)]
+         (do (close-input-port file))
+         ]
+    out))
+
+(define [write-file writef filepath content]
+  (define file (open-output-file filepath
+                                 #:mode 'binary
+                                 #:exists 'truncate/replace))
+  (writef content file)
+  (close-output-port file))
+
+(define [read-file-string filepath] (read-file read-string filepath))
+(define [write-file-string filepath content] (write-file write-string filepath content))
+(define [read-file-bytes filepath] (bytes->list (read-file read-bytes filepath)))
+(define [write-file-bytes filepath content] (write-file (lambda [x filepath] (write-bytes (list->bytes x) filepath)) filepath content))
+
+(define [directory-files directory]
+  "Returns object like this:
+   ((fullname name)
+    (fullname name)
+     ....
+  "
+
+  (let* [[names (directory-list directory)]
+         [fullnames
+          (map (lambda [name]
+                 (cons
+                  (path->string
+                   (build-path directory name))
+                  name))
+               names)]]
+    fullnames))
+
+;; TODO:
+;; (define [directory-files-rec directory]
+;;   "Returns object like this:
+;;    ((fullname name dirname1 dirname2 dirname3...
+;;     (fullname name ....
+
+;;    Where dirname1 is the parent dir of the file
+;;   ")
+
