@@ -132,7 +132,7 @@
            (my-mutex-lock! mu)
            (catch-any
              (lambda []
-               (apply format #t fmt args))
+               (apply format (cons* #t fmt args)))
              (lambda argv
                (set! err argv)))
            (my-mutex-unlock! mu)
