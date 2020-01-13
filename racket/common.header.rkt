@@ -182,72 +182,126 @@
 ;; PROCESSES ;;
 ;;;;;;;;;;;;;;;
 
+;; (define-rec comprocess
+;;   command
+;;   args
+;;   mode
+;;   pipe
+;;   pid
+;;   status
+;;   exited?
+;;   )
+
 (define-rec comprocess
-  command
-  args
-  mode
-  pipe
-  pid
-  status
-  exited?
-  )
+  cmd
+  outport
+  on-exit
+  p)
 
-(define [run-comprocess#private mode command . args]
-  "Run process in background
-   Input and Output ports are represented by `comprocess-pipe'
-   They are new, not related to `(current-input-port)' or `(current-ouput-porn)'
+;; (define/contract [exasync cmd outfile cb]
+;;    [-> string? path? procedure? Proc?]
+;;    (define [onExit status]
+;;          (if (= 0 status)
+;;              (cb #f)
+;;              (cb (format "ExitCode ~a returned from '~a'" status cmd))))
+;;    (let [[proc (Proc cmd outfile onExit #f)]]
+;;         (printf "> ~a\n" cmd)
+;;         (Proc-run proc)
+;;         proc))
 
-   type ::= mode -> string -> list of string -> process
-   mode ::= OPEN_READ | OPEN_WRITE | OPEN_BOTH
-  "
-  (let [[p
-         (comprocess
-          command
-          args
-          mode
-          #f
-          #f
-          #f
-          #f)]]
-    (call-with-new-thread
-     (lambda []
-       (let* [[pipe (apply open-pipe*
-                           (cons* (comprocess-mode p)
-                                  (comprocess-command p)
-                                  (comprocess-args p)))]
-              [pid (hashq-ref port/pid-table pipe)]]
-         (set-comprocess-pipe! p pipe)
-         (set-comprocess-pid! p pid)
-         (set-comprocess-status! p (cdr (waitpid pid))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
-         (set-comprocess-exited?! p #t))))
+(define-values [system-shell system-shell-option]
+   (case (system-type)
+      [(unix macos) (values "/bin/sh" "-c")]
+      [(windows) (values (build-path (find-system-path 'sys-dir) "cmd.exe") "/C")]))
 
-    ;; wait for pipe to initialize
-    (let lp []
-      (unless (comprocess-pid p)
-        (usleep 100)
-        (lp)))
-    p))
+(define [run-comprocess#private self]
+   (if (comprocess-p self)
+       'already-running
+       (let [[out-port (comprocess-outport self)]]
 
-(define [run-comprocess command . args]
-  (apply run-comprocess#private (cons* OPEN_READ command args)))
+            (let-values
+               [[[p stdout stdin stderr]
+                     (subprocess
+                      out-port #f 'stdout ;; stdout stdin stderr
+                      'new                ;; new group, means that (kill ..) will kill its children also
 
-(define [run-comprocess-with-output-to output command . args]
-  "Run process in background
-   Input and Output ports are represented by `comprocess-pipe'
-   Output port will be redirected to `output', input is unchanged
+                      system-shell
+                      system-shell-option
+                      (comprocess-cmd self))]]
 
-   type ::= port -> string -> list of string -> process
-  "
-  (let [[p (apply run-comprocess (cons* command args))]]
-    (call-with-new-thread
-     (lambda []
-       (port-redirect
-        (comprocess-pipe p)
-        output)))
-    p))
+               (define [run-in-thread]
+                  (subprocess-wait p)
 
-(define [close-comprocess p]
-  (catch #t
-    (lambda [] (close-pipe (comprocess-pipe p)))
-    (lambda args #f)))
+                  (when out-port
+                     (close-output-port out-port))
+                  (when stdin
+                     (close-output-port stdin))
+                  (when stdout
+                     (close-input-port stdout))
+                  (when stderr
+                     (close-input-port stderr))
+
+                  ((comprocess-on-exit self) (subprocess-status p)))
+
+               (set-comprocess-p! self p)
+               (thread run-in-thread)))))
+
+;; (define [run-comprocess#private mode command . args]
+;;   "Run process in background
+;;    Input and Output ports are represented by `comprocess-pipe'
+;;    They are new, not related to `(current-input-port)' or `(current-ouput-porn)'
+
+;;    type ::= mode -> string -> list of string -> process
+;;    mode ::= OPEN_READ | OPEN_WRITE | OPEN_BOTH
+;;   "
+;;   (let [[p
+;;          (comprocess
+;;           command
+;;           args
+;;           mode
+;;           #f
+;;           #f
+;;           #f
+;;           #f)]]
+;;     (call-with-new-thread
+;;      (lambda []
+;;        (let* [[pipe (apply open-pipe*
+;;                            (cons* (comprocess-mode p)
+;;                                   (comprocess-command p)
+;;                                   (comprocess-args p)))]
+;;               [pid (hashq-ref port/pid-table pipe)]]
+;;          (set-comprocess-pipe! p pipe)
+;;          (set-comprocess-pid! p pid)
+;;          (set-comprocess-status! p (cdr (waitpid pid))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
+;;          (set-comprocess-exited?! p #t))))
+
+;;     ;; wait for pipe to initialize
+;;     (let lp []
+;;       (unless (comprocess-pid p)
+;;         (usleep 100)
+;;         (lp)))
+;;     p))
+
+;; (define [run-comprocess command . args]
+;;   (apply run-comprocess#private (cons* OPEN_READ command args)))
+
+;; (define [run-comprocess-with-output-to output command . args]
+;;   "Run process in background
+;;    Input and Output ports are represented by `comprocess-pipe'
+;;    Output port will be redirected to `output', input is unchanged
+
+;;    type ::= port -> string -> list of string -> process
+;;   "
+;;   (let [[p (apply run-comprocess (cons* command args))]]
+;;     (call-with-new-thread
+;;      (lambda []
+;;        (port-redirect
+;;         (comprocess-pipe p)
+;;         output)))
+;;     p))
+
+;; (define [close-comprocess p]
+;;   (catch #t
+;;     (lambda [] (close-pipe (comprocess-pipe p)))
+;;     (lambda args #f)))
 
