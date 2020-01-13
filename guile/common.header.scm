@@ -450,10 +450,10 @@
                                   (comprocess-command p)
                                   (comprocess-args p)))]
               [pid (hashq-ref port/pid-table pipe)]]
-         (set-comprocess-pipe p pipe)
-         (set-comprocess-pid p pid)
-         (set-comprocess-status p (cdr (waitpid pid))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
-         (set-comprocess-exited? p #t))))
+         (set-comprocess-pipe! p pipe)
+         (set-comprocess-pid! p pid)
+         (set-comprocess-status! p (cdr (waitpid pid))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
+         (set-comprocess-exited?! p #t))))
 
     ;; wait for pipe to initialize
     (let lp []
