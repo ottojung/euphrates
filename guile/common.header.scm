@@ -495,6 +495,10 @@
       (and (= (length check-list) (length args))
            (fold (lambda [p x c] (and c (p x))) #t check-list args))))
 
+(define-syntax-rule [generate-prefixed-name prefix name]
+  (datum->syntax #'name
+                 (symbol-append prefix (syntax->datum #'name))))
+
 (define-syntax-rule [generate-add-name name]
   (generate-prefixed-name 'gfunc/instantiate- name))
 
@@ -580,21 +584,18 @@
   (mdict-c '() . entries))
 
 (define [mdict-has? h-func key]
-  (letin
-   [h (set! (h-func) 0)]
-   (hash-get-handle h key)))
+  (let [[h (set! (h-func) 0)]]
+    (hash-get-handle h key)))
 
 (define [mdict->alist h-func]
-  (letin
-   [h (set! (h-func) 0)]
-   (hash-map->list cons h)))
+  (let [[h (set! (h-func) 0)]]
+    (hash-map->list cons h)))
 
 (define [mass *mdict key value]
-  (letin
-   [new (alist->hash-table (mdict->alist *mdict))]
-   [new-f (hash->mdict new)]
-   (do (hash-set! new key value))
-   new-f))
+  (let* [[new (alist->hash-table (mdict->alist *mdict))]
+         [new-f (hash->mdict new)]
+         (do (hash-set! new key value))]
+    new-f))
 
 (define [mdict-keys h-func]
   (map car (mdict->alist h-func)))

@@ -156,10 +156,6 @@
 (define [nanosecond-to-microsecond ns]
   (quotient ns 1000))
 
-(define-syntax-rule [generate-prefixed-name prefix name]
-  (datum->syntax #'name
-                 (symbol-append prefix (syntax->datum #'name))))
-
 (define [make-unique]
   "Returns procedure that returns #t if applied to itself, #f otherwise"
   (letrec [[me (lambda [other] (eq? other me))]] me))
