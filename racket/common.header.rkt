@@ -183,6 +183,7 @@
 ;;;;;;;;;;;;;;;
 
 (define-rec comprocess
+  p
   command
   args
   pid
@@ -200,28 +201,31 @@
                 'new                ;; new group, means that (kill ..) will kill its children also
 
                 command
-                args))]
-       [[re] (comprocess command args #f #f #f)]]
+                args))]]
+    (let [[re (comprocess p
+                          command
+                          args
+                          (subprocess-pid p)
+                          #f
+                          #f)]]
 
-    (set-comprocess-pid! re (subprocess-pid p))
+      (define [run-in-thread]
+        (subprocess-wait p)
 
-    (define [run-in-thread]
-      (subprocess-wait p)
+        (when out-port
+          (close-output-port out-port))
+        (when stdin
+          (close-output-port stdin))
+        (when stdout
+          (close-input-port stdout))
+        (when stderr
+          (close-input-port stderr))
 
-      (when out-port
-        (close-output-port out-port))
-      (when stdin
-        (close-output-port stdin))
-      (when stdout
-        (close-input-port stdout))
-      (when stderr
-        (close-input-port stderr))
+        (set-comprocess-exited?! re #t)
+        (set-comprocess-status! re (subprocess-status p)))
 
-      (set-comprocess-exited?! re #t)
-      (set-comprocess-status! re (subprocess-status p)))
-
-    (thread run-in-thread)
-    re))
+      (thread run-in-thread)
+      re)))
 
 (define [run-comprocess command . args]
   (apply run-comprocess#private
@@ -229,6 +233,9 @@
 
 (define run-comprocess-with-output-to
   run-comprocess#private)
+
+(define [kill-comprocess p]
+  (
 
 (define [close-comprocess p] #t) ;; auto-closes
 
