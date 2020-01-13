@@ -48,6 +48,9 @@
    mdict->alist
    mdict-keys
    catch-any
+   define-eval-namespace
+   eval-string-in-namespace
+   load-file-in-namespace
 
    with-lock
    dom-print
@@ -166,7 +169,8 @@
 (define string-split#simple string-split)
 
 ;; for racket compatibility
-(define-syntax-rule [define-eval-namespace name] 'not-used)
+(define-syntax-rule [define-eval-namespace name]
+  (define name 'not-used))
 
 ;; namespace is get with `define-eval-namespace'
 (define [eval-string-in-namespace str namespace]
