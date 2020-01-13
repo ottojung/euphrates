@@ -126,3 +126,7 @@
 (define [catch-any body handler]
   (catch #t body handler))
 
+(define my-make-mutex (@ (srfi srfi-18) make-mutex))
+(define [my-mutex-lock! mut] (mutex-lock! mut))
+(define [my-mutex-unlock! mut] (mutex-unlock! mut))
+

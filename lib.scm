@@ -342,14 +342,12 @@
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
 
-(define my-make-mutex (@ (srfi srfi-18) make-mutex))
-
 (define-syntax-rule [with-lock mutex . bodies]
   (call-with-blocked-asyncs
    (lambda []
-     (mutex-lock! mutex)
+     (my-mutex-lock! mutex)
      (let [[ret (begin . bodies)]]
-       (mutex-unlock! mutex)
+       (my-mutex-unlock! mutex)
        ret))))
 
 (define [stringf fmt . args]
@@ -363,13 +361,13 @@
       (call-with-blocked-asyncs
        (lambda []
          (let [[err #f]]
-           (mutex-lock! mu)
+           (my-mutex-lock! mu)
            (catch #t
              (lambda []
                (display s))
              (lambda argv
                (set! err argv)))
-           (mutex-unlock! mu)
+           (my-mutex-unlock! mu)
            (when err (apply throw err))))))))
 
 (define [printf fmt . args]
@@ -446,9 +444,9 @@
                 (lambda [args func]
                   (call-with-blocked-asyncs
                    (lambda []
-                     (mutex-lock! sem)
+                     (my-mutex-lock! sem)
                      (set! internal-list (make-parameter (append (internal-list) (list (cons args func)))))
-                     (mutex-unlock! sem))))
+                     (my-mutex-unlock! sem))))
                 (lambda [args func body]
                   (let [[new-list (cons (cons args func) (internal-list))]]
                     (parameterize [[internal-list new-list]]
@@ -718,8 +716,8 @@
 ;; making non-preemptive threads to preemptive ones (or `i-thread's - "interuptible threads")
 ;;
 ;; NOTE:
-;; * `mutex-lock!' is not interruptible
-;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `mutex-unlock!'
+;; * `my-mutex-lock!' is not interruptible
+;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `my-mutex-unlock!'
 ;;   Or use `np-thread-lockr' and `np-thread-unlockr' instead
 ;; * `sleep' (`usleep') is not interruptible
 ;;   use `np-thread-usleep' instead
@@ -793,15 +791,15 @@
     (values
      (lambda [] lst)
      (lambda [st]
-       (mutex-lock! mut)
+       (my-mutex-lock! mut)
        (set! lst (cons st lst))
-       (mutex-unlock! mut))
+       (my-mutex-unlock! mut))
      (lambda [st]
-       (mutex-lock! mut)
+       (my-mutex-lock! mut)
        (set! lst
          (filter (lambda [el] (not (equal? el st)))
                  lst))
-       (mutex-unlock! mut))
+       (my-mutex-unlock! mut))
      (lambda []
        (format #t "--- CRITICAL POINTS ---\n")
        (for-each
