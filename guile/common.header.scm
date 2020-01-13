@@ -165,7 +165,15 @@
 
 (define string-split#simple string-split)
 
-(define [hash-table->alist h] (hash-map->list cons h))
+;; for racket compatibility
+(define-syntax-rule [define-eval-namespace name] 'not-used)
+
+;; namespace is get with `define-eval-namespace'
+(define [eval-string-in-namespace str namespace]
+  (eval-string str))
+
+(define [load-file-in-namespace filepath namespace]
+  (load filepath))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;

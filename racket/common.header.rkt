@@ -91,12 +91,23 @@
       (string-split str (string delim) #:trim? #f)
       (string-split str delim #:trim? #f)))
 
+(define-syntax-rule [define-eval-namespace name]
+  (begin
+    (define-namespace-anchor ns-anc)
+    (define name (namespace-anchor->namespace ns-anc))))
+
+;; namespace is get with `define-eval-namespace'
+(define [eval-string-in-namespace str namespace]
+  (eval (call-with-input-string str read)
+        namespace))
+
 (define racket-base-namespace (make-base-namespace))
 
-;; SPECIFICATION: racket does not see local scope in eval
-(define [eval-string str]
-  (eval (call-with-input-string str read)
-        racket-base-namespace))
+(define [eval-string-base str]
+  (eval-string-in-namespace str racket-base-namespace))
+
+(define [load-file-in-namespace filepath namespace]
+  (eval-string-in-namespace (file->string filepath) namespace))
 
 ;; TODOS
 
