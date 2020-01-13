@@ -395,11 +395,11 @@
    type ::= port -> port -> int
   "
   (let lp [[count 0]]
-    (let [[byte (read-byte from)]]
+    (let [[byte (get-u8 from)]]
       (if (eof-object? byte)
           count
           (begin
-            (write-byte byte to)
+            (put-u8 to byte)
             (lp (1+ count)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
