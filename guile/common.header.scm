@@ -159,6 +159,8 @@
 
 (define call-with-new-sys-thread call-with-new-thread)
 
+(define string-split#simple string-split)
+
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;

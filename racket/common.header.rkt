@@ -74,6 +74,11 @@
 
 (define call-with-new-sys-thread thread)
 
+(define [string-split#simple str delim]
+  (if (char? delim)
+      (string-split str (string delim))
+      (string-split str delim)))
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;;;;;;;;

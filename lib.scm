@@ -187,7 +187,7 @@
   `(generic-fold-macro car cdr null? ,initial ,lst ,@ body))
 
 (define [simplify-posix-path path]
-  (let* [[splits (string-split path #\/)]
+  (let* [[splits (string-split#simple path #\/)]
          [rev
           (let lp [[buf (list)] [rest splits]]
             (if (null? (cdr rest))
