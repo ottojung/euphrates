@@ -169,6 +169,8 @@
 
 (define string-split#simple string-split)
 
+(define [hash-table->alist h] (hash-map->list cons h))
+
 ;; for racket compatibility
 (define-syntax-rule [define-eval-namespace name]
   (define name 'not-used))
