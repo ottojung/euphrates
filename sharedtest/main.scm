@@ -280,6 +280,10 @@
 (let [[p (run-comprocess-with-output-to
           (current-output-port)
           "sl")]]
+  (let lp []
+    (usleep 10000)
+    (unless (comprocess-exited? p)
+      (lp)))
   (current-output-port))
 
 (let [[p (run-comprocess-with-output-to
