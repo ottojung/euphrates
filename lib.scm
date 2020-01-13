@@ -294,7 +294,7 @@
 (define [stringf fmt . args]
   (with-output-to-string
     (lambda []
-      (apply format (cons* #t fmt args)))))
+      (apply printf (cons* fmt args)))))
 
 (define [println fmt . args]
   (apply printf (cons* (string-append fmt "\n") args)))
@@ -308,7 +308,7 @@
 
 ;; Logs computations
 (define [dom-print name result x cont]
-  (format #t "(~a = ~a = ~a)\n" name x result)
+  (printf "(~a = ~a = ~a)\n" name x result)
   (cont x))
 
 (define [port-redirect from to]
