@@ -111,9 +111,9 @@
   #:with param-name (format-id #'name "gfunc/parameterize-~a" (syntax-e #'name))
   (param-name check-list func (lambda [] . body)))
 
-(define-simple-macro [gfunc/instance name check-list . body]
+(define-simple-macro [gfunc/instance name check-list func]
   #:with add-name (format-id #'name "gfunc/instantiate-~a" (syntax-e #'name))
-  (add-name (list . check-list) (lambda [] . body)))
+  (add-name (list . check-list) func))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
