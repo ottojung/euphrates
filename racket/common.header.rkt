@@ -68,3 +68,45 @@
 (define [usleep microsecond]
   (sleep (/ microsecond (* 1000 1000))))
 
+;; TODOS
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; GENERIC FUNCTIONS ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(define [check-list-contract check-list args]
+  (or (not check-list)
+      (and (= (length check-list) (length args))
+           (andmap (lambda [p x] (p x)) check-list args))))
+
+(define-simple-macro [gfunc/define name]
+  #:with add-name (format-id #'name "gfunc/instantiate-~a" (syntax-e #'name))
+  #:with param-name (format-id #'name "gfunc/parameterize-~a" (syntax-e #'name))
+  (define-values [name add-name param-name]
+    (let [[internal-list (make-parameter null)]
+          [sem (make-semaphore 1)]]
+      (values
+       (lambda args
+         (let [[m (findf (lambda [p] (check-list-contract (car p) args)) (internal-list))]]
+           (if m
+               (apply (cdr m) args)
+               (error (format "No gfunc instance of ~a accepts arguments ~a" name args)))))
+       (lambda [args func]
+         (semaphore-wait sem)
+         (set! internal-list (make-parameter (append (internal-list) (list (cons args func)))))
+         (semaphore-post sem))
+       (lambda [args func body]
+         (let [[new-list (cons (cons args func) (internal-list))]]
+           (parameterize [[internal-list new-list]]
+             (body))))))))
+
+(define-simple-macro [gfunc/parameterize name check-list func . body]
+  #:with param-name (format-id #'name "gfunc/parameterize-~a" (syntax-e #'name))
+  (param-name check-list func (lambda [] . body)))
+
+(define-simple-macro [gfunc/instance name check-list . body]
+  #:with add-name (format-id #'name "gfunc/instantiate-~a" (syntax-e #'name))
+  (add-name (list . check-list) (lambda [] . body)))
+
+
