@@ -50,7 +50,7 @@
       (cons key (hash-ref h key))
       #f))
 
-(define getcwd current-directory)
+(define [getcwd] (path->string (current-directory)))
 (define chdir current-directory)
 (define absolute-file-name? absolute-path?)
 (define file-mtime file-or-directory-modify-seconds)
@@ -197,6 +197,11 @@
 
 ;;    Where dirname1 is the parent dir of the file
 ;;   ")
+
+(define [path-parent-directory path]
+  (let-values [[[base name must-be-dir?]
+                (split-path path)]]
+    (path->string base)))
 
 ;;;;;;;;;;;;;
 ;; RECORDS ;;

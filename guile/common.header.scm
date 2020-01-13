@@ -272,6 +272,8 @@
                     '()
                     directory))
 
+(define path-parent-directory dirname)
+
 ;;;;;;;;;;;;;
 ;; RECORDS ;;
 ;;;;;;;;;;;;;
