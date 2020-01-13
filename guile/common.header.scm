@@ -123,6 +123,13 @@
   :use-module [srfi srfi-111] ;; box
   )
 
+(define my-make-mutex (@ (srfi srfi-18) make-mutex))
+(define [my-mutex-lock! mut] (mutex-lock! mut))
+(define [my-mutex-unlock! mut] (mutex-unlock! mut))
+
+(define [catch-any body handler]
+  (catch #t body handler))
+
 (define local-print
   (let [[mu (my-make-mutex)]]
     (lambda [fmt args]
@@ -140,13 +147,6 @@
 
 (define [printf fmt . args]
   (local-print fmt args))
-
-(define [catch-any body handler]
-  (catch #t body handler))
-
-(define my-make-mutex (@ (srfi srfi-18) make-mutex))
-(define [my-mutex-lock! mut] (mutex-lock! mut))
-(define [my-mutex-unlock! mut] (mutex-unlock! mut))
 
 (define time-get-monotonic-nanoseconds-timestamp
   (let [[time-to-nanoseconds
