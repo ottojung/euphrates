@@ -115,8 +115,8 @@
 ;; FILE IO ;;
 ;;;;;;;;;;;;;
 
-(define [read-file readf filepath]
-  (let* [[file (open-input-file filepath #:mode 'binary)]
+(define [read-file readf filepath mode]
+  (let* [[file (open-input-file filepath #:mode mode)]
          (do (file-position file eof))
          [len (file-position file)]
          (do (file-position file 0))
@@ -125,17 +125,24 @@
          ]
     out))
 
-(define [write-file writef filepath content]
+(define [write-file writef filepath content mode]
+  (let [[file (open-output-file filepath
+                                #:mode mode
+                                #:exists 'truncate/replace)]]
+    (writef content file)
+    (close-output-port file)))
+
+(define [append-file writef filepath content mode]
   (define file (open-output-file filepath
-                                 #:mode 'binary
-                                 #:exists 'truncate/replace))
+                                 #:mode mode
+                                 #:exists 'append))
   (writef content file)
   (close-output-port file))
 
-(define [read-file-string filepath] (read-file read-string filepath))
-(define [write-file-string filepath content] (write-file write-string filepath content))
-(define [read-file-bytes filepath] (bytes->list (read-file read-bytes filepath)))
-(define [write-file-bytes filepath content] (write-file (lambda [x filepath] (write-bytes (list->bytes x) filepath)) filepath content))
+(define [read-string-file filepath] (read-file read-string filepath 'text))
+(define [read-bytes-file filepath] (bytes->list (read-file read-bytes filepath 'binary)))
+(define [write-string-file filepath content] (write-file write-string filepath content 'text))
+(define [append-string-file filepath content] (append-file write-string filepath content 'text))
 
 (define [directory-files directory]
   "Returns object like this:
