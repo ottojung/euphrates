@@ -140,4 +140,5 @@
        ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
 (define read-byte get-u8)
+(define write-byte (lambda [b to] (put-u8 to b)))
 

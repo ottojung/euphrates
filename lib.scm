@@ -399,7 +399,7 @@
       (if (eof-object? byte)
           count
           (begin
-            (put-u8 to byte)
+            (write-byte byte to)
             (lp (1+ count)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
