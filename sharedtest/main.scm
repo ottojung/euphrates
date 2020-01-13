@@ -275,15 +275,12 @@
  (println "end"))
 
 (let [[p (run-comprocess "echo" "hello" "from" "echo")]]
-  (display
-   (get-string-all (comprocess-pipe p)))
-  (close-comprocess p)
-  )
+  (close-comprocess p))
 
-(let [[p (run-comprocess "sl")]]
-  (port-redirect
-   (comprocess-pipe p)
-   (current-output-port)))
+(let [[p (run-comprocess-with-output-to
+          (current-output-port)
+          "sl")]]
+  (current-output-port))
 
 (let [[p (run-comprocess-with-output-to
           (current-output-port)
