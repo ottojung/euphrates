@@ -51,6 +51,7 @@
    define-eval-namespace
    eval-string-in-namespace
    load-file-in-namespace
+   get-command-line-arguments
 
    with-lock
    dom-print
@@ -178,6 +179,12 @@
 
 (define [load-file-in-namespace filepath namespace]
   (load filepath))
+
+(define [get-command-line-arguments]
+  (let [[ret (command-line)]]
+    (if (< (length ret) 2)
+        (list)
+        (cdr ret))))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
