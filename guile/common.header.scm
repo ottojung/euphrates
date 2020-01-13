@@ -161,9 +161,14 @@
 
 (define string-split#simple string-split)
 
+(define [hash-table->list h] (hash-map->list cons h))
+
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
+
+(define [file-mtime filepath]
+  (stat:mtime (stat filepath)))
 
 (define [read-string-file path]
   (let* [
@@ -323,8 +328,8 @@
   args
   mode
   pipe
-  pid
-  status
+  pid ;; #f or integer
+  status ;; #f or integer
   exited?
   )
 
@@ -355,7 +360,8 @@
               [pid (hashq-ref port/pid-table pipe)]]
          (set-comprocess-pipe! p pipe)
          (set-comprocess-pid! p pid)
-         (set-comprocess-status! p (cdr (waitpid pid))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
+         (set-comprocess-status! p (status:exit-val
+                                    (cdr (waitpid pid)))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
          (set-comprocess-exited?! p #t))))
 
     ;; wait for pipe to initialize

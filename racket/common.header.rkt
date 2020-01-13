@@ -42,6 +42,18 @@
 (define [put-u8 to byte] (write-byte byte to))
 
 (define fold foldl)
+(define and-map andmap)
+(define or-map andmap)
+(define hash-table->alist hash->list)
+(define [hash-get-handle h key]
+  (if (hash-has-key? h key)
+      (cons key (hash-ref h key))
+      #f))
+
+(define getcwd current-directory)
+(define chdir current-directory)
+(define absolute-file-name? absolute-path?)
+(define file-mtime file-or-directory-modify-seconds)
 
 (define [open-file filepath mode]
   (cond
