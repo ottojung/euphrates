@@ -388,9 +388,6 @@
   (format #t "(~a = ~a = ~a)\n" name x result)
   (cont x))
 
-(define [time-get-monotonic-timestamp]
-  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
-
 (define [time-to-nanoseconds time]
   (+ (time-nanosecond time) (* 1000000000 (time-second time))))
 
@@ -662,11 +659,11 @@
 
 (define [np-thread-usleep micro-seconds]
   (let* [[nano-seconds (microsecond-to-nanosecond micro-seconds)]
-         [start-time (time-get-monotonic-timestamp)]
+         [start-time (time-get-monotonic-nanoseconds-timestamp)]
          [end-time (+ start-time nano-seconds)]
          [sleep-rate (np-thread-sleep-rate-ms)]]
     (let lp []
-      (let [[t (time-get-monotonic-timestamp)]]
+      (let [[t (time-get-monotonic-nanoseconds-timestamp)]]
         (unless (> t end-time)
           (let [[s (min sleep-rate
                         (nanosecond-to-microsecond (- end-time t)))]]

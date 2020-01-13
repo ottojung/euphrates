@@ -130,3 +130,6 @@
 (define [my-mutex-lock! mut] (mutex-lock! mut))
 (define [my-mutex-unlock! mut] (mutex-unlock! mut))
 
+(define [time-get-monotonic-nanoseconds-timestamp]
+  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
+
