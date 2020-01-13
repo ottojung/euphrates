@@ -14,9 +14,9 @@
 (set-rec1-aa! rec 10)
 (println "aa = ~a" (rec1-aa rec))
 
-(format #t "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
+(printf "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
 
-(format #t "k = ~a\n" k)
+(printf "k = ~a\n" k)
 
 (+ 5 10)
 
@@ -29,25 +29,25 @@
 
 ;; scoping test
 (apploop [x] [20]
-		 (format #t "up ~a\n" x)
+		 (printf "up ~a\n" x)
 		 (unless (> x 24)
 		   (let [[z 10]]
 			 (apploop [x] [3]
-					  (format #t "dw ~a\n" x)
+					  (printf "dw ~a\n" x)
 					  (if (= x 0)
 						  x
 						  (loop (1- x))))
 			 (loop (1+ x)))))
 
-(define x (format #t "z = ~a\n" (* 2/3 1/3)))
+(define x (printf "z = ~a\n" (* 2/3 1/3)))
 
-(format #t "x = ~a\n" x)
+(printf "x = ~a\n" x)
 
 (define zzz 20)
 
 (+ zzz zzz)
 
-(format #t "fn = ~a\n" ((fn i (* 2 i)) 5))
+(printf "fn = ~a\n" ((fn i (* 2 i)) 5))
 
 (letin-with-full dom-print
                  [a (+ 2 7)]
@@ -61,9 +61,9 @@
        [c (- b b)]
        (+ 100 c)))
 
-(format #t "dom-default = ~a\n" (calc-default))
+(printf "dom-default = ~a\n" (calc-default))
 
-(format #t "dom parameterized = ~a\n"
+(printf "dom parameterized = ~a\n"
         (letin-parameterize
          (fn f fname
              (fn xqt resultqt x cont
@@ -81,11 +81,11 @@
 ;; (gfunc/instance haha []
 ;;                 (fn 2))
 
-(format #t "haha = ~a\n" (haha))
-;; (format #t "kekloop = ~a\n" kekloop)
-;; (format #t "hahahelo = ~a\n" hahahelo)
+(printf "haha = ~a\n" (haha))
+;; (printf "kekloop = ~a\n" kekloop)
+;; (printf "hahahelo = ~a\n" hahahelo)
 
-(format #t "haha<int>(5) = ~a\n" (haha 5)) ;; TODO: fix
+(printf "haha<int>(5) = ~a\n" (haha 5)) ;; TODO: fix
 
 (println "~a" (list-fold 1 (range 1 5) *))
 (println "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
