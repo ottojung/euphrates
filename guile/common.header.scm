@@ -99,8 +99,9 @@
    comprocess-exited?
    run-comprocess
    run-comprocess-with-output-to
-   kill-comprocess*
-   close-comprocess
+   kill-comprocess
+   kill-comprocess-with-timeout
+   cleanup-comprocess
 
    define-rec
    ]
