@@ -362,7 +362,7 @@
        (lambda []
          (let [[err #f]]
            (my-mutex-lock! mu)
-           (catch #t
+           (catch-any
              (lambda []
                (display s))
              (lambda argv
