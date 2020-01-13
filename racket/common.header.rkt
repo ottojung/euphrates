@@ -70,6 +70,8 @@
 (define [usleep microsecond]
   (sleep (/ microsecond (* 1000 1000))))
 
+(define call-with-new-sys-thread thread)
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;;;;;;;;
