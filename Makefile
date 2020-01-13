@@ -24,7 +24,7 @@ tracket:
 
 common: | $(DIR) $(DIR)/common.$(END)
 
-$(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) $(DIRPREFIX)/common.footer.$(END) lib.scm
+$(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) lib.scm $(DIRPREFIX)/common.footer.$(END)
 	cat $^ > $@
 
 $(DIR):
