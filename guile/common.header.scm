@@ -487,5 +487,5 @@
     (lambda args #f)))
 
 (define [kill-comprocess p force?]
-  (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
+  (kill (if force? SIGKILL SIGTERM)) (comprocess-pid p))
 
