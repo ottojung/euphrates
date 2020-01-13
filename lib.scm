@@ -491,15 +491,13 @@
 ;; PROCESSES ;;
 ;;;;;;;;;;;;;;;
 
-(define [kill-comprocess* p . sigs-timings]
+(define [kill-comprocess-with-timeout p timeout]
   (unless (comprocess-exited? p)
     (call-with-new-sys-thread
      (lambda []
-       (let lp [[lst sigs-timings]]
-         (unless (or (null? lst)
-                     (comprocess-exited? p))
-           (kill (comprocess-pid p) (car lst))
-           (unless (null? (cdr lst))
-             (usleep (car (cdr lst)))
-             (lp (cdr (cdr lst))))))))))
+       (kill-comprocess p #f)
+       (usleep timeout)
+       (unless (comprocess-exited? p)
+         (kill-comprocess p #t))
+       (cleanup-comprocess p)))))
 

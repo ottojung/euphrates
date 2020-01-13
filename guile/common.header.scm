@@ -480,7 +480,11 @@
         output)))
     p))
 
-(define [close-comprocess p]
+(define [cleanup-comprocess p]
   (catch #t
     (lambda [] (close-pipe (comprocess-pipe p)))
     (lambda args #f)))
+
+(define [kill-comprocess p force?]
+  (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
+

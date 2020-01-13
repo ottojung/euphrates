@@ -234,9 +234,9 @@
 (define run-comprocess-with-output-to
   run-comprocess#private)
 
-(define [kill-comprocess p]
-  (
+(define [kill-comprocess p force?]
+  (subprocess-kill p force?))
 
-(define [close-comprocess p] #t) ;; auto-closes
+(define [cleanup-comprocess p] #t) ;; auto-closes
 
 
