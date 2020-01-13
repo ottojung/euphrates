@@ -193,58 +193,43 @@
 ;;   )
 
 (define-rec comprocess
-  cmd
+  command
+  args
   outport
-  on-exit
-  p)
+  exited?
+  status)
 
-;; (define/contract [exasync cmd outfile cb]
-;;    [-> string? path? procedure? Proc?]
-;;    (define [onExit status]
-;;          (if (= 0 status)
-;;              (cb #f)
-;;              (cb (format "ExitCode ~a returned from '~a'" status cmd))))
-;;    (let [[proc (Proc cmd outfile onExit #f)]]
-;;         (printf "> ~a\n" cmd)
-;;         (Proc-run proc)
-;;         proc))
+(define [run-comprocess#private command args]
+  (if (comprocess-p self)
+      'already-running
+      (let [[out-port (comprocess-outport self)]]
 
-(define-values [system-shell system-shell-option]
-   (case (system-type)
-      [(unix macos) (values "/bin/sh" "-c")]
-      [(windows) (values (build-path (find-system-path 'sys-dir) "cmd.exe") "/C")]))
-
-(define [run-comprocess#private self]
-   (if (comprocess-p self)
-       'already-running
-       (let [[out-port (comprocess-outport self)]]
-
-            (let-values
-               [[[p stdout stdin stderr]
-                     (subprocess
+        (let-values
+            [[[p stdout stdin stderr]
+              (apply subprocess
+                     (list*
                       out-port #f 'stdout ;; stdout stdin stderr
                       'new                ;; new group, means that (kill ..) will kill its children also
 
-                      system-shell
-                      system-shell-option
-                      (comprocess-cmd self))]]
+                      (comprocess-command self)
+                      (comprocess-args self)))]]
 
-               (define [run-in-thread]
-                  (subprocess-wait p)
+          (define [run-in-thread]
+            (subprocess-wait p)
 
-                  (when out-port
-                     (close-output-port out-port))
-                  (when stdin
-                     (close-output-port stdin))
-                  (when stdout
-                     (close-input-port stdout))
-                  (when stderr
-                     (close-input-port stderr))
+            (when out-port
+              (close-output-port out-port))
+            (when stdin
+              (close-output-port stdin))
+            (when stdout
+              (close-input-port stdout))
+            (when stderr
+              (close-input-port stderr))
 
-                  ((comprocess-on-exit self) (subprocess-status p)))
+            (set-comprocess-exited?! #t)
+            (set-comprocess-status! (subprocess-status p)))
 
-               (set-comprocess-p! self p)
-               (thread run-in-thread)))))
+          (thread run-in-thread)))))
 
 ;; (define [run-comprocess#private mode command . args]
 ;;   "Run process in background
