@@ -395,7 +395,7 @@
    type ::= port -> port -> int
   "
   (let lp [[count 0]]
-    (let [[byte (get-u8 from)]]
+    (let [[byte (read-byte from)]]
       (if (eof-object? byte)
           count
           (begin

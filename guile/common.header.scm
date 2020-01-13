@@ -139,3 +139,5 @@
       (time-to-nanoseconds
        ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
+(define read-byte get-u8)
+
