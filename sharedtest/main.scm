@@ -274,22 +274,21 @@
 
  (println "end"))
 
-(let [[p (run-process OPEN_BOTH "echo" "hello" "from" "echo")]]
+(let [[p (run-comprocess "echo" "hello" "from" "echo")]]
   (display
-   (get-string-all (pipe:process p))))
+   (get-string-all (comprocess-pipe p))))
 
-(let [[p (run-process OPEN_BOTH "sl")]]
+(let [[p (run-comprocess "sl")]]
   (port-redirect
-   (pipe:process p)
+   (comprocess-pipe p)
    (current-output-port)))
 
-(let [[p (run-process-with-output-to
+(let [[p (run-comprocess-with-output-to
           (current-output-port)
-          OPEN_BOTH
           "sl")]]
   (let lp []
     (usleep (second-to-microsecond 1/2))
-    (kill-process* p SIGINT 1 SIGTERM)
-    (unless (exited?:process p)
+    (kill-comprocess* p SIGINT 1 SIGTERM)
+    (unless (comprocess-exited? p)
       (usleep 100)
       (lp))))
