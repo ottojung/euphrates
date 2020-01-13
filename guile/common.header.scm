@@ -101,7 +101,6 @@
    run-comprocess-with-output-to
    kill-comprocess
    kill-comprocess-with-timeout
-   cleanup-comprocess
 
    define-rec
    ]
@@ -481,11 +480,6 @@
         output)))
     p))
 
-(define [cleanup-comprocess p]
-  (catch #t
-    (lambda [] (close-pipe (comprocess-pipe p)))
-    (lambda args #f)))
-
 (define [kill-comprocess p force?]
-  (kill (if force? SIGKILL SIGTERM)) (comprocess-pid p))
+  (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
 

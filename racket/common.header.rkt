@@ -237,6 +237,3 @@
 (define [kill-comprocess p force?]
   (subprocess-kill p force?))
 
-(define [cleanup-comprocess p] #t) ;; auto-closes
-
-

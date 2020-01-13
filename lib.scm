@@ -498,6 +498,5 @@
        (kill-comprocess p #f)
        (usleep timeout)
        (unless (comprocess-exited? p)
-         (kill-comprocess p #t))
-       (cleanup-comprocess p)))))
+         (kill-comprocess p #t))))))
 
