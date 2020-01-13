@@ -40,12 +40,14 @@
    append-posix-path
    with-bracket
    with-bracket-dw
+   hash-table->alist
    alist->mdict
    mdict
    mass
    mdict-has?
    mdict->alist
    mdict-keys
+   catch-any
 
    with-lock
    dom-print
@@ -68,6 +70,8 @@
    directory-tree
    directory-files
    directory-files-rec
+   file-mtime
+   path-parent-directory
 
    np-thread-fork
    np-thread-yield
