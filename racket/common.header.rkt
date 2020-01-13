@@ -88,8 +88,8 @@
 
 (define [string-split#simple str delim]
   (if (char? delim)
-      (string-split str (string delim))
-      (string-split str delim)))
+      (string-split str (string delim) #:trim? #f)
+      (string-split str delim #:trim? #f)))
 
 (define racket-base-namespace (make-base-namespace))
 
