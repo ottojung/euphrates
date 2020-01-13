@@ -144,19 +144,27 @@
 ;; FILE IO ;;
 ;;;;;;;;;;;;;
 
-(define [read-string-file path [mode 'r]]
-  (letin-with-identity
-   [in (open-file path (~a mode))]
+(define [read-string-file path]
+  (let* [
+   [in (open-file path "r")]
    [text (get-string-all in)]
-   (do (close-port in))
+   (go (close-port in))]
    text))
 
-(define [write-string-file path data [fmt "~a"] [mode 'w]]
+(define [write-string-file path data]
   "mode ::= 'w | 'a"
-  (letin-with-identity
-   [out (open-file path (~a mode))]
-   [re (format out fmt data)]
-   (do (close-port out))
+  (let* [
+   [out (open-file path "w")]
+   [re (display data out)]
+   (go (close-port out))]
+   re))
+
+(define [append-string-file path data]
+  "mode ::= 'w | 'a"
+  (let* [
+   [out (open-file path "w")]
+   [re (display data out)]
+   (go (close-port out))]
    re))
 
 (define remove-stat
@@ -237,5 +245,4 @@
   (file-system-fold enter? leaf down up skip error
                     '()
                     directory))
-
 
