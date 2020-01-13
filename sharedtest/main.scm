@@ -276,7 +276,9 @@
 
 (let [[p (run-comprocess "echo" "hello" "from" "echo")]]
   (display
-   (get-string-all (comprocess-pipe p))))
+   (get-string-all (comprocess-pipe p)))
+  (close-comprocess p)
+  )
 
 (let [[p (run-comprocess "sl")]]
   (port-redirect

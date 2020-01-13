@@ -101,6 +101,7 @@
    run-comprocess
    run-comprocess-with-output-to
    kill-comprocess*
+   close-comprocess
 
    define-rec
    ]
@@ -479,3 +480,9 @@
         (comprocess-pipe p)
         output)))
     p))
+
+(define [close-comprocess p]
+  (catch #t
+    (lambda [] (close-pipe (comprocess-pipe p)))
+    (lambda args #f)))
+
