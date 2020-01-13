@@ -296,24 +296,6 @@
     (lambda []
       (apply format (cons* #t fmt args)))))
 
-(define local-print
-  (let [[mu (my-make-mutex)]]
-    (lambda [s]
-      (call-with-blocked-asyncs
-       (lambda []
-         (let [[err #f]]
-           (my-mutex-lock! mu)
-           (catch-any
-             (lambda []
-               (display s))
-             (lambda argv
-               (set! err argv)))
-           (my-mutex-unlock! mu)
-           (when err (apply throw err))))))))
-
-(define [printf fmt . args]
-  (local-print (apply stringf (cons* fmt args))))
-
 (define [println fmt . args]
   (apply printf (cons* (string-append fmt "\n") args)))
 

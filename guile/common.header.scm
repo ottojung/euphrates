@@ -123,6 +123,24 @@
   :use-module [srfi srfi-111] ;; box
   )
 
+(define local-print
+  (let [[mu (my-make-mutex)]]
+    (lambda [fmt args]
+      (call-with-blocked-asyncs
+       (lambda []
+         (let [[err #f]]
+           (my-mutex-lock! mu)
+           (catch-any
+             (lambda []
+               (apply format #t fmt args))
+             (lambda argv
+               (set! err argv)))
+           (my-mutex-unlock! mu)
+           (when err (apply throw err))))))))
+
+(define [printf fmt . args]
+  (local-print fmt args))
+
 (define [catch-any body handler]
   (catch #t body handler))
 
