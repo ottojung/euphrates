@@ -199,7 +199,11 @@
 
 (let [[p (run-comprocess-with-output-to
           (current-output-port)
-          "sl")]]
+          "/bin/echo" "hello" "from" "echo")]] 0)
+
+(let [[p (run-comprocess-with-output-to
+          (current-output-port)
+          "/usr/games/sl")]]
   (let lp []
     (usleep 10000)
     (unless (comprocess-exited? p)
