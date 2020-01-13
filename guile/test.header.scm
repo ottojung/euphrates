@@ -1,14 +1,15 @@
 
-(define current-dir (dirname (current-filename)))
-(define suffix "/my-lisp-std/test")
-(define target-dir (substring
-                    current-dir
-                    0
-                    (- (string-length current-dir)
-                       (string-length suffix))))
-;; USAGE:
+(eval-when (load eval compile)
+  (define current-dir (dirname (current-filename)))
+  (define suffix "/my-lisp-std/test")
+  (define target-dir (substring
+                      current-dir
+                      0
+                      (- (string-length current-dir)
+                         (string-length suffix))))
+  ;; USAGE:
 
-(add-to-load-path target-dir)
+  (add-to-load-path target-dir))
 
 ;; OR
 
