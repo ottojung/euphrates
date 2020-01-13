@@ -275,7 +275,7 @@
  (println "end"))
 
 (let [[p (run-comprocess "echo" "hello" "from" "echo")]]
-  (close-comprocess p))
+  (cleanup-comprocess p))
 
 (let [[p (run-comprocess-with-output-to
           (current-output-port)
