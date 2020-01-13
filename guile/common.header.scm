@@ -165,7 +165,7 @@
 
 (define string-split#simple string-split)
 
-(define [hash-table->list h] (hash-map->list cons h))
+(define [hash-table->alist h] (hash-map->list cons h))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
