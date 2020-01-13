@@ -291,7 +291,7 @@
           "sl")]]
   (let lp []
     (usleep (second-to-microsecond 1/2))
-    (kill-comprocess* p SIGINT 1 SIGTERM)
+    (kill-comprocess-with-timeout p 1)
     (unless (comprocess-exited? p)
       (usleep 100)
       (lp))))
