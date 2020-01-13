@@ -9,6 +9,8 @@ DIRPREFIX =
 DIRSUFFIX = my-lisp-std
 END =
 
+CURRENT_GIT_COMMIT = $(shell git rev-parse HEAD)
+
 DIR = $(DIRPREFIX)/$(DIRSUFFIX)
 
 TESTFILE =
@@ -25,7 +27,8 @@ tracket:
 common: | $(DIR) $(DIR)/common.$(END)
 
 $(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) lib.scm $(DIRPREFIX)/common.footer.$(END)
-	cat $^ > $@
+	echo ";; my-lisp-std-version-$(CURRENT_GIT_COMMIT)" > $@
+	cat $^ >> $@
 
 $(DIR):
 	mkdir -p $@
