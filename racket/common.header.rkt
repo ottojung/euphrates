@@ -91,6 +91,13 @@
       (string-split str (string delim))
       (string-split str delim)))
 
+(define racket-base-namespace (make-base-namespace))
+
+;; SPECIFICATION: racket does not see local scope in eval
+(define [eval-string str]
+  (eval (call-with-input-string str read)
+        racket-base-namespace))
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;;;;;;;;
