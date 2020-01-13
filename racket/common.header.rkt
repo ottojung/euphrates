@@ -39,3 +39,32 @@
 
 (define fold foldl)
 
+(define [open-file filepath mode]
+  (cond
+   [(equal? "w" mode)
+    (open-output-file filepath
+                      #:mode 'text
+                      #:exists-flag 'truncate)]
+   [(equal? "wb" mode)
+    (open-output-file filepath
+                      #:mode 'binary
+                      #:exists-flag 'truncate)]
+   [(equal? "a" mode)
+    (open-output-file filepath
+                      #:mode 'text
+                      #:exists-flag 'append)]
+   [(equal? "ab" mode)
+    (open-output-file filepath
+                      #:mode 'binary
+                      #:exists-flag 'append)]
+   [(equal? "r" mode)
+    (open-input-file filepath
+                      #:mode 'text)]
+   [(equal? "rb" mode)
+    (open-input-file filepath
+                     #:mode 'binary)]
+   [else (error "incorrect file mode")]))
+
+(define [usleep microsecond]
+  (sleep (/ microsecond (* 1000 1000))))
+
