@@ -168,3 +168,8 @@
 ;;    Where dirname1 is the parent dir of the file
 ;;   ")
 
+(define-syntax-rule [define-rec name . fields]
+  (struct name fields
+          #:mutable
+          #:prefab))
+

@@ -7,12 +7,12 @@
 ;; (define-rec-strs "rec1" "aa" "bb")
 (define-rec rec1 aa bb)
 
-(define rec (construct-rec1 1 2))
+(define rec (rec1 1 2))
 
 (println "record? ~a" (record? rec))
-(println "aa = ~a" (aa/rec1 rec))
-(set!aa/rec1 rec 10)
-(println "aa = ~a" (aa/rec1 rec))
+(println "aa = ~a" (rec1-aa rec))
+(set-rec1-aa! rec 10)
+(println "aa = ~a" (rec1-aa rec))
 
 (format #t "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
 
