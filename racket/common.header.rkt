@@ -240,11 +240,13 @@
       re)))
 
 (define [run-comprocess command . args]
-  (apply run-comprocess#private
-         (list* #f command args)))
+  (run-comprocess#private #f command args))
 
-(define run-comprocess-with-output-to
-  run-comprocess#private)
+(define [run-comprocess-with-output-to
+         out
+         command
+         . args]
+  (run-comprocess#private out command args))
 
 (define [kill-comprocess p force?]
   (subprocess-kill p force?))
