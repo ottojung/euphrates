@@ -94,7 +94,6 @@
    comprocess-command
    comprocess-args
    comprocess-mode
-   comprocess-pipe
    comprocess-pid
    comprocess-status
    comprocess-exited?

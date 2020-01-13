@@ -177,3 +177,77 @@
           #:mutable
           #:prefab))
 
+
+;;;;;;;;;;;;;;;
+;; PROCESSES ;;
+;;;;;;;;;;;;;;;
+
+(define-rec comprocess
+  command
+  args
+  mode
+  pipe
+  pid
+  status
+  exited?
+  )
+
+(define [run-comprocess#private mode command . args]
+  "Run process in background
+   Input and Output ports are represented by `comprocess-pipe'
+   They are new, not related to `(current-input-port)' or `(current-ouput-porn)'
+
+   type ::= mode -> string -> list of string -> process
+   mode ::= OPEN_READ | OPEN_WRITE | OPEN_BOTH
+  "
+  (let [[p
+         (comprocess
+          command
+          args
+          mode
+          #f
+          #f
+          #f
+          #f)]]
+    (call-with-new-thread
+     (lambda []
+       (let* [[pipe (apply open-pipe*
+                           (cons* (comprocess-mode p)
+                                  (comprocess-command p)
+                                  (comprocess-args p)))]
+              [pid (hashq-ref port/pid-table pipe)]]
+         (set-comprocess-pipe! p pipe)
+         (set-comprocess-pid! p pid)
+         (set-comprocess-status! p (cdr (waitpid pid))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
+         (set-comprocess-exited?! p #t))))
+
+    ;; wait for pipe to initialize
+    (let lp []
+      (unless (comprocess-pid p)
+        (usleep 100)
+        (lp)))
+    p))
+
+(define [run-comprocess command . args]
+  (apply run-comprocess#private (cons* OPEN_READ command args)))
+
+(define [run-comprocess-with-output-to output command . args]
+  "Run process in background
+   Input and Output ports are represented by `comprocess-pipe'
+   Output port will be redirected to `output', input is unchanged
+
+   type ::= port -> string -> list of string -> process
+  "
+  (let [[p (apply run-comprocess (cons* command args))]]
+    (call-with-new-thread
+     (lambda []
+       (port-redirect
+        (comprocess-pipe p)
+        output)))
+    p))
+
+(define [close-comprocess p]
+  (catch #t
+    (lambda [] (close-pipe (comprocess-pipe p)))
+    (lambda args #f)))
+
