@@ -227,6 +227,9 @@
   (apply run-comprocess#private
          (list* #f command args)))
 
+(define run-comprocess-with-output-to
+  run-comprocess#private)
+
 (define [close-comprocess p] #t) ;; auto-closes
 
 
