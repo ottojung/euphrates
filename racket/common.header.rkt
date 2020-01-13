@@ -6,6 +6,8 @@
 
 (require compatibility/defmacro)
 
+(provide (all-defined-out))
+
 (define 1+ add1)
 (define 1- sub1)
 
@@ -181,6 +183,7 @@
           #:mutable
           #:prefab))
 
+(define record? struct?)
 
 ;;;;;;;;;;;;;;;
 ;; PROCESSES ;;
