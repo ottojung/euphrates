@@ -224,8 +224,8 @@
       (define [run-in-thread]
         (subprocess-wait p)
 
-        (when out-port
-          (close-output-port out-port))
+        ;; (when out-port
+        ;;   (close-output-port out-port))
         (when stdin
           (close-output-port stdin))
         (when stdout
