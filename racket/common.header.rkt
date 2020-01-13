@@ -195,41 +195,43 @@
 (define-rec comprocess
   command
   args
-  outport
+  pid
+  status
   exited?
-  status)
+  )
 
-(define [run-comprocess#private command args]
-  (if (comprocess-p self)
-      'already-running
-      (let [[out-port (comprocess-outport self)]]
+;; out-port can be #f
+(define [run-comprocess#private out-port command args]
+  (let-values
+      [[[p stdout stdin stderr]
+        (apply subprocess
+               (list*
+                out-port #f 'stdout ;; stdout stdin stderr
+                'new                ;; new group, means that (kill ..) will kill its children also
 
-        (let-values
-            [[[p stdout stdin stderr]
-              (apply subprocess
-                     (list*
-                      out-port #f 'stdout ;; stdout stdin stderr
-                      'new                ;; new group, means that (kill ..) will kill its children also
+                command
+                args))]
+       [[re] (comprocess command args #f #f #f)]]
 
-                      (comprocess-command self)
-                      (comprocess-args self)))]]
+    (set-comprocess-pid! re (subprocess-pid p))
 
-          (define [run-in-thread]
-            (subprocess-wait p)
+    (define [run-in-thread]
+      (subprocess-wait p)
 
-            (when out-port
-              (close-output-port out-port))
-            (when stdin
-              (close-output-port stdin))
-            (when stdout
-              (close-input-port stdout))
-            (when stderr
-              (close-input-port stderr))
+      (when out-port
+        (close-output-port out-port))
+      (when stdin
+        (close-output-port stdin))
+      (when stdout
+        (close-input-port stdout))
+      (when stderr
+        (close-input-port stderr))
 
-            (set-comprocess-exited?! #t)
-            (set-comprocess-status! (subprocess-status p)))
+      (set-comprocess-exited?! re #t)
+      (set-comprocess-status! re (subprocess-status p)))
 
-          (thread run-in-thread)))))
+    (thread run-in-thread)
+    re))
 
 ;; (define [run-comprocess#private mode command . args]
 ;;   "Run process in background
