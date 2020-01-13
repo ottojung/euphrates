@@ -464,14 +464,14 @@
 ;; FILE IO ;;
 ;;;;;;;;;;;;;
 
-(define* [read-file path #:optional [mode 'r]]
+(define [read-file path [mode 'r]]
   (letin-with-identity
    [in (open-file path (~a mode))]
    [text (get-string-all in)]
    (do (close-port in))
    text))
 
-(define* [write-file path data #:optional [fmt "~a"] [mode 'w]]
+(define [write-file path data [fmt "~a"] [mode 'w]]
   "mode ::= 'w | 'a"
   (letin-with-identity
    [out (open-file path (~a mode))]
