@@ -109,11 +109,9 @@
   #:with add-name (format-id #'name "gfunc/instantiate-~a" (syntax-e #'name))
   (add-name (list . check-list) (lambda [] . body)))
 
-
-
-;;;;;;;;;;;;;
-;; FILE IO ;;
-;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;; FILESYSTEM ;;
+;;;;;;;;;;;;;;;;
 
 (define [read-file readf filepath mode]
   (let* [[file (open-input-file filepath #:mode mode)]

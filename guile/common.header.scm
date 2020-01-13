@@ -140,9 +140,9 @@
        ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
 
-;;;;;;;;;;;;;
-;; FILE IO ;;
-;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;
+;; FILESYSTEM ;;
+;;;;;;;;;;;;;;;;
 
 (define [read-string-file path]
   (let* [
