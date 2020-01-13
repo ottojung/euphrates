@@ -388,9 +388,6 @@
   (format #t "(~a = ~a = ~a)\n" name x result)
   (cont x))
 
-(define [time-to-nanoseconds time]
-  (+ (time-nanosecond time) (* 1000000000 (time-second time))))
-
 (define [port-redirect from to]
   "Redirect from `from' to `to' byte by byte, until `eof-object?'
    Returns count of written bytes
@@ -709,119 +706,119 @@
 ;; PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Enable asynchronous auto-yield
-;; making non-preemptive threads to preemptive ones (or `i-thread's - "interuptible threads")
-;;
-;; NOTE:
-;; * `my-mutex-lock!' is not interruptible
-;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `my-mutex-unlock!'
-;;   Or use `np-thread-lockr' and `np-thread-unlockr' instead
-;; * `sleep' (`usleep') is not interruptible
-;;   use `np-thread-usleep' instead
+;; ;; Enable asynchronous auto-yield
+;; ;; making non-preemptive threads to preemptive ones (or `i-thread's - "interuptible threads")
+;; ;;
+;; ;; NOTE:
+;; ;; * `my-mutex-lock!' is not interruptible
+;; ;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `my-mutex-unlock!'
+;; ;;   Or use `np-thread-lockr' and `np-thread-unlockr' instead
+;; ;; * `sleep' (`usleep') is not interruptible
+;; ;;   use `np-thread-usleep' instead
 
-;; TODO: [variable interrupt frequency] use this somehow
-(define global-interrupt-frequency-p (make-parameter 1000000))
+;; ;; TODO: [variable interrupt frequency] use this somehow
+;; (define global-interrupt-frequency-p (make-parameter 1000000))
 
-(define-values
-  [i-thread-yield
-   i-thread-dont-yield]
-  (let [[interruptor-thread #f]
-        [lst (list)]
-        [interruptor-finished? #t]]
+;; (define-values
+;;   [i-thread-yield
+;;    i-thread-dont-yield]
+;;   (let [[interruptor-thread #f]
+;;         [lst (list)]
+;;         [interruptor-finished? #t]]
 
-    (define [interruptor-loop]
-      (if (null? lst)
-          (set! interruptor-finished? #t)
-          (begin
-            (map
-             (lambda [th]
-               (system-async-mark
-                np-thread-yield
-                th))
-             lst)
-            (usleep 900000) ;; TODO: [variable interrupt frequency]
-            (interruptor-loop))))
+;;     (define [interruptor-loop]
+;;       (if (null? lst)
+;;           (set! interruptor-finished? #t)
+;;           (begin
+;;             (map
+;;              (lambda [th]
+;;                (system-async-mark
+;;                 np-thread-yield
+;;                 th))
+;;              lst)
+;;             (usleep 900000) ;; TODO: [variable interrupt frequency]
+;;             (interruptor-loop))))
 
-    (values
-     (lambda [thread]
+;;     (values
+;;      (lambda [thread]
 
-       (when interruptor-finished?
-         (set! interruptor-thread
-           (call-with-new-thread interruptor-loop)))
+;;        (when interruptor-finished?
+;;          (set! interruptor-thread
+;;            (call-with-new-thread interruptor-loop)))
 
-       (system-async-mark
-        (lambda []
-          (unless (member thread lst)
-            (set! lst (cons thread lst))))
-        interruptor-thread))
+;;        (system-async-mark
+;;         (lambda []
+;;           (unless (member thread lst)
+;;             (set! lst (cons thread lst))))
+;;         interruptor-thread))
 
-     (lambda [thread]
-       (unless interruptor-finished?
-         (system-async-mark
-          (lambda []
-            (set! lst
-              (filter (lambda [th] (not (equal? th thread)))
-                      lst)))
-          interruptor-thread))))))
+;;      (lambda [thread]
+;;        (unless interruptor-finished?
+;;          (system-async-mark
+;;           (lambda []
+;;             (set! lst
+;;               (filter (lambda [th] (not (equal? th thread)))
+;;                       lst)))
+;;           interruptor-thread))))))
 
-(define [i-thread-yield-me]
-  (i-thread-yield ((@ [ice-9 threads] current-thread))))
+;; (define [i-thread-yield-me]
+;;   (i-thread-yield ((@ [ice-9 threads] current-thread))))
 
-(define [i-thread-dont-yield-me]
-  (i-thread-dont-yield ((@ [ice-9 threads] current-thread))))
+;; (define [i-thread-dont-yield-me]
+;;   (i-thread-dont-yield ((@ [ice-9 threads] current-thread))))
 
-(define-syntax-rule [i-thread-run! . thunk]
-  (np-thread-run!
-   (dynamic-wind
-     i-thread-yield-me
-     (lambda [] (begin . thunk))
-     i-thread-dont-yield-me)))
+;; (define-syntax-rule [i-thread-run! . thunk]
+;;   (np-thread-run!
+;;    (dynamic-wind
+;;      i-thread-yield-me
+;;      (lambda [] (begin . thunk))
+;;      i-thread-dont-yield-me)))
 
-;; For debug purposes
-(define-values
-  [i-thread-critical-points
-   i-thread-critical-points-append!
-   i-thread-critical-points-remove!
-   i-thread-critical-points-print]
-  (let [[lst (list)]
-        [mut (my-make-mutex)]]
-    (values
-     (lambda [] lst)
-     (lambda [st]
-       (my-mutex-lock! mut)
-       (set! lst (cons st lst))
-       (my-mutex-unlock! mut))
-     (lambda [st]
-       (my-mutex-lock! mut)
-       (set! lst
-         (filter (lambda [el] (not (equal? el st)))
-                 lst))
-       (my-mutex-unlock! mut))
-     (lambda []
-       (format #t "--- CRITICAL POINTS ---\n")
-       (for-each
-        (lambda [st]
-          (display-backtrace st (current-output-port)))
-        lst)
-       (format #t "--- END CRITICAL POINTS ---\n")))))
+;; ;; For debug purposes
+;; (define-values
+;;   [i-thread-critical-points
+;;    i-thread-critical-points-append!
+;;    i-thread-critical-points-remove!
+;;    i-thread-critical-points-print]
+;;   (let [[lst (list)]
+;;         [mut (my-make-mutex)]]
+;;     (values
+;;      (lambda [] lst)
+;;      (lambda [st]
+;;        (my-mutex-lock! mut)
+;;        (set! lst (cons st lst))
+;;        (my-mutex-unlock! mut))
+;;      (lambda [st]
+;;        (my-mutex-lock! mut)
+;;        (set! lst
+;;          (filter (lambda [el] (not (equal? el st)))
+;;                  lst))
+;;        (my-mutex-unlock! mut))
+;;      (lambda []
+;;        (format #t "--- CRITICAL POINTS ---\n")
+;;        (for-each
+;;         (lambda [st]
+;;           (display-backtrace st (current-output-port)))
+;;         lst)
+;;        (format #t "--- END CRITICAL POINTS ---\n")))))
 
-(define-syntax-rule [i-thread-critical! . thunk]
-  "
-  Will not interrupt during execution of `thunk'
-  Unsafe: must finish quick!
-  "
-  (call-with-blocked-asyncs
-   (lambda []
-     (let [[st (make-stack #t)]]
-       (i-thread-critical-points-append! st)
-       (begin . thunk)
-       (i-thread-critical-points-remove! st)))))
+;; (define-syntax-rule [i-thread-critical! . thunk]
+;;   "
+;;   Will not interrupt during execution of `thunk'
+;;   Unsafe: must finish quick!
+;;   "
+;;   (call-with-blocked-asyncs
+;;    (lambda []
+;;      (let [[st (make-stack #t)]]
+;;        (i-thread-critical-points-append! st)
+;;        (begin . thunk)
+;;        (i-thread-critical-points-remove! st)))))
 
-(define [i-thread-critical-b! thunk finally]
-  "
-  Same as `i-thread-critical' but also puts `thunk' and `finally' to `with-bracket' clause
-  "
-  (i-thread-critical! (with-bracket thunk finally)))
+;; (define [i-thread-critical-b! thunk finally]
+;;   "
+;;   Same as `i-thread-critical' but also puts `thunk' and `finally' to `with-bracket' clause
+;;   "
+;;   (i-thread-critical! (with-bracket thunk finally)))
 
 ;;;;;;;;;;;;;;;
 ;; PROCESSES ;;

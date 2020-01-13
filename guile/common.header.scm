@@ -130,6 +130,12 @@
 (define [my-mutex-lock! mut] (mutex-lock! mut))
 (define [my-mutex-unlock! mut] (mutex-unlock! mut))
 
-(define [time-get-monotonic-nanoseconds-timestamp]
-  (time-to-nanoseconds ((@ (srfi srfi-19) current-time) time-monotonic)))
+(define time-get-monotonic-nanoseconds-timestamp
+  (let [[time-to-nanoseconds
+         (lambda [time]
+           (+ (time-nanosecond time)
+              (* 1000000000 (time-second time))))]]
+    (lambda []
+      (time-to-nanoseconds
+       ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
