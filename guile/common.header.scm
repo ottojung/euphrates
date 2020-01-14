@@ -57,6 +57,7 @@
    load-file-in-namespace
    get-command-line-arguments
    get-current-program-path
+   string-endswith?
 
    with-lock
    dom-print
@@ -200,6 +201,9 @@
     (if (null? ret)
         'unknown-current-program-path
         (car ret))))
+
+(define [string-endswith? str suffix]
+  (string-suffix? suffix str))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;

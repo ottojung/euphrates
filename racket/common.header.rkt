@@ -41,6 +41,7 @@
 (define [get-u8 from] (read-byte from))
 (define [put-u8 to byte] (write-byte byte to))
 
+(define string-endswith? string-suffix?)
 (define fold foldl)
 (define and-map andmap)
 (define or-map andmap)
