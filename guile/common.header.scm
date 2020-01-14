@@ -40,6 +40,10 @@
    append-posix-path
    with-bracket
    with-bracket-dw
+   call-with-new-sys-thread
+   cancel-sys-thread
+   sys-thread-exited?
+   string-split#simple
    hash-table->alist
    alist->mdict
    mdict
@@ -167,6 +171,8 @@
        ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
 (define call-with-new-sys-thread call-with-new-thread)
+(define cancel-sys-thread cancel-thread)
+(define sys-thread-exited? thread-exited?)
 
 (define string-split#simple string-split)
 

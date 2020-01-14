@@ -85,6 +85,8 @@
   (sleep (/ microsecond (* 1000 1000))))
 
 (define call-with-new-sys-thread thread)
+(define cancel-sys-thread kill-thread)
+(define sys-thread-exited? thread-dead?)
 
 (define [string-split#simple str delim]
   (if (char? delim)
