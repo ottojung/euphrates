@@ -210,14 +210,19 @@
                names)]]
     fullnames))
 
-;; TODO:
-;; (define [directory-files-rec directory]
-;;   "Returns object like this:
-;;    ((fullname name dirname1 dirname2 dirname3...
-;;     (fullname name ....
+(define [directory-files-rec directory]
+  "Returns object like this:
+   ((fullname name dirname1 dirname2 dirname3...
+    (fullname name ....
 
-;;    Where dirname1 is the parent dir of the file
-;;   ")
+   Where dirname1 is the parent dir of the file
+  "
+  (fold-files
+   (lambda [f type ctx]
+     (cons (map path->string
+                (cons f (reverse (explode-path f))))
+           ctx))
+   (list)))
 
 (define [path-parent-directory path]
   (let-values [[[base name must-be-dir?]
