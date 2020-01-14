@@ -6,7 +6,7 @@ TESTFILES = $(shell ls sharedtest/)
 
 
 DIRPREFIX =
-DIRSUFFIX = my-lisp-std
+DIRSUFFIX = my-$(DIRPREFIX)-std
 END =
 
 CURRENT_GIT_COMMIT = $(shell git rev-parse HEAD)

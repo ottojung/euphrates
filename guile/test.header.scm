@@ -1,7 +1,7 @@
 
 (eval-when (load eval compile)
   (define current-dir (dirname (current-filename)))
-  (define suffix "/my-lisp-std/test")
+  (define suffix "/my-guile-std/test")
   (define target-dir (substring
                       current-dir
                       0
@@ -25,7 +25,7 @@
 ;; set GUILE_LOAD_PATH+=$HOME/lib
 
 ;; then:
-(use-modules [my-lisp-std common])
+(use-modules [my-guile-std common])
 (use-modules [ice-9 threads])
 (use-modules [ice-9 textual-ports])
 (use-modules [[srfi srfi-18]

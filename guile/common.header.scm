@@ -1,5 +1,5 @@
 
-(define-module [my-lisp-std common]
+(define-module [my-guile-std common]
   :export
   [
    letin
