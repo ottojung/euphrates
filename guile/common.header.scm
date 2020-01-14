@@ -52,6 +52,7 @@
    eval-string-in-namespace
    load-file-in-namespace
    get-command-line-arguments
+   get-current-program-path
 
    with-lock
    dom-print
@@ -187,6 +188,12 @@
     (if (< (length ret) 2)
         (list)
         (cdr ret))))
+
+(define [get-current-program-path]
+  (let [[ret (command-line)]]
+    (if (null? ret)
+        'unknown-current-program-path
+        (car ret))))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;

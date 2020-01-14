@@ -114,6 +114,9 @@
 (define [get-command-line-arguments]
   (vector->list (current-command-line-arguments)))
 
+(define [get-current-program-path]
+  (path->string (find-system-path 'run-file)))
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;;;;;;;;
