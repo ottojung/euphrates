@@ -202,7 +202,7 @@
 
 (println
  "stack result = ~a"
- (with-stack
+ (st
   (PUSH 2)
   (PUSH 3)
   ADD

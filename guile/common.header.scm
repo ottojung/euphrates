@@ -25,8 +25,11 @@
    dom-default
 
    with-stack-stack
+   with-stack-full-loop-p
    with-stack-full
    with-stack
+   st
+   define/stack
    PUSH
    DROP
    ADD
@@ -34,6 +37,7 @@
    NEGATE
    CALL
    IF-THEN-ELSE
+   PRINT
 
    ~a
    range

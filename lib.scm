@@ -137,28 +137,43 @@
 ;; USED IN CALL
 (define with-stack-stack (make-parameter (list)))
 
-(define [with-stack-full initial functions]
-  (let loop [[stack initial] [rest functions]]
+(define [with-stack-full-loop initial operations]
+  (let loop [[stack initial] [rest operations]]
     (if (null? rest)
         stack
-        (let* [[head (car rest)]
+        (let* [[first (car rest)]
+               [simple? (procedure? first)]
+               [head (if simple? first (cdr first))]
                [arity (procedure-get-minimum-arity head)]]
           (call-with-values
               (lambda []
-                (cond
-                 [(procedure? head)
-                  (apply head (take stack arity))]
-                 [(list? head)
-                  (case (car head)
-                    [['call]
-                     (parameterize [[with-stack-stack stack]]
-                       ((cdr head)))])]))
+                (if simple?
+                    (apply head (take stack arity))
+                    (case (car first)
+                      [['call]
+                       (parameterize [[with-stack-stack stack]]
+                         (apply head (take stack arity)))])))
             (lambda vals
               (loop (append vals (drop stack arity))
                     (cdr rest))))))))
 
-(define [with-stack . functions]
-  (with-stack-full (with-stack-stack) functions))
+(define with-stack-full-loop-p
+  (make-parameter with-stack-full-loop))
+
+(define [with-stack-full initial operations]
+  ((with-stack-full-loop-p) initial operations))
+
+;; this is like `lambda' where `(with-stack-stack)' is the lexical/dynamic scope
+(define [with-stack operations]
+  (with-stack-full (with-stack-stack) operations))
+
+;; this is like `fn'
+(define [st . operations]
+  (with-stack operations))
+
+(define-syntax-rule [define/stack [name . args] . operations]
+  (define [name . args]
+    (with-stack (list . operations))))
 
 (define [PUSH x] (lambda [] x))
 (define [DROP x] (values))
@@ -170,6 +185,11 @@
   (if test
       then
       else))
+
+(define PRINT
+  (case-lambda
+    [[fmt] (lambda [x] (println fmt x))]
+    [[] (PRINT "~a")]))
 
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
