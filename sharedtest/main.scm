@@ -194,3 +194,22 @@
  (np-thread-fork zulul)
 
  (println "end"))
+
+
+;;;;;;;;;;;;;;;;
+;; STACK FLOW ;;
+;;;;;;;;;;;;;;;;
+
+(println
+ "stack result = ~a"
+ (with-stack
+  (PUSH 2)
+  (PUSH 3)
+  ADD
+  (PUSH 5)
+  MUL
+  (lambda [x] (println "stack op1 result = ~a" x) x)
+  NEGATE
+  (PUSH 100)
+  ADD))
+

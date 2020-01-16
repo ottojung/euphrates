@@ -13,6 +13,7 @@
    monoids-r*
    monoid-r*
    monoid*
+
    letin-with-full
    letin-parameterize
    letin-with-full-parameterized
@@ -22,6 +23,18 @@
    domid
    domf
    dom-default
+
+   with-stack-stack
+   with-stack-full
+   with-stack
+   PUSH
+   DROP
+   ADD
+   MUL
+   NEGATE
+   CALL
+   IF-THEN-ELSE
+
    ~a
    range
    list-init
@@ -136,6 +149,10 @@
   :use-module [srfi srfi-42]
   :use-module [srfi srfi-111] ;; box
   )
+
+(define [procedure-get-minimum-arity proc]
+  (let [[ret (procedure-minimum-arity proc)]]
+    (if ret (car ret) #f)))
 
 (define my-make-mutex (@ (srfi srfi-18) make-mutex))
 (define [my-mutex-lock! mut] (mutex-lock! mut))

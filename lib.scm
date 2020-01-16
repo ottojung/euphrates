@@ -128,6 +128,50 @@
           (cont x))))
 
 ;;;;;;;;;;;;;;;;
+;; STACK FLOW ;;
+;;;;;;;;;;;;;;;;
+
+;; get current stack
+;; used for composition
+;; DOES NOT UPDATE DURING `with-stack' EXECUTION
+;; USED IN CALL
+(define with-stack-stack (make-parameter (list)))
+
+(define [with-stack-full initial functions]
+  (let loop [[stack initial] [rest functions]]
+    (if (null? rest)
+        stack
+        (let* [[head (car rest)]
+               [arity (procedure-get-minimum-arity head)]]
+          (call-with-values
+              (lambda []
+                (cond
+                 [(procedure? head)
+                  (apply head (take stack arity))]
+                 [(list? head)
+                  (case (car head)
+                    [['call]
+                     (parameterize [[with-stack-stack stack]]
+                       ((cdr head)))])]))
+            (lambda vals
+              (loop (append vals (drop stack arity))
+                    (cdr rest))))))))
+
+(define [with-stack . functions]
+  (with-stack-full (with-stack-stack) functions))
+
+(define [PUSH x] (lambda [] x))
+(define [DROP x] (values))
+(define [ADD a b] (+ a b))
+(define [MUL a b] (* a b))
+(define [NEGATE x] (- x))
+(define [CALL x] (cons 'call x)) ;; parameterizes call to `x'
+(define [IF-THEN-ELSE else then test]
+  (if test
+      then
+      else))
+
+;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
 
