@@ -144,18 +144,17 @@
         (let* [[first (car rest)]
                [simple? (procedure? first)]
                [head (if simple? first (cdr first))]
-               [arity (procedure-get-minimum-arity head)]]
-          (call-with-values
-              (lambda []
-                (if simple?
-                    (apply head (take stack arity))
-                    (case (car first)
-                      [['call]
-                       (parameterize [[with-stack-stack stack]]
-                         (apply head (take stack arity)))])))
-            (lambda vals
-              (loop (append vals (drop stack arity))
-                    (cdr rest))))))))
+               [arity (procedure-get-minimum-arity head)]
+               [current (lambda [] (apply head (take stack arity)))]
+               [cont (lambda vals
+                       (loop (append vals (drop stack arity))
+                             (cdr rest)))]]
+          (if simple?
+              (call-with-values current cont)
+              (case (car first)
+                [['call]
+                 (parameterize [[with-stack-stack stack]]
+                   (call-with-values current cont))]))))))
 
 (define with-stack-full-loop-p
   (make-parameter with-stack-full-loop))
