@@ -154,7 +154,9 @@
               (case (car first)
                 [['call]
                  (parameterize [[with-stack-stack stack]]
-                   (call-with-values current cont))]))))))
+                   (call-with-values current cont))]
+                [['push/cc]
+                 (cont cont)]))))))
 
 (define with-stack-full-loop-p
   (make-parameter with-stack-full-loop))
