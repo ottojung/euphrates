@@ -159,7 +159,9 @@
                  (parameterize [[with-stack-stack stack]]
                    (finish (cdr first)))]
                 [['push/cc]
-                 ((cont 0) (cont 0))]))))))
+                 ((cont 0) (cont 0))]
+                [['call/cc]
+                 ((cdr first) (cont 0))]))))))
 
 (define with-stack-full-loop-p
   (make-parameter with-stack-full-loop))
