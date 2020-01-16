@@ -154,15 +154,16 @@
                     (call-with-values current (cont arity))))]]
           (if simple?
               (finish first)
-              (case (car first)
-                [['call]
-                 (parameterize [[with-stack-stack stack]]
-                   (finish (cdr first)))]
-                [['push/cc]
-                 ((cont 0) (cont 0))]
-                [['call/cc]
-                 (parameterize [[with-stack-stack stack]]
-                   ((cdr first) (cont 0)))]))))))
+              (let [[t (car first)]]
+                (cond
+                 [(eq? t 'call)
+                  (parameterize [[with-stack-stack stack]]
+                    (finish (cdr first)))]
+                 [(eq? t 'push/cc)
+                  ((cont 0) (cont 0))]
+                 [(eq? t 'call/cc)
+                  (parameterize [[with-stack-stack stack]]
+                    ((cdr first) (cont 0)))])))))))
 
 (define with-stack-full-loop-p
   (make-parameter with-stack-full-loop))
