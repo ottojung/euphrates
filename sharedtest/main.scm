@@ -257,3 +257,25 @@
  (LOAD y)
  (lambda [x] (println "LOAD y = ~a" x) x))
 
+(st
+ (PUSH "GOTO test")
+ (PRINT)
+ (PUSH (list 2 3))
+ (PROJ car cadr)
+ (MAP (STORE x) (STORE y))
+ (lambda [x y] (println "x = ~a ; y = ~a" x y) x)
+ PUSH/CC
+ (STORE/DEFAULT cont1)
+ (LOAD x)
+ (PUSH 1)
+ ADD
+ (STORE x)
+ (lambda [x] (println "LOAD x = ~a" x) x)
+ (lambda [x]
+   (if (< x 10)
+       (GOTO (LOAD cont1))
+       identity))
+ EVAL
+ (LOAD y)
+ (lambda [x] (println "LOAD y = ~a" x) x))
+

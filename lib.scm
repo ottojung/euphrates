@@ -355,6 +355,8 @@
            [(stack-special-value? top)
             (let [[t (stack-special-value-type top)]]
               (cond
+               [(eq? t 'eval) ;; interpret instruction from the stack
+                (loop (cdr stack) (cons (car stack) (cdr rest)))]
                [(eq? t 'call)
                 (parameterize [[with-stack-stack stack]]
                   (loop (stack-apply
@@ -365,6 +367,13 @@
                 (loop
                  ((stack-special-value-value top) stack)
                  (cdr rest))]
+               [(eq? t 'control) ;; like `whole' but also accepts and returns the `operations'
+                (let-values
+                    [[[new-stack new-ops]
+                      ((stack-special-value-value top)
+                       stack
+                       (cdr rest))]]
+                  (loop new-stack new-ops))]
                [(eq? t 'push/cc)
                 (loop
                  (stack-apply
@@ -399,6 +408,7 @@
 (define [MUL a b] (* a b))
 (define [NEGATE x] (- x))
 (define [CALL x] (stack-special-value 'call x)) ;; parameterizes call to `x'
+(define EVAL (stack-special-value 'eval #f))
 (define [IF-THEN-ELSE else then test]
   (if test
       then
@@ -411,6 +421,12 @@
 
 (define PUSH/CC (stack-special-value 'push/cc #f))
 (define [CALL/CC f] (stack-special-value 'call/cc f))
+(define [GOTO continuation . args]
+  (stack-special-value
+   'control
+   (lambda [stack ops]
+     ((continuation) args)
+     (values #f (list)))))
 
 (define [MAP . funcs]
   "
@@ -448,6 +464,15 @@
     (hash-set! (my-global-scope-table-p) name value)
     value))
 
+(define [STORE/DEFAULT-symb name]
+  (lambda [value]
+    (let [[h (my-global-scope-table-p)]]
+      (if (hash-has-key? h name)
+          (hash-ref h name value)
+          (begin
+            (hash-set! h name value)
+            value)))))
+
 (define LOAD-symb
   (let [[unique (make-unique)]]
     (lambda [name]
@@ -461,6 +486,8 @@
 
 (define-syntax-rule [STORE name]
   (STORE-symb (quote name)))
+(define-syntax-rule [STORE/DEFAULT name]
+  (STORE/DEFAULT-symb (quote name)))
 (define-syntax-rule [LOAD name]
   (LOAD-symb (quote name)))
 

@@ -10,6 +10,7 @@
   [ice-9 match]
   [srfi srfi-1]
   [srfi srfi-9] ;; records
+  [srfi srfi-11] ;; let-values
   [srfi srfi-13]
   [srfi srfi-16]
   [srfi srfi-18]
