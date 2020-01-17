@@ -260,10 +260,8 @@
 (st
  (PUSH "GOTO test")
  (PRINT)
- (PUSH (list 2 3))
- (PROJ car cadr)
- (MAP (STORE x) (STORE y))
- (lambda [x y] (println "x = ~a ; y = ~a" x y) x)
+ (PUSH 0)
+ (STORE x)
  PUSH/CC
  (STORE/DEFAULT cont1)
  (LOAD x)
@@ -276,6 +274,26 @@
        (GOTO (LOAD cont1))
        identity))
  EVAL
- (LOAD y)
- (lambda [x] (println "LOAD y = ~a" x) x))
+ (LOAD x)
+ (lambda [x] (println "LOAD-end x = ~a" x) x))
+
+(st
+ (PUSH "GOTO test 2")
+ (PRINT)
+ (PUSH 0)
+ (STORE x)
+ PUSH/CC
+ (STORE/DEFAULT cont1)
+ (LOAD x)
+ (PUSH 1)
+ ADD
+ (STORE x)
+ (lambda [x] (println "LOAD x = ~a" x) x)
+ (lambda [x] (< x 10))
+ (PUSH (GOTO (LOAD cont1)))
+ (PUSH identity)
+ IF-THEN-ELSE
+ EVAL
+ (LOAD x)
+ (lambda [x] (println "LOAD-end x = ~a" x) x))
 
