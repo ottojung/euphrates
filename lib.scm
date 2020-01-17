@@ -216,6 +216,48 @@
 (define [append-posix-path . paths]
   (list-fold "" paths append-posix-path2))
 
+(define-syntax-rule [with-lock mutex . bodies]
+  (call-with-blocked-asyncs
+   (lambda []
+     (my-mutex-lock! mutex)
+     (let [[ret (begin . bodies)]]
+       (my-mutex-unlock! mutex)
+       ret))))
+
+(define [stringf fmt . args]
+  (with-output-to-string
+    (lambda []
+      (apply printf (cons* fmt args)))))
+
+(define [println fmt . args]
+  (apply printf (cons* (string-append fmt "\n") args)))
+
+(define global-debug-mode-filter (make-parameter #f))
+
+(define [debug fmt . args]
+  (let [[p (global-debug-mode-filter)]]
+    (when (or (not p) (and p (p fmt args)))
+      (apply printf (cons* fmt args)))))
+
+;; Logs computations
+(define [dom-print name result x cont]
+  (printf "(~a = ~a = ~a)\n" name x result)
+  (cont x))
+
+(define [port-redirect from to]
+  "Redirect from `from' to `to' byte by byte, until `eof-object?'
+   Returns count of written bytes
+
+   type ::= port -> port -> int
+  "
+  (let lp [[count 0]]
+    (let [[byte (get-u8 from)]]
+      (if (eof-object? byte)
+          count
+          (begin
+            (put-u8 to byte)
+            (lp (1+ count)))))))
+
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
@@ -278,52 +320,6 @@
   finally ::= (-> Any)
   "
   (with-bracket-lf expr finally))
-
-;;;;;;;;;;;;;;;;
-;; SHORTHANDS ;;
-;;;;;;;;;;;;;;;;
-
-(define-syntax-rule [with-lock mutex . bodies]
-  (call-with-blocked-asyncs
-   (lambda []
-     (my-mutex-lock! mutex)
-     (let [[ret (begin . bodies)]]
-       (my-mutex-unlock! mutex)
-       ret))))
-
-(define [stringf fmt . args]
-  (with-output-to-string
-    (lambda []
-      (apply printf (cons* fmt args)))))
-
-(define [println fmt . args]
-  (apply printf (cons* (string-append fmt "\n") args)))
-
-(define global-debug-mode-filter (make-parameter #f))
-
-(define [debug fmt . args]
-  (let [[p (global-debug-mode-filter)]]
-    (when (or (not p) (and p (p fmt args)))
-      (apply printf (cons* fmt args)))))
-
-;; Logs computations
-(define [dom-print name result x cont]
-  (printf "(~a = ~a = ~a)\n" name x result)
-  (cont x))
-
-(define [port-redirect from to]
-  "Redirect from `from' to `to' byte by byte, until `eof-object?'
-   Returns count of written bytes
-
-   type ::= port -> port -> int
-  "
-  (let lp [[count 0]]
-    (let [[byte (get-u8 from)]]
-      (if (eof-object? byte)
-          count
-          (begin
-            (put-u8 to byte)
-            (lp (1+ count)))))))
 
 ;;;;;;;;;;;;;;;;
 ;; STACK FLOW ;;
