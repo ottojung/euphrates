@@ -27,6 +27,8 @@
 (define [my-mutex-lock! mut] (mutex-lock! mut))
 (define [my-mutex-unlock! mut] (mutex-unlock! mut))
 
+(define hash-has-key? hash-get-handle)
+
 (define [catch-any body handler]
   (catch #t body handler))
 
