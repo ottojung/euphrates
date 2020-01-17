@@ -361,6 +361,10 @@
                          stack
                          (stack-special-value-value top))
                         (cdr rest)))]
+               [(eq? t 'whole) ;; passes whole stack to the function, expects new stack in return
+                (loop
+                 ((stack-special-value-value top) stack)
+                 (cdr rest))]
                [(eq? t 'push/cc)
                 (loop
                  (stack-apply
@@ -408,6 +412,24 @@
 (define PUSH/CC (stack-special-value 'push/cc #f))
 (define [CALL/CC f] (stack-special-value 'call/cc f))
 
+(define [MAP . funcs]
+  "
+   Maps functions on successive values from stack
+   Stack must have enough elements"
+  (let [[len (length funcs)]]
+    (stack-special-value
+     'whole
+     (lambda [stack]
+       (append
+        (map (lambda [f x] (f x))
+             funcs (take stack len))
+        (drop stack len))))))
+
+(define [PROJ . funcs]
+  "Projects functions on stack top"
+  (lambda [x]
+    (apply values
+           (map (lambda [f] (f x)) funcs))))
 
 (define-syntax-rule [define/stack [name . args] . operations]
   (define name
@@ -421,26 +443,26 @@
   (parameterize [[my-global-scope-table-p (make-hash-table)]]
     (with-stack operations)))
 
-(define [STORE-symb name value]
-  (hash-set! (my-global-scope-table-p) name value))
+(define [STORE-symb name]
+  (lambda [value]
+    (hash-set! (my-global-scope-table-p) name value)
+    value))
 
 (define LOAD-symb
   (let [[unique (make-unique)]]
     (lambda [name]
-      (let [[ret (hash-ref (my-global-scope-table-p) name unique)]]
-        (if (unique ret)
-            (throw 'load-symb-invalid-name
-                   `(args: ,name)
-                   `(name does not exist in table))
-            ret)))))
+      (lambda []
+        (let [[ret (hash-ref (my-global-scope-table-p) name unique)]]
+          (if (unique ret)
+              (throw 'load-symb-invalid-name
+                     `(args: ,name)
+                     `(name does not exist in table))
+              ret))))))
 
 (define-syntax-rule [STORE name]
-  (lambda [value]
-    (STORE-symb (quote name) value)
-    value))
+  (STORE-symb (quote name)))
 (define-syntax-rule [LOAD name]
-  (lambda []
-    (LOAD-symb (quote name))))
+  (LOAD-symb (quote name)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NON PREEMPTIVE THREADS ;;
