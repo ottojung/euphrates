@@ -200,6 +200,10 @@
 ;; STACK FLOW ;;
 ;;;;;;;;;;;;;;;;
 
+(define/stack [ADD-TO-7]
+  (PUSH 7)
+  ADD)
+
 (println
  "stack result = ~a"
  (st
@@ -208,6 +212,7 @@
   ADD
   (PUSH 5)
   MUL
+  ADD-TO-7
   (lambda [x] (println "stack op1 result = ~a" x) x)
   NEGATE
   (PUSH 100)

@@ -179,10 +179,6 @@
 (define [st . operations]
   (with-stack operations))
 
-(define-syntax-rule [define/stack [name . args] . operations]
-  (define [name . args]
-    (with-stack (list . operations))))
-
 (define [PUSH x] (lambda [] x))
 (define [DROP x] (values))
 (define [ADD a b] (+ a b))
@@ -198,6 +194,15 @@
   (case-lambda
     [[fmt] (lambda [x] (println fmt x))]
     [[] (PRINT "~a")]))
+
+(define-syntax-rule [define/stack [name . args] . operations]
+  (define name
+    (CALL
+     (lambda args
+       (apply
+        values
+        (with-stack
+         (list . operations)))))))
 
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
