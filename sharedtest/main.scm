@@ -243,11 +243,11 @@
      (println "AFTER CALL TO ~a" (stack-k (list n)))
      n))
   (PUSH "END")
-  (PRINT)))
+  PRINT))
 
 (st
  (PUSH "PROJ and MAP test")
- (PRINT)
+ PRINT
  (PUSH (list 2 3))
  (PROJ car cadr)
  (MAP (STORE x) (STORE y))
@@ -259,7 +259,7 @@
 
 (st
  (PUSH "GOTO test")
- (PRINT)
+ PRINT
  (PUSH 0)
  (STORE x)
  PUSH/CC
@@ -279,7 +279,7 @@
 
 (st
  (PUSH "GOTO test 2")
- (PRINT)
+ PRINT
  (PUSH 0)
  (STORE x)
  PUSH/CC
