@@ -137,12 +137,15 @@
 ;; USED IN CALL
 (define with-stack-stack (make-parameter (list)))
 
+(define-rec stack-special-value
+  type
+  value)
+
 (define [with-stack-full-loop initial operations]
   (let loop [[stack initial] [rest operations]]
     (if (null? rest)
         stack
-        (let* [[first (car rest)]
-               [simple? (procedure? first)]
+        (let* [[top (car rest)]
                [cont (lambda [dd]
                        (lambda vals
                          (loop (append vals (drop stack dd))
@@ -152,18 +155,22 @@
                   (let* [[arity (procedure-get-minimum-arity head)]
                          [current (lambda [] (apply head (take stack arity)))]]
                     (call-with-values current (cont arity))))]]
-          (if simple?
-              (finish first)
-              (let [[t (car first)]]
-                (cond
-                 [(eq? t 'call)
-                  (parameterize [[with-stack-stack stack]]
-                    (finish (cdr first)))]
-                 [(eq? t 'push/cc)
-                  ((cont 0) (cont 0))]
-                 [(eq? t 'call/cc)
-                  (parameterize [[with-stack-stack stack]]
-                    ((cdr first) (cont 0)))])))))))
+          (cond
+           [(procedure? top)
+            (finish top)]
+           [(list? top)
+            (loop stack (append top (cdr rest)))]
+           [(stack-special-value? first)
+            (let [[t (stack-special-value-type top)]]
+              (cond
+               [(eq? t 'call)
+                (parameterize [[with-stack-stack stack]]
+                  (finish (stack-special-value-value top)))]
+               [(eq? t 'push/cc)
+                ((cont 0) (cont 0))]
+               [(eq? t 'call/cc)
+                (parameterize [[with-stack-stack stack]]
+                  ((stack-special-value-value top) (cont 0)))]))])))))
 
 (define with-stack-full-loop-p
   (make-parameter with-stack-full-loop))
@@ -184,7 +191,7 @@
 (define [ADD a b] (+ a b))
 (define [MUL a b] (* a b))
 (define [NEGATE x] (- x))
-(define [CALL x] (cons 'call x)) ;; parameterizes call to `x'
+(define [CALL x] (stack-special-value 'call x)) ;; parameterizes call to `x'
 (define [IF-THEN-ELSE else then test]
   (if test
       then
@@ -197,12 +204,7 @@
 
 (define-syntax-rule [define/stack [name . args] . operations]
   (define name
-    (CALL
-     (lambda args
-       (apply
-        values
-        (with-stack
-         (list . operations)))))))
+    (list . operations)))
 
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
