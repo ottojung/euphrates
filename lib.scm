@@ -173,19 +173,17 @@
                   stack
                   (lambda []
                     (case-lambda
-                      [[vals]
-                       (println "appending vals = ~a" vals)
-                       (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
+                      [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
                       [[vals ops] (loop (append vals stack) ops)]))) ;; also 'changes direction' by replacing `rest' by `ops'
-                  (cdr rest))]
+                 (cdr rest))]
                [(eq? t 'call/cc)
                 (parameterize [[with-stack-stack stack]]
                   ((stack-special-value-value top)
-                  (lambda []
-                    (case-lambda
-                      [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
-                      [[vals ops] (loop (append vals stack) ops)] ;; also 'changes direction' by replacing `rest' by `ops'
-                      ))))]))])))))
+                   (lambda []
+                     (case-lambda
+                       [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
+                       [[vals ops] (loop (append vals stack) ops)] ;; also 'changes direction' by replacing `rest' by `ops'
+                       ))))]))])))))
 
 (define with-stack-full-loop-p
   (make-parameter with-stack-full-loop))
