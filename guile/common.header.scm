@@ -38,6 +38,8 @@
    CALL
    IF-THEN-ELSE
    PRINT
+   PUSH/CC
+   CALL/CC
 
    ~a
    range

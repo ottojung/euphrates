@@ -170,11 +170,14 @@
                [(eq? t 'push/cc)
                 (loop
                  (stack-apply
+                  stack
                   (lambda []
                     (case-lambda
-                      [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
-                      [[vals ops] (loop (append vals stack) ops)])) ;; also 'changes direction' by replacing `rest' by `ops'
-                  (cdr rest)))]
+                      [[vals]
+                       (println "appending vals = ~a" vals)
+                       (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
+                      [[vals ops] (loop (append vals stack) ops)]))) ;; also 'changes direction' by replacing `rest' by `ops'
+                  (cdr rest))]
                [(eq? t 'call/cc)
                 (parameterize [[with-stack-stack stack]]
                   ((stack-special-value-value top)
@@ -213,6 +216,9 @@
   (case-lambda
     [[fmt] (lambda [x] (println fmt x))]
     [[] (PRINT "~a")]))
+
+(define PUSH/CC (stack-special-value 'push/cc #f))
+(define [CALL/CC f] (stack-special-value 'call/cc f))
 
 (define-syntax-rule [define/stack [name . args] . operations]
   (define name

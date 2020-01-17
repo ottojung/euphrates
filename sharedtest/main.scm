@@ -218,3 +218,30 @@
   (PUSH 100)
   ADD))
 
+(define stack-k #f)
+
+(println
+ "stack result = ~a"
+ (st
+  (PUSH 2)
+  (PUSH 3)
+  ADD
+  PUSH/CC
+  (lambda [k]
+    (println "got k = ~a" k)
+    (if (procedure? k)
+        (begin
+          (set! stack-k k)
+          5)
+        (begin
+          (set! stack-k (lambda lst 77))
+          77)))
+  MUL
+  (CALL
+   (lambda [n]
+     (println "MUL result = ~a" n)
+     (println "AFTER CALL TO ~a" (stack-k (list n)))
+     n))
+  (PUSH "END")
+  (PRINT)))
+
