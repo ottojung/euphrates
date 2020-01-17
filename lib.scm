@@ -141,36 +141,48 @@
   type
   value)
 
+(define [stack-apply stack proc]
+  (let [[arity (procedure-get-minimum-arity proc)]]
+    (append
+     (call-with-values
+         (lambda [] (apply proc (take stack arity)))
+       (lambda vals (append vals (drop stack arity)))))))
+
 (define [with-stack-full-loop initial operations]
   (let loop [[stack initial] [rest operations]]
     (if (null? rest)
         stack
-        (let* [[top (car rest)]
-               [cont (lambda [dd]
-                       (lambda vals
-                         (loop (append vals (drop stack dd))
-                               (cdr rest))))]
-               [finish
-                (lambda [head]
-                  (let* [[arity (procedure-get-minimum-arity head)]
-                         [current (lambda [] (apply head (take stack arity)))]]
-                    (call-with-values current (cont arity))))]]
+        (let [[top (car rest)]]
           (cond
            [(procedure? top)
-            (finish top)]
+            (loop (stack-apply stack top) (cdr rest))]
            [(list? top)
             (loop stack (append top (cdr rest)))]
-           [(stack-special-value? first)
+           [(stack-special-value? top)
             (let [[t (stack-special-value-type top)]]
               (cond
                [(eq? t 'call)
                 (parameterize [[with-stack-stack stack]]
-                  (finish (stack-special-value-value top)))]
+                  (loop (stack-apply
+                         stack
+                         (stack-special-value-value top))
+                        (cdr rest)))]
                [(eq? t 'push/cc)
-                ((cont 0) (cont 0))]
+                (loop
+                 (stack-apply
+                  (lambda []
+                    (case-lambda
+                      [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
+                      [[vals ops] (loop (append vals stack) ops)])) ;; also 'changes direction' by replacing `rest' by `ops'
+                  (cdr rest)))]
                [(eq? t 'call/cc)
                 (parameterize [[with-stack-stack stack]]
-                  ((stack-special-value-value top) (cont 0)))]))])))))
+                  ((stack-special-value-value top)
+                  (lambda []
+                    (case-lambda
+                      [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
+                      [[vals ops] (loop (append vals stack) ops)] ;; also 'changes direction' by replacing `rest' by `ops'
+                      ))))]))])))))
 
 (define with-stack-full-loop-p
   (make-parameter with-stack-full-loop))
