@@ -245,3 +245,15 @@
   (PUSH "END")
   (PRINT)))
 
+(st
+ (PUSH "PROJ and MAP test")
+ (PRINT)
+ (PUSH (list 2 3))
+ (PROJ car cadr)
+ (MAP (STORE x) (STORE y))
+ (lambda [x y] (println "x = ~a ; y = ~a" x y) x)
+ (LOAD x)
+ (lambda [x] (println "LOAD x = ~a" x) x)
+ (LOAD y)
+ (lambda [x] (println "LOAD y = ~a" x) x))
+
