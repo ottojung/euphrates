@@ -214,7 +214,7 @@
 
 (define PRINT
   (case-lambda
-    [[fmt] (lambda [x] (println fmt x))]
+    [[fmt] (lambda [x] (println fmt x) (values))]
     [[] (PRINT "~a")]))
 
 (define PUSH/CC (stack-special-value 'push/cc #f))
