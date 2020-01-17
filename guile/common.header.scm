@@ -40,6 +40,11 @@
    PRINT
    PUSH/CC
    CALL/CC
+   LOAD-symb
+   STORE-symb
+   LOAD
+   STORE
+   my-global-scope-table-p
 
    ~a
    range

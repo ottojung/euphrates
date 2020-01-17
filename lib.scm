@@ -128,101 +128,6 @@
           (cont x))))
 
 ;;;;;;;;;;;;;;;;
-;; STACK FLOW ;;
-;;;;;;;;;;;;;;;;
-
-;; get current stack
-;; used for composition
-;; DOES NOT UPDATE DURING `with-stack' EXECUTION
-;; USED IN CALL
-(define with-stack-stack (make-parameter (list)))
-
-(define-rec stack-special-value
-  type
-  value)
-
-(define [stack-apply stack proc]
-  (let [[arity (procedure-get-minimum-arity proc)]]
-    (append
-     (call-with-values
-         (lambda [] (apply proc (take stack arity)))
-       (lambda vals (append vals (drop stack arity)))))))
-
-(define [with-stack-full-loop initial operations]
-  (let loop [[stack initial] [rest operations]]
-    (if (null? rest)
-        stack
-        (let [[top (car rest)]]
-          (cond
-           [(procedure? top)
-            (loop (stack-apply stack top) (cdr rest))]
-           [(list? top)
-            (loop stack (append top (cdr rest)))]
-           [(stack-special-value? top)
-            (let [[t (stack-special-value-type top)]]
-              (cond
-               [(eq? t 'call)
-                (parameterize [[with-stack-stack stack]]
-                  (loop (stack-apply
-                         stack
-                         (stack-special-value-value top))
-                        (cdr rest)))]
-               [(eq? t 'push/cc)
-                (loop
-                 (stack-apply
-                  stack
-                  (lambda []
-                    (case-lambda
-                      [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
-                      [[vals ops] (loop (append vals stack) ops)]))) ;; also 'changes direction' by replacing `rest' by `ops'
-                 (cdr rest))]
-               [(eq? t 'call/cc)
-                (parameterize [[with-stack-stack stack]]
-                  ((stack-special-value-value top)
-                   (lambda []
-                     (case-lambda
-                       [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
-                       [[vals ops] (loop (append vals stack) ops)] ;; also 'changes direction' by replacing `rest' by `ops'
-                       ))))]))])))))
-
-(define with-stack-full-loop-p
-  (make-parameter with-stack-full-loop))
-
-(define [with-stack-full initial operations]
-  ((with-stack-full-loop-p) initial operations))
-
-;; this is like `lambda' where `(with-stack-stack)' is the lexical/dynamic scope
-(define [with-stack operations]
-  (with-stack-full (with-stack-stack) operations))
-
-;; this is like `fn'
-(define [st . operations]
-  (with-stack operations))
-
-(define [PUSH x] (lambda [] x))
-(define [DROP x] (values))
-(define [ADD a b] (+ a b))
-(define [MUL a b] (* a b))
-(define [NEGATE x] (- x))
-(define [CALL x] (stack-special-value 'call x)) ;; parameterizes call to `x'
-(define [IF-THEN-ELSE else then test]
-  (if test
-      then
-      else))
-
-(define PRINT
-  (case-lambda
-    [[fmt] (lambda [x] (println fmt x) x)]
-    [[] (PRINT "~a")]))
-
-(define PUSH/CC (stack-special-value 'push/cc #f))
-(define [CALL/CC f] (stack-special-value 'call/cc f))
-
-(define-syntax-rule [define/stack [name . args] . operations]
-  (define name
-    (list . operations)))
-
-;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
 
@@ -419,6 +324,127 @@
           (begin
             (put-u8 to byte)
             (lp (1+ count)))))))
+
+;;;;;;;;;;;;;;;;
+;; STACK FLOW ;;
+;;;;;;;;;;;;;;;;
+
+;; get current stack
+;; used for composition
+;; DOES NOT UPDATE DURING `with-stack' EXECUTION
+;; USED IN CALL
+(define with-stack-stack (make-parameter (list)))
+
+(define-rec stack-special-value
+  type
+  value)
+
+(define [stack-apply stack proc]
+  (let [[arity (procedure-get-minimum-arity proc)]]
+    (append
+     (call-with-values
+         (lambda [] (apply proc (take stack arity)))
+       (lambda vals (append vals (drop stack arity)))))))
+
+(define [with-stack-full-loop initial operations]
+  (let loop [[stack initial] [rest operations]]
+    (if (null? rest)
+        stack
+        (let [[top (car rest)]]
+          (cond
+           [(procedure? top)
+            (loop (stack-apply stack top) (cdr rest))]
+           [(list? top)
+            (loop stack (append top (cdr rest)))]
+           [(stack-special-value? top)
+            (let [[t (stack-special-value-type top)]]
+              (cond
+               [(eq? t 'call)
+                (parameterize [[with-stack-stack stack]]
+                  (loop (stack-apply
+                         stack
+                         (stack-special-value-value top))
+                        (cdr rest)))]
+               [(eq? t 'push/cc)
+                (loop
+                 (stack-apply
+                  stack
+                  (lambda []
+                    (case-lambda
+                      [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
+                      [[vals ops] (loop (append vals stack) ops)]))) ;; also 'changes direction' by replacing `rest' by `ops'
+                 (cdr rest))]
+               [(eq? t 'call/cc)
+                (parameterize [[with-stack-stack stack]]
+                  ((stack-special-value-value top)
+                   (lambda []
+                     (case-lambda
+                       [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
+                       [[vals ops] (loop (append vals stack) ops)] ;; also 'changes direction' by replacing `rest' by `ops'
+                       ))))]))])))))
+
+(define with-stack-full-loop-p
+  (make-parameter with-stack-full-loop))
+
+(define [with-stack-full initial operations]
+  ((with-stack-full-loop-p) initial operations))
+
+;; this is like `lambda' where `(with-stack-stack)' is the lexical/dynamic scope
+(define [with-stack operations]
+  (with-stack-full (with-stack-stack) operations))
+
+(define [PUSH x] (lambda [] x))
+(define [DROP x] (values))
+(define [ADD a b] (+ a b))
+(define [MUL a b] (* a b))
+(define [NEGATE x] (- x))
+(define [CALL x] (stack-special-value 'call x)) ;; parameterizes call to `x'
+(define [IF-THEN-ELSE else then test]
+  (if test
+      then
+      else))
+
+(define PRINT
+  (case-lambda
+    [[fmt] (lambda [x] (println fmt x) x)]
+    [[] (PRINT "~a")]))
+
+(define PUSH/CC (stack-special-value 'push/cc #f))
+(define [CALL/CC f] (stack-special-value 'call/cc f))
+
+
+(define-syntax-rule [define/stack [name . args] . operations]
+  (define name
+    (list . operations)))
+
+;; naming..
+(define my-global-scope-table-p (make-parameter (make-hash-table)))
+
+;; this is like `fn'
+(define [st . operations]
+  (parameterize [[my-global-scope-table-p (make-hash-table)]]
+    (with-stack operations)))
+
+(define [STORE-symb name value]
+  (hash-set! (my-global-scope-table-p) name value))
+
+(define LOAD-symb
+  (let [[unique (make-unique)]]
+    (lambda [name]
+      (let [[ret (hash-ref (my-global-scope-table-p) name unique)]]
+        (if (unique ret)
+            (throw 'load-symb-invalid-name
+                   `(args: ,name)
+                   `(name does not exist in table))
+            ret)))))
+
+(define-syntax-rule [STORE name]
+  (lambda [value]
+    (STORE-symb (quote name) value)
+    value))
+(define-syntax-rule [LOAD name]
+  (lambda []
+    (LOAD-symb (quote name))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NON PREEMPTIVE THREADS ;;
