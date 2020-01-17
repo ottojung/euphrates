@@ -1,7 +1,7 @@
 
 (eval-when (load eval compile)
   (define current-dir (dirname (current-filename)))
-  (define suffix "/my-guile-std/test")
+  (define suffix "/test")
   (define target-dir (substring
                       current-dir
                       0

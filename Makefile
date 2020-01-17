@@ -36,12 +36,12 @@ $(DIR):
 alltests:
 	for f in $(TESTFILES) ; do $(MAKE) test TESTFILE="$$f" ; done
 
-test: | $(DIR)/test $(DIR)/test/$(TESTFILE)
+test: | $(DIRPREFIX)/test $(DIRPREFIX)/test/$(TESTFILE)
 
-$(DIR)/test/$(TESTFILE): $(DIRPREFIX)/test.header.$(END) sharedtest/$(TESTFILE)
+$(DIRPREFIX)/test/$(TESTFILE): $(DIRPREFIX)/test.header.$(END) sharedtest/$(TESTFILE)
 	cat $^ > $@
 
-$(DIR)/test:
+$(DIRPREFIX)/test:
 	mkdir -p $@
 
 clean:
