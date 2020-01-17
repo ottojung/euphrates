@@ -1,164 +1,21 @@
 
-(define-module [my-guile-std common]
-  :export
-  [
-   letin
-   defloop
-   apploop
-   reversed-args
-   fn
-   fn-list
-   with-return
-   monoids*
-   monoids-r*
-   monoid-r*
-   monoid*
-
-   letin-with-full
-   letin-parameterize
-   letin-with-full-parameterized
-   letin-with
-   letin-with-identity
-   dom
-   domid
-   domf
-   dom-default
-
-   with-stack-stack
-   with-stack-full-loop-p
-   with-stack-full
-   with-stack
-   st
-   define/stack
-   PUSH
-   DROP
-   ADD
-   MUL
-   NEGATE
-   CALL
-   IF-THEN-ELSE
-   PRINT
-   PUSH/CC
-   CALL/CC
-   LOAD-symb
-   STORE-symb
-   LOAD
-   STORE
-   my-global-scope-table-p
-
-   ~a
-   range
-   list-init
-   second-to-microsecond
-   microsecond-to-nanosecond
-   second-to-nanosecond
-   nanosecond-to-microsecond
-   generate-prefixed-name
-   make-unique
-   generic-fold
-   generic-fold-macro
-   list-fold
-   list-fold/rest
-   lfold
-   simplify-posix-path
-   append-posix-path
-   with-bracket
-   with-bracket-dw
-   call-with-new-sys-thread
-   cancel-sys-thread
-   sys-thread-exited?
-   string-split#simple
-   hash-table->alist
-   alist->mdict
-   mdict
-   mass
-   mdict-has?
-   mdict->alist
-   mdict-keys
-   catch-any
-   define-eval-namespace
-   eval-string-in-namespace
-   load-file-in-namespace
-   get-command-line-arguments
-   get-current-program-path
-   string-endswith?
-
-   with-lock
-   dom-print
-
-   gfunc/define
-   gfunc/instance
-   gfunc/parameterize
-
-   printf
-   println
-   global-debug-mode-filter
-   debug
-   stringf
-   time-to-nanoseconds
-   time-get-monotonic-timestamp
-   port-redirect
-
-   read-file
-   write-file
-   directory-tree
-   directory-files
-   directory-files-rec
-   file-mtime
-   path-parent-directory
-
-   np-thread-fork
-   np-thread-yield
-   np-thread-run!
-   np-thread-sleep-rate-ms
-   np-thread-sleep-rate-ms-set!
-   np-thread-usleep
-   np-thread-cancel!
-   np-thread-cancel-all!
-   np-thread-lockr!
-   np-thread-unlockr!
-
-   i-thread-yield
-   i-thread-dont-yield
-   i-thread-yield-me
-   i-thread-dont-yield-me
-   i-thread-run!
-   i-thread-critical!
-   i-thread-critical-b!
-   i-thread-critical-points
-   i-thread-critical-points-print
-
-   comprocess?
-   comprocess-command
-   comprocess-args
-   comprocess-mode
-   comprocess-pid
-   comprocess-status
-   comprocess-exited?
-   run-comprocess
-   run-comprocess-with-output-to
-   kill-comprocess
-   kill-comprocess-with-timeout
-
-   define-rec
-   ]
-
-  :use-module [ice-9 format]
-  :use-module [ice-9 binary-ports]
-  :use-module [ice-9 textual-ports]
-  :use-module [ice-9 hash-table]
-  :use-module [ice-9 threads]
-  :use-module [ice-9 popen]
-  :use-module [ice-9 ftw]
-  :use-module [ice-9 match]
-  :use-module [srfi srfi-1]
-  :use-module [srfi srfi-9] ;; records
-  :use-module [srfi srfi-13]
-  :use-module [srfi srfi-16]
-  :use-module [srfi srfi-18]
-  :use-module [srfi srfi-19] ;; time
-  :use-module [srfi srfi-42]
-  :use-module [srfi srfi-111] ;; box
+(use-modules
+  [ice-9 format]
+  [ice-9 binary-ports]
+  [ice-9 textual-ports]
+  [ice-9 hash-table]
+  [ice-9 threads]
+  [ice-9 popen]
+  [ice-9 ftw]
+  [ice-9 match]
+  [srfi srfi-1]
+  [srfi srfi-9] ;; records
+  [srfi srfi-13]
+  [srfi srfi-16]
+  [srfi srfi-18]
+  [srfi srfi-19] ;; time
+  [srfi srfi-42]
+  [srfi srfi-111] ;; box
   )
 
 (define [procedure-get-minimum-arity proc]
