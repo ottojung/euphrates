@@ -450,8 +450,17 @@
 
 (define-syntax-rule [define/stack [name . args] . operations]
   (define name
-    (lambda args
-      (list . operations))))
+    (let [[arity (length (quote args))]]
+      (stack-special-value
+       'whole
+       (lambda [stack]
+         (let [[taken (take stack arity)]
+               [poped (drop stack arity)]]
+           (with-stack-full
+            poped
+            (apply
+             (lambda args (list . operations))
+             taken))))))))
 
 ;; naming..
 (define my-global-scope-table-p (make-parameter (make-hash-table)))
