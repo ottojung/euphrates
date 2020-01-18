@@ -331,7 +331,7 @@
 ;; USED IN CALL
 (define with-stack-stack (make-parameter (list)))
 
-(define-rec stack-special-value
+(define-rec stack-special-op
   type
   value)
 
@@ -352,8 +352,8 @@
             (loop (stack-apply stack top) (cdr rest))]
            [(list? top)
             (loop stack (append top (cdr rest)))]
-           [(stack-special-value? top)
-            (let [[t (stack-special-value-type top)]]
+           [(stack-special-op? top)
+            (let [[t (stack-special-op-type top)]]
               (cond
                [(eq? t 'eval) ;; interpret instruction from the stack
                 (loop (cdr stack) (cons (car stack) (cdr rest)))]
@@ -361,16 +361,16 @@
                 (parameterize [[with-stack-stack stack]]
                   (loop (stack-apply
                          stack
-                         (stack-special-value-value top))
+                         (stack-special-op-value top))
                         (cdr rest)))]
                [(eq? t 'whole) ;; passes whole stack to the function, expects new stack in return
                 (loop
-                 ((stack-special-value-value top) stack)
+                 ((stack-special-op-value top) stack)
                  (cdr rest))]
                [(eq? t 'control) ;; like `whole' but also accepts and returns the `operations'
                 (let-values
                     [[[new-stack new-ops]
-                      ((stack-special-value-value top)
+                      ((stack-special-op-value top)
                        stack
                        (cdr rest))]]
                   (loop new-stack new-ops))]
@@ -385,7 +385,7 @@
                  (cdr rest))]
                [(eq? t 'call/cc)
                 (parameterize [[with-stack-stack stack]]
-                  ((stack-special-value-value top)
+                  ((stack-special-op-value top)
                    (lambda []
                      (case-lambda
                        [[vals] (loop (append vals stack) (cdr rest))] ;; only pushes values to the stack
@@ -409,7 +409,7 @@
 (define [NEGATE x] (- x))
 (define [FLIP x y] (values y x)) ;; equivalent to (PERM 1 0)
 (define [PERM . perms] ;; START WITH 0
-  (stack-special-value
+  (stack-special-op
    'whole
    (lambda [stack]
      (append
@@ -417,8 +417,8 @@
             perms)
       (drop stack (length perms))))))
 
-(define [CALL x] (stack-special-value 'call x)) ;; parameterizes call to `x'
-(define EVAL (stack-special-value 'eval #f))
+(define [CALL x] (stack-special-op 'call x)) ;; parameterizes call to `x'
+(define EVAL (stack-special-op 'eval #f))
 (define [IF-THEN-ELSE else then test]
   (if test
       then
@@ -430,10 +430,10 @@
 (define [PRINTF fmt]
   (lambda [x] (println fmt x) x))
 
-(define PUSH/CC (stack-special-value 'push/cc #f))
-(define [CALL/CC f] (stack-special-value 'call/cc f))
+(define PUSH/CC (stack-special-op 'push/cc #f))
+(define [CALL/CC f] (stack-special-op 'call/cc f))
 (define [GOTO continuation . args]
-  (stack-special-value
+  (stack-special-op
    'control
    (lambda [stack ops]
      ((continuation) args)
@@ -444,7 +444,7 @@
    Maps functions on successive values from stack
    Stack must have enough elements"
   (let [[len (length funcs)]]
-    (stack-special-value
+    (stack-special-op
      'whole
      (lambda [stack]
        (append
@@ -461,7 +461,7 @@
 (define-syntax-rule [define/stack [name . args] . operations]
   (define name
     (let [[arity (length (quote args))]]
-      (stack-special-value
+      (stack-special-op
        'whole
        (lambda [stack]
          (let [[taken (take stack arity)]
