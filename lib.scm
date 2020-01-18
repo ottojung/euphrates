@@ -404,6 +404,7 @@
 
 (define [PUSH x] (lambda [] x))
 (define [DROP x] (values))
+(define DUP (lambda [x] (values x x))) ;; quivalent to (PROJ identity identity)
 (define [ADD a b] (+ a b))
 (define [MUL a b] (* a b))
 (define [NEGATE x] (- x))

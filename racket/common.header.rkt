@@ -130,6 +130,12 @@
 (define [big-random-int max]
   (exact-floor (* (random) max))) ;; random in racket is bounded to 4294967087
 
+(define-syntax-rule [with-output-to-file#clear file . bodies]
+  (with-output-to-file
+      #:exists 'truncate/replace
+      file
+      (lambda [] . bodies)))
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;;;;;;;;

@@ -69,6 +69,11 @@
 
 (define big-random-int random)
 
+(define-syntax-rule [with-output-to-file#clear file . bodies]
+  (with-output-to-file
+      file
+      (lambda [] . bodies)))
+
 ;; for racket compatibility
 (define-syntax-rule [define-eval-namespace name]
   (define name 'not-used))
