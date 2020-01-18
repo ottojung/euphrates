@@ -481,9 +481,14 @@
   (parameterize [[my-global-scope-table-p (make-hash-table)]]
     (with-stack operations)))
 
-(define [STORE-symb name]
+(define [PUT-symb name]
   (lambda [value]
     (hash-set! (my-global-scope-table-p) name value)
+    (values)))
+
+(define [STORE-symb name]
+  (lambda [value]
+    ((PUT-symb name) value)
     value))
 
 (define [STORE/DEFAULT-symb name]
@@ -506,6 +511,8 @@
                      `(name does not exist in table))
               ret))))))
 
+(define-syntax-rule [PUT name]
+  (PUT-symb (quote name)))
 (define-syntax-rule [STORE name]
   (STORE-symb (quote name)))
 (define-syntax-rule [STORE/DEFAULT name]
