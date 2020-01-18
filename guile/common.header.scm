@@ -67,6 +67,8 @@
 
 (define [hash-table->alist h] (hash-map->list cons h))
 
+(define big-random-int random)
+
 ;; for racket compatibility
 (define-syntax-rule [define-eval-namespace name]
   (define name 'not-used))

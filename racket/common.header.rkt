@@ -127,6 +127,9 @@
 (define [get-current-program-path]
   (path->string (find-system-path 'run-file)))
 
+(define [big-random-int max]
+  (exact-floor (* (random) max))) ;; random in racket is bounded to 4294967087
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;;;;;;;;
