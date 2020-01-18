@@ -407,6 +407,16 @@
 (define [ADD a b] (+ a b))
 (define [MUL a b] (* a b))
 (define [NEGATE x] (- x))
+(define [FLIP x y] (values y x)) ;; equivalent to (PERM 1 0)
+(define [PERM . perms] ;; START WITH 0
+  (stack-special-value
+   'whole
+   (lambda [stack]
+     (append
+      (map (lambda [pos] (list-ref stack pos))
+            perms)
+      (drop stack (length perms))))))
+
 (define [CALL x] (stack-special-value 'call x)) ;; parameterizes call to `x'
 (define EVAL (stack-special-value 'eval #f))
 (define [IF-THEN-ELSE else then test]
