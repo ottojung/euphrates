@@ -450,7 +450,8 @@
 
 (define-syntax-rule [define/stack [name . args] . operations]
   (define name
-    (list . operations)))
+    (lambda args
+      (list . operations))))
 
 ;; naming..
 (define my-global-scope-table-p (make-parameter (make-hash-table)))
