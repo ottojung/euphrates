@@ -374,6 +374,11 @@
                        stack
                        (cdr rest))]]
                   (loop new-stack new-ops))]
+               [(eq? t 'escape) ;; like `control' but doesnt execute loop
+                ((stack-special-op-value top)
+                 loop
+                 stack
+                 (cdr rest))]
                [(eq? t 'push/cc)
                 (loop
                  (stack-apply
@@ -404,6 +409,7 @@
 
 (define [PUSH x] (lambda [] x))
 (define [DROP x] (values))
+(define [NULL] (values)) ;; useful for IF-THEN-ELSE
 (define DUP (lambda [x] (values x x))) ;; quivalent to (PROJ identity identity)
 (define [ADD a b] (+ a b))
 (define [MUL a b] (* a b))
@@ -439,6 +445,27 @@
    (lambda [stack ops]
      ((continuation) args)
      (values #f (list)))))
+
+(define [STACK-EFF environment-func]
+  (stack-special-op
+   'control
+   (lambda [stack ops]
+     (let [[ret
+           (environment-func
+            (lambda []
+              (with-stack-full
+               stack
+               ops)))]]
+       (if (stack-special-op? ret)
+           (values (stack-special-op-type ret)
+                   (stack-special-op-value ret))
+           (values (list) (list)))))))
+
+(define STACK-EFF-POP
+  (stack-special-op
+   'escape
+   (lambda [loop stack ops]
+     (stack-special-op stack ops))))
 
 (define [MAP . funcs]
   "
