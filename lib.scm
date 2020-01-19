@@ -520,6 +520,18 @@
 (define-syntax-rule [LOAD name]
   (LOAD-symb (quote name)))
 
+(define-syntax stackfn-coll
+  (syntax-rules ()
+    [(stackfn-coll buf body)
+     (list (lambda buf body))]
+    [(stackfn-coll buf x . xs)
+     (cons
+       (LOAD x)
+       (stackfn-coll (x . buf) . xs))]))
+
+(define-syntax-rule [stackfn . args]
+  (stackfn-coll () . args))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NON PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
