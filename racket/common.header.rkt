@@ -136,6 +136,25 @@
       file
       (lambda [] . bodies)))
 
+;; Author: samth
+;; source repository: https://github.com/racket/math
+;; source file: https://github.com/racket/math/blob/master/math-lib/math/private/number-theory/modular-arithmetic-base.rkt
+(define (modular-expt* n a b)
+  (cond [(b . < . 0)  (raise-argument-error 'modular-expt "Natural" 1 a b n)]
+        [else
+         (let loop ([a a] [b b])
+           (cond [(b . <= . 1)  (if (zero? b) (modulo 1 n) (modulo a n))]
+                 [(even? b)  (define c (loop a (quotient b 2)))
+                  (modulo (* c c) n)]
+                 [else  (modulo (* a (loop a (sub1 b))) n)]))]))
+
+;; Author: samth
+;; source repository: https://github.com/racket/math
+;; source file: https://github.com/racket/math/blob/master/math-lib/math/private/number-theory/modular-arithmetic-base.rkt
+(define (modulo-expt a b n)
+  (cond [(n . <= . 0)  (raise-argument-error 'modular-expt "Positive-Integer" 2 a b n)]
+        [else  (modular-expt* n a b)]))
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;;;;;;;;
