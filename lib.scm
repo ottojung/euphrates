@@ -371,6 +371,7 @@
                 (let-values
                     [[[new-stack new-ops]
                       ((stack-special-op-value top)
+                       loop
                        stack
                        (cdr rest))]]
                   (loop new-stack new-ops))]
@@ -449,11 +450,11 @@
 (define [STACK-EFF environment-func]
   (stack-special-op
    'control
-   (lambda [stack ops]
+   (lambda [loop stack ops]
      (let [[ret
            (environment-func
             (lambda []
-              (with-stack-full
+              (loop
                stack
                ops)))]]
        (if (stack-special-op? ret)
