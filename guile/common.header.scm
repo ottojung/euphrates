@@ -97,6 +97,12 @@
         'unknown-current-program-path
         (car ret))))
 
+(define-syntax-rule [get-current-source-file-path]
+  (cdr
+   (assq
+    'filename
+    (current-source-location))))
+
 (define [string-endswith? str suffix]
   (string-suffix? suffix str))
 
@@ -106,29 +112,6 @@
 
 (define [file-mtime filepath]
   (stat:mtime (stat filepath)))
-
-(define [read-string-file path]
-  (let* [
-   [in (open-file path "r")]
-   [text (get-string-all in)]
-   (go (close-port in))]
-   text))
-
-(define [write-string-file path data]
-  "mode ::= 'w | 'a"
-  (let* [
-   [out (open-file path "w")]
-   [re (display data out)]
-   (go (close-port out))]
-   re))
-
-(define [append-string-file path data]
-  "mode ::= 'w | 'a"
-  (let* [
-   [out (open-file path "w")]
-   [re (display data out)]
-   (go (close-port out))]
-   re))
 
 (define remove-stat
   ;; Remove the `stat' object the `file-system-tree' provides

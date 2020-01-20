@@ -1,5 +1,3 @@
-
-
 (eval-when (load compile expand)
   (load "../my-guile-std/common.scm"))
 

@@ -1,4 +1,3 @@
-
 (define k (letin
            [i 2]
            [c 3]
@@ -296,4 +295,14 @@
  EVAL
  (LOAD x)
  (lambda [x] (println "LOAD-end x = ~a" x) x))
+
+;;;;;;;;;;;;;;;;
+;; FILESYSTEM ;;
+;;;;;;;;;;;;;;;;
+
+(let [[curfile (get-current-source-file-path)]]
+  (println "cur file = ~a" curfile)
+  (let [[text (read-string-file curfile)]]
+    (println "text = ~a" (car (string-split#simple text #\newline)))
+    (write-string-file curfile text)))
 

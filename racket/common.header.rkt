@@ -6,6 +6,9 @@
 
 (require compatibility/defmacro)
 
+(require mzlib/etc) ;; this-expression-file-name, this-expression-source-directory
+(provide (all-from-out mzlib/etc))
+
 (provide (all-defined-out))
 
 (define 1+ add1)
@@ -63,32 +66,6 @@
 (define absolute-file-name? absolute-path?)
 (define file-mtime file-or-directory-modify-seconds)
 
-(define [open-file filepath mode]
-  (cond
-   [(equal? "w" mode)
-    (open-output-file filepath
-                      #:mode 'text
-                      #:exists-flag 'truncate)]
-   [(equal? "wb" mode)
-    (open-output-file filepath
-                      #:mode 'binary
-                      #:exists-flag 'truncate)]
-   [(equal? "a" mode)
-    (open-output-file filepath
-                      #:mode 'text
-                      #:exists-flag 'append)]
-   [(equal? "ab" mode)
-    (open-output-file filepath
-                      #:mode 'binary
-                      #:exists-flag 'append)]
-   [(equal? "r" mode)
-    (open-input-file filepath
-                      #:mode 'text)]
-   [(equal? "rb" mode)
-    (open-input-file filepath
-                     #:mode 'binary)]
-   [else (error "incorrect file mode")]))
-
 (define [usleep microsecond]
   (sleep (/ microsecond (* 1000 1000))))
 
@@ -127,6 +104,19 @@
 (define [get-current-program-path]
   (path->string (find-system-path 'run-file)))
 
+;; TODO: why this shit doesn't work?
+;; (define-syntax [get-current-source-file-path stx]
+;;   #`(path->string
+;;      (build-path
+;;       #,(this-expression-source-directory stx)
+;;       #,(this-expression-file-name stx))))
+
+(define-macro (get-current-source-file-path)
+  '(path->string
+    (build-path
+     (this-expression-source-directory)
+     (this-expression-file-name))))
+
 (define [big-random-int max]
   (exact-floor (* (random) max))) ;; random in racket is bounded to 4294967087
 
@@ -154,6 +144,14 @@
 (define (modulo-expt a b n)
   (cond [(n . <= . 0)  (raise-argument-error 'modular-expt "Positive-Integer" 2 a b n)]
         [else  (modular-expt* n a b)]))
+
+
+(define [close-port port]
+  (cond
+   [(output-port? port) (close-output-port port)]
+   [(input-port? port) (close-input-port port)]
+   [else (throw 'type-error `(args: port)
+                `(expected type port? but got something else))]))
 
 ;; TODOS
 
@@ -200,34 +198,15 @@
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
 
-(define [read-file readf filepath mode]
-  (let* [[file (open-input-file filepath #:mode mode)]
-         (do (file-position file eof))
-         [len (file-position file)]
-         (do (file-position file 0))
-         [out (readf len file)]
-         (do (close-input-port file))
-         ]
-    out))
-
-(define [write-file writef filepath content mode]
-  (let [[file (open-output-file filepath
-                                #:mode mode
-                                #:exists 'truncate/replace)]]
-    (writef content file)
-    (close-output-port file)))
-
-(define [append-file writef filepath content mode]
-  (define file (open-output-file filepath
-                                 #:mode mode
-                                 #:exists 'append))
-  (writef content file)
-  (close-output-port file))
-
-(define [read-string-file filepath] (read-file read-string filepath 'text))
-(define [read-bytes-file filepath] (bytes->list (read-file read-bytes filepath 'binary)))
-(define [write-string-file filepath content] (write-file write-string filepath content 'text))
-(define [append-string-file filepath content] (append-file write-string filepath content 'text))
+(define (open-file path mode)
+  (match mode
+    ["r" (open-input-file path #:mode 'text)]
+    ["w" (open-output-file path #:mode 'text #:exists 'truncate/replace)]
+    ["a" (open-output-file path #:mode 'text #:exists 'append)]
+    ["rb" (open-input-file path #:mode 'binary)]
+    ["wb" (open-output-file path #:mode 'binary #:exists 'truncate/replace)]
+    ["ab" (open-output-file path #:mode 'binary #:exists 'append)]
+    [other (throw 'open-file-mode-not-supported `(args: ,path ,mode))]))
 
 (define [directory-files directory]
   "Returns object like this:

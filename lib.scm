@@ -560,6 +560,36 @@
 (define-syntax-rule [stackfn . args]
   (stackfn-coll () . args))
 
+;;;;;;;;;;;;;;;;
+;; FILESYSTEM ;;
+;;;;;;;;;;;;;;;;
+
+(define [read-all-port readf port]
+  "`readf' is usually `read-char' or `read-byte'"
+  (let loop ((result '()) (chr (readf port)))
+    (if (eof-object? chr)
+        (list->string (reverse result))
+        (loop (cons chr result) (readf port)))))
+
+(define [read-string-file path]
+  (let* [
+   [in (open-file path "r")]
+   [text (read-all-port read-char in)]
+   (go (close-port in))]
+   text))
+
+(define [write-string-file path data]
+  (let* [[out (open-file path "w")]
+         [re (display data out)]
+         (go (close-port out))]
+    re))
+
+(define [append-string-file path data]
+  (let* [[out (open-file path "a")]
+         [re (display data out)]
+         (go (close-port out))]
+    re))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NON PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
