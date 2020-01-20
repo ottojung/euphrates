@@ -2,7 +2,6 @@
 (use-modules
   [ice-9 format]
   [ice-9 binary-ports]
-  [ice-9 textual-ports]
   [ice-9 hash-table]
   [ice-9 threads]
   [ice-9 popen]
