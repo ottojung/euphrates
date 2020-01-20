@@ -443,7 +443,7 @@
 (define [GOTO continuation . args]
   (stack-special-op
    'control
-   (lambda [stack ops]
+   (lambda [loop stack ops]
      ((continuation) args)
      (values #f (list)))))
 
