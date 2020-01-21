@@ -105,6 +105,32 @@
 (define [string-endswith? str suffix]
   (string-suffix? suffix str))
 
+(define find-first find)
+
+(define-syntax format-id-base
+  (lambda (stx1)
+    (syntax-case stx1 ()
+      [(format-id stx fmt args)
+       (with-syntax [[ret
+                      #'(datum->syntax
+                         stx
+                         (string->symbol
+                          (with-output-to-string
+                            (lambda []
+                              (apply
+                               format
+                               (cons*
+                                #t
+                                fmt
+                                args))))))]]
+         #'ret)])))
+
+(define-syntax-rule [format-id stx fmt . args]
+  (format-id-base stx fmt (list . args)))
+
+(define-syntax-rule [begin-for-syntax . args]
+  (begin . args))
+
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
@@ -313,64 +339,3 @@
 (define [kill-comprocess p force?]
   (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
 
-;;;;;;;;;;;;;;;;;;;;;;;
-;; GENERIC FUNCTIONS ;;
-;;;;;;;;;;;;;;;;;;;;;;;
-
-(define [check-list-contract check-list args]
-  (or (not check-list)
-      (and (= (length check-list) (length args))
-           (fold (lambda [p x c] (and c (p x))) #t check-list args))))
-
-(define-syntax-rule [generate-prefixed-name prefix name]
-  (datum->syntax #'name
-                 (symbol-append prefix (syntax->datum #'name))))
-
-(define-syntax-rule [generate-add-name name]
-  (generate-prefixed-name 'gfunc/instantiate- name))
-
-(define-syntax-rule [generate-param-name name]
-  (generate-prefixed-name 'gfunc/parameterize- name))
-
-(define-syntax gfunc/define
-  (lambda (stx)
-    (syntax-case stx ()
-      [[gfunc/define name]
-       (with-syntax ([add-name (generate-add-name name)]
-                     [param-name (generate-param-name name)])
-         #'(define-values [name add-name param-name]
-             (let [[internal-list (make-parameter '())]
-                   [sem (my-make-mutex)]]
-               (values
-                (lambda args
-                  (let [[m (find (lambda [p] (check-list-contract (car p) args)) (internal-list))]]
-                    (if m
-                        (apply (cdr m) args)
-                        (throw 'gfunc-no-instance-found
-                               (string-append "No gfunc instance of "
-                                              (symbol->string (syntax->datum #'name))
-                                              " accepts required arguments")))))
-                (lambda [args func]
-                  (call-with-blocked-asyncs
-                   (lambda []
-                     (my-mutex-lock! sem)
-                     (set! internal-list (make-parameter (append (internal-list) (list (cons args func)))))
-                     (my-mutex-unlock! sem))))
-                (lambda [args func body]
-                  (let [[new-list (cons (cons args func) (internal-list))]]
-                    (parameterize [[internal-list new-list]]
-                      (body))))))))])))
-
-(define-syntax gfunc/parameterize
-  (lambda (stx)
-    (syntax-case stx ()
-      [[gfunc/parameterize name check-list func . body]
-       (with-syntax [[param-name (generate-param-name name)]]
-         #'(param-name check-list func (lambda [] . body)))])))
-
-(define-syntax gfunc/instance
-  (lambda (stx)
-    (syntax-case stx ()
-      [[gfunc/instance name check-list func]
-       (with-syntax [[add-name (generate-add-name name)]]
-         #'(add-name (list . check-list) func))])))
