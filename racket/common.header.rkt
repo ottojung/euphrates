@@ -226,18 +226,19 @@
   p
   command
   args
+  pipe
   pid
   status
   exited?
   )
 
-;; out-port can be #f
-(define [run-comprocess#private out-port command args]
+;; TODO: support asynchronous stdin
+(define [run-comprocess#full p-stdout p-stderr command . args]
   (let-values
       [[[p stdout stdin stderr]
         (apply subprocess
                (list*
-                out-port #f 'stdout ;; stdout stdin stderr
+                p-stdout #f p-stderr ;; stdout stdin stderr
                 'new                ;; new group, means that (kill ..) will kill its children also
 
                 command
@@ -245,6 +246,7 @@
     (let [[re (comprocess p
                           command
                           args
+                          stdin
                           (subprocess-pid p)
                           #f
                           #f)]]
@@ -252,13 +254,11 @@
       (define [run-in-thread]
         (subprocess-wait p)
 
-        ;; (when out-port
-        ;;   (close-output-port out-port))
+        (when (and stdout (not p-stdout))
+          (close-input-port stdout))
         (when stdin
           (close-output-port stdin))
-        (when stdout
-          (close-input-port stdout))
-        (when stderr
+        (when (and stderr (not p-stderr))
           (close-input-port stderr))
 
         (set-comprocess-exited?! re #t)
@@ -268,14 +268,9 @@
       re)))
 
 (define [run-comprocess command . args]
-  (run-comprocess#private #f command args))
-
-(define [run-comprocess-with-output-to
-         out
-         command
-         . args]
-  (run-comprocess#private out command args))
+  (apply run-comprocess#full
+         (list* (current-output-port) (current-error-port) command args)))
 
 (define [kill-comprocess p force?]
-  (subprocess-kill p force?))
+  (subprocess-kill (comprocess-p p) force?))
 

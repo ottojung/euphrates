@@ -273,43 +273,44 @@
 (define-rec comprocess
   command
   args
-  mode
   pipe
   pid ;; #f or integer
   status ;; #f or integer
   exited?
   )
 
-;; TODO: (guile2.9.7) why stderr is redicted to (current-error-port) but not stdout?
-(define [run-comprocess#private mode command . args]
+;; TODO: support asynchronous stdin
+;; TODO: why comprocess test doesn't work anymore? Last worked on commit: 63756176ec8d544d4135d88c46fa747666d438b3
+(define [run-comprocess#full p-stdout p-stderr command . args]
   "Run process in background
-   Input and Output ports are represented by `comprocess-pipe'
-   They are new, not related to `(current-input-port)' or `(current-ouput-porn)'
+   Input port is represented by `comprocess-pipe'
+   NOTE: in guile p-stdout == p-stderr doesn't work!
 
-   type ::= mode -> string -> list of string -> process
-   mode ::= OPEN_READ | OPEN_WRITE | OPEN_BOTH
+   type ::= output-port? -> output-port? -> string -> list of string -> process
   "
   (let [[p
          (comprocess
           command
           args
-          mode
           #f
           #f
           #f
           #f)]]
     (call-with-new-thread
      (lambda []
-       (let* [[pipe (apply open-pipe*
-                           (cons* (comprocess-mode p)
-                                  (comprocess-command p)
-                                  (comprocess-args p)))]
-              [pid (hashq-ref port/pid-table pipe)]]
-         (set-comprocess-pipe! p pipe)
-         (set-comprocess-pid! p pid)
-         (set-comprocess-status! p (status:exit-val
-                                    (cdr (waitpid pid)))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
-         (set-comprocess-exited?! p #t))))
+       (parameterize [[current-output-port p-stdout]
+                      [current-error-port p-stderr]
+                      [current-input-port (open-input-string "hello")]]
+         (let* [[pipe (apply open-pipe*
+                             (cons* OPEN_WRITE
+                                    (comprocess-command p)
+                                    (comprocess-args p)))]
+                [pid (hashq-ref port/pid-table pipe)]]
+           (set-comprocess-pipe! p pipe)
+           (set-comprocess-pid! p pid)
+           (set-comprocess-status! p (status:exit-val
+                                      (cdr (waitpid pid)))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
+           (set-comprocess-exited?! p #t)))))
 
     ;; wait for pipe to initialize
     (let lp []
@@ -319,22 +320,10 @@
     p))
 
 (define [run-comprocess command . args]
-  (apply run-comprocess#private (cons* OPEN_READ command args)))
-
-(define [run-comprocess-with-output-to output command . args]
-  "Run process in background
-   Input and Output ports are represented by `comprocess-pipe'
-   Output port will be redirected to `output', input is unchanged
-
-   type ::= port -> string -> list of string -> process
-  "
-  (let [[p (apply run-comprocess (cons* command args))]]
-    (call-with-new-thread
-     (lambda []
-       (port-redirect
-        (comprocess-pipe p)
-        output)))
-    p))
+  (apply run-comprocess#full
+         (cons* (current-output-port)
+                (current-error-port)
+                command args)))
 
 (define [kill-comprocess p force?]
   (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
