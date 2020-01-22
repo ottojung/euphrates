@@ -104,6 +104,8 @@
 
 (define [string-endswith? str suffix]
   (string-suffix? suffix str))
+(define [string-startswith? str prefix]
+  (string-prefix? prefix str))
 
 (define find-first find)
 

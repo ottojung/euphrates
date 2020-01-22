@@ -135,6 +135,18 @@
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
 
+(define [take-common-prefix a b]
+  (list->string
+   (let loop [[as (string->list a)]
+              [bs (string->list b)]]
+     (if (or (null? as)
+             (null? bs))
+         (list)
+         (if (char=? (car as) (car bs))
+             (cons (car as)
+                   (loop (cdr as) (cdr bs)))
+             (list))))))
+
 (define [~a x]
   (with-output-to-string
     (lambda []
@@ -593,6 +605,11 @@
          [re (display data out)]
          (go (close-port out))]
     re))
+
+(define [path-rebase newbase oldbase path]
+  (if (string-startswith? path oldbase)
+      (string-append newbase (substring path (string-length oldbase)))
+      #f))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NON PREEMPTIVE THREADS ;;

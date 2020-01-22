@@ -14,6 +14,8 @@
 (define 1+ add1)
 (define 1- sub1)
 
+(define [string-null? s] (not (non-empty-string? s)))
+
 (define [throw type . args]
   (error (symbol->string type) "(args: ~a)" args))
 
@@ -52,6 +54,7 @@
 (define [put-u8 to byte] (write-byte byte to))
 
 (define string-endswith? string-suffix?)
+(define string-startswith? string-prefix?)
 (define fold foldl)
 (define and-map andmap)
 (define or-map andmap)
