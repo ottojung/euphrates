@@ -166,13 +166,17 @@
  (define [kek]
    (println "in kek"))
 
- (define cycles 3)
+ (define cycles 4)
+
+ (define zulul-thread #f)
 
  (define [lol]
    (apploop [n] [0]
             (if (> n cycles)
                 (println "lol ended")
                 (begin
+                  (when (= n 2)
+                    (np-thread-cancel! zulul-thread))
                   (println "lol at ~a" n)
                   (np-thread-yield)
                   (println "lol after ~a" n)
@@ -190,7 +194,7 @@
 
  (np-thread-fork kek)
  (np-thread-fork lol)
- (np-thread-fork zulul)
+ (set! zulul-thread (np-thread-fork zulul))
 
  (println "end"))
 

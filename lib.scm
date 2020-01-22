@@ -716,9 +716,16 @@
             (usleep s)
             (lp)))))))
 
-(define [np-thread-cancel!]
-  "Terminates current np-thread"
-  (np-thread-end))
+;; Terminates np-thread
+;; If no arguments given, current thread will be terminated
+;; But if thread is provided, it will be removed from thread list (equivalent to termination if that thread is not the current one)
+;; Therefore, don't provide current thread as argument unless you really mean to
+(define np-thread-cancel!
+  (case-lambda
+    [[]
+     (np-thread-end)]
+    [[chosen]
+     (np-thread-list-remove (lambda [th] (eq? th chosen)))]))
 
 (define [np-thread-cancel-all!]
   "
@@ -726,8 +733,6 @@
   "
   (np-thread-list-remove (const #t))
   (np-thread-end))
-
-;; TODO: cancel chosen thread
 
 (define-values
   [np-thread-lockr! np-thread-unlockr!]
