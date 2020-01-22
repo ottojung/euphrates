@@ -598,20 +598,26 @@
 ;; NON PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define-rec np-thread-obj
+  continuation)
+
 (define-values
   [np-thread-list-add
-   np-thread-list-pop
+   np-thread-list-switch ;; pops thread from the top and sets `np-thread-current' = it
    np-thread-list-init
    np-thread-list-initialized?
    np-thread-list-remove
+   np-thread-current
    ]
   (let* [[lst-p (make-parameter #f)]
-         [mut (my-make-mutex)]]
+         [mut (my-make-mutex)]
+         [current-thread (make-parameter #f)]]
     (values
      (lambda [th]
        (with-lock
         mut
-        (set-box! (lst-p) (cons th (unbox (lst-p))))))
+        (set-box! (lst-p) (cons th (unbox (lst-p)))))
+       th)
      (lambda []
        (with-lock
         mut
@@ -621,10 +627,12 @@
                     'np-thread-empty-list
                     (last lst))]]
           (unless (null? lst)
-            (set-box! (lst-p) (list-init lst)))
+            (set-box! (lst-p) (list-init lst))
+            (set-box! (current-thread) head))
           head)))
      (lambda [body]
-       (parameterize [[lst-p (box (list))]]
+       (parameterize [[lst-p (box (list))]
+                      [current-thread (box (np-thread-obj body))]]
          (body)))
      (lambda []
        (if (lst-p) #t #f))
@@ -633,7 +641,8 @@
         mut
         (set-box! (lst-p)
                   (filter (negate predicate)
-                          (unbox (lst-p)))))))))
+                          (unbox (lst-p))))))
+     (lambda [] (unbox (current-thread))))))
 
 (define-values
   [np-thread-get-start-point
@@ -646,19 +655,21 @@
          (np-thread-list-init thunk))))))
 
 (define [np-thread-end]
-  (let [[p (np-thread-list-pop)]]
+  (let [[p (np-thread-list-switch)]]
     (if (eq? p 'np-thread-empty-list)
         ((np-thread-get-start-point))
         (begin
-          (p #t)
+          ((np-thread-obj-continuation p) #t)
           (np-thread-end)))))
 
 (define [np-thread-yield]
   (when (np-thread-list-initialized?)
     (let* [[kk #f]
-           [repl (call/cc (lambda [k] (set! kk k) #f))]]
+           [repl (call/cc (lambda [k] (set! kk k) #f))]
+           [me (np-thread-current)]]
+      (set-np-thread-obj-continuation! me kk)
       (unless repl
-        (np-thread-list-add kk) ;; save
+        (np-thread-list-add me) ;; save
         (np-thread-end)))))
 
 (define [np-thread-fork thunk]
@@ -668,9 +679,10 @@
            `(tried to fork np-thread before np-thread-run!)))
 
   (np-thread-list-add
-   (lambda [tru]
-     (thunk)
-     (np-thread-end))))
+   (np-thread-obj
+    (lambda [tru]
+      (thunk)
+      (np-thread-end)))))
 
 (define-syntax-rule [np-thread-run! . thunk]
   (call/cc
