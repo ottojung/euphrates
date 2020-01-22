@@ -664,10 +664,11 @@
 
 (define [np-thread-yield]
   (when (np-thread-list-initialized?)
-    (let* [[kk #f]
-           [repl (call/cc (lambda [k] (set! kk k) #f))]
-           [me (np-thread-current)]]
-      (set-np-thread-obj-continuation! me kk)
+    (let* [[me (np-thread-current)]
+           [repl (call/cc
+                  (lambda [k]
+                    (set-np-thread-obj-continuation! me k)
+                    #f))]]
       (unless repl
         (np-thread-list-add me) ;; save
         (np-thread-end)))))
