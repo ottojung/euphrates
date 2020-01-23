@@ -164,6 +164,10 @@
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
 
+(define [file-or-directory-exists? path]
+  (or (file-exists? path)
+      (directory-exists? path)))
+
 (define (open-file path mode)
   (match mode
     ["r" (open-input-file path #:mode 'text)]

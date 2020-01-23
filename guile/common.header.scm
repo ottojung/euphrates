@@ -137,6 +137,8 @@
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
 
+(define file-or-directory-exists? file-exists?)
+
 (define [file-mtime filepath]
   (stat:mtime (stat filepath)))
 

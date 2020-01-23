@@ -98,9 +98,9 @@
 ;; (println (append-posix-path "hello/there" "/bro"))
 
 
-(println "rebased path1 = ~a" (path-rebase "hello/there/" "hello/here/" "kek"))
-(println "rebased path2 = ~a" (path-rebase "hello/there/" "hello/here/" "hello/kek/kek"))
-(println "rebased path3 = ~a" (path-rebase "hello/there/" "hello/here/" "hello/here/kek"))
+(println "rebased path1 = ~a" (path-rebase "hello/there/" "kek"))
+(println "rebased path2 = ~a" (path-rebase "hello/there/" "hello/kek/kek"))
+(println "rebased path3 = ~a" (path-rebase "hello/there/" "hello/here/kek"))
 
 (define [hell2 x]
   (with-return

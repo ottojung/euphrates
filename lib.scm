@@ -606,10 +606,13 @@
          (go (close-port out))]
     re))
 
-(define [path-rebase newbase oldbase path]
-  (if (string-startswith? path oldbase)
-      (string-append newbase (substring path (string-length oldbase)))
-      #f))
+(define [path-rebase newbase path]
+  (let [[oldbase (take-common-prefix newbase path)]]
+    (if (string-null? oldbase)
+        #f
+        (string-append newbase
+                       (substring path
+                                  (string-length oldbase))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; NON PREEMPTIVE THREADS ;;
