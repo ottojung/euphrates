@@ -762,15 +762,17 @@
     (values
      (lambda [resource]
        (let lp []
-         ((with-lock
-           mut
-           (if (hash-ref h resource #f)
-               (lambda []
-                 (np-thread-usleep (np-thread-sleep-rate-ms))
-                 (lp))
-               (begin
-                 (hash-set! h resource #t)
-                 (lambda [] 0)))))))
+         (when
+             (with-lock
+              mut
+              (let [[r (hash-ref h resource #f)]]
+                (if r
+                    #t
+                    (begin
+                      (hash-set! h resource #t)
+                      #f))))
+           (np-thread-usleep (np-thread-sleep-rate-ms))
+           (lp))))
      (lambda [resource]
        (with-lock
         mut
