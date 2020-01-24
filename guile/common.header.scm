@@ -222,6 +222,7 @@
                     directory))
 
 (define path-parent-directory dirname)
+(define make-directory mkdir)
 
 ;;;;;;;;;;;;;
 ;; RECORDS ;;
