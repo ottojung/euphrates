@@ -207,7 +207,8 @@
      (cons (map path->string
                 (cons f (reverse (explode-path f))))
            ctx))
-   (list)))
+   (list)
+   directory))
 
 (define [path-parent-directory path]
   (let-values [[[base name must-be-dir?]
