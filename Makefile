@@ -7,7 +7,12 @@ TESTFILES = $(shell ls sharedtest/)
 
 DIRPREFIX =
 DIRSUFFIX = my-$(DIRPREFIX)-std
-END =
+
+ifeq ($(DIRPREFIX),$(GUILEDIR))
+END := scm
+else
+END := rkt
+endif
 
 CURRENT_GIT_COMMIT = $(shell git rev-parse HEAD)
 
@@ -15,14 +20,42 @@ DIR = $(DIRPREFIX)/$(DIRSUFFIX)
 
 TESTFILE =
 
+PREFIX = "$HOME/.local/"
+PREFIX_FULL = "$(PREFIX)/lib"
+INSTALL_TGT = "$(PREFIX_FULL)/$(DIR)"
+
 all: tguile tracket
 	@ echo 'all done'
 
+install: installGuile installRacket
+	@ echo 'install done'
+
+installGuile:
+	$(MAKE) installone DIRPREFIX=$(GUILEDIR)
+
+installRacket:
+	$(MAKE) installone DIRPREFIX=$(RACKETDIR)
+
+uninstall:
+	$(MAKE) uninstallone DIRPREFIX=$(GUILEDIR)
+	$(MAKE) uninstallone DIRPREFIX=$(RACKETDIR)
+
+installone: $(INSTALL_TGT)
+
+uninstallone:
+	rm -rf $(INSTALL_TGT)
+
+$(INSTALL_TGT): all $(PREFIX_FULL)
+	cp -r "$(DIR)" "$(PREFIX_FULL)"
+
+$(PREFIX_FULL):
+	mkdir -p $@
+
 tguile:
-	$(MAKE) common alltests DIRPREFIX=$(GUILEDIR) END=scm
+	$(MAKE) common alltests DIRPREFIX=$(GUILEDIR)
 
 tracket:
-	$(MAKE) common alltests DIRPREFIX=$(RACKETDIR) END=rkt
+	$(MAKE) common alltests DIRPREFIX=$(RACKETDIR)
 
 common: | $(DIR) $(DIR)/common.$(END)
 
