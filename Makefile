@@ -20,7 +20,7 @@ DIR = $(DIRPREFIX)/$(DIRSUFFIX)
 
 TESTFILE =
 
-PREFIX = "$HOME/.local/"
+PREFIX = "$(HOME)/.local/"
 PREFIX_FULL = "$(PREFIX)/lib"
 INSTALL_TGT = "$(PREFIX_FULL)/$(DIR)"
 
