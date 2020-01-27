@@ -160,16 +160,16 @@
 (define [list-init lst]
   (take lst (1- (length lst))))
 
-(define [second-to-microsecond s]
+(define [normal->micro@unit s]
   (* 1000000 s))
 
-(define [microsecond-to-nanosecond ms]
+(define [micro->nano@unit ms]
   (* 1000 ms))
 
-(define [second-to-nanosecond s]
-  (microsecond-to-nanosecond (second-to-microsecond s)))
+(define [normal->nano@unit s]
+  (micro->nano@unit (normal->micro@unit s)))
 
-(define [nanosecond-to-microsecond ns]
+(define [nano->micro@unit ns]
   (quotient ns 1000))
 
 (define [make-unique]
@@ -717,14 +717,14 @@
 (define-values
   [np-thread-sleep-rate-ms
    np-thread-sleep-rate-ms-set!]
-  (let [[p (make-parameter (second-to-microsecond 1/100))]]
+  (let [[p (make-parameter (normal->micro@unit 1/100))]]
     (values
      (lambda [] (p))
      (lambda [value body]
        (parameterize [[p value]] (body))))))
 
 (define [np-thread-usleep micro-seconds]
-  (let* [[nano-seconds (microsecond-to-nanosecond micro-seconds)]
+  (let* [[nano-seconds (micro->nano@unit micro-seconds)]
          [start-time (time-get-monotonic-nanoseconds-timestamp)]
          [end-time (+ start-time nano-seconds)]
          [sleep-rate (np-thread-sleep-rate-ms)]]
@@ -732,7 +732,7 @@
       (let [[t (time-get-monotonic-nanoseconds-timestamp)]]
         (unless (> t end-time)
           (let [[s (min sleep-rate
-                        (nanosecond-to-microsecond (- end-time t)))]]
+                        (nano->micro@unit (- end-time t)))]]
             (np-thread-yield)
             (usleep s)
             (lp)))))))
