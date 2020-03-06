@@ -215,6 +215,10 @@
                 (split-path path)]]
     (path->string base)))
 
+(define (make-temporary-fileport)
+  (let ((filepath (make-temporary-file)))
+    (values (open-file filepath "w") (path->string filepath))))
+
 ;;;;;;;;;;;;;
 ;; RECORDS ;;
 ;;;;;;;;;;;;;
