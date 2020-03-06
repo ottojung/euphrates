@@ -43,7 +43,7 @@ uninstall:
 installone: $(INSTALL_TGT)
 
 uninstallone:
-	rm -rf $(INSTALL_TGT)
+	rm -rf "$(PREFIX_FULL)/$(shell basename $(DIR))"
 
 $(INSTALL_TGT): all $(PREFIX_FULL)
 	cp -r "$(DIR)" "$(PREFIX_FULL)"
