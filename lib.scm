@@ -87,6 +87,17 @@
 (define-syntax letin-with-full
   (syntax-rules ()
     [(letin-with-full f body) body]
+    [(letin-with-full f ((a . as) b) body ...)
+     (f (quote (a . as))
+        (quote b)
+        (call-with-values (lambda [] b) (lambda x x))
+        (lambda [k]
+          (apply
+           (lambda [a . as]
+             (letin-with-full f
+                              body
+                              ...))
+           k)))]
     [(letin-with-full f (a b) body ...)
      (f (quote a)
         (quote b)
