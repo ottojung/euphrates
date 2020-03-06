@@ -874,3 +874,25 @@
        (with-syntax [[add-name (generate-add-name #'name)]]
          #'(add-name (list . check-list) func))])))
 
+;;;;;;;;;;;;;
+;; SCRIPTS ;;
+;;;;;;;;;;;;;
+
+(define [sh-async cmd]
+  (run-comprocess "/bin/sh" "-c" cmd))
+
+(define [sh cmd]
+  (domid
+   (p (sh-async cmd))
+   (do (println "> ~a" cmd))
+   (sleep-until (comprocess-exited? p))))
+
+(define [sh-re cmd]
+  (domid
+   ((outport outfilename) (make-temporary-fileport))
+   (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
+   (do (sleep-until (comprocess-exited? p)))
+   (ret (read-string-file outfilename))
+   (do (close-port outport))
+   (do (delete-file outfilename))
+   ret))
