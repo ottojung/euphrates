@@ -83,6 +83,14 @@
     [(monoid* op a b c ...)
      (monoid* op (op a b) c ...)]))
 
+(begin-for-syntax
+ (define-syntax-rule [generate-prefixed-name prefix name]
+   (format-id name "~a~a" prefix (syntax->datum name))))
+
+;;;;;;;;;;;;
+;; MONADS ;;
+;;;;;;;;;;;;
+
 ;; like do syntax in haskell
 (define-syntax letin-with-full-bare
   (syntax-rules ()
@@ -139,9 +147,62 @@
           x
           (cont x))))
 
-(begin-for-syntax
- (define-syntax-rule [generate-prefixed-name prefix name]
-   (format-id name "~a~a" prefix (syntax->datum name))))
+(define (monad-arg monad-input)
+  (first monad-input))
+(define (monad-cont monad-input)
+  (second monad-input))
+(define (monad-qvar monad-input)
+  (third monad-input))
+(define (monad-qval monad-input)
+  (forth monad-input))
+(define (monad-qtags monad-input)
+  (fifth monad-input))
+
+(define (monad-last-val? monad-input)
+  (null? (monad-qvar monad-input)))
+
+(define (monad-cret monad-input arg cont)
+  (values arg
+          cont
+          (monad-qvar monad-input)
+          (monad-qval monad-input)
+          (monad-qtags monad-input)))
+(define (monad-ret monad-input arg)
+  (values arg
+          (monad-cont monad-input)
+          (monad-qvar monad-input)
+          (monad-qval monad-input)
+          (monad-qtags monad-input)))
+
+
+(define (except-monad)
+  (let ((exceptions (list)))
+    (lambda monad-input
+      (if (monad-last-val? monad-input)
+          (monad-ret monad-input
+                     (if (null? exceptions)
+                         (monad-arg monad-input)
+                         (memconst (apply throw 'except-monad exceptions))))
+          (if (or (null? exceptions)
+                  (memq 'always (monad-qtags monad-input)))
+              (monad-ret monad-input
+                         (memconst (catch-any
+                                    (monad-arg monad-input)
+                                    (lambda args
+                                      (cons! args exceptions)
+                                      'monad-except-default))))
+              (monad-ret monad-input (const 'monad-except-default)))))))
+
+(define log-monad
+  (lambda monad-input
+    (printf "(~a = ~a = ~a)\n"
+            (monad-qvar monad-input)
+            ((monad-arg monad-input))
+            (monad-qval monad-input))
+    (apply values monad-input)))
+
+(define identity-monad
+  (lambda monad-input (apply values monad-input)))
 
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
