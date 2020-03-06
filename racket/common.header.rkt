@@ -213,7 +213,11 @@
 (define [path-parent-directory path]
   (let-values [[[base name must-be-dir?]
                 (split-path path)]]
-    (path->string base)))
+    (if (path? base)
+        (path->string base)
+        (match base
+          ['relative "."]
+          [#f        "/"]))))
 
 (define (make-temporary-fileport)
   (let ((filepath (make-temporary-file)))
