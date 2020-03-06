@@ -84,28 +84,28 @@
      (monoid* op (op a b) c ...)]))
 
 ;; like do syntax in haskell
-(define-syntax letin-with-full
+(define-syntax letin-with-full-bare
   (syntax-rules ()
-    [(letin-with-full f body) body]
-    [(letin-with-full f ((a . as) b) body ...)
+    [(letin-with-full-bare f body) body]
+    [(letin-with-full-bare f ((a . as) b) body ...)
      (f (quote (a . as))
         (quote b)
         (lambda [] (call-with-values (lambda [] b) (lambda x x)))
         (lambda [k]
           (apply
            (lambda [a . as]
-             (letin-with-full f
-                              body
-                              ...))
+             (letin-with-full-bare f
+                                   body
+                                   ...))
            k)))]
-    [(letin-with-full f (a b) body ...)
+    [(letin-with-full-bare f (a b) body ...)
      (f (quote a)
         (quote b)
         (lambda [] b)
         (lambda [a]
-          (letin-with-full f
-                           body
-                           ...)))]))
+          (letin-with-full-bare f
+                                body
+                                ...)))]))
 
 (define letin-global-monad-parameter (make-parameter #f))
 (define-syntax-rule [letin-parameterize f . body]
@@ -113,14 +113,15 @@
     (begin . body)))
 
 ;; with parameterization
-(define-syntax-rule [letin-with-full-parameterized f . argv]
-  (let [[p (letin-global-monad-parameter)]]
+(define-syntax-rule [letin-with-full fexpr . argv]
+  (let* [[p (letin-global-monad-parameter)]
+         [f fexpr]]
     (if p
-        (letin-with-full (p f (quote f)) . argv)
-        (letin-with-full f . argv))))
+        (letin-with-full-bare (p f (quote f)) . argv)
+        (letin-with-full-bare f . argv))))
 
 (define-syntax-rule [letin-with f . argv]
-  (letin-with-full-parameterized (lambda [name result x cont] (f x cont)) . argv))
+  (letin-with-full (lambda [name result x cont] (f x cont)) . argv))
 
 (define-syntax-rule [letin-with-identity . argv]
   (letin-with (fn x cont (cont (x))) . argv))
