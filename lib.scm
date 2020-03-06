@@ -285,6 +285,19 @@
             (put-u8 to byte)
             (lp (1+ count)))))))
 
+(define gsleep-func-p (make-parameter usleep))
+(define [gsleep micro-seconds]
+  ((gsleep-func-p) micro-seconds))
+
+(define sleep-until-period-p
+  (make-parameter (normal->micro@unit 1/100)))
+(define-syntax-rule [sleep-until condi . body]
+  (let ((period (sleep-until-period-p)))
+    (do ()
+        (condi)
+      (gsleep period)
+      . body)))
+
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
