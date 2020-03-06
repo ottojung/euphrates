@@ -90,7 +90,7 @@
     [(letin-with-full f ((a . as) b) body ...)
      (f (quote (a . as))
         (quote b)
-        (call-with-values (lambda [] b) (lambda x x))
+        (lambda [] (call-with-values (lambda [] b) (lambda x x)))
         (lambda [k]
           (apply
            (lambda [a . as]
@@ -101,7 +101,7 @@
     [(letin-with-full f (a b) body ...)
      (f (quote a)
         (quote b)
-        b
+        (lambda [] b)
         (lambda [a]
           (letin-with-full f
                            body
@@ -123,7 +123,7 @@
   (letin-with-full-parameterized (lambda [name result x cont] (f x cont)) . argv))
 
 (define-syntax-rule [letin-with-identity . argv]
-  (letin-with (fn x cont (cont x)) . argv))
+  (letin-with (fn x cont (cont (x))) . argv))
 
 (define-syntax-rule [dom . argv] (letin-with . argv))
 
