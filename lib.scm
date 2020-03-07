@@ -92,9 +92,9 @@
 ;;;;;;;;;;;;
 
 ;; like do syntax in haskell
-(define-syntax letin-with-full-bare
+(define-syntax monadic-bare
   (syntax-rules ()
-    [(letin-with-full-bare f body)
+    [(monadic-bare f body)
      (let-values
          (((r-x r-cont qvar qval qtags)
            (f (const body)
@@ -103,14 +103,14 @@
               (quote body)
               (quote ()))))
        (r-cont (r-x)))]
-    [(letin-with-full-bare f ((a . as) b . tags) body ...)
+    [(monadic-bare f ((a . as) b . tags) body ...)
      (let-values
          (((r-x r-cont qvar qval qtags)
            (f (lambda [] (call-with-values (lambda [] b) (lambda x x)))
               (lambda [k]
                 (apply
                  (lambda [a . as]
-                   (letin-with-full-bare f
+                   (monadic-bare f
                                          body
                                          ...))
                  k))
@@ -118,12 +118,12 @@
               (quote b)
               (quote tags))))
        (r-cont (r-x)))]
-    [(letin-with-full-bare f (a b . tags) body ...)
+    [(monadic-bare f (a b . tags) body ...)
      (let-values
          (((r-x r-cont qvar qval qtags)
            (f (lambda [] b)
               (lambda [a]
-                (letin-with-full-bare f
+                (monadic-bare f
                                       body
                                       ...))
               (quote a)
@@ -131,23 +131,21 @@
               (quote tags))))
        (r-cont (r-x)))]))
 
-(define letin-global-monad-parameter (make-parameter #f))
-(define-syntax-rule [letin-parameterize f . body]
-  (parameterize [[letin-global-monad-parameter f]]
+(define monadic-global-parameter (make-parameter #f))
+(define-syntax-rule [monadic-parameterize f . body]
+  (parameterize [[monadic-global-parameter f]]
     (begin . body)))
 
 ;; with parameterization
-(define-syntax-rule [letin-with-full fexpr . argv]
-  (let* [[p (letin-global-monad-parameter)]
+(define-syntax-rule [monadic fexpr . argv]
+  (let* [[p (monadic-global-parameter)]
          [f fexpr]]
     (if p
-        (letin-with-full-bare (p f (quote f)) . argv)
-        (letin-with-full-bare f . argv))))
+        (monadic-bare (p f (quote f)) . argv)
+        (monadic-bare f . argv))))
 
-(define-syntax-rule [letin-with-identity . argv]
-  (letin-with-full identity-monad . argv))
-
-(define-syntax-rule [domid . argv] (letin-with-identity . argv))
+(define-syntax-rule [monadic-id . argv]
+  (monadic identity-monad . argv))
 
 (define (monad-arg monad-input)
   (first monad-input))
@@ -984,13 +982,13 @@
   (run-comprocess "/bin/sh" "-c" cmd))
 
 (define [sh cmd]
-  (domid
+  (monadic-id
    (p (sh-async cmd))
    (do (println "> ~a" cmd))
    (sleep-until (comprocess-exited? p))))
 
 (define [sh-re cmd]
-  (domid
+  (monadic-id
    ((outport outfilename) (make-temporary-fileport))
    (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
    (do (sleep-until (comprocess-exited? p)))
