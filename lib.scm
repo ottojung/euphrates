@@ -1028,7 +1028,7 @@
   (monadic-id
    (p (sh-async cmd))
    (do (println "> ~a" cmd) `(log ,cmd in shell))
-   (sleep-until (comprocess-exited? p))
+   (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    p))
 
