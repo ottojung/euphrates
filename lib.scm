@@ -1017,6 +1017,10 @@
 ;; SCRIPTS ;;
 ;;;;;;;;;;;;;
 
+(define (shell-check-status p)
+  (unless (= 0 (comprocess-status p))
+    (throw 'shell-process-failed `(cmd: ,(comprocess-command p)) p)))
+
 (define [sh-async cmd]
   (run-comprocess "/bin/sh" "-c" cmd))
 
@@ -1024,7 +1028,9 @@
   (monadic-id
    (p (sh-async cmd))
    (do (println "> ~a" cmd) `(log ,cmd in shell))
-   (sleep-until (comprocess-exited? p))))
+   (sleep-until (comprocess-exited? p))
+   (do (shell-check-status p))
+   p))
 
 (define [sh-re cmd]
   (monadic (except-monad)
@@ -1032,6 +1038,7 @@
    (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
    (do (println "> ~a" cmd) `(log ,cmd in shell))
    (do (sleep-until (comprocess-exited? p)))
+   (do (shell-check-status p))
    (ret (read-string-file outfilename))
    (do (close-port outport) 'always)
    (do (delete-file outfilename) 'always)
