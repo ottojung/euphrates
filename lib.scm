@@ -291,6 +291,13 @@
 ;; MONADS ;;
 ;;;;;;;;;;;;
 
+(define-syntax monadic-bare-handle-tags
+  (syntax-rules ()
+    ((monadic-bare-handle-tags ())
+     (list))
+    ((monadic-bare-handle-tags . tags)
+     (list . tags))))
+
 ;; like do syntax in haskell
 (define-syntax monadic-bare
   (syntax-rules ()
@@ -316,7 +323,7 @@
                  k))
               (quote (a . as))
               (quote b)
-              (quote tags))))
+              (monadic-bare-handle-tags . tags))))
        (r-cont (r-x)))]
     [(monadic-bare f (a b . tags) body ...)
      (let-values
@@ -328,7 +335,7 @@
                               ...))
               (quote a)
               (quote b)
-              (quote tags))))
+              (monadic-bare-handle-tags . tags))))
        (r-cont (r-x)))]))
 
 (define monadic-global-parameter (make-parameter #f))
@@ -1016,17 +1023,18 @@
 (define [sh cmd]
   (monadic-id
    (p (sh-async cmd))
-   (do (println "> ~a" cmd))
+   (do (println "> ~a" cmd) `(log ,cmd in shell))
    (sleep-until (comprocess-exited? p))))
 
 (define [sh-re cmd]
   (monadic (except-monad)
    ((outport outfilename) (make-temporary-fileport))
    (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
+   (do (println "> ~a" cmd) `(log ,cmd in shell))
    (do (sleep-until (comprocess-exited? p)))
    (ret (read-string-file outfilename))
-   (do (close-port outport) always)
-   (do (delete-file outfilename) always)
+   (do (close-port outport) 'always)
+   (do (delete-file outfilename) 'always)
    ret))
 
 (define (parse-cli args)
