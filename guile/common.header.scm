@@ -66,7 +66,18 @@
 
 (define [hash-table->alist h] (hash-map->list cons h))
 
-(define big-random-int random)
+(define big-random-int
+  (let ((initialized? #f))
+    (lambda (max)
+      (unless initialized?
+        ;; NOTE: in guile, random is deterministic by default
+        ;; while rackets is non-deterministic by default
+        ;; It would be ok if they both were deterministic,
+        ;; but it is easier to change guile, so there it is.
+        ;; TODO: deterministic random at will
+        (set! initialized? #t)
+        (set! *random-state* (random-state-from-platform)))
+      (random max))))
 
 (define-syntax-rule [with-output-to-file#clear file . bodies]
   (with-output-to-file
