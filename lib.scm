@@ -1028,3 +1028,56 @@
    (do (close-port outport) always)
    (do (delete-file outfilename) always)
    ret))
+
+(define (parse-cli args)
+  (define (trim s) (string-trim-chars s "-" 'both))
+
+  (let lp ((pos 0) (buf (list)) (left args))
+    (if (null? left)
+        buf
+        (let ((current (car left)))
+          (cond
+           ((string-startswith? current "--")
+            (let ((last? (null? (cdr left))))
+              (if last?
+                  (throw 'parse-cli-error `(expected-value-for-key: ,current))
+                  (let* ((key (trim current))
+                         (next (car (cdr left)))
+                         (cell (cons key next))
+                         (rest (cdr (cdr left))))
+                    (lp pos (cons cell buf) rest)))))
+           ((string-startswith? current "-")
+            (let* ((key (trim current))
+                   (cell (cons key #t))
+                   (rest (cdr left)))
+              (lp pos (cons cell buf) rest)))
+           (#t
+            (lp (1+ pos) (cons (cons pos current) buf) (cdr left))))))))
+
+(define parse-cli-global-default #f)
+(define parse-cli-global-p (make-parameter #f))
+(define (parse-cli!)
+  (let ((parsed (parse-cli (get-command-line-arguments))))
+    (set! parse-cli-global-default parsed)
+    parsed))
+(define (parse-cli-parse-or-get!)
+  (if (parse-cli-global-p)
+      (parse-cli-global-p)
+      (if parse-cli-global-default
+          parse-cli-global-default
+          (parse-cli!))))
+
+(define (parse-cli-check-bool key)
+  (let* ((parsed (parse-cli-parse-or-get!))
+         (ret (assoc key parsed)))
+    (if (pair? ret)
+        (cdr ret)
+        ret)))
+
+(define (parse-cli-check-val key)
+  (let* ((parsed (parse-cli-parse-or-get!))
+         (ret (assoc key parsed)))
+    (if (pair? ret)
+        (cdr ret)
+        (throw 'missing-command-line-argument key))))
+

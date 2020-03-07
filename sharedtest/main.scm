@@ -323,3 +323,14 @@
     (println "text = ~a" (car (string-split#simple text #\newline)))
     (write-string-file curfile text)))
 
+;;;;;;;;;;;;;
+;; SCRIPTS ;;
+;;;;;;;;;;;;;
+
+(set! parse-cli-global-default
+  (parse-cli
+   (list "filename" "--key1" "val1" "-opt1" "--key2" "val2")))
+
+(println "parsed = ~a" (parse-cli-parse-or-get!))
+(println "key1 = ~a" (parse-cli-check-val "key1"))
+
