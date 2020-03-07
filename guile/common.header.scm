@@ -136,7 +136,7 @@
 (define first car)
 (define (second x) (list-ref x 1))
 (define (third x) (list-ref x 2))
-(define (forth x) (list-ref x 3))
+(define (fourth x) (list-ref x 3))
 (define (fifth x) (list-ref x 4))
 
 ;;;;;;;;;;;;;;;;
