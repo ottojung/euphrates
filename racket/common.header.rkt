@@ -55,6 +55,23 @@
 
 (define string-endswith? string-suffix?)
 (define string-startswith? string-prefix?)
+(define (string-trim-chars str chars-arg direction)
+  (define (regs cc)
+    (let lp ((left cc))
+      (if (null? left)
+          (list)
+          (if (null? (cdr left))
+              (list (car left)) ;; last char
+              (list* (car left) #\| (lp (cdr left)))))))
+  (define chars (if (string? chars-arg)
+                    (string->list chars-arg)
+                    chars-arg))
+  (define reg (regexp (apply string (regs chars))))
+  (case direction
+    ('left (string-trim str reg #:left? #t #:right? #f #:repeat? #t))
+    ('right (string-trim str reg #:left? #f #:right? #t #:repeat? #t))
+    ('both (string-trim str reg #:left? #t #:right? #t #:repeat? #t))))
+
 (define fold foldl)
 (define and-map andmap)
 (define or-map andmap)
