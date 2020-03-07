@@ -398,6 +398,13 @@
 (define identity-monad
   (lambda monad-input (apply values monad-input)))
 
+(define (maybe-monad predicate)
+  (lambda monad-input
+    (let ((arg ((monad-arg monad-input))))
+      (if (predicate arg)
+          (monad-cret monad-input (const arg) identity)
+          (monad-ret  monad-input (const arg))))))
+
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
 ;;;;;;;;;;;;;

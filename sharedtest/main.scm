@@ -48,25 +48,26 @@
 
 (printf "fn = ~a\n" ((fn i (* 2 i)) 5))
 
-(letin-with-full dom-print
-                 [a (+ 2 7)]
-                 [b (* a 10)]
-                 (* b b))
+(monadic log-monad
+         [a (+ 2 7)]
+         [b (* a 10)]
+         (* b b))
 
 (define [calc-default]
-  (dom (dom-default (fn x (= x 0)))
-       [a (+ 2 7)]
-       [b (* a 10)]
-       [c (- b b)]
-       (+ 100 c)))
+  (monadic (maybe-monad (fn x (= x 0)))
+           [a (+ 2 7)]
+           [b (* a 10)]
+           [c (- b b)]
+           (+ 100 c)))
 
 (printf "dom-default = ~a\n" (calc-default))
 
 (printf "dom parameterized = ~a\n"
-        (letin-parameterize
+        (monadic-parameterize
          (fn f fname
-             (fn xqt resultqt x cont
-                 (1+ (f xqt resultqt x cont))))
+             (lambda monadic-input
+               (let-values (((arg cont qvar qval qtags) (apply f monadic-input)))
+                 (values (const (1+ (arg))) cont qvar qval qtags))))
          (calc-default)))
 
 (gfunc/define haha)
