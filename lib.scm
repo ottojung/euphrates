@@ -87,122 +87,6 @@
  (define-syntax-rule [generate-prefixed-name prefix name]
    (format-id name "~a~a" prefix (syntax->datum name))))
 
-;;;;;;;;;;;;
-;; MONADS ;;
-;;;;;;;;;;;;
-
-;; like do syntax in haskell
-(define-syntax monadic-bare
-  (syntax-rules ()
-    [(monadic-bare f body)
-     (let-values
-         (((r-x r-cont qvar qval qtags)
-           (f (const body)
-              identity
-              (quote ())
-              (quote body)
-              (quote ()))))
-       (r-cont (r-x)))]
-    [(monadic-bare f ((a . as) b . tags) body ...)
-     (let-values
-         (((r-x r-cont qvar qval qtags)
-           (f (lambda [] (call-with-values (lambda [] b) (lambda x x)))
-              (lambda [k]
-                (apply
-                 (lambda [a . as]
-                   (monadic-bare f
-                                         body
-                                         ...))
-                 k))
-              (quote (a . as))
-              (quote b)
-              (quote tags))))
-       (r-cont (r-x)))]
-    [(monadic-bare f (a b . tags) body ...)
-     (let-values
-         (((r-x r-cont qvar qval qtags)
-           (f (lambda [] b)
-              (lambda [a]
-                (monadic-bare f
-                                      body
-                                      ...))
-              (quote a)
-              (quote b)
-              (quote tags))))
-       (r-cont (r-x)))]))
-
-(define monadic-global-parameter (make-parameter #f))
-(define-syntax-rule [monadic-parameterize f . body]
-  (parameterize [[monadic-global-parameter f]]
-    (begin . body)))
-
-;; with parameterization
-(define-syntax-rule [monadic fexpr . argv]
-  (let* [[p (monadic-global-parameter)]
-         [f fexpr]]
-    (if p
-        (monadic-bare (p f (quote f)) . argv)
-        (monadic-bare f . argv))))
-
-(define-syntax-rule [monadic-id . argv]
-  (monadic identity-monad . argv))
-
-(define (monad-arg monad-input)
-  (first monad-input))
-(define (monad-cont monad-input)
-  (second monad-input))
-(define (monad-qvar monad-input)
-  (third monad-input))
-(define (monad-qval monad-input)
-  (forth monad-input))
-(define (monad-qtags monad-input)
-  (fifth monad-input))
-
-(define (monad-last-val? monad-input)
-  (null? (monad-qvar monad-input)))
-
-(define (monad-cret monad-input arg cont)
-  (values arg
-          cont
-          (monad-qvar monad-input)
-          (monad-qval monad-input)
-          (monad-qtags monad-input)))
-(define (monad-ret monad-input arg)
-  (values arg
-          (monad-cont monad-input)
-          (monad-qvar monad-input)
-          (monad-qval monad-input)
-          (monad-qtags monad-input)))
-
-(define (except-monad)
-  (let ((exceptions (list)))
-    (lambda monad-input
-      (if (monad-last-val? monad-input)
-          (monad-ret monad-input
-                     (if (null? exceptions)
-                         (monad-arg monad-input)
-                         (memconst (apply throw 'except-monad exceptions))))
-          (if (or (null? exceptions)
-                  (memq 'always (monad-qtags monad-input)))
-              (monad-ret monad-input
-                         (memconst (catch-any
-                                    (monad-arg monad-input)
-                                    (lambda args
-                                      (cons! args exceptions)
-                                      'monad-except-default))))
-              (monad-ret monad-input (const 'monad-except-default)))))))
-
-(define log-monad
-  (lambda monad-input
-    (printf "(~a = ~a = ~a)\n"
-            (monad-qvar monad-input)
-            ((monad-arg monad-input))
-            (monad-qval monad-input))
-    (apply values monad-input)))
-
-(define identity-monad
-  (lambda monad-input (apply values monad-input)))
-
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
@@ -397,6 +281,122 @@
                (lambda [] (apply (car buf) ret))
              (lambda x x))
            (cdr buf))))))
+
+;;;;;;;;;;;;
+;; MONADS ;;
+;;;;;;;;;;;;
+
+;; like do syntax in haskell
+(define-syntax monadic-bare
+  (syntax-rules ()
+    [(monadic-bare f body)
+     (let-values
+         (((r-x r-cont qvar qval qtags)
+           (f (const body)
+              identity
+              (quote ())
+              (quote body)
+              (quote ()))))
+       (r-cont (r-x)))]
+    [(monadic-bare f ((a . as) b . tags) body ...)
+     (let-values
+         (((r-x r-cont qvar qval qtags)
+           (f (lambda [] (call-with-values (lambda [] b) (lambda x x)))
+              (lambda [k]
+                (apply
+                 (lambda [a . as]
+                   (monadic-bare f
+                                         body
+                                         ...))
+                 k))
+              (quote (a . as))
+              (quote b)
+              (quote tags))))
+       (r-cont (r-x)))]
+    [(monadic-bare f (a b . tags) body ...)
+     (let-values
+         (((r-x r-cont qvar qval qtags)
+           (f (lambda [] b)
+              (lambda [a]
+                (monadic-bare f
+                                      body
+                                      ...))
+              (quote a)
+              (quote b)
+              (quote tags))))
+       (r-cont (r-x)))]))
+
+(define monadic-global-parameter (make-parameter #f))
+(define-syntax-rule [monadic-parameterize f . body]
+  (parameterize [[monadic-global-parameter f]]
+    (begin . body)))
+
+;; with parameterization
+(define-syntax-rule [monadic fexpr . argv]
+  (let* [[p (monadic-global-parameter)]
+         [f fexpr]]
+    (if p
+        (monadic-bare (p f (quote f)) . argv)
+        (monadic-bare f . argv))))
+
+(define-syntax-rule [monadic-id . argv]
+  (monadic identity-monad . argv))
+
+(define (monad-arg monad-input)
+  (first monad-input))
+(define (monad-cont monad-input)
+  (second monad-input))
+(define (monad-qvar monad-input)
+  (third monad-input))
+(define (monad-qval monad-input)
+  (forth monad-input))
+(define (monad-qtags monad-input)
+  (fifth monad-input))
+
+(define (monad-last-val? monad-input)
+  (null? (monad-qvar monad-input)))
+
+(define (monad-cret monad-input arg cont)
+  (values arg
+          cont
+          (monad-qvar monad-input)
+          (monad-qval monad-input)
+          (monad-qtags monad-input)))
+(define (monad-ret monad-input arg)
+  (values arg
+          (monad-cont monad-input)
+          (monad-qvar monad-input)
+          (monad-qval monad-input)
+          (monad-qtags monad-input)))
+
+(define (except-monad)
+  (let ((exceptions (list)))
+    (lambda monad-input
+      (if (monad-last-val? monad-input)
+          (monad-ret monad-input
+                     (if (null? exceptions)
+                         (monad-arg monad-input)
+                         (memconst (apply throw 'except-monad exceptions))))
+          (if (or (null? exceptions)
+                  (memq 'always (monad-qtags monad-input)))
+              (monad-ret monad-input
+                         (memconst (catch-any
+                                    (monad-arg monad-input)
+                                    (lambda args
+                                      (cons! args exceptions)
+                                      'monad-except-default))))
+              (monad-ret monad-input (const 'monad-except-default)))))))
+
+(define log-monad
+  (lambda monad-input
+    (printf "(~a = ~a = ~a)\n"
+            (monad-qvar monad-input)
+            ((monad-arg monad-input))
+            (monad-qval monad-input))
+    (apply values monad-input)))
+
+(define identity-monad
+  (lambda monad-input (apply values monad-input)))
 
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
