@@ -17,7 +17,7 @@
 (define [string-null? s] (not (non-empty-string? s)))
 
 (define [throw type . args]
-  (error (symbol->string type) "(args: ~a)" args))
+  (error type "~a" args))
 
 (define [catch-any body handler]
   (call-with-exception-handler handler body))
