@@ -504,7 +504,7 @@
     (append
      (call-with-values
          (lambda [] (apply proc (take stack arity)))
-       (lambda vals (append vals (drop stack arity)))))))
+       (lambda vals (append vals stack))))))
 
 (define [with-stack-full-loop initial operations]
   (let loop [[stack initial] [rest operations]]
@@ -573,7 +573,22 @@
   (with-stack-full (with-stack-stack) operations))
 
 (define [PUSH x] (lambda [] x))
-(define [DROP x] (values))
+(define [DROP x]
+  (stack-special-op
+   'whole
+   cdr))
+
+(define [USE proc]
+  "Like stack-apply but drops n elements from stack where n=arity(f)"
+  (stack-special-op
+   'whole
+   (lambda (stack)
+     (let [[arity (procedure-get-minimum-arity proc)]]
+       (append
+        (call-with-values
+            (lambda [] (apply proc (take stack arity)))
+          (lambda vals (append vals (drop stack arity)))))))))
+
 (define [NULL] (values)) ;; useful for IF-THEN-ELSE
 (define DUP (lambda [x] (values x x))) ;; quivalent to (PROJ identity identity)
 (define [ADD a b] (+ a b))
@@ -587,7 +602,7 @@
      (append
       (map (lambda [pos] (list-ref stack pos))
             perms)
-      (drop stack (length perms))))))
+      stack))))
 
 (define [CALL x] (stack-special-op 'call x)) ;; parameterizes call to `x'
 (define EVAL (stack-special-op 'eval #f))
@@ -643,7 +658,7 @@
        (append
         (map (lambda [f x] (f x))
              funcs (take stack len))
-        (drop stack len))))))
+        stack)))))
 
 (define [PROJ . funcs]
   "Projects functions on stack top"
@@ -657,10 +672,9 @@
       (stack-special-op
        'whole
        (lambda [stack]
-         (let [[taken (take stack arity)]
-               [poped (drop stack arity)]]
+         (let [[taken (take stack arity)]]
            (with-stack-full
-            poped
+            stack
             (apply
              (lambda args (list . operations))
              taken))))))))

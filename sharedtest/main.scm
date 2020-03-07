@@ -256,7 +256,7 @@
   (PUSH 3)
   ADD
   PUSH/CC
-  (lambda [k]
+  (USE (lambda [k]
     (println "got k = ~a" k)
     (if (procedure? k)
         (begin
@@ -264,7 +264,7 @@
           5)
         (begin
           (set! stack-k (lambda lst 77))
-          77)))
+          77))))
   MUL
   (CALL
    (lambda [n]
