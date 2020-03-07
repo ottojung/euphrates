@@ -267,21 +267,6 @@
             (set! evaled? #t)
             memory)))))
 
-(define (compose-var . functions)
-  "
-  Composition of functions with any number of arguments
-  They better match
-  "
-  (lambda x
-    (let lp ((ret x) (buf functions))
-      (if (null? buf)
-          (apply values ret)
-          (lp
-           (call-with-values
-               (lambda [] (apply (car buf) ret))
-             (lambda x x))
-           (cdr buf))))))
-
 (define (replicate n x)
   (if (= 0 n)
       (list)
