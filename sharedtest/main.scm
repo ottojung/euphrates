@@ -70,6 +70,13 @@
                  (values (const (1+ (arg))) cont qvar qval qtags))))
          (calc-default)))
 
+(printf "dom composed = ~a\n"
+  (monadic (compose-var log-monad (maybe-monad (fn x (= x 0))))
+           [a (+ 2 7)]
+           [b (* a 10)]
+           [c (- b b)]
+           (+ 100 c)))
+
 (gfunc/define haha)
 
 
