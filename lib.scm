@@ -1030,22 +1030,13 @@
    ret))
 
 (define (parse-cli args)
-  (define (trim s) (string-trim-chars s "-" 'both))
+  (define (trim s) (string-trim-chars s "-" 'left))
 
   (let lp ((pos 0) (buf (list)) (left args))
     (if (null? left)
         buf
         (let ((current (car left)))
           (cond
-           ((string-startswith? current "--")
-            (let ((last? (null? (cdr left))))
-              (if last?
-                  (throw 'parse-cli-error `(expected-value-for-key: ,current))
-                  (let* ((key (trim current))
-                         (next (car (cdr left)))
-                         (cell (cons key next))
-                         (rest (cdr (cdr left))))
-                    (lp pos (cons cell buf) rest)))))
            ((string-startswith? current "-")
             (let* ((key (trim current))
                    (cell (cons key #t))
@@ -1074,21 +1065,28 @@
           (parse-cli-global-default)
           (parse-cli!))))
 
-(define (parse-cli-check-bool key)
+(define (parse-cli-get-flag key)
   (let* ((parsed (parse-cli-parse-or-get!))
          (ret (assoc key parsed)))
     (if (pair? ret)
         (cdr ret)
         ret)))
 
-(define (parse-cli-check-val key)
-  (let* ((parsed (parse-cli-parse-or-get!))
-         (ret (assoc key parsed)))
-    (if (pair? ret)
-        (cdr ret)
-        (throw 'missing-command-line-argument key))))
+(define (parse-cli-get-switch key)
+  (let ((parsed (parse-cli-parse-or-get!)))
+    (let lp ((rest parsed) (prev #f))
+      (if (null? rest)
+          (throw 'missing-command-line-switch-value key)
+          (let* ((current (car rest))
+                 (k (car current))
+                 (v (cdr current)))
+            (if (equal? k key)
+                (if prev prev
+                    (throw 'command-line-flag-should-be-a-switch
+                           key))
+                (lp (cdr rest) v)))))))
 
-(define (parse-cli-pos-after after-key)
+(define (parse-cli-get-list after-key)
   (let* ((parsed (parse-cli-parse-or-get!)))
     (let lp ((rest (reverse parsed))
              (found? (if (eq? #f after-key)
@@ -1101,7 +1099,7 @@
             (if found?
                 (if (integer? key)
                     (cons val (lp (cdr rest) found?))
-                    (lp (cdr rest) found?))
+                    (list)) ; NOTE: next is another flag/switch
                 (if (equal? key after-key)
                     (lp (cdr rest) (not found?))
                     (lp (cdr rest) found?))))))))

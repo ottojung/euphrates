@@ -347,7 +347,9 @@
     )))
 
 (println "parsed = ~a" (parse-cli-parse-or-get!))
-(println "key1 = ~a" (parse-cli-check-val "key1"))
-(println "after -- = ~a" (parse-cli-pos-after ""))
-(println "all positional = ~a" (parse-cli-pos-after #f))
+(println "flag key1 = ~a" (parse-cli-get-flag "key1"))
+(println "switch key1 = ~a" (parse-cli-get-switch "key1"))
+(println "flag key9 = ~a" (parse-cli-get-flag "key9"))
+(println "list '' -- = ~a" (parse-cli-get-list ""))
+(println "all positional = ~a" (parse-cli-get-list #f))
 
