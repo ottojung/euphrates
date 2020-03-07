@@ -623,8 +623,7 @@
   (stack-special-op
    'control
    (lambda [loop stack ops]
-     ((continuation) args)
-     (values #f (list)))))
+     (values ((continuation) args) (list)))))
 
 (define [STACK-EFF environment-func]
   (stack-special-op
