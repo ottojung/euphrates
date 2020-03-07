@@ -282,6 +282,11 @@
              (lambda x x))
            (cdr buf))))))
 
+(define (replicate n x)
+  (if (= 0 n)
+      (list)
+      (cons x (replicate (1- n) x))))
+
 ;;;;;;;;;;;;
 ;; MONADS ;;
 ;;;;;;;;;;;;
@@ -306,8 +311,8 @@
                 (apply
                  (lambda [a . as]
                    (monadic-bare f
-                                         body
-                                         ...))
+                                 body
+                                 ...))
                  k))
               (quote (a . as))
               (quote b)
@@ -319,8 +324,8 @@
            (f (lambda [] b)
               (lambda [a]
                 (monadic-bare f
-                                      body
-                                      ...))
+                              body
+                              ...))
               (quote a)
               (quote b)
               (quote tags))))
@@ -369,14 +374,29 @@
           (monad-qval monad-input)
           (monad-qtags monad-input)))
 
+(define (monad-handle-multiple monad-input arg)
+  (let* ((qvar (monad-qvar monad-input))
+         (len (if (list? qvar) (length qvar) 1)))
+    (if (< len 2)
+        arg
+        (const (replicate len (arg))))))
+(define (monad-replicate-multiple monad-input arg)
+  (let* ((qvar (monad-qvar monad-input))
+         (len (if (list? qvar) (length qvar) 1)))
+    (if (< len 2)
+        arg
+        (replicate len arg))))
+
 (define (except-monad)
   (let ((exceptions (list)))
     (lambda monad-input
       (if (monad-last-val? monad-input)
           (monad-ret monad-input
+                     (monad-handle-multiple
+                      monad-input
                      (if (null? exceptions)
                          (monad-arg monad-input)
-                         (memconst (apply throw 'except-monad exceptions))))
+                         (memconst (apply throw 'except-monad exceptions)))))
           (if (or (null? exceptions)
                   (memq 'always (monad-qtags monad-input)))
               (monad-ret monad-input
@@ -384,8 +404,13 @@
                                     (monad-arg monad-input)
                                     (lambda args
                                       (cons! args exceptions)
-                                      'monad-except-default))))
-              (monad-ret monad-input (const 'monad-except-default)))))))
+                                      (monad-replicate-multiple
+                                       monad-input
+                                       'monad-except-default)))))
+              (monad-ret monad-input
+                         (monad-handle-multiple
+                          monad-input
+                         (const 'monad-except-default))))))))
 
 (define log-monad
   (lambda monad-input
@@ -995,11 +1020,11 @@
    (sleep-until (comprocess-exited? p))))
 
 (define [sh-re cmd]
-  (monadic-id
+  (monadic (except-monad)
    ((outport outfilename) (make-temporary-fileport))
    (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
    (do (sleep-until (comprocess-exited? p)))
    (ret (read-string-file outfilename))
-   (do (close-port outport))
-   (do (delete-file outfilename))
+   (do (close-port outport) always)
+   (do (delete-file outfilename) always)
    ret))
