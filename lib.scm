@@ -1032,7 +1032,7 @@
 (define (parse-cli args)
   (define (trim s) (string-trim-chars s "-" 'left))
 
-  (let lp ((pos 0) (buf (list)) (left args))
+  (let lp ((pos 0) (buf (list (cons #f #t))) (left args))
     (if (null? left)
         buf
         (let ((current (car left)))
@@ -1089,9 +1089,7 @@
 (define (parse-cli-get-list after-key)
   (let* ((parsed (parse-cli-parse-or-get!)))
     (let lp ((rest (reverse parsed))
-             (found? (if (eq? #f after-key)
-                         #t
-                         #f)))
+             (found? #f))
       (if (null? rest)
           (list)
           (let ((key (car (car rest)))
