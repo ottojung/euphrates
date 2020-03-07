@@ -94,26 +94,42 @@
 ;; like do syntax in haskell
 (define-syntax letin-with-full-bare
   (syntax-rules ()
-    [(letin-with-full-bare f body) body]
-    [(letin-with-full-bare f ((a . as) b) body ...)
-     (f (quote (a . as))
-        (quote b)
-        (lambda [] (call-with-values (lambda [] b) (lambda x x)))
-        (lambda [k]
-          (apply
-           (lambda [a . as]
-             (letin-with-full-bare f
-                                   body
-                                   ...))
-           k)))]
-    [(letin-with-full-bare f (a b) body ...)
-     (f (quote a)
-        (quote b)
-        (lambda [] b)
-        (lambda [a]
-          (letin-with-full-bare f
-                                body
-                                ...)))]))
+    [(letin-with-full-bare f body)
+     (let-values
+         (((r-x r-cont qvar qval qtags)
+           (f (const body)
+              identity
+              (quote ())
+              (quote body)
+              (quote ()))))
+       (r-cont (r-x)))]
+    [(letin-with-full-bare f ((a . as) b . tags) body ...)
+     (let-values
+         (((r-x r-cont qvar qval qtags)
+           (f (lambda [] (call-with-values (lambda [] b) (lambda x x)))
+              (lambda [k]
+                (apply
+                 (lambda [a . as]
+                   (letin-with-full-bare f
+                                         body
+                                         ...))
+                 k))
+              (quote (a . as))
+              (quote b)
+              (quote tags))))
+       (r-cont (r-x)))]
+    [(letin-with-full-bare f (a b . tags) body ...)
+     (let-values
+         (((r-x r-cont qvar qval qtags)
+           (f (lambda [] b)
+              (lambda [a]
+                (letin-with-full-bare f
+                                      body
+                                      ...))
+              (quote a)
+              (quote b)
+              (quote tags))))
+       (r-cont (r-x)))]))
 
 (define letin-global-monad-parameter (make-parameter #f))
 (define-syntax-rule [letin-parameterize f . body]
@@ -128,24 +144,10 @@
         (letin-with-full-bare (p f (quote f)) . argv)
         (letin-with-full-bare f . argv))))
 
-(define-syntax-rule [letin-with f . argv]
-  (letin-with-full (lambda [name result x cont] (f x cont)) . argv))
-
 (define-syntax-rule [letin-with-identity . argv]
-  (letin-with (fn x cont (cont (x))) . argv))
-
-(define-syntax-rule [dom . argv] (letin-with . argv))
+  (letin-with-full identity-monad . argv))
 
 (define-syntax-rule [domid . argv] (letin-with-identity . argv))
-
-(define-syntax-rule [domf . argv] (letin-with-full . argv))
-
-;; Short circuits with any predicate
-(define [dom-default default?]
-  (fn x cont
-      (if (default? x)
-          x
-          (cont x))))
 
 (define (monad-arg monad-input)
   (first monad-input))
@@ -173,7 +175,6 @@
           (monad-qvar monad-input)
           (monad-qval monad-input)
           (monad-qtags monad-input)))
-
 
 (define (except-monad)
   (let ((exceptions (list)))
