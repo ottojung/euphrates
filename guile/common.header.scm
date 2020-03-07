@@ -133,6 +133,12 @@
 (define-syntax-rule [begin-for-syntax . args]
   (begin . args))
 
+(define first car)
+(define (second x) (list-ref x 1))
+(define (third x) (list-ref x 2))
+(define (forth x) (list-ref x 3))
+(define (fifth x) (list-ref x 4))
+
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
