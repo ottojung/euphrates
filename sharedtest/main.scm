@@ -327,10 +327,14 @@
 ;; SCRIPTS ;;
 ;;;;;;;;;;;;;
 
-(set! parse-cli-global-default
+(parse-cli-global-default
   (parse-cli
-   (list "filename" "--key1" "val1" "-opt1" "--key2" "val2")))
+   (list
+    "filename" "--key1" "val1" "-opt1" "--key2" "val2" "--" "rest1" "rest2"
+    )))
 
 (println "parsed = ~a" (parse-cli-parse-or-get!))
 (println "key1 = ~a" (parse-cli-check-val "key1"))
+(println "after -- = ~a" (parse-cli-pos-after ""))
+(println "all positional = ~a" (parse-cli-pos-after #f))
 

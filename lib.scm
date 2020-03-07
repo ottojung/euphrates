@@ -1054,17 +1054,24 @@
            (#t
             (lp (1+ pos) (cons (cons pos current) buf) (cdr left))))))))
 
-(define parse-cli-global-default #f)
 (define parse-cli-global-p (make-parameter #f))
+(define parse-cli-global-default
+  (let ((value #f))
+    (case-lambda
+      (() value)
+      ((new-value)
+       (set! value new-value)
+       new-value))))
+
 (define (parse-cli!)
   (let ((parsed (parse-cli (get-command-line-arguments))))
-    (set! parse-cli-global-default parsed)
+    (parse-cli-global-default parsed)
     parsed))
 (define (parse-cli-parse-or-get!)
   (if (parse-cli-global-p)
       (parse-cli-global-p)
-      (if parse-cli-global-default
-          parse-cli-global-default
+      (if (parse-cli-global-default)
+          (parse-cli-global-default)
           (parse-cli!))))
 
 (define (parse-cli-check-bool key)
@@ -1081,3 +1088,20 @@
         (cdr ret)
         (throw 'missing-command-line-argument key))))
 
+(define (parse-cli-pos-after after-key)
+  (let* ((parsed (parse-cli-parse-or-get!)))
+    (let lp ((rest (reverse parsed))
+             (found? (if (eq? #f after-key)
+                         #t
+                         #f)))
+      (if (null? rest)
+          (list)
+          (let ((key (car (car rest)))
+                (val (cdr (car rest))))
+            (if found?
+                (if (integer? key)
+                    (cons val (lp (cdr rest) found?))
+                    (lp (cdr rest) found?))
+                (if (equal? key after-key)
+                    (lp (cdr rest) (not found?))
+                    (lp (cdr rest) found?))))))))
