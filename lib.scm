@@ -1040,9 +1040,10 @@
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    (ret (read-string-file outfilename))
+   (trimed (string-trim-chars ret "\n \t" 'both))
    (do (close-port outport) 'always)
    (do (delete-file outfilename) 'always)
-   ret))
+   trimed))
 
 (define (parse-cli args)
   (define (trim s) (string-trim-chars s "-" 'left))
