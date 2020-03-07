@@ -17,6 +17,19 @@
 
 (printf "k = ~a\n" k)
 
+(let* ((s "xxhellokh")
+       (tt "hx")
+       (test
+        (fn mode
+            (println "trim of ~s with ~s in mode ~a: ~a"
+                     s
+                     tt
+                     mode
+                     (string-trim-chars s tt mode)))))
+  (test 'left)
+  (test 'right)
+  (test 'both))
+
 (+ 5 10)
 
 (display "Hello, Guile!\n")

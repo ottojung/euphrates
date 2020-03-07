@@ -68,9 +68,9 @@
                     chars-arg))
   (define reg (regexp (apply string (regs chars))))
   (case direction
-    ('left (string-trim str reg #:left? #t #:right? #f #:repeat? #t))
-    ('right (string-trim str reg #:left? #f #:right? #t #:repeat? #t))
-    ('both (string-trim str reg #:left? #t #:right? #t #:repeat? #t))))
+    ((left) (string-trim str reg #:left? #t #:right? #f #:repeat? #t))
+    ((right) (string-trim str reg #:left? #f #:right? #t #:repeat? #t))
+    ((both) (string-trim str reg #:left? #t #:right? #t #:repeat? #t))))
 
 (define fold foldl)
 (define and-map andmap)

@@ -113,9 +113,9 @@
   (define (pred c)
     (memq c chars))
   (case direction
-    ('left (string-trim str pred))
-    ('right (string-trim-right str pred))
-    ('both (string-trim-both str pred))))
+    ((left) (string-trim str pred))
+    ((right) (string-trim-right str pred))
+    ((both) (string-trim-both str pred))))
 
 (define find-first find)
 
