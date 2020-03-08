@@ -1025,13 +1025,18 @@
   (unless (= 0 (comprocess-status p))
     (throw 'shell-process-failed `(cmd: ,(comprocess-command p)) p)))
 
-(define [sh-async cmd]
+(define [sh-async-no-log cmd]
   (run-comprocess "/bin/sh" "-c" cmd))
+
+(define (sh-async cmd)
+  (monadic-id
+   (ret (sh-async-no-log cmd))
+   (do (println "> ~a" cmd) `(log ,cmd in shell))
+   ret))
 
 (define [sh cmd]
   (monadic-id
-   (p (sh-async cmd))
-   (do (println "> ~a" cmd) `(log ,cmd in shell))
+   (p (sh-async-no-log cmd))
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    p))
