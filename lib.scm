@@ -665,18 +665,20 @@
     (apply values
            (map (lambda [f] (f x)) funcs))))
 
+(define-syntax-rule (stack-lambda args . operations)
+  (let [[arity (length (quote args))]]
+    (stack-special-op
+     'whole
+     (lambda [stack]
+       (let [[taken (take stack arity)]]
+         (with-stack-full
+          stack
+          (apply
+           (lambda args (list . operations))
+           taken)))))))
+
 (define-syntax-rule [define/stack [name . args] . operations]
-  (define name
-    (let [[arity (length (quote args))]]
-      (stack-special-op
-       'whole
-       (lambda [stack]
-         (let [[taken (take stack arity)]]
-           (with-stack-full
-            stack
-            (apply
-             (lambda args (list . operations))
-             taken))))))))
+  (define name (stack-lambda args . operations)))
 
 ;; naming..
 (define my-global-scope-table-p (make-parameter (make-hash-table)))
