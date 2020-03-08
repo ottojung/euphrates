@@ -682,9 +682,13 @@
 (define my-global-scope-table-p (make-parameter (make-hash-table)))
 
 ;; this is like `fn'
-(define [st . operations]
+(define [st-full . operations]
   (parameterize [[my-global-scope-table-p (make-hash-table)]]
     (with-stack operations)))
+
+;; this is like `fn'
+;; (define st (compose car st-full))
+(define st (compose car st-full))
 
 (define [PUT-symb name]
   (lambda [value]
