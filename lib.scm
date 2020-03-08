@@ -128,14 +128,11 @@
 (define [nano->micro@unit ns]
   (quotient ns 1000))
 
-(define [micro->1 u]
+(define [micro->normal@unit u]
   (quotient u 1000000))
 
-(define [nano->1 n]
+(define [nano->normal@unit n]
   (quotient n (* 1000 1000000)))
-
-(define [nano->micro n]
-  (quotient n 1000))
 
 (define [make-unique]
   "Returns procedure that returns #t if applied to itself, #f otherwise"
