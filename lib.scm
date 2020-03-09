@@ -1041,7 +1041,7 @@
 
 (define [sh cmd]
   (monadic-id
-   (p (sh-async-no-log cmd))
+   (p (sh-async cmd))
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    p))
