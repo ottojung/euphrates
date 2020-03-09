@@ -607,6 +607,8 @@
   (if test
       then
       else))
+(define (BOOL test then else)
+  (IF-THEN-ELSE else then test))
 
 (define PRINT
   (lambda [x] (println "~a" x) (values)))
