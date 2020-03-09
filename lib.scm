@@ -569,7 +569,7 @@
 (define [with-stack operations]
   (with-stack-full (with-stack-stack) operations))
 
-(define [PUSH x] (lambda [] x))
+(define-syntax-rule [PUSH x] (lambda [] x))
 (define [DROP x]
   (stack-special-op
    'whole
