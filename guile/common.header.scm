@@ -95,11 +95,12 @@
 (define [load-file-in-namespace filepath namespace]
   (load filepath))
 
-(define [get-command-line-arguments]
-  (let [[ret (command-line)]]
-    (if (< (length ret) 2)
-        (list)
-        (cdr ret))))
+(define get-command-line-arguments
+  (make-parameter
+   (let [[ret (command-line)]]
+     (if (< (length ret) 2)
+         (list)
+         (cdr ret)))))
 
 (define [get-current-program-path]
   (let [[ret (command-line)]]
