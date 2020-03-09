@@ -575,16 +575,23 @@
    'whole
    cdr))
 
-(define [USE proc]
-  "Like stack-apply but drops n elements from stack where n=arity(f)"
-  (stack-special-op
-   'whole
-   (lambda (stack)
-     (let [[arity (procedure-get-minimum-arity proc)]]
-       (append
-        (call-with-values
-            (lambda [] (apply proc (take stack arity)))
-          (lambda vals (append vals (drop stack arity)))))))))
+;; Like stack-apply but drops n elements from stack
+;; where n=arity(f) or n is specified as first arg
+(define USE
+  (let ((retf
+         (lambda (proc arity)
+           (stack-special-op
+            'whole
+            (lambda (stack)
+              (append
+               (call-with-values
+                   (lambda [] (apply proc (take stack arity)))
+                 (lambda vals (append vals (drop stack arity))))))))))
+    (case-lambda
+      ((proc)
+       (retf proc (procedure-get-minimum-arity proc)))
+      ((arity proc)
+       (retf proc arity)))))
 
 (define [NULL] (values)) ;; useful for IF-THEN-ELSE
 (define DUP identity)
