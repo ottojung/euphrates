@@ -570,7 +570,7 @@
   (with-stack-full (with-stack-stack) operations))
 
 (define-syntax-rule [PUSH x] (lambda [] x))
-(define [DROP x]
+(define DROP
   (stack-special-op
    'whole
    cdr))
