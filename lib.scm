@@ -587,7 +587,7 @@
           (lambda vals (append vals (drop stack arity)))))))))
 
 (define [NULL] (values)) ;; useful for IF-THEN-ELSE
-(define DUP (lambda [x] (values x x))) ;; quivalent to (PROJ identity identity)
+(define DUP identity)
 (define [ADD a b] (+ a b))
 (define [MUL a b] (* a b))
 (define [NEGATE x] (- x))
@@ -609,10 +609,10 @@
       else))
 
 (define PRINT
-  (lambda [x] (println "~a" x) x))
+  (lambda [x] (println "~a" x) (values)))
 
 (define [PRINTF fmt]
-  (lambda [x] (println fmt x) x))
+  (lambda [x] (println fmt x) (values)))
 
 (define PUSH/CC (stack-special-op 'push/cc #f))
 (define [CALL/CC f] (stack-special-op 'call/cc f))
@@ -652,7 +652,13 @@
      'whole
      (lambda [stack]
        (append
-        (map (lambda [f x] (f x))
+        (map (lambda [f x]
+               (call-with-values
+                   (lambda () (f x))
+                 (lambda recv
+                   (if (= (length recv) 1)
+                       (car recv)
+                       x))))
              funcs (take stack len))
         stack)))))
 
@@ -697,7 +703,7 @@
 (define [STORE-symb name]
   (lambda [value]
     ((PUT-symb name) value)
-    value))
+    (values)))
 
 (define [STORE/DEFAULT-symb name]
   (lambda [value]
