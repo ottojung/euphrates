@@ -103,6 +103,11 @@
                    (loop (cdr as) (cdr bs)))
              (list))))))
 
+(define (lines str)
+  (string-split str #\newline))
+(define (unlines lns)
+  (string-join lns "\n"))
+
 (define [~a x]
   (with-output-to-string
     (lambda []
