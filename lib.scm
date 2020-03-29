@@ -113,10 +113,14 @@
     (lambda []
       (display x))))
 
-(define [range start count]
-  (if (> count 0)
-      (cons start (range (1+ start) (1- count)))
-      (list)))
+(define range
+  (case-lambda
+    ((start count)
+     (if (> count 0)
+         (cons start (range (1+ start) (1- count)))
+         (list)))
+    ((count)
+     (range 0 count))))
 
 (define [list-init lst]
   (take lst (1- (length lst))))
