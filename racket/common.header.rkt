@@ -20,7 +20,8 @@
   (error type "~a" args))
 
 (define [catch-any body handler]
-  (call-with-exception-handler handler body))
+  (with-handlers ((exn:fail? handler))
+    body))
 
 (define [make-hash-table] (make-hash))
 
