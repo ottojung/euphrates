@@ -1071,6 +1071,7 @@
    (do (shell-check-status p))
    (ret (read-string-file outfilename))
    (trimed (string-trim-chars ret "\n \t" 'both))
+   (do (println "< ~a" trimed) `(log ,cmd in shell) 'sh-re-return)
    (do (close-port outport) 'always)
    (do (delete-file outfilename) 'always)
    trimed))
