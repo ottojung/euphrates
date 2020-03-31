@@ -21,7 +21,7 @@
 
 (define [catch-any body handler]
   (with-handlers ((exn:fail? handler))
-    body))
+    (body)))
 
 (define [make-hash-table] (make-hash))
 
