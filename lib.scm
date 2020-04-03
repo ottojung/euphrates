@@ -1087,6 +1087,16 @@
    (do (delete-file outfilename) 'always)
    trimed))
 
+(define (system-re command)
+  "Like `system', but returns (output, exit status)"
+  (monadic-id
+   (temp (make-temporary-filename))
+   (p (system*/exit-code "/bin/sh" "-c"
+                         (string-append command " > " temp)))
+   (output (read-string-file temp))
+   (trimed (string-trim-chars output "\n \t" 'both))
+   (cons trimed p)))
+
 (define (parse-cli args)
   (define (trim s) (string-trim-chars s "-" 'left))
 

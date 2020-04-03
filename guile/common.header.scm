@@ -366,3 +366,6 @@
 (define [kill-comprocess p force?]
   (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
 
+;; racket compatibility
+(define system*/exit-code system*)
+
