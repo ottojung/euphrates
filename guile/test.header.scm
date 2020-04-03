@@ -1,5 +1,5 @@
 (eval-when (load compile expand)
-  (load "../my-guile-std/common.scm"))
+  (load "../euphrates/common.scm"))
 
 (use-modules [ice-9 threads])
 (use-modules [ice-9 textual-ports])

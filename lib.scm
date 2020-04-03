@@ -208,7 +208,7 @@
   (let* ((rand (big-random-int 99999999999))
          (s (with-output-to-string
               (lambda () (display rand)))))
-    (string-append "/tmp/my-lisp-std-temp-" s)))
+    (string-append "/tmp/euphrates-temp-" s)))
 
 (define-syntax-rule [with-lock mutex . bodies]
   (call-with-blocked-asyncs

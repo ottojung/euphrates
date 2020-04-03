@@ -1,3 +1,3 @@
 #lang racket
 
-(require "../my-racket-std/common.rkt")
+(require (file "../euphrates/common.rkt"))

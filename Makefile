@@ -6,7 +6,7 @@ TESTFILES = $(shell ls sharedtest/)
 
 
 DIRPREFIX =
-DIRSUFFIX = my-$(DIRPREFIX)-std
+DIRSUFFIX = euphrates
 
 ifeq ($(DIRPREFIX),$(GUILEDIR))
 END := scm
@@ -60,7 +60,7 @@ tracket:
 common: | $(DIR) $(DIR)/common.$(END)
 
 $(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) lib.scm $(DIRPREFIX)/common.footer.$(END)
-	echo ";; my-lisp-std-version-$(CURRENT_GIT_COMMIT)" > $@
+	echo ";; euphrates-version-$(CURRENT_GIT_COMMIT)" > $@
 	cat $^ >> $@
 
 $(DIR):
