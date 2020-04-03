@@ -1159,7 +1159,9 @@
     (let lp ((rest (reverse parsed))
              (found? #f))
       (if (null? rest)
-          (list)
+          (if found?
+              (list)
+              found?)
           (let ((key (car (car rest)))
                 (val (cdr (car rest))))
             (if found?
