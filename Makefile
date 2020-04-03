@@ -20,15 +20,22 @@ DIR = $(DIRPREFIX)/$(DIRSUFFIX)
 
 TESTFILE =
 
-PREFIX = "$(HOME)/.local/"
-PREFIX_FULL = "$(PREFIX)/lib"
-INSTALL_TGT = "$(PREFIX_FULL)/$(DIR)"
+GUILE_PREFIX = $(shell guile -c '(display (%site-dir))')
+RACKET_PREFIX = $(shell racket --eval "(display (path->string (find-system-path 'collects-dir)))")
+
+ifeq ($(DIRPREFIX),$(GUILEDIR))
+PREFIX := $(GUILE_PREFIX)
+else
+PREFIX := $(RACKET_PREFIX)
+endif
+
+INSTALL_TGT = "$(PREFIX)/$(DIR)"
 
 all: tguile tracket
-	@ echo 'all done'
+	@ echo 'All done'
 
 install: installGuile installRacket
-	@ echo 'install done'
+	@ echo 'Install done'
 
 installGuile:
 	$(MAKE) installone DIRPREFIX=$(GUILEDIR)
@@ -43,12 +50,13 @@ uninstall:
 installone: $(INSTALL_TGT)
 
 uninstallone:
-	rm -rf "$(PREFIX_FULL)/$(shell basename $(DIR))"
+	rm -rf "$(PREFIX)/$(shell basename $(DIR))"
 
-$(INSTALL_TGT): all $(PREFIX_FULL)
-	cp -r "$(DIR)" "$(PREFIX_FULL)"
+$(INSTALL_TGT): all $(PREFIX)
+	cp -r "$(DIR)" "$(PREFIX)"
 
-$(PREFIX_FULL):
+$(PREFIX):
+	@ echo "Installation directory doesn't exist! Creating..."
 	mkdir -p $@
 
 tguile:
