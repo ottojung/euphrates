@@ -2,12 +2,14 @@
 GUILEDIR = guile
 RACKETDIR = racket
 
-TESTFILES = $(shell ls sharedtest/)
+INSTALL_MAKE = makefiles/install.make
 
-DIRPREFIX =
+TESTFILES = $(shell ls src/sharedtest/)
+
+DIRPREFIX = src/$(TARGET)
 DIRSUFFIX = euphrates
 
-ifeq ($(DIRPREFIX),$(GUILEDIR))
+ifeq ($(TARGET),$(GUILEDIR))
 END := scm
 else
 END := rkt

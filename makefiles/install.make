@@ -1,10 +1,10 @@
 
-include common.make
+include makefiles/common.make
 
 GUILE_PREFIX = $(shell guile -c '(display (%site-dir))')
 RACKET_PREFIX = $(shell racket --eval "(display (path->string (find-system-path 'collects-dir)))")
 
-ifeq ($(DIRPREFIX),$(GUILEDIR))
+ifeq ($(TARGET),$(GUILEDIR))
 PREFIX := $(GUILE_PREFIX)
 else
 PREFIX := $(RACKET_PREFIX)
