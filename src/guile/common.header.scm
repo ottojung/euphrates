@@ -25,6 +25,8 @@
 
   )
 
+(define null (list))
+
 (define [procedure-get-minimum-arity proc]
   (let [[ret (procedure-minimum-arity proc)]]
     (if ret (car ret) #f)))
