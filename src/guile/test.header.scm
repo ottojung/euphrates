@@ -1,5 +1,8 @@
-(eval-when (load compile expand)
-  (load "../euphrates/common.scm"))
+
+(add-to-load-path "..")
+(add-to-load-path "src/guile/")
+
+(use-modules (euphrates common))
 
 (use-modules [ice-9 threads])
 (use-modules [ice-9 textual-ports])
