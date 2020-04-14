@@ -1,6 +1,5 @@
 
-(add-to-load-path "..")
-(add-to-load-path "src/guile/")
+(add-to-load-path "build/src/guile")
 
 (use-modules (euphrates common))
 

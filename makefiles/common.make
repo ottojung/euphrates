@@ -4,7 +4,7 @@ RACKETDIR = racket
 
 INSTALL_MAKE = makefiles/install.make
 
-TESTFILES = $(shell ls src/sharedtest/)
+TESTFILES = $(shell ls test/sharedtest/)
 
 DIRPREFIX = src/$(TARGET)
 DIRSUFFIX = euphrates
@@ -17,6 +17,8 @@ endif
 
 CURRENT_GIT_COMMIT = $(shell git rev-parse HEAD)
 
-DIR = $(DIRPREFIX)/$(DIRSUFFIX)
+BUILDDIR = build
+
+DIR = $(BUILDDIR)/$(DIRPREFIX)/$(DIRSUFFIX)
 
 TESTFILE =

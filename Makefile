@@ -33,14 +33,15 @@ $(DIR):
 	mkdir -p $@
 
 alltests:
+	@ echo "files: $(TESTFILES)"
 	for f in $(TESTFILES) ; do $(MAKE) test TARGET=$(TARGET) TESTFILE="$$f" ; done
 
-test: | $(DIRPREFIX)/test $(DIRPREFIX)/test/$(TESTFILE)
+test: | $(BUILDDIR)/test/$(DIRPREFIX) $(BUILDDIR)/test/$(DIRPREFIX)/$(TESTFILE)
 
-$(DIRPREFIX)/test/$(TESTFILE): $(DIRPREFIX)/test.header.$(END) src/sharedtest/$(TESTFILE)
+$(BUILDDIR)/test/$(DIRPREFIX)/$(TESTFILE): test/$(TARGET)/test.header.$(END) test/sharedtest/$(TESTFILE)
 	cat $^ > $@
 
-$(DIRPREFIX)/test:
+$(BUILDDIR)/test/$(DIRPREFIX):
 	mkdir -p $@
 
 clean:
