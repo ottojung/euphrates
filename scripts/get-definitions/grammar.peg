@@ -1,7 +1,7 @@
 all <- (multiple / single / other) *
 
 multiple <-- '\n' defMultiple spaces open multipleId+
-multipleId <-- identifier spaces
+multipleId <-- identifier (' ' / '\t' / '\n')*
 
 single <-- '\n' def prefix identifier
 
