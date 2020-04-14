@@ -1,0 +1,20 @@
+all <- (multiple / single / other) *
+
+multiple <-- '\n' defMultiple spaces open multipleId+
+multipleId <-- identifier spaces
+
+single <-- '\n' def prefix identifier
+
+prefix <- (open spaces) / (spaces open)
+
+open < '(' / '[' / '{'
+
+letter <- [a-z] / [A-Z] / '-' / '/' / '>' / '<' / '#' / '@' / '!' / ':' / '.' / '+' / '$' / '%' / '^' / '&'
+identifier <- letter (letter / [0-9])*
+
+defMultiple < '(' spaces 'define-values'
+def < '(' spaces ('define-syntax-rule' / 'define-syntax' / 'define')
+
+spaces < (' ' / '\t' / '\n')*
+
+other < .
