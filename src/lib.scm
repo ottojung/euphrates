@@ -259,10 +259,11 @@
 (define sleep-until-period-p
   (make-parameter (normal->micro@unit 1/100)))
 (define-syntax-rule [sleep-until condi . body]
-  (let ((period (sleep-until-period-p)))
+  (let ((period (sleep-until-period-p))
+        (gsleep-func (gsleep-func-p)))
     (do ()
         (condi)
-      (gsleep period)
+      (gsleep-func period)
       . body)))
 
 (define-syntax-rule (cons! x lst)
