@@ -45,5 +45,5 @@ $(BUILDDIR)/test/$(DIRPREFIX):
 	mkdir -p $@
 
 clean:
-	git clean -dfx
+	rm -rf $(BUILDDIR)
 
