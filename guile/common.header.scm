@@ -1,21 +1,26 @@
 
-(use-modules
-  [ice-9 format]
-  [ice-9 binary-ports]
-  [ice-9 hash-table]
-  [ice-9 threads]
-  [ice-9 popen]
-  [ice-9 ftw]
-  [ice-9 match]
-  [srfi srfi-1]
-  [srfi srfi-9] ;; records
-  [srfi srfi-11] ;; let-values
-  [srfi srfi-13]
-  [srfi srfi-16]
-  [srfi srfi-18]
-  [srfi srfi-19] ;; time
-  [srfi srfi-42]
-  [srfi srfi-111] ;; box
+(define-module (euphrates common)
+  #:export (
+            EUPHRATES_GUILE_EXPORT_LIST
+            )
+
+  #:use-module [ice-9 format]
+  #:use-module  [ice-9 binary-ports]
+  #:use-module  [ice-9 hash-table]
+  #:use-module  [ice-9 threads]
+  #:use-module  [ice-9 popen]
+  #:use-module  [ice-9 ftw]
+  #:use-module  [ice-9 match]
+  #:use-module  [srfi srfi-1]
+  #:use-module  [srfi srfi-9] ;; records
+  #:use-module  [srfi srfi-11] ;; let-values
+  #:use-module  [srfi srfi-13]
+  #:use-module  [srfi srfi-16]
+  #:use-module  [srfi srfi-18]
+  #:use-module  [srfi srfi-19] ;; time
+  #:use-module  [srfi srfi-42]
+  #:use-module  [srfi srfi-111] ;; box
+
   )
 
 (define [procedure-get-minimum-arity proc]

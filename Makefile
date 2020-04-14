@@ -70,6 +70,7 @@ common: | $(DIR) $(DIR)/common.$(END)
 $(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) lib.scm $(DIRPREFIX)/common.footer.$(END)
 	echo ";; euphrates-version-$(CURRENT_GIT_COMMIT)" > $@
 	cat $^ >> $@
+	if [ "$(DIRPREFIX)" = "guile" ]; then scripts/replace-export-list.sh ; fi
 
 $(DIR):
 	mkdir -p $@
