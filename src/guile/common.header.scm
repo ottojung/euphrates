@@ -21,6 +21,8 @@
   #:use-module [srfi srfi-42]
   #:use-module [srfi srfi-111] ;; box
 
+  #:re-export (let-values)
+
   )
 
 (define [procedure-get-minimum-arity proc]

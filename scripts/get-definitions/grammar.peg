@@ -5,7 +5,7 @@ multipleId <-- identifier (' ' / '\t' / '\n')*
 
 single <-- '\n' def prefix identifier
 
-prefix <- (open spaces) / (spaces open)
+prefix <- (open spaces) / (spaces open) / space+
 
 open < '(' / '[' / '{'
 
@@ -13,8 +13,9 @@ letter <- [a-z] / [A-Z] / '-' / '/' / '>' / '<' / '#' / '@' / '!' / ':' / '.' / 
 identifier <- letter (letter / [0-9])*
 
 defMultiple < '(' spaces 'define-values'
-def < '(' spaces ('define-syntax-rule' / 'define-syntax' / 'define')
+def < '(' spaces ('define-syntax-rule' / 'define-macro' / 'define-syntax' / 'define')
 
-spaces < (' ' / '\t' / '\n')*
+spaces < space*
+space < (' ' / '\t' / '\n')
 
 other < .
