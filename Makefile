@@ -1,35 +1,4 @@
-
-GUILEDIR = guile
-RACKETDIR = racket
-
-TESTFILES = $(shell ls sharedtest/)
-
-
-DIRPREFIX =
-DIRSUFFIX = euphrates
-
-ifeq ($(DIRPREFIX),$(GUILEDIR))
-END := scm
-else
-END := rkt
-endif
-
-CURRENT_GIT_COMMIT = $(shell git rev-parse HEAD)
-
-DIR = $(DIRPREFIX)/$(DIRSUFFIX)
-
-TESTFILE =
-
-GUILE_PREFIX = $(shell guile -c '(display (%site-dir))')
-RACKET_PREFIX = $(shell racket --eval "(display (path->string (find-system-path 'collects-dir)))")
-
-ifeq ($(DIRPREFIX),$(GUILEDIR))
-PREFIX := $(GUILE_PREFIX)
-else
-PREFIX := $(RACKET_PREFIX)
-endif
-
-INSTALL_TGT = "$(PREFIX)/$(DIR)"
+include common.make
 
 all: tguile tracket
 	@ echo 'All done'
@@ -37,27 +6,15 @@ all: tguile tracket
 install: installGuile installRacket
 	@ echo 'Install done'
 
-installGuile:
-	$(MAKE) installone DIRPREFIX=$(GUILEDIR)
+installGuile: tguile
+	$(MAKE) -f install.make installone DIRPREFIX=$(GUILEDIR)
 
-installRacket:
-	$(MAKE) installone DIRPREFIX=$(RACKETDIR)
+installRacket: tracket
+	$(MAKE) -f install.make installone DIRPREFIX=$(RACKETDIR)
 
 uninstall:
-	$(MAKE) uninstallone DIRPREFIX=$(GUILEDIR)
-	$(MAKE) uninstallone DIRPREFIX=$(RACKETDIR)
-
-installone: $(INSTALL_TGT)
-
-uninstallone:
-	rm -rf "$(PREFIX)/$(shell basename $(DIR))"
-
-$(INSTALL_TGT): all $(PREFIX)
-	cp -r "$(DIR)" "$(PREFIX)"
-
-$(PREFIX):
-	@ echo "Installation directory doesn't exist! Creating..."
-	mkdir -p $@
+	$(MAKE) -f install.make uninstallone DIRPREFIX=$(GUILEDIR)
+	$(MAKE) -f install.make uninstallone DIRPREFIX=$(RACKETDIR)
 
 tguile:
 	$(MAKE) common alltests DIRPREFIX=$(GUILEDIR)
