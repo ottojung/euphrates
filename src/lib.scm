@@ -276,30 +276,26 @@
   ((my-mutex-unlock!-p) mut))
 
 (define-values
-    (my-thread-critical-make-place
-     my-thread-critical-call
+    (my-thread-critical-make
      my-thread-critical-parameterize)
-  (let* ((make-p (make-parameter my-make-mutex))
-         (make (lambda () ((make-p))))
-         (call-default
-          (lambda (mut thunk)
-            (dynamic-wind
-              (lambda () (my-mutex-lock! mut))
-              thunk
-              (lambda () (my-mutex-unlock! mut)))))
-         (call-p (make-parameter call-default))
-         (call (lambda (mut thunk) ((call-p) mut thunk)))
+  (let* ((make-func-default
+          (lambda ()
+            (let ((mut (my-make-mutex)))
+              (lambda (thunk)
+                (dynamic-wind
+                  (lambda () (my-mutex-lock! mut))
+                  thunk
+                  (lambda () (my-mutex-unlock! mut)))))))
+         (make-func-p (make-parameter make-func-default))
+         (make-func (lambda () ((make-func-p))))
          (param
-          (lambda (new-make new-call thunk)
-            (parameterize
-                ((make-p new-make)
-                 (call-p new-call))
+          (lambda (new-critical thunk)
+            (parameterize ((make-func-p new-critical))
               (thunk)))))
-    (values make call param)))
+    (values make-func param)))
 
-(define-syntax-rule (with-critical place-mutex . bodies)
-  (my-thread-critical-call
-   place-mutex
+(define-syntax-rule (with-critical critical-func . bodies)
+  (critical-func
    (lambda [] . bodies)))
 
 (define gsleep-func-p (make-parameter usleep))
@@ -880,17 +876,17 @@
    np-thread-current
    ]
   (let* [[lst-p (make-parameter #f)]
-         [mut (my-thread-critical-make-place)]
+         [critical (my-thread-critical-make)]
          [current-thread (make-parameter #f)]]
     (values
      (lambda [th]
        (with-critical
-        mut
+        critical
         (set-box! (lst-p) (cons th (unbox (lst-p)))))
        th)
      (lambda []
        (with-critical
-        mut
+        critical
         (let* [[lst (unbox (lst-p))]
                [head
                 (if (null? lst)
@@ -908,7 +904,7 @@
        (if (lst-p) #t #f))
      (lambda [predicate]
        (with-critical
-        mut
+        critical
         (set-box! (lst-p)
                   (filter (negate predicate)
                           (unbox (lst-p))))))
@@ -1007,14 +1003,14 @@
 
 (define-values
   [np-thread-lockr! np-thread-unlockr!]
-  (let [[mut (my-thread-critical-make-place)]
+  (let [[critical (my-thread-critical-make)]
         [h (make-hash-table)]]
     (values
      (lambda [resource]
        (let lp []
          (when
              (with-critical
-              mut
+              critical
               (let [[r (hash-ref h resource #f)]]
                 (if r
                     #t
@@ -1025,7 +1021,7 @@
            (lp))))
      (lambda [resource]
        (with-critical
-        mut
+        critical
         (hash-set! h resource #f))))))
 
 ;; Disables critical zones because in non-interruptible mode
@@ -1041,8 +1037,7 @@
                  (my-mutex-lock!-p np-thread-lockr!)
                  (my-mutex-unlock!-p np-thread-unlockr!))
     (my-thread-critical-parameterize
-     (lambda () 'unused-mutex-instanace-created-by-np-thread-parameterization) ;; make
-     (lambda (mut fn) (fn)) ;; call
+     (lambda () (lambda (fn) (fn)))
      thunk)))
 
 ;;;;;;;;;;;;;;;
@@ -1083,7 +1078,7 @@
                      [param-name (generate-param-name #'name)])
          #'(define-values [name add-name param-name]
              (let [[internal-list (make-parameter '())]
-                   [sem (my-thread-critical-make-place)]]
+                   [critical (my-thread-critical-make)]]
                (values
                 (lambda args
                   (let [[m (find-first (lambda [p] (check-list-contract (car p) args)) (internal-list))]]
@@ -1095,7 +1090,7 @@
                                               " accepts required arguments")))))
                 (lambda [args func]
                   (with-critical
-                   sem
+                   critical
                    (set! internal-list
                      (make-parameter (append (internal-list)
                                              (list (cons args

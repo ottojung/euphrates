@@ -181,8 +181,7 @@
                  (my-mutex-lock!-p np-thread-lockr!)
                  (my-mutex-unlock!-p np-thread-unlockr!))
     (my-thread-critical-parameterize
-     (lambda () ;; make
-       'unused-mutex-instanace-created-by-i-thread-parameterization)
-     (lambda (mut fn) ;; call
-       (i-thread-critical! (fn)))
+     (lambda ()
+       (lambda (fn)
+         (i-thread-critical! (fn))))
      thunk)))

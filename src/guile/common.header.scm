@@ -45,14 +45,13 @@
   (catch #t body handler))
 
 (define local-print
-  (let [[mu #f]]
+  (let [[critical #f]]
     (lambda [fmt args]
-      (unless mu
-        (set! mu (my-thread-critical-make-place)))
+      (unless critical
+        (set! critical (my-thread-critical-make))) ;; FIXME: race condition
 
       (let [[err #f]]
-        (my-thread-critical-call
-         mu
+        (critical
          (lambda []
            (catch-any
             (lambda []
