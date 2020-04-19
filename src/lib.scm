@@ -1046,12 +1046,13 @@
 
 (define [kill-comprocess-with-timeout p timeout]
   (unless (comprocess-exited? p)
-    (call-with-new-sys-thread
-     (lambda []
-       (kill-comprocess p #f)
-       (usleep timeout)
-       (unless (comprocess-exited? p)
-         (kill-comprocess p #t))))))
+    (kill-comprocess p #f)
+    (unless (comprocess-exited? p)
+      (call-with-new-sys-thread
+       (lambda []
+         (gsleep timeout)
+         (unless (comprocess-exited? p)
+           (kill-comprocess p #t)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; GENERIC FUNCTIONS ;;

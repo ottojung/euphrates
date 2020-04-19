@@ -22,9 +22,9 @@
           "-c"
           "sl")]]
   (let lp []
-    (usleep (second-to-microsecond 1/2))
+    (usleep (normal->micro@unit 1/2))
     (kill-comprocess-with-timeout p
-                                  (second-to-microsecond 1/2))
+                                  (normal->micro@unit 1/2))
     (unless (comprocess-exited? p)
       (usleep 100)
       (lp))))

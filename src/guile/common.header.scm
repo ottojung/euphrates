@@ -332,6 +332,14 @@
   exited?
   )
 
+;; TODO: autoexport
+(export comprocess-command)
+(export comprocess-args)
+(export comprocess-pipe)
+(export comprocess-pid)
+(export comprocess-status)
+(export comprocess-exited?)
+
 ;; TODO: support asynchronous stdin
 ;; TODO: why comprocess test doesn't work anymore? Last worked on commit: 63756176ec8d544d4135d88c46fa747666d438b3
 (define [run-comprocess#full p-stdout p-stderr command . args]
