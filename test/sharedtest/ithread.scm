@@ -3,28 +3,28 @@
 ;; (i-thread-yield cur)
 
 (i-thread-run!
- (println "preemptive test")
+ (printfln "preemptive test")
 
  (define [kek]
-   (println "in kek"))
+   (printfln "in kek"))
 
  (define cycles 20)
 
  (define [lol]
    (apploop [n] [0]
             (if (> n cycles)
-                (println "lol ended")
+                (printfln "lol ended")
                 (begin
-                  (println "lol at ~a" n)
+                  (printfln "lol at ~a" n)
                   (usleep 100000)
                   (loop (1+ n))))))
 
  (define [zulul]
    (apploop [n] [0]
             (if (> n cycles)
-                (println "zulul ended")
+                (printfln "zulul ended")
                 (begin
-                  (println "zulul at ~a" n)
+                  (printfln "zulul at ~a" n)
                   (usleep 100000)
                   (loop (1+ n))))))
 
@@ -32,13 +32,13 @@
  (np-thread-fork lol)
  (np-thread-fork zulul)
 
- (println "end"))
+ (printfln "end"))
 
 (i-thread-run!
- (println "critical test")
+ (printfln "critical test")
 
  (define [kek]
-   (println "in kek"))
+   (printfln "in kek"))
 
  (define cycles 20)
 
@@ -46,9 +46,9 @@
    (i-thread-critical!
     (apploop [n] [0]
              (if (> n cycles)
-                 (println "lol ended")
+                 (printfln "lol ended")
                  (begin
-                   (println "lol at ~a" n)
+                   (printfln "lol at ~a" n)
                    (usleep 100000)
                    (loop (1+ n)))))))
 
@@ -56,9 +56,9 @@
    (i-thread-critical!
     (apploop [n] [0]
              (if (> n cycles)
-                 (println "zulul ended")
+                 (printfln "zulul ended")
                  (begin
-                   (println "zulul at ~a" n)
+                   (printfln "zulul at ~a" n)
                    (usleep 100000)
                    (loop (1+ n)))))))
 
@@ -66,4 +66,4 @@
  (np-thread-fork lol)
  (np-thread-fork zulul)
 
- (println "end"))
+ (printfln "end"))

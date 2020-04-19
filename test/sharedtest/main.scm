@@ -8,10 +8,10 @@
 
 (define rec (rec1 1 2))
 
-(println "record? ~a" (record? rec))
-(println "aa = ~a" (rec1-aa rec))
+(printfln "record? ~a" (record? rec))
+(printfln "aa = ~a" (rec1-aa rec))
 (set-rec1-aa! rec 10)
-(println "aa = ~a" (rec1-aa rec))
+(printfln "aa = ~a" (rec1-aa rec))
 
 (printf "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
 
@@ -21,7 +21,7 @@
        (tt "hx")
        (test
         (fn mode
-            (println "trim of ~s with ~s in mode ~a: ~a"
+            (printfln "trim of ~s with ~s in mode ~a: ~a"
                      s
                      tt
                      mode
@@ -34,10 +34,10 @@
 
 (display "Hello, Guile!\n")
 
-;; (println "tree:\n~a\n\n" (directory-tree "."))
-(println "files:\n~a\n\n" (directory-files "."))
-;; (println "files-rec:\n~a\n\n" (directory-files-rec "."))
-;; (println "rec only names:\n~a\n\n" (map cadr (directory-files-rec ".")))
+;; (printfln "tree:\n~a\n\n" (directory-tree "."))
+(printfln "files:\n~a\n\n" (directory-files "."))
+;; (printfln "files-rec:\n~a\n\n" (directory-files-rec "."))
+;; (printfln "rec only names:\n~a\n\n" (map cadr (directory-files-rec ".")))
 
 ;; scoping test
 (apploop [x] [20]
@@ -107,21 +107,21 @@
 
 (printf "haha<int>(5) = ~a\n" (haha 5)) ;; TODO: fix
 
-(println "~a" (list-fold 1 (range 1 5) *))
-(println "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
-(println "~a" (lfold 1 (range 1 5) (* acc x)))
+(printfln "~a" (list-fold 1 (range 1 5) *))
+(printfln "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
+(printfln "~a" (lfold 1 (range 1 5) (* acc x)))
 
-(println (simplify-posix-path "/hello/../there/./bro/"))
-(println (append-posix-path "hello/there/" "bro"))
-(println (append-posix-path "hello/there" "bro"))
-(println (append-posix-path "hello/there" ".." "and/" "bro" "." "hello"))
-(println (simplify-posix-path (append-posix-path "hello/there" ".." "and/" "bro" "." "hello")))
-;; (println (append-posix-path "hello/there" "/bro"))
+(printfln (simplify-posix-path "/hello/../there/./bro/"))
+(printfln (append-posix-path "hello/there/" "bro"))
+(printfln (append-posix-path "hello/there" "bro"))
+(printfln (append-posix-path "hello/there" ".." "and/" "bro" "." "hello"))
+(printfln (simplify-posix-path (append-posix-path "hello/there" ".." "and/" "bro" "." "hello")))
+;; (printfln (append-posix-path "hello/there" "/bro"))
 
 
-(println "rebased path1 = ~a" (path-rebase "hello/there/" "kek"))
-(println "rebased path2 = ~a" (path-rebase "hello/there/" "hello/kek/kek"))
-(println "rebased path3 = ~a" (path-rebase "hello/there/" "hello/here/kek"))
+(printfln "rebased path1 = ~a" (path-rebase "hello/there/" "kek"))
+(printfln "rebased path2 = ~a" (path-rebase "hello/there/" "hello/kek/kek"))
+(printfln "rebased path3 = ~a" (path-rebase "hello/there/" "hello/here/kek"))
 
 (define [hell2 x]
   (with-return
@@ -187,10 +187,10 @@
    (printf "composite unlocked\n")))
 
 (np-thread-run!
- (println "hello")
+ (printfln "hello")
 
  (define [kek]
-   (println "in kek"))
+   (printfln "in kek"))
 
  (define cycles 4)
 
@@ -199,30 +199,30 @@
  (define [lol]
    (apploop [n] [0]
             (if (> n cycles)
-                (println "lol ended")
+                (printfln "lol ended")
                 (begin
                   (when (= n 2)
                     (np-thread-cancel! zulul-thread))
-                  (println "lol at ~a" n)
+                  (printfln "lol at ~a" n)
                   (np-thread-yield)
-                  (println "lol after ~a" n)
+                  (printfln "lol after ~a" n)
                   (loop (1+ n))))))
 
  (define [zulul]
    (apploop [n] [0]
             (if (> n cycles)
-                (println "zulul ended")
+                (printfln "zulul ended")
                 (begin
-                  (println "zulul at ~a" n)
+                  (printfln "zulul at ~a" n)
                   (np-thread-yield)
-                  (println "zulul after ~a" n)
+                  (printfln "zulul after ~a" n)
                   (loop (1+ n))))))
 
  (np-thread-fork kek)
  (np-thread-fork lol)
  (set! zulul-thread (np-thread-fork zulul))
 
- (println "end"))
+ (printfln "end"))
 
 
 ;;;;;;;;;;;;;;;;
@@ -233,7 +233,7 @@
   (PUSH 7)
   ADD)
 
-(println
+(printfln
  "stack result = ~a"
  (st
   (PUSH 2)
@@ -242,14 +242,14 @@
   (PUSH 5)
   MUL
   ADD-TO-7
-  (lambda [x] (println "stack op1 result = ~a" x) x)
+  (lambda [x] (printfln "stack op1 result = ~a" x) x)
   NEGATE
   (PUSH 100)
   ADD))
 
 (define stack-k #f)
 
-(println
+(printfln
  "stack result = ~a"
  (st
   (PUSH 2)
@@ -257,7 +257,7 @@
   ADD
   PUSH/CC
   (USE (lambda [k]
-    (println "got k = ~a" k)
+    (printfln "got k = ~a" k)
     (if (procedure? k)
         (begin
           (set! stack-k k)
@@ -268,8 +268,8 @@
   MUL
   (CALL
    (lambda [n]
-     (println "MUL result = ~a" n)
-     (println "AFTER CALL TO ~a" (stack-k (list n)))
+     (printfln "MUL result = ~a" n)
+     (printfln "AFTER CALL TO ~a" (stack-k (list n)))
      n))
   (PUSH "END")
   PRINT))
@@ -280,11 +280,11 @@
  (PUSH (list 2 3))
  (PROJ car cadr)
  (MAP (STORE x) (STORE y))
- (lambda [x y] (println "x = ~a ; y = ~a" x y) x)
+ (lambda [x y] (printfln "x = ~a ; y = ~a" x y) x)
  (LOAD x)
- (lambda [x] (println "LOAD x = ~a" x) x)
+ (lambda [x] (printfln "LOAD x = ~a" x) x)
  (LOAD y)
- (lambda [x] (println "LOAD y = ~a" x) x))
+ (lambda [x] (printfln "LOAD y = ~a" x) x))
 
 (st
  (PUSH "GOTO test")
@@ -297,14 +297,14 @@
  (PUSH 1)
  ADD
  (STORE x)
- (lambda [x] (println "LOAD x = ~a" x) x)
+ (lambda [x] (printfln "LOAD x = ~a" x) x)
  (lambda [x]
    (if (< x 10)
        (GOTO (LOAD cont1))
        identity))
  EVAL
  (LOAD x)
- (lambda [x] (println "LOAD-end x = ~a" x) x))
+ (lambda [x] (printfln "LOAD-end x = ~a" x) x))
 
 (st
  (PUSH "GOTO test 2")
@@ -317,23 +317,23 @@
  (PUSH 1)
  ADD
  (STORE x)
- (lambda [x] (println "LOAD x = ~a" x) x)
+ (lambda [x] (printfln "LOAD x = ~a" x) x)
  (lambda [x] (< x 10))
  (PUSH (GOTO (LOAD cont1)))
  (PUSH identity)
  IF-THEN-ELSE
  EVAL
  (LOAD x)
- (lambda [x] (println "LOAD-end x = ~a" x) x))
+ (lambda [x] (printfln "LOAD-end x = ~a" x) x))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
 
 (let [[curfile (get-current-source-file-path)]]
-  (println "cur file = ~a" curfile)
+  (printfln "cur file = ~a" curfile)
   (let [[text (read-string-file curfile)]]
-    (println "text = ~a" (car (string-split#simple text #\newline)))
+    (printfln "text = ~a" (car (string-split#simple text #\newline)))
     (write-string-file curfile text)))
 
 ;;;;;;;;;;;;;
@@ -346,10 +346,10 @@
     "filename" "--key1" "val1" "-opt1" "--key2" "val2" "--" "rest1" "rest2"
     )))
 
-(println "parsed = ~a" (parse-cli-parse-or-get!))
-(println "flag key1 = ~a" (parse-cli-get-flag "key1"))
-(println "switch key1 = ~a" (parse-cli-get-switch "key1"))
-(println "flag key9 = ~a" (parse-cli-get-flag "key9"))
-(println "list '' -- = ~a" (parse-cli-get-list ""))
-(println "all positional = ~a" (parse-cli-get-list #f))
+(printfln "parsed = ~a" (parse-cli-parse-or-get!))
+(printfln "flag key1 = ~a" (parse-cli-get-flag "key1"))
+(printfln "switch key1 = ~a" (parse-cli-get-switch "key1"))
+(printfln "flag key9 = ~a" (parse-cli-get-flag "key9"))
+(printfln "list '' -- = ~a" (parse-cli-get-list ""))
+(printfln "all positional = ~a" (parse-cli-get-list #f))
 

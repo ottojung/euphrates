@@ -215,7 +215,7 @@
     (lambda []
       (apply printf (cons* fmt args)))))
 
-(define [println fmt . args]
+(define [printfln fmt . args]
   (apply printf (cons* (string-append fmt "\n") args)))
 
 (define global-debug-mode-filter (make-parameter #f))
@@ -685,10 +685,10 @@
   (IF-THEN-ELSE else then test))
 
 (define PRINT
-  (lambda [x] (println "~a" x) (values)))
+  (lambda [x] (printfln "~a" x) (values)))
 
 (define [PRINTF fmt]
-  (lambda [x] (println fmt x) (values)))
+  (lambda [x] (printfln fmt x) (values)))
 
 (define PUSH/CC (stack-special-op 'push/cc #f))
 (define [CALL/CC f] (stack-special-op 'call/cc f))
@@ -1133,7 +1133,7 @@
 (define (sh-async cmd)
   (monadic-id
    (ret (sh-async-no-log cmd))
-   (do (println "> ~a" cmd) `(log ,cmd in shell))
+   (do (printfln "> ~a" cmd) `(log ,cmd in shell))
    ret))
 
 (define [sh cmd]
@@ -1147,12 +1147,12 @@
   (monadic (except-monad)
    ((outport outfilename) (make-temporary-fileport))
    (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
-   (do (println "> ~a" cmd) `(log ,cmd in shell))
+   (do (printfln "> ~a" cmd) `(log ,cmd in shell))
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    (ret (read-string-file outfilename))
    (trimed (string-trim-chars ret "\n \t" 'both))
-   (do (println "< ~a" trimed) `(log ,cmd in shell) 'sh-re-return)
+   (do (printfln "< ~a" trimed) `(log ,cmd in shell) 'sh-re-return)
    (do (close-port outport) 'always)
    (do (delete-file outfilename) 'always)
    trimed))
