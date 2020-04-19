@@ -1,5 +1,7 @@
 #! /bin/sh
 
+# TODO: replace define-rec generated names as well
+
 set -ex
 
 FILE="build/src/guile/euphrates/common.scm"

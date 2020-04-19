@@ -279,7 +279,7 @@
 (define-syntax rec-fields
   (lambda (stx)
     (syntax-case stx ()
-      [(rec-fields fiii name buf)
+      [(rec-fields fiii name buf export-buf)
        (with-syntax
            [[type (datum->syntax #'name
                                  (symbol-append
@@ -289,8 +289,13 @@
                                   (symbol-append
                                    (syntax->datum #'name)
                                    '?))]]
-         #'(define-record-type type (name . fiii) predi . buf))]
-      [(rec-fields fiii name buf field . fields)
+         #'(begin
+             (define-record-type type
+               (name . fiii)
+               predi
+               . buf)
+             (export . export-buf)))]
+      [(rec-fields fiii name buf export-buf field . fields)
        (with-syntax
 
            [[gname (datum->syntax #'field
@@ -309,6 +314,7 @@
          #'(rec-fields fiii
                        name
                        ((field gname sname) . buf)
+                       (gname sname . export-buf)
                        .
                        fields))])))
 
@@ -316,6 +322,7 @@
   (rec-fields
    fields
    name
+   ()
    ()
    . fields))
 
@@ -331,14 +338,6 @@
   status ;; #f or integer
   exited?
   )
-
-;; TODO: autoexport
-(export comprocess-command)
-(export comprocess-args)
-(export comprocess-pipe)
-(export comprocess-pid)
-(export comprocess-status)
-(export comprocess-exited?)
 
 ;; TODO: support asynchronous stdin
 ;; TODO: why comprocess test doesn't work anymore? Last worked on commit: 63756176ec8d544d4135d88c46fa747666d438b3
