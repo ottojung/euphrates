@@ -176,6 +176,7 @@
 ;; while waiting on mutex. Locks are the same as for np-thread
 (define (i-thread-parameterize-env#interruptible thunk)
   (parameterize ((my-thread-spawn-p np-thread-fork)
+                 (gsleep-func-p np-thread-usleep)
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p np-thread-lockr!)
                  (my-mutex-unlock!-p np-thread-unlockr!))

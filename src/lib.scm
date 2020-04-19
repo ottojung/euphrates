@@ -1036,6 +1036,7 @@
 ;; while waiting on mutex.
 (define (np-thread-parameterize-env#non-interruptible thunk)
   (parameterize ((my-thread-spawn-p np-thread-fork)
+                 (gsleep-func-p np-thread-usleep)
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p np-thread-lockr!)
                  (my-mutex-unlock!-p np-thread-unlockr!))
