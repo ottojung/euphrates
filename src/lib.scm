@@ -210,14 +210,6 @@
               (lambda () (display rand)))))
     (string-append "/tmp/euphrates-temp-" s)))
 
-(define-syntax-rule [with-lock mutex . bodies]
-  (call-with-blocked-asyncs
-   (lambda []
-     (my-mutex-lock! mutex)
-     (let [[ret (begin . bodies)]]
-       (my-mutex-unlock! mutex)
-       ret))))
-
 (define [stringf fmt . args]
   (with-output-to-string
     (lambda []
@@ -282,6 +274,11 @@
                  (call-p new-call))
               (thunk)))))
     (values make call param)))
+
+(define-syntax-rule (with-critical place-mutex . bodies)
+  (my-thread-critical-call
+   place-mutex
+   (lambda [] . bodies)))
 
 (define gsleep-func-p (make-parameter usleep))
 (define [gsleep micro-seconds]
@@ -861,16 +858,16 @@
    np-thread-current
    ]
   (let* [[lst-p (make-parameter #f)]
-         [mut (my-make-mutex)]
+         [mut (my-thread-critical-make-place)]
          [current-thread (make-parameter #f)]]
     (values
      (lambda [th]
-       (with-lock
+       (with-critical
         mut
         (set-box! (lst-p) (cons th (unbox (lst-p)))))
        th)
      (lambda []
-       (with-lock
+       (with-critical
         mut
         (let* [[lst (unbox (lst-p))]
                [head
@@ -888,7 +885,7 @@
      (lambda []
        (if (lst-p) #t #f))
      (lambda [predicate]
-       (with-lock
+       (with-critical
         mut
         (set-box! (lst-p)
                   (filter (negate predicate)
@@ -988,13 +985,13 @@
 
 (define-values
   [np-thread-lockr! np-thread-unlockr!]
-  (let [[mut (my-make-mutex)]
+  (let [[mut (my-thread-critical-make-place)]
         [h (make-hash-table)]]
     (values
      (lambda [resource]
        (let lp []
          (when
-             (with-lock
+             (with-critical
               mut
               (let [[r (hash-ref h resource #f)]]
                 (if r
@@ -1005,7 +1002,7 @@
            (np-thread-usleep (np-thread-sleep-rate-ms))
            (lp))))
      (lambda [resource]
-       (with-lock
+       (with-critical
         mut
         (hash-set! h resource #f))))))
 
@@ -1046,7 +1043,7 @@
                      [param-name (generate-param-name #'name)])
          #'(define-values [name add-name param-name]
              (let [[internal-list (make-parameter '())]
-                   [sem (my-make-mutex)]]
+                   [sem (my-thread-critical-make-place)]]
                (values
                 (lambda args
                   (let [[m (find-first (lambda [p] (check-list-contract (car p) args)) (internal-list))]]
@@ -1057,11 +1054,12 @@
                                               (symbol->string (syntax->datum #'name))
                                               " accepts required arguments")))))
                 (lambda [args func]
-                  (call-with-blocked-asyncs
-                   (lambda []
-                     (my-mutex-lock! sem)
-                     (set! internal-list (make-parameter (append (internal-list) (list (cons args func)))))
-                     (my-mutex-unlock! sem))))
+                  (with-critical
+                   sem
+                   (set! internal-list
+                     (make-parameter (append (internal-list)
+                                             (list (cons args
+                                                         func)))))))
                 (lambda [args func body]
                   (let [[new-list (cons (cons args func) (internal-list))]]
                     (parameterize [[internal-list new-list]]
