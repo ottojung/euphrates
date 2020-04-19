@@ -246,6 +246,25 @@
 
 ;;; thread abstractions
 
+;; NOTE ON USING MUTEXES AND CRITICAL ZONES
+;; Critical zones must not evaluate non-local
+;; jumps, such as exceptions!
+;; np-thread and others rely on this.
+;; Use critical zones where it is clear that
+;; code doesn't have jumps because they are
+;; faster than locks, for some contexts,
+;; and are easier to use
+;; Otherwise, use locks
+;; When parameterizing locks/critical-zones
+;; make sure that application uses compatible
+;; set of thread-model/blocking-methods pairs
+;; For example, if application uses posix threads
+;; along with np-thread's, they you should use
+;; default version of locks which is the most strict one
+;; Even if threads of different types don't compete
+;; in application code, this library uses same locks
+;; for global storages.
+
 (define (my-make-mutex)
   ((my-make-mutex-p)))
 (define (my-mutex-lock! mut)
@@ -1005,6 +1024,21 @@
        (with-critical
         mut
         (hash-set! h resource #f))))))
+
+;; Disables critical zones because in non-interruptible mode
+;; user can assure atomicity by themself
+;; Locks still work as previusly,
+;; but implementation must be changed,
+;; because system mutexes will not allow to do yield
+;; while waiting on mutex.
+(define (np-thread-parameterize-locks#non-interruptible thunk)
+  (parameterize ((my-make-mutex-p make-unique)
+                 (my-mutex-lock!-p np-thread-lockr!)
+                 (my-mutex-unlock!-p np-thread-unlockr!))
+    (my-thread-critical-parameterize
+     (lambda () 'unused-mutex-instanace-created-by-np-thread-parameterization) ;; make
+     (lambda (mut fn) (fn)) ;; call
+     thunk)))
 
 ;;;;;;;;;;;;;;;
 ;; PROCESSES ;;

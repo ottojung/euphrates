@@ -167,3 +167,20 @@
   Same as `i-thread-critical' but also puts `thunk' and `finally' to `with-bracket' clause
   "
   (i-thread-critical! (with-bracket thunk finally)))
+
+;; Critical zones relaxed - they don't need mutexes
+;; but they do need to be disabled from interrupts
+;; Locks still work as previusly,
+;; but implementation must be changed,
+;; because system mutexes will not allow to do yield
+;; while waiting on mutex. Locks are the same as for np-thread
+(define (i-thread-parameterize-locks#interruptible thunk)
+  (parameterize ((my-make-mutex-p make-unique)
+                 (my-mutex-lock!-p np-thread-lockr!)
+                 (my-mutex-unlock!-p np-thread-unlockr!))
+    (my-thread-critical-parameterize
+     (lambda () ;; make
+       'unused-mutex-instanace-created-by-i-thread-parameterization)
+     (lambda (mut fn) ;; call
+       (i-thread-critical! (fn)))
+     thunk)))
