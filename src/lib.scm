@@ -246,6 +246,9 @@
 
 ;;; thread abstractions
 
+(define my-thread-spawn-p (make-parameter call-with-new-sys-thread))
+(define (my-thread-spawn thunk) ((my-thread-spawn-p) thunk))
+
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
 ;; jumps, such as exceptions!
@@ -1031,8 +1034,9 @@
 ;; but implementation must be changed,
 ;; because system mutexes will not allow to do yield
 ;; while waiting on mutex.
-(define (np-thread-parameterize-locks#non-interruptible thunk)
-  (parameterize ((my-make-mutex-p make-unique)
+(define (np-thread-parameterize-env#non-interruptible thunk)
+  (parameterize ((my-thread-spawn-p np-thread-fork)
+                 (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p np-thread-lockr!)
                  (my-mutex-unlock!-p np-thread-unlockr!))
     (my-thread-critical-parameterize
@@ -1050,7 +1054,7 @@
     (unless (comprocess-exited? p)
       (call-with-new-sys-thread
        (lambda []
-         (gsleep timeout)
+         (usleep timeout)
          (unless (comprocess-exited? p)
            (kill-comprocess p #t)))))))
 
