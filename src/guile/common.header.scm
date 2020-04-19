@@ -31,9 +31,13 @@
   (let [[ret (procedure-minimum-arity proc)]]
     (if ret (car ret) #f)))
 
-(define my-make-mutex (@ (srfi srfi-18) make-mutex))
-(define [my-mutex-lock! mut] (mutex-lock! mut))
-(define [my-mutex-unlock! mut] (mutex-unlock! mut))
+(define my-make-mutex-p
+  (make-parameter
+   (@ (srfi srfi-18) make-mutex)))
+(define my-mutex-lock!-p
+  (make-parameter mutex-lock!))
+(define my-mutex-unlock!-p
+  (make-parameter mutex-unlock!))
 
 (define hash-has-key? hash-get-handle)
 
@@ -41,19 +45,21 @@
   (catch #t body handler))
 
 (define local-print
-  (let [[mu (my-make-mutex)]]
+  (let [[mu #f]]
     (lambda [fmt args]
-      (call-with-blocked-asyncs
-       (lambda []
-         (let [[err #f]]
-           (my-mutex-lock! mu)
+      (unless mu
+        (set! mu (my-thread-critical-make-place)))
+
+      (let [[err #f]]
+        (my-thread-critical-call
+         mu
+         (lambda []
            (catch-any
-             (lambda []
-               (apply format (cons* #t fmt args)))
-             (lambda argv
-               (set! err argv)))
-           (my-mutex-unlock! mu)
-           (when err (apply throw err))))))))
+            (lambda []
+              (apply format (cons* #t fmt args)))
+            (lambda argv
+              (set! err argv)))))
+        (when err (apply throw err))))))
 
 (define [printf fmt . args]
   (local-print fmt args))

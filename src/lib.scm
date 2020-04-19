@@ -252,6 +252,37 @@
             (put-u8 to byte)
             (lp (1+ count)))))))
 
+;;; thread abstractions
+
+(define (my-make-mutex)
+  ((my-make-mutex-p)))
+(define (my-mutex-lock! mut)
+  ((my-mutex-lock!-p) mut))
+(define (my-mutex-unlock! mut)
+  ((my-mutex-unlock!-p) mut))
+
+(define-values
+    (my-thread-critical-make-place
+     my-thread-critical-call
+     my-thread-critical-parameterize)
+  (let* ((make-p (make-parameter my-make-mutex))
+         (make (lambda () ((make-p))))
+         (call-default
+          (lambda (mut thunk)
+            (dynamic-wind
+              (lambda () (my-mutex-lock! mut))
+              thunk
+              (lambda () (my-mutex-unlock! mut)))))
+         (call-p (make-parameter call-default))
+         (call (lambda (mut thunk) ((call-p) mut thunk)))
+         (param
+          (lambda (new-make new-call thunk)
+            (parameterize
+                ((make-p new-make)
+                 (call-p new-call))
+              (thunk)))))
+    (values make call param)))
+
 (define gsleep-func-p (make-parameter usleep))
 (define [gsleep micro-seconds]
   ((gsleep-func-p) micro-seconds))

@@ -25,14 +25,13 @@
 
 (define [make-hash-table] (make-hash))
 
-(define [my-make-mutex]
-  (make-semaphore 1))
-
-(define [my-mutex-lock! mut]
-  (semaphore-wait mut))
-
-(define [my-mutex-unlock! mut]
-  (semaphore-post mut))
+(define my-make-mutex-p
+  (make-parameter
+   (lambda () (make-semaphore 1))))
+(define my-mutex-lock!-p
+  (make-parameter semaphore-wait))
+(define my-mutex-unlock!-p
+  (make-parameter semaphore-post))
 
 (define cons* list*)
 
