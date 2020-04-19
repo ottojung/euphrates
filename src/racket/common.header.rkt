@@ -113,7 +113,7 @@
 (define [eval-string-base str]
   (eval-string-in-namespace str racket-base-namespace))
 
-(define [load-file-in-namespace filepath namespace]
+(define-syntax-rule [load-file-in-namespace filepath namespace]
   (eval-string-in-namespace
    (string-append "(begin\n" (file->string filepath) ")")
    namespace))

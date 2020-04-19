@@ -107,7 +107,7 @@
 (define [eval-string-in-namespace str namespace]
   (eval-string str))
 
-(define [load-file-in-namespace filepath namespace]
+(define-syntax-rule [load-file-in-namespace filepath namespace]
   (load filepath))
 
 (define get-command-line-arguments
