@@ -33,6 +33,21 @@
 (define my-mutex-unlock!-p
   (make-parameter semaphore-post))
 
+;; (ATOMIC BOX
+
+(define make-atomic-box
+  box)
+(define atomic-box?
+  box?)
+(define atomic-box-ref
+  unbox)
+(define atomic-box-set!
+  set-box!)
+(define atomic-box-compare-and-swap!
+  box-cas!)
+
+;; ATOMIC BOX)
+
 (define cons* list*)
 
 (define [procedure-get-minimum-arity proc]
