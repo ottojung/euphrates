@@ -175,12 +175,12 @@
 ;; because system mutexes will not allow to do yield
 ;; while waiting on mutex. Locks are the same as for np-thread
 (define (i-thread-parameterize-env#interruptible thunk)
-  (parameterize ((my-thread-spawn-p np-thread-fork)
+  (parameterize ((dynamic-thread-spawn-p np-thread-fork)
                  (gsleep-func-p np-thread-usleep)
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p np-thread-lockr!)
                  (my-mutex-unlock!-p np-thread-unlockr!))
-    (my-thread-critical-parameterize
+    (dynamic-thread-critical-parameterize
      (lambda ()
        (lambda (fn)
          (i-thread-critical! (fn))))

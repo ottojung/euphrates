@@ -246,8 +246,8 @@
 
 ;;; thread abstractions
 
-(define my-thread-spawn-p (make-parameter call-with-new-sys-thread))
-(define (my-thread-spawn thunk) ((my-thread-spawn-p) thunk))
+(define dynamic-thread-spawn-p (make-parameter call-with-new-sys-thread))
+(define (dynamic-thread-spawn thunk) ((dynamic-thread-spawn-p) thunk))
 
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
@@ -276,8 +276,8 @@
   ((my-mutex-unlock!-p) mut))
 
 (define-values
-    (my-thread-critical-make
-     my-thread-critical-parameterize)
+    (dynamic-thread-critical-make
+     dynamic-thread-critical-parameterize)
   (let* ((make-func-default
           (lambda ()
             (let ((mut (my-make-mutex)))
@@ -876,7 +876,7 @@
    np-thread-current
    ]
   (let* [[lst-p (make-parameter #f)]
-         [critical (my-thread-critical-make)]
+         [critical (dynamic-thread-critical-make)]
          [current-thread (make-parameter #f)]]
     (values
      (lambda [th]
@@ -1003,7 +1003,7 @@
 
 (define-values
   [np-thread-lockr! np-thread-unlockr!]
-  (let [[critical (my-thread-critical-make)]
+  (let [[critical (dynamic-thread-critical-make)]
         [h (make-hash-table)]]
     (values
      (lambda [resource]
@@ -1031,12 +1031,12 @@
 ;; because system mutexes will not allow to do yield
 ;; while waiting on mutex.
 (define (np-thread-parameterize-env#non-interruptible thunk)
-  (parameterize ((my-thread-spawn-p np-thread-fork)
+  (parameterize ((dynamic-thread-spawn-p np-thread-fork)
                  (gsleep-func-p np-thread-usleep)
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p np-thread-lockr!)
                  (my-mutex-unlock!-p np-thread-unlockr!))
-    (my-thread-critical-parameterize
+    (dynamic-thread-critical-parameterize
      (lambda () (lambda (fn) (fn)))
      thunk)))
 
@@ -1078,7 +1078,7 @@
                      [param-name (generate-param-name #'name)])
          #'(define-values [name add-name param-name]
              (let [[internal-list (make-parameter '())]
-                   [critical (my-thread-critical-make)]]
+                   [critical (dynamic-thread-critical-make)]]
                (values
                 (lambda args
                   (let [[m (find-first (lambda [p] (check-list-contract (car p) args)) (internal-list))]]

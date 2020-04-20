@@ -48,7 +48,7 @@
   (let [[critical #f]]
     (lambda [fmt args]
       (unless critical
-        (set! critical (my-thread-critical-make))) ;; FIXME: race condition
+        (set! critical (dynamic-thread-critical-make))) ;; FIXME: race condition
 
       (let [[err #f]]
         (critical
