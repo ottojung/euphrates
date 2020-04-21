@@ -28,7 +28,8 @@
                atomic-box-ref
                atomic-box-set!
                ;; atomic-box-swap! ;; racket doesn't have this
-               atomic-box-compare-and-swap!)
+               ;; atomic-box-compare-and-swap!) ;; racket doesn't have this
+               )
   )
 
 (define null (list))
@@ -44,6 +45,11 @@
   (make-parameter mutex-lock!))
 (define my-mutex-unlock!-p
   (make-parameter mutex-unlock!))
+
+;; for racket compatibility
+(define (atomic-box-compare-and-set! box expected desired)
+  (let ((ret (atomic-box-compare-and-swap! box expected desired)))
+    (eq? ret expected)))
 
 (define hash-has-key? hash-get-handle)
 (define (hash-empty? h)

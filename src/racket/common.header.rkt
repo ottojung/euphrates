@@ -43,7 +43,7 @@
   unbox)
 (define atomic-box-set!
   set-box!)
-(define atomic-box-compare-and-swap!
+(define atomic-box-compare-and-set!
   box-cas!)
 
 ;; ATOMIC BOX)
