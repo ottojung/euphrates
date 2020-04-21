@@ -145,7 +145,10 @@
 
 (define [make-unique]
   "Returns procedure that returns #t if applied to itself, #f otherwise"
-  (letrec [[me (lambda [other] (eq? other me))]] me))
+  (let ((me #f))
+    (set! me (lambda (other)
+               (eq? other me)))
+    me))
 
 (define [generic-fold first-f rest-f stop-predicate initial collection function]
   (let lp [[acc initial]
