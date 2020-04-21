@@ -280,12 +280,16 @@
      dynamic-thread-critical-parameterize)
   (let* ((make-func-default
           (lambda ()
-            (let ((mut (my-make-mutex)))
+            (let* ((mut (my-make-mutex))
+                   (lock-func (my-mutex-lock!-p))
+                   (unlock-func (my-mutex-unlock!-p))
+                   (lock (lambda () (lock-func mut)))
+                   (unlock (lambda () (unlock-func mut))))
               (lambda (thunk)
                 (dynamic-wind
-                  (lambda () (my-mutex-lock! mut))
+                  lock
                   thunk
-                  (lambda () (my-mutex-unlock! mut)))))))
+                  unlock)))))
          (make-func-p (make-parameter make-func-default))
          (make-func (lambda () ((make-func-p))))
          (param
@@ -320,12 +324,10 @@
   (let ((memory #f)
         (evaled? #f))
     (lambda argv
-      (if evaled?
-          memory
-          (begin
-            (set! memory x)
-            (set! evaled? #t)
-            memory)))))
+      (unless evaled?
+        (set! evaled? #f)
+        (set! memory x))
+      memory)))
 
 (define (replicate n x)
   (if (= 0 n)
