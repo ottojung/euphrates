@@ -46,6 +46,8 @@
   (make-parameter mutex-unlock!))
 
 (define hash-has-key? hash-get-handle)
+(define (hash-empty? h)
+  (= 0 (hash-count (lambda _ 0) h)))
 
 (define [catch-any body handler]
   (catch #t body handler))
