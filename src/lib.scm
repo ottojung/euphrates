@@ -252,6 +252,9 @@
 (define dynamic-thread-spawn-p (make-parameter call-with-new-sys-thread))
 (define (dynamic-thread-spawn thunk) ((dynamic-thread-spawn-p) thunk))
 
+(define dynamic-thread-cancel-p (make-parameter cancel-sys-thread))
+(define (dynamic-thread-cancel thunk) ((dynamic-thread-cancel-p) thunk))
+
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
 ;; jumps, such as exceptions!
