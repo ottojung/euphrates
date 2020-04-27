@@ -301,7 +301,7 @@
                (name . fiii)
                predi
                . buf)
-             (export . export-buf)))]
+             (export name predi . export-buf)))]
       [(rec-fields fiii name buf export-buf field . fields)
        (with-syntax
 
