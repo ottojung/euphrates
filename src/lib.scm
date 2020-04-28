@@ -1046,7 +1046,8 @@
                  (my-mutex-unlock!-p np-thread-unlockr!))
     (dynamic-thread-critical-parameterize
      (lambda () (lambda (fn) (fn)))
-     thunk)))
+     (lambda ()
+       (np-thread-run! (thunk))))))
 
 ;;;;;;;;;;;;;;;
 ;; PROCESSES ;;
@@ -1244,3 +1245,241 @@
                 (if (equal? key after-key)
                     (lp (cdr rest) (not found?))
                     (lp (cdr rest) found?))))))))
+
+
+;;;;;;;;;;;;;;;;;;
+;; TREE-FUTURES ;;
+;;;;;;;;;;;;;;;;;;
+
+;; Futures, but
+;; * form trees
+;;   Tree-future is finished when its body is evaluated
+;;   and all of its children are finished
+;; * multiplatform
+;;   Supports different threading models
+;;   Depends on abstract implementation
+;;   of critical-make, thread-spawn, etc
+;; * cancellable
+;;   Can be intrrupted at any moment
+;;   Root is cancelled first then its nodes
+;;   May not be supported by threading model
+;; * stateful
+;;   Provides functionality to modify
+;;   future-local state.
+;;   Mutations are atomic
+
+(define-rec tree-future
+  parent-index
+  current-index
+  children-list
+  callback ;; (: tree-future -> result -> exit-code -> a) called on finish or on exception or if cancelled; if exception happend, some children may not be finished yet; it is safe to modify this structure after callback is called
+  thread ;; running thread.  On normal exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
+  finished? ;; used for callback scheduling.  On normal exit (with or without error) `finished?` is #t, but when cancelled, `finished` is #f
+  context ;; thunk that evaluates contexts and returns it.  #memoized
+  )
+
+(define tree-future-current (make-parameter #f))
+(define tree-future-eval-context-p (make-parameter #f))
+(define (tree-future-eval-context) ((tree-future-eval-context-p)))
+
+;; Initializes tree-future env using current threading model
+;; Returns an interface for this environment
+(define (tree-future-get)
+  (let*
+      ((message-bin null) ;; TODO: replace by atomic queue
+       (message-bin-lock (dynamic-thread-critical-make))
+
+       (init-lock (dynamic-thread-critical-make))
+       (work-thread #f)
+
+       (futures-hash (make-hash-table))
+       (get-by-index
+        (lambda (index)
+          (hash-ref futures-hash index #f)))
+
+       (logger
+        (lambda (fmt . args)
+          (apply printfln (cons fmt args))))
+
+       (send-message
+        (lambda type-args
+          (with-critical
+           message-bin-lock
+           (set! message-bin
+             (cons type-args message-bin)))))
+
+       (remove-future-sync
+        (lambda (structure set-finished?)
+          (when (and-map (lambda (child-index) (not (get-by-index child-index)))
+                         (tree-future-children-list structure))
+            (hash-remove! futures-hash (tree-future-current-index structure))
+            (when set-finished?
+              (set-tree-future-finished?! structure #t))
+            (send-message
+             'remove
+             (tree-future-parent-index structure)))))
+
+       (dispatch
+        (lambda (type . args)
+          (case type
+            ((start)
+             (match args
+               (`(,parent-index
+                  ,current-index
+                  ,target-procedure
+                  ,callback
+                  ,initial-context)
+                (if (get-by-index current-index)
+                    (logger "index already exists")
+                    (let* ((parent (get-by-index parent-index))
+                           (context (lambda () initial-context))
+                           (structure (tree-future parent-index
+                                                   current-index
+                                                   null
+                                                   callback
+                                                   #f
+                                                   #f
+                                                   context))
+                           (eval-context
+                            (lambda () ((tree-future-context structure))))
+                           (finish (lambda ()
+                                     (send-message 'remove current-index)
+                                     (printfln "WAITING FOR FINISHED?")
+                                     (sleep-until (tree-future-finished? structure)))))
+                      (hash-set! futures-hash current-index structure)
+                      (when parent
+                        (set-tree-future-children-list!
+                         parent
+                         (cons current-index
+                               (tree-future-children-list parent))))
+                      (set-tree-future-thread!
+                       structure
+                       (dynamic-thread-spawn
+                        (lambda ()
+                          (parameterize ((tree-future-current current-index)
+                                         (tree-future-eval-context-p eval-context))
+                            (catch-any
+                             (lambda ()
+                               (let ((result (target-procedure)))
+                                 (finish)
+                                 (callback structure result 'ok)))
+                             (lambda err
+                               (finish)
+                               (callback structure err 'error))))))))))
+               (else
+                (logger "wrong number of arguments to 'start"))))
+
+            ((remove)
+             (printfln "REMOVING")
+
+             (match args
+               (`(,index)
+                (let* ((structure (get-by-index index)))
+                  (when structure
+                    (remove-future-sync structure #t))))
+               (else
+                (logger "wrong number of arguments to 'remove"))))
+
+            ((cancel)
+             (printfln "CANCEL")
+
+             (match args
+               (`(,index ,argument)
+                (let* ((structure (get-by-index index)))
+                  (if structure
+                      (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
+                        (dynamic-thread-cancel (tree-future-thread structure))
+                        (remove-future-sync structure #f) ;; NOTE: removes but callback will not be called
+                        (dynamic-thread-spawn
+                         (lambda ()
+                           ((tree-future-callback structure) structure argument 'cancel))))
+                      (logger "bad index"))))
+               (else
+                (logger "wrong number of arguments to 'remove"))))
+
+            ((context) ;; also used for checking if future exists
+             (printfln "CONTEXT")
+             (match args
+               (`(,target-index ,transformer ,error-handler)
+                (let ((target (get-by-index target-index)))
+                  (if target
+                      (let ((current (tree-future-context target)))
+                        (set-tree-future-context!
+                         target
+                         (let ((saved? #f)
+                               (memory #f))
+                           (lambda ()
+                             (unless saved?
+                               (set! saved? #t)
+                               (set! memory (transformer (current))))
+                             memory))))
+                      (error-handler 'doesnt-exist))))
+               (else
+                (logger "wrong number of arguments to 'context")))))))
+
+       (recieve-loop
+        (lambda ()
+          (let ((sleep (gsleep-func-p)))
+            (let lp ()
+              (let ((val null))
+                (with-critical
+                 message-bin-lock
+                 (begin
+                   (set! val message-bin)
+                   (set! message-bin null)))
+                (for-each
+                 (lambda (elem)
+                   (apply dispatch elem))
+                 (reverse val)))
+              (if (hash-empty? futures-hash)
+                  (set! work-thread #f)
+                  (begin
+                    (sleep 100)
+                    (lp)))))))
+
+       (maybe-start-loopin
+        (lambda ()
+          (init-lock
+           (lambda ()
+             (unless work-thread
+               (set! work-thread
+                 (dynamic-thread-spawn recieve-loop)))))))
+
+       (run (lambda (target-procedure
+                     callback
+                     initial-context)
+              (maybe-start-loopin)
+              (let ((current-index (tree-future-current))
+                    (target-index (make-unique)))
+                (send-message 'start
+                              current-index
+                              target-index
+                              target-procedure
+                              callback
+                              initial-context)
+                target-index)))
+
+       (modify
+        (lambda (target-index transformation)
+          (send-message 'context
+                        target-index
+                        transformation
+                        (lambda (error)
+                          (logger "bad index")))))
+       )
+    (values run modify)))
+
+(define tree-future-run-p (make-parameter #f))
+(define (tree-future-run . args)
+  (apply (tree-future-run-p) args))
+
+(define tree-future-modify-p (make-parameter #f))
+(define (tree-future-modify . args)
+  (apply (tree-future-modify-p) args))
+
+(define-syntax-rule (with-new-tree-future-env . bodies)
+  (let-values (((run modify) (tree-future-get)))
+    (parameterize ((tree-future-run-p run)
+                   (tree-future-modify-p modify))
+      . bodies)))
+
