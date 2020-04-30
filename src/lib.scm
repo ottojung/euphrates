@@ -247,6 +247,24 @@
             (put-u8 to byte)
             (lp (1+ count)))))))
 
+(define-syntax-rule (cons! x lst)
+  (set! lst (cons x lst)))
+
+; memoized constant function
+(define-syntax-rule (memconst x)
+  (let ((memory #f)
+        (evaled? #f))
+    (lambda argv
+      (unless evaled?
+        (set! evaled? #f)
+        (set! memory x))
+      memory)))
+
+(define (replicate n x)
+  (if (= 0 n)
+      (list)
+      (cons x (replicate (1- n) x))))
+
 ;;; thread abstractions
 
 (define dynamic-thread-spawn-p (make-parameter call-with-new-sys-thread))
@@ -355,24 +373,6 @@
         (condi)
       (gsleep-func period)
       . body)))
-
-(define-syntax-rule (cons! x lst)
-  (set! lst (cons x lst)))
-
-; memoized constant function
-(define-syntax-rule (memconst x)
-  (let ((memory #f)
-        (evaled? #f))
-    (lambda argv
-      (unless evaled?
-        (set! evaled? #f)
-        (set! memory x))
-      memory)))
-
-(define (replicate n x)
-  (if (= 0 n)
-      (list)
-      (cons x (replicate (1- n) x))))
 
 ;;;;;;;;;;;;
 ;; MONADS ;;
