@@ -272,10 +272,7 @@
 ;; set of thread-model/blocking-methods pairs
 ;; For example, if application uses posix threads
 ;; along with np-thread's, they you should use
-;; default version of locks which is the most strict one
-;; Even if threads of different types don't compete
-;; in application code, this library uses same locks
-;; for global storages.
+;; uni-spinlocks which are the most strict one
 
 ;; Universal spinlock
 ;; Works for any thread model
