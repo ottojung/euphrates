@@ -255,6 +255,9 @@
 (define dynamic-thread-cancel-p (make-parameter cancel-sys-thread))
 (define (dynamic-thread-cancel thunk) ((dynamic-thread-cancel-p) thunk))
 
+(define dynamic-thread-yield-p (make-parameter (lambda () 0)))
+(define (dynamic-thread-yield) ((dynamic-thread-yield-p)))
+
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
 ;; jumps, such as exceptions!
