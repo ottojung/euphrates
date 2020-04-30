@@ -277,6 +277,40 @@
 ;; in application code, this library uses same locks
 ;; for global storages.
 
+;; Universal spinlock
+;; Works for any thread model
+;; Very wasteful
+(define-values
+    (make-uni-spinlock
+     uni-spinlock-lock!
+     uni-spinlock-unlock!
+     make-uni-spinlock-critical)
+
+  (let* ((make (lambda () (make-atomic-box #f)))
+
+         (lock
+          (lambda (o)
+            (let ((yield (dynamic-thread-yield-p)))
+              (let lp ()
+                (unless (atomic-box-compare-and-set!
+                         o #f #t)
+                  (yield)
+                  (lp))))))
+
+         (unlock
+          (lambda (o)
+            (atomic-box-set! o #f)))
+
+         (critical
+          (lambda ()
+            (let ((box (make)))
+              (lambda (thunk)
+                (dynamic-wind
+                  (lambda () (lock box))
+                  thunk
+                  (lambda () (unlock box))))))))
+    (values make lock unlock critical)))
+
 (define (my-make-mutex)
   ((my-make-mutex-p)))
 (define (my-mutex-lock! mut)
@@ -887,7 +921,7 @@
    np-thread-current
    ]
   (let* [[lst-p (make-parameter #f)]
-         [critical (dynamic-thread-critical-make)]
+         [critical (make-uni-spinlock-critical)]
          [current-thread (make-parameter #f)]]
     (values
      (lambda [th]

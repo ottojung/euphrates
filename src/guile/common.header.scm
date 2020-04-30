@@ -59,12 +59,15 @@
   (catch #t body handler))
 
 (define local-print
-  (let [[critical #f]]
+  (let [[critical-box (make-atomic-box #f)]]
     (lambda [fmt args]
-      (unless critical
-        (set! critical (dynamic-thread-critical-make))) ;; FIXME: race condition
+      (atomic-box-compare-and-swap!
+       critical-box
+       #f
+       (make-uni-spinlock-critical))
 
-      (let [[err #f]]
+      (let [[err #f]
+            [critical (atomic-box-ref critical-box)]]
         (critical
          (lambda []
            (catch-any
