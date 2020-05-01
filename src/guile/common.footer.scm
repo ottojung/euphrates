@@ -178,8 +178,8 @@
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
                  (gsleep-func-p np-thread-usleep)
                  (my-make-mutex-p make-unique)
-                 (my-mutex-lock!-p np-thread-lockr!)
-                 (my-mutex-unlock!-p np-thread-unlockr!))
+                 (my-mutex-lock!-p universal-lockr!)
+                 (my-mutex-unlock!-p universal-unlockr!))
     (dynamic-thread-critical-parameterize
      (lambda ()
        (lambda (fn)

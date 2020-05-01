@@ -271,6 +271,9 @@
 (define dynamic-thread-yield-p (make-parameter (lambda () 0)))
 (define (dynamic-thread-yield) ((dynamic-thread-yield-p)))
 
+(define dynamic-thread-wait-delay#us-p
+  (make-parameter (normal->micro@unit 1/100)))
+
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
 ;; jumps, such as exceptions!
@@ -368,6 +371,32 @@
         (condi)
       (gsleep-func period)
       . body)))
+
+;; Like uni-spinlock but use arbitary variables as lock target
+;; and do sleep when wait
+(define-values
+  [universal-lockr! universal-unlockr!]
+  (let [[critical (make-uni-spinlock)]
+        [h (make-hash-table)]]
+    (values
+     (lambda [resource]
+       (let ((sleep (gsleep-func-p)))
+         (let lp []
+           (when
+               (with-critical
+                critical
+                (let [[r (hash-ref h resource #f)]]
+                  (if r
+                      #t
+                      (begin
+                        (hash-set! h resource #t)
+                        #f))))
+             (sleep (dynamic-thread-wait-delay#us-p))
+             (lp)))))
+     (lambda [resource]
+       (with-critical
+        critical
+        (hash-set! h resource #f))))))
 
 ;;;;;;;;;;;;
 ;; MONADS ;;
@@ -997,20 +1026,11 @@
        (begin . thunk)
        (np-thread-end))))))
 
-(define-values
-  [np-thread-sleep-rate-ms
-   np-thread-sleep-rate-ms-set!]
-  (let [[p (make-parameter (normal->micro@unit 1/100))]]
-    (values
-     (lambda [] (p))
-     (lambda [value body]
-       (parameterize [[p value]] (body))))))
-
 (define [np-thread-usleep micro-seconds]
   (let* [[nano-seconds (micro->nano@unit micro-seconds)]
          [start-time (time-get-monotonic-nanoseconds-timestamp)]
          [end-time (+ start-time nano-seconds)]
-         [sleep-rate (np-thread-sleep-rate-ms)]]
+         [sleep-rate (dynamic-thread-wait-delay#us-p)]]
     (let lp []
       (let [[t (time-get-monotonic-nanoseconds-timestamp)]]
         (unless (> t end-time)
@@ -1038,29 +1058,6 @@
   (np-thread-list-remove (const #t))
   (np-thread-end))
 
-(define-values
-  [np-thread-lockr! np-thread-unlockr!]
-  (let [[critical (dynamic-thread-critical-make)]
-        [h (make-hash-table)]]
-    (values
-     (lambda [resource]
-       (let lp []
-         (when
-             (with-critical
-              critical
-              (let [[r (hash-ref h resource #f)]]
-                (if r
-                    #t
-                    (begin
-                      (hash-set! h resource #t)
-                      #f))))
-           (np-thread-usleep (np-thread-sleep-rate-ms))
-           (lp))))
-     (lambda [resource]
-       (with-critical
-        critical
-        (hash-set! h resource #f))))))
-
 ;; Disables critical zones because in non-interruptible mode
 ;; user can assure atomicity by themself
 ;; Locks still work as previusly,
@@ -1071,8 +1068,8 @@
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
                  (gsleep-func-p np-thread-usleep)
                  (my-make-mutex-p make-unique)
-                 (my-mutex-lock!-p np-thread-lockr!)
-                 (my-mutex-unlock!-p np-thread-unlockr!))
+                 (my-mutex-lock!-p universal-lockr!)
+                 (my-mutex-unlock!-p universal-unlockr!))
     (dynamic-thread-critical-parameterize
      (lambda () (lambda (fn) (fn)))
      (lambda ()
