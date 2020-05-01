@@ -128,19 +128,19 @@
    i-thread-critical-points-remove!
    i-thread-critical-points-print]
   (let [[lst (list)]
-        [mut (dynamic-thread-mutex-make)]]
+        [mut (make-uni-spinlock-critical)]]
     (values
      (lambda [] lst)
      (lambda [st]
-       (dynamic-thread-mutex-lock! mut)
-       (set! lst (cons st lst))
-       (dynamic-thread-mutex-unlock! mut))
+       (with-critical
+        mut
+        (set! lst (cons st lst))))
      (lambda [st]
-       (dynamic-thread-mutex-lock! mut)
-       (set! lst
-         (filter (lambda [el] (not (equal? el st)))
-                 lst))
-       (dynamic-thread-mutex-unlock! mut))
+       (with-critical
+        mut
+        (set! lst
+          (filter (lambda [el] (not (equal? el st)))
+                  lst))))
      (lambda []
        (format #t "--- CRITICAL POINTS ---\n")
        (for-each
