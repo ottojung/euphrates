@@ -10,8 +10,7 @@
   (lambda args
     (with-critical
      mut
-     (set! cb-count (1+ cb-count)))
-    (printfln "\nchild~a-cb, total: ~a\n\n" n cb-count)))
+     (set! cb-count (1+ cb-count)))))
 
 (define (child-make n)
   (lambda ()
@@ -48,13 +47,20 @@
  (with-np-thread-env#non-interruptible
   (main))
 
+ (assertNorm (= cb-count 100))
+
  (with-np-thread-env#non-interruptible
   (main)))
+
+(assertNorm (= cb-count 200))
 
 (with-new-tree-future-env
  ;; not parameterized
  (main))
 
-(assert (= in-main-count 3) "expected: 3, got: ~a" in-main-count)
-(assert (= cb-count 300) "expected: 300, got: ~a" cb-count)
+(assertNorm (= in-main-count 3))
+
+;; there is no guarantee that callbacks will finish.. but its very likely
+(usleep 100000)
+(assertNorm (= cb-count 300))
 

@@ -21,8 +21,23 @@
 (define-syntax-rule [apploop args argv . body]
   ((defloop args . body) . argv))
 
-(define-macro (reversed-args . body)
-  (reverse body))
+(define-syntax reversed-args-buf
+  (syntax-rules ()
+    ((_ (x . xs) buf)
+     (reversed-args-buf xs (x . buf)))
+    ((_ () buf)
+     buf)))
+(define-syntax-rule (reversed-args . args)
+  (reversed-args-buf args ()))
+
+(define-syntax reversed-args-f-buf
+  (syntax-rules ()
+    ((_ f (x . xs) buf)
+     (reversed-args-f-buf f xs (x . buf)))
+    ((_ f () buf)
+     (f . buf))))
+(define-syntax-rule (reversed-args-f f . args)
+  (reversed-args-f-buf f args ()))
 
 (define-syntax reversed-lambda
   (syntax-rules ()
@@ -119,6 +134,33 @@
        (throw 'assertion-fail
               `(test: ,(quote test))
               `(description: ,(stringf . printf-args)))))))
+
+(define-syntax assertNormBuf
+  (syntax-rules ()
+    ((_ orig buf (last-r))
+     (let ((last last-r))
+       (unless (reversed-args last . buf)
+         (throw 'assertion-fail
+                `(test: ,(quote orig))
+                `(test!: ,(reversed-args-f list last . buf))))))
+    ((_ orig buf (last-r) . printf-args)
+     (let ((last last-r))
+       (unless (reversed-args last . buf)
+         (throw 'assertion-fail
+                `(test: ,(quote orig))
+                `(test!: ,(reversed-args-f list last . buf))
+                `(description: ,(stringf . printf-args))))))
+    ((_ orig buf (x-r . xs-r) . printf-args)
+     (let ((x x-r))
+       (assertNormBuf orig (x . buf) xs-r . printf-args)))))
+
+;; reduces test to normal form by hand
+(define-syntax assertNorm
+  (syntax-rules ()
+    ((_ (x . xs) . printf-args)
+     (assertNormBuf (x . xs) () (x . xs) . printf-args))
+    ((_ test . printf-args)
+     (assert test . printf-args))))
 
 (define range
   (case-lambda
