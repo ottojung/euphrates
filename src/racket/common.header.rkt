@@ -25,12 +25,12 @@
 
 (define [make-hash-table] (make-hash))
 
-(define my-make-mutex-p
+(define dynamic-thread-mutex-make-p
   (make-parameter
    (lambda () (make-semaphore 1))))
-(define my-mutex-lock!-p
+(define dynamic-thread-mutex-lock!-p
   (make-parameter semaphore-wait))
-(define my-mutex-unlock!-p
+(define dynamic-thread-mutex-unlock!-p
   (make-parameter semaphore-post))
 
 ;; (ATOMIC BOX

@@ -58,8 +58,8 @@
 ;; making non-preemptive threads to preemptive ones (or `i-thread's - "interuptible threads")
 ;;
 ;; NOTE:
-;; * `my-mutex-lock!' is not interruptible
-;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `my-mutex-unlock!'
+;; * `dynamic-thread-mutex-lock!' is not interruptible
+;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `dynamic-thread-mutex-unlock!'
 ;;   Or use `universal-lockr' and `universal-unlockr' instead
 ;; * `sleep' (`usleep') is not interruptible
 ;;   use `universal-usleep' instead
@@ -129,19 +129,19 @@
    i-thread-critical-points-remove!
    i-thread-critical-points-print]
   (let [[lst (list)]
-        [mut (my-make-mutex)]]
+        [mut (dynamic-thread-mutex-make)]]
     (values
      (lambda [] lst)
      (lambda [st]
-       (my-mutex-lock! mut)
+       (dynamic-thread-mutex-lock! mut)
        (set! lst (cons st lst))
-       (my-mutex-unlock! mut))
+       (dynamic-thread-mutex-unlock! mut))
      (lambda [st]
-       (my-mutex-lock! mut)
+       (dynamic-thread-mutex-lock! mut)
        (set! lst
          (filter (lambda [el] (not (equal? el st)))
                  lst))
-       (my-mutex-unlock! mut))
+       (dynamic-thread-mutex-unlock! mut))
      (lambda []
        (format #t "--- CRITICAL POINTS ---\n")
        (for-each
@@ -182,7 +182,7 @@
                   (lambda ()
                     (lambda (fn)
                       (i-thread-critical! (fn)))))
-                 (my-make-mutex-p make-unique)
-                 (my-mutex-lock!-p universal-lockr!)
-                 (my-mutex-unlock!-p universal-unlockr!))
+                 (dynamic-thread-mutex-make-p make-unique)
+                 (dynamic-thread-mutex-lock!-p universal-lockr!)
+                 (dynamic-thread-mutex-unlock!-p universal-unlockr!))
     (thunk)))

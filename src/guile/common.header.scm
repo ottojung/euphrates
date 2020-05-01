@@ -38,12 +38,12 @@
   (let [[ret (procedure-minimum-arity proc)]]
     (if ret (car ret) #f)))
 
-(define my-make-mutex-p
+(define dynamic-thread-mutex-make-p
   (make-parameter
    (@ (srfi srfi-18) make-mutex)))
-(define my-mutex-lock!-p
+(define dynamic-thread-mutex-lock!-p
   (make-parameter mutex-lock!))
-(define my-mutex-unlock!-p
+(define dynamic-thread-mutex-unlock!-p
   (make-parameter mutex-unlock!))
 
 ;; for racket compatibility
