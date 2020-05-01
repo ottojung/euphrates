@@ -274,6 +274,10 @@
 (define dynamic-thread-wait-delay#us-p
   (make-parameter (normal->micro@unit 1/100)))
 
+(define dynamic-thread-sleep-p (make-parameter usleep))
+(define [dynamic-thread-sleep micro-seconds]
+  ((dynamic-thread-sleep-p) micro-seconds))
+
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
 ;; jumps, such as exceptions!
@@ -358,18 +362,14 @@
   (critical-func
    (lambda [] . bodies)))
 
-(define gsleep-func-p (make-parameter usleep))
-(define [gsleep micro-seconds]
-  ((gsleep-func-p) micro-seconds))
-
 (define sleep-until-period-p
   (make-parameter (normal->micro@unit 1/100)))
 (define-syntax-rule [sleep-until condi . body]
   (let ((period (sleep-until-period-p))
-        (gsleep-func (gsleep-func-p)))
+        (dynamic-thread-sleep-func (dynamic-thread-sleep-p)))
     (do ()
         (condi)
-      (gsleep-func period)
+      (dynamic-thread-sleep-func period)
       . body)))
 
 ;; Like uni-spinlock but use arbitary variables as lock target
@@ -380,7 +380,7 @@
         [h (make-hash-table)]]
     (values
      (lambda [resource]
-       (let ((sleep (gsleep-func-p)))
+       (let ((sleep (dynamic-thread-sleep-p)))
          (let lp []
            (when
                (with-critical
@@ -1066,7 +1066,7 @@
 ;; while waiting on mutex.
 (define (np-thread-parameterize-env#non-interruptible thunk)
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
-                 (gsleep-func-p np-thread-usleep)
+                 (dynamic-thread-sleep-p np-thread-usleep)
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p universal-lockr!)
                  (my-mutex-unlock!-p universal-unlockr!))
@@ -1445,7 +1445,7 @@
 
        (recieve-loop
         (lambda ()
-          (let ((sleep (gsleep-func-p)))
+          (let ((sleep (dynamic-thread-sleep-p)))
             (let lp ()
               (let ((val null))
                 (with-critical

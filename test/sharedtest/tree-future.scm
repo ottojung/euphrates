@@ -12,7 +12,7 @@
 (define (child-make n)
   (lambda ()
     (printfln "child~a" n)
-    (gsleep (normal->micro@unit 3))))
+    (dynamic-thread-sleep (normal->micro@unit 3))))
 
 (define (run-nth-child n)
   (tree-future-run
@@ -38,7 +38,7 @@
   (tree-future-run fn1
                    cb1
                    #f)
-  (gsleep (normal->micro@unit 10)))
+  (dynamic-thread-sleep (normal->micro@unit 10)))
 
 (with-new-tree-future-env
  (np-thread-parameterize-env#non-interruptible

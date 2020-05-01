@@ -10,7 +10,7 @@
     (unless (= cur last)
       (set! last cur)
       (printfln "new cur: ~a" cur))
-    (gsleep (normal->micro@unit 1/100))
+    (dynamic-thread-sleep (normal->micro@unit 1/100))
     (when (> last 100)
       (printfln "BIGGER"))
     (unless (> last 100)
@@ -27,7 +27,7 @@
   (let lp ()
     (when (< (time) endtime)
       (tree-future-modify child 1+)
-      (gsleep (normal->micro@unit 1/100))
+      (dynamic-thread-sleep (normal->micro@unit 1/100))
       (lp))))
 
 (with-new-tree-future-env
