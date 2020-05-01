@@ -335,28 +335,22 @@
 (define (my-mutex-unlock! mut)
   ((my-mutex-unlock!-p) mut))
 
-(define-values
-    (dynamic-thread-critical-make
-     dynamic-thread-critical-parameterize)
-  (let* ((make-func-default
-          (lambda ()
-            (let* ((mut (my-make-mutex))
-                   (lock-func (my-mutex-lock!-p))
-                   (unlock-func (my-mutex-unlock!-p))
-                   (lock (lambda () (lock-func mut)))
-                   (unlock (lambda () (unlock-func mut))))
-              (lambda (thunk)
-                (dynamic-wind
-                  lock
-                  thunk
-                  unlock)))))
-         (make-func-p (make-parameter make-func-default))
-         (make-func (lambda () ((make-func-p))))
-         (param
-          (lambda (new-critical thunk)
-            (parameterize ((make-func-p new-critical))
-              (thunk)))))
-    (values make-func param)))
+(define (dynamic-thread-critical-make#default)
+  (let* ((mut (my-make-mutex))
+         (lock-func (my-mutex-lock!-p))
+         (unlock-func (my-mutex-unlock!-p))
+         (lock (lambda () (lock-func mut)))
+         (unlock (lambda () (unlock-func mut))))
+    (lambda (thunk)
+      (dynamic-wind
+        lock
+        thunk
+        unlock))))
+
+(define dynamic-thread-critical-make-p
+  (make-parameter dynamic-thread-critical-make#default))
+(define (dynamic-thread-critical-make)
+  ((dynamic-thread-critical-make-p)))
 
 (define-syntax-rule (with-critical critical-func . bodies)
   (critical-func
@@ -1069,13 +1063,13 @@
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
                  (dynamic-thread-sleep-p universal-usleep)
                  (dynamic-thread-yield-p np-thread-yield)
+                 (dynamic-thread-critical-make-p
+                  (lambda ()
+                    (lambda (fn) (fn))))
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p universal-lockr!)
                  (my-mutex-unlock!-p universal-unlockr!))
-    (dynamic-thread-critical-parameterize
-     (lambda () (lambda (fn) (fn)))
-     (lambda ()
-       (np-thread-run! (thunk))))))
+    (np-thread-run! (thunk))))
 
 ;;;;;;;;;;;;;;;
 ;; PROCESSES ;;

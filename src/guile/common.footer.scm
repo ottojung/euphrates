@@ -177,11 +177,12 @@
 (define (i-thread-parameterize-env#interruptible thunk)
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
                  (dynamic-thread-sleep-p universal-usleep)
+                 (dynamic-thread-yield-p np-thread-yield)
+                 (dynamic-thread-critical-make
+                  (lambda ()
+                    (lambda (fn)
+                      (i-thread-critical! (fn)))))
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p universal-lockr!)
                  (my-mutex-unlock!-p universal-unlockr!))
-    (dynamic-thread-critical-parameterize
-     (lambda ()
-       (lambda (fn)
-         (i-thread-critical! (fn))))
-     thunk)))
+    (thunk)))
