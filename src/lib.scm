@@ -294,6 +294,30 @@
 ;; along with np-thread's, they you should use
 ;; uni-spinlocks which are the most strict one
 
+(define (dynamic-thread-mutex-make)
+  ((dynamic-thread-mutex-make-p)))
+(define (dynamic-thread-mutex-lock! mut)
+  ((dynamic-thread-mutex-lock!-p) mut))
+(define (dynamic-thread-mutex-unlock! mut)
+  ((dynamic-thread-mutex-unlock!-p) mut))
+
+(define (dynamic-thread-critical-make#default)
+  (let* ((mut (dynamic-thread-mutex-make))
+         (lock-func (dynamic-thread-mutex-lock!-p))
+         (unlock-func (dynamic-thread-mutex-unlock!-p))
+         (lock (lambda () (lock-func mut)))
+         (unlock (lambda () (unlock-func mut))))
+    (lambda (thunk)
+      (dynamic-wind
+        lock
+        thunk
+        unlock))))
+
+(define dynamic-thread-critical-make-p
+  (make-parameter dynamic-thread-critical-make#default))
+(define (dynamic-thread-critical-make)
+  ((dynamic-thread-critical-make-p)))
+
 ;; Universal spinlock
 ;; Works for any thread model
 ;; Very wasteful
@@ -327,30 +351,6 @@
                   thunk
                   (lambda () (unlock box))))))))
     (values make lock unlock critical)))
-
-(define (dynamic-thread-mutex-make)
-  ((dynamic-thread-mutex-make-p)))
-(define (dynamic-thread-mutex-lock! mut)
-  ((dynamic-thread-mutex-lock!-p) mut))
-(define (dynamic-thread-mutex-unlock! mut)
-  ((dynamic-thread-mutex-unlock!-p) mut))
-
-(define (dynamic-thread-critical-make#default)
-  (let* ((mut (dynamic-thread-mutex-make))
-         (lock-func (dynamic-thread-mutex-lock!-p))
-         (unlock-func (dynamic-thread-mutex-unlock!-p))
-         (lock (lambda () (lock-func mut)))
-         (unlock (lambda () (unlock-func mut))))
-    (lambda (thunk)
-      (dynamic-wind
-        lock
-        thunk
-        unlock))))
-
-(define dynamic-thread-critical-make-p
-  (make-parameter dynamic-thread-critical-make#default))
-(define (dynamic-thread-critical-make)
-  ((dynamic-thread-critical-make-p)))
 
 (define-syntax-rule (with-critical critical-func . bodies)
   (critical-func
