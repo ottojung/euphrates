@@ -1491,7 +1491,6 @@
        (run (lambda (target-procedure
                      callback
                      initial-context)
-              (maybe-start-loopin)
               (let ((current-index (tree-future-current))
                     (target-index (make-unique)))
                 (send-message 'start
@@ -1500,6 +1499,7 @@
                               target-procedure
                               callback
                               initial-context)
+                (maybe-start-loopin)
                 target-index)))
 
        (modify
