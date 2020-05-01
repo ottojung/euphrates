@@ -1317,6 +1317,10 @@
         (lambda (index)
           (hash-ref futures-hash index #f)))
 
+       (wait-all
+        (lambda ()
+          (sleep-until (not work-thread))))
+
        (logger
         (lambda (fmt . args)
           (apply printfln (cons fmt args))))
@@ -1487,7 +1491,7 @@
                         (lambda (error)
                           (logger "bad index")))))
        )
-    (values run modify)))
+    (values run modify wait-all)))
 
 (define tree-future-run-p (make-parameter #f))
 (define (tree-future-run . args)
@@ -1498,8 +1502,12 @@
   (apply (tree-future-modify-p) args))
 
 (define-syntax-rule (with-new-tree-future-env . bodies)
-  (let-values (((run modify) (tree-future-get)))
+  (let-values (((run modify wait) (tree-future-get)))
     (parameterize ((tree-future-run-p run)
                    (tree-future-modify-p modify))
-      . bodies)))
+      (with-bracket
+       (lambda (return)
+         (begin . bodies))
+       (lambda args
+         (wait))))))
 
