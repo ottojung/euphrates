@@ -108,11 +108,6 @@
 (define (unlines lns)
   (string-join lns "\n"))
 
-(define [~a x]
-  (with-output-to-string
-    (lambda []
-      (display x))))
-
 (define range
   (case-lambda
     ((start count)

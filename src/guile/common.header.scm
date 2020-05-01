@@ -80,6 +80,11 @@
 (define [printf fmt . args]
   (local-print fmt args))
 
+(define (~a x)
+  (with-output-to-string
+    (lambda ()
+      (display x))))
+
 (define time-get-monotonic-nanoseconds-timestamp
   (let [[time-to-nanoseconds
          (lambda [time]
