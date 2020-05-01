@@ -61,6 +61,6 @@
 (assertNorm (= in-main-count 3))
 
 ;; there is no guarantee that callbacks will finish.. but its very likely
-(usleep 100000)
+(usleep (normal->micro@unit 1/10))
 (assertNorm (= cb-count 300))
 
