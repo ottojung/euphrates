@@ -368,11 +368,12 @@
 ;; and do sleep when wait
 (define-values
   [universal-lockr! universal-unlockr!]
-  (let [[critical (make-uni-spinlock)]
+  (let [[critical (make-uni-spinlock-critical)]
         [h (make-hash-table)]]
     (values
      (lambda [resource]
-       (let ((sleep (dynamic-thread-sleep-p)))
+       (let ((sleep (dynamic-thread-sleep-p))
+             (timeout (dynamic-thread-wait-delay#us-p)))
          (let lp []
            (when
                (with-critical
@@ -383,7 +384,7 @@
                       (begin
                         (hash-set! h resource #t)
                         #f))))
-             (sleep (dynamic-thread-wait-delay#us-p))
+             (sleep timeout)
              (lp)))))
      (lambda [resource]
        (with-critical
