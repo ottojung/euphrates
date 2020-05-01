@@ -186,7 +186,7 @@
  (lambda []
    (printf "composite unlocked\n")))
 
-(np-thread-run!
+(with-np-thread-env#non-interruptible
  (printfln "hello")
 
  (define [kek]
@@ -202,9 +202,9 @@
                 (printfln "lol ended")
                 (begin
                   (when (= n 2)
-                    (np-thread-cancel! zulul-thread))
+                    (dynamic-thread-cancel zulul-thread))
                   (printfln "lol at ~a" n)
-                  (np-thread-yield)
+                  (dynamic-thread-yield)
                   (printfln "lol after ~a" n)
                   (loop (1+ n))))))
 
@@ -214,13 +214,13 @@
                 (printfln "zulul ended")
                 (begin
                   (printfln "zulul at ~a" n)
-                  (np-thread-yield)
+                  (dynamic-thread-yield)
                   (printfln "zulul after ~a" n)
                   (loop (1+ n))))))
 
- (np-thread-fork kek)
- (np-thread-fork lol)
- (set! zulul-thread (np-thread-fork zulul))
+ (dynamic-thread-spawn kek)
+ (dynamic-thread-spawn lol)
+ (set! zulul-thread (dynamic-thread-spawn zulul))
 
  (printfln "end"))
 

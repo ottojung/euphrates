@@ -941,134 +941,140 @@
 (define-rec np-thread-obj
   continuation)
 
-(define-values
-  [np-thread-list-add
-   np-thread-list-switch ;; pops thread from the top and sets `np-thread-current' = it
-   np-thread-list-init
-   np-thread-list-initialized?
-   np-thread-list-remove
-   np-thread-current
-   ]
-  (let* [[lst-p (make-parameter #f)]
-         [critical (make-uni-spinlock-critical)]
-         [current-thread (make-parameter #f)]]
-    (values
-     (lambda [th]
-       (with-critical
-        critical
-        (set-box! (lst-p) (cons th (unbox (lst-p)))))
-       th)
-     (lambda []
-       (with-critical
-        critical
-        (let* [[lst (unbox (lst-p))]
-               [head
-                (if (null? lst)
-                    'np-thread-empty-list
-                    (last lst))]]
-          (unless (null? lst)
-            (set-box! (lst-p) (list-init lst))
-            (set-box! (current-thread) head))
-          head)))
-     (lambda [body]
-       (parameterize [[lst-p (box (list))]
-                      [current-thread (box (np-thread-obj body))]]
-         (body)))
-     (lambda []
-       (if (lst-p) #t #f))
-     (lambda [predicate]
-       (with-critical
-        critical
-        (set-box! (lst-p)
-                  (filter (negate predicate)
-                          (unbox (lst-p))))))
-     (lambda [] (unbox (current-thread))))))
-
-(define-values
-  [np-thread-get-start-point
-   np-thread-set-start-point]
-  (let [[p (make-parameter (lambda [] 0))]]
-    (values
-     (lambda [] (p))
-     (lambda [value thunk]
-       (parameterize [[p value]]
-         (np-thread-list-init thunk))))))
-
-(define [np-thread-end]
-  (let [[p (np-thread-list-switch)]]
-    (if (eq? p 'np-thread-empty-list)
-        ((np-thread-get-start-point))
-        (begin
-          ((np-thread-obj-continuation p) #t)
-          (np-thread-end)))))
-
-(define [np-thread-yield]
-  (when (np-thread-list-initialized?)
-    (let* [[me (np-thread-current)]
-           [repl (call/cc
-                  (lambda [k]
-                    (set-np-thread-obj-continuation! me k)
-                    #f))]]
-      (unless repl
-        (np-thread-list-add me) ;; save
-        (np-thread-end)))))
-
-(define [np-thread-fork thunk]
-  (unless (np-thread-list-initialized?)
-    (throw 'np-thread-forking-before-run!
-           `(args: ,thunk)
-           `(tried to fork np-thread before np-thread-run!)))
-
-  (np-thread-list-add
-   (np-thread-obj
-    (lambda [tru]
-      (thunk)
-      (np-thread-end)))))
-
-(define-syntax-rule [np-thread-run! . thunk]
-  (call/cc
-   (lambda [k]
-     (np-thread-set-start-point
-      k
-      (lambda []
-       (begin . thunk)
-       (np-thread-end))))))
-
-;; Terminates np-thread
-;; If no arguments given, current thread will be terminated
-;; But if thread is provided, it will be removed from thread list (equivalent to termination if that thread is not the current one)
-;; Therefore, don't provide current thread as argument unless you really mean to
-(define np-thread-cancel!
-  (case-lambda
-    [[]
-     (np-thread-end)]
-    [[chosen]
-     (np-thread-list-remove (lambda [th] (eq? th chosen)))]))
-
-(define [np-thread-cancel-all!]
-  "
-  Terminates all threads on current thread group
-  "
-  (np-thread-list-remove (const #t))
-  (np-thread-end))
-
 ;; Disables critical zones because in non-interruptible mode
 ;; user can assure atomicity by themself
 ;; Locks still work as previusly,
 ;; but implementation must be changed,
 ;; because system mutexes will not allow to do yield
 ;; while waiting on mutex.
-(define (np-thread-parameterize-env#non-interruptible thunk)
+(define (np-thread-parameterize-env make-critical thunk)
+
+  (define-values
+      [np-thread-list-add
+       np-thread-list-switch ;; pops thread from the top and sets `np-thread-current' = it
+       np-thread-list-init
+       np-thread-list-initialized?
+       np-thread-list-remove
+       np-thread-current
+       ]
+    (let* [[lst-p (make-parameter #f)]
+           [critical (make-critical)]
+           [current-thread (make-parameter #f)]]
+      (values
+       (lambda [th]
+         (with-critical
+          critical
+          (set-box! (lst-p) (cons th (unbox (lst-p)))))
+         th)
+       (lambda []
+         (with-critical
+          critical
+          (let* [[lst (unbox (lst-p))]
+                 [head
+                  (if (null? lst)
+                      'np-thread-empty-list
+                      (last lst))]]
+            (unless (null? lst)
+              (set-box! (lst-p) (list-init lst))
+              (set-box! (current-thread) head))
+            head)))
+       (lambda [body]
+         (parameterize [[lst-p (box (list))]
+                        [current-thread (box (np-thread-obj body))]]
+           (body)))
+       (lambda []
+         (if (lst-p) #t #f))
+       (lambda [predicate]
+         (with-critical
+          critical
+          (set-box! (lst-p)
+                    (filter (negate predicate)
+                            (unbox (lst-p))))))
+       (lambda [] (unbox (current-thread))))))
+
+  (define-values
+      [np-thread-get-start-point
+       np-thread-set-start-point]
+    (let [[p (make-parameter (lambda [] 0))]]
+      (values
+       (lambda [] (p))
+       (lambda [value thunk]
+         (parameterize [[p value]]
+           (np-thread-list-init thunk))))))
+
+  (define [np-thread-end]
+    (let [[p (np-thread-list-switch)]]
+      (if (eq? p 'np-thread-empty-list)
+          ((np-thread-get-start-point))
+          (begin
+            ((np-thread-obj-continuation p) #t)
+            (np-thread-end)))))
+
+  (define [np-thread-yield]
+    (when (np-thread-list-initialized?)
+      (let* [[me (np-thread-current)]
+             [repl (call/cc
+                    (lambda [k]
+                      (set-np-thread-obj-continuation! me k)
+                      #f))]]
+        (unless repl
+          (np-thread-list-add me) ;; save
+          (np-thread-end)))))
+
+  (define [np-thread-fork thunk]
+    (unless (np-thread-list-initialized?)
+      (throw 'np-thread-forking-before-run!
+             `(args: ,thunk)
+             `(tried to fork np-thread before np-thread-run!)))
+
+    (np-thread-list-add
+     (np-thread-obj
+      (lambda [tru]
+        (thunk)
+        (np-thread-end)))))
+
+  (define-syntax-rule [np-thread-run! . thunk]
+    (call/cc
+     (lambda [k]
+       (np-thread-set-start-point
+        k
+        (lambda []
+          (begin . thunk)
+          (np-thread-end))))))
+
+  ;; Terminates np-thread
+  ;; If no arguments given, current thread will be terminated
+  ;; But if thread is provided, it will be removed from thread list (equivalent to termination if that thread is not the current one)
+  ;; Therefore, don't provide current thread as argument unless you really mean to
+  (define np-thread-cancel!
+    (case-lambda
+      [[]
+       (np-thread-end)]
+      [[chosen]
+       (np-thread-list-remove (lambda [th] (eq? th chosen)))]))
+
+  (define [np-thread-cancel-all!]
+    "
+  Terminates all threads on current thread group
+  "
+    (np-thread-list-remove (const #t))
+    (np-thread-end))
+
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
-                 (dynamic-thread-sleep-p universal-usleep)
+                 (dynamic-thread-cancel-p np-thread-cancel!)
                  (dynamic-thread-yield-p np-thread-yield)
-                 (dynamic-thread-critical-make-p
-                  (lambda ()
-                    (lambda (fn) (fn))))
+                 (dynamic-thread-sleep-p universal-usleep)
                  (dynamic-thread-mutex-make-p make-unique)
                  (dynamic-thread-mutex-lock!-p universal-lockr!)
-                 (dynamic-thread-mutex-unlock!-p universal-unlockr!))
+                 (dynamic-thread-mutex-unlock!-p universal-unlockr!)
+                 (dynamic-thread-critical-make-p
+                  (lambda ()
+                    (lambda (fn) (fn)))))
     (np-thread-run! (thunk))))
+
+(define-syntax-rule (with-np-thread-env#non-interruptible . bodies)
+  (np-thread-parameterize-env (lambda () (lambda (fn) (fn)))
+                              (lambda () . bodies)))
 
 ;;;;;;;;;;;;;;;
 ;; PROCESSES ;;

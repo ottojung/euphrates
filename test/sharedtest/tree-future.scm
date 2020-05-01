@@ -41,11 +41,11 @@
   (dynamic-thread-sleep (normal->micro@unit 10)))
 
 (with-new-tree-future-env
- (np-thread-parameterize-env#non-interruptible
-  main)
+ (with-np-thread-env#non-interruptible
+  (main))
 
- (np-thread-parameterize-env#non-interruptible
-  main))
+ (with-np-thread-env#non-interruptible
+  (main)))
 
 (with-new-tree-future-env
  ;; not parameterized

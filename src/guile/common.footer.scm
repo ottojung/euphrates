@@ -81,7 +81,7 @@
             (map
              (lambda [th]
                (system-async-mark
-                np-thread-yield
+                dynamic-thread-yield
                 th))
              lst)
             (usleep 900000) ;; TODO: [variable interrupt frequency]
@@ -116,11 +116,10 @@
   (i-thread-dont-yield ((@ [ice-9 threads] current-thread))))
 
 (define-syntax-rule [i-thread-run! . thunk]
-  (np-thread-run!
-   (dynamic-wind
-     i-thread-yield-me
-     (lambda [] (begin . thunk))
-     i-thread-dont-yield-me)))
+  (dynamic-wind
+    i-thread-yield-me
+    (lambda [] (begin . thunk))
+    i-thread-dont-yield-me))
 
 ;; For debug purposes
 (define-values
@@ -175,14 +174,15 @@
 ;; because system mutexes will not allow to do yield
 ;; while waiting on mutex. Locks are the same as for np-thread
 (define (i-thread-parameterize-env#interruptible thunk)
-  (parameterize ((dynamic-thread-spawn-p np-thread-fork)
-                 (dynamic-thread-sleep-p universal-usleep)
-                 (dynamic-thread-yield-p np-thread-yield)
-                 (dynamic-thread-critical-make
+  (parameterize ((dynamic-thread-critical-make-p
                   (lambda ()
                     (lambda (fn)
                       (i-thread-critical! (fn)))))
                  (dynamic-thread-mutex-make-p make-unique)
                  (dynamic-thread-mutex-lock!-p universal-lockr!)
                  (dynamic-thread-mutex-unlock!-p universal-unlockr!))
-    (thunk)))
+    (i-thread-run! (thunk))))
+
+(define-syntax-rule (with-i-thread-env#interruptible . bodies)
+  (i-thread-parameterize-env#interruptible
+   (lambda () . bodies)))
