@@ -4,9 +4,13 @@
 (define (cb1 . args)
   (printfln "cb 1: ~a" args))
 
+(define mut (make-uni-spinlock-critical))
+
 (define (child-cb-make n)
   (lambda args
-    (set! cb-count (1+ cb-count))
+    (with-critical
+     mut
+     (set! cb-count (1+ cb-count)))
     (printfln "\nchild~a-cb, total: ~a\n\n" n cb-count)))
 
 (define (child-make n)
