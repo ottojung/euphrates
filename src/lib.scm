@@ -398,6 +398,21 @@
         critical
         (hash-set! h resource #f))))))
 
+(define [universal-usleep micro-seconds]
+  (let* [[nano-seconds (micro->nano@unit micro-seconds)]
+         [start-time (time-get-monotonic-nanoseconds-timestamp)]
+         [end-time (+ start-time nano-seconds)]
+         [sleep-rate (dynamic-thread-wait-delay#us-p)]
+         [yield (dynamic-thread-yield-p)]]
+    (let lp []
+      (let [[t (time-get-monotonic-nanoseconds-timestamp)]]
+        (unless (> t end-time)
+          (let [[s (min sleep-rate
+                        (nano->micro@unit (- end-time t)))]]
+            (yield)
+            (usleep s)
+            (lp)))))))
+
 ;;;;;;;;;;;;
 ;; MONADS ;;
 ;;;;;;;;;;;;
@@ -1026,20 +1041,6 @@
        (begin . thunk)
        (np-thread-end))))))
 
-(define [np-thread-usleep micro-seconds]
-  (let* [[nano-seconds (micro->nano@unit micro-seconds)]
-         [start-time (time-get-monotonic-nanoseconds-timestamp)]
-         [end-time (+ start-time nano-seconds)]
-         [sleep-rate (dynamic-thread-wait-delay#us-p)]]
-    (let lp []
-      (let [[t (time-get-monotonic-nanoseconds-timestamp)]]
-        (unless (> t end-time)
-          (let [[s (min sleep-rate
-                        (nano->micro@unit (- end-time t)))]]
-            (np-thread-yield)
-            (usleep s)
-            (lp)))))))
-
 ;; Terminates np-thread
 ;; If no arguments given, current thread will be terminated
 ;; But if thread is provided, it will be removed from thread list (equivalent to termination if that thread is not the current one)
@@ -1066,7 +1067,8 @@
 ;; while waiting on mutex.
 (define (np-thread-parameterize-env#non-interruptible thunk)
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
-                 (dynamic-thread-sleep-p np-thread-usleep)
+                 (dynamic-thread-sleep-p universal-usleep)
+                 (dynamic-thread-yield-p np-thread-yield)
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p universal-lockr!)
                  (my-mutex-unlock!-p universal-unlockr!))

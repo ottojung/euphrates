@@ -60,9 +60,9 @@
 ;; NOTE:
 ;; * `my-mutex-lock!' is not interruptible
 ;;   Use `i-thread-critical!' to ensure that no interrupt will happen before `my-mutex-unlock!'
-;;   Or use `np-thread-lockr' and `np-thread-unlockr' instead
+;;   Or use `universal-lockr' and `universal-unlockr' instead
 ;; * `sleep' (`usleep') is not interruptible
-;;   use `np-thread-usleep' instead
+;;   use `universal-usleep' instead
 
 ;; TODO: [variable interrupt frequency] use this somehow
 (define global-interrupt-frequency-p (make-parameter 1000000))
@@ -176,7 +176,7 @@
 ;; while waiting on mutex. Locks are the same as for np-thread
 (define (i-thread-parameterize-env#interruptible thunk)
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
-                 (dynamic-thread-sleep-p np-thread-usleep)
+                 (dynamic-thread-sleep-p universal-usleep)
                  (my-make-mutex-p make-unique)
                  (my-mutex-lock!-p universal-lockr!)
                  (my-mutex-unlock!-p universal-unlockr!))
