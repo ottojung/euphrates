@@ -51,3 +51,6 @@
  ;; not parameterized
  (main))
 
+(assert (= in-main-count 3) "expected: 3, got: ~a" in-main-count)
+(assert (= cb-count 300) "expected: 300, got: ~a" cb-count)
+

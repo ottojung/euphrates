@@ -108,6 +108,18 @@
 (define (unlines lns)
   (string-join lns "\n"))
 
+(define-syntax assert
+  (syntax-rules ()
+    ((assert test)
+     (unless test
+       (throw 'assertion-fail
+              `(test: ,(quote test)))))
+    ((assert test . printf-args)
+     (unless test
+       (throw 'assertion-fail
+              `(test: ,(quote test))
+              `(description: ,(stringf . printf-args)))))))
+
 (define range
   (case-lambda
     ((start count)
