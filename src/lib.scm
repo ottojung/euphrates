@@ -356,10 +356,8 @@
   (critical-func
    (lambda [] . bodies)))
 
-(define sleep-until-period-p
-  (make-parameter (normal->micro@unit 1/100)))
 (define-syntax-rule [sleep-until condi . body]
-  (let ((period (sleep-until-period-p))
+  (let ((period (dynamic-thread-wait-delay#us-p))
         (dynamic-thread-sleep-func (dynamic-thread-sleep-p)))
     (do ()
         (condi)
