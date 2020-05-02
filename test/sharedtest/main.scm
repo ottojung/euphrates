@@ -61,12 +61,6 @@
 
 (printf "fn = ~a\n" ((fn i (* 2 i)) 5))
 
-(monadic log-monad
-         [[k d] (values 2 7)]
-         [a (+ k d)]
-         [b (* a 10)]
-         (* b b))
-
 (define [calc-default]
   (monadic (maybe-monad (fn x (= x 0)))
            [a (+ 2 7)]
@@ -76,20 +70,40 @@
 
 (assert-equal (calc-default) 0)
 
-(printf "dom parameterized = ~a\n"
-        (monadic-parameterize
-         (fn f fname
-             (lambda monadic-input
-               (let-values (((arg cont qvar qval qtags) (apply f monadic-input)))
-                 (values (const (1+ (arg))) cont qvar qval qtags))))
-         (calc-default)))
+(assert-equal
+ 1
+ (monadic-parameterize
+  (fn f fname
+      (lambda monadic-input
+        (let-values (((arg cont qvar qval qtags) (apply f monadic-input)))
+          (values (const (1+ (arg))) cont qvar qval qtags))))
+  (calc-default)))
 
-(printf "dom composed = ~a\n"
-  (monadic (compose log-monad (maybe-monad (fn x (= x 0))))
+(assert-equal
+ 0
+ (monadic (compose log-monad (maybe-monad (fn x (= x 0))))
+          [a (+ 2 7)]
+          [b (* a 10)]
+          [c (- b b)]
+          (+ 100 c)))
+
+(assert-equal
+ 100
+ (monadic log-monad
+          [a (+ 2 7)]
+          [b (* a 10)]
+          [c (- b b)]
+          (+ 100 c)))
+
+(assert-equal
+ 0
+ (with-monadic-right
+  (maybe-monad (fn x (= x 0)))
+  (monadic log-monad
            [a (+ 2 7)]
            [b (* a 10)]
            [c (- b b)]
-           (+ 100 c)))
+           (+ 100 c))))
 
 (let ((ran-always #f)
       (throwed #t))

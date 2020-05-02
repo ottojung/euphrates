@@ -517,13 +517,13 @@
   (parameterize [[monadic-global-parameter f]]
     (begin . body)))
 
-(define-syntax-rule [monadic-compose-left f . body]
+(define-syntax-rule [with-monadic-left f . body]
   (let ((new-monad
          (lambda (old-monad old-monad-quoted)
            (compose f old-monad))))
     (parameterize [[monadic-global-parameter new-monad]]
       (begin . body))))
-(define-syntax-rule [monadic-compose-right f . body]
+(define-syntax-rule [with-monadic-right f . body]
   (let ((new-monad
          (lambda (old-monad old-monad-quoted)
            (compose old-monad f))))
