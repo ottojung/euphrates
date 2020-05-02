@@ -62,8 +62,9 @@
   (thunk))
 
 (define [time-get-monotonic-nanoseconds-timestamp]
-  (* 1000 1000
-     (current-process-milliseconds)))
+  (ceiling
+   (* 1000000
+      (current-inexact-milliseconds))))
 
 (define [get-u8 from] (read-byte from))
 (define [put-u8 to byte] (write-byte byte to))
