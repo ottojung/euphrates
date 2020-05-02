@@ -195,6 +195,15 @@
 (assert-equal 55 (hell2 50))
 
 (assert-equal
+ 10
+ (call-with-finally
+  (lambda [return]
+    (printf "locked\n")
+    10)
+  (lambda []
+    (printf "unlocked\n"))))
+
+(assert-equal
  5
  (call-with-finally
   (lambda [return]
