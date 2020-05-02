@@ -62,7 +62,8 @@
 (printf "fn = ~a\n" ((fn i (* 2 i)) 5))
 
 (monadic log-monad
-         [a (+ 2 7)]
+         [[k d] (values 2 7)]
+         [a (+ k d)]
          [b (* a 10)]
          (* b b))
 
@@ -89,6 +90,41 @@
            [b (* a 10)]
            [c (- b b)]
            (+ 100 c)))
+
+(let ((ran-always #f)
+      (throwed #t))
+  (catch-any
+   (lambda ()
+     (monadic (except-monad)
+              [a (+ 2 7)]
+              [b (throw 'test-abort)]
+              [p (printfln "after kek") 'always]
+              [r (set! ran-always #t) 'always]
+              [c (- b b)]
+              (+ 100 c))
+     (set! throwed #f))
+   (lambda errs
+     (printfln "except-monad throwed: ~a" errs)))
+  (assert ran-always)
+  (assert throwed))
+
+(let ((ran-always #f)
+      (throwed #t))
+  (catch-any
+   (lambda ()
+     (monadic (compose log-monad (except-monad))
+              [a (+ 2 7)]
+              [[k d] (values 2 3)]
+              [[b y] (throw 'test-abort)]
+              [p (printfln "after kek") 'always]
+              [r (set! ran-always #t) 'always]
+              [c (- b b)]
+              (+ 100 c))
+     (set! throwed #f))
+   (lambda errs
+     (printfln "except-monad throwed: ~a" errs)))
+  (assert ran-always)
+  (assert throwed))
 
 (gfunc/define haha)
 

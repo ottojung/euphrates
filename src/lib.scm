@@ -478,7 +478,7 @@
     [(monadic-bare f body)
      (let-values
          (((r-x r-cont qvar qval qtags)
-           (f (const body)
+           (f (memconst body)
               identity
               (quote ())
               (quote body)
@@ -487,7 +487,7 @@
     [(monadic-bare f ((a . as) b . tags) body ...)
      (let-values
          (((r-x r-cont qvar qval qtags)
-           (f (lambda [] (call-with-values (lambda [] b) (lambda x x)))
+           (f (memconst (call-with-values (lambda [] b) (lambda x x)))
               (lambda [k]
                 (apply
                  (lambda [a . as]
@@ -517,19 +517,34 @@
   (parameterize [[monadic-global-parameter f]]
     (begin . body)))
 
+(define-syntax-rule [monadic-compose-left f . body]
+  (let ((new-monad
+         (lambda (old-monad old-monad-quoted)
+           (compose f old-monad))))
+    (parameterize [[monadic-global-parameter new-monad]]
+      (begin . body))))
+(define-syntax-rule [monadic-compose-right f . body]
+  (let ((new-monad
+         (lambda (old-monad old-monad-quoted)
+           (compose old-monad f))))
+    (parameterize [[monadic-global-parameter new-monad]]
+      (begin . body))))
+
 ;; with parameterization
 (define-syntax-rule [monadic fexpr . argv]
   (let* [[p (monadic-global-parameter)]
          [f fexpr]]
     (if p
-        (monadic-bare (p f (quote f)) . argv)
+        (monadic-bare (p f (quote fexpr)) . argv)
         (monadic-bare f . argv))))
 
 (define-syntax-rule [monadic-id . argv]
   (monadic identity-monad . argv))
 
-(define (monad-arg monad-input)
+(define (monad-arg-lazy monad-input)
   (first monad-input))
+(define (monad-arg monad-input)
+  ((monad-arg-lazy monad-input))) ;; NOTE: evaluates it right away
 (define (monad-cont monad-input)
   (second monad-input))
 (define (monad-qvar monad-input)
@@ -542,14 +557,14 @@
 (define (monad-last-val? monad-input)
   (null? (monad-qvar monad-input)))
 
-(define (monad-cret monad-input arg cont)
-  (values arg
+(define-syntax-rule (monad-cret monad-input arg cont)
+  (values (memconst arg)
           cont
           (monad-qvar monad-input)
           (monad-qval monad-input)
           (monad-qtags monad-input)))
-(define (monad-ret monad-input arg)
-  (values arg
+(define-syntax-rule (monad-ret monad-input arg)
+  (values (memconst arg)
           (monad-cont monad-input)
           (monad-qvar monad-input)
           (monad-qval monad-input)
@@ -560,7 +575,7 @@
          (len (if (list? qvar) (length qvar) 1)))
     (if (< len 2)
         arg
-        (const (replicate len (arg))))))
+        (replicate len (arg)))))
 (define (monad-replicate-multiple monad-input arg)
   (let* ((qvar (monad-qvar monad-input))
          (len (if (list? qvar) (length qvar) 1)))
@@ -577,27 +592,27 @@
                       monad-input
                      (if (null? exceptions)
                          (monad-arg monad-input)
-                         (memconst (apply throw 'except-monad exceptions)))))
+                         (apply throw 'except-monad exceptions))))
           (if (or (null? exceptions)
                   (memq 'always (monad-qtags monad-input)))
               (monad-ret monad-input
-                         (memconst (catch-any
-                                    (monad-arg monad-input)
-                                    (lambda args
-                                      (cons! args exceptions)
-                                      (monad-replicate-multiple
-                                       monad-input
-                                       'monad-except-default)))))
+                         (catch-any
+                          (monad-arg-lazy monad-input)
+                          (lambda args
+                            (cons! args exceptions)
+                            (monad-replicate-multiple
+                             monad-input
+                             'monad-except-default))))
               (monad-ret monad-input
                          (monad-handle-multiple
                           monad-input
-                         (const 'monad-except-default))))))))
+                          'monad-except-default)))))))
 
 (define log-monad
   (lambda monad-input
     (printf "(~a = ~a = ~a)\n"
             (monad-qvar monad-input)
-            ((monad-arg monad-input))
+            (monad-arg monad-input)
             (monad-qval monad-input))
     (apply values monad-input)))
 
@@ -606,10 +621,10 @@
 
 (define (maybe-monad predicate)
   (lambda monad-input
-    (let ((arg ((monad-arg monad-input))))
+    (let ((arg (monad-arg monad-input)))
       (if (predicate arg)
-          (monad-cret monad-input (const arg) identity)
-          (monad-ret  monad-input (const arg))))))
+          (monad-cret monad-input arg identity)
+          (monad-ret  monad-input arg)))))
 
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
