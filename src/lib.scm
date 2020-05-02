@@ -1186,7 +1186,7 @@
                      [param-name (generate-param-name #'name)])
          #'(define-values [name add-name param-name]
              (let [[internal-list (make-parameter '())]
-                   [critical (dynamic-thread-critical-make)]]
+                   [critical (make-uni-spinlock-critical)]]
                (values
                 (lambda args
                   (let [[m (find-first (lambda [p] (check-list-contract (car p) args)) (internal-list))]]
