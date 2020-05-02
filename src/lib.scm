@@ -1518,7 +1518,8 @@
 
        (recieve-loop
         (lambda ()
-          (let ((sleep (dynamic-thread-sleep-p)))
+          (let ((sleep (dynamic-thread-sleep-p))
+                (timeout (dynamic-thread-wait-delay#us-p)))
             (let lp ()
               (let ((val null))
                 (with-critical
@@ -1533,7 +1534,7 @@
               (if (hash-empty? futures-hash)
                   (set! work-thread #f)
                   (begin
-                    (sleep 100)
+                    (sleep timeout)
                     (lp)))))))
 
        (maybe-start-loopin
