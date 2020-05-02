@@ -648,31 +648,34 @@
                 (unless finally-executed?
                   (set! finally-executed? #t)
                   (apply finally args)))]]
-        (let ((ret
-               (catch-any
-                (lambda []
-                  (call/cc
-                   (lambda [k]
-                     (parameterize
-                         [[dynamic-stack
-                           (cons (cons k finally-wraped) (dynamic-stack))]]
-                       (expr (lambda argv
-                               (set! normal? #f)
 
-                               (let lp [[st (dynamic-stack)]]
-                                 (unless (null? st)
-                                   (let [[p (car st)]]
-                                     ((cdr p))
-                                     (when (not (eq? (car p) k))
-                                       (lp (cdr st))))))
+        (call-with-values
+            (lambda ()
+              (catch-any
+               (lambda []
+                 (call/cc
+                  (lambda [k]
+                    (parameterize
+                        [[dynamic-stack
+                          (cons (cons k finally-wraped) (dynamic-stack))]]
+                      (expr (lambda argv
+                              (set! normal? #f)
 
-                               (apply k argv)
-                               ))))))
-                (lambda args
-                  (set! err args)))))
-          (when normal? (finally-wraped))
-          (when err (apply throw err))
-          ret)))))
+                              (let lp [[st (dynamic-stack)]]
+                                (unless (null? st)
+                                  (let [[p (car st)]]
+                                    ((cdr p))
+                                    (when (not (eq? (car p) k))
+                                      (lp (cdr st))))))
+
+                              (apply k argv)
+                              ))))))
+               (lambda args
+                 (set! err args))))
+          (lambda ret
+            (when normal? (finally-wraped))
+            (when err (apply throw err))
+            (apply values ret)))))))
 
 (define [call-with-finally expr finally]
   "
