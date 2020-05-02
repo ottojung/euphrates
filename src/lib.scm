@@ -630,29 +630,31 @@
                 (unless finally-executed?
                   (set! finally-executed? #t)
                   (apply finally args)))]]
-        (catch-any
-          (lambda []
-            (call/cc
-             (lambda [k]
-               (parameterize
-                   [[dynamic-stack
-                     (cons (cons k finally-wraped) (dynamic-stack))]]
-                 (expr (lambda argv
-                         (set! normal? #f)
+        (let ((ret
+               (catch-any
+                (lambda []
+                  (call/cc
+                   (lambda [k]
+                     (parameterize
+                         [[dynamic-stack
+                           (cons (cons k finally-wraped) (dynamic-stack))]]
+                       (expr (lambda argv
+                               (set! normal? #f)
 
-                         (let lp [[st (dynamic-stack)]]
-                           (unless (null? st)
-                             (let [[p (car st)]]
-                               ((cdr p))
-                               (when (not (eq? (car p) k))
-                                 (lp (cdr st))))))
+                               (let lp [[st (dynamic-stack)]]
+                                 (unless (null? st)
+                                   (let [[p (car st)]]
+                                     ((cdr p))
+                                     (when (not (eq? (car p) k))
+                                       (lp (cdr st))))))
 
-                         (apply k argv)
-                         ))))))
-          (lambda args
-            (set! err args)))
-        (when normal? (finally-wraped))
-        (when err (apply throw err))))))
+                               (apply k argv)
+                               ))))))
+                (lambda args
+                  (set! err args)))))
+          (when normal? (finally-wraped))
+          (when err (apply throw err))
+          ret)))))
 
 (define [with-bracket expr finally]
   "
@@ -660,7 +662,7 @@
   `return' is a call/cc function, but it ensures that `finally' is called.
   Also, if exception is raised, `finally' executes.
   Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
-  Returns unspecified
+  Returns evaluated expr or re-throws an exception
 
   This is different from `with-bracket-dw' (dynamic-wind)
   because it executes `finally' before returning the control
