@@ -679,6 +679,7 @@
   Applies `return' function to expr.
   `return' is a call/cc function, but it ensures that `finally' is called.
   Also, if exception is raised, `finally' executes.
+  `finally' executes only once! No matter how many exits are done.
   Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
   Returns evaluated expr or re-throws an exception
 
