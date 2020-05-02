@@ -1388,7 +1388,7 @@
 ;; Initializes tree-future env using current threading model
 ;; Returns an interface for this environment
 (define (tree-future-get)
-  (let*
+  (letrec
       ((message-bin null) ;; TODO: replace by atomic queue
        (message-bin-lock (dynamic-thread-critical-make))
 
@@ -1422,9 +1422,7 @@
             (hash-remove! futures-hash (tree-future-current-index structure))
             (when set-finished?
               (set-tree-future-finished?! structure #t))
-            (send-message
-             'remove
-             (tree-future-parent-index structure)))))
+            (dispatch 'remove (tree-future-parent-index structure)))))
 
        (dispatch
         (lambda (type . args)
