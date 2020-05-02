@@ -305,7 +305,7 @@
         (evaled? #f))
     (lambda argv
       (unless evaled?
-        (set! evaled? #f)
+        (set! evaled? #t)
         (set! memory x))
       memory)))
 
