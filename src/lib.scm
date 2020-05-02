@@ -630,7 +630,7 @@
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
 
-(define [with-bracket-dw expr finally]
+(define [call-with-finally-dw expr finally]
   (call/cc
    (lambda [k]
      (dynamic-wind
@@ -638,7 +638,7 @@
        (lambda [] (expr k))
        finally))))
 
-(define with-bracket-lf
+(define call-with-finally-lf
   (let [[dynamic-stack (make-parameter (list))]]
     (lambda [expr finally]
       (let* [[err #f] [normal? #t]
@@ -674,7 +674,7 @@
           (when err (apply throw err))
           ret)))))
 
-(define [with-bracket expr finally]
+(define [call-with-finally expr finally]
   "
   Applies `return' function to expr.
   `return' is a call/cc function, but it ensures that `finally' is called.
@@ -682,14 +682,14 @@
   Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
   Returns evaluated expr or re-throws an exception
 
-  This is different from `with-bracket-dw' (dynamic-wind)
+  This is different from `call-with-finally-dw' (dynamic-wind)
   because it executes `finally' before returning the control
   and it does not catch any non local jumps except the `return' and throws
 
   expr ::= ((Any -> Any) -> Any)
   finally ::= (-> Any)
   "
-  (with-bracket-lf expr finally))
+  (call-with-finally-lf expr finally))
 
 ;;;;;;;;;;;;;;;;
 ;; STACK FLOW ;;
@@ -1584,7 +1584,7 @@
   (let-values (((run modify wait) (tree-future-get)))
     (parameterize ((tree-future-run-p run)
                    (tree-future-modify-p modify))
-      (with-bracket
+      (call-with-finally
        (lambda (return)
          (begin . bodies))
        (lambda args

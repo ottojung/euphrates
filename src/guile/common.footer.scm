@@ -163,9 +163,9 @@
 
 (define [i-thread-critical-b! thunk finally]
   "
-  Same as `i-thread-critical' but also puts `thunk' and `finally' to `with-bracket' clause
+  Same as `i-thread-critical' but also puts `thunk' and `finally' to `call-with-finally' clause
   "
-  (i-thread-critical! (with-bracket thunk finally)))
+  (i-thread-critical! (call-with-finally thunk finally)))
 
 ;; Critical zones relaxed - they don't need mutexes
 ;; but they do need to be disabled from interrupts

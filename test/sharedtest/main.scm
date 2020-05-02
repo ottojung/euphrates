@@ -196,7 +196,7 @@
 
 (assert-equal
  5
- (with-bracket
+ (call-with-finally
   (lambda [return]
     (printf "locked\n")
     (return 5)
@@ -207,7 +207,7 @@
 ;; (catch #t
 ;;   (lambda []
 
-;;     (with-bracket
+;;     (call-with-finally
 ;;      (lambda [return]
 ;;        (printf "locked 'ex\n")
 ;;        (throw 'kek)
@@ -218,18 +218,18 @@
 ;;   (lambda args
 ;;     (printf "~a\n" args)))
 
-(with-bracket
+(call-with-finally
  (lambda [return]
    (printf "composite locked\n")
 
    ;; (return 2)
 
-   (with-bracket
+   (call-with-finally
     (lambda [return2]
       (printf "composite locked 2\n")
       ;; (return 5)
 
-      (with-bracket
+      (call-with-finally
        (lambda [return3]
          (printf "composite locked 3\n")
          (return 5)
