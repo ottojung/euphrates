@@ -73,7 +73,7 @@
            [c (- b b)]
            (+ 100 c)))
 
-(printf "dom-default = ~a\n" (calc-default))
+(assertEqual (calc-default) 0)
 
 (printf "dom parameterized = ~a\n"
         (monadic-parameterize
@@ -92,36 +92,48 @@
 
 (gfunc/define haha)
 
-
 ;; (gfunc/instantiate-haha (list integer?) (lambda (i) (* i 2)))
 (gfunc/instance haha [integer?]
                 (fn i (* i 10)))
 
-(gfunc/instantiate-haha (list) (lambda () 2))
+(gfunc/instantiate-haha (list) (lambda () 'no-arguments))
 ;; (gfunc/instance haha []
 ;;                 (fn 2))
 
-(printf "haha = ~a\n" (haha))
-;; (printf "kekloop = ~a\n" kekloop)
-;; (printf "hahahelo = ~a\n" hahahelo)
-
-(printf "haha<int>(5) = ~a\n" (haha 5)) ;; TODO: fix
+(assertEqual 'no-arguments (haha))
+(assertEqual 50 (haha 5))
 
 (printfln "~a" (list-fold 1 (range 1 5) *))
 (printfln "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
 (printfln "~a" (lfold 1 (range 1 5) (* acc x)))
 
-(printfln (simplify-posix-path "/hello/../there/./bro/"))
-(printfln (append-posix-path "hello/there/" "bro"))
-(printfln (append-posix-path "hello/there" "bro"))
-(printfln (append-posix-path "hello/there" ".." "and/" "bro" "." "hello"))
-(printfln (simplify-posix-path (append-posix-path "hello/there" ".." "and/" "bro" "." "hello")))
+(assertEqual
+ (simplify-posix-path "/hello/../there/./bro/")
+ "/there/bro/")
+(assertEqual
+ (append-posix-path "hello/there/" "bro")
+ "hello/there/bro")
+(assertEqual
+ (append-posix-path "hello/there" "bro")
+ "hello/there/bro")
+(assertEqual
+ (append-posix-path "hello/there" ".." "and/" "bro" "." "hello")
+ "hello/there/../and/bro/./hello")
+(assertEqual
+ (simplify-posix-path
+  (append-posix-path "hello/there" ".." "and/" "bro" "." "hello"))
+ "hello/and/bro/hello")
 ;; (printfln (append-posix-path "hello/there" "/bro"))
 
-
-(printfln "rebased path1 = ~a" (path-rebase "hello/there/" "kek"))
-(printfln "rebased path2 = ~a" (path-rebase "hello/there/" "hello/kek/kek"))
-(printfln "rebased path3 = ~a" (path-rebase "hello/there/" "hello/here/kek"))
+(assertEqual
+  (path-rebase "hello/there/" "kek")
+  #f)
+(assertEqual
+  (path-rebase "hello/there/" "hello/kek/kek")
+  "hello/there/kek/kek")
+(assertEqual
+  (path-rebase "hello/there/" "hello/here/kek")
+  "hello/there/here/kek")
 
 (define [hell2 x]
   (with-return
@@ -130,16 +142,17 @@
    (return 55)
    (+ 2 x)))
 
-(printf "expect 55 : ~a\n" (hell2 50))
+(assertEqual 55 (hell2 50))
 
-
-(with-bracket
- (lambda [return]
-   (printf "locked\n")
-   (return 5)
-   (printf "should not happend\n"))
- (lambda []
-   (printf "unlocked\n")))
+(assertEqual
+ 5
+ (with-bracket
+  (lambda [return]
+    (printf "locked\n")
+    (return 5)
+    (printf "should not happend\n"))
+  (lambda []
+    (printf "unlocked\n"))))
 
 ;; (catch #t
 ;;   (lambda []

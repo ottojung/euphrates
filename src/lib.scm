@@ -162,6 +162,9 @@
     ((_ test . printf-args)
      (assert test . printf-args))))
 
+(define-syntax-rule (assertEqual a b . printf-args)
+  (assertNorm (equal? a b) . printf-args))
+
 (define range
   (case-lambda
     ((start count)
