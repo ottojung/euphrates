@@ -47,20 +47,20 @@
  (with-np-thread-env#non-interruptible
   (main))
 
- (assertNorm (= cb-count 100))
+ (assert-norm (= cb-count 100))
 
  (with-np-thread-env#non-interruptible
   (main)))
 
-(assertNorm (= cb-count 200))
+(assert-norm (= cb-count 200))
 
 (with-new-tree-future-env
  ;; not parameterized
  (main))
 
-(assertNorm (= in-main-count 3))
+(assert-norm (= in-main-count 3))
 
 ;; there is no guarantee that callbacks will finish.. but its very likely
 (usleep (normal->micro@unit 1/10))
-(assertNorm (= cb-count 300))
+(assert-norm (= cb-count 300))
 

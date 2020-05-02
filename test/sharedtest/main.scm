@@ -73,7 +73,7 @@
            [c (- b b)]
            (+ 100 c)))
 
-(assertEqual (calc-default) 0)
+(assert-equal (calc-default) 0)
 
 (printf "dom parameterized = ~a\n"
         (monadic-parameterize
@@ -100,38 +100,38 @@
 ;; (gfunc/instance haha []
 ;;                 (fn 2))
 
-(assertEqual 'no-arguments (haha))
-(assertEqual 50 (haha 5))
+(assert-equal 'no-arguments (haha))
+(assert-equal 50 (haha 5))
 
 (printfln "~a" (list-fold 1 (range 1 5) *))
 (printfln "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
 (printfln "~a" (lfold 1 (range 1 5) (* acc x)))
 
-(assertEqual
+(assert-equal
  (simplify-posix-path "/hello/../there/./bro/")
  "/there/bro/")
-(assertEqual
+(assert-equal
  (append-posix-path "hello/there/" "bro")
  "hello/there/bro")
-(assertEqual
+(assert-equal
  (append-posix-path "hello/there" "bro")
  "hello/there/bro")
-(assertEqual
+(assert-equal
  (append-posix-path "hello/there" ".." "and/" "bro" "." "hello")
  "hello/there/../and/bro/./hello")
-(assertEqual
+(assert-equal
  (simplify-posix-path
   (append-posix-path "hello/there" ".." "and/" "bro" "." "hello"))
  "hello/and/bro/hello")
 ;; (printfln (append-posix-path "hello/there" "/bro"))
 
-(assertEqual
+(assert-equal
   (path-rebase "hello/there/" "kek")
   #f)
-(assertEqual
+(assert-equal
   (path-rebase "hello/there/" "hello/kek/kek")
   "hello/there/kek/kek")
-(assertEqual
+(assert-equal
   (path-rebase "hello/there/" "hello/here/kek")
   "hello/there/here/kek")
 
@@ -142,9 +142,9 @@
    (return 55)
    (+ 2 x)))
 
-(assertEqual 55 (hell2 50))
+(assert-equal 55 (hell2 50))
 
-(assertEqual
+(assert-equal
  5
  (with-bracket
   (lambda [return]

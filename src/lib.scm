@@ -135,7 +135,7 @@
               `(test: ,(quote test))
               `(description: ,(stringf . printf-args)))))))
 
-(define-syntax assertNormBuf
+(define-syntax assert-norm-buf
   (syntax-rules ()
     ((_ orig buf (last-r))
      (let ((last last-r))
@@ -152,18 +152,18 @@
                 `(description: ,(stringf . printf-args))))))
     ((_ orig buf (x-r . xs-r) . printf-args)
      (let ((x x-r))
-       (assertNormBuf orig (x . buf) xs-r . printf-args)))))
+       (assert-norm-buf orig (x . buf) xs-r . printf-args)))))
 
 ;; reduces test to normal form by hand
-(define-syntax assertNorm
+(define-syntax assert-norm
   (syntax-rules ()
     ((_ (x . xs) . printf-args)
-     (assertNormBuf (x . xs) () (x . xs) . printf-args))
+     (assert-norm-buf (x . xs) () (x . xs) . printf-args))
     ((_ test . printf-args)
      (assert test . printf-args))))
 
-(define-syntax-rule (assertEqual a b . printf-args)
-  (assertNorm (equal? a b) . printf-args))
+(define-syntax-rule (assert-equal a b . printf-args)
+  (assert-norm (equal? a b) . printf-args))
 
 (define range
   (case-lambda
