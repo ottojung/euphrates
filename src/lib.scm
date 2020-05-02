@@ -1451,7 +1451,6 @@
                             (lambda () ((tree-future-context structure))))
                            (finish (lambda ()
                                      (send-message 'remove current-index)
-                                     (printfln "WAITING FOR FINISHED?")
                                      (sleep-until (tree-future-finished? structure)))))
                       (hash-set! futures-hash current-index structure)
                       (when parent
@@ -1477,8 +1476,6 @@
                 (logger "wrong number of arguments to 'start"))))
 
             ((remove)
-             (printfln "REMOVING")
-
              (match args
                (`(,index)
                 (let* ((structure (get-by-index index)))
@@ -1488,8 +1485,6 @@
                 (logger "wrong number of arguments to 'remove"))))
 
             ((cancel)
-             (printfln "CANCEL")
-
              (match args
                (`(,index ,argument)
                 (let* ((structure (get-by-index index)))
@@ -1505,7 +1500,6 @@
                 (logger "wrong number of arguments to 'remove"))))
 
             ((context) ;; also used for checking if future exists
-             (printfln "CONTEXT")
              (match args
                (`(,target-index ,transformer ,error-handler)
                 (let ((target (get-by-index target-index)))
