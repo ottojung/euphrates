@@ -1564,29 +1564,32 @@
                               initial-context)
                 (maybe-start-loopin)
                 target-index)))
-
-       (modify
-        (lambda (target-index transformation)
-          (send-message 'context
-                        target-index
-                        transformation
-                        (lambda (error)
-                          (logger "bad index")))))
        )
-    (values run modify wait-all)))
+    (values run send-message wait-all)))
+
+(define tree-future-send-message-p (make-parameter #f))
+(define (tree-future-send-message . args)
+  (apply (tree-future-send-message-p) args))
 
 (define tree-future-run-p (make-parameter #f))
 (define (tree-future-run . args)
   (apply (tree-future-run-p) args))
 
-(define tree-future-modify-p (make-parameter #f))
-(define (tree-future-modify . args)
-  (apply (tree-future-modify-p) args))
+(define (tree-future-modify target-index transformation)
+  (tree-future-send-message 'context
+                            target-index
+                            transformation
+                            (lambda (error)
+                              (printfln "bad index"))))
+
+(define (tree-future-cancel target-index . arguments)
+  (apply tree-future-send-message
+         (cons* 'cancel target-index arguments)))
 
 (define-syntax-rule (with-new-tree-future-env . bodies)
-  (let-values (((run modify wait) (tree-future-get)))
+  (let-values (((run send-message wait) (tree-future-get)))
     (parameterize ((tree-future-run-p run)
-                   (tree-future-modify-p modify))
+                   (tree-future-send-message-p send-message))
       (call-with-finally
        (lambda (return)
          (begin . bodies))
