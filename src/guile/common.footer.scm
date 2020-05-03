@@ -1,3 +1,18 @@
+
+;; depends on uni-spinlock
+(define local-print
+  (let [[critical (make-uni-spinlock-critical)]]
+    (lambda [fmt args]
+      (let [[err #f]]
+        (critical
+         (lambda []
+           (catch-any
+            (lambda []
+              (apply format (cons* #t fmt args)))
+            (lambda argv
+              (set! err argv)))))
+        (when err (apply throw err))))))
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; HASHED RECORDS ;;
 ;;;;;;;;;;;;;;;;;;;;

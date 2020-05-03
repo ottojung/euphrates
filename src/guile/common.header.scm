@@ -58,25 +58,6 @@
 (define [catch-any body handler]
   (catch #t body handler))
 
-(define local-print
-  (let [[critical-box (make-atomic-box #f)]]
-    (lambda [fmt args]
-      (atomic-box-compare-and-swap!
-       critical-box
-       #f
-       (make-uni-spinlock-critical))
-
-      (let [[err #f]
-            [critical (atomic-box-ref critical-box)]]
-        (critical
-         (lambda []
-           (catch-any
-            (lambda []
-              (apply format (cons* #t fmt args)))
-            (lambda argv
-              (set! err argv)))))
-        (when err (apply throw err))))))
-
 (define [printf fmt . args]
   (local-print fmt args))
 
