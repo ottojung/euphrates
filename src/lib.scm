@@ -1542,7 +1542,12 @@
                              memory))))
                       (logger "target doesnt exist"))))
                (else
-                (logger "wrong number of arguments to 'context")))))))
+                (logger "wrong number of arguments to 'context"))))
+
+            (else
+             (logger "bad op type"))
+
+            )))
 
        (recieve-loop
         (lambda ()
