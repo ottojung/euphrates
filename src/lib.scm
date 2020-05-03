@@ -1602,3 +1602,59 @@
        (lambda args
          (wait))))))
 
+;; task-oriented. Return child result, ignore callback
+
+(define-rec tree-future-task
+  touch-procedure
+  finished?-procedure
+  child-index)
+
+;; NOTE: if status != 'ok then throws exception
+(define (tree-future-run-task-thunk thunk)
+  (let ((finished? #f)
+        (results #f)
+        (status #f))
+
+    (define (callback structure cb-status . cb-results)
+      (set! results cb-results)
+      (set! status cb-status)
+      (set! finished? #t))
+
+    (define (wait)
+      (unless finished?
+        (sleep-until finished?)))
+
+    (define touch-procedure
+      (case-lambda
+        (()
+         (wait)
+         (case status
+           ((ok) (apply values results))
+           (else (throw 'tree-future-await-failed status results))))
+        ((type)
+         (wait)
+         (case type
+           ((no-throw)
+            (values status results))
+           (else
+            (throw 'unknown-touch-type type))))))
+
+    (define (finished?-procedure)
+      finished?)
+
+    (define child-index
+      (tree-future-run thunk callback #f))
+
+    (tree-future-task
+     touch-procedure
+     finished?-procedure
+     child-index)))
+
+(define-syntax-rule (tree-future-run-task . bodies)
+  (tree-future-run-task-thunk (lambda () . bodies)))
+
+(define tree-future-wait-task
+  (case-lambda
+    ((task)
+     ((tree-future-task-touch-procedure task)))
+    (tasks (map tree-future-wait-task tasks))))
