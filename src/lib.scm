@@ -411,6 +411,7 @@
   (critical-func
    (lambda [] . bodies)))
 
+
 (define-syntax-rule [sleep-until condi . body]
   (let ((period (dynamic-thread-wait-delay#us-p))
         (dynamic-thread-sleep-func (dynamic-thread-sleep-p)))
@@ -1385,8 +1386,9 @@
   children-list
   callback ;; (: tree-future -> result -> exit-code -> a) called on finish or on exception or if cancelled; if exception happend, some children may not be finished yet; it is safe to modify this structure after callback is called
   thread ;; running thread.  On normal exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
-  finished? ;; used for callback scheduling.  On normal exit (with or without error) `finished?` is #t, but when cancelled, `finished` is #f
+  finished? ;; set to true when (`evaluated?' or `cancelled?') and all of children are `finished?'
   evaluated? ;; set by child if body finished evaluating.  If cancelled, this still can be true if child makes it in time
+  cancelled? ;; set by manager thread, checked by child before callback.  Mutually exclusive with `finished?'
   context ;; thunk that evaluates contexts and returns it.  #memoized
   )
 
@@ -1425,13 +1427,13 @@
              (cons type-args message-bin)))))
 
        (remove-future-sync
-        (lambda (structure cancelled?)
-          (when (and (or cancelled? (tree-future-evaluated? structure))
+        (lambda (structure)
+          (when (and (or (tree-future-evaluated? structure)
+                         (tree-future-cancelled? structure))
                      (and-map (lambda (child-index) (not (get-by-index child-index)))
                               (tree-future-children-list structure)))
             (hash-remove! futures-hash (tree-future-current-index structure))
-            (unless cancelled?
-              (set-tree-future-finished?! structure #t))
+            (set-tree-future-finished?! structure #t)
             (dispatch 'remove (tree-future-parent-index structure)))))
 
        (dispatch
@@ -1454,8 +1456,7 @@
                                                    null
                                                    callback
                                                    #f
-                                                   #f
-                                                   #f
+                                                   #f #f #f
                                                    context))
                            (eval-context
                             (lambda () ((tree-future-context structure)))))
@@ -1486,7 +1487,8 @@
                               (set-tree-future-evaluated?! structure #t)
                               (send-message 'remove structure)
                               (sleep-until (tree-future-finished? structure))
-                              (apply callback (cons* structure status results))))))))))
+                              (unless (tree-future-cancelled? structure)
+                                (apply callback (cons* structure status results)))))))))))
                (else
                 (logger "wrong number of arguments to 'start"))))
 
@@ -1494,10 +1496,10 @@
              (match args
                (`(,index)
                 (if (tree-future? index)
-                    (remove-future-sync index #f)
+                    (remove-future-sync index)
                     (let ((structure (get-by-index index)))
                       (when structure
-                        (remove-future-sync structure #f)))))
+                        (remove-future-sync structure)))))
                (else
                 (logger "wrong number of arguments to 'remove"))))
 
@@ -1509,10 +1511,12 @@
                    (let* ((structure (get-by-index index)))
                      (if structure
                          (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
+                           (set-tree-future-cancelled?! structure #t)
                            (dynamic-thread-cancel (tree-future-thread structure))
-                           (remove-future-sync structure #t) ;; NOTE: removes but callback will not be called
+                           (remove-future-sync structure) ;; NOTE: removes but callback will not be called
                            (dynamic-thread-spawn
                             (lambda ()
+                              (sleep-until (tree-future-finished? structure))
                               (apply (tree-future-callback structure)
                                      (cons* structure 'cancel arguments)))))
                          (logger "bad index"))))))
