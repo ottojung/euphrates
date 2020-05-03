@@ -1518,6 +1518,7 @@
                      (if structure
                          (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
                            (dynamic-thread-cancel (tree-future-thread structure))
+                           (set-tree-future-evaluated?! structure #t) ;; NOTE: when cancelled, evaluated? is #t
                            (remove-future-sync structure #f) ;; NOTE: removes but callback will not be called
                            (dynamic-thread-spawn
                             (lambda ()
