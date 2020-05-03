@@ -1505,7 +1505,7 @@
 
             ((context) ;; also used for checking if future exists
              (match args
-               (`(,target-index ,transformer ,error-handler)
+               (`(,target-index ,transformer)
                 (let ((target (get-by-index target-index)))
                   (if target
                       (let ((current (tree-future-context target)))
@@ -1518,7 +1518,7 @@
                                (set! saved? #t)
                                (set! memory (transformer (current))))
                              memory))))
-                      (error-handler 'doesnt-exist))))
+                      (logger "target doesnt exist"))))
                (else
                 (logger "wrong number of arguments to 'context")))))))
 
@@ -1578,9 +1578,7 @@
 (define (tree-future-modify target-index transformation)
   (tree-future-send-message 'context
                             target-index
-                            transformation
-                            (lambda (error)
-                              (printfln "bad index"))))
+                            transformation))
 
 (define (tree-future-cancel target-index . arguments)
   (apply tree-future-send-message
