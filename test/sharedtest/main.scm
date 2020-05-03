@@ -105,6 +105,28 @@
            [c (- b b)]
            (+ 100 c))))
 
+(define count-monad-counter 0)
+(define count-monad
+  (lambda monad-input
+    (set! count-monad-counter
+      (1+ count-monad-counter))
+    (apply values monad-input)))
+
+(with-monadic-left
+ count-monad
+ (assert-equal
+  0
+  (with-monadic-right
+   (maybe-monad (fn x (= x 0)))
+   (monadic log-monad
+            [a (+ 2 7)]
+            [b (* a 10)]
+            [c (- b b)]
+            [d (+ 2 3)]
+            (+ 100 c)))))
+
+(assert-equal 3 count-monad-counter)
+
 (let ((ran-always #f)
       (throwed #t))
   (catch-any

@@ -518,17 +518,25 @@
     (begin . body)))
 
 (define-syntax-rule [with-monadic-left f . body]
-  (let ((new-monad
-         (lambda (old-monad old-monad-quoted)
-           (compose f old-monad))))
-    (parameterize [[monadic-global-parameter new-monad]]
-      (begin . body))))
+  (let ((current-monad (monadic-global-parameter)))
+    (let ((new-monad
+           (lambda (old-monad old-monad-quoted)
+             (let ((applied (if current-monad
+                                (current-monad old-monad old-monad-quoted)
+                                old-monad)))
+               (compose f applied)))))
+      (parameterize [[monadic-global-parameter new-monad]]
+        (begin . body)))))
 (define-syntax-rule [with-monadic-right f . body]
-  (let ((new-monad
-         (lambda (old-monad old-monad-quoted)
-           (compose old-monad f))))
-    (parameterize [[monadic-global-parameter new-monad]]
-      (begin . body))))
+  (let ((current-monad (monadic-global-parameter)))
+    (let ((new-monad
+           (lambda (old-monad old-monad-quoted)
+             (let ((applied (if current-monad
+                                (current-monad old-monad old-monad-quoted)
+                                old-monad)))
+               (compose applied f)))))
+      (parameterize [[monadic-global-parameter new-monad]]
+        (begin . body)))))
 
 ;; with parameterization
 (define-syntax-rule [monadic fexpr . argv]
