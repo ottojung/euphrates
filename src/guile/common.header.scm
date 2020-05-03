@@ -30,6 +30,7 @@
                ;; atomic-box-swap! ;; racket doesn't have this
                ;; atomic-box-compare-and-swap!) ;; racket doesn't have this
                )
+  #:re-export (box unbox box? set-box!)
   )
 
 (define null (list))
