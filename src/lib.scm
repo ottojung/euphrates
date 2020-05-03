@@ -1427,6 +1427,7 @@
        (dispatch
         (lambda (type . args)
           (case type
+
             ((start)
              (match args
                (`(,parent-index
@@ -1446,10 +1447,7 @@
                                                    #f
                                                    context))
                            (eval-context
-                            (lambda () ((tree-future-context structure))))
-                           (finish (lambda ()
-                                     (send-message 'remove current-index)
-                                     (sleep-until (tree-future-finished? structure)))))
+                            (lambda () ((tree-future-context structure)))))
                       (hash-set! futures-hash current-index structure)
                       (when parent
                         (set-tree-future-children-list!
@@ -1462,14 +1460,21 @@
                         (lambda ()
                           (parameterize ((tree-future-current current-index)
                                          (tree-future-eval-context-p eval-context))
-                            (catch-any
-                             (lambda ()
-                               (let ((result (target-procedure)))
-                                 (finish)
-                                 (callback structure result 'ok)))
-                             (lambda err
-                               (finish)
-                               (callback structure err 'error))))))))))
+                            (let ((results #f)
+                                  (status 'undefined))
+                              (catch-any
+                               (lambda ()
+                                 (call-with-values
+                                     target-procedure
+                                   (lambda vals
+                                     (set! status 'ok)
+                                     (set! results vals))))
+                               (lambda err
+                                 (set! status 'error)
+                                 (set! results err)))
+                              (send-message 'remove current-index)
+                              (sleep-until (tree-future-finished? structure))
+                              (apply callback (cons* structure status results))))))))))
                (else
                 (logger "wrong number of arguments to 'start"))))
 
@@ -1483,19 +1488,20 @@
                 (logger "wrong number of arguments to 'remove"))))
 
             ((cancel)
-             (match args
-               (`(,index ,argument)
-                (let* ((structure (get-by-index index)))
-                  (if structure
-                      (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
-                        (dynamic-thread-cancel (tree-future-thread structure))
-                        (remove-future-sync structure #f) ;; NOTE: removes but callback will not be called
-                        (dynamic-thread-spawn
-                         (lambda ()
-                           ((tree-future-callback structure) structure argument 'cancel))))
-                      (logger "bad index"))))
-               (else
-                (logger "wrong number of arguments to 'remove"))))
+             (if (null? args)
+                 (logger "wrong number of arguments to 'remove")
+                 (let ((index (car args))
+                       (arguments (cdr args)))
+                   (let* ((structure (get-by-index index)))
+                     (if structure
+                         (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
+                           (dynamic-thread-cancel (tree-future-thread structure))
+                           (remove-future-sync structure #f) ;; NOTE: removes but callback will not be called
+                           (dynamic-thread-spawn
+                            (lambda ()
+                              (apply (tree-future-callback structure)
+                                     (cons* structure 'cancel arguments)))))
+                         (logger "bad index"))))))
 
             ((context) ;; also used for checking if future exists
              (match args
