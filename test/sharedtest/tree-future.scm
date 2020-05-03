@@ -1,21 +1,46 @@
 
-(define cb-count 0)
+(define CHILD-COUNT 100)
 
-(define (cb1 . args)
-  (printfln "cb 1: ~a" args))
+(define body-count 0)
+
+(define failed #t)
 
 (define mut (make-uni-spinlock-critical))
 
+(define (main-cb structure status . args)
+  (set! failed #t)
+
+  (with-critical
+   mut
+   (assert-equal body-count CHILD-COUNT)
+   (set! body-count 0))
+
+  (set! failed #f)
+
+  (printfln "main cb: ~a ~a" status args))
+
 (define (child-cb-make n)
-  (lambda args
-    (with-critical
-     mut
-     (set! cb-count (1+ cb-count)))))
+  (lambda (structure status . args)
+    ;; (printfln "child~a-cb: ~a ~a" n status args)
+    (set! failed #t)
+    (assert-equal status 'ok)
+    (set! failed #f)
+    ))
 
 (define (child-make n)
   (lambda ()
-    (printfln "child~a" n)
-    (dynamic-thread-sleep (normal->micro@unit 3))))
+    (dynamic-thread-sleep (normal->micro@unit 3))
+
+    (define t1 (tree-future-run-task 2))
+    (define t2 (tree-future-run-task 3))
+    (define re (tree-future-wait-task t1 t2))
+    (define s (apply + re))
+    (assert-equal s 5)
+
+    ;; (printfln "child ~a" n)
+    (with-critical
+     mut
+     (set! body-count (1+ body-count)))))
 
 (define (run-nth-child n)
   (tree-future-run
@@ -23,14 +48,14 @@
    (child-cb-make n)
    #f))
 
-(define (fn1)
+(define (main-body)
 
   (for-each
    (lambda (i)
      (run-nth-child i))
-   (range 100))
+   (range CHILD-COUNT))
 
-  (printfln "fn 1"))
+  (printfln "main body"))
 
 (define in-main-count 0)
 
@@ -38,8 +63,8 @@
   (set! in-main-count (1+ in-main-count))
   (printfln "in main ~a" in-main-count)
 
-  (tree-future-run fn1
-                   cb1
+  (tree-future-run main-body
+                   main-cb
                    #f)
   (dynamic-thread-sleep (normal->micro@unit 10)))
 
@@ -47,20 +72,13 @@
  (with-np-thread-env#non-interruptible
   (main))
 
- (assert-norm (= cb-count 100))
-
  (with-np-thread-env#non-interruptible
   (main)))
-
-(assert-norm (= cb-count 200))
 
 (with-new-tree-future-env
  ;; not parameterized
  (main))
 
-(assert-norm (= in-main-count 3))
-
-;; there is no guarantee that callbacks will finish.. but its very likely
-(usleep (normal->micro@unit 1/10))
-(assert-norm (= cb-count 300))
+(assert (not failed))
+(assert-equal in-main-count 3)
 
