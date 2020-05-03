@@ -1386,6 +1386,7 @@
   callback ;; (: tree-future -> result -> exit-code -> a) called on finish or on exception or if cancelled; if exception happend, some children may not be finished yet; it is safe to modify this structure after callback is called
   thread ;; running thread.  On normal exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
   finished? ;; used for callback scheduling.  On normal exit (with or without error) `finished?` is #t, but when cancelled, `finished` is #f
+  evaluated? ;; set by child if body finished evaluating
   context ;; thunk that evaluates contexts and returns it.  #memoized
   )
 
@@ -1425,8 +1426,9 @@
 
        (remove-future-sync
         (lambda (structure set-finished?)
-          (when (and-map (lambda (child-index) (not (get-by-index child-index)))
-                         (tree-future-children-list structure))
+          (when (and (tree-future-evaluated? structure)
+                     (and-map (lambda (child-index) (not (get-by-index child-index)))
+                              (tree-future-children-list structure)))
             (hash-remove! futures-hash (tree-future-current-index structure))
             (when set-finished?
               (set-tree-future-finished?! structure #t))
@@ -1451,6 +1453,7 @@
                                                    current-index
                                                    null
                                                    callback
+                                                   #f
                                                    #f
                                                    #f
                                                    context))
@@ -1480,7 +1483,7 @@
                                (lambda err
                                  (set! status 'error)
                                  (set! results err)))
-                              (send-message 'remove current-index)
+                              (send-message 'remove-self structure)
                               (sleep-until (tree-future-finished? structure))
                               (apply callback (cons* structure status results))))))))))
                (else
@@ -1492,6 +1495,17 @@
                 (let* ((structure (get-by-index index)))
                   (when structure
                     (remove-future-sync structure #t))))
+               (else
+                (logger "wrong number of arguments to 'remove"))))
+
+            ((remove-self)
+             (match args
+               (`(,structure)
+                (if (tree-future? structure)
+                    (begin
+                      (set-tree-future-evaluated?! structure #t)
+                      (remove-future-sync structure #t))
+                    (logger "not a tree structure")))
                (else
                 (logger "wrong number of arguments to 'remove"))))
 
