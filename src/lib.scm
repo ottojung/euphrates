@@ -1465,7 +1465,7 @@
                (cancel-children structure args)
                (let ((parent (get-by-index (tree-future-parent-index structure))))
                  (when parent
-                   (cance-future-sync parent 'all (list 'child-cancelled-with args)))))))))
+                   (cancel-future-sync parent 'all (list 'child-cancelled-with args)))))))))
 
        (children-finished?
         (lambda (structure)
