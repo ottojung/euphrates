@@ -1430,7 +1430,7 @@
         (lambda (structure)
           (when (and (or (tree-future-evaluated? structure)
                          (tree-future-cancelled? structure))
-                     (and-map (lambda (child-index) (not (get-by-index child-index)))
+                     (and-map tree-future-finished?
                               (tree-future-children-list structure)))
             (hash-remove! futures-hash (tree-future-current-index structure))
             (set-tree-future-finished?! structure #t)
@@ -1464,7 +1464,7 @@
                       (when parent
                         (set-tree-future-children-list!
                          parent
-                         (cons current-index
+                         (cons structure
                                (tree-future-children-list parent))))
                       (set-tree-future-thread!
                        structure
