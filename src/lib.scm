@@ -1683,52 +1683,74 @@
 
 (define-rec tree-future-task
   touch-procedure
-  finished?-procedure
   child-index)
 
 ;; NOTE: if status != 'ok then throws exception
-(define (tree-future-run-task-thunk thunk finally)
+(define (tree-future-run-task-thunk thunk user-finally user-callback initial-context)
   (let ((finished? #f)
+        (evaluated? #f)
         (results #f)
         (status #f))
 
     (define (callback structure cb-status . cb-results)
+      (set! finished? #t)
+      (when user-callback
+        (apply user-callback (cons* structure cb-status cb-results))))
+
+    (define (finally structure cb-status . cb-results)
       (set! results cb-results)
       (set! status cb-status)
-      (set! finished? #t))
+      (set! evaluated? #t)
+      (when user-finally
+        (apply user-finally (cons* structure cb-status cb-results))))
 
-    (define (wait)
-      (unless finished?
-        (sleep-until finished?)))
+    (define (wait target)
+      (case target
+        ((evaluation)
+         (unless evaluated?
+           (sleep-until evaluated?)))
+        ((children)
+         (unless finished?
+           (sleep-until finished?)))))
+
+    (define (done? target)
+      (case target
+        ((evaluation) evaluated?)
+        ((children) finished?)))
 
     (define touch-procedure
       (case-lambda
         (()
-         (wait)
-         (case status
-           ((ok) (apply values results))
-           (else (throw 'tree-future-await-failed status results))))
-        ((type)
-         (wait)
+         (touch-procedure 'default 'children))
+
+        ((type target)
          (case type
+
+           ((default)
+            (wait target)
+            (case status
+              ((ok) (apply values results))
+              (else (throw 'tree-future-await-failed status results))))
+
            ((no-throw)
+            (wait target)
             (values status results))
+
+           ((check)
+            (values (done? target) status results))
+
            (else
             (throw 'unknown-touch-type type))))))
 
-    (define (finished?-procedure)
-      finished?)
-
     (define child-index
-      (tree-future-run thunk finally callback #f))
+      (tree-future-run thunk finally callback initial-context))
 
     (tree-future-task
      touch-procedure
-     finished?-procedure
      child-index)))
 
 (define-syntax-rule (tree-future-run-task . bodies)
-  (tree-future-run-task-thunk (lambda () . bodies) #f))
+  (tree-future-run-task-thunk (lambda () . bodies) #f #f #f))
 
 (define tree-future-wait-task
   (case-lambda
