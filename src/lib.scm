@@ -197,10 +197,10 @@
 
 (define [make-unique]
   "Returns procedure that returns #t if applied to itself, #f otherwise"
-  (let ((me #f))
-    (set! me (lambda (other)
-               (eq? other me)))
-    me))
+  (let ((euphrates-unique #f))
+    (set! euphrates-unique (lambda (other)
+               (eq? other euphrates-unique)))
+    euphrates-unique))
 
 (define [generic-fold first-f rest-f stop-predicate initial collection function]
   (let lp [[acc initial]
