@@ -1426,6 +1426,32 @@
            (set! message-bin
              (cons type-args message-bin)))))
 
+       (cancel-children
+        (lambda (structure args)
+          (for-each (lambda (child)
+                      (cancel-future-sync child 'down (list 'parent-cancelled-with args)))
+                    (tree-future-children-list structure))))
+
+       (cancel-future-sync
+        (lambda (structure mode args)
+          (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
+            (set-tree-future-cancelled?! structure #t)
+            (dynamic-thread-cancel (tree-future-thread structure))
+            (remove-future-sync structure) ;; NOTE: removes but callback will not be called
+            (dynamic-thread-spawn
+             (lambda ()
+               (sleep-until (tree-future-finished? structure))
+               (apply (tree-future-callback structure)
+                      (cons* structure 'cancel args))))
+            (case mode
+              ((single) 0)
+              ((down) (cancel-children structure args))
+              ((all)
+               (cancel-children structure args)
+               (let ((parent (get-by-index (tree-future-parent-index structure))))
+                 (when parent
+                   (cance-future-sync parent 'all (list 'child-cancelled-with args)))))))))
+
        (remove-future-sync
         (lambda (structure)
           (when (and (or (tree-future-evaluated? structure)
@@ -1508,22 +1534,19 @@
                 (logger "wrong number of arguments to 'remove"))))
 
             ((cancel)
-             (if (null? args)
+             (if (or (null? args) (null? (cdr args)))
                  (logger "wrong number of arguments to 'remove")
                  (let ((index (car args))
-                       (arguments (cdr args)))
-                   (let* ((structure (get-by-index index)))
-                     (if structure
-                         (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
-                           (set-tree-future-cancelled?! structure #t)
-                           (dynamic-thread-cancel (tree-future-thread structure))
-                           (remove-future-sync structure) ;; NOTE: removes but callback will not be called
-                           (dynamic-thread-spawn
-                            (lambda ()
-                              (sleep-until (tree-future-finished? structure))
-                              (apply (tree-future-callback structure)
-                                     (cons* structure 'cancel arguments)))))
-                         (logger "bad index"))))))
+                       (mode (cadr args))
+                       (arguments (cddr args)))
+                   (case mode
+                     ((single down all)
+                      (let* ((structure (get-by-index index)))
+                        (if structure
+                            (cancel-future-sync structure mode args)
+                            (logger "bad index"))))
+                     (else
+                      (logger "bad mode"))))))
 
             ((context) ;; also used for checking if future exists
              (match args
