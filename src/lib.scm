@@ -1429,6 +1429,9 @@
 
        (finish
         (lambda (structure status results)
+          (send-message 'remove structure)
+          (sleep-until (tree-future-children-finished? structure))
+
           (let ((errs #f))
             (catch-any
              (lambda ()
@@ -1453,10 +1456,8 @@
                  (tree-future-evaluated?#box structure)
                  #f 'cancelled) ;; NOTE: do not cancel callbacks!
             (dynamic-thread-cancel (tree-future-thread structure))
-            (remove-future-sync structure) ;; NOTE: removes but callback will not be called
             (dynamic-thread-spawn
              (lambda ()
-               (sleep-until (tree-future-children-finished? structure))
                (finish structure 'cancel args)))
             (case mode
               ((single) 0)
@@ -1536,9 +1537,6 @@
                                     (when (atomic-box-compare-and-set!
                                            (tree-future-evaluated?#box structure)
                                            #f #t)
-                                      (send-message 'remove structure)
-                                      (sleep-until (tree-future-children-finished? structure))
-
                                       (finish structure status results))))))))))))
                (else
                 (logger "wrong number of arguments to 'start"))))
