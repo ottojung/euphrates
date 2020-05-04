@@ -25,6 +25,9 @@
     (set! failed #t)
     (assert-equal status 'ok)
     (set! failed #f)
+    (with-critical
+     mut
+     (set! body-count (1+ body-count)))
     ))
 
 (define (child-make n)
@@ -36,11 +39,8 @@
     (define re (tree-future-wait-task t1 t2))
     (define s (apply + re))
     (assert-equal s 5)
-
     ;; (printfln "child ~a" n)
-    (with-critical
-     mut
-     (set! body-count (1+ body-count)))))
+    ))
 
 (define (run-nth-child n)
   (tree-future-run

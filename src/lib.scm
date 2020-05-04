@@ -1365,7 +1365,7 @@
 
 ;; Futures, but
 ;; * form trees
-;;   Tree-future is finished when its body is evaluated
+;;   Tree-future is finished when its body and callback is evaluated
 ;;   and all of its children are finished
 ;; * multiplatform
 ;;   Supports different threading models
@@ -1375,6 +1375,7 @@
 ;;   Can be intrrupted at any moment
 ;;   Root is cancelled first then its nodes
 ;;   May not be supported by threading model
+;;   Only body is cancellable (and callback is guaranteed to execute *eventually*, even on cancel)
 ;; * stateful
 ;;   Provides functionality to modify
 ;;   future-local state.
@@ -1384,11 +1385,12 @@
   parent-index
   current-index
   children-list
-  callback ;; (: tree-future -> exit-status -> results... -> a) called on finish or on exception or if cancelled; if exception happend, some children may not be finished yet; it is safe to modify this structure after callback is called
-  thread ;; running thread.  On normal exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
-  finished? ;; set to true when (`evaluated?' or `cancelled?') and all of children are `finished?'
-  evaluated? ;; set by child if body finished evaluating.  If cancelled, this still can be true if child makes it in time
-  cancelled? ;; set by manager thread, checked by child before callback
+  callback ;; (: tree-future -> exit-status -> results... -> a) called on finish or on exception or on `cancelled?', after all children are `finished?'; it is safe to modify this structure after callback is called
+  thread ;; body thread.  On non-cancel exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
+  evaluated? ;; set when body finished evaluating (either with a throw to error or without).  Could be true even if was `cancelled?' because child can make it in time; it is a safe race though
+  children-finished? ;; set when all children are `finished?'. Checked after `evaluated?'
+  finished? ;; set when callback finished evaluating
+  cancelled? ;; set when 'cancel was sent to child and child was not `evaluated?'
   context ;; thunk that evaluates contexts and returns it.  #memoized
   )
 
@@ -1426,6 +1428,20 @@
            (set! message-bin
              (cons type-args message-bin)))))
 
+       (finish
+        (lambda (structure status results)
+          (let ((errs #f))
+            (catch-any
+             (lambda ()
+               (apply (tree-future-callback structure)
+                      (cons* structure status results)))
+             (lambda err
+               (set! errs err)))
+            (set-tree-future-finished?! structure #t)
+            (send-message 'remove structure)
+            (when errs
+              (apply throw errs)))))
+
        (cancel-children
         (lambda (structure args)
           (for-each (lambda (child)
@@ -1434,15 +1450,14 @@
 
        (cancel-future-sync
         (lambda (structure mode args)
-          (unless (tree-future-finished? structure) ;; NOTE: do not cancel callback!
+          (unless (tree-future-evaluated? structure) ;; NOTE: do not cancel callback!
             (set-tree-future-cancelled?! structure #t)
             (dynamic-thread-cancel (tree-future-thread structure))
             (remove-future-sync structure) ;; NOTE: removes but callback will not be called
             (dynamic-thread-spawn
              (lambda ()
-               (sleep-until (tree-future-finished? structure))
-               (apply (tree-future-callback structure)
-                      (cons* structure 'cancel args))))
+               (sleep-until (tree-future-children-finished? structure))
+               (finish structure 'cancel args)))
             (case mode
               ((single) 0)
               ((down) (cancel-children structure args))
@@ -1452,15 +1467,18 @@
                  (when parent
                    (cance-future-sync parent 'all (list 'child-cancelled-with args)))))))))
 
+       (children-finished?
+        (lambda (structure)
+          (and-map tree-future-finished?
+                   (tree-future-children-list structure))))
+
        (remove-future-sync
         (lambda (structure)
-          (when (and (or (tree-future-evaluated? structure)
-                         (tree-future-cancelled? structure))
-                     (and-map tree-future-finished?
-                              (tree-future-children-list structure)))
-            (hash-remove! futures-hash (tree-future-current-index structure))
-            (set-tree-future-finished?! structure #t)
-            (dispatch 'remove (tree-future-parent-index structure)))))
+          (when (children-finished? structure)
+            (set-tree-future-children-finished?! structure #t)
+            (when (tree-future-finished? structure)
+              (hash-remove! futures-hash (tree-future-current-index structure))
+              (dispatch 'remove (tree-future-parent-index structure))))))
 
        (dispatch
         (lambda (type . args)
@@ -1477,7 +1495,8 @@
                     (logger "index already exists")
                     (let ((parent (get-by-index parent-index)))
                       (if (and parent
-                               (or (tree-future-finished? parent)
+                               (or (and (tree-future-evaluated? parent)
+                                        (tree-future-children-finished? parent))
                                    (tree-future-cancelled? parent)))
                           (logger "parent is already done")
                           (let* ((context (lambda () initial-context))
@@ -1486,7 +1505,7 @@
                                                          null
                                                          callback
                                                          #f
-                                                         #f #f #f
+                                                         #f #f #f #f
                                                          context))
                                  (eval-context
                                   (lambda () ((tree-future-context structure)))))
@@ -1514,11 +1533,13 @@
                                      (lambda err
                                        (set! status 'error)
                                        (set! results err)))
+
                                     (set-tree-future-evaluated?! structure #t)
                                     (send-message 'remove structure)
-                                    (sleep-until (tree-future-finished? structure))
+                                    (sleep-until (tree-future-children-finished? structure))
+
                                     (unless (tree-future-cancelled? structure)
-                                      (apply callback (cons* structure status results)))))))))))))
+                                      (finish structure status results))))))))))))
                (else
                 (logger "wrong number of arguments to 'start"))))
 
@@ -1652,7 +1673,7 @@
   child-index)
 
 ;; NOTE: if status != 'ok then throws exception
-(define (tree-future-run-task-thunk thunk)
+(define (tree-future-run-task-thunk thunk finally)
   (let ((finished? #f)
         (results #f)
         (status #f))
@@ -1660,6 +1681,9 @@
     (define (callback structure cb-status . cb-results)
       (set! results cb-results)
       (set! status cb-status)
+      (when finally
+        (catch-any finally
+                   (lambda errs 0))) ;; NOTE: ignore errors
       (set! finished? #t))
 
     (define (wait)
@@ -1693,7 +1717,7 @@
      child-index)))
 
 (define-syntax-rule (tree-future-run-task . bodies)
-  (tree-future-run-task-thunk (lambda () . bodies)))
+  (tree-future-run-task-thunk (lambda () . bodies) #f))
 
 (define tree-future-wait-task
   (case-lambda
