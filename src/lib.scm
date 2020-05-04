@@ -1385,6 +1385,7 @@
   parent-index
   current-index
   children-list
+  finally  ;; (: tree-future -> exit-status -> results... -> a) called after body is evaluated.  Cannot be cancelled
   callback ;; (: tree-future -> exit-status -> results... -> a) called on finish or on exception or on `cancelled?', after all children are `finished?'; it is safe to modify this structure after callback is called
   thread ;; body thread.  On non-cancel exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
   evaluated?#box ;; set when body finished evaluating (maybe with error) or when cancelled. When cancelled, the value is 'cancelled
@@ -1427,18 +1428,29 @@
            (set! message-bin
              (cons type-args message-bin)))))
 
+       (run-finally
+        (lambda (structure status results)
+          (when (tree-future-finally structure)
+            (catch-any (lambda ()
+                         (apply (tree-future-finally structure)
+                                (cons* structure status results)))
+                       (lambda errs 0))))) ;; NOTE: errors are ignored!
+
        (finish
         (lambda (structure status results)
+
+          (run-finally structure status results)
           (send-message 'remove structure)
           (sleep-until (tree-future-children-finished? structure))
 
           (let ((errs #f))
-            (catch-any
-             (lambda ()
-               (apply (tree-future-callback structure)
-                      (cons* structure status results)))
-             (lambda err
-               (set! errs err)))
+            (when (tree-future-callback structure)
+              (catch-any
+               (lambda ()
+                 (apply (tree-future-callback structure)
+                        (cons* structure status results)))
+               (lambda err
+                 (set! errs err))))
             (set-tree-future-finished?! structure #t)
             (send-message 'remove structure)
             (when errs
@@ -1490,6 +1502,7 @@
                (`(,parent-index
                   ,current-index
                   ,target-procedure
+                  ,finally
                   ,callback
                   ,initial-context)
                 (if (get-by-index current-index)
@@ -1502,6 +1515,7 @@
                                  (structure (tree-future parent-index
                                                          current-index
                                                          null
+                                                         finally
                                                          callback
                                                          #f
                                                          (make-atomic-box #f)
@@ -1621,6 +1635,7 @@
                  (dynamic-thread-spawn recieve-loop)))))))
 
        (run (lambda (target-procedure
+                     finally
                      callback
                      initial-context)
               (let ((current-index (tree-future-current))
@@ -1629,6 +1644,7 @@
                               current-index
                               target-index
                               target-procedure
+                              finally
                               callback
                               initial-context)
                 (maybe-start-loopin)
@@ -1679,9 +1695,6 @@
     (define (callback structure cb-status . cb-results)
       (set! results cb-results)
       (set! status cb-status)
-      (when finally
-        (catch-any finally
-                   (lambda errs 0))) ;; NOTE: ignore errors
       (set! finished? #t))
 
     (define (wait)
@@ -1707,7 +1720,7 @@
       finished?)
 
     (define child-index
-      (tree-future-run thunk callback #f))
+      (tree-future-run thunk finally callback #f))
 
     (tree-future-task
      touch-procedure

@@ -45,6 +45,7 @@
 (define (run-nth-child n)
   (tree-future-run
    (child-make n)
+   #f
    (child-cb-make n)
    #f))
 
@@ -64,6 +65,7 @@
   (printfln "in main ~a" in-main-count)
 
   (tree-future-run main-body
+                   #f
                    main-cb
                    #f))
 

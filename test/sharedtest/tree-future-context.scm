@@ -22,7 +22,7 @@
   (define curtime (time))
   (define endtime (+ curtime (normal->nano@unit 5)))
 
-  (define child (tree-future-run fn1 cb1 0))
+  (define child (tree-future-run fn1 #f cb1 0))
 
   (let lp ()
     (when (< (time) endtime)
