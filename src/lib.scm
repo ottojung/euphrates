@@ -1695,6 +1695,8 @@
 
     (define (callback cb-structure cb-status . cb-results)
       (set! structure cb-structure)
+      (catch-any (lambda () (tree-future-eval-context))
+                 (lambda errs 0)) ;; NOTE: ignoring errors
       (set! finished? #t)
       (when user-callback
         (apply user-callback (cons* cb-structure cb-status cb-results))))
