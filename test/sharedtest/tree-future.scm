@@ -29,7 +29,7 @@
 
 (define (child-make n)
   (lambda ()
-    (dynamic-thread-sleep (normal->micro@unit 3))
+    ;; (dynamic-thread-sleep (normal->micro@unit 3))
 
     (define t1 (tree-future-run-task 2))
     (define t2 (tree-future-run-task 3))
@@ -65,8 +65,7 @@
 
   (tree-future-run main-body
                    main-cb
-                   #f)
-  (dynamic-thread-sleep (normal->micro@unit 10)))
+                   #f))
 
 (with-new-tree-future-env
  (with-np-thread-env#non-interruptible
