@@ -1449,46 +1449,50 @@
                   ,initial-context)
                 (if (get-by-index current-index)
                     (logger "index already exists")
-                    (let* ((parent (get-by-index parent-index))
-                           (context (lambda () initial-context))
-                           (structure (tree-future parent-index
-                                                   current-index
-                                                   null
-                                                   callback
-                                                   #f
-                                                   #f #f #f
-                                                   context))
-                           (eval-context
-                            (lambda () ((tree-future-context structure)))))
-                      (hash-set! futures-hash current-index structure)
-                      (when parent
-                        (set-tree-future-children-list!
-                         parent
-                         (cons structure
-                               (tree-future-children-list parent))))
-                      (set-tree-future-thread!
-                       structure
-                       (dynamic-thread-spawn
-                        (lambda ()
-                          (parameterize ((tree-future-current current-index)
-                                         (tree-future-eval-context-p eval-context))
-                            (let ((results #f)
-                                  (status 'undefined))
-                              (catch-any
-                               (lambda ()
-                                 (call-with-values
-                                     target-procedure
-                                   (lambda vals
-                                     (set! status 'ok)
-                                     (set! results vals))))
-                               (lambda err
-                                 (set! status 'error)
-                                 (set! results err)))
-                              (set-tree-future-evaluated?! structure #t)
-                              (send-message 'remove structure)
-                              (sleep-until (tree-future-finished? structure))
-                              (unless (tree-future-cancelled? structure)
-                                (apply callback (cons* structure status results)))))))))))
+                    (let ((parent (get-by-index parent-index)))
+                      (if (and parent
+                               (or (tree-future-finished? parent)
+                                   (tree-future-cancelled? parent)))
+                          (logger "parent is already done")
+                          (let* ((context (lambda () initial-context))
+                                 (structure (tree-future parent-index
+                                                         current-index
+                                                         null
+                                                         callback
+                                                         #f
+                                                         #f #f #f
+                                                         context))
+                                 (eval-context
+                                  (lambda () ((tree-future-context structure)))))
+                            (hash-set! futures-hash current-index structure)
+                            (when parent
+                              (set-tree-future-children-list!
+                               parent
+                               (cons structure
+                                     (tree-future-children-list parent))))
+                            (set-tree-future-thread!
+                             structure
+                             (dynamic-thread-spawn
+                              (lambda ()
+                                (parameterize ((tree-future-current current-index)
+                                               (tree-future-eval-context-p eval-context))
+                                  (let ((results #f)
+                                        (status 'undefined))
+                                    (catch-any
+                                     (lambda ()
+                                       (call-with-values
+                                           target-procedure
+                                         (lambda vals
+                                           (set! status 'ok)
+                                           (set! results vals))))
+                                     (lambda err
+                                       (set! status 'error)
+                                       (set! results err)))
+                                    (set-tree-future-evaluated?! structure #t)
+                                    (send-message 'remove structure)
+                                    (sleep-until (tree-future-finished? structure))
+                                    (unless (tree-future-cancelled? structure)
+                                      (apply callback (cons* structure status results)))))))))))))
                (else
                 (logger "wrong number of arguments to 'start"))))
 
