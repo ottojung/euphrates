@@ -1690,12 +1690,14 @@
   (let ((finished? #f)
         (evaluated? #f)
         (results #f)
-        (status #f))
+        (status #f)
+        (structure #f))
 
-    (define (callback structure cb-status . cb-results)
+    (define (callback cb-structure cb-status . cb-results)
+      (set! structure cb-structure)
       (set! finished? #t)
       (when user-callback
-        (apply user-callback (cons* structure cb-status cb-results))))
+        (apply user-callback (cons* cb-structure cb-status cb-results))))
 
     (define (finally structure cb-status . cb-results)
       (set! results cb-results)
@@ -1734,10 +1736,10 @@
 
            ((no-throw)
             (wait target)
-            (values status results))
+            (values structure status results))
 
            ((check)
-            (values (done? target) status results))
+            (values (done? target) structure status results))
 
            (else
             (throw 'unknown-touch-type type))))))
