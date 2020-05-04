@@ -1384,11 +1384,11 @@
   parent-index
   current-index
   children-list
-  callback ;; (: tree-future -> result -> exit-code -> a) called on finish or on exception or if cancelled; if exception happend, some children may not be finished yet; it is safe to modify this structure after callback is called
+  callback ;; (: tree-future -> exit-status -> results... -> a) called on finish or on exception or if cancelled; if exception happend, some children may not be finished yet; it is safe to modify this structure after callback is called
   thread ;; running thread.  On normal exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
   finished? ;; set to true when (`evaluated?' or `cancelled?') and all of children are `finished?'
   evaluated? ;; set by child if body finished evaluating.  If cancelled, this still can be true if child makes it in time
-  cancelled? ;; set by manager thread, checked by child before callback.  Mutually exclusive with `finished?'
+  cancelled? ;; set by manager thread, checked by child before callback
   context ;; thunk that evaluates contexts and returns it.  #memoized
   )
 
