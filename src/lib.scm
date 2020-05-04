@@ -1387,10 +1387,9 @@
   children-list
   callback ;; (: tree-future -> exit-status -> results... -> a) called on finish or on exception or on `cancelled?', after all children are `finished?'; it is safe to modify this structure after callback is called
   thread ;; body thread.  On non-cancel exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
-  evaluated? ;; set when body finished evaluating (either with a throw to error or without).  Could be true even if was `cancelled?' because child can make it in time; it is a safe race though
+  evaluated?#box ;; set when body finished evaluating (maybe with error) or when cancelled. When cancelled, the value is 'cancelled
   children-finished? ;; set when all children are `finished?'. Checked after `evaluated?'
   finished? ;; set when callback finished evaluating
-  cancelled? ;; set when 'cancel was sent to child and child was not `evaluated?'
   context ;; thunk that evaluates contexts and returns it.  #memoized
   )
 
@@ -1450,8 +1449,9 @@
 
        (cancel-future-sync
         (lambda (structure mode args)
-          (unless (tree-future-evaluated? structure) ;; NOTE: do not cancel callback!
-            (set-tree-future-cancelled?! structure #t)
+          (when (atomic-box-compare-and-set!
+                 (tree-future-evaluated?#box structure)
+                 #f 'cancelled) ;; NOTE: do not cancel callbacks!
             (dynamic-thread-cancel (tree-future-thread structure))
             (remove-future-sync structure) ;; NOTE: removes but callback will not be called
             (dynamic-thread-spawn
@@ -1495,9 +1495,7 @@
                     (logger "index already exists")
                     (let ((parent (get-by-index parent-index)))
                       (if (and parent
-                               (or (and (tree-future-evaluated? parent)
-                                        (tree-future-children-finished? parent))
-                                   (tree-future-cancelled? parent)))
+                               (tree-future-finished? parent))
                           (logger "parent is already done")
                           (let* ((context (lambda () initial-context))
                                  (structure (tree-future parent-index
@@ -1505,7 +1503,8 @@
                                                          null
                                                          callback
                                                          #f
-                                                         #f #f #f #f
+                                                         (make-atomic-box #f)
+                                                         #f #f
                                                          context))
                                  (eval-context
                                   (lambda () ((tree-future-context structure)))))
@@ -1534,11 +1533,12 @@
                                        (set! status 'error)
                                        (set! results err)))
 
-                                    (set-tree-future-evaluated?! structure #t)
-                                    (send-message 'remove structure)
-                                    (sleep-until (tree-future-children-finished? structure))
+                                    (when (atomic-box-compare-and-set!
+                                           (tree-future-evaluated?#box structure)
+                                           #f #t)
+                                      (send-message 'remove structure)
+                                      (sleep-until (tree-future-children-finished? structure))
 
-                                    (unless (tree-future-cancelled? structure)
                                       (finish structure status results))))))))))))
                (else
                 (logger "wrong number of arguments to 'start"))))
