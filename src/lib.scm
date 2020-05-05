@@ -421,6 +421,31 @@
       (dynamic-thread-sleep-func period)
       . body)))
 
+(define (dynamic-thread-async-thunk thunk)
+  (let ((results #f)
+        (status #f)) ;; \in { #f, 'ok, 'fail }
+
+    (dynamic-thread-spawn
+     (lambda ()
+       (catch-any
+        (lambda ()
+          (call-with-values thunk
+            (lambda vals
+              (set! results vals)
+              (set! status 'ok))))
+        (lambda errors
+          (set! results errors)
+          (set! status 'fail)))))
+
+    (lambda ()
+      (sleep-until status)
+      (when (eq? 'fail status)
+        (throw 'dynamic-thread-run-async-failed results))
+      (apply values results))))
+
+(define-syntax-rule (dynamic-thread-async . bodies)
+  (dynamic-thread-async-thunk (lambda () . bodies)))
+
 ;; Like uni-spinlock but use arbitary variables as lock target
 ;; and do sleep when wait
 (define-values

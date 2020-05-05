@@ -447,3 +447,9 @@
 (printfln "list '' -- = ~a" (parse-cli-get-list ""))
 (printfln "all positional = ~a" (parse-cli-get-list #f))
 
+;;;;;;;;;;;;;;;;;;;;
+;; dynamic-thread ;;
+;;;;;;;;;;;;;;;;;;;;
+
+(assert-equal 777 ((dynamic-thread-async 3 777)))
+
