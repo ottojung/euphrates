@@ -9,7 +9,7 @@ prefix <- (open spaces) / (spaces open) / space+
 
 open < '(' / '[' / '{'
 
-letter <- [a-z] / [A-Z] / '-' / '*' / '/' / '>' / '<' / '#' / '@' / '!' / ':' / '.' / '+' / '$' / '%' / '^' / '&' / '~'
+letter <- [a-z] / [A-Z] / '-' / '*' / '/' / '>' / '<' / '#' / '@' / '!' / ':' / '.' / '+' / '$' / '%' / '^' / '&' / '~' / '?'
 identifier <- letter (letter / [0-9])*
 
 defMultiple < '(' spaces 'define-values'
