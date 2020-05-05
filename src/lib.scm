@@ -1254,10 +1254,12 @@
    ret))
 
 (define [sh cmd]
-  (monadic-id
+  (monadic (except-monad)
    (p (sh-async cmd))
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
+   (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
+       'always 'sh-kill-on-error p)
    p))
 
 (define [sh-re cmd]
@@ -1272,6 +1274,8 @@
    (do (printfln "< ~a" trimed) `(log ,cmd in shell) 'sh-re-return)
    (do (close-port outport) 'always)
    (do (delete-file outfilename) 'always)
+   (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
+       'always 'sh-kill-on-error p)
    trimed))
 
 (define (system-re command)
