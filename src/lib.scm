@@ -365,9 +365,9 @@
          (lock (lambda () (lock-func mut)))
          (unlock (lambda () (unlock-func mut))))
     (lambda (thunk)
-        (lock)
-        (thunk)
-        (unlock))))
+      (lock)
+      (let ((ret (thunk)))
+        (unlock)))))
 
 (define dynamic-thread-critical-make-p
   (make-parameter dynamic-thread-critical-make#default))
@@ -402,9 +402,10 @@
           (lambda ()
             (let ((box (make)))
               (lambda (thunk)
-                  (lock box)
-                  (thunk)
-                  (unlock box))))))
+                (lock box)
+                (let ((ret (thunk)))
+                  (unlock box)
+                  ret))))))
     (values make lock unlock critical)))
 
 (define-syntax-rule (with-critical critical-func . bodies)
