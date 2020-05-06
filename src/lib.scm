@@ -319,6 +319,8 @@
 
 ;;; thread abstractions
 
+;; NOTE: don't use -p parameters unless parameterizing!
+
 (define dynamic-thread-spawn-p (make-parameter call-with-new-sys-thread))
 (define (dynamic-thread-spawn thunk) ((dynamic-thread-spawn-p) thunk))
 
@@ -334,6 +336,14 @@
 (define dynamic-thread-sleep-p (make-parameter usleep))
 (define [dynamic-thread-sleep micro-seconds]
   ((dynamic-thread-sleep-p) micro-seconds))
+
+(define (dynamic-thread-get-delay-procedure)
+  (let ((sleep (dynamic-thread-sleep-p))
+        (timeout (dynamic-thread-wait-delay#us-p)))
+    (lambda () (sleep timeout))))
+
+(define (dynamic-thread-get-yield-procedure)
+  (dynamic-thread-yield-p))
 
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
@@ -387,7 +397,7 @@
 
          (lock
           (lambda (o)
-            (let ((yield (dynamic-thread-yield-p)))
+            (let ((yield (dynamic-thread-get-yield-procedure)))
               (let lp ()
                 (unless (atomic-box-compare-and-set!
                          o #f #t)
@@ -414,11 +424,10 @@
 
 
 (define-syntax-rule [sleep-until condi . body]
-  (let ((period (dynamic-thread-wait-delay#us-p))
-        (dynamic-thread-sleep-func (dynamic-thread-sleep-p)))
+  (let ((sleep (dynamic-thread-get-delay-procedure)))
     (do ()
         (condi)
-      (dynamic-thread-sleep-func period)
+      (sleep)
       . body)))
 
 (define (dynamic-thread-async-thunk thunk)
@@ -454,8 +463,7 @@
         [h (make-hash-table)]]
     (values
      (lambda [resource]
-       (let ((sleep (dynamic-thread-sleep-p))
-             (timeout (dynamic-thread-wait-delay#us-p)))
+       (let ((sleep (dynamic-thread-get-delay-procedure)))
          (let lp []
            (when
                (with-critical
@@ -466,7 +474,7 @@
                       (begin
                         (hash-set! h resource #t)
                         #f))))
-             (sleep timeout)
+             (sleep)
              (lp)))))
      (lambda [resource]
        (with-critical
@@ -478,7 +486,7 @@
          [start-time (time-get-monotonic-nanoseconds-timestamp)]
          [end-time (+ start-time nano-seconds)]
          [sleep-rate (dynamic-thread-wait-delay#us-p)]
-         [yield (dynamic-thread-yield-p)]]
+         [yield (dynamic-thread-get-yield-procedure)]]
     (let lp []
       (let [[t (time-get-monotonic-nanoseconds-timestamp)]]
         (unless (> t end-time)
@@ -1658,8 +1666,7 @@
 
        (recieve-loop
         (lambda ()
-          (let ((sleep (dynamic-thread-sleep-p))
-                (timeout (dynamic-thread-wait-delay#us-p)))
+          (let ((sleep (dynamic-thread-get-delay-procedure)))
             (let lp ()
               (let ((val null))
                 (with-critical
@@ -1674,7 +1681,7 @@
               (if (hash-empty? futures-hash)
                   (set! work-thread #f)
                   (begin
-                    (sleep timeout)
+                    (sleep)
                     (lp)))))))
 
        (maybe-start-loopin
