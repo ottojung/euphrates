@@ -529,7 +529,7 @@
     [(monadic-bare f (a b . tags) body ...)
      (let-values
          (((r-x r-cont qvar qval qtags)
-           (f (lambda [] b)
+           (f (memconst b)
               (lambda [a]
                 (monadic-bare f
                               body
