@@ -576,10 +576,10 @@
 (define-syntax-rule [monadic-id . argv]
   (monadic identity-monad . argv))
 
-(define (monad-arg-lazy monad-input)
+(define (monad-arg#lazy monad-input)
   (first monad-input))
 (define (monad-arg monad-input)
-  ((monad-arg-lazy monad-input))) ;; NOTE: evaluates it right away
+  ((monad-arg#lazy monad-input))) ;; NOTE: evaluates it right away
 (define (monad-cont monad-input)
   (second monad-input))
 (define (monad-qvar monad-input)
@@ -632,7 +632,7 @@
                   (memq 'always (monad-qtags monad-input)))
               (monad-ret monad-input
                          (catch-any
-                          (monad-arg-lazy monad-input)
+                          (monad-arg#lazy monad-input)
                           (lambda args
                             (cons! args exceptions)
                             (monad-replicate-multiple
@@ -660,6 +660,21 @@
       (if (predicate arg)
           (monad-cret monad-input arg identity)
           (monad-ret  monad-input arg)))))
+
+(define lazy-monad
+  (lambda monad-input
+    (let* ((qvar (monad-qvar monad-input))
+           (len (if (list? qvar) (length qvar) 1))
+           (single? (< len 2))
+           (arg (monad-arg#lazy monad-input)))
+      (if single?
+          (monad-ret monad-input arg)
+          (let ((ret (map
+                      (lambda (i)
+                        (lambda ()
+                          (list-ref (arg) i)))
+                      (range len))))
+            (monad-ret monad-input ret))))))
 
 ;;;;;;;;;;;;;
 ;; BRACKET ;;

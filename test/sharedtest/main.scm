@@ -61,6 +61,9 @@
 
 (printf "fn = ~a\n" ((fn i (* 2 i)) 5))
 
+
+;; monads {
+
 (define [calc-default]
   (monadic (maybe-monad (fn x (= x 0)))
            [a (+ 2 7)]
@@ -161,6 +164,26 @@
      (printfln "except-monad throwed: ~a" errs)))
   (assert ran-always)
   (assert throwed))
+
+(let ((eval-b-count 0))
+  (assert-equal
+   550
+   ((monadic (compose log-monad lazy-monad)
+             [a (+ 2 7)]
+             [b (begin
+                  (set! eval-b-count (1+ eval-b-count))
+                  (* (a) 10))]
+             [z (throw 'should-not-be-evaluated)]
+             [c (+ (b) (b) (b) (b) (b))]
+             [[k d] (values 2 3)]
+             [sum (+ (k) (d))]
+             (begin
+               (assert-equal (sum) 5)
+               (+ 100 (c))))))
+
+  (assert-equal 1 eval-b-count))
+
+;; } monads
 
 (gfunc/define haha)
 
