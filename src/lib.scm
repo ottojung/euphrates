@@ -319,6 +319,12 @@
 
 ;;; thread abstractions
 
+(define (dynamic-thread-get-delay-procedure#default)
+  (let ((sleep (dynamic-thread-sleep-p))
+        (timeout (dynamic-thread-wait-delay#us-p)))
+    (lambda ()
+      (sleep timeout))))
+
 ;; NOTE: don't use -p parameters unless parameterizing!
 
 (define dynamic-thread-spawn-p (make-parameter call-with-new-sys-thread))
@@ -327,30 +333,32 @@
 (define dynamic-thread-cancel-p (make-parameter cancel-sys-thread))
 (define (dynamic-thread-cancel thunk) ((dynamic-thread-cancel-p) thunk))
 
+;; This yield should also be called by thread manager while sleeping
 (define dynamic-thread-yield-p (make-parameter (lambda () 0)))
 (define (dynamic-thread-yield) ((dynamic-thread-yield-p)))
 
 (define dynamic-thread-wait-delay#us-p
   (make-parameter (normal->micro@unit 1/100)))
 
-(define dynamic-thread-sleep-p (make-parameter usleep))
+(define dynamic-thread-sleep-p (make-parameter sys-thread-sleep))
 (define [dynamic-thread-sleep micro-seconds]
   ((dynamic-thread-sleep-p) micro-seconds))
 
+(define dynamic-thread-get-delay-procedure-p
+  (make-parameter dynamic-thread-get-delay-procedure#default))
 (define (dynamic-thread-get-delay-procedure)
-  (let ((sleep (dynamic-thread-sleep-p))
-        (timeout (dynamic-thread-wait-delay#us-p)))
-    (lambda () (sleep timeout))))
+  ((dynamic-thread-get-delay-procedure-p)))
 
 (define (dynamic-thread-get-yield-procedure)
   (dynamic-thread-yield-p))
 
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
-;; jumps, such as exceptions!
+;; jumps, such as exceptions, or yield!
 ;; np-thread and others rely on this.
 ;; Use critical zones where it is clear that
-;; code doesn't have jumps because they are
+;; code doesn't have jumps because they
+;; cannot be cancelled, and they are
 ;; faster than locks, for some contexts,
 ;; and are easier to use
 ;; Otherwise, use locks
@@ -377,7 +385,8 @@
     (lambda (thunk)
       (lock)
       (let ((ret (thunk)))
-        (unlock)))))
+        (unlock)
+        ret))))
 
 (define dynamic-thread-critical-make-p
   (make-parameter dynamic-thread-critical-make#default))

@@ -79,6 +79,7 @@
 (define call-with-new-sys-thread call-with-new-thread)
 (define cancel-sys-thread cancel-thread)
 (define sys-thread-exited? thread-exited?)
+(define sys-thread-sleep usleep)
 
 (define string-split#simple string-split)
 
