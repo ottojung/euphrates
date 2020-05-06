@@ -193,7 +193,7 @@
                   (* (a) 10))]
              [z (throw 'should-not-be-evaluated)]
              [c (+ (b) (b) (b) (b) (b))]
-             [[k d] (values 2 3)]
+             [[k d] (values 2 3) 'async]
              [sum (+ (k) (d))]
              (begin
                (assert-equal (sum) 5)
