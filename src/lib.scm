@@ -663,18 +663,24 @@
 
 (define lazy-monad
   (lambda monad-input
-    (let* ((qvar (monad-qvar monad-input))
-           (len (if (list? qvar) (length qvar) 1))
-           (single? (< len 2))
-           (arg (monad-arg#lazy monad-input)))
-      (if single?
-          (monad-ret monad-input arg)
-          (let ((ret (map
-                      (lambda (i)
-                        (lambda ()
-                          (list-ref (arg) i)))
-                      (range len))))
-            (monad-ret monad-input ret))))))
+    (if (memq 'async (monad-qtags monad-input))
+        (let ((thunk (dynamic-thread-async
+                      (let ((ret (monad-arg monad-input)))
+                        (lambda () ret)))))
+          (apply values
+                 (cons thunk (cdr monad-input))))
+        (let* ((qvar (monad-qvar monad-input))
+               (len (if (list? qvar) (length qvar) 1))
+               (single? (< len 2))
+               (arg (monad-arg#lazy monad-input)))
+          (if single?
+              (monad-ret monad-input arg)
+              (let ((ret (map
+                          (lambda (i)
+                            (lambda ()
+                              (list-ref (arg) i)))
+                          (range len))))
+                (monad-ret monad-input ret)))))))
 
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
