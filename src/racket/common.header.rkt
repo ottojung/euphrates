@@ -90,7 +90,7 @@
 
 (define fold foldl)
 (define and-map andmap)
-(define or-map andmap)
+(define or-map ormap)
 (define hash-table->alist hash->list)
 (define [hash-get-handle h key]
   (if (hash-has-key? h key)
