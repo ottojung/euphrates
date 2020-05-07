@@ -115,6 +115,10 @@
       (string-split str (string delim) #:trim? #f)
       (string-split str delim #:trim? #f)))
 
+;; TODO: move to lib somehow
+(define (words str)
+  (string-split str))
+
 (define-syntax-rule [define-eval-namespace name]
   (begin
     (define-namespace-anchor ns-anc)

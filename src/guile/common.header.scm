@@ -83,6 +83,17 @@
 
 (define string-split#simple string-split)
 
+;; TODO: move to lib somehow
+(define (words str)
+  (filter
+   (compose not string-null?)
+   (string-split
+    str
+    (lambda (c)
+      (case c
+        ((#\newline #\space #\tab) #t)
+        (else #f))))))
+
 (define [hash-table->alist h] (hash-map->list cons h))
 
 (define big-random-int

@@ -122,6 +122,8 @@
   (string-split str #\newline))
 (define (unlines lns)
   (string-join lns "\n"))
+(define (unwords lns)
+  (string-join lns " "))
 
 (define-syntax assert
   (syntax-rules ()

@@ -3,6 +3,14 @@
            [c 3]
            (+ i c)))
 
+(assert-equal
+ (words "hello \t \t \n world!")
+ (list "hello" "world!"))
+
+(assert-equal
+ (unwords (list "hello" "world!"))
+ "hello world!")
+
 ;; (define-rec-strs "rec1" "aa" "bb")
 (define-rec rec1 aa bb)
 
