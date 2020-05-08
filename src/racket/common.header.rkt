@@ -217,22 +217,51 @@
     ["ab" (open-output-file path #:mode 'binary #:exists 'append)]
     [other (throw 'open-file-mode-not-supported `(args: ,path ,mode))]))
 
-(define [directory-files directory]
-  "Returns object like this:
-   ((fullname name)
-    (fullname name)
-     ....
-  "
+;; Returns object like this:
+;;   ((fullname name)
+;;    (fullname name)
+;;     ....
+(define directory-files
+  (case-lambda
+    ((directory) (directory-files directory #f))
+    ((directory include-directories?)
 
-  (let* [[names (directory-list directory)]
-         [fullnames
-          (map (lambda [name]
-                 (cons
-                  (path->string
-                   (build-path directory name))
-                  name))
-               names)]]
-    fullnames))
+     (define dirs
+       (unless include-directories? (make-hash)))
+
+     (define (down? dir)
+       (unless include-directories?
+         (let-values (((base name dunno)
+                       (split-path dir)))
+           (hash-set! dirs name #t)))
+       #f)
+
+     (define paths
+       (sequence->list
+        (in-directory directory down?)))
+
+     (define mapped
+       (map
+        (lambda (path)
+          (let-values
+              (((base name dunno)
+                (split-path path)))
+            (cons path name)))
+        paths))
+
+     (define filtered
+       (if include-directories?
+           mapped
+           (filter
+            (lambda (pair)
+              (not (hash-ref dirs (cdr pair) #f)))
+            mapped)))
+
+     (define (stringify pair)
+       (list (path->string (car pair))
+             (path->string (cdr pair))))
+
+     (map stringify filtered))))
 
 (define [directory-files-rec directory]
   "Returns object like this:
