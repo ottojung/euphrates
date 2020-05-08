@@ -354,7 +354,7 @@
   args
   pipe
   pid ;; #f or integer
-  status ;; #f or integer
+  status ;; #f or integer or 'not-available
   exited?
   )
 
@@ -367,6 +367,20 @@
 
    type ::= output-port? -> output-port? -> string -> list of string -> process
   "
+
+  ;; returns status
+  (define (waitpid#no-throw#no-hang pid)
+    (catch-any
+     (lambda ()
+       (let* ((w (waitpid pid WNOHANG)) ;; TODO: track pid to prevent accidental reuse of same pid
+              (ret-pid (car w))
+              (status (cdr w)))
+         (case ret-pid
+           ((0) 'running)
+           (else (status:exit-val status)))))
+     (lambda errors
+       'not-available)))
+
   (let [[p
          (comprocess
           command
@@ -375,27 +389,30 @@
           #f
           #f
           #f)]]
-    (call-with-new-thread
-     (lambda []
-       (parameterize [[current-output-port p-stdout]
-                      [current-error-port p-stderr]
-                      [current-input-port (open-input-string "hello")]]
-         (let* [[pipe (apply open-pipe*
-                             (cons* OPEN_WRITE
-                                    (comprocess-command p)
-                                    (comprocess-args p)))]
-                [pid (hashq-ref port/pid-table pipe)]]
-           (set-comprocess-pipe! p pipe)
-           (set-comprocess-pid! p pid)
-           (set-comprocess-status! p (status:exit-val
-                                      (cdr (waitpid pid)))) ;; NOTE: unsafe because process could have ended by now, but probability is too small because processes take long time to start
-           (set-comprocess-exited?! p #t)))))
 
-    ;; wait for pipe to initialize
-    (let lp []
-      (unless (comprocess-pid p)
-        (usleep 100)
-        (lp)))
+    (parameterize [[current-output-port p-stdout]
+                   [current-error-port p-stderr]]
+      (let* [[pipe (apply open-pipe*
+                          (cons* OPEN_WRITE
+                                 (comprocess-command p)
+                                 (comprocess-args p)))]
+             [pid (hashq-ref port/pid-table pipe)]]
+        (set-comprocess-pipe! p pipe)
+        (set-comprocess-pid! p pid)
+
+        (dynamic-thread-spawn
+         (lambda ()
+           (let ((sleep (dynamic-thread-get-delay-procedure)))
+             (let lp ()
+               (let ((status (waitpid#no-throw#no-hang pid)))
+                 (case status
+                   ((running)
+                    (sleep)
+                    (lp))
+                   (else
+                    (set-comprocess-status! p status)
+                    (set-comprocess-exited?! p #t))))))))))
+
     p))
 
 (define [run-comprocess command . args]
