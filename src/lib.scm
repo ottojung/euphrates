@@ -354,6 +354,9 @@
 (define (dynamic-thread-get-yield-procedure)
   (dynamic-thread-yield-p))
 
+(define dynamic-thread-cancel-tag
+  'euphrates-dynamic-thread-cancelled)
+
 ;; NOTE ON USING MUTEXES AND CRITICAL ZONES
 ;; Critical zones must not evaluate non-local
 ;; jumps, such as exceptions, or yield!
@@ -1106,7 +1109,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-rec np-thread-obj
-  continuation)
+  continuation
+  cancel-scheduled?
+  cancel-enabled?
+  )
 
 ;; Disables critical zones because in non-interruptible mode
 ;; user can assure atomicity by themself
@@ -1115,6 +1121,9 @@
 ;; because system mutexes will not allow to do yield
 ;; while waiting on mutex.
 (define (np-thread-parameterize-env make-critical thunk)
+
+  (define (make-np-thread-obj thunk)
+    (np-thread-obj thunk #f #t))
 
   (define-values
       [np-thread-list-add
@@ -1147,7 +1156,8 @@
             head)))
        (lambda [body]
          (parameterize [[lst-p (box (list))]
-                        [current-thread (box (np-thread-obj body))]]
+                        [current-thread
+                         (box (make-np-thread-obj body))]]
            (body)))
        (lambda []
          (if (lst-p) #t #f))
@@ -1179,14 +1189,18 @@
 
   (define [np-thread-yield]
     (when (np-thread-list-initialized?)
-      (let* [[me (np-thread-current)]
-             [repl (call/cc
-                    (lambda [k]
-                      (set-np-thread-obj-continuation! me k)
-                      #f))]]
-        (unless repl
-          (np-thread-list-add me) ;; save
-          (np-thread-end)))))
+      (let [[me (np-thread-current)]]
+        (when (and (np-thread-obj-cancel-scheduled? me)
+                   (np-thread-obj-cancel-enabled? me))
+          (throw dynamic-thread-cancel-tag))
+
+        (let [[repl (call/cc
+                     (lambda [k]
+                       (set-np-thread-obj-continuation! me k)
+                       #f))]]
+          (unless repl
+            (np-thread-list-add me) ;; save
+            (np-thread-end))))))
 
   (define [np-thread-fork thunk]
     (unless (np-thread-list-initialized?)
@@ -1194,11 +1208,12 @@
              `(args: ,thunk)
              `(tried to fork np-thread before np-thread-run!)))
 
-    (np-thread-list-add
-     (np-thread-obj
-      (lambda [tru]
-        (thunk)
-        (np-thread-end)))))
+    (let ((ret (make-np-thread-obj
+                (lambda [tru]
+                  (thunk)
+                  (np-thread-end)))))
+      (np-thread-list-add ret)
+      ret))
 
   (define-syntax-rule [np-thread-run! . thunk]
     (call/cc
@@ -1213,14 +1228,28 @@
   ;; If no arguments given, current thread will be terminated
   ;; But if thread is provided, it will be removed from thread list (equivalent to termination if that thread is not the current one)
   ;; Therefore, don't provide current thread as argument unless you really mean to
-  (define np-thread-cancel!
+  (define np-thread-cancel!#unsafe
     (case-lambda
       [[]
        (np-thread-end)]
       [[chosen]
        (np-thread-list-remove (lambda [th] (eq? th chosen)))]))
 
-  (define [np-thread-cancel-all!]
+  (define (np-thread-cancel! chosen)
+    (set-np-thread-obj-cancel-scheduled?! chosen #t)
+    (when (np-thread-obj-cancel-enabled? chosen)
+      (np-thread-cancel!#unsafe chosen)))
+
+  (define (np-thread-make-critical)
+    (lambda (fn)
+      (let* [[me (np-thread-current)]]
+        (set-np-thread-obj-cancel-enabled?! me #f)
+        (fn) ;; NOTE: must not evaluate non-local jumps
+        (set-np-thread-obj-cancel-enabled?! me #t)
+        (np-thread-yield)
+        )))
+
+  (define [np-thread-cancel-all!unsafe]
     "
   Terminates all threads on current thread group
   "
@@ -1234,9 +1263,7 @@
                  (dynamic-thread-mutex-make-p make-unique)
                  (dynamic-thread-mutex-lock!-p universal-lockr!)
                  (dynamic-thread-mutex-unlock!-p universal-unlockr!)
-                 (dynamic-thread-critical-make-p
-                  (lambda ()
-                    (lambda (fn) (fn)))))
+                 (dynamic-thread-critical-make-p np-thread-make-critical))
     (np-thread-run! (thunk))))
 
 (define-syntax-rule (with-np-thread-env#non-interruptible . bodies)
