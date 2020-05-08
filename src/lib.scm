@@ -1331,7 +1331,7 @@
 (define (sh-async cmd)
   (monadic-id
    (ret (sh-async-no-log cmd))
-   (do (printfln "> ~a" cmd) `(log ,cmd in shell))
+   (do (printfln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    ret))
 
 (define [sh cmd]
@@ -1347,17 +1347,26 @@
   (monadic (except-monad)
    ((outport outfilename) (make-temporary-fileport))
    (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
-   (do (printfln "> ~a" cmd) `(log ,cmd in shell))
+   (do (printfln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    (ret (read-string-file outfilename))
    (trimed (string-trim-chars ret "\n \t" 'both))
-   (do (printfln "< ~a" trimed) `(log ,cmd in shell) 'sh-re-return)
+   (do (printfln "< ~a" trimed) `(sh-cmd ,cmd) 'sh-return-log)
    (do (close-port outport) 'always)
    (do (delete-file outfilename) 'always)
    (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
        'always 'sh-kill-on-error p)
    trimed))
+
+(define-syntax-rule (with-no-shell-log . bodies)
+  (with-monadic-right
+   (filter-monad
+    (lambda (tag)
+      (case tag
+        ((sh-log sh-return-log) #t)
+        (else #f))))
+   . bodies))
 
 (define (system-re command)
   "Like `system', but returns (output, exit status)"
