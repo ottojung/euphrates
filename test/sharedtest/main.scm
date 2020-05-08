@@ -491,11 +491,21 @@
     )))
 
 (printfln "parsed = ~a" (parse-cli-parse-or-get!))
-(printfln "flag key1 = ~a" (parse-cli-get-flag "key1"))
-(printfln "switch key1 = ~a" (parse-cli-get-switch "key1"))
-(printfln "flag key9 = ~a" (parse-cli-get-flag "key9"))
-(printfln "list '' -- = ~a" (parse-cli-get-list ""))
-(printfln "all positional = ~a" (parse-cli-get-list #f))
+
+(assert-equal #t
+              (parse-cli-get-flag "key1"))
+(assert-equal "val1"
+              (parse-cli-get-switch "key1"))
+(assert-equal #f
+              (parse-cli-get-flag "key9"))
+(assert-equal #t
+              (parse-cli-get-flag "key9" "key1"))
+(assert-equal #f
+              (parse-cli-get-flag "key9" "key7"))
+(assert-equal (list "rest1" "rest2")
+              (parse-cli-get-list ""))
+(assert-equal (list "filename")
+              (parse-cli-get-list #f))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; dynamic-thread ;;

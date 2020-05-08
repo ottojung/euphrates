@@ -1414,12 +1414,15 @@
           (parse-cli-global-default)
           (parse-cli!))))
 
-(define (parse-cli-get-flag key)
-  (let* ((parsed (parse-cli-parse-or-get!))
-         (ret (assoc key parsed)))
-    (if (pair? ret)
-        (cdr ret)
-        ret)))
+(define (parse-cli-get-flag . keys)
+  (let* ((parsed (parse-cli-parse-or-get!)))
+    (or-map
+     (lambda (key)
+       (let ((ret (assoc key parsed)))
+         (if (pair? ret)
+             (cdr ret)
+             ret)))
+     keys)))
 
 (define (parse-cli-get-switch key)
   (let ((parsed (parse-cli-parse-or-get!)))
