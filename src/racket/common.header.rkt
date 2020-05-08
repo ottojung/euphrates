@@ -241,9 +241,15 @@
 
    Where dirname1 is the parent dir of the file
   "
+
+  (define (tostring path)
+    (case path
+      ((same) directory)
+      (else (path->string path))))
+
   (fold-files
    (lambda [f type ctx]
-     (cons (map path->string
+     (cons (map tostring
                 (cons f (reverse (explode-path f))))
            ctx))
    (list)
