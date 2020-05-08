@@ -698,6 +698,25 @@
                 (map choose (range len)))))
       (monad-ret monad-input return))))
 
+;; Replaces expressions by different ones based on associted tags
+;; Can be used for deriving many less general monads, like lazy-monad or filter-monad
+(define (replace-monad test/replace-procedure)
+  (lambda monad-input
+    (let* ((tags (monad-qtags monad-input))
+           (arg#lazy (monad-arg#lazy monad-input)))
+      (apply values
+             (cons (test/replace-procedure tags arg#lazy)
+                   (cdr monad-input))))))
+
+;; Skips evaluation based on given predicate
+;; NOTE: don't use on multiple-values!
+(define (filter-monad test-any)
+  (replace-monad
+   (lambda (tags arg#lazy)
+     (if (or-map test-any tags)
+         (lambda () 'filter-monad-skipped-evaluation)
+         arg#lazy))))
+
 ;;;;;;;;;;;;;
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
