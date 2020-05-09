@@ -724,15 +724,23 @@
 ;; BRACKET ;;
 ;;;;;;;;;;;;;
 
-(define [call-with-finally-dw expr finally]
-  (call/cc
-   (lambda [k]
-     (dynamic-wind
-       (lambda [] 0)
-       (lambda [] (expr k))
-       finally))))
+(define call-with-finally#return-tag
+  'euphrates-call-with-finally#return-error)
 
-(define call-with-finally-lf
+;; Applies `return' function to expr.
+;; `return' is a call/cc function, but it ensures that `finally' is called.
+;; Also, if exception is raised, `finally' executes.
+;; `finally' executes only once! No matter how many exits are done.
+;; Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
+;; Returns evaluated expr or re-throws an exception
+;;
+;; This is different from `dynamic-wind'
+;; because it executes `finally' before returning the control
+;; and it does not catch any non local jumps except the `return' and throws
+;;
+;; expr ::= ((Any... -> Any) -> Any)
+;; finally ::= (-> Any)
+(define call-with-finally#return
   (let [[dynamic-stack (make-parameter (list))]]
     (lambda [expr finally]
       (let* [[err #f] [normal? #t]
@@ -771,23 +779,18 @@
             (when err (apply throw err))
             (apply values ret)))))))
 
+;; Runs finally even if exception was thrown (even on thread cancel)
+;; expr ::= (-> Any)
+;; finally ::= (-> Any)
 (define [call-with-finally expr finally]
-  "
-  Applies `return' function to expr.
-  `return' is a call/cc function, but it ensures that `finally' is called.
-  Also, if exception is raised, `finally' executes.
-  `finally' executes only once! No matter how many exits are done.
-  Composable, so that if bottom one calls `return', all `finally's are going to be called in correct order.
-  Returns evaluated expr or re-throws an exception
-
-  This is different from `call-with-finally-dw' (dynamic-wind)
-  because it executes `finally' before returning the control
-  and it does not catch any non local jumps except the `return' and throws
-
-  expr ::= ((Any -> Any) -> Any)
-  finally ::= (-> Any)
-  "
-  (call-with-finally-lf expr finally))
+  (let ((err #f))
+    (catch-any
+     expr
+     (lambda errors
+       (set! err errors)))
+    (finally)
+    (when err
+      (apply throw err))))
 
 ;;;;;;;;;;;;;;;;
 ;; STACK FLOW ;;
@@ -1800,9 +1803,9 @@
     (parameterize ((tree-future-run-p run)
                    (tree-future-send-message-p send-message))
       (call-with-finally
-       (lambda (return)
+       (lambda _
          (begin . bodies))
-       (lambda args
+       (lambda _
          (wait))))))
 
 ;; task-oriented. Return child result, ignore callback
