@@ -403,15 +403,21 @@
         (dynamic-thread-spawn
          (lambda ()
            (let ((sleep (dynamic-thread-get-delay-procedure)))
-             (let lp ()
-               (let ((status (waitpid#no-throw#no-hang pid)))
-                 (case status
-                   ((running)
-                    (sleep)
-                    (lp))
-                   (else
-                    (set-comprocess-status! p status)
-                    (set-comprocess-exited?! p #t))))))))))
+             (call-with-finally
+              (lambda _
+                (let lp ()
+                  (let ((status (waitpid#no-throw#no-hang pid)))
+                    (case status
+                      ((running)
+                       (sleep)
+                       (lp))
+                      (else
+                       (set-comprocess-status! p status)
+                       (set-comprocess-exited?! p #t))))))
+              (lambda _
+                (catch-any
+                 (lambda () (close-pipe pipe))
+                 (lambda _ 0)))))))))
 
     p))
 
