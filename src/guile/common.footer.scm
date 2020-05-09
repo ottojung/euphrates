@@ -173,7 +173,9 @@
    (lambda []
      (let [[st (make-stack #t)]]
        (i-thread-critical-points-append! st)
+       (dynamic-thread-disable-cancel)
        (begin . thunk)
+       (dynamic-thread-enable-cancel)
        (i-thread-critical-points-remove! st)))))
 
 (define [i-thread-critical-b! thunk finally]

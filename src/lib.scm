@@ -343,6 +343,16 @@
 (define dynamic-thread-cancel-p (make-parameter cancel-sys-thread))
 (define (dynamic-thread-cancel thunk) ((dynamic-thread-cancel-p) thunk))
 
+;; for critical zones
+(define dynamic-thread-disable-cancel-p
+  (make-parameter (lambda () 0)))
+(define (dynamic-thread-disable-cancel)
+  ((dynamic-thread-disable-cancel-p)))
+(define dynamic-thread-enable-cancel-p
+  (make-parameter (lambda () 0)))
+(define (dynamic-thread-enable-cancel)
+  ((dynamic-thread-enable-cancel-p)))
+
 ;; This yield should also be called by thread manager while sleeping
 (define dynamic-thread-yield-p (make-parameter (lambda () 0)))
 (define (dynamic-thread-yield) ((dynamic-thread-yield-p)))
@@ -396,9 +406,11 @@
          (lock (lambda () (lock-func mut)))
          (unlock (lambda () (unlock-func mut))))
     (lambda (thunk)
+      (dynamic-thread-disable-cancel)
       (lock)
       (let ((ret (thunk)))
         (unlock)
+        (dynamic-thread-enable-cancel)
         ret))))
 
 (define dynamic-thread-critical-make-p
@@ -434,9 +446,11 @@
           (lambda ()
             (let ((box (make)))
               (lambda (thunk)
+                (dynamic-thread-disable-cancel)
                 (lock box)
                 (let ((ret (thunk)))
                   (unlock box)
+                  (dynamic-thread-enable-cancel)
                   ret))))))
     (values make lock unlock critical)))
 
@@ -1267,8 +1281,17 @@
     (np-thread-list-remove (const #t))
     (np-thread-end))
 
+  (define [np-thread-disable-cancel]
+    (let ((me (np-thread-current)))
+      (set-np-thread-obj-cancel-enabled?! me #f)))
+  (define [np-thread-enable-cancel]
+    (let ((me (np-thread-current)))
+      (set-np-thread-obj-cancel-enabled?! me #t)))
+
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
                  (dynamic-thread-cancel-p np-thread-cancel!)
+                 (dynamic-thread-disable-cancel-p np-thread-disable-cancel)
+                 (dynamic-thread-enable-cancel-p np-thread-enable-cancel)
                  (dynamic-thread-yield-p np-thread-yield)
                  (dynamic-thread-sleep-p universal-usleep)
                  (dynamic-thread-mutex-make-p make-unique)
