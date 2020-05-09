@@ -5,6 +5,10 @@
            (+ i c)))
 
 (assert-equal
+ "file.b.c"
+ (path-replace-extension "file.b.a" ".c"))
+
+(assert-equal
  (words "hello \t \t \n world!")
  (list "hello" "world!"))
 

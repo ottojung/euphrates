@@ -4,6 +4,9 @@
          (for-syntax racket/base
                      racket/syntax))
 
+(require (only-in srfi/13
+                  string-index-right
+                  string-take))
 (require compatibility/defmacro)
 
 (require mzlib/etc) ;; this-expression-file-name, this-expression-source-directory

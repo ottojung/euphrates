@@ -260,6 +260,14 @@
 (define [append-posix-path . paths]
   (list-fold "" paths append-posix-path2))
 
+(define (path-without-extension str)
+  (let ((index (string-index-right str #\.)))
+    (string-take str index)))
+
+(define (path-replace-extension str new-ext)
+  (let ((stripped (path-without-extension str)))
+    (string-append stripped new-ext)))
+
 ;; TODO: make something safe instead?
 (define (make-temporary-filename)
   (let* ((rand (big-random-int 99999999999))
