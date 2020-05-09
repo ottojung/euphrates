@@ -340,7 +340,7 @@
 (define (dynamic-thread-yield) ((dynamic-thread-yield-p)))
 
 (define dynamic-thread-wait-delay#us-p
-  (make-parameter (normal->micro@unit 1/100)))
+  (make-parameter 1000))
 
 (define dynamic-thread-sleep-p (make-parameter sys-thread-sleep))
 (define [dynamic-thread-sleep micro-seconds]
