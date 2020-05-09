@@ -1595,15 +1595,17 @@
             (dynamic-thread-cancel (tree-future-thread structure))
             (dynamic-thread-spawn
              (lambda ()
-               (finish structure 'cancel args)))
-            (case mode
-              ((single) 0)
-              ((down) (cancel-children structure args))
-              ((all)
-               (cancel-children structure args)
-               (let ((parent (get-by-index (tree-future-parent-index structure))))
-                 (when parent
-                   (cancel-future-sync parent 'all (list 'child-cancelled-with args)))))))))
+               (finish structure 'cancel args))))
+
+          ;; propagate cancel not matter if target is already evaluated
+          (case mode
+            ((single) 0)
+            ((down) (cancel-children structure args))
+            ((all)
+             (cancel-children structure args)
+             (let ((parent (get-by-index (tree-future-parent-index structure))))
+               (when parent
+                 (cancel-future-sync parent 'all (list 'child-cancelled-with args))))))))
 
        (children-finished?
         (lambda (structure)
