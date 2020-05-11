@@ -1121,6 +1121,12 @@
          (go (close-port out))]
     re))
 
+(define [path-redirect newbase path]
+  (let [[oldbase (take-common-prefix newbase path)]]
+    (string-append newbase
+                   (substring path
+                              (string-length oldbase)))))
+
 (define [path-rebase newbase path]
   (let [[oldbase (take-common-prefix newbase path)]]
     (if (string-null? oldbase)
