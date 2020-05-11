@@ -6,11 +6,16 @@
 
 (require (only-in srfi/13
                   string-index-right
-                  string-take))
+                  string-take
+                  string-drop))
 (require compatibility/defmacro)
 
 (require mzlib/etc) ;; this-expression-file-name, this-expression-source-directory
 (provide (all-from-out mzlib/etc))
+
+(provide string-index-right
+         string-take
+         string-drop)
 
 (provide (all-defined-out))
 
