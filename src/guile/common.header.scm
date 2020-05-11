@@ -76,11 +76,6 @@
       (time-to-nanoseconds
        ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
-(define call-with-new-sys-thread call-with-new-thread)
-(define cancel-sys-thread cancel-thread)
-(define sys-thread-exited? thread-exited?)
-(define sys-thread-sleep usleep)
-
 (define string-split#simple string-split)
 
 ;; TODO: move to lib somehow
@@ -344,6 +339,48 @@
    ()
    ()
    . fields))
+
+;;;;;;;;;;;;;;;;
+;; sys thread ;;
+;;;;;;;;;;;;;;;;
+
+(define-rec sys-thread
+  handle
+  cancel-scheduled?
+  cancel-enabled?
+  )
+
+(define sys-thread-current
+  (make-parameter
+   (sys-thread #f #f #f)))
+
+(define (sys-thread-enable-cancel)
+  (let ((me (sys-thread-current)))
+    (set-sys-thread-cancel-enabled?! me #t)))
+(define (sys-thread-disable-cancel)
+  (let ((me (sys-thread-current)))
+    (set-sys-thread-cancel-enabled?! me #f)))
+
+(define (sys-thread-spawn thunk)
+  (let ((th (sys-thread #f #f #t)))
+    (set-sys-thread-handle!
+     th
+     (call-with-new-thread thunk))
+    th))
+
+(define (sys-thread-cancel th)
+  (set-sys-thread-cancel-scheduled?! th #t))
+(define (sys-thread-exited? th)
+  (thread-exited? (sys-thread-handle th)))
+
+(define (sys-thread-yield)
+  (let ((me (sys-thread-current)))
+    (when (and (sys-thread-cancel-scheduled? me)
+               (sys-thread-cancel-enabled? me))
+      (throw dynamic-thread-cancel-tag))))
+(define (sys-thread-sleep us)
+  (usleep us)
+  (sys-thread-yield))
 
 ;;;;;;;;;;;;;;;
 ;; PROCESSES ;;

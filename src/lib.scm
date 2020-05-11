@@ -337,19 +337,19 @@
 
 ;; NOTE: don't use -p parameters unless parameterizing!
 
-(define dynamic-thread-spawn-p (make-parameter call-with-new-sys-thread))
+(define dynamic-thread-spawn-p (make-parameter sys-thread-spawn))
 (define (dynamic-thread-spawn thunk) ((dynamic-thread-spawn-p) thunk))
 
-(define dynamic-thread-cancel-p (make-parameter cancel-sys-thread))
+(define dynamic-thread-cancel-p (make-parameter sys-thread-cancel))
 (define (dynamic-thread-cancel thunk) ((dynamic-thread-cancel-p) thunk))
 
 ;; for critical zones
 (define dynamic-thread-disable-cancel-p
-  (make-parameter (lambda () 0)))
+  (make-parameter sys-thread-disable-cancel))
 (define (dynamic-thread-disable-cancel)
   ((dynamic-thread-disable-cancel-p)))
 (define dynamic-thread-enable-cancel-p
-  (make-parameter (lambda () 0)))
+  (make-parameter sys-thread-enable-cancel))
 (define (dynamic-thread-enable-cancel)
   ((dynamic-thread-enable-cancel-p)))
 
@@ -1312,7 +1312,7 @@
   (unless (comprocess-exited? p)
     (kill-comprocess p #f)
     (unless (comprocess-exited? p)
-      (call-with-new-sys-thread
+      (sys-thread-spawn
        (lambda []
          (usleep timeout)
          (unless (comprocess-exited? p)
