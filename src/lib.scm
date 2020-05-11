@@ -1318,9 +1318,9 @@
   (unless (comprocess-exited? p)
     (kill-comprocess p #f)
     (unless (comprocess-exited? p)
-      (sys-thread-spawn
+      (dynamic-thread-spawn
        (lambda []
-         (usleep timeout)
+         (dynamic-thread-sleep timeout)
          (unless (comprocess-exited? p)
            (kill-comprocess p #t)))))))
 
