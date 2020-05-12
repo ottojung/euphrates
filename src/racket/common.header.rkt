@@ -3,19 +3,13 @@
 (require syntax/parse/define
          (for-syntax racket/base
                      racket/syntax))
-
-(require (only-in srfi/13
-                  string-index-right
-                  string-take
-                  string-drop))
+(require srfi/13) ;; string-prefix? string-take string-drop ...
 (require compatibility/defmacro)
 
 (require mzlib/etc) ;; this-expression-file-name, this-expression-source-directory
 (provide (all-from-out mzlib/etc))
 
-(provide string-index-right
-         string-take
-         string-drop)
+(provide (all-from-out srfi/13))
 
 (provide (all-defined-out))
 
@@ -76,25 +70,6 @@
 
 (define [get-u8 from] (read-byte from))
 (define [put-u8 to byte] (write-byte byte to))
-
-(define string-endswith? string-suffix?)
-(define string-startswith? string-prefix?)
-(define (string-trim-chars str chars-arg direction)
-  (define (regs cc)
-    (let lp ((left cc))
-      (if (null? left)
-          (list)
-          (if (null? (cdr left))
-              (list (car left)) ;; last char
-              (list* (car left) #\| (lp (cdr left)))))))
-  (define chars (if (string? chars-arg)
-                    (string->list chars-arg)
-                    chars-arg))
-  (define reg (regexp (apply string (regs chars))))
-  (case direction
-    ((left) (string-trim str reg #:left? #t #:right? #f #:repeat? #t))
-    ((right) (string-trim str reg #:left? #f #:right? #t #:repeat? #t))
-    ((both) (string-trim str reg #:left? #t #:right? #t #:repeat? #t))))
 
 (define fold foldl)
 (define and-map andmap)

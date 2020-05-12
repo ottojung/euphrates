@@ -139,21 +139,6 @@
     'filename
     (current-source-location))))
 
-(define [string-endswith? str suffix]
-  (string-suffix? suffix str))
-(define [string-startswith? str prefix]
-  (string-prefix? prefix str))
-(define (string-trim-chars str chars-arg direction)
-  (define chars (if (string? chars-arg)
-                    (string->list chars-arg)
-                    chars-arg))
-  (define (pred c)
-    (memq c chars))
-  (case direction
-    ((left) (string-trim str pred))
-    ((right) (string-trim-right str pred))
-    ((both) (string-trim-both str pred))))
-
 (define find-first find)
 
 (define-syntax format-id-base

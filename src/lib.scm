@@ -118,6 +118,17 @@
                    (loop (cdr as) (cdr bs)))
              (list))))))
 
+(define (string-trim-chars str chars-arg direction)
+  (define chars (if (string? chars-arg)
+                    (string->list chars-arg)
+                    chars-arg))
+  (define (pred c)
+    (memq c chars))
+  (case direction
+    ((left) (string-trim str pred))
+    ((right) (string-trim-right str pred))
+    ((both) (string-trim-both str pred))))
+
 (define (lines str)
   (string-split str #\newline))
 (define (unlines lns)
@@ -1453,7 +1464,7 @@
         buf
         (let ((current (car left)))
           (cond
-           ((string-startswith? current "-")
+           ((string-prefix? "-" current)
             (let* ((key (trim current))
                    (cell (cons key #t))
                    (rest (cdr left)))
