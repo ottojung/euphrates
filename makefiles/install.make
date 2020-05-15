@@ -10,15 +10,22 @@ else
 PREFIX := $(RACKET_PREFIX)
 endif
 
-INSTALL_TGT = "$(PREFIX)/$(DIR)"
+LINK_DIRNAME = $(DIRSUFFIX)
+LINK_TGT = $(PREFIX)/$(LINK_DIRNAME)
+INSTALL_DIRNAME = $(LINK_DIRNAME)-$(CURRENT_GIT_COMMIT)
+INSTALL_TGT = $(PREFIX)/$(INSTALL_DIRNAME)
 
-installone: $(INSTALL_TGT)
+installone: $(INSTALL_TGT) $(LINK_TGT)
 
 uninstallone:
-	rm -rf "$(PREFIX)/$(shell basename $(DIR))"
+	rm -rf "$(INSTALL_TGT)"
+	rm -f "$(LINK_TGT)"
 
 $(INSTALL_TGT): $(PREFIX)
-	cp -r "$(DIR)" "$(PREFIX)"
+	cp -r "$(DIR)" "$(INSTALL_TGT)"
+
+$(LINK_TGT): $(PREFIX)
+	cd $(PREFIX) && ln -s -f "$(INSTALL_DIRNAME)" "$(LINK_DIRNAME)"
 
 $(PREFIX):
 	@ echo "Installation directory doesn't exist! Creating..."
