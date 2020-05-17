@@ -4,6 +4,8 @@ include makefiles/common.make
 GUILE_PREFIX = $(shell guile -c '(display (%site-dir))')
 RACKET_PREFIX = $(shell racket --eval "(display (path->string (find-system-path 'collects-dir)))")
 
+HARD_INSTALL = true
+
 ifeq ($(TARGET),$(GUILEDIR))
 PREFIX := $(GUILE_PREFIX)
 else
@@ -19,13 +21,16 @@ installone: $(INSTALL_TGT) $(LINK_TGT)
 
 uninstallone:
 	rm -rf "$(INSTALL_TGT)"
-	rm -f "$(LINK_TGT)"
+	if $(HARD_INSTALL); then rm -f "$(LINK_TGT)"; fi
+
+LINK_CMD = cd $(PREFIX) && ln -s -f "$(INSTALL_DIRNAME)" "$(LINK_DIRNAME)"
 
 $(INSTALL_TGT): $(PREFIX)
 	cp -r "$(DIR)" "$(INSTALL_TGT)"
+	if $(HARD_INSTALL); then $(LINK_CMD); fi
 
 $(LINK_TGT): $(PREFIX)
-	cd $(PREFIX) && ln -s -f "$(INSTALL_DIRNAME)" "$(LINK_DIRNAME)"
+	$(LINK_CMD)
 
 $(PREFIX):
 	@ echo "Installation directory doesn't exist! Creating..."
