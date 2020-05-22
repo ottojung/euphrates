@@ -1406,7 +1406,7 @@
 (define (shell-cmd-to-comprocess-args cmd)
   (if (list? cmd)
       cmd
-      (cons "/bin/sh" "-c" cmd)))
+      (list "/bin/sh" "-c" cmd)))
 
 (define [sh-async-no-log cmd]
   (apply run-comprocess
