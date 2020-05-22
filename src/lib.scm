@@ -1403,8 +1403,14 @@
   (unless (= 0 (comprocess-status p))
     (throw 'shell-process-failed `(cmd: ,(comprocess-command p)) p)))
 
+(define (shell-cmd-to-comprocess-args cmd)
+  (if (list? cmd)
+      cmd
+      (cons "/bin/sh" "-c" cmd)))
+
 (define [sh-async-no-log cmd]
-  (run-comprocess "/bin/sh" "-c" cmd))
+  (apply run-comprocess
+         (shell-cmd-to-comprocess-args cmd)))
 
 (define (sh-async cmd)
   (monadic-id
@@ -1424,7 +1430,9 @@
 (define [sh-re cmd]
   (monadic (except-monad)
    ((outport outfilename) (make-temporary-fileport))
-   (p (run-comprocess#full outport outport "/bin/sh" "-c" cmd))
+   (p (apply run-comprocess#full
+             (cons* outport outport
+                    (shell-cmd-to-comprocess-args cmd))))
    (do (printfln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
