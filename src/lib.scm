@@ -105,6 +105,15 @@
  (define-syntax-rule [generate-prefixed-name prefix name]
    (format-id name "~a~a" prefix (syntax->datum name))))
 
+(define (catch-any#as-pair thunk)
+  (let* ((maybe-error #f) ;; should be 'nil :D
+         (result
+          (catch-any
+           thunk
+           (lambda (error)
+             (set! maybe-error error)))))
+    (values result maybe-error)))
+
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
