@@ -23,7 +23,7 @@ uninstallone:
 	rm -rf "$(INSTALL_TGT)"
 	if $(HARD_INSTALL); then rm -f "$(LINK_TGT)"; fi
 
-LINK_CMD = cd $(PREFIX) && ln -s -f "$(INSTALL_DIRNAME)" "$(LINK_DIRNAME)"
+LINK_CMD = cd $(PREFIX) && ln --symbolic --force --no-dereference "$(INSTALL_DIRNAME)" "$(LINK_DIRNAME)"
 
 $(INSTALL_TGT): $(PREFIX)
 	cp -r "$(DIR)" "$(INSTALL_TGT)"
