@@ -4,6 +4,15 @@
            [c 3]
            (+ i c)))
 
+(assert-equal (list 0 'x 1 'x 2)
+              (list-intersperse 'x (list 0 1 2)))
+(assert-equal (list 0)
+              (list-intersperse 'x (list 0)))
+(assert-equal (list)
+              (list-intersperse 'x (list)))
+(assert-equal 199
+              (length (list-intersperse 'x (range 100))))
+
 (catch-any
  (lambda ()
    (throw 'test1 1 2 3 4))

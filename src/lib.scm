@@ -148,6 +148,17 @@
 (define (unwords lns)
   (string-join lns " "))
 
+(define (list-intersperse element lst)
+  (let lp ((buf lst))
+    (if (pair? buf)
+        (let ((rest (cdr buf)))
+          (if (null? rest)
+              buf
+              (cons* (car buf)
+                     element
+                     (lp rest))))
+        null)))
+
 (define-syntax assert
   (syntax-rules ()
     ((assert test)
