@@ -27,6 +27,7 @@ common: | $(DIR) $(DIR)/common.$(END)
 $(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) src/lib.scm $(DIRPREFIX)/common.footer.$(END)
 	echo ";; euphrates-version-$(CURRENT_GIT_COMMIT)" > $@
 	cat $^ >> $@
+	sed -i "s/EUPHRATES_VERSION_STRING_SED_PLACEHOLDER/$(CURRENT_GIT_COMMIT)/g" "$@"
 	if [ "$(TARGET)" = "$(GUILEDIR)" ]; then scripts/replace-export-list.sh ; fi
 
 $(DIR):

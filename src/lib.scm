@@ -1,3 +1,6 @@
+
+(define euphrates-version "EUPHRATES_VERSION_STRING_SED_PLACEHOLDER")
+
 ;;;;;;;;;;;;
 ;; SYNTAX ;;
 ;;;;;;;;;;;;
