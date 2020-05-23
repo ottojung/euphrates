@@ -46,8 +46,7 @@
   (tree-future-run
    (child-make n)
    #f
-   (child-cb-make n)
-   #f))
+   (child-cb-make n)))
 
 (define (main-body)
 
@@ -66,8 +65,7 @@
 
   (tree-future-run main-body
                    #f
-                   main-cb
-                   #f))
+                   main-cb))
 
 (with-new-tree-future-env
  (with-np-thread-env#non-interruptible
