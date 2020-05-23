@@ -175,6 +175,8 @@
 
 (define find-first findf)
 
+(define setenv putenv) ;; Guile's procedure is called `setenv'
+
 ;; TODOS
 
 ;;;;;;;;;;;;;;;;
