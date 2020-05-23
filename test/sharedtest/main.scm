@@ -4,6 +4,13 @@
            [c 3]
            (+ i c)))
 
+(catch-any
+ (lambda ()
+   (throw 'test1 1 2 3 4))
+ (lambda err
+   (printfln "err: ~A" err)
+   (assert-equal 1 (length err))))
+
 (assert-equal
  "file.b.c"
  (path-replace-extension "file.b.a" ".c"))

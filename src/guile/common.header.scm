@@ -57,7 +57,8 @@
   (= 0 (hash-count (lambda _ 0) h)))
 
 (define [catch-any body handler]
-  (catch #t body handler))
+  (catch #t body
+    (lambda err (handler err))))
 
 (define [printf fmt . args]
   (local-print fmt args))
