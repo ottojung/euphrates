@@ -1596,6 +1596,7 @@
   callback ;; (: tree-future -> exit-status -> results... -> a) called on finish or on exception or on `cancelled?', after all children are `finished?'; it is safe to modify this structure after callback is called
   thread ;; body thread.  On non-cancel exit, callback is also called on this thread, but if this cancelled, then callback is called on a newly created thread
   evaluated?#box ;; set when body finished evaluating (maybe with error) or when cancelled. When cancelled, the value is 'cancelled
+  evaluated? ;; set when body finished evaluating but by event loop, not by atomic box
   children-finished? ;; set when all children are `finished?'. Checked after `evaluated?'
   finished? ;; set when callback finished evaluating
   )
@@ -1644,7 +1645,7 @@
         (lambda (structure status results)
 
           (run-finally structure status results)
-          (send-message 'remove structure)
+          (send-message 'finish-async structure)
           (sleep-until (tree-future-children-finished? structure))
 
           (let ((errs #f))
@@ -1694,7 +1695,8 @@
        (remove-future-sync
         (lambda (structure)
           (when (children-finished? structure)
-            (set-tree-future-children-finished?! structure #t)
+            (when (tree-future-evaluated? structure)
+              (set-tree-future-children-finished?! structure #t))
             (when (tree-future-finished? structure)
               (hash-remove! futures-hash (tree-future-current-index structure))
               (dispatch 'remove (tree-future-parent-index structure))))))
@@ -1705,55 +1707,30 @@
 
             ((start)
              (match args
-               (`(,parent-index
-                  ,current-index
-                  ,target-procedure
-                  ,finally
-                  ,callback)
-                (if (get-by-index current-index)
-                    (logger "index already exists")
-                    (let ((parent (get-by-index parent-index)))
-                      (if (and parent
-                               (tree-future-finished? parent))
-                          (logger "parent is already done")
-                          (let* ((structure (tree-future parent-index
-                                                         current-index
-                                                         null
-                                                         finally
-                                                         callback
-                                                         #f
-                                                         (make-atomic-box #f)
-                                                         #f #f)))
-                            (hash-set! futures-hash current-index structure)
-                            (when parent
-                              (set-tree-future-children-list!
-                               parent
-                               (cons structure
-                                     (tree-future-children-list parent))))
-                            (set-tree-future-thread!
-                             structure
-                             (dynamic-thread-spawn
-                              (lambda ()
-                                (parameterize ((tree-future-current current-index))
-                                  (let ((results #f)
-                                        (status 'undefined))
-                                    (catch-any
-                                     (lambda ()
-                                       (call-with-values
-                                           target-procedure
-                                         (lambda vals
-                                           (set! status 'ok)
-                                           (set! results vals))))
-                                     (lambda err
-                                       (set! status 'error)
-                                       (set! results err)))
-
-                                    (when (atomic-box-compare-and-set!
-                                           (tree-future-evaluated?#box structure)
-                                           #f #t)
-                                      (finish structure status results))))))))))))
+               (`(,structure)
+                (let ((parent (get-by-index (tree-future-parent-index structure))))
+                  (if (and parent
+                           (tree-future-finished? parent))
+                      (logger "parent is already done")
+                      (begin
+                        (hash-set! futures-hash
+                                   (tree-future-current-index structure)
+                                   structure)
+                        (when parent
+                          (set-tree-future-children-list!
+                           parent
+                           (cons structure
+                                 (tree-future-children-list parent))))))))
                (else
                 (logger "wrong number of arguments to 'start"))))
+
+            ((finish-async)
+             (match args
+               (`(,structure)
+                (set-tree-future-evaluated?! structure #t)
+                (remove-future-sync structure))
+               (else
+                (logger "wrong number of arguments to 'finish-async"))))
 
             ((remove)
              (match args
@@ -1817,16 +1794,43 @@
        (run (lambda (target-procedure
                      finally
                      callback)
-              (let ((current-index (tree-future-current))
-                    (target-index (make-unique)))
-                (send-message 'start
-                              current-index
-                              target-index
-                              target-procedure
-                              finally
-                              callback)
+              (let* ((parent-index (tree-future-current))
+                     (current-index (make-unique))
+                     (structure (tree-future parent-index
+                                             current-index
+                                             null
+                                             finally
+                                             callback
+                                             #f
+                                             (make-atomic-box #f)
+                                             #f #f #f)))
+
+                (send-message 'start structure)
+
+                (set-tree-future-thread!
+                 structure
+                 (dynamic-thread-spawn
+                  (lambda ()
+                    (parameterize ((tree-future-current current-index))
+                      (let ((results #f)
+                            (status 'undefined))
+                        (catch-any
+                         (lambda ()
+                           (call-with-values
+                               target-procedure
+                             (lambda vals
+                               (set! status 'ok)
+                               (set! results vals))))
+                         (lambda err
+                           (set! status 'error)
+                           (set! results err)))
+                        (when (atomic-box-compare-and-set!
+                               (tree-future-evaluated?#box structure)
+                               #f #t)
+                          (finish structure status results)))))))
+
                 (maybe-start-loopin)
-                target-index)))
+                current-index)))
        )
     (values run send-message wait-all)))
 
