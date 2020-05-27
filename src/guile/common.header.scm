@@ -12,6 +12,7 @@
   #:use-module [ice-9 ftw]
   #:use-module [ice-9 match]
   #:use-module [ice-9 atomic]
+  #:use-module [ice-9 rdelim] ;; read-line
   #:use-module [srfi srfi-1]
   #:use-module [srfi srfi-9] ;; records
   #:use-module [srfi srfi-11] ;; let-values
@@ -22,6 +23,7 @@
   #:use-module [srfi srfi-42]
   #:use-module [srfi srfi-111] ;; box
 
+  #:re-export (read-line)
   #:re-export (let-values)
   #:re-export (make-atomic-box
                atomic-box?
