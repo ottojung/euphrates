@@ -1701,6 +1701,10 @@
               (hash-remove! futures-hash (tree-future-current-index structure))
               (dispatch 'remove (tree-future-parent-index structure))))))
 
+       (retry-later
+        (lambda (type args)
+          (apply send-message (cons type args))))
+
        (dispatch
         (lambda (type . args)
           (case type
@@ -1753,7 +1757,9 @@
                      ((single down all)
                       (let* ((structure (get-by-index index)))
                         (if structure
-                            (cancel-future-sync structure mode args)
+                            (if (tree-future-thread structure)
+                                (cancel-future-sync structure mode args)
+                                (retry-later type args))
                             (logger "bad index"))))
                      (else
                       (logger "bad mode"))))))
