@@ -1599,6 +1599,7 @@
   evaluated? ;; set when body finished evaluating but by event loop, not by atomic box
   children-finished? ;; set when all children are `finished?'. Checked after `evaluated?'
   finished? ;; set when callback finished evaluating
+  context ;; opaque context
   )
 
 (define tree-future-current (make-parameter #f))
@@ -1799,7 +1800,8 @@
 
        (run (lambda (target-procedure
                      finally
-                     callback)
+                     callback
+                     context)
               (let* ((parent-index (tree-future-current))
                      (current-index (make-unique))
                      (structure (tree-future parent-index
@@ -1809,7 +1811,8 @@
                                              callback
                                              #f
                                              (make-atomic-box #f)
-                                             #f #f #f)))
+                                             #f #f #f
+                                             context)))
 
                 (send-message 'start structure)
 
@@ -1869,7 +1872,7 @@
   child-index)
 
 ;; NOTE: if status != 'ok then throws exception
-(define (tree-future-run-task-thunk thunk user-finally user-callback)
+(define (tree-future-run-task-thunk thunk user-finally user-callback user-context)
   (let ((finished? #f)
         (evaluated? #f)
         (results #f)
@@ -1928,14 +1931,14 @@
             (throw 'unknown-touch-type type))))))
 
     (define child-index
-      (tree-future-run thunk finally callback))
+      (tree-future-run thunk finally callback user-context))
 
     (tree-future-task
      touch-procedure
      child-index)))
 
 (define-syntax-rule (tree-future-run-task . bodies)
-  (tree-future-run-task-thunk (lambda () . bodies) #f #f))
+  (tree-future-run-task-thunk (lambda () . bodies) #f #f #f))
 
 (define tree-future-wait-task
   (case-lambda
