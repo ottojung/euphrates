@@ -1599,10 +1599,12 @@
   evaluated? ;; set when body finished evaluating but by event loop, not by atomic box
   children-finished? ;; set when all children are `finished?'. Checked after `evaluated?'
   finished? ;; set when callback finished evaluating
-  context ;; opaque context
+  context ;; thunk that evaluates contexts and returns it.  #memoized
   )
 
 (define tree-future-current (make-parameter #f))
+(define tree-future-eval-context-p (make-parameter #f))
+(define (tree-future-eval-context) ((tree-future-eval-context-p)))
 
 ;; Initializes tree-future env using current threading model
 ;; Returns an interface for this environment
@@ -1765,6 +1767,25 @@
                      (else
                       (logger "bad mode"))))))
 
+            ((context) ;; also used for checking if future exists
+             (match args
+               (`(,target-index ,transformer)
+                (let ((target (get-by-index target-index)))
+                  (if target
+                      (let ((current (tree-future-context target)))
+                        (set-tree-future-context!
+                         target
+                         (let ((saved? #f)
+                               (memory #f))
+                           (lambda ()
+                             (unless saved?
+                               (set! saved? #t)
+                               (set! memory (transformer (current))))
+                             memory))))
+                      (logger "target doesnt exist"))))
+               (else
+                (logger "wrong number of arguments to 'context"))))
+
             (else
              (logger "bad op type"))
 
@@ -1801,8 +1822,9 @@
        (run (lambda (target-procedure
                      finally
                      callback
-                     context)
-              (let* ((parent-index (tree-future-current))
+                     initial-context)
+              (let* ((context (lambda () initial-context))
+                     (parent-index (tree-future-current))
                      (current-index (make-unique))
                      (structure (tree-future parent-index
                                              current-index
@@ -1812,7 +1834,9 @@
                                              #f
                                              (make-atomic-box #f)
                                              #f #f #f
-                                             context)))
+                                             context))
+                     (eval-context
+                      (lambda () ((tree-future-context structure)))))
 
                 (send-message 'start structure)
 
@@ -1820,7 +1844,8 @@
                  structure
                  (dynamic-thread-spawn
                   (lambda ()
-                    (parameterize ((tree-future-current current-index))
+                    (parameterize ((tree-future-current current-index)
+                                   (tree-future-eval-context-p eval-context))
                       (let ((results #f)
                             (status 'undefined))
                         (catch-any
@@ -1851,6 +1876,11 @@
 (define (tree-future-run . args)
   (apply (tree-future-run-p) args))
 
+(define (tree-future-modify target-index transformation)
+  (tree-future-send-message 'context
+                            target-index
+                            transformation))
+
 (define (tree-future-cancel target-index . arguments)
   (apply tree-future-send-message
          (cons* 'cancel target-index arguments)))
@@ -1872,7 +1902,7 @@
   child-index)
 
 ;; NOTE: if status != 'ok then throws exception
-(define (tree-future-run-task-thunk thunk user-finally user-callback user-context)
+(define (tree-future-run-task-thunk thunk user-finally user-callback initial-context)
   (let ((finished? #f)
         (evaluated? #f)
         (results #f)
@@ -1881,6 +1911,8 @@
 
     (define (callback cb-structure cb-status . cb-results)
       (set! structure cb-structure)
+      (catch-any (lambda () (tree-future-eval-context))
+                 (lambda errs 0)) ;; NOTE: ignoring errors
       (set! finished? #t)
       (when user-callback
         (apply user-callback (cons* cb-structure cb-status cb-results))))
@@ -1931,7 +1963,7 @@
             (throw 'unknown-touch-type type))))))
 
     (define child-index
-      (tree-future-run thunk finally callback user-context))
+      (tree-future-run thunk finally callback initial-context))
 
     (tree-future-task
      touch-procedure

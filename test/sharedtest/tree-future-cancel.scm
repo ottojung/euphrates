@@ -41,7 +41,8 @@
   (tree-future-run
    (child-make n)
    #f
-   (child-cb-make n)))
+   (child-cb-make n)
+   #f))
 
 (define (cancel-nth-child child)
   (tree-future-cancel child 'down))
@@ -71,7 +72,8 @@
 
   (tree-future-run main-body
                    #f
-                   main-cb))
+                   main-cb
+                   #f))
 
 (with-new-tree-future-env
  (with-np-thread-env#non-interruptible
