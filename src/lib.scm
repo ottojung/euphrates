@@ -1273,12 +1273,19 @@
              `(args: ,thunk)
              `(tried to fork np-thread before np-thread-run!)))
 
-    (let ((ret (make-np-thread-obj
-                (lambda [tru]
-                  (thunk)
-                  (np-thread-end)))))
-      (np-thread-list-add ret)
-      ret))
+    (let* ((cont #f)
+           (repl (call/cc
+                  (lambda [k]
+                    (set! cont k)
+                    #f))))
+      (if repl
+          (begin
+            (thunk)
+            (np-thread-end))
+          (let ((ret (make-np-thread-obj
+                      (lambda [tru] (cont #t)))))
+            (np-thread-list-add ret)
+            ret))))
 
   (define-syntax-rule [np-thread-run! . thunk]
     (call/cc
