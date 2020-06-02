@@ -12,7 +12,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  test-racket:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,9 +20,23 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make dependecies -f makefiles/ci.make
+        make install-racket -f makefiles/ci.make
 
-    - name: Run a multi-line script
+    - name: Test main
+      run: |
+        echo TODO
+
+  test-guile:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        make install-guile -f makefiles/ci.make
+
+    - name: Test main
       run: |
         echo TODO
 
