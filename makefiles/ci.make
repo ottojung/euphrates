@@ -28,5 +28,3 @@ test-%:
 
 .ONESHELL: $(TESTS)
 
-.PHONY: dependecies install-guile install-racket build-all
-
