@@ -12,7 +12,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  test-racket:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,39 +20,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo make install-racket -f makefiles/ci.make
+        sudo make dependecies -f makefiles/ci.make
 
-    - name: Test main
+    - name: Install euphrates
       run: |
-        echo TODO
+        make install-all -f makefiles/ci.make
 
-  test-guile:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Install dependencies
+    - name: Run tests
       run: |
-        sudo make install-guile -f makefiles/ci.make
-
-    - name: Test main
-      run: |
-        echo TODO
-
-  dummy:
-    runs-on: ubuntu-latest
-
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    steps:
-    - uses: actions/checkout@v2
-
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: echo Hello, world!
-
-    # Runs a set of commands using the runners shell
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        make testall -f makefiles/ci.make

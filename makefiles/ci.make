@@ -2,6 +2,9 @@
 INSTALL_LIST += $(shell hash guile || echo install-guile)
 INSTALL_LIST += $(shell hash racket || echo install-racket)
 
+TESTFILES = main.scm comprocess.scm tree-future.scm tree-future-cancel.scm tree-future-context.scm
+TESTS = $(shell echo " $(TESTFILES)" | sed 's/ / test-/g')
+
 dependencies: $(INSTALL_LIST)
 
 install-guile:
@@ -10,5 +13,20 @@ install-guile:
 install-racket:
 	apt install -y racket
 
-.PHONY: dependecies install-guile install-racket
+build-all:
+	$(MAKE) all
+
+install-all:
+	$(MAKE) install
+
+testall:
+	$(MAKE) $(TESTS) BACKEND=guile -f makefiles/ci.make
+	$(MAKE) $(TESTS) BACKEND=racket -f makefiles/ci.make
+
+test-%:
+	$(BACKEND) build/test/src/$(BACKEND)/$(shell echo $@ | sed 's/test-//g')
+
+.ONESHELL: $(TESTS)
+
+.PHONY: dependecies install-guile install-racket build-all
 

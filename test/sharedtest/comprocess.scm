@@ -14,24 +14,24 @@
           "/bin/sh" "-c" "sleep 5 && echo hello from echo5 1>&2")]]
   (sleep-until (comprocess-exited? p)))
 
-(let [[p (run-comprocess
-          "sl")]]
-  (let lp []
-    (usleep 10000)
-    (unless (comprocess-exited? p)
-      (lp))))
-
-(let [[p (run-comprocess
-          "/bin/sh"
-          "-c"
-          "sl")]]
-  (let lp []
-    (usleep (normal->micro@unit 1/2))
-    (kill-comprocess-with-timeout p
-                                  (normal->micro@unit 1/2))
-    (unless (comprocess-exited? p)
-      (usleep 100)
-      (lp))))
-
 (printfln "ALL EXITED")
+
+;; (let [[p (run-comprocess
+;;           "sl")]]
+;;   (let lp []
+;;     (usleep 10000)
+;;     (unless (comprocess-exited? p)
+;;       (lp))))
+
+;; (let [[p (run-comprocess
+;;           "/bin/sh"
+;;           "-c"
+;;           "sl")]]
+;;   (let lp []
+;;     (usleep (normal->micro@unit 1/2))
+;;     (kill-comprocess-with-timeout p
+;;                                   (normal->micro@unit 1/2))
+;;     (unless (comprocess-exited? p)
+;;       (usleep 100)
+;;       (lp))))
 
