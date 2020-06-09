@@ -392,11 +392,17 @@
 ;; FILESYSTEM ;;
 ;;;;;;;;;;;;;;;;
 
-(let [[curfile (get-current-source-file-path)]]
+(let* [[temp (make-temporary-filename)]
+       [curfile (get-current-source-file-path)]]
   (printfln "cur file = ~a" curfile)
   (let [[text (read-string-file curfile)]]
-    (printfln "text = ~a" (car (string-split#simple text #\newline)))
-    (write-string-file curfile text)))
+    (printfln "text = <~a>" (car
+                             (filter
+                              (compose not string-null?)
+                              (string-split#simple text #\newline))))
+    (write-string-file temp text)
+    (let [[temp-text (read-string-file temp)]]
+      (assert-equal text temp-text))))
 
 ;;;;;;;;;;;;;
 ;; SCRIPTS ;;

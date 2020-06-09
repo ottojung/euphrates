@@ -30,5 +30,3 @@ testall:
 test-%:
 	$(BACKEND) build/test/src/$(BACKEND)/$(shell echo $@ | sed 's/test-//g')
 
-.ONESHELL: $(TESTS)
-
