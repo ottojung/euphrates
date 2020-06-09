@@ -17,14 +17,6 @@
 ;; HASHED RECORDS ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(define [alist->hash-table lst]
-  (let [[h (make-hash-table)]]
-    (for-each
-     (lambda (pair)
-       (hash-set! h (car pair) (cdr pair)))
-     lst)
-    h))
-
 (define [hash->mdict h]
   (letin
    [unique (make-unique)]

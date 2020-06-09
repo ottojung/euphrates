@@ -265,7 +265,7 @@
    tree-future-run-task
    tree-future-wait-task
    local-print
-   alist->hash-table
+   hash-copy
    hash->mdict
    alist->mdict
    mdict-c
@@ -319,6 +319,7 @@
                ;; atomic-box-compare-and-swap!) ;; racket doesn't have this
                )
   #:re-export (box unbox box? set-box!)
+  #:re-export (alist->hash-table)
   )
 
 (define null (list))
@@ -339,6 +340,14 @@
 (define hash-has-key? hash-get-handle)
 (define (hash-empty? h)
   (= 0 (hash-count (lambda _ 0) h)))
+(define [hash-table->alist h] (hash-map->list cons h))
+(define [hash-copy h]
+  (let [[ret (make-hash-table)]]
+    (hash-for-each
+     (lambda (key value)
+       (hash-set! ret key value))
+     h)
+    ret))
 
 (define [catch-any body handler]
   (catch #t body
@@ -373,8 +382,6 @@
       (case c
         ((#\newline #\space #\tab) #t)
         (else #f))))))
-
-(define [hash-table->alist h] (hash-map->list cons h))
 
 (define big-random-int
   (let ((initialized? #f))

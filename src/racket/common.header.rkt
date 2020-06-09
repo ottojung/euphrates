@@ -27,6 +27,14 @@
 
 (define [make-hash-table] (make-hash))
 
+(define [alist->hash-table lst]
+  (let [[h (make-hash-table)]]
+    (for-each
+     (lambda (pair)
+       (hash-set! h (car pair) (cdr pair)))
+     lst)
+    h))
+
 (define dynamic-thread-mutex-make-p
   (make-parameter
    (lambda () (make-semaphore 1))))
