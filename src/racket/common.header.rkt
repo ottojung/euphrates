@@ -344,8 +344,6 @@
         (apply subprocess
                (list*
                 p-stdout #f p-stderr ;; stdout stdin stderr
-                'new                ;; new group, means that (kill ..) will kill its children also
-
                 command
                 args))]]
     (let [[re (comprocess p
