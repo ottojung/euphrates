@@ -3,7 +3,6 @@
   #:export
   (
    null
-   procedure-get-minimum-arity
    dynamic-thread-mutex-make-p
    dynamic-thread-mutex-lock!-p
    dynamic-thread-mutex-unlock!-p
@@ -323,10 +322,6 @@
   )
 
 (define null (list))
-
-(define [procedure-get-minimum-arity proc]
-  (let [[ret (procedure-minimum-arity proc)]]
-    (if ret (car ret) #f)))
 
 (define dynamic-thread-mutex-make-p
   (make-parameter

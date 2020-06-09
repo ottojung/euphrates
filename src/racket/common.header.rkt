@@ -52,13 +52,6 @@
 
 (define cons* list*)
 
-(define [procedure-get-minimum-arity proc]
-  (let [[mask (procedure-arity-mask proc)]]
-    (let lp2 [[count 0]]
-      (if (bitwise-bit-set? mask count)
-          count
-          (lp2 (add1 count))))))
-
 (define [call-with-blocked-asyncs thunk]
   ;; TODO: print system message that this does not work
   (thunk))
