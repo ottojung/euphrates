@@ -8,10 +8,10 @@ TESTS = $(shell echo " $(TESTFILES)" | sed 's/ / test-/g')
 dependencies: $(INSTALL_LIST)
 
 install-guile:
-	apt install -y guile-2.2
+	apt-get install -y guile-2.2
 
 install-racket:
-	apt install -y racket
+	apt-get install -y racket
 
 build-all:
 	$(MAKE) all
