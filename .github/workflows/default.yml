@@ -20,7 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo make dependecies -f makefiles/ci.make
+        sudo make dependencies -f makefiles/ci.make
 
     - name: Install euphrates
       run: |
