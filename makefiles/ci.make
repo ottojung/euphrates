@@ -17,7 +17,7 @@ build-all:
 	$(MAKE) all
 
 install-all:
-	$(MAKE) install
+	sudo $(MAKE) install
 
 testall:
 	$(MAKE) $(TESTS) BACKEND=guile -f makefiles/ci.make
