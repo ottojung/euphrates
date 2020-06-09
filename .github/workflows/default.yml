@@ -20,7 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make install-racket -f makefiles/ci.make
+        sudo make install-racket -f makefiles/ci.make
 
     - name: Test main
       run: |
@@ -34,7 +34,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make install-guile -f makefiles/ci.make
+        sudo make install-guile -f makefiles/ci.make
 
     - name: Test main
       run: |
