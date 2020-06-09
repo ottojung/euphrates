@@ -34,4 +34,4 @@ $(LINK_TGT): $(PREFIX)
 
 $(PREFIX):
 	@ echo "Installation directory doesn't exist! Creating..."
-	mkdir -p $@
+	mkdir -p $@ || (sudo mkdir -p $@ && sudo chown "$USER:$USER" $@)
