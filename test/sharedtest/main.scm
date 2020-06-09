@@ -351,8 +351,6 @@
    (printf "composite unlocked\n")))
 
 (with-np-thread-env#non-interruptible
- (printfln "hello")
-
  (define [kek]
    (printfln "in kek"))
 
@@ -381,6 +379,8 @@
                   (dynamic-thread-yield)
                   (printfln "zulul after ~a" n)
                   (loop (1+ n))))))
+
+ (printfln "hello")
 
  (dynamic-thread-spawn kek)
  (dynamic-thread-spawn lol)
