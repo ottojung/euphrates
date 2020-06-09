@@ -26,6 +26,8 @@
     (body)))
 
 (define [make-hash-table] (make-hash))
+(define [hash-table-foreach h procedure]
+  (hash-table-for-each h procedure))
 
 (define [alist->hash-table lst]
   (let [[h (make-hash-table)]]
