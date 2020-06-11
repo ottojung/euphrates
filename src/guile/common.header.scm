@@ -349,7 +349,7 @@
      h)
     ret))
 (define [hash-table-foreach h procedure]
-  (hash-table-for-each procedure h))
+  (hash-for-each procedure h))
 
 (define [catch-any body handler]
   (catch #t body
