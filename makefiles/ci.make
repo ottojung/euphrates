@@ -23,8 +23,12 @@ build-all:
 install-all:
 	sudo $(MAKE) install
 
-testall:
+testall: testguile testracket
+
+testguile:
 	$(MAKE) $(TESTS) BACKEND=guile -f makefiles/ci.make
+
+testracket:
 	$(MAKE) $(TESTS) BACKEND=racket -f makefiles/ci.make
 
 test-%:
