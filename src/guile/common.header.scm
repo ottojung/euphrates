@@ -9,6 +9,7 @@
    atomic-box-compare-and-set!
    hash-has-key?
    hash-empty?
+   hash-table-foreach
    catch-any
    printf
    ~a
