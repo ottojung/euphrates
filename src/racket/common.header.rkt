@@ -178,9 +178,13 @@
 
 (define find-first findf)
 
-(define setenv putenv) ;; Guile's procedure is called `setenv'
-
-;; TODOS
+(define (setenv s v)
+  (if v
+      (putenv s v) ;; Guile's procedure is called `setenv', except that it accepts #f
+      (environment-variables-set!
+       (current-environment-variables)
+       (string->bytes/locale s (char->integer #\?))
+       #f)))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
