@@ -17,11 +17,11 @@
 
   (set! failed #f)
 
-  (printfln "main cb: ~a ~a" status args))
+  (dprintln "main cb: ~a ~a" status args))
 
 (define (child-cb-make n)
   (lambda (structure status . args)
-    ;; (printfln "child~a-cb: ~a ~a" n status args)
+    ;; (dprintln "child~a-cb: ~a ~a" n status args)
     (set! failed #t)
     (assert-equal status 'ok)
     (set! failed #f)
@@ -39,7 +39,7 @@
     (define re (tree-future-wait-task t1 t2))
     (define s (apply + re))
     (assert-equal s 5)
-    ;; (printfln "child ~a" n)
+    ;; (dprintln "child ~a" n)
     ))
 
 (define (run-nth-child n)
@@ -56,13 +56,13 @@
      (run-nth-child i))
    (range CHILD-COUNT))
 
-  (printfln "main body"))
+  (dprintln "main body"))
 
 (define in-main-count 0)
 
 (define (main)
   (set! in-main-count (1+ in-main-count))
-  (printfln "in main ~a" in-main-count)
+  (dprintln "in main ~a" in-main-count)
 
   (tree-future-run main-body
                    #f

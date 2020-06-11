@@ -18,7 +18,7 @@
 
   (set! failed #f)
 
-  (printfln "main cb: ~a ~a" status args))
+  (dprintln "main cb: ~a ~a" status args))
 
 (define (child-cb-make n)
   (lambda (structure status . args)
@@ -34,7 +34,7 @@
 
     (set! missed-cancel #t)
 
-    (printfln "HERE!")
+    (dprintln "HERE!")
     ))
 
 (define (run-nth-child n)
@@ -62,13 +62,13 @@
      (cancel-nth-child child))
    children)
 
-  (printfln "main body"))
+  (dprintln "main body"))
 
 (define in-main-count 0)
 
 (define (main)
   (set! in-main-count (1+ in-main-count))
-  (printfln "in main ~a" in-main-count)
+  (dprintln "in main ~a" in-main-count)
 
   (tree-future-run main-body
                    #f

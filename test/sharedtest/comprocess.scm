@@ -14,7 +14,7 @@
           "/bin/sh" "-c" "sleep 5 && echo hello from echo5 1>&2")]]
   (sleep-until (comprocess-exited? p)))
 
-(printfln "ALL EXITED")
+(dprintln "ALL EXITED")
 
 ;; (let [[p (run-comprocess
 ;;           "sl")]]

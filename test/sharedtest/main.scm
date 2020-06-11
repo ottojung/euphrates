@@ -17,7 +17,7 @@
  (lambda ()
    (throw 'test1 1 2 3 4))
  (lambda err
-   (printfln "err: ~A" err)
+   (dprintln "err: ~A" err)
    (assert-equal 1 (length err))))
 
 (assert-equal
@@ -37,10 +37,10 @@
 
 (define rec (rec1 1 2))
 
-(printfln "record? ~a" (record? rec))
-(printfln "aa = ~a" (rec1-aa rec))
+(dprintln "record? ~a" (record? rec))
+(dprintln "aa = ~a" (rec1-aa rec))
 (set-rec1-aa! rec 10)
-(printfln "aa = ~a" (rec1-aa rec))
+(dprintln "aa = ~a" (rec1-aa rec))
 
 (printf "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
 
@@ -50,7 +50,7 @@
        (tt "hx")
        (test
         (fn mode
-            (printfln "trim of ~s with ~s in mode ~a: ~a"
+            (dprintln "trim of ~s with ~s in mode ~a: ~a"
                      s
                      tt
                      mode
@@ -63,10 +63,10 @@
 
 (display "Hello, Guile!\n")
 
-;; (printfln "tree:\n~a\n\n" (directory-tree "."))
-(printfln "files:\n~a\n\n" (directory-files "."))
-;; (printfln "files-rec:\n~a\n\n" (directory-files-rec "."))
-;; (printfln "rec only names:\n~a\n\n" (map cadr (directory-files-rec ".")))
+;; (dprintln "tree:\n~a\n\n" (directory-tree "."))
+(dprintln "files:\n~a\n\n" (directory-files "."))
+;; (dprintln "files-rec:\n~a\n\n" (directory-files-rec "."))
+;; (dprintln "rec only names:\n~a\n\n" (map cadr (directory-files-rec ".")))
 
 ;; scoping test
 (apploop [x] [20]
@@ -166,13 +166,13 @@
      (monadic (except-monad)
               [a (+ 2 7)]
               [b (throw 'test-abort)]
-              [p (printfln "after kek") 'always]
+              [p (dprintln "after kek") 'always]
               [r (set! ran-always #t) 'always]
               [c (- b b)]
               (+ 100 c))
      (set! throwed #f))
    (lambda errs
-     (printfln "except-monad throwed: ~a" errs)))
+     (dprintln "except-monad throwed: ~a" errs)))
   (assert ran-always)
   (assert throwed))
 
@@ -184,13 +184,13 @@
               [a (+ 2 7)]
               [[k d] (values 2 3)]
               [[b y] (throw 'test-abort)]
-              [p (printfln "after kek") 'always]
+              [p (dprintln "after kek") 'always]
               [r (set! ran-always #t) 'always]
               [c (- b b)]
               (+ 100 c))
      (set! throwed #f))
    (lambda errs
-     (printfln "except-monad throwed: ~a" errs)))
+     (dprintln "except-monad throwed: ~a" errs)))
   (assert ran-always)
   (assert throwed))
 
@@ -245,9 +245,9 @@
 (assert-equal 'no-arguments (haha))
 (assert-equal 50 (haha 5))
 
-(printfln "~a" (list-fold 1 (range 1 5) *))
-(printfln "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
-(printfln "~a" (lfold 1 (range 1 5) (* acc x)))
+(dprintln "~a" (list-fold 1 (range 1 5) *))
+(dprintln "~a" (list-fold 1 (range 1 5) (lambda [acc x] (* acc x))))
+(dprintln "~a" (lfold 1 (range 1 5) (* acc x)))
 
 (assert-equal
  (simplify-posix-path "/hello/../there/./bro/")
@@ -265,7 +265,7 @@
  (simplify-posix-path
   (append-posix-path "hello/there" ".." "and/" "bro" "." "hello"))
  "hello/and/bro/hello")
-;; (printfln (append-posix-path "hello/there" "/bro"))
+;; (dprintln (append-posix-path "hello/there" "/bro"))
 
 (assert-equal
   (path-rebase "hello/there/" "kek")
@@ -352,7 +352,7 @@
 
 (with-np-thread-env#non-interruptible
  (define [kek]
-   (printfln "in kek"))
+   (dprintln "in kek"))
 
  (define cycles 4)
 
@@ -361,32 +361,32 @@
  (define [lol]
    (apploop [n] [0]
             (if (> n cycles)
-                (printfln "lol ended")
+                (dprintln "lol ended")
                 (begin
                   (when (= n 2)
                     (dynamic-thread-cancel zulul-thread))
-                  (printfln "lol at ~a" n)
+                  (dprintln "lol at ~a" n)
                   (dynamic-thread-yield)
-                  (printfln "lol after ~a" n)
+                  (dprintln "lol after ~a" n)
                   (loop (1+ n))))))
 
  (define [zulul]
    (apploop [n] [0]
             (if (> n cycles)
-                (printfln "zulul ended")
+                (dprintln "zulul ended")
                 (begin
-                  (printfln "zulul at ~a" n)
+                  (dprintln "zulul at ~a" n)
                   (dynamic-thread-yield)
-                  (printfln "zulul after ~a" n)
+                  (dprintln "zulul after ~a" n)
                   (loop (1+ n))))))
 
- (printfln "hello")
+ (dprintln "hello")
 
  (dynamic-thread-spawn kek)
  (dynamic-thread-spawn lol)
  (set! zulul-thread (dynamic-thread-spawn zulul))
 
- (printfln "end"))
+ (dprintln "end"))
 
 ;;;;;;;;;;;;;;;;
 ;; FILESYSTEM ;;
@@ -394,9 +394,9 @@
 
 (let* [[temp (make-temporary-filename)]
        [curfile (get-current-source-file-path)]]
-  (printfln "cur file = ~a" curfile)
+  (dprintln "cur file = ~a" curfile)
   (let [[text (read-string-file curfile)]]
-    (printfln "text = <~a>" (car
+    (dprintln "text = <~a>" (car
                              (filter
                               (compose not string-null?)
                               (string-split#simple text #\newline))))
@@ -414,7 +414,7 @@
     "filename" "--key1" "val1" "-opt1" "--key2" "val2" "--" "rest1" "rest2"
     )))
 
-(printfln "parsed = ~a" (parse-cli-parse-or-get!))
+(dprintln "parsed = ~a" (parse-cli-parse-or-get!))
 
 (assert-equal #t
               (parse-cli-get-flag "key1"))

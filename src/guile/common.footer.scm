@@ -1,8 +1,8 @@
 
 ;; depends on uni-spinlock
-(define local-print
+(define guile-printf
   (let [[critical (make-uni-spinlock-critical)]]
-    (lambda [fmt args]
+    (lambda [fmt . args]
       (let [[err #f]]
         (critical
          (lambda []

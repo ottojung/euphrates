@@ -314,8 +314,14 @@
     (lambda []
       (apply printf (cons* fmt args)))))
 
-(define [printfln fmt . args]
-  (apply printf (cons* (string-append fmt "\n") args)))
+(define dprint#p-default printf)
+(define dprint#p
+  (make-parameter dprint#p-default))
+(define dprint
+  (lambda args
+    (apply (dprint#p) args)))
+(define [dprintln fmt . args]
+  (apply dprint (cons* (string-append fmt "\n") args)))
 
 (define global-debug-mode-filter (make-parameter #f))
 
@@ -326,7 +332,7 @@
 
 ;; Logs computations
 (define [dom-print name result x cont]
-  (printf "(~a = ~a = ~a)\n" name x result)
+  (dprint "(~a = ~a = ~a)\n" name x result)
   (cont x))
 
 (define [port-redirect from to]
@@ -723,7 +729,7 @@
 
 (define log-monad
   (lambda monad-input
-    (printf "(~a = ~a = ~a)\n"
+    (dprint "(~a = ~a = ~a)\n"
             (monad-qvar monad-input)
             (monad-arg monad-input)
             (monad-qval monad-input))
@@ -1172,7 +1178,7 @@
 (define (sh-async cmd)
   (monadic-id
    (ret (sh-async-no-log cmd))
-   (do (printfln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
+   (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    ret))
 
 (define [sh cmd]
@@ -1190,12 +1196,12 @@
    (p (apply run-comprocess#full
              (cons* outport outport
                     (shell-cmd-to-comprocess-args cmd))))
-   (do (printfln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
+   (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    (ret (read-string-file outfilename))
    (trimed (string-trim-chars ret "\n \t" 'both))
-   (do (printfln "< ~a" trimed) `(sh-cmd ,cmd) 'sh-return-log)
+   (do (dprintln "< ~a" trimed) `(sh-cmd ,cmd) 'sh-return-log)
    (do (close-port outport) 'always)
    (do (delete-file outfilename) 'always)
    (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
@@ -1361,7 +1367,7 @@
 
        (logger
         (lambda (fmt . args)
-          (apply printfln (cons fmt args))))
+          (apply dprintln (cons fmt args))))
 
        (send-message
         (lambda type-args

@@ -4,28 +4,28 @@
 
 (with-np-thread-env#non-interruptible
  (with-i-thread-env#interruptible
-  (printfln "preemptive test")
+  (dprintln "preemptive test")
 
   (define [kek]
-    (printfln "in kek"))
+    (dprintln "in kek"))
 
   (define cycles 20)
 
   (define [lol]
     (apploop [n] [0]
              (if (> n cycles)
-                 (printfln "lol ended")
+                 (dprintln "lol ended")
                  (begin
-                   (printfln "lol at ~a" n)
+                   (dprintln "lol at ~a" n)
                    (usleep 100000)
                    (loop (1+ n))))))
 
   (define [zulul]
     (apploop [n] [0]
              (if (> n cycles)
-                 (printfln "zulul ended")
+                 (dprintln "zulul ended")
                  (begin
-                   (printfln "zulul at ~a" n)
+                   (dprintln "zulul at ~a" n)
                    (usleep 100000)
                    (loop (1+ n))))))
 
@@ -33,15 +33,15 @@
   (dynamic-thread-spawn lol)
   (dynamic-thread-spawn zulul)
 
-  (printfln "end")))
+  (dprintln "end")))
 
 (with-np-thread-env#non-interruptible
  (with-i-thread-env#interruptible
 
-  (printfln "critical test")
+  (dprintln "critical test")
 
   (define [kek]
-    (printfln "in kek"))
+    (dprintln "in kek"))
 
   (define cycles 20)
 
@@ -49,9 +49,9 @@
     (i-thread-critical!
      (apploop [n] [0]
               (if (> n cycles)
-                  (printfln "lol ended")
+                  (dprintln "lol ended")
                   (begin
-                    (printfln "lol at ~a" n)
+                    (dprintln "lol at ~a" n)
                     (usleep 100000)
                     (loop (1+ n)))))))
 
@@ -59,9 +59,9 @@
     (i-thread-critical!
      (apploop [n] [0]
               (if (> n cycles)
-                  (printfln "zulul ended")
+                  (dprintln "zulul ended")
                   (begin
-                    (printfln "zulul at ~a" n)
+                    (dprintln "zulul at ~a" n)
                     (usleep 100000)
                     (loop (1+ n)))))))
 
@@ -69,4 +69,4 @@
   (dynamic-thread-spawn lol)
   (dynamic-thread-spawn zulul)
 
-  (printfln "end")))
+  (dprintln "end")))

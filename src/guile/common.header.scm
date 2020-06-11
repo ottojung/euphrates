@@ -107,7 +107,7 @@
    path-replace-extension
    make-temporary-filename
    stringf
-   printfln
+   dprintln
    global-debug-mode-filter
    debug
    dom-print
@@ -356,8 +356,8 @@
   (catch #t body
     (lambda err (handler err))))
 
-(define [printf fmt . args]
-  (local-print fmt args))
+(define printf
+  (lambda args (apply guile-printf args)))
 
 (define (~a x)
   (with-output-to-string

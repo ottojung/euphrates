@@ -1,18 +1,18 @@
 
 (define (cb1 . args)
-  (printfln "cb1: ~a" args))
+  (dprintln "cb1: ~a" args))
 
 (define (fn1)
   (define last -1)
   (let lp ()
     (define cur (tree-future-eval-context))
-    (printfln "HELLO THERE")
+    (dprintln "HELLO THERE")
     (unless (= cur last)
       (set! last cur)
-      (printfln "new cur: ~a" cur))
+      (dprintln "new cur: ~a" cur))
     (dynamic-thread-sleep (normal->micro@unit 1/100))
     (when (> last 100)
-      (printfln "BIGGER"))
+      (dprintln "BIGGER"))
     (unless (> last 100)
       (lp))))
 
@@ -34,5 +34,5 @@
  ;; not parameterized
  (main))
 
-(printfln "end of test")
+(dprintln "end of test")
 
