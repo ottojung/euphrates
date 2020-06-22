@@ -13,50 +13,6 @@
               (set! err argv)))))
         (when err (apply throw err))))))
 
-;;;;;;;;;;;;;;;;;;;;
-;; HASHED RECORDS ;;
-;;;;;;;;;;;;;;;;;;;;
-
-(define [hash->mdict h]
-  (letin
-   [unique (make-unique)]
-   (make-procedure-with-setter
-    (lambda [key]
-      (let [[g (hash-ref h key unique)]]
-        (if (unique g)
-            (throw 'mdict-key-not-found key h)
-            g)))
-    (lambda [new] h))))
-
-(define [alist->mdict alist]
-  (hash->mdict (alist->hash-table alist)))
-
-(define-syntax mdict-c
-  (syntax-rules ()
-    [(mdict-c carry) (alist->mdict carry)]
-    [(mdict-c carry key value . rest)
-     (mdict-c (cons (cons key value) carry) . rest)]))
-
-(define-syntax-rule [mdict . entries]
-  (mdict-c '() . entries))
-
-(define [mdict-has? h-func key]
-  (let [[h (set! (h-func) 0)]]
-    (hash-get-handle h key)))
-
-(define [mdict->alist h-func]
-  (let [[h (set! (h-func) 0)]]
-    (hash-map->list cons h)))
-
-(define [mass *mdict key value]
-  (let* [[new (alist->hash-table (mdict->alist *mdict))]
-         [new-f (hash->mdict new)]
-         (do (hash-set! new key value))]
-    new-f))
-
-(define [mdict-keys h-func]
-  (map car (mdict->alist h-func)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PREEMPTIVE THREADS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
