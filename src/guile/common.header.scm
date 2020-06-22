@@ -9,6 +9,8 @@
    atomic-box-compare-and-set!
    hash-has-key?
    hash-empty?
+   hash-table->alist
+   hash-copy
    hash-table-foreach
    catch-any
    printf
@@ -16,7 +18,6 @@
    time-get-monotonic-nanoseconds-timestamp
    string-split#simple
    words
-   hash-table->alist
    big-random-int
    with-output-to-file#clear
    define-eval-namespace
@@ -53,9 +54,8 @@
    sys-thread-exited?
    sys-thread-yield
    sys-thread-sleep
-   run-comprocess#full
-   run-comprocess
-   kill-comprocess
+   run-comprocess#p-default
+   kill-comprocess#p-default
    system*/exit-code
    euphrates-version
    letin
@@ -107,6 +107,9 @@
    path-replace-extension
    make-temporary-filename
    stringf
+   dprint#p-default
+   dprint#p
+   dprint
    dprintln
    global-debug-mode-filter
    debug
@@ -178,50 +181,6 @@
    call-with-finally#return-tag
    call-with-finally#return
    call-with-finally
-   with-stack-stack
-   stack-apply
-   with-stack-full-loop
-   with-stack-full-loop-p
-   with-stack-full
-   with-stack
-   PUSH
-   DROP
-   USE
-   NULL
-   DUP
-   ADD
-   MUL
-   NEGATE
-   FLIP
-   PERM
-   CALL
-   EVAL
-   IF-THEN-ELSE
-   BOOL
-   PRINT
-   PRINTF
-   PUSH/CC
-   CALL/CC
-   GOTO
-   STACK-EFF
-   STACK-EFF-POP
-   MAP
-   PROJ
-   stack-lambda
-   define/stack
-   my-global-scope-table-p
-   st-full
-   st
-   PUT-symb
-   STORE-symb
-   STORE/DEFAULT-symb
-   LOAD-symb
-   PUT
-   STORE
-   STORE/DEFAULT
-   LOAD
-   stackfn-coll
-   stackfn
    read-all-port
    read-string-file
    write-string-file
@@ -230,6 +189,10 @@
    path-rebase
    np-thread-parameterize-env
    with-np-thread-env#non-interruptible
+   run-comprocess#p
+   run-comprocess
+   kill-comprocess#p
+   kill-comprocess
    kill-comprocess-with-timeout
    check-list-contract
    gfunc/define
@@ -265,8 +228,7 @@
    tree-future-run-task-thunk
    tree-future-run-task
    tree-future-wait-task
-   local-print
-   hash-copy
+   guile-printf
    hash->mdict
    alist->mdict
    mdict-c
