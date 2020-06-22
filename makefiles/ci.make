@@ -21,6 +21,7 @@ build-all:
 	$(MAKE) all
 
 install-all:
+	make all
 	sudo $(MAKE) install
 
 testall: testguile testracket

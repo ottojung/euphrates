@@ -32,10 +32,12 @@ $(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) src/lib.scm $(DIRPREFIX)
 	sed -i "s/EUPHRATES_VERSION_STRING_SED_PLACEHOLDER/$(CURRENT_GIT_COMMIT)/g" "$@"
 
 $(DIR):
-	mkdir -p $@
+	mkdir -p $@ || true
 
-test: all
+test:
 	$(MAKE) testall -f makefiles/ci.make
+
+.PHONY: test
 
 quick-test: all
 	$(MAKE) quick-test -f makefiles/ci.make
@@ -54,7 +56,7 @@ $(BUILDDIR)/test/$(DIRPREFIX)/$(TESTFILE): test/$(BACKEND)/test.header.$(END) te
 	cat $^ > $@
 
 $(BUILDDIR)/test/$(DIRPREFIX):
-	mkdir -p $@
+	mkdir -p $@ || true
 
 clean:
 	rm -rf $(BUILDDIR)
