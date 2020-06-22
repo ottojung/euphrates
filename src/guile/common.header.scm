@@ -677,7 +677,7 @@
 
 ;; TODO: support asynchronous stdin
 ;; TODO: why comprocess test doesn't work anymore? Last worked on commit: 63756176ec8d544d4135d88c46fa747666d438b3
-(define [run-comprocess command . args]
+(define [run-comprocess#p-default command . args]
   "Run process in background
    Input port is represented by `comprocess-pipe'
    NOTE: in guile p-stdout == p-stderr doesn't work!
@@ -741,7 +741,7 @@
 
     p))
 
-(define [kill-comprocess p force?]
+(define [kill-comprocess#p-default p force?]
   (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
 
 ;; racket compatibility

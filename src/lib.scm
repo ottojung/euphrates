@@ -1088,6 +1088,18 @@
 ;; PROCESSES ;;
 ;;;;;;;;;;;;;;;
 
+(define run-comprocess#p
+  (make-parameter run-comprocess#p-default))
+(define run-comprocess
+  (lambda args
+    (apply (run-comprocess#p) args)))
+
+(define kill-comprocess#p
+  (make-parameter kill-comprocess#p-default))
+(define kill-comprocess
+  (lambda args
+    (apply (kill-comprocess#p) args)))
+
 (define [kill-comprocess-with-timeout p timeout]
   (unless (comprocess-exited? p)
     (kill-comprocess p #f)
