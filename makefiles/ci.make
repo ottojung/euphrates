@@ -34,6 +34,6 @@ testguile:
 testracket:
 	$(MAKE) $(TESTS) BACKEND=racket -f makefiles/ci.make
 
-test-%:
+test-%: build-all
 	$(BACKEND) build/test/src/$(BACKEND)/$(shell echo $@ | sed 's/test-//g')
 
