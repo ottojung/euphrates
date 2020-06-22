@@ -6,7 +6,7 @@ RACKET_PREFIX = $(shell racket --eval "(display (path->string (find-system-path 
 
 HARD_INSTALL = true
 
-ifeq ($(TARGET),$(GUILEDIR))
+ifeq ($(BACKEND),$(GUILEDIR))
 PREFIX := $(GUILE_PREFIX)
 else
 PREFIX := $(RACKET_PREFIX)

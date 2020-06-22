@@ -25,6 +25,9 @@ install-all:
 
 testall: testguile testracket
 
+quick-test:
+	GUILE_AUTO_COMPILE=0 $(MAKE) test-main.scm BACKEND=guile -f makefiles/ci.make
+
 testguile:
 	$(MAKE) $(TESTS) BACKEND=guile -f makefiles/ci.make
 

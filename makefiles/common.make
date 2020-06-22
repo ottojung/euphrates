@@ -6,10 +6,10 @@ INSTALL_MAKE = makefiles/install.make
 
 TESTFILES = $(shell ls test/sharedtest/)
 
-DIRPREFIX = src/$(TARGET)
+DIRPREFIX = src/$(BACKEND)
 DIRSUFFIX = euphrates
 
-ifeq ($(TARGET),$(GUILEDIR))
+ifeq ($(BACKEND),$(GUILEDIR))
 END := scm
 else
 END := rkt

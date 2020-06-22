@@ -1,26 +1,28 @@
 include makefiles/common.make
 
-all: tguile tracket
+all: libs build-tests
 	@ echo 'All done'
+
+libs: tguile tracket
 
 install: installGuile installRacket
 	@ echo 'Install done'
 
 installGuile: tguile
-	$(MAKE) -f $(INSTALL_MAKE) installone TARGET=$(GUILEDIR)
+	$(MAKE) -f $(INSTALL_MAKE) installone BACKEND=$(GUILEDIR)
 
 installRacket: tracket
-	$(MAKE) -f $(INSTALL_MAKE) installone TARGET=$(RACKETDIR)
+	$(MAKE) -f $(INSTALL_MAKE) installone BACKEND=$(RACKETDIR)
 
 uninstall:
-	$(MAKE) -f $(INSTALL_MAKE) uninstallone TARGET=$(GUILEDIR)
-	$(MAKE) -f $(INSTALL_MAKE) uninstallone TARGET=$(RACKETDIR)
+	$(MAKE) -f $(INSTALL_MAKE) uninstallone BACKEND=$(GUILEDIR)
+	$(MAKE) -f $(INSTALL_MAKE) uninstallone BACKEND=$(RACKETDIR)
 
 tguile:
-	$(MAKE) common alltests TARGET=$(GUILEDIR)
+	$(MAKE) common BACKEND=$(GUILEDIR)
 
 tracket:
-	$(MAKE) common alltests TARGET=$(RACKETDIR)
+	$(MAKE) common BACKEND=$(RACKETDIR)
 
 common: | $(DIR) $(DIR)/common.$(END)
 
@@ -32,13 +34,23 @@ $(DIR)/common.$(END): $(DIRPREFIX)/common.header.$(END) src/lib.scm $(DIRPREFIX)
 $(DIR):
 	mkdir -p $@
 
-alltests:
+test: all
+	$(MAKE) testall -f makefiles/ci.make
+
+quick-test: all
+	$(MAKE) quick-test -f makefiles/ci.make
+
+build-tests:
+	$(MAKE) build-target-tests BACKEND=$(GUILEDIR)
+	$(MAKE) build-target-tests BACKEND=$(RACKETDIR)
+
+build-target-tests:
 	@ echo "files: $(TESTFILES)"
-	for f in $(TESTFILES) ; do $(MAKE) test TARGET=$(TARGET) TESTFILE="$$f" ; done
+	for f in $(TESTFILES) ; do $(MAKE) build-one-test BACKEND=$(BACKEND) TESTFILE="$$f" ; done
 
-test: | $(BUILDDIR)/test/$(DIRPREFIX) $(BUILDDIR)/test/$(DIRPREFIX)/$(TESTFILE)
+build-one-test: | $(BUILDDIR)/test/$(DIRPREFIX) $(BUILDDIR)/test/$(DIRPREFIX)/$(TESTFILE)
 
-$(BUILDDIR)/test/$(DIRPREFIX)/$(TESTFILE): test/$(TARGET)/test.header.$(END) test/sharedtest/$(TESTFILE)
+$(BUILDDIR)/test/$(DIRPREFIX)/$(TESTFILE): test/$(BACKEND)/test.header.$(END) test/sharedtest/$(TESTFILE)
 	cat $^ > $@
 
 $(BUILDDIR)/test/$(DIRPREFIX):
