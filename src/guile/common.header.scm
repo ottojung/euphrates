@@ -251,6 +251,12 @@
    i-thread-critical-b!
    i-thread-parameterize-env#interruptible
    with-i-thread-env#interruptible
+   with-svars
+   use-svars
+   with-svar-package
+   make-static-package
+   make-package
+   with-package
    )
 
   #:use-module [ice-9 format]
