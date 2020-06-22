@@ -352,7 +352,9 @@
   )
 
 ;; TODO: support asynchronous stdin
-(define [run-comprocess#full p-stdout p-stderr command . args]
+(define [run-comprocess command . args]
+  (let [[p-stdout (current-output-port)]
+        [p-stderr (current-error-port)]]
   (let-values
       [[[p stdout stdin stderr]
         (apply subprocess
@@ -382,11 +384,7 @@
         (set-comprocess-status! re (subprocess-status p)))
 
       (thread run-in-thread)
-      re)))
-
-(define [run-comprocess command . args]
-  (apply run-comprocess#full
-         (list* (current-output-port) (current-error-port) command args)))
+      re))))
 
 (define [kill-comprocess p force?]
   (subprocess-kill (comprocess-p p) force?))

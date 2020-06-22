@@ -1193,9 +1193,10 @@
 (define [sh-re cmd]
   (monadic (except-monad)
    ((outport outfilename) (make-temporary-fileport))
-   (p (apply run-comprocess#full
-             (cons* outport outport
-                    (shell-cmd-to-comprocess-args cmd))))
+   (p (parameterize [[current-output-port outport]
+                     [current-error-port outport]]
+        (apply run-comprocess
+               (shell-cmd-to-comprocess-args cmd))))
    (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))

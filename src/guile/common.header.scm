@@ -677,13 +677,16 @@
 
 ;; TODO: support asynchronous stdin
 ;; TODO: why comprocess test doesn't work anymore? Last worked on commit: 63756176ec8d544d4135d88c46fa747666d438b3
-(define [run-comprocess#full p-stdout p-stderr command . args]
+(define [run-comprocess command . args]
   "Run process in background
    Input port is represented by `comprocess-pipe'
    NOTE: in guile p-stdout == p-stderr doesn't work!
 
    type ::= output-port? -> output-port? -> string -> list of string -> process
   "
+
+  (define p-stdout (current-output-port))
+  (define p-stderr (current-error-port))
 
   ;; returns status
   (define (waitpid#no-throw#no-hang pid)
@@ -737,12 +740,6 @@
                  (lambda _ 0)))))))))
 
     p))
-
-(define [run-comprocess command . args]
-  (apply run-comprocess#full
-         (cons* (current-output-port)
-                (current-error-port)
-                command args)))
 
 (define [kill-comprocess p force?]
   (kill (comprocess-pid p) (if force? SIGKILL SIGTERM)))
