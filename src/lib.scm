@@ -1417,7 +1417,7 @@
   (let ((parsed (parse-cli-parse-or-get!)))
     (let lp ((rest parsed) (prev #f))
       (if (null? rest)
-          (throw 'missing-command-line-switch-value key)
+          #f
           (let* ((current (car rest))
                  (k (car current))
                  (v (cdr current)))
