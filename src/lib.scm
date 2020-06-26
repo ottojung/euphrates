@@ -1290,6 +1290,10 @@
   (let [[h (h-func)]]
     (hash-get-handle h key)))
 
+(define [mdict-set! h-func key value]
+  (let [[h (h-func)]]
+    (hash-set! h key value)))
+
 (define [mdict->alist h-func]
   (let [[h (h-func)]]
     (hash-table->alist h)))

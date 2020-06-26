@@ -10,7 +10,9 @@
       (assert (mdict-has? z2 3))
       (assert (not (mdict-has? z2 52)))
       (let ((z3 (z2 52 2)))
-        (assert (mdict-has? z3 52))))))
+        (assert (mdict-has? z3 52))
+        (mdict-set! z3 52 9)
+        (assert-equal (z3 52) 9)))))
 
 ;; package
 (let []

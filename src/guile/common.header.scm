@@ -234,6 +234,7 @@
    mdict-c
    mdict
    mdict-has?
+   mdict-set!
    mdict->alist
    mass
    mdict-keys
