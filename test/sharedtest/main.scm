@@ -1,4 +1,5 @@
 
+;; mdict
 (let ()
   (let ((zz (mdict 1 2
                    3 4)))
@@ -13,6 +14,58 @@
         (assert (mdict-has? z3 52))
         (mdict-set! z3 52 9)
         (assert-equal (z3 52) 9)))))
+
+;; words / unwords
+(let ()
+  (assert-equal
+   (words "hello \t \t \n world!")
+   (list "hello" "world!"))
+
+  (assert-equal
+   (unwords (list "hello" "world!"))
+   "hello world!"))
+
+;; list->tree
+(let ()
+  (define ex
+    (map string->symbol
+         (words "hello < define ex < words x > > bye")))
+
+  (let ()
+    (define (divider x xs)
+      (cond
+       ((equal? '< x)
+        (values 'open (list x)))
+       ((equal? '> x)
+        (values 'close (list x)))
+       (else
+        (values #f #f))))
+
+    (define r (list->tree ex divider))
+
+    (assert-equal
+     r
+     '(hello
+       (< define ex (< words x >) >)
+       bye)))
+
+  (let ()
+    (define (divider x xs)
+      (cond
+       ((equal? '< x)
+        (values 'open (list)))
+       ((equal? '> x)
+        (values 'close (list)))
+       (else
+        (values #f #f))))
+
+    (define r (list->tree ex divider))
+
+    (assert-equal
+     r
+     '(hello
+       (define ex (words x))
+       bye))))
 
 ;; package
 (let []
@@ -92,14 +145,6 @@
 (assert-equal
  "file.b.c"
  (path-replace-extension "file.b.a" ".c"))
-
-(assert-equal
- (words "hello \t \t \n world!")
- (list "hello" "world!"))
-
-(assert-equal
- (unwords (list "hello" "world!"))
- "hello world!")
 
 ;; (define-rec-strs "rec1" "aa" "bb")
 (define-rec rec1 aa bb)

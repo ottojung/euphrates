@@ -82,6 +82,7 @@
    unlines
    unwords
    list-intersperse
+   list->tree
    assert
    assert-norm-buf
    assert-norm
