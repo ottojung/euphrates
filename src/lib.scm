@@ -179,6 +179,8 @@
                 ((close)
                  (set! droped xs)
                  d)
+                ((turn)
+                 (lp d))
                 (else
                  (cons x (lp xs)))))))))
 
