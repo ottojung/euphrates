@@ -79,9 +79,10 @@
           (values #t xs)))))
 
   (assert-equal
-   #f
+   'custom-default
    (list-traverse
     (range 10)
+    'custom-default
     (lambda (x xs)
       (if (< 5 x)
           (values #f x)
