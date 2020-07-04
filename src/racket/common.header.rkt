@@ -139,6 +139,9 @@
     (build-path
      (this-expression-source-directory)
      (this-expression-file-name))))
+(define-macro (get-current-source-info)
+  '(list (cons (quote filename)
+               (get-current-source-file-path))))
 
 (define [big-random-int max]
   (exact-floor (* (random) max))) ;; random in racket is bounded to 4294967087

@@ -26,6 +26,7 @@
    get-command-line-arguments
    get-current-program-path
    get-current-source-file-path
+   get-current-source-info
    find-first
    format-id-base
    format-id
@@ -404,6 +405,8 @@
    (assq
     'filename
     (current-source-location))))
+(define-syntax-rule [get-current-source-info]
+  (current-source-location))
 
 (define find-first find)
 
