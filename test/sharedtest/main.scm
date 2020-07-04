@@ -67,8 +67,28 @@
        (define ex (words x))
        bye))))
 
+;; list-traverse
+(let ()
+  (assert-equal
+   6
+   (list-traverse
+    (range 10)
+    (lambda (x xs)
+      (if (< 5 x)
+          (values #f x)
+          (values #t xs)))))
+
+  (assert-equal
+   #f
+   (list-traverse
+    (range 10)
+    (lambda (x xs)
+      (if (< 5 x)
+          (values #f x)
+          (values #t (list)))))))
+
 ;; package
-(let []
+(let ()
   (define already-defined 7)
 
   (define x

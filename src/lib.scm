@@ -159,6 +159,20 @@
                      (lp rest))))
         null)))
 
+(define list-traverse
+  (case-lambda
+   ((lst chooser)
+    (list-traverse lst chooser #f))
+   ((lst chooser default)
+    (let lp ((rest lst))
+      (if (null? rest) default
+          (let* ((head (car rest))
+                 (tail (cdr rest)))
+            (let-values (((continue? return) (chooser head tail)))
+              (if continue?
+                  (lp return)
+                  return))))))))
+
 (define (list->tree lst divider)
   (define (recur tag rest)
     (define droped (list))
