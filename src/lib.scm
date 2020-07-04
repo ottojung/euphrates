@@ -130,6 +130,17 @@
                    (loop (cdr as) (cdr bs)))
              (list))))))
 
+(define [remove-common-prefix a b]
+  (list->string
+   (let loop [[as (string->list a)]
+              [bs (string->list b)]]
+     (cond
+      ((null? as) as)
+      ((null? bs) as)
+      ((eq? (car as) (car bs))
+       (loop (cdr as) (cdr bs)))
+      (else as)))))
+
 (define (string-trim-chars str chars-arg direction)
   (define chars (if (string? chars-arg)
                     (string->list chars-arg)

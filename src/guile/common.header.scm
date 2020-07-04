@@ -78,6 +78,7 @@
    monoid*
    catch-any#as-pair
    take-common-prefix
+   remove-common-prefix
    string-trim-chars
    lines
    unlines

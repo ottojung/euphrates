@@ -412,6 +412,32 @@
   (path-rebase "hello/there/" "hello/here/kek")
   "hello/there/here/kek")
 
+(assert-equal
+ (take-common-prefix "abcd" "abee")
+ "ab")
+(assert-equal
+ (take-common-prefix "abcd" "")
+ "")
+(assert-equal
+ (take-common-prefix "" "abcd")
+ "")
+(assert-equal
+ (take-common-prefix "" "")
+ "")
+
+(assert-equal
+ (remove-common-prefix "abcd" "abee")
+ "cd")
+(assert-equal
+ (remove-common-prefix "abcd" "")
+ "abcd")
+(assert-equal
+ (remove-common-prefix "" "abcd")
+ "")
+(assert-equal
+ (remove-common-prefix "" "")
+ "")
+
 (define [hell2 x]
   (with-return
    (printf "hahaha\n")
