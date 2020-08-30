@@ -115,6 +115,7 @@
    dprint#p
    dprint
    dprintln
+   current-source-info->string
    global-debug-mode-filter
    debug
    dom-print
