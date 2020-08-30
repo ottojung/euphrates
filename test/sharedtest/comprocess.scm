@@ -14,8 +14,13 @@
           "/bin/sh" "-c" "sleep 5 && echo hello from echo5 1>&2")]]
   (sleep-until (comprocess-exited? p)))
 
+(let [[re (sh "echo ~s" "bye")]] 0)
+
 (let [[re (sh-re "echo hello")]]
   (assert-equal re "hello"))
+
+(let [[re (sh-re "echo ~s" "bye")]]
+  (assert-equal re "bye"))
 
 (dprintln "ALL EXITED")
 

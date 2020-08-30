@@ -1394,37 +1394,45 @@
   (unless (= 0 (comprocess-status p))
     (throw 'shell-process-failed `(cmd: ,(comprocess-command p)) p)))
 
-(define (shell-cmd-to-comprocess-args cmd)
-  (if (list? cmd)
-      cmd
-      (list "/bin/sh" "-c" cmd)))
+(define (shell-inputs-to-comprocess-args inputs)
+  ;; assert((and (list? inputs) (not (null? inputs))))
+  (if (= 1 (length inputs))
+      (let ((cmd (car inputs)))
+        (if (list? cmd)
+            (values cmd cmd)
+            (values (list "/bin/sh" "-c" cmd) cmd)))
+      (let ((cmd (apply stringf inputs)))
+        (values
+         (list "/bin/sh" "-c" cmd)
+         cmd))))
 
-(define [sh-async-no-log cmd]
+(define [sh-async-no-log . inputs]
   (apply run-comprocess
-         (shell-cmd-to-comprocess-args cmd)))
+         (shell-inputs-to-comprocess-args inputs)))
 
-(define (sh-async cmd)
+(define (sh-async . inputs)
   (monadic-id
-   (ret (sh-async-no-log cmd))
+   ((args cmd) (shell-inputs-to-comprocess-args inputs))
+   (ret (apply run-comprocess args))
    (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    ret))
 
-(define [sh cmd]
+(define [sh . inputs]
   (monadic (except-monad)
-   (p (sh-async cmd))
+   (p (apply sh-async inputs))
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
    (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
        'always 'sh-kill-on-error p)
    p))
 
-(define [sh-re cmd]
+(define [sh-re . inputs]
   (monadic (except-monad)
+   ((args cmd) (shell-inputs-to-comprocess-args inputs))
    ((outport outfilename) (make-temporary-fileport))
    (p (parameterize [[current-output-port outport]
                      [current-error-port outport]]
-        (apply run-comprocess
-               (shell-cmd-to-comprocess-args cmd))))
+        (apply run-comprocess args)))
    (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
