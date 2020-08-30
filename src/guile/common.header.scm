@@ -118,6 +118,7 @@
    current-source-info->string
    global-debug-mode-filter
    debug
+   with-ignore-errors!
    dom-print
    port-redirect
    cons!

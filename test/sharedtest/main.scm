@@ -1,4 +1,7 @@
 
+(with-ignore-errors!
+ (throw 'test "arg1" "arg2"))
+
 ;; mdict
 (let ()
   (let ((zz (mdict 1 2

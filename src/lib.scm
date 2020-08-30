@@ -406,6 +406,15 @@
     (when (or (not p) (and p (p fmt args)))
       (apply printf (cons* fmt args)))))
 
+(define-syntax-rule (with-ignore-errors! . bodies)
+  (catch-any
+   (lambda _ . bodies)
+   (lambda errors
+     (debug "~aerror: ~s"
+            (current-source-info->string
+             (get-current-source-info))
+            errors))))
+
 ;; Logs computations
 (define [dom-print name result x cont]
   (dprint "(~a = ~a = ~a)\n" name x result)
