@@ -153,7 +153,7 @@
     ((both) (string-trim-both str pred))))
 
 (define (lines str)
-  (string-split str #\newline))
+  (string-split#simple str #\newline))
 (define (unlines lns)
   (string-join lns "\n"))
 (define (unwords lns)
