@@ -5,6 +5,20 @@
 ;; SYNTAX ;;
 ;;;;;;;;;;;;
 
+;; guile's definition
+(define-syntax defmacro
+  (lambda (stx)
+    (syntax-case stx ()
+      ((_ (f . args) body ...)
+       #'(define-macro f (lambda args body ...)))
+      ((_ f gen)
+       #'(define-syntax f
+           (lambda (y)
+             (syntax-case y ()
+               ((_ . args)
+                (let ((v (syntax->datum #'args)))
+                  (datum->syntax y (apply gen v)))))))))))
+
 (define-syntax letin
   (syntax-rules ()
     [(letin body) body]
@@ -301,7 +315,7 @@
         acc
         (lp (function acc (first-f rest) rest) (rest-f rest)))))
 
-(define-macro [generic-fold-macro first-f
+(defmacro [generic-fold-macro first-f
                                   rest-f
                                   stop-predicate
                                   initial
@@ -317,7 +331,7 @@
 (define [list-fold/rest initial lst function]
   (generic-fold car cdr null? initial lst function))
 
-(define-macro [lfold initial lst . body]
+(defmacro [lfold initial lst . body]
   `(generic-fold-macro car cdr null? ,initial ,lst ,@ body))
 
 (define [simplify-posix-path path]
