@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;
 
 ;; guile's definition
-(define-syntax defmacro
+(define-syntax define-smacro
   (lambda (stx)
     (syntax-case stx ()
       ((_ (f . args) body ...)
@@ -315,7 +315,7 @@
         acc
         (lp (function acc (first-f rest) rest) (rest-f rest)))))
 
-(defmacro [generic-fold-macro first-f
+(define-smacro [generic-fold-macro first-f
                                   rest-f
                                   stop-predicate
                                   initial
@@ -331,7 +331,7 @@
 (define [list-fold/rest initial lst function]
   (generic-fold car cdr null? initial lst function))
 
-(defmacro [lfold initial lst . body]
+(define-smacro [lfold initial lst . body]
   `(generic-fold-macro car cdr null? ,initial ,lst ,@ body))
 
 (define [simplify-posix-path path]

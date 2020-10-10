@@ -59,7 +59,7 @@
    kill-comprocess#p-default
    system*/exit-code
    euphrates-version
-   defmacro
+   define-smacro
    letin
    defloop
    apploop
