@@ -303,7 +303,7 @@
 
 (define null (list))
 (define add1 1+)
-(define sub1 1+)
+(define sub1 1-)
 
 (define dynamic-thread-mutex-make-p
   (make-parameter
