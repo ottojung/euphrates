@@ -3,6 +3,8 @@
   #:export
   (
    null
+   add1
+   sub1
    dynamic-thread-mutex-make-p
    dynamic-thread-mutex-lock!-p
    dynamic-thread-mutex-unlock!-p
@@ -300,6 +302,8 @@
   )
 
 (define null (list))
+(define add1 1+)
+(define sub1 1+)
 
 (define dynamic-thread-mutex-make-p
   (make-parameter
