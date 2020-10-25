@@ -2,6 +2,24 @@
 (with-ignore-errors!
  (throw 'test "arg1" "arg2"))
 
+;; lazy-parameter, with-dynamic
+(let ()
+  (define test 1)
+  (define x (lazy-parameter (set! test 3) 2))
+  (define y (make-parameter 9))
+
+  (assert-equal test 1)
+  (assert-equal (y) 9)
+
+  (with-dynamic ((x 4) (y 5))
+                (assert-equal (y) 5)
+                (assert-equal (x) 4)
+                (assert-equal test 1))
+
+  (assert-equal test 1)
+  (assert-equal (x) 2)
+  (assert-equal test 3))
+
 ;; mdict
 (let ()
   (let ((zz (mdict 1 2

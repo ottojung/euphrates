@@ -267,6 +267,8 @@
    make-static-package
    make-package
    with-package
+   with-dynamic
+   lazy-parameter
    )
 
   #:use-module [ice-9 format]

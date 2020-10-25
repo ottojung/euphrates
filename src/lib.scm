@@ -1988,3 +1988,34 @@
     ((task)
      ((tree-future-task-touch-procedure task)))
     (tasks (map tree-future-wait-task tasks))))
+
+
+;;;;;;;;;;;;;;;;;;
+;; with-dynamic ;;
+;;;;;;;;;;;;;;;;;;
+;; & lazy-params
+
+(define-syntax-rule (%with-dynamic-helper1 arg value . bodies)
+  (if (parameter? arg)
+      (parameterize ((arg value)) . bodies)
+      (arg (lambda _ value) (lambda _ . bodies))))
+
+(define-syntax with-dynamic
+  (syntax-rules ()
+    ((_ ((arg value)) . bodies)
+     (%with-dynamic-helper1 arg value . bodies))
+    ((_ ((arg value) . rest) . bodies)
+     (%with-dynamic-helper1
+      arg value
+      (with-dynamic rest . bodies)))))
+
+(define-syntax-rule (lazy-parameter . initials)
+  (let ((p (make-parameter (memconst (begin . initials)))))
+    (case-lambda
+     (() ((p)))
+     ((value body)
+      (let ((mem (memconst (value))))
+        (parameterize ((p mem))
+          (body)))))))
+
+
