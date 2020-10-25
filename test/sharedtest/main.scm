@@ -5,7 +5,8 @@
 ;; lazy-parameter, with-dynamic
 (let ()
   (define test 1)
-  (define x (lazy-parameter (set! test 3) 2))
+  (define x (lazy-parameter (begin (set! test 3) 2)
+                            (lambda (z) (string->number (~a z)))))
   (define y (make-parameter 9))
 
   (assert-equal test 1)

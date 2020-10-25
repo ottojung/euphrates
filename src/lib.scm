@@ -2009,13 +2009,21 @@
       arg value
       (with-dynamic rest . bodies)))))
 
-(define-syntax-rule (lazy-parameter . initials)
-  (let ((p (make-parameter (memconst (begin . initials)))))
-    (case-lambda
-     (() ((p)))
-     ((value body)
-      (let ((mem (memconst (value))))
-        (parameterize ((p mem))
-          (body)))))))
-
-
+(define-syntax lazy-parameter
+  (syntax-rules ()
+    ((_ initial)
+     (let ((p (make-parameter (memconst initial))))
+       (case-lambda
+        (() ((p)))
+        ((value body)
+         (let ((mem (memconst (value))))
+           (parameterize ((p mem))
+             (body)))))))
+    ((_ initial converter)
+     (let ((p (make-parameter (memconst initial))))
+       (case-lambda
+        (() ((p)))
+        ((value body)
+         (let ((mem (memconst (converter (value)))))
+           (parameterize ((p mem))
+             (body)))))))))
