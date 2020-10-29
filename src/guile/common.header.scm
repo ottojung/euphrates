@@ -274,6 +274,11 @@
    with-package
    with-dynamic
    lazy-parameter
+   make-queue
+   queue-empty?
+   queue-peek
+   queue-push!
+   queue-pop!
    )
 
   #:use-module [ice-9 format]

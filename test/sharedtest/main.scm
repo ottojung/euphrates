@@ -5,6 +5,31 @@
 (with-ignore-errors!
  (throw 'test "arg1" "arg2"))
 
+;; queue
+(let ()
+  (define q (make-queue 1))
+
+  (queue-push! q 1)
+  (queue-push! q 2)
+  (queue-push! q 3)
+
+  (assert-equal (queue-peek q) 1)
+  (assert-equal (queue-pop! q) 1)
+  (assert-equal (queue-peek q) 2)
+  (assert-equal (queue-pop! q) 2)
+
+  (assert (not (queue-empty? q)))
+
+  (queue-push! q 9)
+  (assert-equal (queue-pop! q) 3)
+  (queue-push! q 8)
+  (assert-equal (queue-pop! q) 9)
+  (queue-push! q 7)
+  (assert-equal (queue-pop! q) 8)
+  (assert-equal (queue-pop! q) 7)
+
+  (assert (queue-empty? q)))
+
 ;; lazy-parameter, with-dynamic
 (let ()
   (define test 1)
