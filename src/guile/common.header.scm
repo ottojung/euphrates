@@ -46,6 +46,11 @@
    directory-files-rec
    path-parent-directory
    make-directory
+   base65#alphabet
+   alphanum#alphabet
+   alpha#alphabet
+   printable#alphabet
+   random-choice
    make-temporary-fileport
    rec-fields
    define-rec

@@ -1,4 +1,7 @@
 
+(debug "Hello, ~a"
+       (list->string (random-choice 5 printable#alphabet)))
+
 (with-ignore-errors!
  (throw 'test "arg1" "arg2"))
 

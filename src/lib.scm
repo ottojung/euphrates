@@ -392,11 +392,56 @@
   (let ((stripped (path-without-extension str)))
     (string-append stripped new-ext)))
 
+;; specified by RFC 4648
+(define base64#alphabet
+  #(#\A #\B #\C #\D #\E #\F #\G #\H
+    #\I #\J #\K #\L #\M #\N #\O #\P
+    #\Q #\R #\S #\T #\U #\V #\W #\X
+    #\Y #\Z #\a #\b #\c #\d #\e #\f
+    #\g #\h #\i #\j #\k #\l #\m #\n
+    #\o #\p #\q #\r #\s #\t #\u #\v
+    #\w #\x #\y #\z #\0 #\1 #\2 #\3
+    #\4 #\5 #\6 #\7 #\8 #\9 #\- #\_))
+
+(define alphanum#alphabet
+  #(#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9
+    #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j
+    #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t
+    #\u #\v #\w #\x #\y #\z #\A #\B #\C #\D
+    #\E #\F #\G #\H #\I #\J #\K #\L #\M #\N
+    #\O #\P #\Q #\R #\S #\T #\U #\V #\W #\X
+    #\Y #\Z))
+
+(define alpha#alphabet
+  #(#\a #\b #\c #\d #\e #\f #\g #\h #\i #\j
+    #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t
+    #\u #\v #\w #\x #\y #\z #\A #\B #\C #\D
+    #\E #\F #\G #\H #\I #\J #\K #\L #\M #\N
+    #\O #\P #\Q #\R #\S #\T #\U #\V #\W #\X
+    #\Y #\Z))
+
+(define printable#alphabet
+  #(#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9
+    #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j
+    #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t
+    #\u #\v #\w #\x #\y #\z #\A #\B #\C #\D
+    #\E #\F #\G #\H #\I #\J #\K #\L #\M #\N
+    #\O #\P #\Q #\R #\S #\T #\U #\V #\W #\X
+    #\Y #\Z #\+ #\/ #\@ #\! #\& #\* #\= #\?
+    #\( #\) #\- #\% #\# #\, #\. #\^ #\' #\[
+    #\] #\{ #\} #\; #\: #\\ #\< #\> #\" #\$))
+
+(define (random-choice len alphabet#vector)
+  (let ((size (vector-length alphabet#vector)))
+    (let loop ((len len) (buf (list)))
+      (if (<= len 0) buf
+          (loop (sub1 len)
+                (cons (vector-ref alphabet#vector (big-random-int size))
+                      buf))))))
+
 ;; TODO: make something safe instead?
 (define (make-temporary-filename)
-  (let* ((rand (big-random-int 99999999999))
-         (s (with-output-to-string
-              (lambda () (display rand)))))
+  (let* ((s (list->string (random-choice 10 alphanum#alphabet))))
     (string-append "/tmp/euphrates-temp-" s)))
 
 (define (current-source-info->string info)
