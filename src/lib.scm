@@ -1087,111 +1087,70 @@
   (define (make-np-thread-obj thunk)
     (np-thread-obj thunk #f #t))
 
-  (define-values
-      [np-thread-list-add
-       np-thread-list-switch ;; pops thread from the top and sets `np-thread-current' = it
-       np-thread-list-init
-       np-thread-list-initialized?
-       np-thread-list-remove
-       np-thread-current
-       ]
-    (let* [[lst-p (make-parameter #f)]
-           [critical (make-critical)]
-           [current-thread (make-parameter #f)]]
-      (values
-       (lambda [th]
-         (with-critical
-          critical
-          (set-box! (lst-p) (cons th (unbox (lst-p)))))
-         th)
-       (lambda []
-         (with-critical
-          critical
-          (let* [[lst (unbox (lst-p))]
-                 [head
-                  (if (null? lst)
-                      'np-thread-empty-list
-                      (last lst))]]
-            (unless (null? lst)
-              (set-box! (lst-p) (list-init lst))
-              (set-box! (current-thread) head))
-            head)))
-       (lambda [body]
-         (parameterize [[lst-p (box (list))]
-                        [current-thread
-                         (box (make-np-thread-obj body))]]
-           (body)))
-       (lambda []
-         (if (lst-p) #t #f))
-       (lambda [predicate]
-         (with-critical
-          critical
-          (set-box! (lst-p)
-                    (filter (negate predicate)
-                            (unbox (lst-p))))))
-       (lambda [] (unbox (current-thread))))))
+  (define thread-queue (make-queue 16))
+  (define current-thread #f)
+  (define critical (make-critical))
 
-  (define-values
-      [np-thread-get-start-point
-       np-thread-set-start-point]
-    (let [[p (make-parameter (lambda [] 0))]]
-      (values
-       (lambda [] (p))
-       (lambda [value thunk]
-         (parameterize [[p value]]
-           (np-thread-list-init thunk))))))
+  (define (np-thread-list-add th)
+    (with-critical
+     critical
+     (queue-push! thread-queue th)))
+
+  (define (np-thread-list-switch)
+    (with-critical
+     critical
+     (let loop ((head (queue-pop! thread-queue #f)))
+       (if (not head) 'np-thread-empty-list
+           (if (and (np-thread-obj-cancel-scheduled? head)
+                    (np-thread-obj-cancel-enabled? head))
+               (begin
+                 (loop (queue-pop! thread-queue #f)))
+               (begin
+                 (set! current-thread head)
+                 head))))))
+
+  (define start-point #f)
 
   (define [np-thread-end]
     (let [[p (np-thread-list-switch)]]
       (if (eq? p 'np-thread-empty-list)
-          ((np-thread-get-start-point))
+          (start-point)
           (begin
-            ((np-thread-obj-continuation p) #t)
+            ((np-thread-obj-continuation p))
             (np-thread-end)))))
 
   (define [np-thread-yield]
-    (when (np-thread-list-initialized?)
-      (let [[me (np-thread-current)]]
-        (when (and (np-thread-obj-cancel-scheduled? me)
-                   (np-thread-obj-cancel-enabled? me))
-          (throw dynamic-thread-cancel-tag))
+    (let [[me current-thread]]
+      (when (and (np-thread-obj-cancel-scheduled? me)
+                 (np-thread-obj-cancel-enabled? me))
+        (throw dynamic-thread-cancel-tag))
 
-        (let [[repl (call/cc
-                     (lambda [k]
-                       (set-np-thread-obj-continuation! me k)
-                       #f))]]
-          (unless repl
-            (np-thread-list-add me) ;; save
-            (np-thread-end))))))
+      (call/cc
+       (lambda (k)
+         (set-np-thread-obj-continuation! me k)
+         (np-thread-list-add me)
+         (np-thread-end)))))
 
   (define [np-thread-fork thunk]
-    (unless (np-thread-list-initialized?)
-      (throw 'np-thread-forking-before-run!
-             `(args: ,thunk)
-             `(tried to fork np-thread before np-thread-run!)))
+    (let ((first? #t)
+          (ret #f))
+      (call/cc
+       (lambda (k)
+         (set! ret (make-np-thread-obj k))
+         (np-thread-list-add ret)))
+      (unless first?
+        (thunk)
+        (np-thread-end))
+      (set! first? #f)
+      ret))
 
-    (let* ((cont #f)
-           (repl (call/cc
-                  (lambda [k]
-                    (set! cont k)
-                    #f))))
-      (if repl
-          (begin
-            (thunk)
-            (np-thread-end))
-          (let ((ret (make-np-thread-obj
-                      (lambda [tru] (cont #t)))))
-            (np-thread-list-add ret)
-            ret))))
-
-  (define-syntax-rule [np-thread-run! . thunk]
+  (define [np-thread-run! thunk]
     (call/cc
      (lambda [k]
-       (np-thread-set-start-point
-        k
-        (lambda []
-          (begin . thunk)
-          (np-thread-end))))))
+       (set! start-point k)
+       (set! current-thread (make-np-thread-obj thunk))
+       (thunk)
+       (np-thread-end))))
 
   ;; Terminates np-thread
   ;; If no arguments given, current thread will be terminated
@@ -1199,10 +1158,8 @@
   ;; Therefore, don't provide current thread as argument unless you really mean to
   (define np-thread-cancel!#unsafe
     (case-lambda
-      [[]
-       (np-thread-end)]
-      [[chosen]
-       (np-thread-list-remove (lambda [th] (eq? th chosen)))]))
+      [[] (np-thread-end)]
+      [[chosen] 0]))
 
   (define (np-thread-cancel! chosen)
     (set-np-thread-obj-cancel-scheduled?! chosen #t)
@@ -1211,25 +1168,18 @@
 
   (define (np-thread-make-critical)
     (lambda (fn)
-      (let* [[me (np-thread-current)]]
+      (let* [[me current-thread]]
         (set-np-thread-obj-cancel-enabled?! me #f)
         (fn) ;; NOTE: must not evaluate non-local jumps
         (set-np-thread-obj-cancel-enabled?! me #t)
         (np-thread-yield)
         )))
 
-  (define [np-thread-cancel-all!unsafe]
-    "
-  Terminates all threads on current thread group
-  "
-    (np-thread-list-remove (const #t))
-    (np-thread-end))
-
   (define [np-thread-disable-cancel]
-    (let ((me (np-thread-current)))
+    (let ((me current-thread))
       (set-np-thread-obj-cancel-enabled?! me #f)))
   (define [np-thread-enable-cancel]
-    (let ((me (np-thread-current)))
+    (let ((me current-thread))
       (set-np-thread-obj-cancel-enabled?! me #t)))
 
   (parameterize ((dynamic-thread-spawn-p np-thread-fork)
@@ -1242,7 +1192,7 @@
                  (dynamic-thread-mutex-lock!-p universal-lockr!)
                  (dynamic-thread-mutex-unlock!-p universal-unlockr!)
                  (dynamic-thread-critical-make-p np-thread-make-critical))
-    (np-thread-run! (thunk))))
+    (np-thread-run! thunk)))
 
 (define-syntax-rule (with-np-thread-env#non-interruptible . bodies)
   (np-thread-parameterize-env (lambda () (lambda (fn) (fn)))
