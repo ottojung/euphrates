@@ -115,6 +115,7 @@
    list-fold/rest
    lfold
    simplify-posix-path
+   absolute-posix-path?
    append-posix-path2
    append-posix-path
    path-without-extension

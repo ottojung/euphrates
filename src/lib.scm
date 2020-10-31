@@ -371,11 +371,15 @@
          [ret (string-join norm "/")]]
     ret))
 
+(define (absolute-posix-path? path)
+  (and (string? path)
+       (char=? (string-ref path 0) #\/)))
+
 (define [append-posix-path2 a b]
   (if (= (string-length a) 0)
       b
       (let ((b
-             (if (char=? (string-ref b 0) #\/)
+             (if (absolute-posix-path? b)
                  (let ((cl (remove-common-prefix b a)))
                    (if (equal? cl b)
                        (throw 'append-posix-path-disjoint `(args: ,a ,b))
