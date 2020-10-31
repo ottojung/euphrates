@@ -374,9 +374,13 @@
 (define [append-posix-path2 a b]
   (if (= (string-length a) 0)
       b
-      (begin
-        (when (char=? (string-ref b 0) #\/)
-          (throw 'append-posix-path-error `(args: ,a ,b) '(trying to append root path)))
+      (let ((b
+             (if (char=? (string-ref b 0) #\/)
+                 (let ((cl (remove-common-prefix b a)))
+                   (if (equal? cl b)
+                       (throw 'append-posix-path-disjoint `(args: ,a ,b))
+                       cl))
+                 b)))
         (if (char=? #\/ (string-ref a (1- (string-length a))))
             (string-append a b)
             (string-append a "/" b)))))
