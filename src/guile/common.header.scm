@@ -85,6 +85,8 @@
    monoid-r*
    monoid*
    catch-any#as-pair
+   cartesian-map
+   cartesian-each
    take-common-prefix
    remove-common-prefix
    string-trim-chars
