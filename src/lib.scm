@@ -486,8 +486,9 @@
 
 (define [debug fmt . args]
   (let [[p (global-debug-mode-filter)]]
-    (when (or (not p) (and p (p fmt args)))
-      (apply printf (cons* (string-append fmt "\n") args)))))
+    (when (or (not p) (p fmt args))
+      (parameterize ((current-output-port (current-error-port)))
+        (apply printf (cons* (string-append fmt "\n") args))))))
 
 (define-syntax-rule (with-ignore-errors! . bodies)
   (catch-any
