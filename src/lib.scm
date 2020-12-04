@@ -545,9 +545,10 @@
         (set! evaled? #t)
         (set! memory x))
       memory)
-     ((type)
+     ((type . args)
       (case type
         ((check) evaled?)
+        ((or) (or memory (car args)))
         (else (throw 'unknown-memoize-command type memory evaled?)))))))
 
 (define (replicate n x)
