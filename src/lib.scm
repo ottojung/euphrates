@@ -535,6 +535,21 @@
         (set! memory x))
       memory)))
 
+; memoized value
+(define-syntax-rule (memvalue x)
+  (let ((memory #f)
+        (evaled? #f))
+    (case-lambda
+     (()
+      (unless evaled?
+        (set! evaled? #t)
+        (set! memory x))
+      memory)
+     ((type)
+      (case type
+        ((check) evaled?)
+        (else (throw 'unknown-memoize-command type memory evaled?)))))))
+
 (define (replicate n x)
   (if (= 0 n)
       (list)

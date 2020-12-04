@@ -134,6 +134,7 @@
    port-redirect
    cons!
    memconst
+   memvalue
    replicate
    dynamic-thread-get-delay-procedure#default
    dynamic-thread-spawn-p
