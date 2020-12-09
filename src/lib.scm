@@ -21,11 +21,15 @@
 
 (define-syntax letin
   (syntax-rules ()
-    [(letin body) body]
-    [(letin ((a . as) b) body ...)
-     (let-values [[[a . as] b]] (letin body ...))]
-    [(letin (a b) body ...)
-     (let [[a b]] (letin body ...))]))
+    [(letin ((a . as) b) . ())
+     (let-values [[[a . as] b]]
+       (values a . as))]
+    [(letin ((a . as) b) . bodies)
+     (let-values [[[a . as] b]] (letin . bodies))]
+    [(letin (a b) . ())
+     (let [[a b]] a)]
+    [(letin (a b) . bodies)
+     (let [[a b]] (letin . bodies))]))
 
 (define-syntax defloop
   (lambda (stx)

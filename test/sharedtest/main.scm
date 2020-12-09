@@ -192,10 +192,19 @@
     (begin
       (foo 2)))))
 
-(define k (letin
+(let ()
+  (letin
+   [k (letin
+       [i 2]
+       [c 3]
+       [r (+ i c)])]
+   (do (assert-equal k 5))
+   [[c k] (letin
            [i 2]
-           [c 3]
-           (+ i c)))
+           [(c k) (values 3 4)]
+           [[r m] (values (+ i c k) 0)])]
+   (do (assert-equal c 9))
+   (do (assert-equal k 0))))
 
 (assert-equal (list 0 'x 1 'x 2)
               (list-intersperse 'x (list 0 1 2)))
@@ -228,8 +237,6 @@
 (dprintln "aa = ~a" (rec1-aa rec))
 
 (printf "loop = ~a\n" (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1))))))
-
-(printf "k = ~a\n" k)
 
 (let* ((s "xxhellokh")
        (tt "hx")
