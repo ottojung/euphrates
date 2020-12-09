@@ -779,41 +779,50 @@
 ;; like do syntax in haskell
 (define-syntax monadic-bare
   (syntax-rules ()
-    [(monadic-bare f body)
+    [(_ f ((a . as) b . tags) . ())
      (let-values
-         (((r-x r-cont qvar qval qtags)
-           (f (memconst body)
-              identity
-              (quote ())
-              (quote body)
-              (quote ()))))
+         (((r-x r-cont qvar qval qtags last?)
+           (f (memconst (call-with-values (lambda _ b) (lambda x x)))
+              (lambda args (apply values args))
+              (quote (a . as))
+              (quote b)
+              (monadic-bare-handle-tags . tags)
+              #t)))
        (r-cont (r-x)))]
-    [(monadic-bare f ((a . as) b . tags) body ...)
+    [(_ f ((a . as) b . tags) . bodies)
      (let-values
-         (((r-x r-cont qvar qval qtags)
-           (f (memconst (call-with-values (lambda [] b) (lambda x x)))
+         (((r-x r-cont qvar qval qtags last?)
+           (f (memconst (call-with-values (lambda _ b) (lambda x x)))
               (lambda [k]
                 (apply
                  (lambda [a . as]
-                   (monadic-bare f
-                                 body
-                                 ...))
+                   (monadic-bare f . bodies))
                  k))
               (quote (a . as))
               (quote b)
-              (monadic-bare-handle-tags . tags))))
+              (monadic-bare-handle-tags . tags)
+              #f)))
        (r-cont (r-x)))]
-    [(monadic-bare f (a b . tags) body ...)
+    [(_ f (a b . tags) . ())
      (let-values
-         (((r-x r-cont qvar qval qtags)
+         (((r-x r-cont qvar qval qtags last?)
            (f (memconst b)
-              (lambda [a]
-                (monadic-bare f
-                              body
-                              ...))
+              identity
               (quote a)
               (quote b)
-              (monadic-bare-handle-tags . tags))))
+              (monadic-bare-handle-tags . tags)
+              #t)))
+       (r-cont (r-x)))]
+    [(_ f (a b . tags) . bodies)
+     (let-values
+         (((r-x r-cont qvar qval qtags last?)
+           (f (memconst b)
+              (lambda [a]
+                (monadic-bare f . bodies))
+              (quote a)
+              (quote b)
+              (monadic-bare-handle-tags . tags)
+              #f)))
        (r-cont (r-x)))]))
 
 (define monadic-global-parameter (make-parameter #f))
@@ -865,22 +874,25 @@
   (fourth monad-input))
 (define (monad-qtags monad-input)
   (fifth monad-input))
-
-(define (monad-last-val? monad-input)
-  (null? (monad-qvar monad-input)))
+(define (monad-last? monad-input)
+  (sixth monad-input))
 
 (define-syntax-rule (monad-cret monad-input arg cont)
   (values (memconst arg)
           cont
           (monad-qvar monad-input)
           (monad-qval monad-input)
-          (monad-qtags monad-input)))
+          (monad-qtags monad-input)
+          (monad-last? monad-input)))
 (define-syntax-rule (monad-ret monad-input arg)
   (values (memconst arg)
           (monad-cont monad-input)
           (monad-qvar monad-input)
           (monad-qval monad-input)
-          (monad-qtags monad-input)))
+          (monad-qtags monad-input)
+          (monad-last? monad-input)))
+(define-syntax-rule (monad-ret-id monad-input)
+  (apply values monad-input))
 
 (define (monad-handle-multiple monad-input arg)
   (let* ((qvar (monad-qvar monad-input))
@@ -898,7 +910,7 @@
 (define (except-monad)
   (let ((exceptions (list)))
     (lambda monad-input
-      (if (monad-last-val? monad-input)
+      (if (monad-last? monad-input)
           (monad-ret monad-input
                      (monad-handle-multiple
                       monad-input
@@ -926,7 +938,7 @@
             (monad-qvar monad-input)
             (monad-arg monad-input)
             (monad-qval monad-input))
-    (apply values monad-input)))
+    (monad-ret-id monad-input)))
 
 (define identity-monad
   (lambda monad-input (apply values monad-input)))
@@ -1473,7 +1485,7 @@
    ((args cmd) (shell-inputs-to-comprocess-args inputs))
    (ret (apply run-comprocess args))
    (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
-   ret))
+   (do ret)))
 
 (define [sh . inputs]
   (monadic (except-monad)
@@ -1482,7 +1494,7 @@
    (do (shell-check-status p))
    (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
        'always 'sh-kill-on-error p)
-   p))
+   (do p)))
 
 (define [sh-re . inputs]
   (monadic (except-monad)
@@ -1501,7 +1513,7 @@
    (do (delete-file outfilename) 'always)
    (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
        'always 'sh-kill-on-error p)
-   trimed))
+   (do trimed)))
 
 (define-syntax-rule (with-no-shell-log . bodies)
   (with-monadic-right
@@ -1520,7 +1532,7 @@
                          (string-append command " > " temp)))
    (output (read-string-file temp))
    (trimed (string-trim-chars output "\n \t" 'both))
-   (cons trimed p)))
+   (do (cons trimed p))))
 
 (define (parse-cli args)
   (define (trim s) (string-trim-chars s "-" 'left))

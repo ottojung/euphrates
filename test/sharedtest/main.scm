@@ -290,7 +290,7 @@
            [a (+ 2 7)]
            [b (* a 10)]
            [c (- b b)]
-           (+ 100 c)))
+           [r (+ 100 c)]))
 
 (assert-equal (calc-default) 0)
 
@@ -299,8 +299,8 @@
  (monadic-parameterize
   (fn f fname
       (lambda monadic-input
-        (let-values (((arg cont qvar qval qtags) (apply f monadic-input)))
-          (values (const (1+ (arg))) cont qvar qval qtags))))
+        (let-values (((arg cont qvar qval qtags last?) (apply f monadic-input)))
+          (values (const (1+ (arg))) cont qvar qval qtags last?))))
   (calc-default)))
 
 (assert-equal
@@ -309,7 +309,7 @@
           [a (+ 2 7)]
           [b (* a 10)]
           [c (- b b)]
-          (+ 100 c)))
+          [r (+ 100 c)]))
 
 (assert-equal
  100
@@ -317,7 +317,7 @@
           [a (+ 2 7)]
           [b (* a 10)]
           [c (- b b)]
-          (+ 100 c)))
+          [r (+ 100 c)]))
 
 (assert-equal
  0
@@ -327,7 +327,7 @@
            [a (+ 2 7)]
            [b (* a 10)]
            [c (- b b)]
-           (+ 100 c))))
+           [r (+ 100 c)])))
 
 (define count-monad-counter 0)
 (define count-monad
@@ -347,7 +347,7 @@
             [b (* a 10)]
             [c (- b b)]
             [d (+ 2 3)]
-            (+ 100 c)))))
+            [r (+ 100 c)]))))
 
 (assert-equal 3 count-monad-counter)
 
@@ -357,11 +357,12 @@
    (lambda ()
      (monadic (except-monad)
               [a (+ 2 7)]
+              [o (debug "before kek")]
               [b (throw 'test-abort)]
               [p (dprintln "after kek") 'always]
               [r (set! ran-always #t) 'always]
               [c (- b b)]
-              (+ 100 c))
+              [r (+ 100 c)])
      (set! throwed #f))
    (lambda errs
      (dprintln "except-monad throwed: ~a" errs)))
@@ -379,7 +380,7 @@
               [p (dprintln "after kek") 'always]
               [r (set! ran-always #t) 'always]
               [c (- b b)]
-              (+ 100 c))
+              [r (+ 100 c)])
      (set! throwed #f))
    (lambda errs
      (dprintln "except-monad throwed: ~a" errs)))
@@ -398,9 +399,9 @@
              [c (+ (b) (b) (b) (b) (b))]
              [[k d] (values 2 3)]
              [sum (+ (k) (d))]
-             (begin
-               (assert-equal (sum) 5)
-               (+ 100 (c))))))
+             [r (begin
+                  (assert-equal (sum) 5)
+                  (+ 100 (c)))])))
 
   (assert-equal 1 eval-b-count))
 
@@ -416,9 +417,9 @@
              [c (+ (b) (b) (b) (b) (b))]
              [[k d] (values 2 3) 'async]
              [sum (+ (k) (d))]
-             (begin
-               (assert-equal (sum) 5)
-               (+ 100 (c))))))
+             [r (begin
+                  (assert-equal (sum) 5)
+                  (+ 100 (c)))])))
 
   (assert-equal 1 eval-b-count))
 

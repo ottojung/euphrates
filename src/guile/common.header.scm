@@ -184,9 +184,10 @@
    monad-qvar
    monad-qval
    monad-qtags
-   monad-last-val?
+   monad-last?
    monad-cret
    monad-ret
+   monad-ret-id
    monad-handle-multiple
    monad-replicate-multiple
    except-monad
