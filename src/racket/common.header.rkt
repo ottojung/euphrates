@@ -18,6 +18,19 @@
 
 (define [string-null? s] (not (non-empty-string? s)))
 
+(define (string-pad-right str size pad-char)
+  (let* ((len (string-length str)))
+    (if (>= len size) str
+        (list->string
+         (append (string->list str)
+                 (replicate (- size len) pad-char))))))
+(define (string-pad-left str size pad-char)
+  (let* ((len (string-length str)))
+    (if (>= len size) str
+        (list->string
+         (append (replicate (- size len) pad-char)
+                 (string->list str))))))
+
 (define [throw type . args]
   (error type "~a" args))
 

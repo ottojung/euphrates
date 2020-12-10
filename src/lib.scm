@@ -132,9 +132,173 @@
              (set! maybe-error error)))))
     (values result maybe-error)))
 
+(define-syntax-rule (intermezzo bind-name action . bodies)
+  (let ((bind-name (begin . bodies)))
+    action
+    bind-name))
+
+(define-syntax partial-apply1-helper
+  (syntax-rules ()
+    ((_ f buf () last) (reversed-args-f f last . buf))
+    ((_ f buf (a . args) last)
+     (partial-apply1-helper f (a . buf) args last))))
+(define-syntax-rule (partial-apply1 f . args)
+  (lambda (x)
+    (partial-apply1-helper f () args x)))
+
+(define-syntax partial-apply-helper
+  (syntax-rules ()
+    ((_ f buf () last) (apply f (reversed-args-f cons* last . buf)))
+    ((_ f buf (a . args) last)
+     (partial-apply-helper f (a . buf) args last))))
+(define-syntax-rule (partial-apply f . args)
+  (lambda xs
+    (partial-apply-helper f () args xs)))
+
+(define-syntax compose-under-helper
+  (syntax-rules ()
+    [(_ args op buf ())
+     (lambda args
+       (reversed-args-f op . buf))]
+    [(_ args op buf (f . fs))
+     (compose-under-helper
+      args op
+      ((apply f args) . buf)
+      fs)]))
+(define-syntax-rule (compose-under operation . composites)
+  (compose-under-helper args operation () composites))
+
+;; `comp` operator from clojure
+(define-syntax %comp-helper
+  (syntax-rules ()
+    ((_ buf ())
+     (compose . buf))
+    ((_ buf ((x . xs) . y))
+     (%comp-helper ((partial-apply1 x . xs) . buf) y))
+    ((_ buf (x . y))
+     (%comp-helper (x . buf) y))))
+(define-syntax-rule (comp . xs)
+  (%comp-helper () xs))
+
+(define-syntax %lcomp-helper
+  (syntax-rules ()
+    ((_ ()) identity)
+    ((_ (((x . xs)) . y))
+     (lambda (input)
+       ((%lcomp-helper y) ((partial-apply1 x . xs) input))))
+    ((_ (((x . xs) . names) . y))
+     (lambda (input)
+       (let-values ((names ((partial-apply1 x . xs) input)))
+         ((%lcomp-helper y) input))))
+    ((_ ((x . names) . y))
+     (lambda (input)
+       (let-values ((names (x input)))
+         ((%lcomp-helper y) input))))
+    ((_ ((x) . y))
+     (lambda (input)
+       ((%lcomp-helper y) (x input))))))
+(define-syntax-rule (lcomp . xs)
+  (%lcomp-helper xs))
+
+;; thread (->>) operator from clojure
+(define-syntax-rule (appcomp x . xs)
+  ((comp . xs) x))
+
+;; extended thread (->>) operator from clojure
+(define-syntax-rule (applcomp x . xs)
+  ((lcomp . xs) x))
+
 ;;;;;;;;;;;;;;;;
 ;; SHORTHANDS ;;
 ;;;;;;;;;;;;;;;;
+
+(define (string-null-or-whitespace? str)
+  (let loop ((i (sub1 (string-length str))))
+    (if (< i 0) #t
+        (case (string-ref str i) ;; TODO: is this O(1)?
+          ((#\space #\tab #\newline) (loop (sub1 i)))
+          (else #f)))))
+
+(define (list->hash-set lst)
+  (let ((H (make-hash-table (length lst))))
+    (let loop ((lst lst))
+      (unless (null? lst)
+        (hash-set! H (car lst) #t)
+        (loop (cdr lst))))
+    H))
+
+(define read-list
+  (case-lambda
+   (() (read-list (current-input-port)))
+   ((input)
+    (let ((p (if (string? input) (open-input-string input)
+                 input)))
+      (let lp ()
+        (let ((r (read p)))
+          (if (eof-object? r)
+              (begin
+                (when (string? input)
+                  (close-port p))
+                (list))
+              (cons r (lp)))))))))
+
+(define list-ref-or
+  (case-lambda
+   ((lst ref) (list-ref-or lst ref #f))
+   ((lst ref default)
+    (let lp ((lst lst) (ref ref))
+      (if (null? lst) default
+          (if (= 0 ref)
+              (car lst)
+              (lp (cdr lst) (1- ref))))))))
+
+(define (list-partition predicate lst)
+  (let lp ((buf lst) (false (list)) (true (list)))
+    (if (null? buf)
+        (values (reverse false) (reverse true))
+        (if (predicate (car buf))
+            (lp (cdr buf)
+                false
+                (cons (car buf) true))
+            (lp (cdr buf)
+                (cons (car buf) false)
+                true)))))
+
+(define (list-split-on predicate lst)
+  (let loop ((lst lst) (buf (list)) (ret (list)))
+    (cond
+     ((null? lst)
+      (if (null? buf)
+          (reverse ret)
+          (reverse (cons (reverse buf) ret))))
+     ((predicate (car lst))
+      (loop (cdr lst) (list)
+            (if (null? buf) ret
+                (cons (reverse buf) ret))))
+     (else
+      (loop (cdr lst) (cons (car lst) buf) ret)))))
+
+(define curry-if
+  (case-lambda
+   ((test-function then-function)
+    (curry-if test-function then-function identity))
+   ((test-function then-function else-function)
+    (lambda (x)
+      (if (test-function x) (then-function x) (else-function x))))))
+
+;; returns list in reverse order
+(define list-deduplicate
+  (case-lambda
+   ((lst) (list-deduplicate lst equal?))
+   ((lst pred)
+    (let ((H (make-hash-table (length lst))))
+      (let lp ((buf lst) (mem (list)))
+        (cond ((null? buf) mem)
+              ((hash-ref H (car buf) #f)
+               (lp (cdr buf) mem))
+              (else
+               (hash-set! H (car buf) #t)
+               (lp (cdr buf) (cons (car buf) mem)))))))))
 
 (define (cartesian-map function a b)
   (let lp1 ((ai a))
@@ -554,6 +718,17 @@
         ((check) evaled?)
         ((or) (or memory (car args)))
         (else (throw 'unknown-memoize-command type memory evaled?)))))))
+
+(define-syntax-rule (effectvalue value . effects)
+  (let ((evaled? #f))
+    (case-lambda
+     (() (unless evaled? (set! evaled? #t) . effects) value)
+     ((type . args)
+      (case type
+        ((check) evaled?)
+        ((or) (or (and evaled? value) (car args)))
+        ((value) value)
+        (else (throw 'unknown-effectvalue-command type evaled?)))))))
 
 (define (replicate n x)
   (if (= 0 n)

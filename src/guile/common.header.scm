@@ -17,6 +17,7 @@
    catch-any
    printf
    ~a
+   ~s
    time-get-monotonic-nanoseconds-timestamp
    string-split#simple
    words
@@ -85,6 +86,23 @@
    monoid-r*
    monoid*
    catch-any#as-pair
+   intermezzo
+   partial-apply1
+   partial-apply
+   compose-under
+   comp
+   lcomp
+   appcomp
+   applcomp
+   string-null-or-whitespace?
+   list->hash-set
+   read-list
+   list-ref-or
+   list-partition
+   list-split-on
+   curry-if
+   list-deduplicate
+   string-pad-left
    cartesian-map
    cartesian-each
    take-common-prefix
@@ -358,8 +376,13 @@
 
 (define (~a x)
   (with-output-to-string
-    (lambda ()
+    (lambda _
       (display x))))
+
+(define (~s x)
+  (with-output-to-string
+    (lambda _
+      (write x))))
 
 (define time-get-monotonic-nanoseconds-timestamp
   (let [[time-to-nanoseconds
@@ -371,6 +394,9 @@
        ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
 (define string-split#simple string-split)
+
+;; string-pad-right exists
+(define string-pad-left string-pad)
 
 ;; TODO: move to lib somehow
 (define (words str)
