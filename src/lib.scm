@@ -1675,8 +1675,7 @@
   (monadic (except-monad)
    ((args cmd) (shell-inputs-to-comprocess-args inputs))
    ((outport outfilename) (make-temporary-fileport))
-   (p (parameterize [[current-output-port outport]
-                     [current-error-port outport]]
+   (p (parameterize [[current-output-port outport]]
         (apply run-comprocess args)))
    (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    (do (sleep-until (comprocess-exited? p)))
