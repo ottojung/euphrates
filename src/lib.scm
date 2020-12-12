@@ -1636,7 +1636,7 @@
 ;;;;;;;;;;;;;
 
 (define (shell-check-status p)
-  (unless (= 0 (comprocess-status p))
+  (unless (equal? 0 (comprocess-status p))
     (throw 'shell-process-failed `(cmd: ,(comprocess-command p)) p)))
 
 (define (shell-inputs-to-comprocess-args inputs)
@@ -1659,11 +1659,11 @@
   (monadic-id
    ((args cmd) (shell-inputs-to-comprocess-args inputs))
    (ret (apply run-comprocess args))
-   (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
+   (do (debug "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
    (do ret)))
 
 (define [sh . inputs]
-  (monadic (except-monad)
+  (monadic-id
    (p (apply sh-async inputs))
    (do (sleep-until (comprocess-exited? p)))
    (do (shell-check-status p))
@@ -1672,22 +1672,7 @@
    (do p)))
 
 (define [sh-re . inputs]
-  (monadic (except-monad)
-   ((args cmd) (shell-inputs-to-comprocess-args inputs))
-   ((outport outfilename) (make-temporary-fileport))
-   (p (parameterize [[current-output-port outport]]
-        (apply run-comprocess args)))
-   (do (dprintln "> ~a" cmd) `(sh-cmd ,cmd) 'sh-log)
-   (do (sleep-until (comprocess-exited? p)))
-   (do (shell-check-status p))
-   (ret (read-string-file outfilename))
-   (trimed (string-trim-chars ret "\n \t" 'both))
-   (do (dprintln "< ~a" trimed) `(sh-cmd ,cmd) 'sh-return-log)
-   (do (close-port outport) 'always)
-   (do (delete-file outfilename) 'always)
-   (do (kill-comprocess-with-timeout p (normal->micro@unit 1/2))
-       'always 'sh-kill-on-error p)
-   (do trimed)))
+  (string-trim-chars (with-output-to-string (lambda _ (apply sh inputs))) "\n \t" 'both))
 
 (define-syntax-rule (with-no-shell-log . bodies)
   (with-monadic-right

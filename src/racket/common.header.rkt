@@ -298,7 +298,7 @@
 
 (define (make-temporary-fileport)
   (let ((filepath (make-temporary-file)))
-    (values (open-file filepath "w") (path->string filepath))))
+    (values (open-output-file filepath #:exists 'truncate/replace) (path->string filepath))))
 
 ;;;;;;;;;;;;;
 ;; RECORDS ;;
@@ -369,38 +369,61 @@
 
 ;; TODO: support asynchronous stdin
 (define [run-comprocess#p-default command . args]
-  (let [[p-stdout (current-output-port)]
-        [p-stderr (current-error-port)]]
-  (let-values
-      [[[p stdout stdin stderr]
-        (apply subprocess
-               (list*
-                p-stdout #f p-stderr ;; stdout stdin stderr
-                command
-                args))]]
-    (let [[re (comprocess p
-                          command
-                          args
-                          stdin
-                          (subprocess-pid p)
-                          #f
-                          #f)]]
+  (define-syntax-rule (with-ignore-errors! . bodies)
+    (catch-any
+     (lambda _ . bodies)
+     (lambda errors 'ignored-error)))
 
-      (define [run-in-thread]
-        (subprocess-wait p)
+  (let [[p-stdout0 (current-output-port)]
+        [p-stderr0 (current-error-port)]]
+    (let-values
+        [[[p-stdout p-stdout-file]
+          (if (file-stream-port? p-stdout0)
+              (values p-stdout0 #f)
+              (make-temporary-fileport))]
+         [[p-stderr p-stderr-file]
+          (if (file-stream-port? p-stderr0)
+              (values p-stderr0 #f)
+              (make-temporary-fileport))]]
+      (let-values
+          [[[p stdout stdin stderr]
+            (apply subprocess
+                   (list*
+                    p-stdout #f p-stderr ;; stdout stdin stderr
+                    command
+                    args))]]
+        (let [[re (comprocess p
+                              command
+                              args
+                              stdin
+                              (subprocess-pid p)
+                              #f
+                              #f)]]
 
-        (when (and stdout (not p-stdout))
-          (close-input-port stdout))
-        (when stdin
-          (close-output-port stdin))
-        (when (and stderr (not p-stderr))
-          (close-input-port stderr))
+          (define [run-in-thread]
+            (subprocess-wait p)
 
-        (set-comprocess-exited?! re #t)
-        (set-comprocess-status! re (subprocess-status p)))
+            (when p-stdout-file
+              (with-ignore-errors! (close-output-port p-stdout))
+              (with-ignore-errors! (display (file->string p-stdout-file) p-stdout0))
+              (with-ignore-errors! (delete-file p-stdout-file)))
+            (when p-stderr-file
+              (with-ignore-errors! (close-output-port p-stderr))
+              (with-ignore-errors! (display (file->string p-stderr-file) p-stderr0))
+              (with-ignore-errors! (delete-file p-stderr-file)))
 
-      (thread run-in-thread)
-      re))))
+            (when (and stdout (not p-stdout))
+              (close-input-port stdout))
+            (when stdin
+              (close-output-port stdin))
+            (when (and stderr (not p-stderr))
+              (close-input-port stderr))
+
+            (set-comprocess-exited?! re #t)
+            (set-comprocess-status! re (subprocess-status p)))
+
+          (thread run-in-thread)
+          re)))))
 
 (define [kill-comprocess#p-default p force?]
   (subprocess-kill (comprocess-p p) force?))

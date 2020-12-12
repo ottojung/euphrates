@@ -710,8 +710,33 @@
    type ::= output-port? -> output-port? -> string -> list of string -> process
   "
 
-  (define p-stdout (current-output-port))
-  (define p-stderr (current-error-port))
+  (define p-stdout0 (current-output-port))
+  (define-values (p-stdout p-stdout-file)
+    (if (file-port? p-stdout0)
+        (values p-stdout0 #f)
+        (make-temporary-fileport)))
+  (define p-stderr0 (current-error-port))
+  (define-values (p-stderr p-stderr-file)
+    (if (file-port? p-stderr0)
+        (values p-stderr0 #f)
+        (make-temporary-fileport)))
+
+  (define-syntax-rule (with-ignore-errors! . bodies)
+    (catch-any
+     (lambda _ . bodies)
+     (lambda errors 0)))
+
+  (define cleanup
+    (lambda _
+      ;; TODO: dont ignore errors?
+      (when p-stdout-file
+        (with-ignore-errors! (close-port p-stdout))
+        (with-ignore-errors! (display (read-string-file p-stdout-file) p-stdout0))
+        (with-ignore-errors! (delete-file p-stdout-file)))
+      (when p-stderr-file
+        (with-ignore-errors! (close-port p-stderr))
+        (with-ignore-errors! (display (read-string-file p-stderr-file) p-stderr0))
+        (with-ignore-errors! (delete-file p-stderr-file)))))
 
   ;; returns status
   (define (waitpid#no-throw#no-hang pid)
@@ -741,12 +766,13 @@
                           (cons* OPEN_WRITE
                                  (comprocess-command p)
                                  (comprocess-args p)))]
-             [pid (hashq-ref port/pid-table pipe)]]
+             [pid (hashq-ref port/pid-table pipe)]
+             [re-status #f]]
         (set-comprocess-pipe! p pipe)
         (set-comprocess-pid! p pid)
 
         (dynamic-thread-spawn
-         (lambda ()
+         (lambda _
            (let ((sleep (dynamic-thread-get-delay-procedure)))
              (call-with-finally
               (lambda _
@@ -757,12 +783,12 @@
                        (sleep)
                        (lp))
                       (else
-                       (set-comprocess-status! p status)
-                       (set-comprocess-exited?! p #t))))))
+                       (set! re-status status))))))
               (lambda _
-                (catch-any
-                 (lambda () (close-pipe pipe))
-                 (lambda _ 0)))))))))
+                (cleanup)
+                (set-comprocess-status! p re-status)
+                (set-comprocess-exited?! p #t)
+                (with-ignore-errors! (close-pipe pipe)))))))))
 
     p))
 
@@ -771,4 +797,3 @@
 
 ;; racket compatibility
 (define system*/exit-code system*)
-
