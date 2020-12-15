@@ -710,12 +710,12 @@
    type ::= output-port? -> output-port? -> string -> list of string -> process
   "
 
-  (define p-stdout0 (current-output-port))
+  (define p-stdout0 (or (comprocess-stdout) (current-output-port)))
   (define-values (p-stdout p-stdout-file)
     (if (file-port? p-stdout0)
         (values p-stdout0 #f)
         (make-temporary-fileport)))
-  (define p-stderr0 (current-error-port))
+  (define p-stderr0 (or (comprocess-stdout) (current-error-port)))
   (define-values (p-stderr p-stderr-file)
     (if (file-port? p-stderr0)
         (values p-stderr0 #f)

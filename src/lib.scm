@@ -1418,6 +1418,13 @@
 ;; PROCESSES ;;
 ;;;;;;;;;;;;;;;
 
+;; if #f then (current-input-port)
+(define comprocess-stdout
+  (make-parameter #f))
+;; if #f then (current-error-port)
+(define comprocess-stderr
+  (make-parameter #f))
+
 (define run-comprocess#p
   (make-parameter run-comprocess#p-default))
 (define run-comprocess

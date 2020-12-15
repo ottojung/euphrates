@@ -374,8 +374,8 @@
      (lambda _ . bodies)
      (lambda errors 'ignored-error)))
 
-  (let [[p-stdout0 (current-output-port)]
-        [p-stderr0 (current-error-port)]]
+  (let [[p-stdout0 (or (comprocess-stdout) (current-output-port))]
+        [p-stderr0 (or (comprocess-stderr) (current-error-port))]]
     (let-values
         [[[p-stdout p-stdout-file]
           (if (file-stream-port? p-stdout0)
