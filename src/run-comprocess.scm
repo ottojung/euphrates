@@ -13,7 +13,7 @@
 
 %var run-comprocess#p-default
 
-%for (LANGUAGE "guile")
+%for (COMPILER "guile")
 
 (use-modules (ice-9 popen))
 

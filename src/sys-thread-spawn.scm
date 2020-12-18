@@ -5,7 +5,7 @@
 
 %var sys-thread-spawn
 
-%for (LANGUAGE "guile")
+%for (COMPILER "guile")
 
 (use-modules (ice-9 threads))
 

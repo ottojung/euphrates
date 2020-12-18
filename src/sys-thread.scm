@@ -13,7 +13,7 @@
 %var sys-thread
 %var sys-thread?
 
-%for (LANGUAGE guile)
+%for (COMPILER "guile")
 (use-modules (srfi srfi-9))
 %end
 
