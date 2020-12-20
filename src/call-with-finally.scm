@@ -1,6 +1,8 @@
 
 %run guile
 
+%use (catch-any) "./catch-any.scm"
+
 %var call-with-finally
 
 ;; Runs finally even if exception was thrown (even on thread cancel)
