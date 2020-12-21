@@ -2,7 +2,6 @@
 %run guile
 
 %use (make-uni-spinlock-critical) "./uni-spinlock.scm"
-%use (critical) "./critical.scm"
 %use (catch-any) "./catch-any.scm"
 
 %for (COMPILER "guile")

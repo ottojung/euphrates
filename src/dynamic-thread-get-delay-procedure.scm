@@ -9,5 +9,5 @@
 (define dynamic-thread-get-delay-procedure#p
   (make-parameter dynamic-thread-get-delay-procedure#p-default))
 (define (dynamic-thread-get-delay-procedure)
-  ((dynamic-thread-get-delay-procedure-p)))
+  ((dynamic-thread-get-delay-procedure#p)))
 
