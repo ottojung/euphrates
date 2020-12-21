@@ -17,7 +17,7 @@
 
 (use-modules (ice-9 popen))
 
-(define-syntax with-ignore-errors!
+(define-syntax with-ignore-errors!*
   (syntax-rules ()
     ((_ . bodies)
      (catch-any
@@ -43,13 +43,13 @@
     (lambda _
       ;; TODO: dont ignore errors?
       (when p-stdout-file
-        (with-ignore-errors! (close-port p-stdout))
-        (with-ignore-errors! (display (read-string-file p-stdout-file) p-stdout0))
-        (with-ignore-errors! (delete-file p-stdout-file)))
+        (with-ignore-errors!* (close-port p-stdout))
+        (with-ignore-errors!* (display (read-string-file p-stdout-file) p-stdout0))
+        (with-ignore-errors!* (delete-file p-stdout-file)))
       (when p-stderr-file
-        (with-ignore-errors! (close-port p-stderr))
-        (with-ignore-errors! (display (read-string-file p-stderr-file) p-stderr0))
-        (with-ignore-errors! (delete-file p-stderr-file)))))
+        (with-ignore-errors!* (close-port p-stderr))
+        (with-ignore-errors!* (display (read-string-file p-stderr-file) p-stderr0))
+        (with-ignore-errors!* (delete-file p-stderr-file)))))
 
   ;; returns status
   (define (waitpid#no-throw#no-hang pid)
@@ -101,7 +101,7 @@
                 (cleanup)
                 (set-comprocess-status! p re-status)
                 (set-comprocess-exited?! p #t)
-                (with-ignore-errors! (close-pipe pipe)))))))))
+                (with-ignore-errors!* (close-pipe pipe)))))))))
 
     p))
 
