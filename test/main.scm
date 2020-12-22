@@ -1,6 +1,9 @@
 
 %run guile
 
+%use (get-directory-name) "./src/get-directory-name.scm"
+%use (get-current-source-file-path) "./src/get-current-source-file-path.scm"
+%use (append-posix-path) "./src/append-posix-path.scm"
 %use (run-comprocess#p-default) "./src/run-comprocess.scm"
 %use (make-uni-spinlock) "./src/uni-spinlock.scm"
 %use (debug) "./src/debug.scm"
@@ -28,6 +31,8 @@
 %use (define-rec define-rec?) "./src/define-rec.scm"
 %use (apploop) "./src/apploop.scm"
 %use (string-trim-chars) "./src/string-trim-chars.scm"
+%use (file-or-directory-exists?) "./src/file-or-directory-exists-q.scm"
+%use (get-directory-name) "./src/get-directory-name.scm"
 
 (let ()
   (catch-any
@@ -289,6 +294,13 @@
   (assert= "ellokh" (test 'left))
   (assert= "xxhellok" (test 'right))
   (assert= "ellok" (test 'both)))
+
+;; file-or-directory-exists?
+(let ()
+  (assert (file-or-directory-exists? "/"))
+  (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir1" "ab")))
+  (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir2")))
+  (assert (not (file-or-directory-exists? (append-posix-path "test" "filetests" "dir3")))))
 
 (display "All good\n")
 
