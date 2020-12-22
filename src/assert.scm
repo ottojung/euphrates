@@ -1,7 +1,6 @@
 
 %run guile
 
-%use (reversed-args) "./reversed-args.scm"
 %use (reversed-args-f) "./reversed-args-f.scm"
 %use (assert#raw) "./assert-raw.scm"
 
