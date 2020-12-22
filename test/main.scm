@@ -26,6 +26,7 @@
 %use (list-intersperse) "./src/list-intersperse.scm"
 %use (path-replace-extension) "./src/path-replace-extension.scm"
 %use (define-rec define-rec?) "./src/define-rec.scm"
+%use (apploop) "./src/apploop.scm"
 
 (let ()
   (catch-any
@@ -262,6 +263,7 @@
    "file.b.c"
    (path-replace-extension "file.b.a" ".c")))
 
+;; define-rec
 (let ()
   (define-rec rec1 aa bb)
 
@@ -272,6 +274,11 @@
     (set-rec1-aa! rec 10)
     (assert= 10 (rec1-aa rec))))
 
+;; apploop
+(let ()
+  (assert=
+   120
+   (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1)))))))
 
 (display "All good\n")
 
