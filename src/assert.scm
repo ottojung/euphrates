@@ -9,27 +9,27 @@
 
 (define-syntax assert-buf
   (syntax-rules ()
-    ((_ orig buf (last-r))
+    ((_ orig buf head (last-r))
      (let ((last last-r))
-       (unless (reversed-args last . buf)
+       (unless (reversed-args-f head last . buf)
          (throw 'assertion-fail
-                `(test: ,(quote orig))
-                `(test!: ,(reversed-args-f list last . buf))))))
-    ((_ orig buf (last-r) . printf-args)
+                `(test: ,(cons (quote head) (reversed-args-f list last . buf)))
+                `(original: ,(quote orig))))))
+    ((_ orig buf head (last-r) . printf-args)
      (let ((last last-r))
-       (unless (reversed-args last . buf)
+       (unless (reversed-args-f head last . buf)
          (throw 'assertion-fail
-                `(test: ,(quote orig))
-                `(test!: ,(reversed-args-f list last . buf))
+                `(test: ,(cons (quote head) (reversed-args-f list last . buf)))
+                `(original: ,(quote orig))
                 `(description: ,(stringf . printf-args))))))
-    ((_ orig buf (x-r . xs-r) . printf-args)
+    ((_ orig buf head (x-r . xs-r) . printf-args)
      (let ((x x-r))
-       (assert-buf orig (x . buf) xs-r . printf-args)))))
+       (assert-buf orig (x . buf) head xs-r . printf-args)))))
 
 ;; reduces test to normal form by hand
 (define-syntax assert
   (syntax-rules ()
     ((_ (x . xs) . printf-args)
-     (assert-buf (x . xs) () (x . xs) . printf-args))
+     (assert-buf (x . xs) () x xs . printf-args))
     ((_ test . printf-args)
      (assert#raw test . printf-args))))
