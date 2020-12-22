@@ -24,6 +24,7 @@
 %use (use-svars with-svars with-package make-package make-static-package) "./src/package.scm"
 %use (letin) "./src/letin.scm"
 %use (list-intersperse) "./src/list-intersperse.scm"
+%use (path-replace-extension) "./src/path-replace-extension.scm"
 
 (let ()
   (catch-any
@@ -253,6 +254,12 @@
            (list-intersperse 'x (list)))
   (assert= 199
            (length (list-intersperse 'x (range 100)))))
+
+;; path-replace-extension
+(let ()
+  (assert=
+   "file.b.c"
+   (path-replace-extension "file.b.a" ".c")))
 
 (display "All good\n")
 
