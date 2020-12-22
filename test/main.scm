@@ -33,6 +33,7 @@
 %use (string-trim-chars) "./src/string-trim-chars.scm"
 %use (file-or-directory-exists?) "./src/file-or-directory-exists-q.scm"
 %use (get-directory-name) "./src/get-directory-name.scm"
+%use (directory-files) "./src/directory-files.scm"
 
 (let ()
   (catch-any
@@ -301,6 +302,15 @@
   (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir1" "ab")))
   (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir2")))
   (assert (not (file-or-directory-exists? (append-posix-path "test" "filetests" "dir3")))))
+
+;; directory-files
+(let ()
+  (assert= '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
+           (directory-files "test/filetests"))
+  (assert= '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
+           (directory-files "test/filetests" #f))
+  (assert= '(("test/filetests/dir1" "dir1") ("test/filetests/dir2" "dir2") ("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
+           (directory-files "test/filetests" #t)))
 
 (display "All good\n")
 
