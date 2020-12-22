@@ -27,6 +27,7 @@
 %use (path-replace-extension) "./src/path-replace-extension.scm"
 %use (define-rec define-rec?) "./src/define-rec.scm"
 %use (apploop) "./src/apploop.scm"
+%use (string-trim-chars) "./src/string-trim-chars.scm"
 
 (let ()
   (catch-any
@@ -279,6 +280,15 @@
   (assert=
    120
    (apploop [x] [5] (if (= 0 x) 1 (* x (loop (- x 1)))))))
+
+;; string-trim-chars
+(let* ((s "xxhellokh")
+       (tt "hx"))
+  (define (test mode) (string-trim-chars s tt mode))
+
+  (assert= "ellokh" (test 'left))
+  (assert= "xxhellok" (test 'right))
+  (assert= "ellok" (test 'both)))
 
 (display "All good\n")
 
