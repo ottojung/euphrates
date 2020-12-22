@@ -6,10 +6,15 @@
 %var hash-copy
 %var hash-table-foreach
 %var alist->hash-table
+%var hashmap-ref
+%var hashmap-set!
 
 %for (COMPILER "guile")
 
 (use-modules (ice-9 hash-table))
+
+(define hashmap-ref hash-ref)
+(define hashmap-set! hash-set!)
 
 (define make-hashmap make-hash-table)
 
