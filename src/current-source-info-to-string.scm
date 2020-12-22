@@ -3,7 +3,7 @@
 
 %use (remove-common-prefix) "./remove-common-prefix.scm"
 %use (get-current-directory) "./get-current-directory.scm"
-%use (~a) "./~a.scm"
+%use (~a) "./tilda-a.scm"
 
 %var current-source-info->string
 

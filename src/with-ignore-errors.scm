@@ -2,7 +2,7 @@
 %run guile
 
 %use (catch-any) "./catch-any.scm"
-%use (current-source-info->string) "./current-source-info->string.scm"
+%use (current-source-info->string) "./current-source-info-to-string.scm"
 %use (get-current-source-info) "./get-current-source-info.scm"
 %use (debug) "./debug.scm"
 
