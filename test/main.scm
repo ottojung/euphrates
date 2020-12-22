@@ -1,21 +1,21 @@
 
 %run guile
 
-%use (run-comprocess#p-default) "./../src/run-comprocess.scm"
-%use (make-uni-spinlock) "./../src/uni-spinlock.scm"
-%use (debug) "./../src/debug.scm"
-%use (with-ignore-errors!) "./../src/with-ignore-errors.scm"
-%use (random-choice) "./../src/random-choice.scm"
-%use (printable#alphabet) "./../src/printable-alphabet.scm"
-%use (catch-any) "./../src/catch-any.scm"
-%use (assert) "./../src/assert.scm"
-%use (assert=) "./../src/assert=.scm"
-%use (make-queue queue-empty? queue-peek queue-push! queue-pop!) "./../src/queue.scm"
-%use (with-dynamic) "./../src/with-dynamic.scm"
-%use (lazy-parameter) "./../src/lazy-parameter.scm"
-%use (~a) "./../src/~a.scm"
-%use (~s) "./../src/~s.scm"
-%use (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys) "./../src/mdict.scm"
+%use (run-comprocess#p-default) "./src/run-comprocess.scm"
+%use (make-uni-spinlock) "./src/uni-spinlock.scm"
+%use (debug) "./src/debug.scm"
+%use (with-ignore-errors!) "./src/with-ignore-errors.scm"
+%use (random-choice) "./src/random-choice.scm"
+%use (printable#alphabet) "./src/printable-alphabet.scm"
+%use (catch-any) "./src/catch-any.scm"
+%use (assert) "./src/assert.scm"
+%use (assert=) "./src/assert=.scm"
+%use (make-queue queue-empty? queue-peek queue-push! queue-pop!) "./src/queue.scm"
+%use (with-dynamic) "./src/with-dynamic.scm"
+%use (lazy-parameter) "./src/lazy-parameter.scm"
+%use (~a) "./src/~a.scm"
+%use (~s) "./src/~s.scm"
+%use (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys) "./src/mdict.scm"
 
 (let ()
   (catch-any
