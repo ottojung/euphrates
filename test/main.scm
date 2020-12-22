@@ -9,6 +9,8 @@
 %use (printable#alphabet) "./../src/printable-alphabet.scm"
 %use (catch-any) "./../src/catch-any.scm"
 %use (assert) "./../src/assert.scm"
+%use (assert=) "./../src/assert=.scm"
+%use (make-queue queue-empty? queue-peek queue-push! queue-pop!) "./../src/queue.scm"
 
 (let ()
   (catch-any
@@ -21,7 +23,37 @@
 (let ()
   (assert (equal? 5 (string-length (list->string (random-choice 5 printable#alphabet))))))
 
+(let ()
+  (with-ignore-errors!
+   (throw 'test "arg1" "arg2")))
+
+;; queue
+(let ()
+  (define q (make-queue 1))
+
+  (queue-push! q 1)
+  (queue-push! q 2)
+  (queue-push! q 3)
+
+  (assert= (queue-peek q) 1)
+  (assert= (queue-pop! q) 1)
+  (assert= (queue-peek q) 2)
+  (assert= (queue-pop! q) 2)
+
+  (assert (not (queue-empty? q)))
+
+  (queue-push! q 9)
+  (assert= (queue-pop! q) 3)
+  (queue-push! q 8)
+  (assert= (queue-pop! q) 9)
+  (queue-push! q 7)
+  (assert= (queue-pop! q) 8)
+  (assert= (queue-pop! q) 7)
+
+  (assert (queue-empty? q)))
 
 
 
+
+(display "All good\n")
 
