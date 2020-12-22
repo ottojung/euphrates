@@ -18,6 +18,7 @@
 %use (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys) "./src/mdict.scm"
 %use (words) "./src/words.scm"
 %use (unwords) "./src/unwords.scm"
+%use (list->tree) "./src/list-to-tree.scm"
 
 (let ()
   (catch-any
@@ -104,6 +105,48 @@
   (assert=
    (unwords (list "hello" "world!"))
    "hello world!"))
+
+;; list->tree
+(let ()
+  (define ex
+    (map string->symbol
+         (words "hello < define ex < words x > > bye")))
+
+  (let ()
+    (define (divider x xs)
+      (cond
+       ((equal? '< x)
+        (values 'open (list x)))
+       ((equal? '> x)
+        (values 'close (list x)))
+       (else
+        (values #f #f))))
+
+    (define r (list->tree ex divider))
+
+    (assert=
+     r
+     '(hello
+       (< define ex (< words x >) >)
+       bye)))
+
+  (let ()
+    (define (divider x xs)
+      (cond
+       ((equal? '< x)
+        (values 'open (list)))
+       ((equal? '> x)
+        (values 'close (list)))
+       (else
+        (values #f #f))))
+
+    (define r (list->tree ex divider))
+
+    (assert=
+     r
+     '(hello
+       (define ex (words x))
+       bye))))
 
 (display "All good\n")
 
