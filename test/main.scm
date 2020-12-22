@@ -35,6 +35,7 @@
 %use (get-directory-name) "./src/get-directory-name.scm"
 %use (directory-files) "./src/directory-files.scm"
 %use (directory-files-rec) "./src/directory-files-rec.scm"
+%use (directory-tree) "./src/directory-tree.scm"
 
 (let ()
   (catch-any
@@ -317,6 +318,11 @@
 (let ()
   (assert= '(("test/filetests/dir1/dir1/zzz" "zzz" "test/filetests/dir1/dir1" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ccc" "ccc" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ab" "ab" "test/filetests/dir1" "test/filetests") ("test/filetests/b" "b" "test/filetests") ("test/filetests/a" "a" "test/filetests") ("test/filetests/cdefg" "cdefg" "test/filetests"))
            (directory-files-rec "test/filetests")))
+
+;; directory-tree
+(let ()
+  (assert= '("filetests" ("dir1" ("dir1" "zzz") "ccc" "ab") "dir2" "b" "a" "cdefg")
+           (directory-tree "test/filetests")))
 
 (display "All good\n")
 
