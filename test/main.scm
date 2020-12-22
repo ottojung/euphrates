@@ -19,6 +19,8 @@
 %use (words) "./src/words.scm"
 %use (unwords) "./src/unwords.scm"
 %use (list->tree) "./src/list-to-tree.scm"
+%use (list-traverse) "./src/list-traverse.scm"
+%use (range) "./src/range.scm"
 
 (let ()
   (catch-any
@@ -147,6 +149,27 @@
      '(hello
        (define ex (words x))
        bye))))
+
+;; list-traverse
+(let ()
+  (assert=
+   6
+   (list-traverse
+    (range 10)
+    (lambda (x xs)
+      (if (< 5 x)
+          (values #f x)
+          (values #t xs)))))
+
+  (assert=
+   'custom-default
+   (list-traverse
+    (range 10)
+    'custom-default
+    (lambda (x xs)
+      (if (< 5 x)
+          (values #f x)
+          (values #t (list)))))))
 
 (display "All good\n")
 
