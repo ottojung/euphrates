@@ -23,6 +23,7 @@
 %use (range) "./src/range.scm"
 %use (use-svars with-svars with-package make-package make-static-package) "./src/package.scm"
 %use (letin) "./src/letin.scm"
+%use (list-intersperse) "./src/list-intersperse.scm"
 
 (let ()
   (catch-any
@@ -241,6 +242,17 @@
            [[r m] (values (+ i c k) 0)])]
    (do (assert= c 9))
    (do (assert= k 0))))
+
+;; list-intersperse
+(let ()
+  (assert= (list 0 'x 1 'x 2)
+           (list-intersperse 'x (list 0 1 2)))
+  (assert= (list 0)
+           (list-intersperse 'x (list 0)))
+  (assert= (list)
+           (list-intersperse 'x (list)))
+  (assert= 199
+           (length (list-intersperse 'x (range 100)))))
 
 (display "All good\n")
 

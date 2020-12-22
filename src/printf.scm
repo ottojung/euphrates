@@ -3,6 +3,7 @@
 
 %use (make-uni-spinlock-critical) "./uni-spinlock.scm"
 %use (catch-any) "./catch-any.scm"
+%use (conss) "./conss.scm"
 
 %for (COMPILER "guile")
 
@@ -19,7 +20,7 @@
          (lambda []
            (catch-any
             (lambda []
-              (apply format (cons* #t fmt args)))
+              (apply format (conss #t fmt args)))
             (lambda argv
               (set! err argv)))))
         (when err (apply throw err))))))

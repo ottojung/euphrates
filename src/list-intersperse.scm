@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (cons*) "./cons-star.scm"
+%use (conss) "./conss.scm"
 
 %var list-intersperse
 
@@ -11,8 +11,8 @@
         (let ((rest (cdr buf)))
           (if (null? rest)
               buf
-              (cons* (car buf)
+              (conss (car buf)
                      element
                      (lp rest))))
-        null)))
+        (list))))
 

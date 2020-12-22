@@ -10,6 +10,7 @@
 %use (dynamic-thread-spawn) "./dynamic-thread-spawn.scm"
 %use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
 %use (read-string-file) "./read-string-file.scm"
+%use (conss) "./conss.scm"
 
 %var run-comprocess#p-default
 
@@ -76,7 +77,7 @@
     (parameterize [[current-output-port p-stdout]
                    [current-error-port p-stderr]]
       (let* [[pipe (apply open-pipe*
-                          (cons* OPEN_WRITE
+                          (conss OPEN_WRITE
                                  (comprocess-command p)
                                  (comprocess-args p)))]
              [pid (hashq-ref port/pid-table pipe)]
