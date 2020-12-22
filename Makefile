@@ -1,11 +1,11 @@
 
-testall: | clean-czempak run run-inlined
+run:
+	echo '' | czempak run test/main.scm
+
+cleanrun: | clean-czempak run run-inlined
 
 clean-czempak:
 	rm -rf .czempak-cache "$(HOME)/.local/share/czempak"
-
-run:
-	echo '' | czempak run test/main.scm
 
 run-inlined:
 	echo '(inlined-dest inlined) ?' | \
