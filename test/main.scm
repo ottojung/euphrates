@@ -15,6 +15,7 @@
 %use (lazy-parameter) "./../src/lazy-parameter.scm"
 %use (~a) "./../src/~a.scm"
 %use (~s) "./../src/~s.scm"
+%use (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys) "./../src/mdict.scm"
 
 (let ()
   (catch-any
@@ -76,6 +77,21 @@
   (assert= (x) 2)
   (assert= test 3))
 
+;; mdict
+(let ()
+  (let ((zz (mdict 1 2
+                   3 4)))
+    (assert= (zz 3)
+                  4)
+    (let ((z2 (zz 3 99)))
+      (assert= (z2 3)
+                    99)
+      (assert (mdict-has? z2 3))
+      (assert (not (mdict-has? z2 52)))
+      (let ((z3 (z2 52 2)))
+        (assert (mdict-has? z3 52))
+        (mdict-set! z3 52 9)
+        (assert= (z3 52) 9)))))
 
 (display "All good\n")
 
