@@ -1,9 +1,9 @@
 
 %run guile
 
-%var ~a
+%var ~s
 
-(define (~a x)
+(define (~s x)
   (with-output-to-string
     (lambda _
       (write x))))
