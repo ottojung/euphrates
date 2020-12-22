@@ -16,6 +16,8 @@
 %use (~a) "./src/~a.scm"
 %use (~s) "./src/~s.scm"
 %use (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys) "./src/mdict.scm"
+%use (words) "./src/words.scm"
+%use (unwords) "./src/unwords.scm"
 
 (let ()
   (catch-any
@@ -92,6 +94,16 @@
         (assert (mdict-has? z3 52))
         (mdict-set! z3 52 9)
         (assert= (z3 52) 9)))))
+
+;; words / unwords
+(let ()
+  (assert=
+   (words "hello \t \t \n world!")
+   (list "hello" "world!"))
+
+  (assert=
+   (unwords (list "hello" "world!"))
+   "hello world!"))
 
 (display "All good\n")
 
