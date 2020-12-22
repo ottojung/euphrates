@@ -22,6 +22,7 @@
 %use (list-traverse) "./src/list-traverse.scm"
 %use (range) "./src/range.scm"
 %use (use-svars with-svars with-package make-package make-static-package) "./src/package.scm"
+%use (letin) "./src/letin.scm"
 
 (let ()
   (catch-any
@@ -225,6 +226,21 @@
     [foo bar baz]
     (begin
       (foo 2)))))
+
+;; letin
+(let ()
+  (letin
+   [k (letin
+       [i 2]
+       [c 3]
+       [r (+ i c)])]
+   (do (assert= k 5))
+   [[c k] (letin
+           [i 2]
+           [(c k) (values 3 4)]
+           [[r m] (values (+ i c k) 0)])]
+   (do (assert= c 9))
+   (do (assert= k 0))))
 
 (display "All good\n")
 
