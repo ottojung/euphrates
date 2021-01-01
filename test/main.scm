@@ -39,6 +39,7 @@
 %use (hashmap-ref) "./src/ihashmap.scm"
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (list-permutations) "./src/list-permutations.scm"
+%use (list-combinations) "./src/list-combinations.scm"
 
 (let ()
   (catch-any
@@ -325,6 +326,14 @@
 (let ()
   (assert=HS '((1 2 3 4) (2 1 3 4) (1 3 2 4) (3 1 2 4) (2 3 1 4) (3 2 1 4) (1 2 4 3) (2 1 4 3) (1 4 2 3) (4 1 2 3) (2 4 1 3) (4 2 1 3) (1 3 4 2) (3 1 4 2) (1 4 3 2) (4 1 3 2) (3 4 1 2) (4 3 1 2) (2 3 4 1) (3 2 4 1) (2 4 3 1) (4 2 3 1) (3 4 2 1) (4 3 2 1))
              (list-permutations (list 1 2 3 4))))
+
+(let ()
+  (assert=HS '(() (1) (2) (1 2) (3) (1 3) (2 3) (1 2 3) (4) (1 4) (2 4) (1 2 4) (3 4) (1 3 4) (2 3 4) (1 2 3 4))
+             (list-combinations (list 1 2 3 4))))
+
+(let ()
+  (assert=HS '((1 2) (1 3) (2 3) (1 4) (2 4) (3 4))
+             (list-combinations (list 1 2 3 4) 2)))
 
 (display "All good\n")
 
