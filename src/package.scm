@@ -1,7 +1,8 @@
 
 %run guile
 
-%use (make-hashmap hashmap-ref hashmap-set!) "./hash-table.scm"
+%use (hashmap) "./hashmap.scm"
+%use (hashmap-ref hashmap-set!) "./ihashmap.scm"
 
 %var use-svars
 %var with-svars
@@ -46,7 +47,7 @@
 (define-syntax make-static-package-helper
   (syntax-rules []
     [[_ hh buf []]
-     (let [[hh (make-hashmap)]]
+     (let [[hh (hashmap)]]
        (begin . buf)
        hh)]
     [[_ hh buf [[name value] . definitions]]

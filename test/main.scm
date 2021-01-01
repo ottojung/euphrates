@@ -36,6 +36,7 @@
 %use (directory-files) "./src/directory-files.scm"
 %use (directory-files-rec) "./src/directory-files-rec.scm"
 %use (directory-tree) "./src/directory-tree.scm"
+%use (hashmap-ref) "./src/ihashmap.scm"
 
 (let ()
   (catch-any
@@ -207,7 +208,7 @@
                    [baz 3]]))
 
   (define p-inst (p (cons 'already-defined 22)))
-  (define foo-inst (hash-ref p-inst 'foo))
+  (define foo-inst (hashmap-ref p-inst 'foo))
 
   (assert= y (list 1 4))
   (assert= z (list 7 4))

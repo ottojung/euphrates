@@ -2,7 +2,8 @@
 %run guile
 
 %use (make-unique) "./make-unique.scm"
-%use (make-hashmap hash-table->alist alist->hash-table hash-table-foreach) "./hash-table.scm"
+%use (hashmap) "./hashmap.scm"
+%use (hashmap->alist alist->hashmap hashmap-foreach) "./ihashmap.scm"
 
 %var hash->mdict
 %var ahash->mdict
@@ -22,16 +23,16 @@
              (throw 'mdict-key-not-found key h)
              g))]
       [[key value]
-       (let* [[new (make-hashmap)]]
-         (hash-table-foreach
-          h
+       (let* [[new (hashmap)]]
+         (hashmap-foreach
           (lambda (key value)
-            (hash-set! new key value)))
+            (hash-set! new key value))
+          h)
          (hash-set! new key value)
          (hash->mdict new))])))
 
 (define [alist->mdict alist]
-  (hash->mdict (alist->hash-table alist)))
+  (hash->mdict (alist->hashmap alist)))
 
 (define-syntax mdict-c
   (syntax-rules ()
@@ -52,7 +53,7 @@
 
 (define [mdict->alist h-func]
   (let [[h (h-func)]]
-    (hash-table->alist h)))
+    (hashmap->alist h)))
 
 (define [mdict-keys h-func]
   (map car (mdict->alist h-func)))
