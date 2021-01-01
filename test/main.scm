@@ -38,6 +38,7 @@
 %use (directory-tree) "./src/directory-tree.scm"
 %use (hashmap-ref) "./src/ihashmap.scm"
 %use (assert=HS) "./src/assert-equal-hs.scm"
+%use (list-permutations) "./src/list-permutations.scm"
 
 (let ()
   (catch-any
@@ -320,6 +321,10 @@
 (let ()
   (assert=HS '(("test/filetests/dir2/file1" "file1" "test/filetests/dir2" "test/filetests") ("test/filetests/dir1/dir1/zzz" "zzz" "test/filetests/dir1/dir1" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ccc" "ccc" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ab" "ab" "test/filetests/dir1" "test/filetests") ("test/filetests/b" "b" "test/filetests") ("test/filetests/a" "a" "test/filetests") ("test/filetests/cdefg" "cdefg" "test/filetests"))
              (directory-files-rec "test/filetests")))
+
+(let ()
+  (assert=HS '((1 2 3 4) (2 1 3 4) (1 3 2 4) (3 1 2 4) (2 3 1 4) (3 2 1 4) (1 2 4 3) (2 1 4 3) (1 4 2 3) (4 1 2 3) (2 4 1 3) (4 2 1 3) (1 3 4 2) (3 1 4 2) (1 4 3 2) (4 1 3 2) (3 4 1 2) (4 3 1 2) (2 3 4 1) (3 2 4 1) (2 4 3 1) (4 2 3 1) (3 4 2 1) (4 3 2 1))
+             (list-permutations (list 1 2 3 4))))
 
 (display "All good\n")
 
