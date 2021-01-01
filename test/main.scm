@@ -305,24 +305,5 @@
   (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir2")))
   (assert (not (file-or-directory-exists? (append-posix-path "test" "filetests" "dir3")))))
 
-;; directory-files
-(let ()
-  (assert= '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
-           (directory-files "test/filetests"))
-  (assert= '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
-           (directory-files "test/filetests" #f))
-  (assert= '(("test/filetests/dir1" "dir1") ("test/filetests/dir2" "dir2") ("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
-           (directory-files "test/filetests" #t)))
-
-;; directory-files-rec
-(let ()
-  (assert= '(("test/filetests/dir1/dir1/zzz" "zzz" "test/filetests/dir1/dir1" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ccc" "ccc" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ab" "ab" "test/filetests/dir1" "test/filetests") ("test/filetests/b" "b" "test/filetests") ("test/filetests/a" "a" "test/filetests") ("test/filetests/cdefg" "cdefg" "test/filetests"))
-           (directory-files-rec "test/filetests")))
-
-;; directory-tree
-(let ()
-  (assert= '("filetests" ("dir1" ("dir1" "zzz") "ccc" "ab") "dir2" "b" "a" "cdefg")
-           (directory-tree "test/filetests")))
-
 (display "All good\n")
 
