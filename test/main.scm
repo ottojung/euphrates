@@ -37,6 +37,7 @@
 %use (directory-files-rec) "./src/directory-files-rec.scm"
 %use (directory-tree) "./src/directory-tree.scm"
 %use (hashmap-ref) "./src/ihashmap.scm"
+%use (assert=HS) "./src/assert-equal-hs.scm"
 
 (let ()
   (catch-any
@@ -305,6 +306,20 @@
   (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir1" "ab")))
   (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir2")))
   (assert (not (file-or-directory-exists? (append-posix-path "test" "filetests" "dir3")))))
+
+;; directory-files
+(let ()
+  (assert=HS '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
+             (directory-files "test/filetests"))
+  (assert=HS '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
+             (directory-files "test/filetests" #f))
+  (assert=HS '(("test/filetests/dir1" "dir1") ("test/filetests/dir2" "dir2") ("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
+             (directory-files "test/filetests" #t)))
+
+;; directory-files-rec
+(let ()
+  (assert=HS '(("test/filetests/dir2/file1" "file1" "test/filetests/dir2" "test/filetests") ("test/filetests/dir1/dir1/zzz" "zzz" "test/filetests/dir1/dir1" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ccc" "ccc" "test/filetests/dir1" "test/filetests") ("test/filetests/dir1/ab" "ab" "test/filetests/dir1" "test/filetests") ("test/filetests/b" "b" "test/filetests") ("test/filetests/a" "a" "test/filetests") ("test/filetests/cdefg" "cdefg" "test/filetests"))
+             (directory-files-rec "test/filetests")))
 
 (display "All good\n")
 
