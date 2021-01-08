@@ -48,7 +48,8 @@
        (when ret
          (unless (hash-ref B key #f)
            (set! ret #f))))
-     A)))
+     A)
+    ret))
 
 (define (hashset-equal? a b)
   (let ((A (hashset-value a))

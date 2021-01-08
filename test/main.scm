@@ -37,6 +37,7 @@
 %use (directory-files-rec) "./src/directory-files-rec.scm"
 %use (directory-tree) "./src/directory-tree.scm"
 %use (hashmap-ref) "./src/ihashmap.scm"
+%use (make-hashset hashset-equal?) "./src/ihashset.scm"
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (list-permutations) "./src/list-permutations.scm"
 %use (list-combinations) "./src/list-combinations.scm"
@@ -302,6 +303,20 @@
   (assert= "xxhellok" (test 'right))
   (assert= "ellok" (test 'both)))
 
+;; hashset positive
+(let ()
+  (assert
+   (hashset-equal?
+    (make-hashset '((1 1) (1 2) (1 3) (1 4) (2 1) (2 2) (2 3) (2 4) (3 1) (3 2) (3 3) (3 4) (4 1) (4 2) (4 3) (4 4)))
+    (make-hashset '((1 1) (1 2) (1 3) (1 4) (2 1) (2 2) (2 3) (2 4) (3 1) (3 2) (3 3) (3 4) (4 1) (4 2) (4 3) (4 4))))))
+
+;; hashset negative
+(let ()
+  (assert
+   ((negate hashset-equal?)
+    (make-hashset '((1 1) (1 2) (1 3) (1 4) (2 1) (2 2) (2 3) (2 4) (3 1) (3 2) (3 3) (3 4) (4 1) (4 2) (4 3) (4 4)))
+    (make-hashset '((0 0 0 0) (0 0 0 1) (0 0 1 0) (0 0 1 1) (0 1 0 0) (0 1 0 1) (0 1 1 0) (0 1 1 1) (1 0 0 0) (1 0 0 1) (1 0 1 0) (1 0 1 1) (1 1 0 0) (1 1 0 1) (1 1 1 0) (1 1 1 1))))))
+
 ;; file-or-directory-exists?
 (let ()
   (assert (file-or-directory-exists? "/"))
@@ -334,6 +349,10 @@
 (let ()
   (assert=HS '((1 2) (1 3) (2 3) (1 4) (2 4) (3 4))
              (list-combinations (list 1 2 3 4) 2)))
+
+(let ()
+  (assert=HS '((1 1) (1 2) (1 3) (1 4) (2 1) (2 2) (2 3) (2 4) (3 1) (3 2) (3 3) (3 4) (4 1) (4 2) (4 3) (4 4))
+             (list-combinations (list 1 2 3 4) 2 #t)))
 
 (display "All good\n")
 
