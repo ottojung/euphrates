@@ -42,6 +42,7 @@
 %use (list-permutations) "./src/list-permutations.scm"
 %use (list-combinations) "./src/list-combinations.scm"
 %use (cartesian-product) "./src/cartesian-product.scm"
+%use (list-insert-at) "./src/list-insert-at.scm"
 
 (let ()
   (catch-any
@@ -363,6 +364,24 @@
 (let ()
   (assert=HS '((1 . a) (1 . b) (1 . c) (2 . a) (2 . b) (2 . c) (3 . a) (3 . b) (3 . c))
              (cartesian-product '(1 2 3) '(a b c))))
+
+;; list-insert-at
+(let ()
+  (assert= '(a b c d)
+           (list-insert-at '(a b d) 2 'c))
+
+  (assert= '(a b c d)
+           (list-insert-at '(b c d) 0 'a))
+
+  (assert= '(a b c d)
+           (list-insert-at '(a b c) 3 'd))
+
+  (assert= '(a b c d)
+           (list-insert-at '(a b c) 999999 'd))
+
+  (assert= '(a b c d)
+           (list-insert-at '(a b c) +inf.0 'd)))
+
 
 (display "All good\n")
 
