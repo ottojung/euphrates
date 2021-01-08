@@ -41,6 +41,7 @@
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (list-permutations) "./src/list-permutations.scm"
 %use (list-combinations) "./src/list-combinations.scm"
+%use (cartesian-product) "./src/cartesian-product.scm"
 
 (let ()
   (catch-any
@@ -357,6 +358,11 @@
 (let ()
   (assert=HS '((0 0 0 0) (0 0 0 1) (0 0 1 0) (0 0 1 1) (0 1 0 0) (0 1 0 1) (0 1 1 0) (0 1 1 1) (1 0 0 0) (1 0 0 1) (1 0 1 0) (1 0 1 1) (1 1 0 0) (1 1 0 1) (1 1 1 0) (1 1 1 1))
              (list-combinations (list 0 1) 4 #t)))
+
+;; cartesian-product
+(let ()
+  (assert=HS '((1 . a) (1 . b) (1 . c) (2 . a) (2 . b) (2 . c) (3 . a) (3 . b) (3 . c))
+             (cartesian-product '(1 2 3) '(a b c))))
 
 (display "All good\n")
 
