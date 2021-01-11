@@ -9,6 +9,7 @@
 %var alist->hashmap
 %var hashmap-ref
 %var hashmap-set!
+%var hashmap-clear!
 %var hashmap-count
 
 %for (COMPILER "guile")
@@ -17,6 +18,7 @@
 
 (define hashmap-ref hash-ref)
 (define hashmap-set! hash-set!)
+(define hashmap-clear! hash-clear!)
 
 (define alist->hashmap alist->hash-table)
 
