@@ -2,13 +2,13 @@
 %run guile
 
 %use (assert) "./assert.scm"
-%use (make-hashset hashset-equal?) "./ihashset.scm"
+%use (make-multiset multiset-equal?) "./imultiset.scm"
 
 %var assert=HS
 
-(define (equal/hashset? a b)
-  (hashset-equal? (make-hashset a) (make-hashset b)))
+(define (equal/multiset? a b)
+  (multiset-equal? (make-multiset a) (make-multiset b)))
 
 (define-syntax-rule (assert=HS A B)
-  (assert (equal/hashset? A B)))
+  (assert (equal/multiset? A B)))
 

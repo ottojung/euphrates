@@ -43,6 +43,7 @@
 %use (list-combinations) "./src/list-combinations.scm"
 %use (cartesian-product) "./src/cartesian-product.scm"
 %use (list-insert-at) "./src/list-insert-at.scm"
+%use (list-deduplicate) "./src/list-deduplicate.scm"
 
 (let ()
   (catch-any
@@ -326,6 +327,11 @@
   (assert (file-or-directory-exists? (append-posix-path "test" "filetests" "dir2")))
   (assert (not (file-or-directory-exists? (append-posix-path "test" "filetests" "dir3")))))
 
+;; assert=HS
+(let ()
+  (assert=HS '(a b c d) '(a b c d))
+  (assert=HS '(a b c d) '(b d c a)))
+
 ;; directory-files
 (let ()
   (assert=HS '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
@@ -382,6 +388,16 @@
   (assert= '(a b c d)
            (list-insert-at '(a b c) +inf.0 'd)))
 
+;; list-deduplicate
+(let ()
+  (assert=HS '(a b c d)
+           (list-deduplicate '(a b c d)))
+  (assert=HS '(a b c d)
+           (list-deduplicate '(a b c d c)))
+  (assert=HS '(a b c d)
+           (list-deduplicate '(a b c a a a d a)))
+  (assert=HS '()
+           (list-deduplicate '())))
 
 (display "All good\n")
 
