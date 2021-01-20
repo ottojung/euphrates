@@ -23,12 +23,10 @@
                                   (symbol-append
                                    (syntax->datum #'name)
                                    '?))]]
-         #'(begin
-             (define-record-type type
-               (name . fiii)
-               predi
-               . buf)
-             (export name predi . export-buf)))]
+         #'(define-record-type type
+             (name . fiii)
+             predi
+             . buf))]
       [(rec-fields fiii name buf export-buf field . fields)
        (with-syntax
 
@@ -61,7 +59,6 @@
    . fields))
 
 %end
-
 %for (COMPILER "racket")
 
 (define-syntax-rule [define-rec name . fields]
