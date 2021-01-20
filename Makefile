@@ -1,6 +1,6 @@
 
 run:
-	echo '' | czempak run test/main.scm
+	czempak run test/main.scm
 
 cleanrun: | clean-czempak run run-inlined
 
