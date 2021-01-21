@@ -44,6 +44,7 @@
 %use (cartesian-product) "./src/cartesian-product.scm"
 %use (list-insert-at) "./src/list-insert-at.scm"
 %use (list-deduplicate) "./src/list-deduplicate.scm"
+%use (list-break) "./src/list-break.scm"
 
 (let ()
   (catch-any
@@ -398,6 +399,14 @@
            (list-deduplicate '(a b c a a a d a)))
   (assert=HS '()
            (list-deduplicate '())))
+
+;; list-deduplicate
+(let ()
+  (define-values (a1 a2)
+    (list-break even? '(3 5 7 2 1 9)))
+
+  (assert= a1 '(3 5 7))
+  (assert= a2 '(2 1 9)))
 
 (display "All good\n")
 
