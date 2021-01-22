@@ -46,6 +46,7 @@
 %use (list-deduplicate) "./src/list-deduplicate.scm"
 %use (list-break) "./src/list-break.scm"
 %use (list-tag list-untag) "./src/list-tag.scm"
+%use (list-tag/next list-untag/next) "./src/list-tag-next.scm"
 
 (let ()
   (catch-any
@@ -411,10 +412,10 @@
 
 ;; list-tag
 (let ()
-  (assert= '((2 (5 3 1) 7 9) (6 (9 7) 1))
-           (list-tag even? '(1 3 5 2 7 9 6 1)))
+  (assert= '((2 (5 3 1) 7 9) (6 (9 7) 1 3))
+           (list-tag even? '(1 3 5 2 7 9 6 1 3)))
   (assert= '(2 6)
-           (map car (list-tag even? '(1 3 5 2 7 9 6 1))))
+           (map car (list-tag even? '(1 3 5 2 7 9 6 1 3))))
 
   (assert= '((2 (5 3 1) 7 9) (6 (9 7)))
            (list-tag even? '(1 3 5 2 7 9 6)))
@@ -429,6 +430,31 @@
 
   (assert= '(1 3 5 2 7 9 6)
            (list-untag (list-tag even? '(1 3 5 2 7 9 6))))
+
+  )
+
+;; list-tag/next
+(let ()
+  (assert= '((#f 1 3 5) (2 7 9) (6 1 3))
+           (list-tag/next #f even? '(1 3 5 2 7 9 6 1 3)))
+  (assert= '(#f 2 6)
+           (map car (list-tag/next #f even? '(1 3 5 2 7 9 6 1 3))))
+
+  (assert= '((#f 1 3 5) (2 7 9) (6))
+           (list-tag/next #f even? '(1 3 5 2 7 9 6)))
+  (assert= '(#f 2 6)
+           (map car (list-tag/next #f even? '(1 3 5 2 7 9 6))))
+
+  (assert= '((#f))
+           (list-tag/next #f even? '()))
+
+  (assert= '((#f 1 3 5 7))
+           (list-tag/next #f even? '(1 3 5 7)))
+
+  (assert= '(1 3 5 2 7 9 6 1 3)
+           (list-untag/next (list-tag/next #f even? '(1 3 5 2 7 9 6 1 3))))
+  (assert= '()
+           (list-untag/next (list-tag/next #f even? '())))
 
   )
 
