@@ -12,7 +12,10 @@
       (cons (cons cur (reverse next)) buf))
      ((predicate (car rest))
       (loop (cdr rest) ;; rest
-            (cons (cons cur (reverse next)) buf) ;; buf
+            (if (and (null? buf) ;; first tag
+                     (null? next))
+                buf
+                (cons (cons cur (reverse next)) buf)) ;; buf
             '() ;; next
             (car rest))) ;; cur
      (else

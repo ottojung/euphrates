@@ -423,6 +423,16 @@
   (assert= '(2 6)
            (map car (list-tag even? '(1 3 5 2 7 9 6))))
 
+  (assert= '((4 () 1 3 5) (2 (5 3 1) 7 9) (6 (9 7) 1 3))
+           (list-tag even? '(4 1 3 5 2 7 9 6 1 3)))
+  (assert= '(4 2 6)
+           (map car (list-tag even? '(4 1 3 5 2 7 9 6 1 3))))
+
+  (assert= '((4 () 1 3 5) (2 (5 3 1) 7 9) (6 (9 7)))
+           (list-tag even? '(4 1 3 5 2 7 9 6)))
+  (assert= '(4 2 6)
+           (map car (list-tag even? '(4 1 3 5 2 7 9 6))))
+
   (assert= #f
            (list-tag even? '()))
 
@@ -445,6 +455,16 @@
            (list-tag/next #f even? '(1 3 5 2 7 9 6)))
   (assert= '(#f 2 6)
            (map car (list-tag/next #f even? '(1 3 5 2 7 9 6))))
+
+  (assert= '((4 1 3 5) (2 7 9) (6 1 3))
+           (list-tag/next #f even? '(4 1 3 5 2 7 9 6 1 3)))
+  (assert= '(4 2 6)
+           (map car (list-tag/next #f even? '(4 1 3 5 2 7 9 6 1 3))))
+
+  (assert= '((4 1 3 5) (2 7 9) (6))
+           (list-tag/next #f even? '(4 1 3 5 2 7 9 6)))
+  (assert= '(4 2 6)
+           (map car (list-tag/next #f even? '(4 1 3 5 2 7 9 6))))
 
   (assert= '((#f))
            (list-tag/next #f even? '()))
