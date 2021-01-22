@@ -45,6 +45,7 @@
 %use (list-insert-at) "./src/list-insert-at.scm"
 %use (list-deduplicate) "./src/list-deduplicate.scm"
 %use (list-break) "./src/list-break.scm"
+%use (list-tag list-untag) "./src/list-tag.scm"
 
 (let ()
   (catch-any
@@ -407,6 +408,29 @@
 
   (assert= a1 '(3 5 7))
   (assert= a2 '(2 1 9)))
+
+;; list-tag
+(let ()
+  (assert= '((2 (5 3 1) 7 9) (6 (9 7) 1))
+           (list-tag even? '(1 3 5 2 7 9 6 1)))
+  (assert= '(2 6)
+           (map car (list-tag even? '(1 3 5 2 7 9 6 1))))
+
+  (assert= '((2 (5 3 1) 7 9) (6 (9 7)))
+           (list-tag even? '(1 3 5 2 7 9 6)))
+  (assert= '(2 6)
+           (map car (list-tag even? '(1 3 5 2 7 9 6))))
+
+  (assert= #f
+           (list-tag even? '()))
+
+  (assert= #f
+           (list-tag even? '(1 3 5 7)))
+
+  (assert= '(1 3 5 2 7 9 6)
+           (list-untag (list-tag even? '(1 3 5 2 7 9 6))))
+
+  )
 
 (display "All good\n")
 
