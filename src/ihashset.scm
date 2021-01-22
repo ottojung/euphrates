@@ -42,18 +42,18 @@
 (define (hashset->list S)
   (map car (hashmap->alist (hashset-value S))))
 
-(define (each-is-equal? A B)
-  ;; TODO: we may use continuation to escape early, but that might be unsafe
-  (let ((ret #t))
-    (hashmap-foreach
-     (lambda (key value)
-       (when ret
-         (unless (hash-ref B key #f)
-           (set! ret #f))))
-     A)
-    ret))
-
 (define (hashset-equal? a b)
+  (define (each-is-equal? A B)
+    ;; TODO: we may use continuation to escape early, but that might be unsafe
+    (let ((ret #t))
+      (hashmap-foreach
+       (lambda (key value)
+         (when ret
+           (unless (hash-ref B key #f)
+             (set! ret #f))))
+       A)
+      ret))
+
   (let ((A (hashset-value a))
         (B (hashset-value b)))
     (and (equal? (hashmap-count A)

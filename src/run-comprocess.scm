@@ -25,7 +25,6 @@
       (lambda _ . bodies)
       (lambda errors 0)))))
 
-;; TODO: support asynchronous stdin
 ;; Run process in background
 ;; Input port is represented by `comprocess-pipe'
 (define [run-comprocess#p-default command . args]
@@ -34,7 +33,7 @@
     (if (file-port? p-stdout0)
         (values p-stdout0 #f)
         (make-temporary-fileport)))
-  (define p-stderr0 (or (comprocess-stdout) (current-error-port)))
+  (define p-stderr0 (or (comprocess-stderr) (current-error-port)))
   (define-values (p-stderr p-stderr-file)
     (if (file-port? p-stderr0)
         (values p-stderr0 #f)
