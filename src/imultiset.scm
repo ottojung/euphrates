@@ -10,6 +10,8 @@
 %var vector->multiset
 %var multiset->list
 %var multiset-equal?
+%var multiset-ref
+%var multiset-add!
 
 (define (list->multiset lst)
   (multiset
@@ -58,3 +60,10 @@
     (and (equal? (hashmap-count A)
                  (hashmap-count B))
          (each-is-equal? A B))))
+
+(define (multiset-ref H key)
+  (hash-ref (multiset-value H) key #f))
+(define (multiset-add! H key)
+  (hashmap-set! (multiset-value H)
+                key
+                (+ 1 (hashmap-ref (multiset-value H) key 0))))

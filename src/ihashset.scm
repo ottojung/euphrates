@@ -10,6 +10,8 @@
 %var vector->hashset
 %var hashset->list
 %var hashset-equal?
+%var hashset-ref
+%var hashset-add!
 
 (define (list->hashset lst)
   (hashset
@@ -57,3 +59,8 @@
     (and (equal? (hashmap-count A)
                  (hashmap-count B))
          (each-is-equal? A B))))
+
+(define (hashset-ref H key)
+  (hash-ref (hashset-value H) key #f))
+(define (hashset-add! H key)
+  (hash-set! (hashset-value H) key #t))
