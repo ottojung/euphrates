@@ -47,6 +47,7 @@
 %use (list-break) "./src/list-break.scm"
 %use (list-tag list-untag) "./src/list-tag.scm"
 %use (list-tag/next list-untag/next) "./src/list-tag-next.scm"
+%use (comp appcomp) "./src/comp.scm"
 
 (let ()
   (catch-any
@@ -457,6 +458,21 @@
            (list-untag/next (list-tag/next #f even? '())))
 
   )
+
+;; appcomp
+(let ()
+  (define f
+    (comp (+ 2)
+          ((lambda (x) (expt x 2)))
+          (* 2)))
+
+  (assert= 32 (f 2))
+
+  (assert= 32
+           (appcomp 2
+                    (+ 2)
+                    ((lambda (x) (expt x 2)))
+                    (* 2))))
 
 (display "All good\n")
 
