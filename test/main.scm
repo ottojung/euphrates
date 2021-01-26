@@ -36,7 +36,8 @@
 %use (directory-files) "./src/directory-files.scm"
 %use (directory-files-rec) "./src/directory-files-rec.scm"
 %use (directory-tree) "./src/directory-tree.scm"
-%use (hashmap-ref) "./src/ihashmap.scm"
+%use (hashmap) "./src/hashmap.scm"
+%use (hashmap-ref hashmap->alist) "./src/ihashmap.scm"
 %use (make-hashset hashset-equal?) "./src/ihashset.scm"
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (list-permutations) "./src/list-permutations.scm"
@@ -48,6 +49,7 @@
 %use (list-tag list-untag) "./src/list-tag.scm"
 %use (list-tag/next list-untag/next) "./src/list-tag-next.scm"
 %use (comp appcomp) "./src/comp.scm"
+%use (make-regex-machine) "./src/regex-machine.scm"
 
 (let ()
   (catch-any
@@ -493,6 +495,20 @@
                     (+ 2)
                     ((lambda (x) (expt x 2)))
                     (* 2))))
+
+;; regex-machine
+(let ()
+  (define m (make-regex-machine
+             '(and (any x z)
+                   (or (= 3) (= 2 m k))
+                   (and* (any* i))
+                   (any y))))
+  (define H (hashmap))
+  (assert (m H (list 1 2 3 9 8 7)))
+
+  (assert=HS
+   '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+   (hashmap->alist H)))
 
 (display "All good\n")
 
