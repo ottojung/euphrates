@@ -50,7 +50,8 @@
         (match1 hash (car pattern)
                 (lambda (ret)
                   (if ret
-                      (cont ret)
+                      (or (cont ret)
+                          (loop (cdr pattern)))
                       (loop (cdr pattern))))
                 buf))))
 
