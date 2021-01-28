@@ -117,22 +117,33 @@
 
   grouped)
 
-(define (parsecli:IR->Regex IR)
-  (let loop ((IR IR))
-    (if (list? IR)
-        (case (car IR)
-          ((or) `(or ,@(map loop (cdr IR))))
-          ((fg) `(* (or ,@(map loop (cdr IR)))))
-          (else `(and ,@(map loop IR))))
-        (case (car IR)
-          ((const) `(= ,(cdr IR) ,(cdr IR)))
-          ((word) `(any ,(cdr IR)))
-          ((word*) `(* (any* ,(cdr IR))))
-          ((flag) `(= ,(cdr IR) ,(cdr IR)))
-          ((param) `(and (= ,(cadr IR) ,(cadr IR)) ,(loop (cddr IR))))
-          (else (raisu 'BAD-IR-TYPE IR))))))
+(define (parsecli:IR->Regex synonyms0)
+  (define synonyms
+    (map (lambda (x) (map symbol->string x)) synonyms0))
+  (define (eqq value binding)
+    (define get (assoc value synonyms))
+    (define single (lambda (o) `(= ,o ,binding)))
+    (if get
+        (let ((all (cons value (cdr get))))
+          `(or ,@(map single all)))
+        (single value)))
+  (lambda (IR)
+    (let loop ((IR IR))
+      (if (list? IR)
+          (case (car IR)
+            ((or) `(or ,@(map loop (cdr IR))))
+            ((fg) `(* (or ,@(map loop (cdr IR)))))
+            (else `(and ,@(map loop IR))))
+          (case (car IR)
+            ((const) (eqq (cdr IR) (cdr IR)))
+            ((word) `(any ,(cdr IR)))
+            ((word*) `(* (any* ,(cdr IR))))
+            ((flag) (eqq (cdr IR) (cdr IR)))
+            ((param) `(and ,(eqq (cadr IR) (cadr IR)) ,(loop (cddr IR))))
+            (else (raisu 'BAD-IR-TYPE IR)))))))
 
-(define make-cli
-  (compose make-regex-machine
-           parsecli:IR->Regex
-           parsecli:make-IR))
+(define (make-cli synonyms body)
+  ((compose make-regex-machine
+            (parsecli:IR->Regex synonyms)
+            parsecli:make-IR)
+   body))
