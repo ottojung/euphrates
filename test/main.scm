@@ -50,7 +50,7 @@
 %use (list-tag/next list-untag/next) "./src/list-tag-next.scm"
 %use (comp appcomp) "./src/comp.scm"
 %use (make-regex-machine) "./src/regex-machine.scm"
-%use (make-cli parsecli:IR->Regex parsecli:make-IR) "./src/parsecli.scm"
+%use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
 %use (debugv) "./src/debugv.scm"
 
 (let ()
@@ -512,7 +512,7 @@
    '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
    (hashmap->alist H)))
 
-;; parsecli
+;; parse-cli
 (let ()
   (define cli-decl
     '(run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
@@ -521,9 +521,9 @@
             (<kek*>)
             <end-statement>))
   (define IR
-    (parsecli:make-IR cli-decl))
+    (parse-cli:make-IR cli-decl))
   (define Regex
-    ((parsecli:IR->Regex '((run let go))) IR))
+    ((parse-cli:IR->Regex '((run let go))) IR))
   (define M
     (make-regex-machine Regex))
 

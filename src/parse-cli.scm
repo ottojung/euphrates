@@ -14,16 +14,14 @@
 
 %run guile
 
-%use (make-regex-machine) "./regex-machine.scm"
 %use (group-by/sequential group-by/sequential*) "./group-by-sequential.scm"
 %use (raisu) "./raisu.scm"
 %use (list-init) "./list-init.scm"
 
-%var make-cli
-%var parsecli:make-IR
-%var parsecli:IR->Regex
+%var parse-cli:make-IR
+%var parse-cli:IR->Regex
 
-(define (parsecli:make-IR body)
+(define (parse-cli:make-IR body)
   (define (type-cli body)
     (if (pair? body)
         (cons 'lst (map type-cli body))
@@ -117,7 +115,7 @@
 
   grouped)
 
-(define (parsecli:IR->Regex synonyms0)
+(define (parse-cli:IR->Regex synonyms0)
   (define synonyms
     (map (lambda (x) (map symbol->string x)) synonyms0))
   (define (eqq value binding)
@@ -141,9 +139,3 @@
             ((flag) (eqq (cdr IR) (cdr IR)))
             ((param) `(and ,(eqq (cadr IR) (cadr IR)) ,(loop (cddr IR))))
             (else (raisu 'BAD-IR-TYPE IR)))))))
-
-(define (make-cli synonyms body)
-  ((compose make-regex-machine
-            (parsecli:IR->Regex synonyms)
-            parsecli:make-IR)
-   body))
