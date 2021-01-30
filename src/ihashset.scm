@@ -4,6 +4,7 @@
 %use (hashset hashset-value) "./hashset.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-set! hashmap-count hashmap-foreach hashmap->alist) "./ihashmap.scm"
+%use (raisu) "./raisu.scm"
 
 %var make-hashset
 %var list->hashset
@@ -37,7 +38,7 @@
    ((vector? collection)
     (vector->hashset collection))
    (else
-    (throw 'expected-list? collection))))
+    (raisu 'expected-list? collection))))
 
 (define (hashset->list S)
   (map car (hashmap->alist (hashset-value S))))

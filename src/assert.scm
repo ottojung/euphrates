@@ -1,6 +1,7 @@
 
 %run guile
 
+%use (raisu) "./raisu.scm"
 %use (reversed-args-f) "./reversed-args-f.scm"
 %use (assert#raw) "./assert-raw.scm"
 
@@ -11,13 +12,13 @@
     ((_ orig buf head (last-r))
      (let ((last last-r))
        (unless (reversed-args-f head last . buf)
-         (throw 'assertion-fail
+         (raisu 'assertion-fail
                 `(test: ,(cons (quote head) (reversed-args-f list last . buf)))
                 `(original: ,(quote orig))))))
     ((_ orig buf head (last-r) . printf-args)
      (let ((last last-r))
        (unless (reversed-args-f head last . buf)
-         (throw 'assertion-fail
+         (raisu 'assertion-fail
                 `(test: ,(cons (quote head) (reversed-args-f list last . buf)))
                 `(original: ,(quote orig))
                 `(description: ,(stringf . printf-args))))))

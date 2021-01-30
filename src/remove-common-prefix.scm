@@ -1,6 +1,8 @@
 
 %run guile
 
+%use (raisu) "./raisu.scm"
+
 %var remove-common-prefix
 
 (define [remove-common-prefix a b]
@@ -18,6 +20,6 @@
    ((list? a)
     (loop a b))
    (else
-    (throw 'expecting-string-or-list a b))))
+    (raisu 'expecting-string-or-list a b))))
 
 

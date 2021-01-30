@@ -2,6 +2,7 @@
 %run guile
 
 %use (catch-any) "./catch-any.scm"
+%use (raisu) "./raisu.scm"
 
 %var call-with-finally
 
@@ -16,4 +17,4 @@
        (set! err errors)))
     (finally)
     (when err
-      (apply throw err))))
+      (apply raisu err))))

@@ -4,6 +4,7 @@
 %use (make-unique) "./make-unique.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap->alist alist->hashmap hashmap-foreach) "./ihashmap.scm"
+%use (raisu) "./raisu.scm"
 
 %var hash->mdict
 %var ahash->mdict
@@ -20,7 +21,7 @@
       [[key]
        (let [[g (hash-ref h key unique)]]
          (if (unique g)
-             (throw 'mdict-key-not-found key h)
+             (raisu 'mdict-key-not-found key h)
              g))]
       [[key value]
        (let* [[new (hashmap)]]

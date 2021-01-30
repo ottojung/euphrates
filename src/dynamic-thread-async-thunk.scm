@@ -4,6 +4,7 @@
 %use (dynamic-thread-spawn) "./dynamic-thread-spawn.scm"
 %use (catch-any) "./catch-any.scm"
 %use (sleep-until) "./sleep-until.scm"
+%use (raisu) "./raisu.scm"
 
 %var dynamic-thread-async-thunk
 
@@ -26,5 +27,5 @@
     (lambda ()
       (sleep-until status)
       (when (eq? 'fail status)
-        (throw 'dynamic-thread-run-async-failed results))
+        (raisu 'dynamic-thread-run-async-failed results))
       (apply values results))))

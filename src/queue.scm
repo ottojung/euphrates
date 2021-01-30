@@ -2,6 +2,7 @@
 %run guile
 
 %use (make-unique) "./make-unique.scm"
+%use (raisu) "./raisu.scm"
 
 %var make-queue
 %var queue-empty?
@@ -25,7 +26,7 @@
 
 (define (queue-peek q)
   (if (= (vector-ref q 1) (vector-ref q 2))
-      (throw 'empty-queue-peek)
+      (raisu 'empty-queue-peek)
       (vector-ref (vector-ref q 0) (vector-ref q 1))))
 
 (define (queue-push! q value)
@@ -60,7 +61,7 @@
      ((q)
       (let ((ret (queue-pop! q private-default)))
         (if (eq? private-default ret)
-            (throw 'empty-queue-peek)
+            (raisu 'empty-queue-peek)
             ret)))
 
      ((q default)

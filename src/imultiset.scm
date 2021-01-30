@@ -4,6 +4,7 @@
 %use (multiset multiset-value) "./multiset.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap-count hashmap-foreach hashmap->alist) "./ihashmap.scm"
+%use (raisu) "./raisu.scm"
 
 %var make-multiset
 %var list->multiset
@@ -38,7 +39,7 @@
    ((vector? collection)
     (vector->multiset collection))
    (else
-    (throw 'expected-list? collection))))
+    (raisu 'expected-list? collection))))
 
 (define (multiset->list S)
   (map car (hashmap->alist (multiset-value S))))
