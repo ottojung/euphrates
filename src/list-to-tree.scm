@@ -31,6 +31,8 @@
                    d)
                   ((turn)
                    (lp d))
+                  ((replace)
+                   (cons d (lp xs)))
                   (else
                    (cons x (lp xs)))))))))
 
