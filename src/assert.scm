@@ -4,6 +4,7 @@
 %use (raisu) "./raisu.scm"
 %use (reversed-args-f) "./reversed-args-f.scm"
 %use (assert#raw) "./assert-raw.scm"
+%use (stringf) "./stringf.scm"
 
 %var assert
 
