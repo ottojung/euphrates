@@ -50,6 +50,8 @@
 %use (list-tag/next list-untag/next) "./src/list-tag-next.scm"
 %use (comp appcomp) "./src/comp.scm"
 %use (make-regex-machine) "./src/regex-machine.scm"
+%use (make-cli parsecli:IR->Regex parsecli:make-IR) "./src/parsecli.scm"
+%use (debugv) "./src/debugv.scm"
 
 (let ()
   (catch-any
@@ -509,6 +511,37 @@
   (assert=HS
    '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
    (hashmap->alist H)))
+
+;; parsecli
+(let ()
+  (define cli-decl
+    '(run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
+            (may <nth> -p <x>)
+            (june <nth> -f3? -f4?)
+            (<kek*>)
+            <end-statement>))
+  (define IR
+    (parsecli:make-IR cli-decl))
+  (define Regex
+    (parsecli:IR->Regex IR))
+  (define M
+    (make-regex-machine Regex))
+
+  (assert=
+   '((const . "run") (fg (param "--opts" word* . "<opts*>") (param "--param1" word . "<arg1>") (flag . "--flag1") (flag . "--no-flag1")) (word . "<file>") (or ((const . "may") (word . "<nth>") (param "-p" word . "<x>")) ((const . "june") (word . "<nth>") (fg (flag . "-f3") (flag . "-f4"))) ((word* . "<kek*>"))) (word . "<end-statement>"))
+   IR "Bad IR")
+
+  (assert=
+   '(and (= "run" "run") (* (or (and (= "--opts" "--opts") (* (any* "<opts*>"))) (and (= "--param1" "--param1") (any "<arg1>")) (= "--flag1" "--flag1") (= "--no-flag1" "--no-flag1"))) (any "<file>") (or (and (= "may" "may") (any "<nth>") (and (= "-p" "-p") (any "<x>"))) (and (= "june" "june") (any "<nth>") (* (or (= "-f3" "-f3") (= "-f4" "-f4")))) (and (* (any* "<kek*>")))) (any "<end-statement>"))
+   Regex "Bad Regex")
+
+  (define H (hashmap))
+  (define R (M H (list "run" "--flag1" "somefile" "june" "5" "the-end")))
+
+  (assert R)
+  (assert=HS
+   (hashmap->alist H)
+   '(("<file>" . "somefile") ("<end-statement>" . "the-end") ("--flag1" . "--flag1") ("run" . "run") ("<nth>" . "5") ("june" . "june"))))
 
 (display "All good\n")
 
