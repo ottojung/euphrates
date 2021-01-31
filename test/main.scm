@@ -52,7 +52,7 @@
 %use (comp appcomp) "./src/comp.scm"
 %use (make-regex-machine) "./src/regex-machine.scm"
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
-%use (make-cli lambda-cli with-cli) "./src/define-cli.scm"
+%use (make-cli lambda-cli with-cli define-cli:current-hashmap) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
 
 (let ()
@@ -592,19 +592,18 @@
   (define ret
     (parameterize
         ((command-line-argumets/p
-          (list "go" "--flag1" "somefile" "june" "5" "the-end")))
+          (list "go" "--flag1" "-o" "fast" "-O1!" "somefile" "june" "5" "the-end")))
 
       (with-cli
        (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
             (may <nth> -p <x>)
             (june <nth> -f3? -f4?)
-            (<kek*>)
             <end-statement>)
 
        ;; :exclusive (--flag1? --no-flag1?)
        :synonym (--opts --options -o)
        :synonym (run let go)
-       :type (<opts*> '(fast -O0! -O1! -O2! -O3!))
+       :type (<opts*> '("fast" -O0! -O1! -O2! -O3!))
        :type (<nth> 'number)
        :help (<nth> "day of month")
        :default (<arg1> defaultarg1)
@@ -614,6 +613,7 @@
        ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
 
        (assert= <arg1> "defaultarg1")
+       (assert=HS <opts*> '("fast" -O1!)) ;; note the different types
 
        (string-append "prefix-" run "-"
                       (number->string (+ <nth> <nth>))))))

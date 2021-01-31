@@ -21,6 +21,7 @@
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
 %use (debugv) "./debugv.scm"
+%use (debug) "./debug.scm"
 %use (define-cli:error-type) "./define-cli-error-type.scm"
 %use (raisu) "./raisu.scm"
 %use (~a) "./tilda-a.scm"
@@ -34,6 +35,7 @@
 %var make-cli/f
 %var make-cli
 %var lambda-cli
+%var define-cli:current-hashmap
 %var define-cli:lookup
 %var with-cli
 
@@ -53,23 +55,41 @@
      ((symbol? x) (symbol->string x))
      (else x)))
 
+
+  (define (member/typed x lst)
+    (let loop ((lst lst))
+      (if (null? lst) #f
+          (if (equal? (tostring x) (tostring (car lst)))
+              (car lst)
+              (loop (cdr lst))))))
+
+  (define (handle-1-type name type)
+    (lambda (value)
+      (when value
+        (case type
+          ((number)
+           (let ((n (string->number (tostring value))))
+             (unless n
+               (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type))
+             n))
+          ((symbol)
+           (string->symbol (tostring value)))
+          (else
+           (unless (list? type)
+             (define-cli:raisu 'EXPECTED-LIST-AS-TYPE type 'FOR name))
+           (or (member/typed value type)
+               (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))))
+
   (define (handle-type H)
     (lambda (p)
       (define name (tostring (car p)))
       (define type (cadr p))
       (define value (hashmap-ref H name #f))
-      (when value
-        (case type
-          ((number)
-           (let ((n (string->number value)))
-             (unless n
-               (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'EXPECTED type))
-             (hashmap-set! H name n)))
-          (else
-           (unless (list? type)
-             (define-cli:raisu 'EXPECTED-LIST-AS-TYPE type))
-           (unless (member value (map tostring type))
-             (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'EXPECTED type)))))))
+      (define new-value
+        (if (list? value)
+            (map (handle-1-type name type) value)
+            ((handle-1-type name type) value)))
+      (hashmap-set! H name new-value)))
 
   (define (handle-default H)
     (lambda (d)
@@ -116,14 +136,7 @@
       (map (lambda (s)
              (if (list? s)
                  (let* ((name (car s))
-                       (props (cdr s))
-                       (uw                     (unwords
-                     (list
-                      (assoc/empty #f props)
-                      (assoc/empty 'type props)
-                      (assoc/empty 'default props)))))
-                   (debugv uw)
-
+                        (props (cdr s)))
                    (string-append
                     "\t"
                     (~a name)
