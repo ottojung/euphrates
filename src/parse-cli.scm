@@ -59,12 +59,7 @@
          lst))
 
       (define flat
-        (map
-         (lambda (p)
-           (if (singleton? p)
-               (car p)
-               (flaten p)))
-         gs))
+        (map flaten gs))
 
       (define self
         (group-step predicate/ex flaten))
@@ -88,7 +83,8 @@
          (else #f)))
 
      (lambda (p)
-       (cons 'param (cons (cdr (car p)) (car (cdr p)))))))
+       (if (singleton? p) (car p)
+           (cons 'param (cons (cdr (car p)) (car (cdr p))))))))
 
   (define group/flags
     (group-step
@@ -100,7 +96,11 @@
             (else #f)))
          (else #f)))
      (lambda (p)
-       (cons 'fg p))))
+       (if (singleton? p)
+           (case (car (car p))
+             ((flag param) (cons 'fg p))
+             (else (car p)))
+           (cons 'fg p)))))
 
   (define group/lsts
     (group-step
@@ -108,7 +108,8 @@
        (and (equal? xt 'lst)
             (equal? yt 'lst)))
      (lambda (p)
-       (cons 'or (map cdr p)))))
+       (if (singleton? p) (car p)
+           (cons 'or (map cdr p))))))
 
   (define grouped
     ((compose group/lsts group/flags group/param) typed))
