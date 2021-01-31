@@ -21,6 +21,8 @@
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (debugv) "./debugv.scm"
+%use (define-cli:error-type) "./define-cli-error-type.scm"
+%use (raisu) "./raisu.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
@@ -35,20 +37,58 @@
             parse-cli:make-IR)
    cli-decl))
 
+(define (define-cli:raisu . args)
+  (raisu define-cli:error-type args))
+
 (define (make-cli/f cli-decl examples helps types exclusives synonyms)
+  (define (tostring x)
+    (cond
+     ((number? x) (number->string x))
+     ((symbol? x) (symbol->string x))
+     (else x)))
+  (define (handle-type H)
+    (lambda (p)
+      (define name (tostring (car p)))
+      (define type (cadr p))
+      (define value (hashmap-ref H name #f))
+      (when value
+        (case type
+          ((number)
+           (let ((n (string->number value)))
+             (unless n
+               (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'EXPECTED type))
+             (hashmap-set! H name n)))
+          (else
+           (unless (list? type)
+             (define-cli:raisu 'EXPECTED-LIST-AS-TYPE type))
+           (unless (member value (map tostring type))
+             (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'EXPECTED type)))))))
+
   (define M (make-cli/f/basic cli-decl synonyms))
-  M) ;; TODO
+
+  (lambda (H T)
+    (define R (M H T))
+
+    (unless R
+      (define-cli:raisu 'NO-MATCH))
+
+    (for-each (handle-type H) types)
+
+    M)) ;; TODO
 
 (define-syntax make-cli-helper
   (syntax-rules (:example :help :type :exclusive :synonym)
     ((_ f cli-decl examples helps types exclusives synonyms (:synonym x . xs))
      (make-cli-helper
-      f cli-decl examples helps types exclusives (x . synonyms) xs))
+      f cli-decl examples helps types exclusives ((quote x) . synonyms) xs))
+    ((_ f cli-decl examples helps types exclusives synonyms (:type (x y) . xs))
+     (make-cli-helper
+      f cli-decl examples helps ((list (quote x) y) . types) exclusives synonyms xs))
     ((_ f cli-decl examples helps types exclusives synonyms bodies)
      (f
       cli-decl
-      (quote examples) (quote helps) (quote types)
-      (quote exclusives) (quote synonyms)
+      (list . examples) (list . helps) (list . types)
+      (list . exclusives) (list . synonyms)
       bodies))))
 (define-syntax-rule (make-cli-helper-start f cli-decl args)
   (make-cli-helper f cli-decl () () () () () args))

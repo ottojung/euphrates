@@ -604,16 +604,17 @@
        ;; :exclusive (--flag1? --no-flag1?)
        :synonym (--opts --options -o)
        :synonym (run let go)
-       ;; :type (<opts*> '(fast -O0! -O1! -O2! -O3!))
-       ;; :type (<nth> 'number)
+       :type (<opts*> '(fast -O0! -O1! -O2! -O3!))
+       :type (<nth> 'number)
 
        ;; :help (june "is a cool month")
        ;; :help "general help here"
        ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
 
-       (string-append "prefix-" run))))
+       (string-append "prefix-" run "-"
+                      (number->string (+ <nth> <nth>))))))
 
-  (assert= ret "prefix-go"))
+  (assert= ret "prefix-go-10"))
 
 (display "All good\n")
 
