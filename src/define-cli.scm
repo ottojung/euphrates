@@ -22,8 +22,6 @@
 %use (hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
 %use (debugv) "./debugv.scm"
 %use (debug) "./debug.scm"
-%use (define-cli:error-type) "./define-cli-error-type.scm"
-%use (raisu) "./raisu.scm"
 %use (~a) "./tilda-a.scm"
 %use (unlines) "./unlines.scm"
 %use (unwords) "./unwords.scm"
@@ -47,12 +45,6 @@
             parse-cli:make-IR)
    cli-decl))
 
-(define (define-cli:raisu/p/default . args)
-  (raisu define-cli:error-type args))
-
-(define define-cli:raisu/p
-  (make-parameter define-cli:raisu/p/default))
-
 (define (define-cli:raisu/default-exit type . args)
   (case type
     ((NO-MATCH)
@@ -63,6 +55,9 @@
      (display args (current-error-port))
      (newline (current-error-port))))
   (exit 1))
+
+(define define-cli:raisu/p
+  (make-parameter define-cli:raisu/default-exit))
 
 (define (define-cli:raisu . args)
   (apply (define-cli:raisu/p) args))
