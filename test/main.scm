@@ -10,7 +10,7 @@
 %use (debugv) "./src/debugv.scm"
 %use (with-ignore-errors!) "./src/with-ignore-errors.scm"
 %use (random-choice) "./src/random-choice.scm"
-%use (printable#alphabet) "./src/printable-alphabet.scm"
+%use (printable/alphabet) "./src/printable-alphabet.scm"
 %use (catch-any) "./src/catch-any.scm"
 %use (assert) "./src/assert.scm"
 %use (assert=) "./src/assert-equal.scm"
@@ -64,7 +64,7 @@
               '((assertion-fail (test: (= 5 7)) (original: (= (+ 3 2) (- 10 3))))))))))
 
 (let ()
-  (assert (equal? 5 (string-length (list->string (random-choice 5 printable#alphabet))))))
+  (assert (equal? 5 (string-length (list->string (random-choice 5 printable/alphabet))))))
 
 (let ()
   (with-ignore-errors!

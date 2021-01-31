@@ -1,9 +1,9 @@
 
 %run guile
 
-%var alpha#alphabet
+%var alpha/alphabet
 
-(define alpha#alphabet
+(define alpha/alphabet
   #(#\a #\b #\c #\d #\e #\f #\g #\h #\i #\j
     #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t
     #\u #\v #\w #\x #\y #\z #\A #\B #\C #\D
