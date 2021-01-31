@@ -38,6 +38,8 @@
 %var define-cli:current-hashmap
 %var define-cli:lookup
 %var with-cli
+%var define-cli:raisu/p
+%var define-cli:raisu/default-exit
 
 (define (make-cli/f/basic cli-decl synonyms)
   ((compose make-regex-machine
@@ -45,8 +47,25 @@
             parse-cli:make-IR)
    cli-decl))
 
-(define (define-cli:raisu . args)
+(define (define-cli:raisu/p/default . args)
   (raisu define-cli:error-type args))
+
+(define define-cli:raisu/p
+  (make-parameter define-cli:raisu/p/default))
+
+(define (define-cli:raisu/default-exit type . args)
+  (case type
+    ((NO-MATCH)
+     (display (car args) (current-error-port))
+     (newline (current-error-port)))
+    (else
+     (display "Bad arguments. " (current-error-port))
+     (display args (current-error-port))
+     (newline (current-error-port))))
+  (exit 1))
+
+(define (define-cli:raisu . args)
+  (apply (define-cli:raisu/p) args))
 
 (define (make-cli/f cli-decl defaults examples helps types exclusives synonyms)
   (define (tostring x)
@@ -165,7 +184,6 @@
     (define R (M H T))
 
     (unless R
-      (display (make-help)) (newline)
       (define-cli:raisu 'NO-MATCH (make-help)))
 
     (for-each (handle-default H) defaults)
