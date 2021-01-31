@@ -4,4 +4,4 @@
 %var unwords
 
 (define (unwords lns)
-  (string-join lns " "))
+  (string-join (filter (negate string-null?) lns) " "))
