@@ -606,9 +606,10 @@
        :synonym (run let go)
        :type (<opts*> '(fast -O0! -O1! -O2! -O3!))
        :type (<nth> 'number)
+       :help (<nth> "day of month")
 
-       ;; :help (june "is a cool month")
-       ;; :help "general help here"
+       :help "general help here"
+       :help (june "is a cool month")
        ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
 
        (string-append "prefix-" run "-"

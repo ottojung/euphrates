@@ -23,6 +23,11 @@
 %use (debugv) "./debugv.scm"
 %use (define-cli:error-type) "./define-cli-error-type.scm"
 %use (raisu) "./raisu.scm"
+%use (~a) "./tilda-a.scm"
+%use (unlines) "./unlines.scm"
+%use (unwords) "./unwords.scm"
+%use (conss) "./conss.scm"
+%use (cartesian-map) "./cartesian-map.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
@@ -46,6 +51,7 @@
      ((number? x) (number->string x))
      ((symbol? x) (symbol->string x))
      (else x)))
+
   (define (handle-type H)
     (lambda (p)
       (define name (tostring (car p)))
@@ -64,13 +70,54 @@
            (unless (member value (map tostring type))
              (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'EXPECTED type)))))))
 
+  (define (make-help)
+    (define arg-helps (filter list? helps))
+    (define single-helps (filter (negate list?) helps))
+
+    (define (filt type help)
+      (and (equal? (car type) (car help))
+           (append help (list (cdr type))))) ;; = (name help (type))
+    (define helps+types (filter identity (cartesian-map filt types arg-helps)))
+    (define lonely-types
+      (filter
+       (lambda (t)
+         (not (or-map (lambda (h) (equal? (car t) (car h)))
+                      arg-helps)))
+       types))
+    (define lonely-helps
+      (filter
+       (lambda (h)
+         (not (or-map (lambda (t) (equal? (car t) (car h)))
+                      types)))
+       arg-helps))
+
+    (define (print-list lst)
+      (map (lambda (s)
+             (if (list? s)
+                 (string-append "\t" (~a (car s)) "\t" (unwords (map ~a (cdr s))))
+                 (string-append "\t" (~a s))))
+           lst))
+
+    (unlines
+     (conss
+      "USAGE:"
+      (~a cli-decl)
+      ""
+      (append
+       (print-list helps+types)
+       (print-list lonely-helps)
+       (print-list lonely-types)
+       (list "")
+       (print-list single-helps)))))
+
   (define M (make-cli/f/basic cli-decl synonyms))
 
   (lambda (H T)
     (define R (M H T))
 
     (unless R
-      (define-cli:raisu 'NO-MATCH))
+      (display (make-help)) (newline)
+      (define-cli:raisu 'NO-MATCH (make-help)))
 
     (for-each (handle-type H) types)
 
@@ -81,6 +128,9 @@
     ((_ f cli-decl examples helps types exclusives synonyms (:synonym x . xs))
      (make-cli-helper
       f cli-decl examples helps types exclusives ((quote x) . synonyms) xs))
+    ((_ f cli-decl examples helps types exclusives synonyms (:help x . xs))
+     (make-cli-helper
+      f cli-decl examples ((quote x) . helps) types exclusives synonyms xs))
     ((_ f cli-decl examples helps types exclusives synonyms (:type (x y) . xs))
      (make-cli-helper
       f cli-decl examples helps ((list (quote x) y) . types) exclusives synonyms xs))
