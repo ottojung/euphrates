@@ -7,6 +7,7 @@
 %use (run-comprocess#p-default) "./src/run-comprocess.scm"
 %use (make-uni-spinlock) "./src/uni-spinlock.scm"
 %use (debug) "./src/debug.scm"
+%use (debugv) "./src/debugv.scm"
 %use (with-ignore-errors!) "./src/with-ignore-errors.scm"
 %use (random-choice) "./src/random-choice.scm"
 %use (printable#alphabet) "./src/printable-alphabet.scm"
@@ -51,8 +52,8 @@
 %use (comp appcomp) "./src/comp.scm"
 %use (make-regex-machine) "./src/regex-machine.scm"
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
-%use (make-cli lambda-cli) "./src/define-cli.scm"
-%use (debugv) "./src/debugv.scm"
+%use (make-cli lambda-cli with-cli) "./src/define-cli.scm"
+%use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
 
 (let ()
   (catch-any
@@ -572,6 +573,35 @@
 
   (assert= "go-suffix"
            (f (list "go" "--flag1" "somefile" "june" "5" "the-end"))))
+
+;; with-cli
+(let ()
+
+  (define ret
+    (parameterize
+        ((command-line-argumets/p
+          (list "go" "--flag1" "somefile" "june" "5" "the-end")))
+
+      (with-cli
+       (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
+            (may <nth> -p <x>)
+            (june <nth> -f3? -f4?)
+            (<kek*>)
+            <end-statement>)
+
+       ;; :exclusive (--flag1? --no-flag1?)
+       :synonym (--opts --options -o)
+       :synonym (run let go)
+       ;; :type (<opts*> '(fast -O0! -O1! -O2! -O3!))
+       ;; :type (<nth> 'number)
+
+       ;; :help (june "is a cool month")
+       ;; :help "general help here"
+       ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
+
+       (string-append "prefix-" run))))
+
+  (assert= ret "prefix-go"))
 
 (display "All good\n")
 

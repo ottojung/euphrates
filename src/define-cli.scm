@@ -15,6 +15,7 @@
 %run guile
 
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./parse-cli.scm"
+%use (get-command-line-arguments) "./get-command-line-arguments.scm"
 %use (make-regex-machine) "./regex-machine.scm"
 %use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"
 %use (hashmap) "./hashmap.scm"
@@ -26,27 +27,7 @@
 %var make-cli
 %var lambda-cli
 %var define-cli:lookup
-;; %var define-cli
 %var with-cli
-
-(define-syntax-rule (with-cli declaration . args)
-  0)
-
-(with-cli
-  (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
-         (may <nth>)
-         (june <nth>)
-         (<kek*>)
-         end-statement)
-
-  :exclusive (--flag1? --no-flag1?)
-  :synonym (--opts --options -o)
-  :type (<opts*> '(fast -O0! -O1! -O2! -O3!))
-  :type (<nth> 'number)
-
-  :help (june "is a cool month")
-  :help "general help here"
-  :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
 
 (define (make-cli/f/basic cli-decl synonyms)
   ((compose make-regex-machine
@@ -112,4 +93,6 @@
 (define-syntax-rule (lambda-cli cli-decl . args)
   (make-cli-helper-start make-cli/lambda-cli/wrapper cli-decl args))
 
-
+(define-syntax-rule (with-cli cli-decl . args)
+  ((lambda-cli cli-decl . args)
+   (get-command-line-arguments)))
