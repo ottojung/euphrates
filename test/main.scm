@@ -51,6 +51,7 @@
 %use (comp appcomp) "./src/comp.scm"
 %use (make-regex-machine) "./src/regex-machine.scm"
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
+%use (make-cli lambda-cli) "./src/define-cli.scm"
 %use (debugv) "./src/debugv.scm"
 
 (let ()
@@ -542,6 +543,35 @@
   (assert=HS
    (hashmap->alist H)
    '(("<file>" . "somefile") ("<end-statement>" . "the-end") ("--flag1" . "--flag1") ("run" . "go") ("<nth>" . "5") ("june" . "june"))))
+
+;; make-cli
+(let ()
+  (define M
+    (make-cli
+     (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
+          (may <nth> -p <x>)
+          (june <nth> -f3? -f4?)
+          (<kek*>)
+          <end-statement>)
+     :synonym (run let go)))
+
+  (assert (M (hashmap) (list "go" "--flag1" "somefile" "june" "5" "the-end"))))
+
+;; lambda-cli
+(let ()
+
+  (define f
+    (lambda-cli
+     (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
+          (may <nth> -p <x>)
+          (june <nth> -f3? -f4?)
+          (<kek*>)
+          <end-statement>)
+     :synonym (run go)
+     (string-append run "-suffix")))
+
+  (assert= "go-suffix"
+           (f (list "go" "--flag1" "somefile" "june" "5" "the-end"))))
 
 (display "All good\n")
 
