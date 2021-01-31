@@ -607,10 +607,13 @@
        :type (<opts*> '(fast -O0! -O1! -O2! -O3!))
        :type (<nth> 'number)
        :help (<nth> "day of month")
+       :default (<arg1> defaultarg1)
 
        :help "general help here"
        :help (june "is a cool month")
        ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
+
+       (assert= <arg1> "defaultarg1")
 
        (string-append "prefix-" run "-"
                       (number->string (+ <nth> <nth>))))))

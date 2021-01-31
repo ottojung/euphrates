@@ -19,7 +19,7 @@
 %use (make-regex-machine) "./regex-machine.scm"
 %use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"
 %use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
 %use (debugv) "./debugv.scm"
 %use (define-cli:error-type) "./define-cli-error-type.scm"
 %use (raisu) "./raisu.scm"
@@ -28,6 +28,7 @@
 %use (unwords) "./unwords.scm"
 %use (conss) "./conss.scm"
 %use (cartesian-map) "./cartesian-map.scm"
+%use (list-deduplicate) "./list-deduplicate.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
@@ -45,7 +46,7 @@
 (define (define-cli:raisu . args)
   (raisu define-cli:error-type args))
 
-(define (make-cli/f cli-decl examples helps types exclusives synonyms)
+(define (make-cli/f cli-decl defaults examples helps types exclusives synonyms)
   (define (tostring x)
     (cond
      ((number? x) (number->string x))
@@ -70,32 +71,69 @@
            (unless (member value (map tostring type))
              (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'EXPECTED type)))))))
 
+  (define (handle-default H)
+    (lambda (d)
+      (unless (hashmap-ref H (tostring (car d)) #f)
+        (hashmap-set! H (tostring (car d)) (tostring (cadr d))))))
+
   (define (make-help)
     (define arg-helps (filter list? helps))
     (define single-helps (filter (negate list?) helps))
 
-    (define (filt type help)
-      (and (equal? (car type) (car help))
-           (append help (list (cdr type))))) ;; = (name help (type))
-    (define helps+types (filter identity (cartesian-map filt types arg-helps)))
-    (define lonely-types
-      (filter
-       (lambda (t)
-         (not (or-map (lambda (h) (equal? (car t) (car h)))
-                      arg-helps)))
-       types))
-    (define lonely-helps
-      (filter
-       (lambda (h)
-         (not (or-map (lambda (t) (equal? (car t) (car h)))
-                      types)))
-       arg-helps))
+    (define (flatten* T)
+      (if (list? T)
+          (apply append (map flatten* T))
+          (list T)))
+
+    (define flattened
+      (list-deduplicate
+       (flatten* cli-decl)))
+
+    (define fH (hashmap))
+
+    (for-each
+     (lambda (name)
+       (map
+        (lambda (L T)
+          (define A (assoc name L))
+          (when A
+            (hashmap-set! fH name (cons (cons T (cadr A))
+                                        (hashmap-ref fH name (list))))))
+        (list arg-helps types defaults)
+        '(#f type default)))
+     flattened)
+
+    (define (fmt-property x)
+      (if (car x)
+          (string-append "[" (~a (car x)) ": " (~a (cdr x)) "]")
+          (~a (cdr x))))
+
+    (define (assoc/empty name lst)
+      (let ((x (assoc name lst)))
+        (if x (fmt-property x) "")))
 
     (define (print-list lst)
       (map (lambda (s)
              (if (list? s)
-                 (string-append "\t" (~a (car s)) "\t" (unwords (map ~a (cdr s))))
-                 (string-append "\t" (~a s))))
+                 (let* ((name (car s))
+                       (props (cdr s))
+                       (uw                     (unwords
+                     (list
+                      (assoc/empty #f props)
+                      (assoc/empty 'type props)
+                      (assoc/empty 'default props)))))
+                   (debugv uw)
+
+                   (string-append
+                    "\t"
+                    (~a name)
+                    "\t"
+                    (unwords
+                     (list
+                      (assoc/empty #f props)
+                      (assoc/empty 'type props)
+                      (assoc/empty 'default props)))))
+                 (string-append "\t" s)))
            lst))
 
     (unlines
@@ -104,9 +142,7 @@
       (~a cli-decl)
       ""
       (append
-       (print-list helps+types)
-       (print-list lonely-helps)
-       (print-list lonely-types)
+       (print-list (hashmap->alist fH))
        (list "")
        (print-list single-helps)))))
 
@@ -119,34 +155,38 @@
       (display (make-help)) (newline)
       (define-cli:raisu 'NO-MATCH (make-help)))
 
+    (for-each (handle-default H) defaults)
     (for-each (handle-type H) types)
 
     M)) ;; TODO
 
 (define-syntax make-cli-helper
-  (syntax-rules (:example :help :type :exclusive :synonym)
-    ((_ f cli-decl examples helps types exclusives synonyms (:synonym x . xs))
+  (syntax-rules (:default :example :help :type :exclusive :synonym)
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:synonym x . xs))
      (make-cli-helper
-      f cli-decl examples helps types exclusives ((quote x) . synonyms) xs))
-    ((_ f cli-decl examples helps types exclusives synonyms (:help x . xs))
+      f cli-decl defaults examples helps types exclusives ((quote x) . synonyms) xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:help x . xs))
      (make-cli-helper
-      f cli-decl examples ((quote x) . helps) types exclusives synonyms xs))
-    ((_ f cli-decl examples helps types exclusives synonyms (:type (x y) . xs))
+      f cli-decl defaults examples ((quote x) . helps) types exclusives synonyms xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:type (x y) . xs))
      (make-cli-helper
-      f cli-decl examples helps ((list (quote x) y) . types) exclusives synonyms xs))
-    ((_ f cli-decl examples helps types exclusives synonyms bodies)
+      f cli-decl defaults examples helps ((list (quote x) y) . types) exclusives synonyms xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:default x . xs))
+     (make-cli-helper
+      f cli-decl ((quote x) . defaults) examples helps types exclusives synonyms xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms bodies)
      (f
       cli-decl
-      (list . examples) (list . helps) (list . types)
-      (list . exclusives) (list . synonyms)
+      (list . defaults) (list . examples) (list . helps)
+      (list . types) (list . exclusives) (list . synonyms)
       bodies))))
 (define-syntax-rule (make-cli-helper-start f cli-decl args)
-  (make-cli-helper f cli-decl () () () () () args))
+  (make-cli-helper f cli-decl () () () () () () args))
 
 (define-syntax make-cli/f/wrapper
   (syntax-rules ()
-    ((_ cli-decl examples helps types exclusives synonyms ())
-     (make-cli/f (quote cli-decl) examples helps types exclusives synonyms))))
+    ((_ cli-decl defaults examples helps types exclusives synonyms ())
+     (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms))))
 (define-syntax-rule (make-cli cli-decl . args)
   (make-cli-helper-start make-cli/f/wrapper cli-decl args))
 
@@ -172,9 +212,9 @@
 
 (define-syntax make-cli/lambda-cli/wrapper
   (syntax-rules ()
-    ((_ cli-decl examples helps types exclusives synonyms bodies)
+    ((_ cli-decl defaults examples helps types exclusives synonyms bodies)
      (let* ((H (hashmap))
-            (M (make-cli/f (quote cli-decl) examples helps types exclusives synonyms)))
+            (M (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms)))
        (lambda (args)
          (parameterize ((define-cli:current-hashmap H))
            (and (M H args)
