@@ -516,34 +516,62 @@
 
 ;; parse-cli
 (let ()
-  (define cli-decl
-    '(run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
+  (let ()
+    (define cli-decl
+      '(run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
             (may <nth> -p <x>)
             (june <nth> -f3? -f4?)
             (<kek*>)
             <end-statement>))
-  (define IR
-    (parse-cli:make-IR cli-decl))
-  (define Regex
-    ((parse-cli:IR->Regex '((run let go))) IR))
-  (define M
-    (make-regex-machine Regex))
+    (define IR
+      (parse-cli:make-IR cli-decl))
+    (define Regex
+      ((parse-cli:IR->Regex '((run let go))) IR))
+    (define M
+      (make-regex-machine Regex))
 
-  (define H (hashmap))
-  (define R (M H (list "go" "--flag1" "somefile" "june" "5" "the-end")))
+    (define H (hashmap))
+    (define R (M H (list "go" "--flag1" "somefile" "june" "5" "the-end")))
 
-  (assert=
-   '((const . "run") (fg (param "--opts" word* . "<opts*>") (param "--param1" word . "<arg1>") (flag . "--flag1") (flag . "--no-flag1")) (word . "<file>") (or ((const . "may") (word . "<nth>") (fg (param "-p" word . "<x>"))) ((const . "june") (word . "<nth>") (fg (flag . "-f3") (flag . "-f4"))) ((word* . "<kek*>"))) (word . "<end-statement>"))
-   IR "Bad IR")
+    (assert=
+     '((const . "run") (fg (param "--opts" word* . "<opts*>") (param "--param1" word . "<arg1>") (flag . "--flag1") (flag . "--no-flag1")) (word . "<file>") (or ((const . "may") (word . "<nth>") (fg (param "-p" word . "<x>"))) ((const . "june") (word . "<nth>") (fg (flag . "-f3") (flag . "-f4"))) ((word* . "<kek*>"))) (word . "<end-statement>"))
+     IR "Bad IR")
 
-  (assert=
-   '(and (or (= "run" "run") (= "let" "run") (= "go" "run")) (* (or (and (= "--opts" "--opts") (* (any* "<opts*>"))) (and (= "--param1" "--param1") (any "<arg1>")) (= "--flag1" "--flag1") (= "--no-flag1" "--no-flag1"))) (any "<file>") (or (and (= "may" "may") (any "<nth>") (* (or (and (= "-p" "-p") (any "<x>"))))) (and (= "june" "june") (any "<nth>") (* (or (= "-f3" "-f3") (= "-f4" "-f4")))) (and (* (any* "<kek*>")))) (any "<end-statement>"))
-   Regex "Bad Regex")
+    (assert=
+     '(and (or (= "run" "run") (= "let" "run") (= "go" "run")) (* (or (and (= "--opts" "--opts") (* (any* "<opts*>"))) (and (= "--param1" "--param1") (any "<arg1>")) (= "--flag1" "--flag1") (= "--no-flag1" "--no-flag1"))) (any "<file>") (or (and (= "may" "may") (any "<nth>") (* (or (and (= "-p" "-p") (any "<x>"))))) (and (= "june" "june") (any "<nth>") (* (or (= "-f3" "-f3") (= "-f4" "-f4")))) (and (* (any* "<kek*>")))) (any "<end-statement>"))
+     Regex "Bad Regex")
 
-  (assert R)
-  (assert=HS
-   (hashmap->alist H)
-   '(("<file>" . "somefile") ("<end-statement>" . "the-end") ("--flag1" . "--flag1") ("run" . "go") ("<nth>" . "5") ("june" . "june"))))
+    (assert R)
+    (assert=HS
+     (hashmap->alist H)
+     '(("<file>" . "somefile") ("<end-statement>" . "the-end") ("--flag1" . "--flag1") ("run" . "go") ("<nth>" . "5") ("june" . "june"))))
+
+  (let ()
+    (define in/out-types '(raw word normal))
+
+    (parameterize
+        ((command-line-argumets/p
+          (list "--base" "10" "--soft")))
+
+      (with-cli
+       (--in <input-type>
+             --soft?
+             --out <output-type>
+             --base <base-raw>
+             --inbase <inbase-raw>
+             --infinite?
+             )
+
+       :type (<input-type> in/out-types)
+       :type (<output-type> in/out-types)
+       :default (<input-type> normal)
+       :default (<output-type> normal)
+
+       :default (<base-raw> default)
+       :default (<inbase-raw> 2)
+
+
+       (assert --soft?)))))
 
 ;; make-cli
 (let ()

@@ -28,8 +28,8 @@
 %use (unlines) "./unlines.scm"
 %use (unwords) "./unwords.scm"
 %use (conss) "./conss.scm"
-%use (cartesian-map) "./cartesian-map.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
+%use (list-init) "./list-init.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
@@ -227,7 +227,11 @@
   (hashmap-ref (define-cli:current-hashmap) x #f))
 
 (define-syntax-rule (define-cli:let1 x)
-  (define-cli:lookup (symbol->string (quote x))))
+  (let* ((s0 (symbol->string (quote x)))
+         (s1 (if (string-suffix? "?" s0)
+                 ((compose list->string list-init string->list) s0)
+                 s0)))
+    (define-cli:lookup s1)))
 
 (define-syntax define-cli:let-list
   (syntax-rules ()
