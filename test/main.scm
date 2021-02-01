@@ -54,6 +54,7 @@
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
 %use (make-cli lambda-cli with-cli define-cli:current-hashmap) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
+%use (system-re) "./src/system-re.scm"
 
 (let ()
   (catch-any
@@ -647,6 +648,10 @@
                       (number->string (+ <nth> <nth>))))))
 
   (assert= ret "prefix-go-10"))
+
+;; system-re
+(let ()
+  (assert= (cons "hello" 0) (system-re "echo hello")))
 
 (display "All good\n")
 
