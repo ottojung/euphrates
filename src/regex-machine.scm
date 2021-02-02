@@ -89,6 +89,9 @@
            (cdr pattern))
           (cdr buf)))))
 
+(define (match-epsilon hash pattern cont buf)
+  (cont buf))
+
 (define (match1 hash pattern cont buf)
   (define (go func)
     (func hash (cdr pattern) cont buf))
@@ -100,6 +103,7 @@
     ((or) (go match-or))
     ((*) (go match-kleene-star))
     ((and*) (go match-and-star))
+    ((epsilon) (go match-epsilon))
     (else (go (car pattern)))))
 
 (define (make-regex-machine pattern)
