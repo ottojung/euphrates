@@ -651,7 +651,8 @@
 
 ;; system-re
 (let ()
-  (assert= (cons "hello" 0) (system-re "echo hello")))
+  (assert= (cons "hello" 0) (system-re "echo hello"))
+  (assert= (cons "hello" 0) (system-re "echo ~a" "hello")))
 
 (display "All good\n")
 

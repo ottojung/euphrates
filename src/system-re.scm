@@ -5,12 +5,14 @@
 %use (read-string-file) "./read-string-file.scm"
 %use (string-trim-chars) "./string-trim-chars.scm"
 %use (system*/exit-code) "./system-star-exit-code.scm"
+%use (stringf) "./stringf.scm"
 
 %var system-re
 
-(define (system-re command)
+(define (system-re fmt . args)
   "Like `system', but returns (output, exit status)"
-  (let* ((temp (make-temporary-filename))
+  (let* ((command (apply stringf (cons fmt args)))
+         (temp (make-temporary-filename))
          (p (system*/exit-code "/bin/sh" "-c"
                                (string-append command " > " temp)))
          (output (read-string-file temp))
