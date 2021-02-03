@@ -55,6 +55,7 @@
 %use (make-cli lambda-cli with-cli define-cli:current-hashmap) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
 %use (system-re) "./src/system-re.scm"
+%use (number->number-list number-list->number number->number-list) "./src/number-list.scm"
 
 (let ()
   (catch-any
@@ -653,6 +654,42 @@
 (let ()
   (assert= (cons "hello" 0) (system-re "echo hello"))
   (assert= (cons "hello" 0) (system-re "echo ~a" "hello")))
+
+;; number-list
+(let ()
+  (assert= 9 (number-list->number 2 '(1 0 0 1) '()))
+  (assert= 8 (number-list->number 2 '(1 0 0 0) '()))
+
+  (assert= 0.375
+           (exact->inexact (number-list->number 2 '(0 0 0 0) '(0 1 1))))
+  (assert= 0.375
+           (exact->inexact (number-list->number 2 '() '(0 1 1))))
+  (assert= 9.375
+           (exact->inexact (number-list->number 2 '(1 0 0 1) '(0 1 1))))
+  (assert= 8.375
+           (exact->inexact (number-list->number 2 '(1 0 0 0) '(0 1 1))))
+
+  (let ()
+    (define-values (wp fp) (number->number-list 2 9))
+    (assert= wp '(1 0 0 1))
+    (assert= fp '()))
+  (let ()
+    (define-values (wp fp) (number->number-list 2 8))
+    (assert= wp '(1 0 0 0))
+    (assert= fp '()))
+  (let ()
+    (define-values (wp fp) (number->number-list 2 0.375))
+    (assert= wp '())
+    (assert= fp '(0 1 1)))
+  (let ()
+    (define-values (wp fp) (number->number-list 2 9.375))
+    (assert= wp '(1 0 0 1))
+    (assert= fp '(0 1 1)))
+  (let ()
+    (define-values (wp fp) (number->number-list 2 8.375))
+    (assert= wp '(1 0 0 0))
+    (assert= fp '(0 1 1)))
+  )
 
 (display "All good\n")
 
