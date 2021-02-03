@@ -56,6 +56,7 @@
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
 %use (system-re) "./src/system-re.scm"
 %use (number->number-list number-list->number number->number-list) "./src/number-list.scm"
+%use (convert-number-base) "./src/convert-number-base.scm"
 
 (let ()
   (catch-any
@@ -690,6 +691,22 @@
     (assert= wp '(1 0 0 0))
     (assert= fp '(0 1 1)))
   )
+
+;; convert-number-base
+(let ()
+  (for-each
+   (lambda (p)
+     (assert= (car p) (convert-number-base 2 10 (cdr p)))
+     (assert= (cdr p) (convert-number-base 10 2 (car p))))
+   (list
+    (cons "9" "1001")
+    (cons "8" "1000")
+    (cons "0.375" "0.011")
+    (cons "9.375" "1001.011")
+    (cons "8.375" "1000.011")))
+
+  (assert= "f" (convert-number-base 2 16 "1111"))
+  (assert= "1111" (convert-number-base 16 2 "f")))
 
 (display "All good\n")
 
