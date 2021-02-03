@@ -125,17 +125,18 @@
 
     (define fH (hashmap))
 
-    (for-each
-     (lambda (name)
-       (map
-        (lambda (L T)
-          (define A (assoc name L))
-          (when A
-            (hashmap-set! fH name (cons (cons T (cadr A))
-                                        (hashmap-ref fH name (list))))))
-        (list arg-helps types defaults)
-        '(#f type default)))
-     flattened)
+    (define _
+      (for-each
+       (lambda (name)
+         (map
+          (lambda (L T)
+            (define A (assoc name L))
+            (when A
+              (hashmap-set! fH name (cons (cons T (cadr A))
+                                          (hashmap-ref fH name (list))))))
+          (list arg-helps types defaults)
+          '(#f type default)))
+       flattened))
 
     (define (fmt-property x)
       (if (car x)
