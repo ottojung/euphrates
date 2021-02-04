@@ -10,15 +10,18 @@
 %use (raisu) "./raisu.scm"
 
 %var convert-number-base
+%var convert-number-base:max-base
+
+(define convert-number-base:max-base
+  (vector-length alphanum/alphabet))
 
 (define (convert-number-base/list inbase outbase L)
-  (define max-base (vector-length alphanum/alphabet))
   (define (get-char n) (vector-ref alphanum/alphabet n))
 
-  (when (> (max inbase outbase) max-base)
+  (when (> (max inbase outbase) convert-number-base:max-base)
     (raisu 'OUT-OF-RANGE-ERROR
            'only-small-bases-are-supported
-           inbase outbase max-base))
+           inbase outbase convert-number-base:max-base))
 
   (let ()
     (define-values (wp0 fp0) (list-span (lambda (x) (not (equal? x #\.))) L))
