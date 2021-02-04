@@ -1,11 +1,9 @@
 
 %run guile
 
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set!) "./ihashmap.scm"
-
 %var number-list->number
 %var number->number-list
+%var number->number-list:precision/p
 %var number-list->number-list
 
 ;; `number-list` is `base-q expansion` of a number.
@@ -31,7 +29,12 @@
   (define whole-part (- x fractional-part))
   (values whole-part fractional-part))
 
-(define (number->number-list base x)
+(define number->number-list:precision/p
+  (make-parameter 20))
+
+(define (number->number-list base x0)
+  (define x (inexact->exact x0))
+
   (define-values (whole-part fractional-part)
     (number-parts x))
 
@@ -42,17 +45,15 @@
           (quotient x base)
           (cons (remainder x base) buf))))
    (if (zero? fractional-part) '()
-       (let ((H (hashmap)))
-         (let loop ((x fractional-part))
-           (cond
-            ((zero? x) '())
-            ((hashmap-ref H x #f) '()) ;; TODO: something better?
-            (else
+       (let loop ((x fractional-part)
+                  (i (number->number-list:precision/p)))
+         (if (or (zero? x)
+                 (zero? i))
+             '()
              (let ()
                (define mult (* x base))
                (define-values (wp fp) (number-parts mult))
-               (hashmap-set! H x #t)
-               (cons wp (loop fp))))))))))
+               (cons wp (loop fp (- i 1)))))))))
 
 (define (number-list->number-list
          inbase outbase whole-part fractional-part)
