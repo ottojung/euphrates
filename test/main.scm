@@ -567,12 +567,11 @@
 
        :type (<input-type> in/out-types)
        :type (<output-type> in/out-types)
-       :default (<input-type> normal)
-       :default (<output-type> normal)
+       :default (<input-type> 'normal)
+       :default (<output-type> 'normal)
 
-       :default (<base-raw> default)
+       :default (<base-raw> 'default)
        :default (<inbase-raw> 2)
-
 
        (assert --soft?)))))
 
@@ -637,7 +636,7 @@
        :type (<opts*> '("fast" -O0! -O1! -O2! -O3!))
        :type (<nth> 'number)
        :help (<nth> "day of month")
-       :default (<arg1> defaultarg1)
+       :default (<arg1> 'defaultarg1)
 
        :help "general help here"
        :help (june "is a cool month")

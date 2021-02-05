@@ -29,6 +29,9 @@
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (list-init) "./list-init.scm"
 
+%use (debugv) "./debugv.scm"
+%use (debug) "./debug.scm"
+
 %var make-cli/f/basic
 %var make-cli/f
 %var make-cli
@@ -38,6 +41,12 @@
 %var with-cli
 %var define-cli:raisu/p
 %var define-cli:raisu/default-exit
+
+(define (tostring x)
+  (cond
+   ((number? x) (number->string x))
+   ((symbol? x) (symbol->string x))
+   (else x)))
 
 (define (make-cli/f/basic cli-decl synonyms)
   ((compose make-regex-machine
@@ -63,13 +72,6 @@
   (apply (define-cli:raisu/p) args))
 
 (define (make-cli/f cli-decl defaults examples helps types exclusives synonyms)
-  (define (tostring x)
-    (cond
-     ((number? x) (number->string x))
-     ((symbol? x) (symbol->string x))
-     (else x)))
-
-
   (define (member/typed x lst)
     (let loop ((lst lst))
       (if (null? lst) #f
@@ -198,9 +200,9 @@
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:type (x y) . xs))
      (make-cli-helper
       f cli-decl defaults examples helps ((list (quote x) y) . types) exclusives synonyms xs))
-    ((_ f cli-decl defaults examples helps types exclusives synonyms (:default x . xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:default (x y) . xs))
      (make-cli-helper
-      f cli-decl ((quote x) . defaults) examples helps types exclusives synonyms xs))
+      f cli-decl ((list (quote x) y) . defaults) examples helps types exclusives synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms bodies)
      (f
       cli-decl
