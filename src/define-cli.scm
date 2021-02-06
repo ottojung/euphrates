@@ -28,6 +28,7 @@
 %use (conss) "./conss.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (list-init) "./list-init.scm"
+%use (list-last) "./list-last.scm"
 
 %use (debugv) "./debugv.scm"
 %use (debug) "./debug.scm"
@@ -79,33 +80,64 @@
               (car lst)
               (loop (cdr lst))))))
 
-  (define (handle-1-type name type)
+  (define (handle-type/1 name type)
     (lambda (value)
       (when value
         (case type
           ((number)
            (let ((n (string->number (tostring value))))
              (unless n
-               (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type))
-             n))
+               (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))
+             (values n #f)))
           ((symbol)
-           (string->symbol (tostring value)))
+           (values (string->symbol (tostring value)) #f))
           (else
            (unless (list? type)
-             (define-cli:raisu 'EXPECTED-LIST-AS-TYPE type 'FOR name))
-           (or (member/typed value type)
-               (define-cli:raisu 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))))
+             (values #f (list 'EXPECTED-LIST-AS-TYPE type 'FOR name)))
+           (let ((m (member/typed value type)))
+             (if m
+                 (values m #f)
+                 (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))))))
+
+  (define (handle-type/union name types value)
+    (let loop ((types types) (errors '()))
+      (if (null? types) (values #f (reverse errors))
+          (let ()
+            (define-values (R error)
+              ((handle-type/1 name (car types)) value))
+            (if error
+                (loop (cdr types) (cons error errors))
+                (values R #f))))))
+
+  (define (handle-type/values name types vals)
+    (let loop ((vals vals) (buf '()))
+      (if (null? vals) (values (reverse buf) #f)
+          (let ()
+            (define-values (R error)
+              (handle-type/union name types (car vals)))
+
+            (if error
+                (values #f error)
+                (loop (cdr vals) (cons R buf)))))))
 
   (define (handle-type H)
     (lambda (p)
       (define name (tostring (car p)))
-      (define type (cadr p))
+      (define types (cdr p))
       (define value (hashmap-ref H name #f))
-      (define new-value
+
+      (define-values (R error)
         (if (list? value)
-            (map (handle-1-type name type) value)
-            ((handle-1-type name type) value)))
-      (hashmap-set! H name new-value)))
+            (handle-type/values name types value)
+            (handle-type/union name types value)))
+
+      (when error
+        (apply define-cli:raisu
+               (append
+                (list-last error)
+                (list (list-init error)))))
+
+      (hashmap-set! H name R)))
 
   (define (handle-default H)
     (lambda (d)
@@ -197,9 +229,9 @@
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:help x . xs))
      (make-cli-helper
       f cli-decl defaults examples ((quote x) . helps) types exclusives synonyms xs))
-    ((_ f cli-decl defaults examples helps types exclusives synonyms (:type (x y) . xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:type (x . ys) . xs))
      (make-cli-helper
-      f cli-decl defaults examples helps ((list (quote x) y) . types) exclusives synonyms xs))
+      f cli-decl defaults examples helps ((list (quote x) . ys) . types) exclusives synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:default (x y) . xs))
      (make-cli-helper
       f cli-decl ((list (quote x) y) . defaults) examples helps types exclusives synonyms xs))

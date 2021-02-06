@@ -570,6 +570,8 @@
        :default (<input-type> 'normal)
        :default (<output-type> 'normal)
 
+       :type (<base-raw> in/out-types 'number)
+       :type (<inbase-raw> in/out-types 'number)
        :default (<base-raw> 'default)
        :default (<inbase-raw> 2)
 
