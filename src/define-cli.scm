@@ -20,8 +20,6 @@
 %use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
-%use (debugv) "./debugv.scm"
-%use (debug) "./debug.scm"
 %use (~a) "./tilda-a.scm"
 %use (unlines) "./unlines.scm"
 %use (unwords) "./unwords.scm"
@@ -29,9 +27,6 @@
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
-
-%use (debugv) "./debugv.scm"
-%use (debug) "./debug.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
@@ -86,9 +81,9 @@
         (case type
           ((number)
            (let ((n (string->number (tostring value))))
-             (unless n
-               (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))
-             (values n #f)))
+             (if n
+                 (values n #f)
+                 (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))
           ((symbol)
            (values (string->symbol (tostring value)) #f))
           (else
