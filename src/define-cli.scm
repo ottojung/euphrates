@@ -25,6 +25,7 @@
 %use (unwords) "./unwords.scm"
 %use (conss) "./conss.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
+%use (list-intersperse) "./list-intersperse.scm"
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
 
@@ -161,8 +162,11 @@
           (lambda (L T)
             (define A (assoc name L))
             (when A
-              (hashmap-set! fH name (cons (cons T (cadr A))
-                                          (hashmap-ref fH name (list))))))
+              (let ((val (if (list? (cdr A))
+                             (apply string-append (map ~a (list-intersperse " | " (cdr A))))
+                             (cdr A))))
+                (hashmap-set! fH name (cons (cons T val)
+                                            (hashmap-ref fH name (list)))))))
           (list arg-helps types defaults)
           '(#f type default)))
        flattened))
