@@ -78,22 +78,23 @@
 
   (define (handle-type/1 name type)
     (lambda (value)
-      (when value
-        (case type
-          ((number)
-           (let ((n (string->number (tostring value))))
-             (if n
-                 (values n #f)
-                 (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))
-          ((symbol)
-           (values (string->symbol (tostring value)) #f))
-          (else
-           (unless (list? type)
-             (values #f (list 'EXPECTED-LIST-AS-TYPE type 'FOR name)))
-           (let ((m (member/typed value type)))
-             (if m
-                 (values m #f)
-                 (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))))))
+      (if (not value)
+          (values #f #f)
+          (case type
+            ((number)
+             (let ((n (string->number (tostring value))))
+               (if n
+                   (values n #f)
+                   (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))
+            ((symbol)
+             (values (string->symbol (tostring value)) #f))
+            (else
+             (unless (list? type)
+               (values #f (list 'EXPECTED-LIST-AS-TYPE type 'FOR name)))
+             (let ((m (member/typed value type)))
+               (if m
+                   (values m #f)
+                   (values #f (list 'BAD-TYPE-OF-ARGUMENT value 'FOR name 'EXPECTED type)))))))))
 
   (define (handle-type/union name types value)
     (let loop ((types types) (errors '()))
