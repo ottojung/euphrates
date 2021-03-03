@@ -14,8 +14,13 @@
 
 (define directory-files
   (case-lambda
-    ((directory) (directory-files directory #f))
-    ((directory include-directories?)
+    ((directory0) (directory-files directory0 #f))
+    ((directory0 include-directories?)
+     ;; Append '/' at the end because guile wont work otherwise
+     (define directory
+       (if (string-suffix? "/" directory0)
+           (identity directory0)
+           (string-append directory0 "/")))
 
      ;; Skip everything
      (define (enter? name stat result)
