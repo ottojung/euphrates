@@ -715,7 +715,7 @@
 (let ()
 
   (define object1 -3)
-  (define-property absolute set-absolute!)
+  (define-property absolute set-absolute! oRsDeyPCHkSMLSRztojiqnz)
 
   (assert= (absolute object1 #f) #f)
 

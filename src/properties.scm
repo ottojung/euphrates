@@ -11,7 +11,7 @@
 
 ;; usage:
 ;; (define object1 (make-unique))
-;; (define-property size set-size!)
+;; (define-property size set-size! z8C4ZLEXPNH4DqCNjk0g1)
 ;; (set-size! object1 10)
 ;; (size object1) ;; => 10
 ;; (size #t) ;; => throws an exception because size is not set for #t
@@ -19,7 +19,7 @@
 
 ;; note: setter is lazy:
 ;; (define object1 (make-unique))
-;; (define-property (size set-size!))
+;; (define-property size set-size! z8C4ZLEXPNH4DqCNjk0g1)
 ;; (set-size! object1 (begin (display "hello") 10))
 ;; ;; does not do anything
 ;; (size object1) ;; => prints "hello" and returns 10
@@ -27,7 +27,7 @@
 
 (define-syntax define-property
   (syntax-rules ()
-    ((_ getter setter)
+    ((_ getter setter H)
      (begin
        (define H (hashmap))
        (define-syntax setter
