@@ -57,6 +57,7 @@
 %use (system-re) "./src/system-re.scm"
 %use (number->number-list number-list->number number->number-list) "./src/number-list.scm"
 %use (convert-number-base) "./src/convert-number-base.scm"
+%use (define-property) "./src/properties.scm"
 
 (let ()
   (catch-any
@@ -709,6 +710,18 @@
 
   (assert= "f" (convert-number-base 2 16 "1111"))
   (assert= "1111" (convert-number-base 16 2 "f")))
+
+;; properties
+(let ()
+
+  (define object1 -3)
+  (define-property absolute set-absolute!)
+
+  (assert= (absolute object1 #f) #f)
+
+  (set-absolute! object1 3)
+
+  (assert= (absolute object1 #f) 3))
 
 (display "All good\n")
 
