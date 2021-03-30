@@ -58,6 +58,7 @@
 %use (number->number-list number-list->number number->number-list) "./src/number-list.scm"
 %use (convert-number-base) "./src/convert-number-base.scm"
 %use (define-property) "./src/properties.scm"
+%use (seconds->time-string) "./src/time-to-string.scm"
 
 (let ()
   (catch-any
@@ -722,6 +723,10 @@
   (set-absolute! object1 3)
 
   (assert= (absolute object1 #f) 3))
+
+;; seconds->time-string
+(let ()
+  (assert= "2:01:10" (seconds->time-string (+ (* 3600 2) 70))))
 
 (display "All good\n")
 
