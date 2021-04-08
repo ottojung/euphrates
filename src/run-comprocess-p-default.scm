@@ -12,7 +12,7 @@
 %use (read-string-file) "./read-string-file.scm"
 %use (conss) "./conss.scm"
 
-%var run-comprocess#p-default
+%var run-comprocess/p-default
 
 %for (COMPILER "guile")
 
@@ -27,7 +27,7 @@
 
 ;; Run process in background
 ;; Input port is represented by `comprocess-pipe'
-(define [run-comprocess#p-default command . args]
+(define [run-comprocess/p-default command . args]
   (define p-stdout0 (or (comprocess-stdout) (current-output-port)))
   (define-values (p-stdout p-stdout-file)
     (if (file-port? p-stdout0)
@@ -52,7 +52,7 @@
         (with-ignore-errors!* (delete-file p-stderr-file)))))
 
   ;; returns status
-  (define (waitpid#no-throw#no-hang pid)
+  (define (waitpid/no-throw/no-hang pid)
     (catch-any
      (lambda ()
        (let* ((w (waitpid pid WNOHANG)) ;; TODO: track pid to prevent accidental reuse of same pid
@@ -90,7 +90,7 @@
              (call-with-finally
               (lambda _
                 (let lp ()
-                  (let ((status (waitpid#no-throw#no-hang pid)))
+                  (let ((status (waitpid/no-throw/no-hang pid)))
                     (case status
                       ((running)
                        (sleep)

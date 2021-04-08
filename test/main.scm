@@ -4,7 +4,7 @@
 %use (get-directory-name) "./src/get-directory-name.scm"
 %use (get-current-source-file-path) "./src/get-current-source-file-path.scm"
 %use (append-posix-path) "./src/append-posix-path.scm"
-%use (run-comprocess#p-default) "./src/run-comprocess.scm"
+%use (run-comprocess/p-default) "./src/run-comprocess-p-default.scm"
 %use (make-uni-spinlock) "./src/uni-spinlock.scm"
 %use (debug) "./src/debug.scm"
 %use (debugv) "./src/debugv.scm"

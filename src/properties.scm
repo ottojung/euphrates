@@ -40,7 +40,7 @@
             ((obj)
              (let ((R (hashmap-ref H obj not-found)))
                (if (eq? R not-found)
-                   (raisu 'object-does-not-have-this-property obj)
+                   (raisu 'object-does-not-have-this-property (quote H) obj)
                    (R))))
             ((obj default)
              (let ((R (hashmap-ref H obj not-found)))
