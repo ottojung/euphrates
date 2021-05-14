@@ -13,6 +13,8 @@
 %var hashset-equal?
 %var hashset-ref
 %var hashset-add!
+%var hashset-difference
+%var hashset-intersection
 
 (define (list->hashset lst)
   (hashset
@@ -65,3 +67,29 @@
   (hash-ref (hashset-value H) key #f))
 (define (hashset-add! H key)
   (hash-set! (hashset-value H) key #t))
+
+(define (hashset-difference a b)
+  (define H (hashmap))
+
+  (let ((A (hashset-value a))
+        (B (hashset-value b)))
+    (hashmap-foreach
+     (lambda (key value)
+       (unless (hash-ref B key #f)
+         (hashmap-set! H key #t)))
+     A))
+
+  (hashset H))
+
+(define (hashset-intersection a b)
+  (define H (hashmap))
+
+  (let ((A (hashset-value a))
+        (B (hashset-value b)))
+    (hashmap-foreach
+     (lambda (key value)
+       (when (hash-ref B key #f)
+         (hashmap-set! H key #t)))
+     A))
+
+  (hashset H))

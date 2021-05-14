@@ -39,7 +39,7 @@
 %use (directory-tree) "./src/directory-tree.scm"
 %use (hashmap) "./src/hashmap.scm"
 %use (hashmap-ref hashmap->alist) "./src/ihashmap.scm"
-%use (make-hashset hashset-equal?) "./src/ihashset.scm"
+%use (make-hashset hashset-equal? hashset-difference) "./src/ihashset.scm"
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (list-permutations) "./src/list-permutations.scm"
 %use (list-combinations) "./src/list-combinations.scm"
@@ -334,6 +334,15 @@
    ((negate hashset-equal?)
     (make-hashset '((1 1) (1 2) (1 3) (1 4) (2 1) (2 2) (2 3) (2 4) (3 1) (3 2) (3 3) (3 4) (4 1) (4 2) (4 3) (4 4)))
     (make-hashset '((0 0 0 0) (0 0 0 1) (0 0 1 0) (0 0 1 1) (0 1 0 0) (0 1 0 1) (0 1 1 0) (0 1 1 1) (1 0 0 0) (1 0 0 1) (1 0 1 0) (1 0 1 1) (1 1 0 0) (1 1 0 1) (1 1 1 0) (1 1 1 1))))))
+
+;; hashset difference
+(let ()
+  (assert
+   (hashset-equal?
+    (make-hashset '(1 2 3))
+    (hashset-difference
+     (make-hashset '(1 2 3 4 5))
+     (make-hashset '(4 5 7 8))))))
 
 ;; file-or-directory-exists?
 (let ()
