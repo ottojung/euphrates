@@ -18,10 +18,10 @@
   (micro->nano/unit (normal->micro/unit s)))
 
 (define (nano->micro/unit ns)
-  (quotient ns 1000))
+  (/ ns 1000))
 
 (define (micro->normal/unit u)
-  (quotient u 1000000))
+  (/ u 1000000))
 
 (define (nano->normal/unit n)
-  (quotient n (* 1000 1000000)))
+  (/ n 1000000000))
