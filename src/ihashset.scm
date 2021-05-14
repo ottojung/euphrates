@@ -3,7 +3,7 @@
 
 %use (hashset hashset-value) "./hashset.scm"
 %use (hashmap) "./hashmap.scm"
-%use (hashmap-set! hashmap-count hashmap-foreach hashmap->alist) "./ihashmap.scm"
+%use (hashmap-set! hashmap-copy hashmap-count hashmap-foreach hashmap->alist) "./ihashmap.scm"
 %use (raisu) "./raisu.scm"
 
 %var make-hashset
@@ -15,6 +15,7 @@
 %var hashset-add!
 %var hashset-difference
 %var hashset-intersection
+%var hashset-union
 
 (define (list->hashset lst)
   (hashset
@@ -91,5 +92,21 @@
        (when (hash-ref B key #f)
          (hashmap-set! H key #t)))
      A))
+
+  (hashset H))
+
+(define (hashset-union a b)
+  (define H (hashmap))
+
+  (let ((A (hashset-value a))
+        (B (hashset-value b)))
+    (hashmap-foreach
+     (lambda (key value)
+       (hashmap-set! H key #t))
+     A)
+    (hashmap-foreach
+     (lambda (key value)
+       (hashmap-set! H key #t))
+     B))
 
   (hashset H))
