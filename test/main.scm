@@ -59,6 +59,8 @@
 %use (convert-number-base) "./src/convert-number-base.scm"
 %use (define-property) "./src/properties.scm"
 %use (seconds->time-string) "./src/time-to-string.scm"
+%use (time-get-current-unixtime) "./src/time-get-current-unixtime.scm"
+%use (time-get-monotonic-nanoseconds-timestamp) "./src/time-get-monotonic-nanoseconds-timestamp.scm"
 
 (let ()
   (catch-any
@@ -736,6 +738,17 @@
 ;; seconds->time-string
 (let ()
   (assert= "2:01:10" (seconds->time-string (+ (* 3600 2) 70))))
+
+;; time-get-current-unixtime
+(let ()
+  (assert (number? (time-get-current-unixtime))))
+
+;; time-get-monotonic-nanoseconds-timestamp
+(let ()
+  (let ((ret (time-get-monotonic-nanoseconds-timestamp)))
+    (assert (number? ret))
+    (assert (integer? ret))
+    (assert (> ret 0))))
 
 (display "All good\n")
 
