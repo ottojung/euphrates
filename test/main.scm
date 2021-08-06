@@ -62,6 +62,7 @@
 %use (time-get-current-unixtime) "./src/time-get-current-unixtime.scm"
 %use (time-get-monotonic-nanoseconds-timestamp) "./src/time-get-monotonic-nanoseconds-timestamp.scm"
 %use (path-without-extension) "./src/path-without-extension.scm"
+%use (path-extension) "./src/path-extension.scm"
 
 (let ()
   (catch-any
@@ -762,6 +763,23 @@
   (assert= "/hi/hello.txt.tar" (path-without-extension "/hi/hello.txt.tar.enc"))
 
   (assert= "hello" (path-without-extension "hello"))
+  (assert= "" (path-without-extension ""))
+  (assert= "" (path-without-extension "."))
+  )
+
+;; path-extension
+(let ()
+  (assert= ".txt" (path-extension "hello.txt"))
+  (assert= ".tar" (path-extension "hello.txt.tar"))
+  (assert= ".enc" (path-extension "hello.txt.tar.enc"))
+
+  (assert= ".txt" (path-extension "/hi/hello.txt"))
+  (assert= ".tar" (path-extension "/hi/hello.txt.tar"))
+  (assert= ".enc" (path-extension "/hi/hello.txt.tar.enc"))
+
+  (assert= "" (path-extension "hello"))
+  (assert= "" (path-extension ""))
+  (assert= "." (path-extension "."))
   )
 
 (display "All good\n")
