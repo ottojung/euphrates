@@ -63,6 +63,7 @@
 %use (time-get-monotonic-nanoseconds-timestamp) "./src/time-get-monotonic-nanoseconds-timestamp.scm"
 %use (path-without-extension) "./src/path-without-extension.scm"
 %use (path-extension) "./src/path-extension.scm"
+%use (shell-quote) "./src/shell-quote.scm"
 
 (let ()
   (catch-any
@@ -780,6 +781,13 @@
   (assert= "" (path-extension "hello"))
   (assert= "" (path-extension ""))
   (assert= "." (path-extension "."))
+  )
+
+;; shell-quote
+(let ()
+  (assert= "'$b'" (shell-quote "$b"))
+  (assert= "'$'\"'\"'b'" (shell-quote "$'b"))
+  (assert= "'$ '\"'\"' b'" (shell-quote "$ ' b"))
   )
 
 (display "All good\n")
