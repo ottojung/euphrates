@@ -46,11 +46,11 @@
       (when p-stdout-file
         (with-ignore-errors!* (close-port p-stdout))
         (with-ignore-errors!* (display (read-string-file p-stdout-file) p-stdout0))
-        (with-ignore-errors!* (file-delete p-stdout-file)))
+        (file-delete p-stdout-file))
       (when p-stderr-file
         (with-ignore-errors!* (close-port p-stderr))
         (with-ignore-errors!* (display (read-string-file p-stderr-file) p-stderr0))
-        (with-ignore-errors!* (file-delete p-stderr-file)))))
+        (file-delete p-stderr-file))))
 
   ;; returns status
   (define (waitpid/no-throw/no-hang pid)
