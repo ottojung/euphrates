@@ -1,6 +1,10 @@
 
 %run guile
 
+%var run-comprocess/p-default
+
+%for (COMPILER "guile")
+
 %use (comprocess comprocess? comprocess-command comprocess-args comprocess-pipe set-comprocess-pipe! comprocess-pid set-comprocess-pid! comprocess-status set-comprocess-status! comprocess-exited? set-comprocess-exited?!) "./comprocess.scm"
 %use (make-temporary-fileport) "./make-temporary-fileport.scm"
 %use (catch-any) "./catch-any.scm"
@@ -11,10 +15,7 @@
 %use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
 %use (read-string-file) "./read-string-file.scm"
 %use (conss) "./conss.scm"
-
-%var run-comprocess/p-default
-
-%for (COMPILER "guile")
+%use (file-delete) "./file-delete.scm"
 
 (use-modules (ice-9 popen))
 
@@ -45,11 +46,11 @@
       (when p-stdout-file
         (with-ignore-errors!* (close-port p-stdout))
         (with-ignore-errors!* (display (read-string-file p-stdout-file) p-stdout0))
-        (with-ignore-errors!* (delete-file p-stdout-file)))
+        (with-ignore-errors!* (file-delete p-stdout-file)))
       (when p-stderr-file
         (with-ignore-errors!* (close-port p-stderr))
         (with-ignore-errors!* (display (read-string-file p-stderr-file) p-stderr0))
-        (with-ignore-errors!* (delete-file p-stderr-file)))))
+        (with-ignore-errors!* (file-delete p-stderr-file)))))
 
   ;; returns status
   (define (waitpid/no-throw/no-hang pid)

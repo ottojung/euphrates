@@ -6,6 +6,8 @@
 %use (string-trim-chars) "./string-trim-chars.scm"
 %use (system*/exit-code) "./system-star-exit-code.scm"
 %use (stringf) "./stringf.scm"
+%use (with-ignore-errors!) "./with-ignore-errors.scm"
+%use (file-delete) "./file-delete.scm"
 
 %var system-re
 
@@ -16,5 +18,6 @@
          (p (system*/exit-code "/bin/sh" "-c"
                                (string-append command " > " temp)))
          (output (read-string-file temp))
+         (do (with-ignore-errors! (file-delete temp)))
          (trimed (string-trim-chars output "\n \t" 'both)))
     (cons trimed p)))
