@@ -5,5 +5,5 @@
 
 (define (path-without-extension str)
   (let ((index (string-index-right str #\.)))
-    (string-take str index)))
+    (if index (string-take str index) str)))
 
