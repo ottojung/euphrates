@@ -7,6 +7,7 @@
 %use (system*/exit-code) "./system-star-exit-code.scm"
 %use (stringf) "./stringf.scm"
 %use (file-delete) "./file-delete.scm"
+%use (shell-quote) "./shell-quote.scm"
 
 %var system-re
 
@@ -14,8 +15,9 @@
   "Like `system', but returns (output, exit status)"
   (let* ((command (apply stringf (cons fmt args)))
          (temp (make-temporary-filename))
-         (p (system*/exit-code "/bin/sh" "-c"
-                               (string-append command " > " temp)))
+         (p (system*/exit-code
+             "/bin/sh" "-c"
+             (string-append "/bin/sh -c " (shell-quote command) " > " temp)))
          (output (read-string-file temp))
          (trimed (string-trim-chars output "\n \t" 'both)))
     (file-delete temp)
