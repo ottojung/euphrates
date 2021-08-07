@@ -9,6 +9,7 @@
 %use (list-span) "./list-span.scm"
 %use (raisu) "./raisu.scm"
 
+;; NOTE: input is a list of characters or a string!
 %var convert-number-base
 %var convert-number-base:max-base
 
