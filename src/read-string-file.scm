@@ -8,7 +8,7 @@
 (define [read-string-file path]
   (let* [
    [in (open-file path "r")]
-   [text (read-all-port read-char in)]
+   [text (read-all-port in read-char)]
    (go (close-port in))]
    text))
 
