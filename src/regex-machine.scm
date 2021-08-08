@@ -14,83 +14,96 @@
 
 %run guile
 
-%use (hashmap hashmap?) "./hashmap.scm"
-%use (hashmap->alist hashmap-ref hashmap-set! hashmap-clear! hashmap-foreach hashmap-copy) "./ihashmap.scm"
+%use (immutable-hashmap) "./immutable-hashmap.scm"
+%use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
 
 %var make-regex-machine
 
 (define (match-kleene-star hash pattern cont buf)
-  (let loop ((buf buf))
-    (if (null? buf) (cont buf)
+  (let loop ((hash hash) (buf buf))
+    (if (null? buf)
+        (cont hash buf)
         (match1 hash
                 (car pattern)
-                (lambda (ret)
+                (lambda (new-hash ret)
                   (if ret
-                      (or (cont ret)
-                          (loop ret))
-                      (cont buf)))
+                      (or (cont new-hash ret)
+                          (loop new-hash ret))
+                      (cont hash buf)))
                 buf))))
 
 (define (match-and-star hash pattern cont buf)
   (match-kleene-star hash (list (cons 'and pattern)) cont buf))
 
 (define (match-and hash pattern cont buf)
-  (let loop ((pattern pattern) (buf buf))
-    (if (null? pattern) (cont buf)
+  (let loop ((hash hash) (pattern pattern) (buf buf))
+    (if (null? pattern) (cont hash buf)
         (match1 hash (car pattern)
-                (lambda (ret)
+                (lambda (new-hash ret)
                   (if ret
-                      (loop (cdr pattern) ret)
-                      (cont #f)))
+                      (loop new-hash (cdr pattern) ret)
+                      (cont hash #f)))
                 buf))))
 
 (define (match-or hash pattern cont buf)
-  (let loop ((pattern pattern))
-    (if (null? pattern) (cont #f)
+  (let loop ((hash hash) (pattern pattern))
+    (if (null? pattern) (cont hash #f)
         (match1 hash (car pattern)
-                (lambda (ret)
+                (lambda (new-hash ret)
                   (if ret
-                      (or (cont ret)
-                          (loop (cdr pattern)))
-                      (loop (cdr pattern))))
+                      (or (cont new-hash ret)
+                          (loop new-hash (cdr pattern)))
+                      (loop hash (cdr pattern))))
                 buf))))
 
 (define (match-any hash pattern cont buf)
-  (cont
-   (and (not (null? buf))
-        (begin
-          (for-each
-           (lambda (name)
-             (hashmap-set! hash name (car buf)))
-           pattern)
-          (cdr buf)))))
+  (define (get-new-hash)
+    (define first (car buf))
+    (let loop ((hash hash) (pattern pattern))
+      (if (null? pattern) hash
+          (let ((name (car pattern)))
+            (loop
+             (immutable-hashmap-set hash name first)
+             (cdr pattern))))))
+
+  (if (not (null? buf))
+      (cont (get-new-hash) (cdr buf))
+      (cons hash #f)))
 
 (define (match-any* hash pattern cont buf)
-  (cont
-   (and (not (null? buf))
-        (begin
-          (for-each
-           (lambda (name)
-             (hashmap-set! hash name
-                           (cons (car buf)
-                                 (hashmap-ref hash name '()))))
-           pattern)
-          (cdr buf)))))
+  (define (get-new-hash)
+    (define first (car buf))
+    (let loop ((hash hash) (pattern pattern))
+      (if (null? pattern) hash
+          (let ((name (car pattern)))
+            (loop
+             (immutable-hashmap-set
+              hash name
+              (cons first (immutable-hashmap-ref hash name '())))
+             (cdr pattern))))))
+
+  (if (not (null? buf))
+      (cont (get-new-hash) (cdr buf))
+      (cons hash #f)))
 
 (define (match-equal hash pattern cont buf)
-  (cont
-   (and (not (null? buf))
-        (not (null? pattern))
-        (equal? (car pattern) (car buf))
-        (begin
-          (for-each
-           (lambda (name)
-             (hashmap-set! hash name (car buf)))
-           (cdr pattern))
-          (cdr buf)))))
+  (define (get-new-hash)
+    (define first (car buf))
+    (let loop ((hash hash) (pattern (cdr pattern)))
+      (if (null? pattern) hash
+          (let ((name (car pattern)))
+            (loop
+             (immutable-hashmap-set hash name first)
+             (cdr pattern))))))
+
+  (if (and (not (null? buf))
+           (not (null? pattern))
+           (equal? (car pattern) (car buf)))
+      (cont (get-new-hash) (cdr buf))
+      (cont hash #f)))
 
 (define (match-epsilon hash pattern cont buf)
-  (cont buf))
+  (cont hash buf))
 
 (define (match1 hash pattern cont buf)
   (define (go func)
@@ -107,8 +120,17 @@
     (else (go (car pattern)))))
 
 (define (make-regex-machine pattern)
-  (lambda (H T)
-    (match1 H pattern null? T)))
+  (lambda (H0 T)
+    (define (cont hash buf)
+      (and (null? buf)
+           (begin
+             (immutable-hashmap-foreach
+              (lambda (key value)
+                (hash-set! H0 key value))
+              hash)
+             #t)))
+    (let ((H (immutable-hashmap)))
+      (match1 H pattern cont T))))
 
 
 
