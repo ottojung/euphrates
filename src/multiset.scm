@@ -5,10 +5,7 @@
 %var multiset?
 %var multiset-value
 
-%for (COMPILER "guile")
-(use-modules (srfi srfi-9))
-%end
+%use (define-newtype) "./define-newtype.scm"
 
-(define-record-type <multiset>
-  (multiset value) multiset?
-  (value multiset-value))
+(define-newtype multiset multiset? multiset-value)
+

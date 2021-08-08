@@ -6,10 +6,6 @@
 %var hashset?
 %var hashset-value
 
-%for (COMPILER "guile")
-(use-modules (srfi srfi-9))
-%end
+%use (define-newtype) "./define-newtype.scm"
 
-(define-record-type <hashset>
-  (hashset value) hashset?
-  (value hashset-value))
+(define-newtype hashset hashset? hashset-value)

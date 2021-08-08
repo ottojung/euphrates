@@ -6,11 +6,7 @@
 %var open-cond-value
 %var set-open-cond-value!
 
-%for (COMPILER "guile")
-(use-modules (srfi srfi-9))
-%end
+%use (define-newtype) "./define-newtype.scm"
 
-(define-record-type <open-cond>
-  (open-cond value) open-cond?
-  (value open-cond-value set-open-cond-value!))
+(define-newtype open-cond open-cond? open-cond-value set-open-cond-value!)
 
