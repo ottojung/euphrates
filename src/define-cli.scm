@@ -167,7 +167,7 @@
                              (apply string-append (map ~a (list-intersperse " | " (cdr A))))
                              (cdr A))))
                 (hashmap-set! fH name (cons (cons T val)
-                                            (hashmap-ref fH name (list)))))))
+                                            (hashmap-ref fH name '()))))))
           (list arg-helps types defaults)
           '(#f type default)))
        flattened))

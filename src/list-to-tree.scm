@@ -11,11 +11,11 @@
 
 (define (list->tree lst divider)
   (define (recur tag rest)
-    (define droped (list))
+    (define droped '())
     (define taken
       (let lp ((lst rest))
         (if (null? lst)
-            (list)
+            '()
             (let* ((x (car lst))
                    (xs (cdr lst)))
               (let-values

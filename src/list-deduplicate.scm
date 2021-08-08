@@ -12,7 +12,7 @@
    ((lst) (list-deduplicate lst equal?))
    ((lst pred)
     (let ((H (hashmap)))
-      (let lp ((buf lst) (mem (list)))
+      (let lp ((buf lst) (mem '()))
         (cond ((null? buf) mem)
               ((hashmap-ref H (car buf) #f)
                (lp (cdr buf) mem))

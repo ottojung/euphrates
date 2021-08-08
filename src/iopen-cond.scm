@@ -8,7 +8,7 @@
 %var open-cond-lambda
 
 (define-syntax-rule (define-open-cond name)
-  (define name (open-cond (list))))
+  (define name (open-cond '())))
 
 (define-syntax-rule (define-open-cond-instance open-cond function)
   (set-open-cond-value!

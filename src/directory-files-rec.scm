@@ -55,7 +55,7 @@
      (cons (map tostring
                 (cons f (reverse (explode-path f))))
            ctx))
-   (list)
+   '()
    directory))
 
 %end

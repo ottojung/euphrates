@@ -5,7 +5,7 @@
 
 (define (cartesian-map function a b)
   (let lp1 ((ai a))
-    (if (null? ai) (list)
+    (if (null? ai) '()
         (let ((av (car ai)))
           (let lp2 ((bi b))
             (if (null? bi)

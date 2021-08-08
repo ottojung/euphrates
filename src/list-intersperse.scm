@@ -14,5 +14,5 @@
               (conss (car buf)
                      element
                      (lp rest))))
-        (list))))
+        '())))
 

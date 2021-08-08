@@ -73,7 +73,7 @@
            (lambda (name)
              (hashmap-set! hash name
                            (cons (car buf)
-                                 (hashmap-ref hash name (list)))))
+                                 (hashmap-ref hash name '()))))
            pattern)
           (cdr buf)))))
 
