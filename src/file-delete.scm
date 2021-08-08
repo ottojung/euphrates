@@ -1,13 +1,20 @@
 
 %run guile
 
+;;
+;; @returns #f on success, #t on failure
 %var file-delete
 
-%use (with-ignore-errors!) "./with-ignore-errors.scm"
+%use (catch-any) "./catch-any.scm"
 
 %for (COMPILER "guile")
 
 (define (file-delete filepath)
-  (with-ignore-errors! (delete-file filepath)))
+  (catch-any
+   (lambda _
+     (delete-file filepath)
+     #f)
+   (lambda _
+     #t)))
 
 %end
