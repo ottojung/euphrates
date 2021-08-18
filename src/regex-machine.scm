@@ -27,8 +27,12 @@
                 (car pattern)
                 (lambda (new-hash ret)
                   (if ret
-                      (or (cont new-hash ret)
-                          (loop new-hash ret))
+                      (call-with-values
+                          (lambda _ (cont new-hash ret))
+                        (lambda (h ret2)
+                          (if ret2
+                              (values h ret2)
+                              (loop new-hash ret))))
                       (cont hash buf)))
                 buf))))
 
@@ -51,8 +55,12 @@
         (match1 hash (car pattern)
                 (lambda (new-hash ret)
                   (if ret
-                      (or (cont new-hash ret)
-                          (loop new-hash (cdr pattern)))
+                      (call-with-values
+                          (lambda () (cont new-hash ret))
+                        (lambda (h ret2)
+                          (if ret2
+                              (values h ret2)
+                              (loop new-hash (cdr pattern)))))
                       (loop hash (cdr pattern))))
                 buf))))
 
@@ -122,15 +130,18 @@
 (define (make-regex-machine pattern)
   (lambda (H0 T)
     (define (cont hash buf)
-      (and (null? buf)
-           (begin
-             (immutable-hashmap-foreach
-              (lambda (key value)
-                (hash-set! H0 key value))
-              hash)
-             #t)))
+      (values hash (null? buf)))
     (let ((H (immutable-hashmap)))
-      (match1 H pattern cont T))))
+      (call-with-values
+          (lambda () (match1 H pattern cont T))
+        (lambda (hash ret)
+          (and ret
+               (not
+                (not
+                 (immutable-hashmap-foreach
+                  (lambda (key value)
+                    (hash-set! H0 key value))
+                  hash)))))))))
 
 
 
