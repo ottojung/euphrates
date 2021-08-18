@@ -16,7 +16,7 @@
 
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./parse-cli.scm"
 %use (get-command-line-arguments) "./get-command-line-arguments.scm"
-%use (make-regex-machine) "./regex-machine.scm"
+%use (make-regex-machine*) "./regex-machine.scm"
 %use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
@@ -46,7 +46,7 @@
    (else x)))
 
 (define (make-cli/f/basic cli-decl synonyms)
-  ((compose make-regex-machine
+  ((compose make-regex-machine*
             (parse-cli:IR->Regex synonyms)
             parse-cli:make-IR)
    cli-decl))

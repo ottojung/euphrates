@@ -50,7 +50,7 @@
 %use (list-tag list-untag) "./src/list-tag.scm"
 %use (list-tag/next list-untag/next) "./src/list-tag-next.scm"
 %use (comp appcomp) "./src/comp.scm"
-%use (make-regex-machine) "./src/regex-machine.scm"
+%use (make-regex-machine*) "./src/regex-machine.scm"
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
 %use (make-cli lambda-cli with-cli define-cli:current-hashmap) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
@@ -524,7 +524,7 @@
 
 ;; regex-machine
 (let ()
-  (define m (make-regex-machine
+  (define m (make-regex-machine*
              '(and (any x z)
                    (or (= 3) (= 2 m k))
                    (and* (any* i))
@@ -550,7 +550,7 @@
     (define Regex
       ((parse-cli:IR->Regex '((run let go))) IR))
     (define M
-      (make-regex-machine Regex))
+      (make-regex-machine* Regex))
 
     (define H (hashmap))
     (define R (M H (list "go" "--flag1" "somefile" "june" "5" "the-end")))
