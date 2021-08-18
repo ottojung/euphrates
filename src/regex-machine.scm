@@ -16,7 +16,9 @@
 
 %use (immutable-hashmap) "./immutable-hashmap.scm"
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
+%use (hashmap-set!) "./ihashmap.scm"
 
+%var make-regex-machine*
 %var make-regex-machine
 
 (define (match-kleene-star hash pattern cont buf)
@@ -127,21 +129,27 @@
     ((epsilon) (go match-epsilon))
     (else (go (car pattern)))))
 
-(define (make-regex-machine pattern)
-  (lambda (H0 T)
+(define (make-regex-machine* pattern)
+  (lambda (T)
     (define (cont hash buf)
       (values hash (null? buf)))
     (let ((H (immutable-hashmap)))
-      (call-with-values
-          (lambda () (match1 H pattern cont T))
-        (lambda (hash ret)
-          (and ret
-               (not
-                (not
-                 (immutable-hashmap-foreach
-                  (lambda (key value)
-                    (hash-set! H0 key value))
-                  hash)))))))))
+      (match1 H pattern cont T))))
+
+;; Same as `make-regex-machine',
+;; but also accepts H0 as hasmap that output will be written to.
+(define (make-regex-machine pattern)
+  (define go (make-regex-machine* pattern))
+  (lambda (H0 T)
+    (call-with-values (lambda _ (go T))
+      (lambda (hash ret)
+        (and ret
+             (not
+              (not
+               (immutable-hashmap-foreach
+                (lambda (key value)
+                  (hashmap-set! H0 key value))
+                hash))))))))
 
 
 
