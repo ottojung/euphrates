@@ -18,6 +18,7 @@
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
 %use (hashmap-set!) "./ihashmap.scm"
 
+%var make-regex-machine/full
 %var make-regex-machine
 %var make-regex-machine*
 
@@ -129,12 +130,16 @@
     ((epsilon) (go match-epsilon))
     (else (go (car pattern)))))
 
+(define (make-regex-machine/full pattern)
+  (lambda (H T cont)
+    (match1 H pattern cont T)))
+
 (define (make-regex-machine pattern)
+  (define M (make-regex-machine/full pattern))
   (lambda (T)
-    (define (cont hash buf)
-      (values hash (null? buf)))
-    (let ((H (immutable-hashmap)))
-      (match1 H pattern cont T))))
+    (M (immutable-hashmap)
+       T
+       (lambda (hash buf) (values hash (null? buf))))))
 
 ;; Same as `make-regex-machine',
 ;; but also accepts H0 as hasmap that output will be written to.
