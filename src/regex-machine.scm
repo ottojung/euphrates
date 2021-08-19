@@ -37,9 +37,6 @@
                               (loop new-hash ret))))
                       (cont hash buf)))))))
 
-(define (match-and-star pattern hash buf cont)
-  (match-kleene-star (list (cons 'and pattern)) hash buf cont))
-
 (define (match-and pattern hash buf cont)
   (let loop ((hash hash) (pattern pattern) (buf buf))
     (if (null? pattern) (cont hash buf)
@@ -116,14 +113,16 @@
   (define (go func)
     (func (cdr pattern) hash buf cont))
   (case (car pattern)
-    ((=) (go match-equal))
-    ((any) (go match-any))
-    ((any*) (go match-any*))
+
     ((and) (go match-and))
     ((or) (go match-or))
     ((*) (go match-kleene-star))
-    ((and*) (go match-and-star))
     ((epsilon) (go match-epsilon))
+
+    ((=) (go match-equal))
+    ((any) (go match-any))
+    ((any*) (go match-any*))
+
     (else (go (car pattern)))))
 
 (define (make-regex-machine/full pattern)
