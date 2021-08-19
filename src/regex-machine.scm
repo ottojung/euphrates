@@ -30,28 +30,30 @@
 ;;        (and* (any* i))
 ;;        (any y))))
 ;;
-;; Available commands:
-;;   (and command1 command2...)
-;;   (or command1 command2...)
-;;   (* command)
+;; Available expressions:
+;;   (and expr1 expr2...)
+;;   (or expr1 expr2...)
+;;   (* expr)
+;;   (not expr)
 ;;
 ;;   (= object var1 var2...)
 ;;   (any var1 var2...)
 ;;   (any* var1 var2...)
 ;;
-;;   (+ command)
-;;   (? command)
-;;   (and* command)
+;;   (+ expr)
+;;   (? expr)
+;;   (and* expr)
 
 %var make-regex-machine/full
 %var make-regex-machine
 %var make-regex-machine*
 
 (define (match-kleene-star pattern hash buf cont)
+  (define expr (car pattern))
   (let loop ((hash hash) (buf buf))
     (if (null? buf)
         (cont hash buf)
-        (match1 (car pattern) hash buf
+        (match1 expr hash buf
                 (lambda (new-hash ret)
                   (if ret
                       (call-with-values
@@ -84,6 +86,13 @@
                               (values h ret2)
                               (loop new-hash (cdr pattern)))))
                       (loop hash (cdr pattern))))))))
+
+(define (match-negation pattern hash buf cont)
+  (match1 (car pattern) hash buf
+          (lambda (new-hash ret)
+            (if ret
+                (cont new-hash #f)
+                (cont hash buf)))))
 
 (define (match-any pattern hash buf cont)
   (define (get-new-hash)
@@ -143,6 +152,7 @@
     ((or) (go match-or))
     ((*) (go match-kleene-star))
     ((epsilon) (go match-epsilon))
+    ((not) (go match-negation))
 
     ((=) (go match-equal))
     ((any) (go match-any))
