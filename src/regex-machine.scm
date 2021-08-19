@@ -22,12 +22,11 @@
 %var make-regex-machine
 %var make-regex-machine*
 
-(define (match-kleene-star hash pattern cont buf)
+(define (match-kleene-star pattern hash buf cont)
   (let loop ((hash hash) (buf buf))
     (if (null? buf)
         (cont hash buf)
-        (match1 hash
-                (car pattern)
+        (match1 (car pattern) hash buf
                 (lambda (new-hash ret)
                   (if ret
                       (call-with-values
@@ -36,26 +35,24 @@
                           (if ret2
                               (values h ret2)
                               (loop new-hash ret))))
-                      (cont hash buf)))
-                buf))))
+                      (cont hash buf)))))))
 
-(define (match-and-star hash pattern cont buf)
-  (match-kleene-star hash (list (cons 'and pattern)) cont buf))
+(define (match-and-star pattern hash buf cont)
+  (match-kleene-star (list (cons 'and pattern)) hash buf cont))
 
-(define (match-and hash pattern cont buf)
+(define (match-and pattern hash buf cont)
   (let loop ((hash hash) (pattern pattern) (buf buf))
     (if (null? pattern) (cont hash buf)
-        (match1 hash (car pattern)
+        (match1 (car pattern) hash buf
                 (lambda (new-hash ret)
                   (if ret
                       (loop new-hash (cdr pattern) ret)
-                      (cont hash #f)))
-                buf))))
+                      (cont hash #f)))))))
 
-(define (match-or hash pattern cont buf)
+(define (match-or pattern hash buf cont)
   (let loop ((hash hash) (pattern pattern))
     (if (null? pattern) (cont hash #f)
-        (match1 hash (car pattern)
+        (match1 (car pattern) hash buf
                 (lambda (new-hash ret)
                   (if ret
                       (call-with-values
@@ -64,10 +61,9 @@
                           (if ret2
                               (values h ret2)
                               (loop new-hash (cdr pattern)))))
-                      (loop hash (cdr pattern))))
-                buf))))
+                      (loop hash (cdr pattern))))))))
 
-(define (match-any hash pattern cont buf)
+(define (match-any pattern hash buf cont)
   (define (get-new-hash)
     (define first (car buf))
     (let loop ((hash hash) (pattern pattern))
@@ -79,9 +75,9 @@
 
   (if (not (null? buf))
       (cont (get-new-hash) (cdr buf))
-      (cons hash #f)))
+      (cont hash #f)))
 
-(define (match-any* hash pattern cont buf)
+(define (match-any* pattern hash buf cont)
   (define (get-new-hash)
     (define first (car buf))
     (let loop ((hash hash) (pattern pattern))
@@ -95,9 +91,9 @@
 
   (if (not (null? buf))
       (cont (get-new-hash) (cdr buf))
-      (cons hash #f)))
+      (cont hash #f)))
 
-(define (match-equal hash pattern cont buf)
+(define (match-equal pattern hash buf cont)
   (define (get-new-hash)
     (define first (car buf))
     (let loop ((hash hash) (pattern (cdr pattern)))
@@ -113,12 +109,12 @@
       (cont (get-new-hash) (cdr buf))
       (cont hash #f)))
 
-(define (match-epsilon hash pattern cont buf)
+(define (match-epsilon pattern hash buf cont)
   (cont hash buf))
 
-(define (match1 hash pattern cont buf)
+(define (match1 pattern hash buf cont)
   (define (go func)
-    (func hash (cdr pattern) cont buf))
+    (func (cdr pattern) hash buf cont))
   (case (car pattern)
     ((=) (go match-equal))
     ((any) (go match-any))
@@ -132,7 +128,7 @@
 
 (define (make-regex-machine/full pattern)
   (lambda (H T cont)
-    (match1 H pattern cont T)))
+    (match1 pattern H T cont)))
 
 (define (make-regex-machine pattern)
   (define M (make-regex-machine/full pattern))
