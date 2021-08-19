@@ -527,7 +527,7 @@
   (define m (make-regex-machine*
              '(and (any x z)
                    (or (= 3) (= 2 m k))
-                   (* (and (any* i)))
+                   (and* (any* i))
                    (any y))))
   (define H (hashmap))
   (assert (m H (list 1 2 3 9 8 7)))

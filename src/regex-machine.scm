@@ -18,6 +18,31 @@
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
 %use (hashmap-set!) "./ihashmap.scm"
 
+;;
+;; Regex Machine.
+;; Similar to Context Free Grammar Machine from ./cfg-machine.scm
+;; It parses arbitrary lists and returns bindings.
+;; Algorithm is the naive and predictable one,
+;; so beware the complexity.
+;; Example `pattern':
+;;  '(and (any x z)
+;;        (or (= 3) (= 2 m k))
+;;        (and* (any* i))
+;;        (any y))))
+;;
+;; Available commands:
+;;   (and command1 command2...)
+;;   (or command1 command2...)
+;;   (* command)
+;;
+;;   (= object var1 var2...)
+;;   (any var1 var2...)
+;;   (any* var1 var2...)
+;;
+;;   (+ command)
+;;   (? command)
+;;   (and* command)
+
 %var make-regex-machine/full
 %var make-regex-machine
 %var make-regex-machine*
@@ -125,7 +150,19 @@
 
     (else (go (car pattern)))))
 
-(define (make-regex-machine/full pattern)
+(define (regex-machine-desugar pattern)
+  (let loop ((pattern pattern))
+    (if (pair? pattern)
+        (map loop
+             (case (car pattern)
+               ((+) `(and ,@(cadr pattern) (* ,(cadr pattern))))
+               ((?) `(or ,@(cadr pattern) (epsilon)))
+               ((and*) `(* (and ,(cadr pattern))))
+               (else pattern)))
+        pattern)))
+
+(define (make-regex-machine/full pattern0)
+  (define pattern (regex-machine-desugar pattern0))
   (lambda (H T cont)
     (match1 pattern H T cont)))
 
