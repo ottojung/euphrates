@@ -14,12 +14,14 @@
 
 %run guile
 
-%use (group-by/sequential group-by/sequential*) "./group-by-sequential.scm"
-%use (raisu) "./raisu.scm"
-%use (list-init) "./list-init.scm"
+;; Deprecated in favor of CFG-machine based DSL
 
 %var parse-cli:make-IR
 %var parse-cli:IR->Regex
+
+%use (group-by/sequential group-by/sequential*) "./group-by-sequential.scm"
+%use (raisu) "./raisu.scm"
+%use (list-init) "./list-init.scm"
 
 (define (parse-cli:make-IR body)
   (define (type-cli body)

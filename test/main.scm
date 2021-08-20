@@ -68,6 +68,7 @@
 %use (immutable-hashmap) "./src/immutable-hashmap.scm"
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap->alist) "./src/i-immutable-hashmap.scm"
 %use (list-split-on) "./src/list-split-on.scm"
+%use (CFG-CLI->CFG-lang) "./src/compile-cli.scm"
 
 (let ()
   (catch-any
@@ -611,6 +612,42 @@
     (assert=HS
      '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7))
      (immutable-hashmap->alist H))))
+
+;; compile-cli
+(let ()
+  (define input
+    '(run OPTS* DATE <end-statement>
+          OPTS*   : --opts <opts...>*
+                  / --param1 <arg1>
+                  / --flag1
+          DATE    : may  <nth> MAY-OPTS?
+                  / june <nth> JUNE-OPTS*
+          MAY-OPTS?    : -p <x>
+          JUNE-OPTS*   : -f3 / -f4))
+
+  (define synonyms '())
+
+  (define compiler (CFG-CLI->CFG-lang synonyms))
+
+  (define result (compiler input))
+
+  (assert= result
+           '((MAIN (and (= "run" run)
+                        (* (call OPTS*))
+                        (call DATE)
+                        (any <end-statement>)))
+             (OPTS* (or (and (= "--opts" --opts) (* (any* <opts...>*)))
+                        (and (= "--param1" --param1) (any <arg1>))
+                        (and (= "--flag1" --flag1))))
+             (DATE (or (and (= "may" may)
+                            (any <nth>)
+                            (? (call MAY-OPTS?)))
+                       (and (= "june" june)
+                            (any <nth>)
+                            (* (call JUNE-OPTS*)))))
+             (MAY-OPTS? (and (= "-p" -p) (any <x>)))
+             (JUNE-OPTS*
+              (or (and (= "-f3" -f3)) (and (= "-f4" -f4)))))))
 
 ;; parse-cli
 (let ()
