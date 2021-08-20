@@ -74,7 +74,7 @@
                       (cont hash #f)))))))
 
 (define (match-or pattern hash buf cont)
-  (let loop ((hash hash) (pattern pattern))
+  (let loop ((pattern pattern))
     (if (null? pattern) (cont hash #f)
         (match1 (car pattern) hash buf
                 (lambda (new-hash ret)
@@ -84,8 +84,8 @@
                         (lambda (h ret2)
                           (if ret2
                               (values h ret2)
-                              (loop new-hash (cdr pattern)))))
-                      (loop hash (cdr pattern))))))))
+                              (loop (cdr pattern)))))
+                      (loop (cdr pattern))))))))
 
 (define (match-negation pattern hash buf cont)
   (match1 (car pattern) hash buf

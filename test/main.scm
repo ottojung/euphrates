@@ -572,8 +572,8 @@
                             (or (= 3) (= 2 m k))
                             (call save-i)
                             (any y)))
-                 (save-i (or (and (epsilon))
-                             (and (any* i) (call save-i)))))))
+                 (save-i (or (and (any* i) (call save-i))
+                             (and (any* i)))))))
     (define-values (H sucess?) (m (list 1 2 3 9 8 7)))
     (assert sucess?)
 
