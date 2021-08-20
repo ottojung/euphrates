@@ -67,6 +67,7 @@
 %use (shell-quote) "./src/shell-quote.scm"
 %use (immutable-hashmap) "./src/immutable-hashmap.scm"
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap->alist) "./src/i-immutable-hashmap.scm"
+%use (list-split-on) "./src/list-split-on.scm"
 
 (let ()
   (catch-any
@@ -881,6 +882,18 @@
   (assert= 9 (immutable-hashmap-ref H3 'b #f))
   (assert= 7 (immutable-hashmap-ref H4 'a #f))
   (assert= 9 (immutable-hashmap-ref H4 'b #f))
+  )
+
+;; list-split-on
+(let ()
+  (assert= '((1) (3) (5) (7))
+           (list-split-on even? (list 1 2 3 4 5 6 7)))
+  (assert= '((1 3 5 7))
+           (list-split-on even? (list 1 3 5 7)))
+  (assert= '((1 3) (5 7))
+           (list-split-on even? (list 1 3 2 2 5 7)))
+  (assert= '()
+           (list-split-on even? (list 2 4 6)))
   )
 
 (display "All good\n")
