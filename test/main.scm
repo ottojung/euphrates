@@ -51,6 +51,7 @@
 %use (list-tag/next list-untag/next) "./src/list-tag-next.scm"
 %use (comp appcomp) "./src/comp.scm"
 %use (make-regex-machine*) "./src/regex-machine.scm"
+%use (make-cfg-machine) "./src/cfg-machine.scm"
 %use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
 %use (make-cli lambda-cli with-cli define-cli:current-hashmap) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
@@ -65,7 +66,7 @@
 %use (path-extension) "./src/path-extension.scm"
 %use (shell-quote) "./src/shell-quote.scm"
 %use (immutable-hashmap) "./src/immutable-hashmap.scm"
-%use (immutable-hashmap-ref immutable-hashmap-set) "./src/i-immutable-hashmap.scm"
+%use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap->alist) "./src/i-immutable-hashmap.scm"
 
 (let ()
   (catch-any
@@ -535,6 +536,50 @@
   (assert=HS
    '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
    (hashmap->alist H)))
+
+;; cfg-machine
+(let ()
+  (let ()
+    (define m (make-cfg-machine
+               '((main (and (any x z)
+                            (or (= 3) (= 2 m k))
+                            (and* (any* i))
+                            (any y))))))
+    (define-values (H sucess?) (m (list 1 2 3 9 8 7)))
+    (assert sucess?)
+
+    (assert=HS
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     (immutable-hashmap->alist H)))
+
+  (let ()
+    (define m (make-cfg-machine
+               '((main (and (any x z)
+                            (or (= 3) (= 2 m k))
+                            (call save-i)
+                            (any y)))
+                 (save-i (and* (any* i))))))
+    (define-values (H sucess?) (m (list 1 2 3 9 8 7)))
+    (assert sucess?)
+
+    (assert=HS
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     (immutable-hashmap->alist H)))
+
+  (let ()
+    (define m (make-cfg-machine
+               '((main (and (any x z)
+                            (or (= 3) (= 2 m k))
+                            (call save-i)
+                            (any y)))
+                 (save-i (or (and (epsilon))
+                             (and (any* i) (call save-i)))))))
+    (define-values (H sucess?) (m (list 1 2 3 9 8 7)))
+    (assert sucess?)
+
+    (assert=HS
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     (immutable-hashmap->alist H))))
 
 ;; parse-cli
 (let ()
