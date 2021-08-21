@@ -5,7 +5,7 @@
 %var seconds->H/M/s
 %var seconds->time-string
 
-%use (string-pad-left) "./string-pad.scm"
+%use (string-pad-L) "./string-pad.scm"
 
 (define (seconds->M/s seconds0)
   (define seconds (remainder seconds0 60))
@@ -25,7 +25,7 @@
 
   (string-append
    (number->string hours) ":"
-   (string-pad-left (number->string minutes) 2 #\0) ":"
-   (string-pad-left (number->string seconds) 2 #\0)))
+   (string-pad-L (number->string minutes) 2 #\0) ":"
+   (string-pad-L (number->string seconds) 2 #\0)))
 
 ;; TODO: other conversions
