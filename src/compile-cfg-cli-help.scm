@@ -66,7 +66,7 @@
     (define AST (CFG-CLI->CFG-AST cli-decl))
     (define window-width
       (let* ((w (system-environment-get "COLUMNS"))
-             (n (string->number w)))
+             (n (and w (string->number w))))
         (or n 80)))
 
     (define flattened
