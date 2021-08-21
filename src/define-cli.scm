@@ -229,8 +229,8 @@
     (unless R
       (define-cli:raisu 'NO-MATCH (make-help)))
 
-    (for-each (handle-exclusive H) exclusives)
     (for-each (handle-default H) defaults)
+    (for-each (handle-exclusive H) exclusives)
     (for-each (handle-type H) types)
 
     (when #f #f)))
