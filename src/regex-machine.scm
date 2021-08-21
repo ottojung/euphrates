@@ -165,8 +165,8 @@
     (if (pair? pattern)
         (map loop
              (case (car pattern)
-               ((+) `(and ,@(cadr pattern) (* ,(cadr pattern))))
-               ((?) `(or ,@(cadr pattern) (epsilon)))
+               ((+) `(and ,(cadr pattern) (* ,(cadr pattern))))
+               ((?) `(or ,(cadr pattern) (epsilon)))
                ((and*) `(* (and ,(cadr pattern))))
                (else pattern)))
         pattern)))
