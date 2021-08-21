@@ -1,0 +1,29 @@
+;;;; Copyright (C) 2021  Otto Jung
+;;;;
+;;;; This program is free software: you can redistribute it and/or modify
+;;;; it under the terms of the GNU General Public License as published by
+;;;; the Free Software Foundation; version 3 of the License.
+;;;;
+;;;; This program is distributed in the hope that it will be useful,
+;;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;;; GNU General Public License for more details.
+;;;;
+;;;; You should have received a copy of the GNU General Public License
+;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+%run guile
+
+%var path-get-basename
+
+%use (list-split-on) "./list-split-on.scm"
+%use (list-last) "./list-last.scm"
+
+(define (path-get-basename path)
+  (list->string
+   (list-last
+    (list-split-on
+     (lambda (c) (equal? #\/ c))
+     (string->list path)))))
+
+
