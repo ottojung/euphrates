@@ -17,6 +17,7 @@
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (immutable-hashmap) "./immutable-hashmap.scm"
+%use (immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
 %use (~s) "./tilda-s.scm"
 %use (raisu) "./raisu.scm"
 %use (make-regex-machine/full) "./regex-machine.scm"
@@ -26,7 +27,9 @@
 ;; It parses arbitrary lists and returns bindings.
 ;; Algorithm is the naive and predictable one,
 ;; so beware the complexity.
+%var make-cfg-machine/full
 %var make-cfg-machine
+%var make-cfg-machine*
 
 ;; Injects functions to call regexes in place of (call "name")
 ;; and returns (values new-grammar main)
@@ -76,11 +79,29 @@
 ;;   (foo (or (and (call main) (= "end-foo" y))
 ;;            (and (epsilon))))
 ;;   (baz (and (any z) (any* w))))
-(define (make-cfg-machine grammar)
+(define (make-cfg-machine/full grammar)
   (define-values (grammar* main) (inject-calls grammar))
+  (lambda (H T cont)
+    (main H T cont)))
+
+(define (make-cfg-machine grammar)
   (define (cont hash buf) (values hash (null? buf)))
+  (define M (make-cfg-machine/full grammar))
   (lambda (T)
-    (main (immutable-hashmap) T cont)))
+    (M (immutable-hashmap) T cont)))
+
+(define (make-cfg-machine* grammar)
+  (define go (make-cfg-machine grammar))
+  (lambda (H0 T)
+    (call-with-values (lambda _ (go T))
+      (lambda (hash ret)
+        (and ret
+             (not
+              (not
+               (immutable-hashmap-foreach
+                (lambda (key value)
+                  (hashmap-set! H0 key value))
+                hash))))))))
 
 
 
