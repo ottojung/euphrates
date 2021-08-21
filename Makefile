@@ -4,6 +4,7 @@ run:
 
 cleanrun:
 	CZEMPAK_ROOT=.czempak-root $(MAKE) cleanrun-s
+
 cleanrun-s: | clean-czempak run run-inlined
 
 clean-czempak:
