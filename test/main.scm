@@ -611,6 +611,17 @@
 
     (assert=HS
      '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7))
+     (immutable-hashmap->alist H)))
+
+  (let ()
+    (define m (make-cfg-machine
+               '((MAIN (and (or (= "run" run) (= "let" run) (= "go" run))
+                            (? (= "--flag1" --flag1?)))))))
+    (define-values (H sucess?) (m (list "go")))
+    (assert sucess?)
+
+    (assert=HS
+     '((run . "go"))
      (immutable-hashmap->alist H))))
 
 ;; compile-cli
@@ -632,22 +643,22 @@
   (define result (compiler input))
 
   (assert= result
-           '((MAIN (and (= "run" run)
+           '((MAIN (and (= "run" "run")
                         (* (call OPTS*))
                         (call DATE)
-                        (any <end-statement>)))
-             (OPTS* (or (and (= "--opts" --opts) (* (any* <opts...>*)))
-                        (and (= "--param1" --param1) (any <arg1>))
-                        (and (= "--flag1" --flag1))))
-             (DATE (or (and (= "may" may)
-                            (any <nth>)
+                        (any "<end-statement>")))
+             (OPTS* (or (and (= "--opts" "--opts") (* (any* "<opts...>*")))
+                        (and (= "--param1" "--param1") (any "<arg1>"))
+                        (and (= "--flag1" "--flag1"))))
+             (DATE (or (and (= "may" "may")
+                            (any "<nth>")
                             (? (call MAY-OPTS?)))
-                       (and (= "june" june)
-                            (any <nth>)
+                       (and (= "june" "june")
+                            (any "<nth>")
                             (* (call JUNE-OPTS*)))))
-             (MAY-OPTS? (and (= "-p" -p) (any <x>)))
+             (MAY-OPTS? (and (= "-p" "-p") (any "<x>")))
              (JUNE-OPTS*
-              (or (and (= "-f3" -f3)) (and (= "-f4" -f4)))))))
+              (or (and (= "-f3" "-f3")) (and (= "-f4" "-f4")))))))
 
 ;; parse-cli
 (let ()
@@ -685,11 +696,14 @@
 (let ()
   (define M
     (make-cli
-     (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
-          (may <nth> -p <x>)
-          (june <nth> -f3? -f4?)
-          (<kek*>)
-          <end-statement>)
+     (run OPTS* DATE <end-statement>
+          OPTS*   : --opts <opts...>*
+                  / --param1 <arg1>
+                  / --flag1
+          DATE    : may  <nth> MAY-OPTS?
+                  / june <nth> JUNE-OPTS*
+          MAY-OPTS?    : -p <x>
+          JUNE-OPTS*   : -f3 / -f4)
      :synonym (run let go)))
 
   (define M2
@@ -699,7 +713,7 @@
 
   (assert
    (M (hashmap)
-      (list "go" "--flag1" "somefile" "june" "5" "the-end")))
+      (list "go" "--param1" "somefile" "june" "5" "the-end")))
 
   (assert (M2 (hashmap) (list "go")))
   (assert (M2 (hashmap) (list "go" "--flag1")))
@@ -711,16 +725,19 @@
 
   (define f
     (lambda-cli
-     (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
-          (may <nth> -p <x>)
-          (june <nth> -f3? -f4?)
-          (<kek*>)
-          <end-statement>)
+     (run OPTS* DATE <end-statement>
+          OPTS*   : --opts <opts...>*
+          /         --param1 <arg1>
+          /         --flag1
+          DATE    : may  <nth> MAY-OPTS?
+          /         june <nth> JUNE-OPTS*
+          MAY-OPTS?    : -p <x>
+          JUNE-OPTS*   : -f3 / -f4)
      :synonym (run go)
      (string-append run "-suffix")))
 
   (assert= "go-suffix"
-           (f (list "go" "--flag1" "somefile" "june" "5" "the-end"))))
+           (f (list "go" "--param1" "somefile" "june" "5" "the-end"))))
 
 ;; with-cli
 (let ()
@@ -729,18 +746,23 @@
     (define ret
       (parameterize
           ((command-line-argumets/p
-            (list "go" "--flag1" "-o" "fast" "-O1!" "somefile" "june" "5" "the-end")))
+            (list "go" "--flag1" "-o" "fast" "-O1!" "june" "5" "the-end")))
 
         (with-cli
-         (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
-              (may <nth> -p <x>)
-              (june <nth> -f3? -f4?)
-              <end-statement>)
+         (run OPTS* DATE <end-statement>
+              OPTS*   : --opts <opts...>+
+              /         --param1 <arg1>
+              /         --flag1
+              /         --no-flag1
+              DATE    : may  <nth> MAY-OPTS?
+              /         june <nth> JUNE-OPTS*
+              MAY-OPTS?    : -p <x>
+              JUNE-OPTS*   : -f3 / -f4)
 
-         ;; :exclusive (--flag1? --no-flag1?)
+         ;; :exclusive (--flag1 --no-flag1)
          :synonym (--opts --options -o)
          :synonym (run let go)
-         :type (<opts*> '("fast" -O0! -O1! -O2! -O3!))
+         :type (<opts...>+ '("fast" -O0! -O1! -O2! -O3!))
          :type (<nth> 'number)
          :help (<nth> "day of month")
          :default (<arg1> 'defaultarg1)
@@ -750,7 +772,7 @@
          ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
 
          (assert= <arg1> "defaultarg1")
-         (assert=HS <opts*> '("fast" -O1!)) ;; note the different types
+         (assert=HS <opts...>+ '("fast" -O1!)) ;; note the different types
 
          (string-append "prefix-" run "-"
                         (number->string (+ <nth> <nth>))))))
@@ -765,13 +787,14 @@
           (list "--base" "10" "--soft")))
 
       (with-cli
-       (--in <input-type>
-             --soft?
-             --out <output-type>
-             --base <base-raw>
-             --inbase <inbase-raw>
-             --infinite?
-             )
+       (OPTS*
+        OPTS* : --in <input-type>
+        /       --soft
+        /       --out <output-type>
+        /       --base <base-raw>
+        /       --inbase <inbase-raw>
+        /       --infinite
+        )
 
        :type (<input-type> in/out-types)
        :type (<output-type> in/out-types)
@@ -783,7 +806,71 @@
        :default (<base-raw> 'default)
        :default (<inbase-raw> 2)
 
-       (assert --soft?)))))
+       (assert= 10 <base-raw>)
+       (assert --soft))))
+
+  (let ()
+    (define in/out-types '(raw word normal))
+
+    (parameterize
+        ((command-line-argumets/p
+          (list "--base" "10" "--soft" "--base" "13")))
+
+      (with-cli
+       (OPTS*
+        OPTS* : --in <input-type>
+        /       --soft
+        /       --out <output-type>
+        /       --base <base-raw>
+        /       --inbase <inbase-raw>
+        /       --infinite
+        )
+
+       :type (<input-type> in/out-types)
+       :type (<output-type> in/out-types)
+       :default (<input-type> 'normal)
+       :default (<output-type> 'normal)
+
+       :type (<base-raw> in/out-types 'number)
+       :type (<inbase-raw> in/out-types 'number)
+       :default (<base-raw> 'default)
+       :default (<inbase-raw> 2)
+
+       (assert= 13 <base-raw>)
+       (assert --soft))))
+
+  (let ()
+    (define in/out-types '(raw word normal))
+
+    (parameterize
+        ((command-line-argumets/p
+          (list "--base" "10" "--soft" "--base" "13" "--in" "raw" "--in" "word")))
+
+      (with-cli
+       (OPTS*
+        OPTS* : --in <input-type>
+        /       --soft
+        /       --out <output-type>
+        /       --base <base-raw>
+        /       --inbase <inbase-raw>
+        /       --infinite
+        )
+
+       :type (<input-type> in/out-types)
+       :type (<output-type> in/out-types)
+       :default (<input-type> 'normal)
+       :default (<output-type> 'normal)
+
+       :type (<base-raw> in/out-types 'number)
+       :type (<inbase-raw> in/out-types 'number)
+       :default (<base-raw> 'default)
+       :default (<inbase-raw> 2)
+
+       (assert= 13 <base-raw>)
+       (assert= 'word <input-type>)
+       (assert --soft))))
+
+  )
 
 ;; system-re
 (let ()

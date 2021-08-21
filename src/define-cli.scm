@@ -14,9 +14,9 @@
 
 %run guile
 
-%use (parse-cli:IR->Regex parse-cli:make-IR) "./parse-cli.scm"
+%use (CFG-CLI->CFG-lang) "./compile-cli.scm"
 %use (get-command-line-arguments) "./get-command-line-arguments.scm"
-%use (make-regex-machine*) "./regex-machine.scm"
+%use (make-cfg-machine*) "./cfg-machine.scm"
 %use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
@@ -28,6 +28,8 @@
 %use (list-intersperse) "./list-intersperse.scm"
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
+
+%use (debug) "./debug.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
@@ -46,9 +48,8 @@
    (else x)))
 
 (define (make-cli/f/basic cli-decl synonyms)
-  ((compose make-regex-machine*
-            (parse-cli:IR->Regex synonyms)
-            parse-cli:make-IR)
+  ((compose make-cfg-machine*
+            (CFG-CLI->CFG-lang synonyms))
    cli-decl))
 
 (define (define-cli:raisu/default-exit type . args)
@@ -257,11 +258,7 @@
   (hashmap-ref (define-cli:current-hashmap) x #f))
 
 (define-syntax-rule (define-cli:let1 x)
-  (let* ((s0 (symbol->string (quote x)))
-         (s1 (if (string-suffix? "?" s0)
-                 ((compose list->string list-init string->list) s0)
-                 s0)))
-    (define-cli:lookup s1)))
+  (define-cli:lookup (~a (quote x))))
 
 (define-syntax define-cli:let-list
   (syntax-rules ()
@@ -281,9 +278,9 @@
      (let* ((H (hashmap))
             (M (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms)))
        (lambda (args)
-         (parameterize ((define-cli:current-hashmap H))
-           (and (M H args)
-                (define-cli:let-tree cli-decl . bodies))))))))
+         (when (M H args)
+           (parameterize ((define-cli:current-hashmap H))
+             (define-cli:let-tree cli-decl . bodies))))))))
 
 (define-syntax-rule (lambda-cli cli-decl . args)
   (make-cli-helper-start make-cli/lambda-cli/wrapper cli-decl args))

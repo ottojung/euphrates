@@ -179,22 +179,24 @@
                  (values (list->string (reverse elem-chars-r))
                          transformations)))))))
 
+    (define selem (~a elem))
+
     (define initial
       (cond
        ((hashset-ref production-names elem)
         (list 'call elem))
        ((placeholder-word? stripped)
         (if (multi-word? stripped)
-            (list 'any* elem)
-            (list 'any elem)))
+            (list 'any* selem)
+            (list 'any selem)))
        (else ;; vv Constant vv
-        (eqq stripped elem))))
+        (eqq stripped selem))))
 
     (transform initial))
 
   ;; Give regex elements additional structure.
   ;; So that this `(and --param1 <arg1>)`
-  ;;      becomes `(and (= "--param1" param1) (any <arg1>))`
+  ;;      becomes `(and (= "--param1" "param1") (any "<arg1>"))`
   (define (pimp-regex production-names regex)
     (let loop ((regex regex))
       (if (pair? regex)
