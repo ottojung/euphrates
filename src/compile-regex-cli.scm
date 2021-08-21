@@ -16,14 +16,14 @@
 
 ;; Deprecated in favor of CFG-machine based DSL
 
-%var parse-cli:make-IR
-%var parse-cli:IR->Regex
+%var compile-regex-cli:make-IR
+%var compile-regex-cli:IR->Regex
 
 %use (group-by/sequential group-by/sequential*) "./group-by-sequential.scm"
 %use (raisu) "./raisu.scm"
 %use (list-init) "./list-init.scm"
 
-(define (parse-cli:make-IR body)
+(define (compile-regex-cli:make-IR body)
   (define (type-cli body)
     (if (pair? body)
         (cons 'lst (map type-cli body))
@@ -121,7 +121,7 @@
 
   grouped)
 
-(define (parse-cli:IR->Regex synonyms0)
+(define (compile-regex-cli:IR->Regex synonyms0)
   (define synonyms
     (map (lambda (x) (map symbol->string x)) synonyms0))
   (define (eqq value binding)

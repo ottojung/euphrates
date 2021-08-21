@@ -52,7 +52,7 @@
 %use (comp appcomp) "./src/comp.scm"
 %use (make-regex-machine*) "./src/regex-machine.scm"
 %use (make-cfg-machine) "./src/cfg-machine.scm"
-%use (parse-cli:IR->Regex parse-cli:make-IR) "./src/parse-cli.scm"
+%use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./src/compile-regex-cli.scm"
 %use (make-cli lambda-cli with-cli define-cli:current-hashmap) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
 %use (system-re) "./src/system-re.scm"
@@ -660,7 +660,7 @@
              (JUNE-OPTS*
               (or (and (= "-f3" "-f3")) (and (= "-f4" "-f4")))))))
 
-;; parse-cli
+;; compile-regex-cli
 (let ()
   (let ()
     (define cli-decl
@@ -670,9 +670,9 @@
             (<kek*>)
             <end-statement>))
     (define IR
-      (parse-cli:make-IR cli-decl))
+      (compile-regex-cli:make-IR cli-decl))
     (define Regex
-      ((parse-cli:IR->Regex '((run let go))) IR))
+      ((compile-regex-cli:IR->Regex '((run let go))) IR))
     (define M
       (make-regex-machine* Regex))
 
