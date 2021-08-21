@@ -34,15 +34,17 @@
 %use (list-fold) "./list-fold.scm"
 %use (drop-while) "./drop-while.scm"
 %use (CFG-lang-modifier-char?) "./compile-cfg-cli.scm"
-
-;; FIXME: remove below imports from ./define-cli.scm
+%use (print-in-window) "./print-in-window.scm"
 %use (unlines) "./unlines.scm"
 %use (conss) "./conss.scm"
 %use (unwords) "./unwords.scm"
+%use (words) "./words.scm"
 %use (list-intersperse) "./list-intersperse.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-set! hashmap-ref hashmap->alist) "./ihashmap.scm"
+%use (map/flatten) "./map-flatten.scm"
+%use (system-environment-get) "./system-environment.scm"
 
 (define (CFG-AST->CFG-CLI-help helps types defaults)
   (define arg-helps (filter list? helps))
@@ -62,6 +64,10 @@
 
   (lambda (cli-decl)
     (define AST (CFG-CLI->CFG-AST cli-decl))
+    (define window-width
+      (let* ((w (system-environment-get "COLUMNS"))
+             (n (string->number w)))
+        (or n 80)))
 
     (define flattened
       (list-deduplicate
@@ -100,9 +106,16 @@
        (name (map car fH-alist))
        (max acc (string-length name))))
 
+    (define option-start-x (+ 3 maximum-option-size))
+
     (define (pad-option n s)
       (display (list->string (replicate n #\space)))
       (string-pad-R s (+ 3 (- maximum-option-size n)) #\space))
+
+    (define (print-option-parts parts)
+      (print-in-window
+       option-start-x window-width option-start-x #\space
+       parts))
 
     (define maximum-production-size
       (list-fold
@@ -110,14 +123,16 @@
        (name (map car (cdr AST)))
        (max acc (string-length (strip-modifiers (~a name))))))
 
+    (define production-start-x (+ 3 maximum-production-size))
+
     (define (pad-production n s)
       (display (list->string (replicate n #\space)))
       (string-pad-R s (+ 3 (- maximum-production-size n)) #\space))
 
     (define (show-type T)
       (if (list? T)
-          (unwords (list-intersperse "|" (map (compose ~s ~a) T)))
-          (~a T)))
+          (map (compose ~s ~a) T)
+          (list (~a T))))
 
     (define (display-options)
       (display "Options:") (newline)
@@ -134,16 +149,16 @@
 
                (let ((description (assoc/false #f props)))
                  (when description
-                   (display (car description))))
+                   (print-option-parts (list-intersperse " " (words (car description))))))
 
                (let ((type (assoc/false 'type props)))
                  (when type
                    (newline)
                    (display (pad-option 4 "type:"))
-                   (let ((val (if (list? type)
-                                  (unwords (list-intersperse "|" (map show-type type)))
-                                  type)))
-                     (display val))))
+                   (print-option-parts
+                    (if (list? type)
+                        (list-intersperse " | " (map/flatten show-type type))
+                        (list (~a type))))))
 
                (let ((def (assoc/false 'default props)))
                  (when def
