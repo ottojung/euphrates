@@ -30,14 +30,15 @@
 ;;     JUNE-OPTS* : -f3 / -f4)
 ;;
 
+%var CFG-AST->CFG-lang
 %var CFG-CLI->CFG-lang
 
 %use (~a) "./tilda-a.scm"
-%use (list-split-on) "./list-split-on.scm"
 %use (raisu) "./raisu.scm"
 %use (make-hashset hashset-ref hashset->list) "./ihashset.scm"
+%use (CFG-CLI->CFG-AST) "./parse-cfg-cli.scm"
 
-(define (CFG-CLI->CFG-lang synonyms0)
+(define (CFG-AST->CFG-lang synonyms0)
   (define synonyms
     (map (lambda (x) (map ~a x)) synonyms0))
 
@@ -48,110 +49,6 @@
         (let ((all (cons value (cdr get))))
           `(or ,@(map single all)))
         (single value)))
-
-  (define (structurize body)
-    ;; Example body:
-    ;;   '(run OPTS* DATE <end-statement>
-    ;;     OPTS*   : --opts <opts...>*
-    ;;             / --param1 <arg1>
-    ;;             / --flag1
-    ;;     DATE    : may  <nth> MAY-OPTS?
-    ;;             / june <nth> JUNE-OPTS*
-    ;;     MAY-OPTS?    : -p <x>
-    ;;     JUNE-OPTS*   : -f3 / -f4)
-
-    (define shifted-semilocons
-      (let loop ((body body) (last ':))
-        (if (null? body)
-            (list last)
-            (let ((cur (car body)))
-              (if (equal? ': cur)
-                  (if (equal? ': last)
-                      (raisu 'cannot-start-with-a-semicolon last body)
-                      (cons cur (loop (cdr body) last)))
-                  (cons last (loop (cdr body) cur)))))))
-
-    ;; Example shifted-semilocons:
-    ;;   '(: run OPTS* DATE <end-statement>
-    ;;     : OPTS*   --opts <opts...>*
-    ;;             / --param1 <arg1>
-    ;;             / --flag1
-    ;;     : DATE    may  <nth> MAY-OPTS?
-    ;;             / june <nth> JUNE-OPTS*
-    ;;     : MAY-OPTS?    -p <x>
-    ;;     : JUNE-OPTS*   -f3 / -f4)
-
-    (define grouped
-      (list-split-on (lambda (word) (eq? ': word)) shifted-semilocons))
-
-    ;; Example grouped:
-    ;;   '((run OPTS* DATE <end-statement>)
-    ;;     (OPTS*    --opts <opts...>*
-    ;;             / --param1 <arg1>
-    ;;             / --flag1)
-    ;;     (DATE     may  <nth> MAY-OPTS?
-    ;;             / june <nth> JUNE-OPTS*)
-    ;;     (MAY-OPTS?    -p <x>)
-    ;;     (JUNE-OPTS*   -f3 / -f4))
-
-    (define main-name 'MAIN)
-    (define decorated-first
-      (cons (cons main-name (car grouped))
-            (cdr grouped)))
-
-    ;; Example decorated-first:
-    ;;   '((MAIN     run OPTS* DATE <end-statement>)
-    ;;     (OPTS*    --opts <opts...>*
-    ;;             / --param1 <arg1>
-    ;;             / --flag1)
-    ;;     (DATE     may  <nth> MAY-OPTS?
-    ;;             / june <nth> JUNE-OPTS*)
-    ;;     (MAY-OPTS?    -p <x>)
-    ;;     (JUNE-OPTS*   -f3 / -f4))
-
-    (define split-by-cases
-      (map
-       (lambda (production)
-         (define name (car production))
-         (define regex (cdr production))
-         (cons name (list-split-on (lambda (word) (equal? '/ word)) regex)))
-       decorated-first))
-
-    ;; Example split-by-cases:
-    ;;   '((MAIN   (run OPTS* DATE <end-statement>))
-    ;;     (OPTS*  (--opts <opts...>*)
-    ;;             (--param1 <arg1>)
-    ;;             (--flag1))
-    ;;     (DATE   (may  <nth> MAY-OPTS?)
-    ;;             (june <nth> JUNE-OPTS*))
-    ;;     (MAY-OPTS?    (-p <x>))
-    ;;     (JUNE-OPTS*   (-f3) (-f4)))
-
-    (define (andify regex)
-      (cons 'and regex))
-    (define (orify cases)
-      (if (null? (cdr cases))
-          (list (andify (car cases)))
-          (list (cons 'or (map andify cases)))))
-    (define anded-and-ored
-      (map
-       (lambda (production)
-         (define name (car production))
-         (define cases (cdr production))
-         (cons name (orify cases)))
-       split-by-cases))
-
-    ;; Example anded-and-ored:
-    ;;   '((MAIN   (and run OPTS* DATE <end-statement>))
-    ;;     (OPTS*  (or (and --opts <opts...>*)
-    ;;                 (and --param1 <arg1>)
-    ;;                 (and --flag1)))
-    ;;     (DATE   (or (and may  <nth> MAY-OPTS?)
-    ;;                 (and june <nth> JUNE-OPTS*)))
-    ;;     (MAY-OPTS?    (and -p <x>))
-    ;;     (JUNE-OPTS*   (or (and -f3) (and -f4))))
-
-    anded-and-ored)
 
   (define (placeholder-word? elem-string)
     (and (string-prefix? "<" elem-string)
@@ -204,11 +101,33 @@
           (cons (car regex) (map loop (cdr regex)))
           (pimp-regex-element production-names regex))))
 
-  (lambda (body)
-    (define structurized (structurize body))
+  (lambda (AST)
+    (define (andify regex)
+      (cons 'and regex))
+    (define (orify cases)
+      (if (null? (cdr cases))
+          (list (andify (car cases)))
+          (list (cons 'or (map andify cases)))))
+    (define anded-and-ored
+      (map
+       (lambda (production)
+         (define name (car production))
+         (define cases (cdr production))
+         (cons name (orify cases)))
+       AST))
+
+    ;; Example anded-and-ored:
+    ;;   '((MAIN   (and run OPTS* DATE <end-statement>))
+    ;;     (OPTS*  (or (and --opts <opts...>*)
+    ;;                 (and --param1 <arg1>)
+    ;;                 (and --flag1)))
+    ;;     (DATE   (or (and may  <nth> MAY-OPTS?)
+    ;;                 (and june <nth> JUNE-OPTS*)))
+    ;;     (MAY-OPTS?    (and -p <x>))
+    ;;     (JUNE-OPTS*   (or (and -f3) (and -f4))))
 
     (define production-names ;; : listof symbol?
-      (make-hashset (map car structurized)))
+      (make-hashset (map car anded-and-ored)))
 
     (define pimped
       (map
@@ -216,7 +135,12 @@
          (define name (car production))
          (define regex (cadr production))
          (list name (pimp-regex production-names regex)))
-       structurized))
+       anded-and-ored))
 
     pimped))
+
+(define (CFG-CLI->CFG-lang synonyms0)
+  (define AST->lang (CFG-AST->CFG-lang synonyms0))
+  (lambda (cli-body)
+    (AST->lang (CFG-CLI->CFG-AST cli-body))))
 
