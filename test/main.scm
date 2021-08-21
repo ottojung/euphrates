@@ -870,6 +870,41 @@
        (assert= 'word <input-type>)
        (assert --soft))))
 
+  (let ()
+    (define in/out-types '(raw word normal))
+
+    (parameterize
+        ((command-line-argumets/p
+          (list "--base" "10" "--soft" "--base" "13" "--hard" "--in" "raw" "--in" "word")))
+
+      (with-cli
+       (OPTS*
+        OPTS* : --in <input-type>
+        /       --soft
+        /       --hard
+        /       --out <output-type>
+        /       --base <base-raw>
+        /       --inbase <inbase-raw>
+        /       --infinite
+        )
+
+       :type (<input-type> in/out-types)
+       :type (<output-type> in/out-types)
+       :default (<input-type> 'normal)
+       :default (<output-type> 'normal)
+
+       :type (<base-raw> in/out-types 'number)
+       :type (<inbase-raw> in/out-types 'number)
+       :default (<base-raw> 'default)
+       :default (<inbase-raw> 2)
+
+       :exclusive (--soft --hard)
+
+       (assert= 13 <base-raw>)
+       (assert= 'word <input-type>)
+       (assert --hard)
+       (assert (not --soft)))))
+
   )
 
 ;; system-re

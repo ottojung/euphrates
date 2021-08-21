@@ -209,7 +209,19 @@
        (list "")
        (print-list single-helps)))))
 
-  (define M (make-cli/f/basic cli-decl synonyms))
+  (define (handle-exclusive H)
+    (lambda (excl)
+      (define main-name (tostring (car excl)))
+      (define secondary-names (cdr excl))
+      (define true-value (define-cli:lookup/H H main-name))
+
+      (when true-value
+        (unless (equal? true-value main-name)
+          (hashmap-set! H main-name #f)
+          (hashmap-set! H true-value true-value)))))
+
+  (define all-synonyms (append exclusives synonyms))
+  (define M (make-cli/f/basic cli-decl all-synonyms))
 
   (lambda (H T)
     (define R (M H T))
@@ -217,16 +229,20 @@
     (unless R
       (define-cli:raisu 'NO-MATCH (make-help)))
 
+    (for-each (handle-exclusive H) exclusives)
     (for-each (handle-default H) defaults)
     (for-each (handle-type H) types)
 
-    M)) ;; TODO
+    (when #f #f)))
 
 (define-syntax make-cli-helper
   (syntax-rules (:default :example :help :type :exclusive :synonym)
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:synonym x . xs))
      (make-cli-helper
       f cli-decl defaults examples helps types exclusives ((quote x) . synonyms) xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:exclusive x . xs))
+     (make-cli-helper
+      f cli-decl defaults examples helps types ((quote x) . exclusives) synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:help x . xs))
      (make-cli-helper
       f cli-decl defaults examples ((quote x) . helps) types exclusives synonyms xs))
@@ -254,11 +270,13 @@
 
 (define define-cli:current-hashmap
   (make-parameter #f))
+(define (define-cli:lookup/H H x)
+  (hashmap-ref H (~a x) #f))
 (define (define-cli:lookup x)
-  (hashmap-ref (define-cli:current-hashmap) x #f))
+  (define-cli:lookup/H (define-cli:current-hashmap) x))
 
 (define-syntax-rule (define-cli:let1 x)
-  (define-cli:lookup (~a (quote x))))
+  (define-cli:lookup (quote x)))
 
 (define-syntax define-cli:let-list
   (syntax-rules ()
