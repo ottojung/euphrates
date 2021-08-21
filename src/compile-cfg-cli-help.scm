@@ -45,6 +45,7 @@
 %use (hashmap-set! hashmap-ref hashmap->alist) "./ihashmap.scm"
 %use (map/flatten) "./map-flatten.scm"
 %use (system-environment-get) "./system-environment.scm"
+%use (alphanum/alphabet/index) "./alphanum-alphabet.scm"
 
 (define (CFG-AST->CFG-CLI-help helps types defaults)
   (define arg-helps (filter list? helps))
@@ -95,10 +96,15 @@
       (let ((x (assoc name lst)))
         (and x (cdr x))))
 
+    (define (string-filter-non-alpha s)
+      (list->string
+       (filter alphanum/alphabet/index (string->list s))))
+
     (define fH-alist
       (sort (hashmap->alist fH)
             (lambda (a b)
-              (string<? (car a) (car b)))))
+              (string<? (string-filter-non-alpha (car a))
+                        (string-filter-non-alpha (car b))))))
 
     (define maximum-option-size
       (list-fold
