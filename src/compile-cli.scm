@@ -36,7 +36,6 @@
 %use (list-split-on) "./list-split-on.scm"
 %use (raisu) "./raisu.scm"
 %use (make-hashset hashset-ref hashset->list) "./ihashset.scm"
-%use (list-prefix?) "./list-prefix-q.scm"
 
 (define (CFG-CLI->CFG-lang synonyms0)
   (define synonyms
@@ -159,8 +158,7 @@
          (string-suffix? ">" elem-string)))
 
   (define (multi-word? elem-string)
-    (define lst (reverse (string->list elem-string)))
-    (list-prefix? '(#\> #\. #\.) lst))
+    (string-suffix? "..>" elem-string))
 
   (define (cons-transform c f)
     (compose f (lambda (x)
