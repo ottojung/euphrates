@@ -679,35 +679,7 @@
     (assert R)
     (assert=HS
      (hashmap->alist H)
-     '(("<file>" . "somefile") ("<end-statement>" . "the-end") ("--flag1" . "--flag1") ("run" . "go") ("<nth>" . "5") ("june" . "june"))))
-
-  (let ()
-    (define in/out-types '(raw word normal))
-
-    (parameterize
-        ((command-line-argumets/p
-          (list "--base" "10" "--soft")))
-
-      (with-cli
-       (--in <input-type>
-             --soft?
-             --out <output-type>
-             --base <base-raw>
-             --inbase <inbase-raw>
-             --infinite?
-             )
-
-       :type (<input-type> in/out-types)
-       :type (<output-type> in/out-types)
-       :default (<input-type> 'normal)
-       :default (<output-type> 'normal)
-
-       :type (<base-raw> in/out-types 'number)
-       :type (<inbase-raw> in/out-types 'number)
-       :default (<base-raw> 'default)
-       :default (<inbase-raw> 2)
-
-       (assert --soft?)))))
+     '(("<file>" . "somefile") ("<end-statement>" . "the-end") ("--flag1" . "--flag1") ("run" . "go") ("<nth>" . "5") ("june" . "june")))))
 
 ;; make-cli
 (let ()
@@ -752,37 +724,66 @@
 
 ;; with-cli
 (let ()
+  (let ()
 
-  (define ret
+    (define ret
+      (parameterize
+          ((command-line-argumets/p
+            (list "go" "--flag1" "-o" "fast" "-O1!" "somefile" "june" "5" "the-end")))
+
+        (with-cli
+         (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
+              (may <nth> -p <x>)
+              (june <nth> -f3? -f4?)
+              <end-statement>)
+
+         ;; :exclusive (--flag1? --no-flag1?)
+         :synonym (--opts --options -o)
+         :synonym (run let go)
+         :type (<opts*> '("fast" -O0! -O1! -O2! -O3!))
+         :type (<nth> 'number)
+         :help (<nth> "day of month")
+         :default (<arg1> 'defaultarg1)
+
+         :help "general help here"
+         :help (june "is a cool month")
+         ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
+
+         (assert= <arg1> "defaultarg1")
+         (assert=HS <opts*> '("fast" -O1!)) ;; note the different types
+
+         (string-append "prefix-" run "-"
+                        (number->string (+ <nth> <nth>))))))
+
+    (assert= ret "prefix-go-10"))
+
+  (let ()
+    (define in/out-types '(raw word normal))
+
     (parameterize
         ((command-line-argumets/p
-          (list "go" "--flag1" "-o" "fast" "-O1!" "somefile" "june" "5" "the-end")))
+          (list "--base" "10" "--soft")))
 
       (with-cli
-       (run --opts <opts*> --param1 <arg1> --flag1? --no-flag1? <file>
-            (may <nth> -p <x>)
-            (june <nth> -f3? -f4?)
-            <end-statement>)
+       (--in <input-type>
+             --soft?
+             --out <output-type>
+             --base <base-raw>
+             --inbase <inbase-raw>
+             --infinite?
+             )
 
-       ;; :exclusive (--flag1? --no-flag1?)
-       :synonym (--opts --options -o)
-       :synonym (run let go)
-       :type (<opts*> '("fast" -O0! -O1! -O2! -O3!))
-       :type (<nth> 'number)
-       :help (<nth> "day of month")
-       :default (<arg1> 'defaultarg1)
+       :type (<input-type> in/out-types)
+       :type (<output-type> in/out-types)
+       :default (<input-type> 'normal)
+       :default (<output-type> 'normal)
 
-       :help "general help here"
-       :help (june "is a cool month")
-       ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
+       :type (<base-raw> in/out-types 'number)
+       :type (<inbase-raw> in/out-types 'number)
+       :default (<base-raw> 'default)
+       :default (<inbase-raw> 2)
 
-       (assert= <arg1> "defaultarg1")
-       (assert=HS <opts*> '("fast" -O1!)) ;; note the different types
-
-       (string-append "prefix-" run "-"
-                      (number->string (+ <nth> <nth>))))))
-
-  (assert= ret "prefix-go-10"))
+       (assert --soft?)))))
 
 ;; system-re
 (let ()
