@@ -14,7 +14,7 @@
 
 %run guile
 
-%use (CFG-CLI->CFG-lang) "./compile-cli.scm"
+%use (CFG-CLI->CFG-lang) "./compile-cfg-cli.scm"
 %use (get-command-line-arguments) "./get-command-line-arguments.scm"
 %use (make-cfg-machine*) "./cfg-machine.scm"
 %use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"

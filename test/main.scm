@@ -68,7 +68,7 @@
 %use (immutable-hashmap) "./src/immutable-hashmap.scm"
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap->alist) "./src/i-immutable-hashmap.scm"
 %use (list-split-on) "./src/list-split-on.scm"
-%use (CFG-CLI->CFG-lang) "./src/compile-cli.scm"
+%use (CFG-CLI->CFG-lang) "./src/compile-cfg-cli.scm"
 
 (let ()
   (catch-any
@@ -624,7 +624,7 @@
      '((run . "go"))
      (immutable-hashmap->alist H))))
 
-;; compile-cli
+;; compile-cfg-cli
 (let ()
   (define input
     '(run OPTS* DATE <end-statement>
