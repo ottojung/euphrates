@@ -19,18 +19,11 @@
 %use (make-cfg-machine*) "./cfg-machine.scm"
 %use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"
 %use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
+%use (hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (~a) "./tilda-a.scm"
-%use (unlines) "./unlines.scm"
-%use (unwords) "./unwords.scm"
-%use (conss) "./conss.scm"
-%use (list-deduplicate) "./list-deduplicate.scm"
-%use (list-intersperse) "./list-intersperse.scm"
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
 %use (CFG-AST->CFG-CLI-help) "./compile-cfg-cli-help.scm"
-
-%use (debug) "./debug.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
