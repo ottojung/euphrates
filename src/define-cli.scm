@@ -28,6 +28,7 @@
 %use (list-intersperse) "./list-intersperse.scm"
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
+%use (CFG-AST->CFG-CLI-help) "./compile-cfg-cli-help.scm"
 
 %use (debug) "./debug.scm"
 
@@ -143,73 +144,6 @@
       (unless (hashmap-ref H (tostring (car d)) #f)
         (hashmap-set! H (tostring (car d)) (tostring (cadr d))))))
 
-  (define (make-help)
-    (define arg-helps (filter list? helps))
-    (define single-helps (filter (negate list?) helps))
-
-    (define (flatten* T)
-      (if (list? T)
-          (apply append (map flatten* T))
-          (list T)))
-
-    (define flattened
-      (list-deduplicate
-       (flatten* cli-decl)))
-
-    (define fH (hashmap))
-
-    (define _
-      (for-each
-       (lambda (name)
-         (map
-          (lambda (L T)
-            (define A (assoc name L))
-            (when A
-              (let ((val (if (list? (cdr A))
-                             (apply string-append (map ~a (list-intersperse " | " (cdr A))))
-                             (cdr A))))
-                (hashmap-set! fH name (cons (cons T val)
-                                            (hashmap-ref fH name '()))))))
-          (list arg-helps types defaults)
-          '(#f type default)))
-       flattened))
-
-    (define (fmt-property x)
-      (if (car x)
-          (string-append "[" (~a (car x)) ": " (~a (cdr x)) "]")
-          (~a (cdr x))))
-
-    (define (assoc/empty name lst)
-      (let ((x (assoc name lst)))
-        (if x (fmt-property x) "")))
-
-    (define (print-list lst)
-      (map (lambda (s)
-             (if (list? s)
-                 (let* ((name (car s))
-                        (props (cdr s)))
-                   (string-append
-                    "\t"
-                    (~a name)
-                    "\t"
-                    (unwords
-                     (list
-                      (assoc/empty #f props)
-                      (assoc/empty 'type props)
-                      (assoc/empty 'default props)))))
-                 (string-append "\t" s)))
-           lst))
-
-    (unlines
-     (conss
-      "USAGE:"
-      (~a cli-decl)
-      ""
-      (append
-       (print-list (hashmap->alist fH))
-       (list "")
-       (print-list single-helps)))))
-
   (define (handle-exclusive H)
     (lambda (excl)
       (define main-name (tostring (car excl)))
@@ -217,7 +151,8 @@
       (define true-value (define-cli:lookup/H H main-name))
 
       (when true-value
-        (unless (equal? true-value main-name)
+        (unless (or (equal? true-value #t)
+                    (equal? true-value main-name))
           (hashmap-set! H main-name #f)
           (hashmap-set! H true-value true-value)))))
 
@@ -225,12 +160,13 @@
   (define M (make-cli/f/basic cli-decl all-synonyms))
 
   (lambda (H T)
+    (define _123 (for-each (handle-default H) defaults))
     (define R (M H T))
 
     (unless R
-      (define-cli:raisu 'NO-MATCH (make-help)))
+      (define-cli:raisu 'NO-MATCH
+        ((CFG-AST->CFG-CLI-help helps types defaults) cli-decl)))
 
-    (for-each (handle-default H) defaults)
     (for-each (handle-exclusive H) exclusives)
     (for-each (handle-type H) types)
 

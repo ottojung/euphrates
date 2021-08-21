@@ -53,7 +53,7 @@
 %use (make-regex-machine*) "./src/regex-machine.scm"
 %use (make-cfg-machine) "./src/cfg-machine.scm"
 %use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./src/compile-regex-cli.scm"
-%use (make-cli lambda-cli with-cli define-cli:current-hashmap) "./src/define-cli.scm"
+%use (make-cli lambda-cli with-cli define-cli:current-hashmap make-cli-with-handler) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
 %use (system-re) "./src/system-re.scm"
 %use (number->number-list number-list->number number->number-list) "./src/number-list.scm"
@@ -69,6 +69,8 @@
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap->alist) "./src/i-immutable-hashmap.scm"
 %use (list-split-on) "./src/list-split-on.scm"
 %use (CFG-CLI->CFG-lang) "./src/compile-cfg-cli.scm"
+%use (CFG-AST->CFG-CLI-help) "./src/compile-cfg-cli-help.scm"
+%use (current-program-path/p) "./src/current-program-path-p.scm"
 
 (let ()
   (catch-any
@@ -1055,6 +1057,86 @@
   (assert= '()
            (list-split-on even? (list 2 4 6)))
   )
+
+;; ;; compile-cfg-cli-help
+;; (let ()
+
+;;   (define MAX-BASE 90)
+;;   (define DEFAULT-BASE 64)
+;;   (define ALPHANUM-BASE 62)
+;;   (define LOWER-BASE 36)
+
+;;   (define bases
+;;     `((hex . 16)
+;;       (binary . 2)
+;;       (octal . 8)
+;;       (max . ,MAX-BASE)
+;;       (lower . ,LOWER-BASE)
+;;       (alphanum . ,ALPHANUM-BASE)
+;;       (alpha . alpha)
+;;       (default . ,DEFAULT-BASE)
+;;       (base64 . base64)))
+;;   (define base-types
+;;     (map car bases))
+
+;;   (define in/out-types '(raw word normal))
+
+;;   (let ()
+;;     (define-syntax-rule (test-bodies cli-decl defaults examples helps types exclusives synonyms bodies)
+;;       ((begin . bodies) (quote cli-decl) defaults examples helps types exclusives synonyms))
+
+;;     (make-cli-with-handler
+;;      test-bodies
+
+;;      (OPTION*
+;;       OPTION* : --in <input-type>
+;;       /         --out <output-type>
+;;       /         --inbase <inbase-type>
+;;       /         --base <base-type>
+;;       /         --soft
+;;       /         --hard
+;;       /         --finite
+;;       /         --infinite
+;;       )
+
+;;      :help (<input-type> "type of input bytes that come from stdin")
+;;      :help (<output-type> "type of out bytes that go to stdout")
+;;      :help (<inbase-type> "base of input bytes that come from stdin")
+;;      :help (<base-type> "base of out bytes that go to stdout")
+
+;;      :type (<input-type> in/out-types)
+;;      :type (<output-type> in/out-types)
+;;      :default (<input-type> 'normal)
+;;      :default (<output-type> 'normal)
+
+;;      :type (<base-type> 'number base-types)
+;;      :type (<inbase-type> 'number base-types)
+;;      :default (<base-type> 'default)
+;;      :default (<inbase-type> 2)
+
+;;      :default (--hard #t)
+;;      :exclusive (--hard --soft)
+
+;;      :default (--finite #t)
+;;      :exclusive (--finite --infinite)
+
+;;      (lambda (cli-decl defaults examples helps types exclusives synonyms)
+
+;;        (define compiler
+;;          (CFG-AST->CFG-CLI-help helps types defaults))
+
+;;        (define result
+;;          (parameterize ((current-program-path/p "my-program"))
+;;            (compiler cli-decl)))
+
+;;        ;; (display result) (newline))
+
+;;        (assert (string? result))
+
+;;      )
+
+;;     )
+;;   )
 
 (display "All good\n")
 

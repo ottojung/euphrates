@@ -32,11 +32,22 @@
 
 %var CFG-AST->CFG-lang
 %var CFG-CLI->CFG-lang
+%var CFG-lang-modifier-char?
 
 %use (~a) "./tilda-a.scm"
 %use (raisu) "./raisu.scm"
 %use (make-hashset hashset-ref hashset->list) "./ihashset.scm"
 %use (CFG-CLI->CFG-AST) "./parse-cfg-cli.scm"
+
+(define (CFG-lang-modifier-char->CFG-function c)
+  (case c
+    ((#\*) '*)
+    ((#\+) '+)
+    ((#\?) '?)
+    (else #f)))
+
+(define (CFG-lang-modifier-char? c)
+  (not (not (CFG-lang-modifier-char->CFG-function c))))
 
 (define (CFG-AST->CFG-lang synonyms0)
   (define synonyms
@@ -58,9 +69,7 @@
     (string-suffix? "..>" elem-string))
 
   (define (cons-transform c f)
-    (compose f (lambda (x)
-                 (list (case c ((#\*) '*) ((#\+) '+) ((#\?) '?))
-                       x))))
+    (compose f (lambda (x) (list (CFG-lang-modifier-char->CFG-function c) x))))
 
   (define (pimp-regex-element production-names elem)
     (define-values (stripped transform)
@@ -68,13 +77,11 @@
                  (transformations identity))
         (if (null? elem-chars-r) (raisu 'only-modifiers?)
             (let ((c (car elem-chars-r)))
-              (case c
-                ((#\* #\+ #\?)
-                 (loop (cdr elem-chars-r)
-                       (cons-transform c transformations)))
-                (else
-                 (values (list->string (reverse elem-chars-r))
-                         transformations)))))))
+              (if (CFG-lang-modifier-char? c)
+                  (loop (cdr elem-chars-r)
+                        (cons-transform c transformations))
+                  (values (list->string (reverse elem-chars-r))
+                          transformations))))))
 
     (define selem (~a elem))
 
