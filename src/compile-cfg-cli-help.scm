@@ -141,7 +141,7 @@
           (list (~a T))))
 
     (define (display-options)
-      (display "Options:") (newline)
+      (display "Options:") (newline) (newline)
       (for-each
        (lambda (s)
          (if (string? s)
@@ -172,7 +172,9 @@
                    (case (car def)
                      ((#t) (display (pad-option 4 "default")))
                      ((#f) (display (pad-option 4 "not the default")))
-                     (else (display (pad-option 4 "default:")) (write (~s (car def)))))))
+                     (else
+                      (display (pad-option 4 "default:"))
+                      (print-option-parts (list-intersperse " " (words (~s (~a (car def))))))))))
 
                (newline)
                (newline))))
