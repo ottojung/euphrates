@@ -145,13 +145,13 @@
                                   type)))
                      (display val))))
 
-               (let ((def (car (assoc/false 'default props))))
+               (let ((def (assoc/false 'default props)))
                  (when def
                    (newline)
-                   (case def
+                   (case (car def)
                      ((#t) (display (pad-option 4 "default")))
                      ((#f) (display (pad-option 4 "not the default")))
-                     (else (display (pad-option 4 "default:")) (write (~s def))))))
+                     (else (display (pad-option 4 "default:")) (write (~s (car def)))))))
 
                (newline)
                (newline))))
