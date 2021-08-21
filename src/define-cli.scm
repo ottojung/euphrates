@@ -34,6 +34,7 @@
 %var make-cli/f/basic
 %var make-cli/f
 %var make-cli
+%var make-cli-with-handler
 %var lambda-cli
 %var define-cli:current-hashmap
 %var define-cli:lookup
@@ -235,22 +236,22 @@
 
     (when #f #f)))
 
-(define-syntax make-cli-helper
+(define-syntax make-cli-with-handler-helper
   (syntax-rules (:default :example :help :type :exclusive :synonym)
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:synonym x . xs))
-     (make-cli-helper
+     (make-cli-with-handler-helper
       f cli-decl defaults examples helps types exclusives ((quote x) . synonyms) xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:exclusive x . xs))
-     (make-cli-helper
+     (make-cli-with-handler-helper
       f cli-decl defaults examples helps types ((quote x) . exclusives) synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:help x . xs))
-     (make-cli-helper
+     (make-cli-with-handler-helper
       f cli-decl defaults examples ((quote x) . helps) types exclusives synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:type (x . ys) . xs))
-     (make-cli-helper
+     (make-cli-with-handler-helper
       f cli-decl defaults examples helps ((list (quote x) . ys) . types) exclusives synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:default (x y) . xs))
-     (make-cli-helper
+     (make-cli-with-handler-helper
       f cli-decl ((list (quote x) y) . defaults) examples helps types exclusives synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms bodies)
      (f
@@ -258,15 +259,15 @@
       (list . defaults) (list . examples) (list . helps)
       (list . types) (list . exclusives) (list . synonyms)
       bodies))))
-(define-syntax-rule (make-cli-helper-start f cli-decl args)
-  (make-cli-helper f cli-decl () () () () () () args))
+(define-syntax-rule (make-cli-with-handler f cli-decl . args)
+  (make-cli-with-handler-helper f cli-decl () () () () () () args))
 
 (define-syntax make-cli/f/wrapper
   (syntax-rules ()
     ((_ cli-decl defaults examples helps types exclusives synonyms ())
      (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms))))
 (define-syntax-rule (make-cli cli-decl . args)
-  (make-cli-helper-start make-cli/f/wrapper cli-decl args))
+  (make-cli-with-handler make-cli/f/wrapper cli-decl . args))
 
 (define define-cli:current-hashmap
   (make-parameter #f))
@@ -301,7 +302,7 @@
              (define-cli:let-tree cli-decl . bodies))))))))
 
 (define-syntax-rule (lambda-cli cli-decl . args)
-  (make-cli-helper-start make-cli/lambda-cli/wrapper cli-decl args))
+  (make-cli-with-handler make-cli/lambda-cli/wrapper cli-decl . args))
 
 (define-syntax-rule (with-cli cli-decl . args)
   ((lambda-cli cli-decl . args)
