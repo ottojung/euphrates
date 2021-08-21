@@ -156,7 +156,8 @@
     (define _123 (for-each (handle-default H) defaults))
     (define R (M H T))
 
-    (unless R
+    (when (or (not R)
+              (hashmap-ref H "--help" #f))
       (define-cli:raisu 'NO-MATCH
         ((CFG-AST->CFG-CLI-help helps types defaults) cli-decl)))
 
