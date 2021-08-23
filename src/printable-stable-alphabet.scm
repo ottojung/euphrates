@@ -3,7 +3,7 @@
 
 %var printable/stable/alphabet
 
-;; Does not starts off like base64 table!
+;; Starts off like shell-nondisrupt/alphabet
 (define printable/stable/alphabet
   #(#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9
     #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j
@@ -11,6 +11,7 @@
     #\u #\v #\w #\x #\y #\z #\A #\B #\C #\D
     #\E #\F #\G #\H #\I #\J #\K #\L #\M #\N
     #\O #\P #\Q #\R #\S #\T #\U #\V #\W #\X
-    #\Y #\Z #\+ #\/ #\@ #\! #\& #\* #\= #\?
-    #\( #\) #\- #\% #\# #\, #\. #\^ #\' #\[
-    #\] #\{ #\} #\; #\: #\\ #\< #\> #\" #\$))
+    #\Y #\Z #\+ #\- #\, #\_ #\: #\@ #\= #\%
+    #\. #\/ #\* #\? #\^ #\\ #\~ #\! #\& #\#
+    #\( #\) #\[ #\] #\{ #\} #\; #\< #\> #\$
+    #\" #\'))
