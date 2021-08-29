@@ -5,8 +5,8 @@
 ;; Uses `dynamic-thread-get-delay-procedure' for sleeping.
 ;; Sleeps before the first check.
 ;;
-;; @returns #f if condition evaluated to true.
-;; @returns #t if timeouted.
+;; @returns condition if it evaluated to a truthy value.
+;; @returns #f if it timeouted.
 %var sleep-until
 
 %use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
@@ -17,16 +17,14 @@
   (syntax-rules ()
     ((_ condi)
      (let ((sleep (dynamic-thread-get-delay-procedure)))
-       (let loop () (sleep) (unless condi (loop)))
-       #f))
+       (let loop () (sleep) (or condi (loop)))))
     ((_ condi timeout-milliseconds)
      (let ((sleep (dynamic-thread-get-delay-procedure))
            (target-time (+ (milli->nano/unit timeout-milliseconds) (time-get-monotonic-nanoseconds-timestamp))))
        (let loop ()
          (sleep)
-         (if condi #f
-             (if (> (time-get-monotonic-nanoseconds-timestamp) target-time)
-                 #t
-                 (loop))))))))
+         (or condi
+             (and (> target-time (time-get-monotonic-nanoseconds-timestamp))
+                  (loop))))))))
 
 
