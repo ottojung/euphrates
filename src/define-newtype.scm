@@ -47,8 +47,7 @@
                #:reflection-name (quote constructor))
        (define constructor <newtype>)
        (define predicate <newtype>?)
-       (define get <newtype>-e)
-       (define set set-<newtype>-e!)))
+       (define get <newtype>-e)))
     ((_ name constructor predicate get set)
      (begin
        (struct <newtype>
