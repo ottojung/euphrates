@@ -84,6 +84,7 @@
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
 %use (profun-op-apply) "./src/profun-op-apply.scm"
 %use (list-take-while) "./src/list-take-while.scm"
+%use (petri-run-list petri-push) "./src/petri.scm"
 
 (let ()
   (catch-any
@@ -1429,6 +1430,17 @@
   (assert= '() (list-take-while even? '(1 2 4 6 8 9 3 1)))
   (assert= '() (list-take-while even? '()))
   (assert= '(2 4 6 8) (list-take-while even? '(2 4 6 8)))
+  )
+
+;; petri
+(let ()
+
+  (petri-run-list
+   (lambda (errors) (display "PETRI ERRORS: ") (display errors) (newline))
+   (list (cons 'hello (lambda () (display "Hello\n") (petri-push 'bye "Robert")))
+         (cons 'bye (lambda (name) (display "Bye ") (display name) (display "!\n"))))
+   )
+
   )
 
 (display "All good\n")
