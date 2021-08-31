@@ -17,8 +17,6 @@
 ;; Expects its procedure to return list of new values for received arguments.
 %var profun-op-apply
 
-%use (raisu) "./raisu.scm"
-
 (define profun-op-apply
   (lambda (args ctx)
     (and (not ctx)
