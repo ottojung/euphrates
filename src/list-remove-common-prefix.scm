@@ -14,19 +14,13 @@
 
 %run guile
 
-%var remove-common-prefix
+%var list-remove-common-prefix
 
-%use (raisu) "./raisu.scm"
-%use (list-remove-common-prefix) "./list-remove-common-prefix.scm"
-
-(define (remove-common-prefix a b)
-  (cond
-   ((string? a)
-    (list->string
-     (list-remove-common-prefix (string->list a) (string->list b))))
-   ((list? a)
-    (list-remove-common-prefix a b))
-   (else
-    (raisu 'expecting-string-or-list a b))))
-
-
+(define (list-remove-common-prefix as bs)
+  (let loop ((as as) (bs bs))
+    (cond
+     ((null? as) as)
+     ((null? bs) as)
+     ((eq? (car as) (car bs))
+      (loop (cdr as) (cdr bs)))
+     (else as))))
