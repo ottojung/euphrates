@@ -72,6 +72,8 @@
 %use (CFG-AST->CFG-CLI-help) "./src/compile-cfg-cli-help.scm"
 %use (current-program-path/p) "./src/current-program-path-p.scm"
 %use (create-database eval-query) "./src/profun.scm"
+%use (profun-make-handler) "./src/profun-make-handler.scm"
+%use (profun-handler-lambda) "./src/profun-handler-lambda.scm"
 
 (let ()
   (catch-any
@@ -1142,32 +1144,11 @@
 ;; profun
 (let ()
 
-  (define-syntax make-handler-helper
-    (syntax-rules ()
-      ((_ key ex-arity buf ())
-       (case key . buf))
-      ((_ key ex-arity buf ((name op) . rest))
-       (make-handler-helper
-        key ex-arity
-        (((name) (if (pair? op) (and (= (car op) ex-arity) (cdr op)) op)) . buf)
-        rest))))
-
-  (define-syntax make-handler
-    (syntax-rules ()
-      ((_ . cases)
-       (lambda (key ex-arity)
-         (make-handler-helper key ex-arity ((else #f)) cases)))))
-
-  (define-syntax handler-lambda
-    (syntax-rules ()
-      ((_ arity args . bodies)
-       (cons arity (lambda args . bodies)))))
-
   (define-syntax make-set
     (syntax-rules ()
       ((_ value)
        (let ((lst #f))
-         (handler-lambda
+         (profun-handler-lambda
           1 (args ctx)
           (define x (car args))
           (unless lst (set! lst value))
@@ -1226,7 +1207,7 @@
                (cons (repack ind result) #f)))))
 
   (define (binary-op action left-inverse right-inverse)
-    (handler-lambda
+    (profun-handler-lambda
      3 (args ctx)
      (define x (car args))
      (define y (cadr args))
@@ -1246,7 +1227,7 @@
       (binary-op * safe-div safe-div)))
 
   (define ass-less
-    (handler-lambda
+    (profun-handler-lambda
      2 (args ctx)
      (define xv (car args))
      (define yv (cadr args))
@@ -1265,7 +1246,7 @@
                     (cons (list ctxm #t) ctxm)))))))
 
   (define divisible
-    (handler-lambda
+    (profun-handler-lambda
      2 (args ctx)
      (let ((x (cadr args))
            (y (car args))
@@ -1288,7 +1269,7 @@
             'both-false)))
 
   (define separate
-    (handler-lambda
+    (profun-handler-lambda
      2 (args ctx)
      (define x (car args))
      (define y (cadr args))
@@ -1302,7 +1283,7 @@
         (throw 'TODO-4:both-undefined-in-separate args)))))
 
   (define unify
-    (handler-lambda
+    (profun-handler-lambda
      2 (args ctx)
      (define x (car args))
      (define y (cadr args))
@@ -1317,7 +1298,7 @@
 
   (let ()
     (define botom-handler
-      (make-handler
+      (profun-make-handler
        (= unify)))
 
     (define db
@@ -1329,7 +1310,7 @@
 
   (let ()
     (define botom-handler
-      (make-handler
+      (profun-make-handler
        (= unify)))
 
     (define db
