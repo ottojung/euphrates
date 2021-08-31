@@ -14,20 +14,13 @@
 
 %run guile
 
-%var with-dynamic
+%var with-dynamic-set!
 
-(define-syntax %with-dynamic-helper1
+(define-syntax with-dynamic-set!
   (syntax-rules ()
-    ((_ arg value . bodies)
+    ((_ arg value)
      (if (parameter? arg)
-         (parameterize ((arg value)) . bodies)
-         (arg (lambda _ value) (lambda _ . bodies))))))
+         (arg value)
+         (arg (lambda _ value))))))
 
-(define-syntax with-dynamic
-  (syntax-rules ()
-    ((_ ((arg value)) . bodies)
-     (%with-dynamic-helper1 arg value . bodies))
-    ((_ ((arg value) . rest) . bodies)
-     (%with-dynamic-helper1
-      arg value
-      (with-dynamic rest . bodies)))))
+
