@@ -71,7 +71,7 @@
 %use (CFG-CLI->CFG-lang) "./src/compile-cfg-cli.scm"
 %use (CFG-AST->CFG-CLI-help) "./src/compile-cfg-cli-help.scm"
 %use (current-program-path/p) "./src/current-program-path-p.scm"
-%use (create-database eval-query) "./src/profun.scm"
+%use (profun-create-database profun-eval-query) "./src/profun.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-handler-lambda) "./src/profun-handler-lambda.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
@@ -1162,8 +1162,8 @@
   (define (test query expected-result)
     (define handler (current-handler))
     (define definitions (current-definitions))
-    (define db (create-database handler definitions))
-    (define result (eval-query db query))
+    (define db (profun-create-database handler definitions))
+    (define result (profun-eval-query db query))
     (assert= expected-result result))
 
   (define-syntax test-definitions

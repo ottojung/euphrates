@@ -14,8 +14,8 @@
 
 %run guile
 
-%var create-database
-%var eval-query
+%var profun-create-database
+%var profun-eval-query
 
 %use (define-type9) "./define-type9.scm"
 %use (hashmap) "./hashmap.scm"
@@ -318,7 +318,7 @@
 ;;   ((abc x) (= x 3))
 ;;   )
 ;; returns database
-(define (create-database botom-handler lst-of-rules)
+(define (profun-create-database botom-handler lst-of-rules)
   (define db (make-database botom-handler))
 
   (define (handle-rule r)
@@ -356,7 +356,7 @@
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists
-(define (eval-query db query)
+(define (profun-eval-query db query)
   (define (backtrack-eval db s)
     (let ((b (backtrack db s)))
       (and b (eval-state db b))))
