@@ -1,0 +1,38 @@
+;;;; Copyright (C) 2021  Otto Jung
+;;;;
+;;;; This program is free software: you can redistribute it and/or modify
+;;;; it under the terms of the GNU General Public License as published by
+;;;; the Free Software Foundation; version 3 of the License.
+;;;;
+;;;; This program is distributed in the hope that it will be useful,
+;;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;;; GNU General Public License for more details.
+;;;;
+;;;; You should have received a copy of the GNU General Public License
+;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+%run guile
+
+;; The srfi-9 define-record-type.
+;; Look into srfi-99 if your system does not implement srfi-9.
+%var define-type9
+
+%for (COMPILER "guile")
+
+(use-modules (srfi srfi-9))
+
+(define-syntax define-type9
+  (syntax-rules ()
+    ((_ . args) (define-record-type . args))))
+
+%end
+%for (COMPILER "racket")
+
+(require srfi/9)
+
+(define-syntax define-type9
+  (syntax-rules ()
+    ((_ . args) (define-record-type . args))))
+
+%end
