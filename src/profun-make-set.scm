@@ -17,6 +17,8 @@
 ;; Used in bottom-handler to return just some predefined values
 %var profun-make-set
 
+%use (profun-handler-lambda) "./profun-handler-lambda.scm"
+
 (define-syntax profun-make-set
   (syntax-rules ()
     ((_ value)
