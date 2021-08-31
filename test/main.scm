@@ -74,6 +74,7 @@
 %use (create-database eval-query) "./src/profun.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-handler-lambda) "./src/profun-handler-lambda.scm"
+%use (profun-op-unify) "./src/profun-op-unify.scm"
 
 (let ()
   (catch-any
@@ -1143,118 +1144,10 @@
 
 ;; profun
 (let ()
-
-  (define (g-op ind x y z op)
-    (define (in-op-domain? x)
-      (and (integer? x) (>= x 0)))
-    (define (repack ind z)
-      (case ind
-        ((0) (list z #t #t))
-        ((1) (list #t z #t))
-        ((2) (list #t #t z))))
-
-    (unless (and (in-op-domain? x) (in-op-domain? y))
-      (throw 'TODO-6:non-naturals-in-op x y))
-    (let ((result (op x y)))
-      (and result (in-op-domain? result)
-           (if z
-               (= z result)
-               (cons (repack ind result) #f)))))
-
-  (define (binary-op action left-inverse right-inverse)
-    (profun-handler-lambda
-     3 (args ctx)
-     (define x (car args))
-     (define y (cadr args))
-     (define z (car (cdr (cdr args))))
-
-     (cond
-      ((and x y) (g-op 2 x y z action))
-      ((and x z) (g-op 1 z x y left-inverse))
-      ((and y z) (g-op 0 z y x right-inverse))
-      (else (throw 'need-more-info-in-+ args)))))
-
-  (define op+ (binary-op + - -))
-  (define op*
-    (let ((safe-div
-           (lambda (a b)
-             (and (not (= 0 b)) (/ a b)))))
-      (binary-op * safe-div safe-div)))
-
-  (define ass-less
-    (profun-handler-lambda
-     2 (args ctx)
-     (define xv (car args))
-     (define yv (cadr args))
-
-     (unless (number? yv)
-       (throw 'non-number-in-less args))
-
-     (if xv
-         (if (number? xv)
-             (and (not ctx) (< xv yv) #t)
-             (throw 'non-number-in-less args))
-         (if (< yv 1) #f
-             (let* ((ctxx (or ctx yv))
-                    (ctxm (- ctxx 1)))
-               (and (>= ctxm 0)
-                    (cons (list ctxm #t) ctxm)))))))
-
-  (define divisible
-    (profun-handler-lambda
-     2 (args ctx)
-     (let ((x (cadr args))
-           (y (car args))
-           (last (or ctx 1)))
-       (if x
-           (= 0 (remainder y x))
-           (and (< last y)
-                (let loop ((i last) (cnt 0))
-                  (if (= 0 (remainder y i))
-                      (cons (list y i) (+ i 1))
-                      (loop (+ 1 i) cnt))))))))
-
-  (define (variable-equal? x y)
-    (if x
-        (if y
-            (equal? x y)
-            'y-false)
-        (if y
-            'x-false
-            'both-false)))
-
-  (define separate
-    (profun-handler-lambda
-     2 (args ctx)
-     (define x (car args))
-     (define y (cadr args))
-
-     (case (variable-equal? x y)
-       ((#t) #f)
-       ((#f) #t)
-       ((x-false) #f)
-       ((y-false) #f)
-       ((both-false)
-        (throw 'TODO-4:both-undefined-in-separate args)))))
-
-  (define unify
-    (profun-handler-lambda
-     2 (args ctx)
-     (define x (car args))
-     (define y (cadr args))
-
-     (case (variable-equal? x y)
-       ((#t) #t)
-       ((#f) #f)
-       ((x-false) (cons (list y #t) #f))
-       ((y-false) (cons (list #t x) #f))
-       ((both-false)
-        (throw 'TODO-3:both-undefined args)))))
-
   (let ()
     (define botom-handler
       (profun-make-handler
-       (= unify)))
+       (= profun-op-unify)))
 
     (define db
       (create-database
@@ -1266,7 +1159,7 @@
   (let ()
     (define botom-handler
       (profun-make-handler
-       (= unify)))
+       (= profun-op-unify)))
 
     (define db
       (create-database
