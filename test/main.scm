@@ -71,6 +71,7 @@
 %use (CFG-CLI->CFG-lang) "./src/compile-cfg-cli.scm"
 %use (CFG-AST->CFG-CLI-help) "./src/compile-cfg-cli-help.scm"
 %use (current-program-path/p) "./src/current-program-path-p.scm"
+%use (create-database eval-query) "./src/profun.scm"
 
 (let ()
   (catch-any
@@ -1137,6 +1138,194 @@
 
 ;;     )
 ;;   )
+
+;; profun
+(let ()
+
+  (define-syntax make-handler-helper
+    (syntax-rules ()
+      ((_ key ex-arity buf ())
+       (case key . buf))
+      ((_ key ex-arity buf ((name op) . rest))
+       (make-handler-helper
+        key ex-arity
+        (((name) (if (pair? op) (and (= (car op) ex-arity) (cdr op)) op)) . buf)
+        rest))))
+
+  (define-syntax make-handler
+    (syntax-rules ()
+      ((_ . cases)
+       (lambda (key ex-arity)
+         (make-handler-helper key ex-arity ((else #f)) cases)))))
+
+  (define-syntax handler-lambda
+    (syntax-rules ()
+      ((_ arity args . bodies)
+       (cons arity (lambda args . bodies)))))
+
+  (define-syntax make-set
+    (syntax-rules ()
+      ((_ value)
+       (let ((lst #f))
+         (handler-lambda
+          1 (args ctx)
+          (define x (car args))
+          (unless lst (set! lst value))
+          (if x (not (not (member x lst)))
+              (let ((ctxx (or ctx lst)))
+                (if (null? ctxx) #f
+                    (cons (list (car ctxx)) (cdr ctxx))))))))))
+
+  (define (try-assign-multi args lst)
+    ;; (display "ASS: ") (display lst) (newline)
+    (let loop ((args args) (lst lst) (ret (list)))
+      (if (null? args) (reverse ret)
+          (if (not (car args))
+              (if (not (car lst))
+                  (loop (cdr args) (cdr lst) (cons #t ret))
+                  (loop (cdr args) (cdr lst) (cons (car lst) ret)))
+              (and (or (equal? #t (car lst)) (equal? (car args) (car lst))) ;; they are equal
+                   (loop (cdr args) (cdr lst) (cons #t ret)))))))
+
+  (define (assign-multi args lst)
+    ;; (display "MULTI: ") (display lst) (newline)
+    (let loop ((lst lst))
+      (if (null? lst) #f
+          (let ((try (try-assign-multi args (car lst))))
+            ;; (display "TRY: ") (display try) (newline)
+            (if try (cons try (cdr lst))
+                (loop (cdr lst)))))))
+
+  ;; Really is a hypergraph
+  (define-syntax make-tuple-set
+    (syntax-rules ()
+      ((_ value)
+       (let ((lst #f))
+         (lambda (args ctx)
+           (define x (car args))
+           ;; (display "CTX: ") (display ctx) (newline)
+           (let ((ctxx (or ctx (begin (unless lst (set! lst value)) lst))))
+             ;; (display "CTXX: ") (display ctxx) (newline)
+             (assign-multi args ctxx)))))))
+
+  (define (g-op ind x y z op)
+    (define (in-op-domain? x)
+      (and (integer? x) (>= x 0)))
+    (define (repack ind z)
+      (case ind
+        ((0) (list z #t #t))
+        ((1) (list #t z #t))
+        ((2) (list #t #t z))))
+
+    (unless (and (in-op-domain? x) (in-op-domain? y))
+      (throw 'TODO-6:non-naturals-in-op x y))
+    (let ((result (op x y)))
+      (and result (in-op-domain? result)
+           (if z
+               (= z result)
+               (cons (repack ind result) #f)))))
+
+  (define (binary-op action left-inverse right-inverse)
+    (handler-lambda
+     3 (args ctx)
+     (define x (car args))
+     (define y (cadr args))
+     (define z (car (cdr (cdr args))))
+
+     (cond
+      ((and x y) (g-op 2 x y z action))
+      ((and x z) (g-op 1 z x y left-inverse))
+      ((and y z) (g-op 0 z y x right-inverse))
+      (else (throw 'need-more-info-in-+ args)))))
+
+  (define op+ (binary-op + - -))
+  (define op*
+    (let ((safe-div
+           (lambda (a b)
+             (and (not (= 0 b)) (/ a b)))))
+      (binary-op * safe-div safe-div)))
+
+  (define ass-less
+    (handler-lambda
+     2 (args ctx)
+     (define xv (car args))
+     (define yv (cadr args))
+
+     (unless (number? yv)
+       (throw 'non-number-in-less args))
+
+     (if xv
+         (if (number? xv)
+             (and (not ctx) (< xv yv) #t)
+             (throw 'non-number-in-less args))
+         (if (< yv 1) #f
+             (let* ((ctxx (or ctx yv))
+                    (ctxm (- ctxx 1)))
+               (and (>= ctxm 0)
+                    (cons (list ctxm #t) ctxm)))))))
+
+  (define divisible
+    (handler-lambda
+     2 (args ctx)
+     (let ((x (cadr args))
+           (y (car args))
+           (last (or ctx 1)))
+       (if x
+           (= 0 (remainder y x))
+           (and (< last y)
+                (let loop ((i last) (cnt 0))
+                  (if (= 0 (remainder y i))
+                      (cons (list y i) (+ i 1))
+                      (loop (+ 1 i) cnt))))))))
+
+  (define (variable-equal? x y)
+    (if x
+        (if y
+            (equal? x y)
+            'y-false)
+        (if y
+            'x-false
+            'both-false)))
+
+  (define separate
+    (handler-lambda
+     2 (args ctx)
+     (define x (car args))
+     (define y (cadr args))
+
+     (case (variable-equal? x y)
+       ((#t) #f)
+       ((#f) #t)
+       ((x-false) #f)
+       ((y-false) #f)
+       ((both-false)
+        (throw 'TODO-4:both-undefined-in-separate args)))))
+
+  (define unify
+    (handler-lambda
+     2 (args ctx)
+     (define x (car args))
+     (define y (cadr args))
+
+     (case (variable-equal? x y)
+       ((#t) #t)
+       ((#f) #f)
+       ((x-false) (cons (list y #t) #f))
+       ((y-false) (cons (list #t x) #f))
+       ((both-false)
+        (throw 'TODO-3:both-undefined args)))))
+
+  (let ()
+    (define botom-handler
+      (make-handler
+       (= unify)))
+
+    (define db
+      (create-database
+       botom-handler
+       '(((abc x y) (= x 3) (= x y) (= y 4)))))
+
+    (debug "RESULT: ~s" (eval-query db '((abc a b))))))
 
 (display "All good\n")
 
