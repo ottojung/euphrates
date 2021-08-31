@@ -21,6 +21,10 @@
 %use (define-type9) "./define-type9.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap-copy hashmap->alist) "./ihashmap.scm"
+%use (list-and-map) "./list-and-map.scm"
+%use (usymbol usymbol?) "./usymbol.scm"
+%use (profun-varname?) "./profun-varname-q.scm"
+%use (profun-query-get-free-variables) "./profun-query-get-free-variables.scm"
 
 (define-type9 <database>
   (database a b) database?
@@ -34,12 +38,6 @@
   (b rule-index) ;; : number (together with "name" gives a unique index)
   (c rule-args) ;; : list of symbols
   (d rule-body) ;; : list of lists of symbols
-  )
-
-(define-type9 <usymbol>
-  (usymbol a b) usymbol?
-  (a usymbol-name) ;; printable name - usually what was read
-  (b usymbol-qualifier) ;; unique qualifier
   )
 
 (define-type9 <instruction>
@@ -122,8 +120,7 @@
 (define (make-env)
   (hashmap))
 (define (env-get env key)
-  (if (or (symbol? key)
-          (usymbol? key))
+  (if (profun-varname? key)
       (hashmap-ref env key #f)
       key))
 (define (env-set env key value)
@@ -160,10 +157,6 @@
             (instruction-next inst)
             (instruction-context inst)))))))
 
-(define (varname? obj)
-  (or (symbol? obj)
-      (usymbol? obj)))
-
 (define (make-unique-varname symb rule)
   (usymbol symb rule))
 
@@ -171,7 +164,7 @@
   (define r-args (rule-args rule))
 
   (define (repl symb)
-    (if (not (varname? symb)) symb
+    (if (not (profun-varname? symb)) symb
         (let lp ((rbuf r-args)
                  (abuf args))
           (if (null? rbuf)
@@ -355,7 +348,7 @@
       (if (null? buf)
           (ret (reverse aret) (reverse bret-app))
           (let ((x (car buf)))
-            (if (not (varname? x))
+            (if (not (profun-varname? x))
                 (let ((u (usymbol name `(arg ,i))))
                   (lp (cdr buf)
                       (+ i 1)
@@ -390,21 +383,11 @@
               (lp (backtrack-eval db s)))
         (list))))
 
-(define (query-get-free-variables q)
-  (filter varname? (apply append (map cdr q))))
-
-(define (and-map f lst)
-  (let loop ((buf lst))
-    (if (null? buf) #t
-        (if (f (car buf))
-            (loop (cdr buf))
-            #f))))
-
 ;; takes result alist and returns #t or #f
 (define (make-instantiation-check query)
-  (let ((free (query-get-free-variables query)))
+  (let ((free (profun-query-get-free-variables query)))
     (lambda (result)
-      (and-map
+      (list-and-map
        (lambda (var) (assq var result))
        free))))
 
