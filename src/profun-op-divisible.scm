@@ -25,9 +25,10 @@
          (y (car args))
          (last (or ctx 1)))
      (if x
-         (= 0 (remainder y x))
+         (and (not (= 0 x))
+              (= 0 (remainder y x)))
          (and (< last y)
               (let loop ((i last) (cnt 0))
                 (if (= 0 (remainder y i))
-                    (cons (list y i) (+ i 1))
+                    (cons (list #t i) (+ i 1))
                     (loop (+ 1 i) cnt))))))))
