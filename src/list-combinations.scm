@@ -3,6 +3,8 @@
 
 %var list-combinations
 
+%use (list-fold) "./list-fold.scm"
+
 %for (COMPILER "guile")
 
 ;; bitwise operations
@@ -98,15 +100,6 @@
               (vector-set! v y (+ 1 x))
               (when (callback (a-vector->list v (+ 1 m)))
                 (loop 0 m))))))))
-
-(define-syntax-rule (list-fold (acc-name acc-value)
-                               (i-name i-value)
-                               . bodies)
-  (let loop ((acc-name acc-value) (i-all i-value))
-    (if (null? i-all) acc-name
-        (let ((i-name (car i-all)))
-          (let ((new-acc (begin . bodies)))
-            (loop new-acc (cdr i-all)))))))
 
 (define range-to
   (case-lambda
