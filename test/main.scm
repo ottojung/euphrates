@@ -82,6 +82,7 @@
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
+%use (list-take-while) "./src/list-take-while.scm"
 
 (let ()
   (catch-any
@@ -1408,6 +1409,14 @@
      )
 
     )
+  )
+
+;; list-take-while
+(let ()
+  (assert= '(2 4 6 8) (list-take-while even? '(2 4 6 8 9 3 1)))
+  (assert= '() (list-take-while even? '(1 2 4 6 8 9 3 1)))
+  (assert= '() (list-take-while even? '()))
+  (assert= '(2 4 6 8) (list-take-while even? '(2 4 6 8)))
   )
 
 (display "All good\n")
