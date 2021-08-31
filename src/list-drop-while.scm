@@ -1,9 +1,9 @@
 
 %run guile
 
-%var drop-while
+%var list-drop-while
 
-(define (drop-while pred lst)
+(define (list-drop-while pred lst)
   (let loop ((lst lst))
     (if (null? lst) '()
         (if (pred (car lst))

@@ -32,7 +32,7 @@
 %use (get-current-program-path) "./get-current-program-path.scm"
 %use (path-get-basename) "./path-get-basename.scm"
 %use (list-fold) "./list-fold.scm"
-%use (drop-while) "./drop-while.scm"
+%use (list-drop-while) "./list-drop-while.scm"
 %use (CFG-lang-modifier-char?) "./compile-cfg-cli.scm"
 %use (print-in-window) "./print-in-window.scm"
 %use (unlines) "./unlines.scm"
@@ -52,7 +52,7 @@
   (define single-helps (filter (negate list?) helps))
 
   (define (strip-modifiers name)
-    (list->string (reverse (drop-while CFG-lang-modifier-char? (reverse (string->list name))))))
+    (list->string (reverse (list-drop-while CFG-lang-modifier-char? (reverse (string->list name))))))
 
   (define header1 #f)
   (define header2 #f)
