@@ -22,6 +22,7 @@
 %use (hashmap-ref hashmap-set! hashmap-copy hashmap->alist) "./ihashmap.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
+%use (list-ref-or) "./list-ref-or.scm"
 
 (define-type9 <database>
   (database a b) database?
@@ -68,13 +69,6 @@
          (state-stack s)
          (state-env s)
          (state-failstate s)))
-
-(define (list-ref-or lst ref default)
-  (let lp ((lst lst) (ref ref))
-    (if (null? lst) default
-        (if (= 0 ref)
-            (car lst)
-            (lp (cdr lst) (- ref 1))))))
 
 (define (make-database botom-handler)
   (database (hashmap) botom-handler))
