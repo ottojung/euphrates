@@ -1144,51 +1144,6 @@
 ;; profun
 (let ()
 
-  (define-syntax make-set
-    (syntax-rules ()
-      ((_ value)
-       (let ((lst #f))
-         (profun-handler-lambda
-          1 (args ctx)
-          (define x (car args))
-          (unless lst (set! lst value))
-          (if x (not (not (member x lst)))
-              (let ((ctxx (or ctx lst)))
-                (if (null? ctxx) #f
-                    (cons (list (car ctxx)) (cdr ctxx))))))))))
-
-  (define (try-assign-multi args lst)
-    ;; (display "ASS: ") (display lst) (newline)
-    (let loop ((args args) (lst lst) (ret (list)))
-      (if (null? args) (reverse ret)
-          (if (not (car args))
-              (if (not (car lst))
-                  (loop (cdr args) (cdr lst) (cons #t ret))
-                  (loop (cdr args) (cdr lst) (cons (car lst) ret)))
-              (and (or (equal? #t (car lst)) (equal? (car args) (car lst))) ;; they are equal
-                   (loop (cdr args) (cdr lst) (cons #t ret)))))))
-
-  (define (assign-multi args lst)
-    ;; (display "MULTI: ") (display lst) (newline)
-    (let loop ((lst lst))
-      (if (null? lst) #f
-          (let ((try (try-assign-multi args (car lst))))
-            ;; (display "TRY: ") (display try) (newline)
-            (if try (cons try (cdr lst))
-                (loop (cdr lst)))))))
-
-  ;; Really is a hypergraph
-  (define-syntax make-tuple-set
-    (syntax-rules ()
-      ((_ value)
-       (let ((lst #f))
-         (lambda (args ctx)
-           (define x (car args))
-           ;; (display "CTX: ") (display ctx) (newline)
-           (let ((ctxx (or ctx (begin (unless lst (set! lst value)) lst))))
-             ;; (display "CTXX: ") (display ctxx) (newline)
-             (assign-multi args ctxx)))))))
-
   (define (g-op ind x y z op)
     (define (in-op-domain? x)
       (and (integer? x) (>= x 0)))
