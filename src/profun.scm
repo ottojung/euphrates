@@ -16,15 +16,12 @@
 
 %var create-database
 %var eval-query
-%var make-instantiation-check
 
 %use (define-type9) "./define-type9.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap-copy hashmap->alist) "./ihashmap.scm"
-%use (list-and-map) "./list-and-map.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
-%use (profun-query-get-free-variables) "./profun-query-get-free-variables.scm"
 
 (define-type9 <database>
   (database a b) database?
@@ -382,12 +379,4 @@
         (cons (filter (lambda (x) (not (usymbol? (car x)))) (take-vars s))
               (lp (backtrack-eval db s)))
         (list))))
-
-;; takes result alist and returns #t or #f
-(define (make-instantiation-check query)
-  (let ((free (profun-query-get-free-variables query)))
-    (lambda (result)
-      (list-and-map
-       (lambda (var) (assq var result))
-       free))))
 
