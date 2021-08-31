@@ -43,7 +43,7 @@
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-set! hashmap-ref hashmap->alist) "./ihashmap.scm"
-%use (map/flatten) "./map-flatten.scm"
+%use (list-map/flatten) "./list-map-flatten.scm"
 %use (system-environment-get) "./system-environment.scm"
 %use (alphanum/alphabet/index) "./alphanum-alphabet.scm"
 
@@ -163,7 +163,7 @@
                    (display (pad-option 4 "type:"))
                    (print-option-parts
                     (if (list? type)
-                        (list-intersperse " | " (map/flatten show-type type))
+                        (list-intersperse " | " (list-map/flatten show-type type))
                         (list (~a type))))))
 
                (let ((def (assoc/false 'default props)))
