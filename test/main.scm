@@ -1325,7 +1325,26 @@
        botom-handler
        '(((abc x y) (= x 3) (= x y) (= y 4)))))
 
-    (debug "RESULT: ~s" (eval-query db '((abc a b))))))
+    (debug "RESULT: ~s" (eval-query db '((abc a b)))))
+
+  (let ()
+    (define botom-handler
+      (make-handler
+       (= unify)))
+
+    (define db
+      (create-database
+       botom-handler
+       '(((abc z k) (= z 8) (= p 10))
+         ((yyy x) (abc x))
+         ((abc x y) (= x 3) (= x y) (= y 3))
+         ((abc x y) (= x "kek") (= y 5))
+         ((abc z k) (= z 8) (= k 9))
+         )))
+
+    (debug "RESULT2: ~s" (eval-query db '((abc x y)))))
+
+  )
 
 (display "All good\n")
 
