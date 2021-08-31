@@ -7,6 +7,7 @@
 %var hashmap-copy
 %var hashmap-foreach
 %var alist->hashmap
+%var multi-alist->hashmap
 %var hashmap-ref
 %var hashmap-set!
 %var hashmap-clear!
@@ -21,6 +22,22 @@
 (define hashmap-clear! hash-clear!)
 
 (define alist->hashmap alist->hash-table)
+
+;; multi-alist example:
+;;    '((a . 3) (b . 2) (a . 4))
+;; which is equivalent to this alist:
+;;    '((a . (4 3)) (b . (2)))
+(define (multi-alist->hashmap multi-alist)
+  (let ((ret (hashmap)))
+    (for-each
+     (lambda (p)
+       (define key (car p))
+       (define value (cdr p))
+       (hash-set!
+        ret key
+        (cons value (hashmap-ref ret key '()))))
+     multi-alist)
+    ret))
 
 (define (hashmap->alist h)
   (hash-map->list cons h))
