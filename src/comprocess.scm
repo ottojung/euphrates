@@ -16,11 +16,9 @@
 %var comprocess
 %var comprocess?
 
-%for (COMPILER "guile")
-(use-modules (srfi srfi-9))
-%end
+%use (define-type9) "./define-type9.scm"
 
-(define-record-type <comprocess>
+(define-type9 <comprocess>
   (comprocess
 
 %for (field @x)

@@ -13,11 +13,9 @@
 %var sys-thread
 %var sys-thread?
 
-%for (COMPILER "guile")
-(use-modules (srfi srfi-9))
-%end
+%use (define-type9) "./define-type9.scm"
 
-(define-record-type <sys-thread>
+(define-type9 <sys-thread>
   (sys-thread
 %for (field @x)
    @x

@@ -14,7 +14,7 @@
 
 %run guile
 
-;; a simpler, less-demanding alternative to define-rec
+;; a simpler, less-demanding alternative to define-type9 and define-rec
 %var define-newtype
 
 %for (COMPILER "guile")
@@ -35,7 +35,6 @@
        (constructor get set)))))
 
 %end
-
 %for (COMPILER "racket")
 
 (define-syntax define-newtype
