@@ -1443,10 +1443,26 @@
 ;; petri
 (let ()
 
+  (assert=
+   "Hello\nBye Robert!\n"
+   (with-output-to-string
+     (lambda ()
+       (petri-run-list
+        (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+        (list (cons 'hello (lambda () (display "Hello\n") (petri-push 'bye "Robert")))
+              (cons 'bye (lambda (name) (display "Bye ") (display name) (display "!\n"))))
+        ))))
+
   (petri-run-list
-   (lambda (errors) (display "PETRI ERRORS: ") (display errors) (newline))
-   (list (cons 'hello (lambda () (display "Hello\n") (petri-push 'bye "Robert")))
-         (cons 'bye (lambda (name) (display "Bye ") (display name) (display "!\n"))))
+   (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+   (list (cons 'hello (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))
+         (cons 'bye (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n"))))
+   )
+
+  (petri-run-list
+   (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+   (list (cons 'hello (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))
+         (cons 'bye (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n"))))
    )
 
   )
