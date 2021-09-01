@@ -1,13 +1,7 @@
 
 %run guile
 
-%for (COMPILER "guile")
+%var dynamic-thread-mutex-lock!#p
 
-(use-modules (srfi srfi-18))
-
-%var dynamic-thread-mutex-unlock!#p
-(define dynamic-thread-mutex-unlock!#p
-  (make-parameter mutex-unlock!))
-
-%end
-
+(define dynamic-thread-mutex-lock!#p
+  (make-parameter #f))

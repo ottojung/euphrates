@@ -6,8 +6,7 @@
 %var dynamic-thread-sleep#p
 %var dynamic-thread-sleep
 
-(define dynamic-thread-sleep#p
-  (make-parameter dynamic-thread-sleep#p-default))
 (define (dynamic-thread-sleep us)
-  ((dynamic-thread-sleep#p) us))
+  ((or (dynamic-thread-sleep#p)
+       dynamic-thread-sleep#p-default) us))
 
