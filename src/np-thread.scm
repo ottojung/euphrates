@@ -14,6 +14,22 @@
 
 %run guile
 
+;; Do not export make-env, use parameterize instead ;; %var np-thread-make-env
+%var np-thread-parameterize-env
+%var with-np-thread-env#non-interruptible
+
+;; Do not export run ;; %var np-thread-global-run!
+%var np-thread-global-spawn
+%var np-thread-global-cancel
+%var np-thread-global-disable-cancel
+%var np-thread-global-enable-cancel
+%var np-thread-global-yield
+%var np-thread-global-sleep
+%var np-thread-global-mutex-make
+%var np-thread-global-mutex-lock!
+%var np-thread-global-mutex-unlock!
+%var np-thread-global-critical-make
+
 %use (define-type9) "./define-type9.scm"
 %use (make-unique) "./make-unique.scm"
 %use (universal-usleep) "./universal-usleep.scm"
@@ -34,24 +50,26 @@
 %use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock-p.scm"
 %use (dynamic-thread-critical-make#p) "./dynamic-thread-critical-make-p.scm"
 
-%var np-thread-parameterize-env
-%var with-np-thread-env#non-interruptible
+%use (np-thread-obj np-thread-obj-continuation set-np-thread-obj-continuation! np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?! np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!) "./np-thread-obj.scm"
 
-(define-type9 <np-thread-obj>
-  (np-thread-obj continuation cancel-scheduled? cancel-enabled?) np-thread-obj?
-  (continuation np-thread-obj-continuation set-np-thread-obj-continuation!)
-  (cancel-scheduled? np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?!)
-  (cancel-enabled? np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!)
-  )
+;; Disables critical zones because in non-interruptible mode
+;; user can assure atomicity by just not calling yield during its evalution.
+;; Locks still work as previusly,
+;; but implementation must be changed,
+;; because system mutexes will not allow to do yield
+;; while waiting on mutex.
+(define (make-no-critical . args)
+  (lambda (fn) (fn)))
 
-(define (np-thread-parameterize-env make-critical thunk)
-
-  (define (make-np-thread-obj thunk)
-    (np-thread-obj thunk #f #t))
+(define (np-thread-make-env make-critical)
 
   (define thread-queue (make-queue 16))
   (define current-thread #f)
   (define critical (make-critical))
+  (define start-point (lambda _ (values)))
+
+  (define (make-np-thread-obj thunk)
+    (np-thread-obj thunk #f #t))
 
   (define (np-thread-list-add th)
     (with-critical
@@ -71,8 +89,6 @@
                  (set! current-thread head)
                  head))))))
 
-  (define start-point #f)
-
   (define [np-thread-end]
     (let [[p (np-thread-list-switch)]]
       (if (eq? p 'np-thread-empty-list)
@@ -81,17 +97,27 @@
             ((np-thread-obj-continuation p))
             (np-thread-end)))))
 
-  (define [np-thread-yield]
-    (let [[me current-thread]]
-      (when (and (np-thread-obj-cancel-scheduled? me)
-                 (np-thread-obj-cancel-enabled? me))
-        (raisu dynamic-thread-cancel-tag))
+  (define [np-thread-run! thunk]
+    (call-with-current-continuation
+     (lambda [k]
+       (set! start-point k)
+       (set! current-thread (make-np-thread-obj thunk))
+       (thunk)
+       (np-thread-end))))
 
-      (call-with-current-continuation
-       (lambda (k)
-         (set-np-thread-obj-continuation! me k)
-         (np-thread-list-add me)
-         (np-thread-end)))))
+  (define [np-thread-yield]
+    (if current-thread
+        (let [[me current-thread]]
+          (when (and (np-thread-obj-cancel-scheduled? me)
+                     (np-thread-obj-cancel-enabled? me))
+            (raisu dynamic-thread-cancel-tag))
+
+          (call-with-current-continuation
+           (lambda (k)
+             (set-np-thread-obj-continuation! me k)
+             (np-thread-list-add me)
+             (np-thread-end))))
+        (np-thread-run! np-thread-yield)))
 
   (define [np-thread-fork thunk]
     (let ((first? #t)
@@ -105,14 +131,6 @@
         (np-thread-end))
       (set! first? #f)
       ret))
-
-  (define [np-thread-run! thunk]
-    (call-with-current-continuation
-     (lambda [k]
-       (set! start-point k)
-       (set! current-thread (make-np-thread-obj thunk))
-       (thunk)
-       (np-thread-end))))
 
   ;; Terminates np-thread
   ;; If no arguments given, current thread will be terminated
@@ -130,20 +148,49 @@
 
   (define (np-thread-make-critical)
     (lambda (fn)
-      (let* [[me current-thread]]
-        (set-np-thread-obj-cancel-enabled?! me #f)
-        (fn) ;; NOTE: must not evaluate non-local jumps
-        (set-np-thread-obj-cancel-enabled?! me #t)
-        (np-thread-yield)
-        )))
+      (when current-thread
+        (let* [[me current-thread]]
+          (set-np-thread-obj-cancel-enabled?! me #f)
+          (fn) ;; NOTE: must not evaluate non-local jumps
+          (set-np-thread-obj-cancel-enabled?! me #t))
+        (np-thread-yield))))
 
   (define [np-thread-disable-cancel]
-    (let ((me current-thread))
-      (set-np-thread-obj-cancel-enabled?! me #f)))
+    (when current-thread
+      (let ((me current-thread))
+        (set-np-thread-obj-cancel-enabled?! me #f))))
   (define [np-thread-enable-cancel]
-    (let ((me current-thread))
-      (set-np-thread-obj-cancel-enabled?! me #t)))
+    (when current-thread
+      (let ((me current-thread))
+        (set-np-thread-obj-cancel-enabled?! me #t))))
 
+  (values
+   np-thread-run!
+   np-thread-fork
+   np-thread-cancel!
+   np-thread-disable-cancel
+   np-thread-enable-cancel
+   np-thread-yield
+   universal-usleep
+   make-unique
+   universal-lockr!
+   universal-unlockr!
+   np-thread-make-critical))
+
+(define (np-thread-parameterize-env make-critical thunk)
+  (define-values
+      (np-thread-run!
+       np-thread-fork
+       np-thread-cancel!
+       np-thread-disable-cancel
+       np-thread-enable-cancel
+       np-thread-yield
+       universal-usleep
+       make-unique
+       universal-lockr!
+       universal-unlockr!
+       np-thread-make-critical)
+    (np-thread-make-env make-critical))
   (parameterize ((dynamic-thread-spawn#p np-thread-fork)
                  (dynamic-thread-cancel#p np-thread-cancel!)
                  (dynamic-thread-disable-cancel#p np-thread-disable-cancel)
@@ -156,14 +203,23 @@
                  (dynamic-thread-critical-make#p np-thread-make-critical))
     (np-thread-run! thunk)))
 
-;; Disables critical zones because in non-interruptible mode
-;; user can assure atomicity by just not calling yield during its evalution.
-;; Locks still work as previusly,
-;; but implementation must be changed,
-;; because system mutexes will not allow to do yield
-;; while waiting on mutex.
 (define-syntax with-np-thread-env#non-interruptible
   (syntax-rules ()
     ((_ . bodies)
-     (np-thread-parameterize-env (lambda () (lambda (fn) (fn)))
-                                 (lambda () . bodies)))))
+     (np-thread-parameterize-env
+      make-no-critical
+      (lambda () . bodies)))))
+
+(define-values
+    (np-thread-global-run!
+     np-thread-global-spawn
+     np-thread-global-cancel
+     np-thread-global-disable-cancel
+     np-thread-global-enable-cancel
+     np-thread-global-yield
+     np-thread-global-sleep
+     np-thread-global-mutex-make
+     np-thread-global-mutex-lock!
+     np-thread-global-mutex-unlock!
+     np-thread-global-critical-make)
+  (np-thread-make-env make-no-critical))
