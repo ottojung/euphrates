@@ -99,8 +99,15 @@
   (assert (equal? 5 (string-length (list->string (random-choice 5 printable/alphabet))))))
 
 (let ()
-  (with-ignore-errors!
-   (raisu 'test "arg1" "arg2")))
+  (assert=
+   "error:"
+   (cadr
+    (words
+     (with-output-to-string
+       (lambda ()
+         (parameterize ((current-error-port (current-output-port)))
+           (with-ignore-errors!
+            (raisu 'test "arg1" "arg2")))))))))
 
 ;; queue
 (let ()
