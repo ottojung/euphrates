@@ -13,7 +13,7 @@
   (let* ((nano-seconds (micro->nano/unit micro-seconds))
          (start-time (time-get-monotonic-nanoseconds-timestamp))
          (end-time (+ start-time nano-seconds))
-         (sleep-rate (dynamic-thread-wait-delay))
+         (sleep-rate (dynamic-thread-get-wait-delay))
          (yield (dynamic-thread-get-yield-procedure)))
     (let lp ()
       (yield)
