@@ -21,6 +21,7 @@
 %use (with-critical) "./with-critical.scm"
 %use (make-queue queue-empty? queue-peek queue-push! queue-pop!) "./queue.scm"
 %use (raisu) "./raisu.scm"
+%use (dynamic-thread-cancel-tag) "./dynamic-thread-cancel-tag.scm"
 
 %use (dynamic-thread-spawn#p) "./dynamic-thread-spawn-p.scm"
 %use (dynamic-thread-cancel#p) "./dynamic-thread-cancel-p.scm"
@@ -38,9 +39,9 @@
 
 (define-type9 <np-thread-obj>
   (np-thread-obj continuation cancel-scheduled? cancel-enabled?) np-thread-obj?
-  (continuation np-thread-continuation set-np-thread-obj-continuation!)
-  (cancel-scheduled? np-thread-cancel-scheduled? set-np-thread-cancel-scheduled?!)
-  (cancel-enabled? np-thread-cancel-enabled? set-np-thread-cancel-enabled?!)
+  (continuation np-thread-obj-continuation set-np-thread-obj-continuation!)
+  (cancel-scheduled? np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?!)
+  (cancel-enabled? np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!)
   )
 
 (define (np-thread-parameterize-env make-critical thunk)
