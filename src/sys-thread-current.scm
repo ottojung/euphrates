@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (sys-thread) "./sys-thread.scm"
+%use (sys-thread) "./sys-thread-obj.scm"
 
 %var sys-thread-current
 

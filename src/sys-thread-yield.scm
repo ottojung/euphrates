@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (sys-thread-cancel-scheduled? sys-thread-cancel-enabled?) "./sys-thread.scm"
+%use (sys-thread-cancel-scheduled? sys-thread-cancel-enabled?) "./sys-thread-obj.scm"
 %use (sys-thread-current) "./sys-thread-current.scm"
 %use (dynamic-thread-cancel-tag) "./dynamic-thread-cancel-tag.scm"
 %use (raisu) "./raisu.scm"

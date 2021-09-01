@@ -6,24 +6,24 @@
 %set (field "cancel-enabled?")
 
 %for (field @x)
-%var sys-thread-@x
-%var set-sys-thread-@x!
+%var sys-thread-obj-@x
+%var set-sys-thread-obj-@x!
 %end
 
-%var sys-thread
-%var sys-thread?
+%var sys-thread-obj
+%var sys-thread-obj?
 
 %use (define-type9) "./define-type9.scm"
 
-(define-type9 <sys-thread>
-  (sys-thread
+(define-type9 <sys-thread-obj>
+  (sys-thread-obj
 %for (field @x)
    @x
 %end
-   ) sys-thread?
+   ) sys-thread-obj?
 
 %for (field @x)
-   (@x sys-thread-@x set-sys-thread-@x!)
+   (@x sys-thread-obj-@x set-sys-thread-obj-@x!)
 %end
 
   )

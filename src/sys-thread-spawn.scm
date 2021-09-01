@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (sys-thread set-sys-thread-handle!) "./sys-thread.scm"
+%use (sys-thread set-sys-thread-handle!) "./sys-thread-obj.scm"
 
 %var sys-thread-spawn
 

@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (set-sys-thread-cancel-enabled?!) "./sys-thread.scm"
+%use (set-sys-thread-cancel-enabled?!) "./sys-thread-obj.scm"
 %use (sys-thread-current) "./sys-thread-current.scm"
 
 %var sys-thread-disable-cancel
