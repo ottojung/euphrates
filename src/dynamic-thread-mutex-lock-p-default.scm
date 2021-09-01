@@ -3,7 +3,7 @@
 
 %var dynamic-thread-mutex-lock!#p-default
 
-%use (sys-mutex-lock!) "./sys-mutex-lock.scm"
+%use (sys-thread-mutex-lock!) "./sys-thread.scm"
 
 (define dynamic-thread-mutex-lock!#p-default
-  sys-mutex-lock!)
+  sys-thread-mutex-lock!)

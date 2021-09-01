@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (sys-thread-spawn) "./sys-thread-spawn.scm"
+%use (sys-thread-spawn) "./sys-thread.scm"
 
 %var dynamic-thread-spawn#p-default
 

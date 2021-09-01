@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (sys-thread-sleep) "./sys-thread-sleep.scm"
+%use (sys-thread-sleep) "./sys-thread.scm"
 
 %var dynamic-thread-sleep#p-default
 

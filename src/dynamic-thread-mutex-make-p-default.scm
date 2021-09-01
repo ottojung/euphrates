@@ -3,7 +3,7 @@
 
 %var dynamic-thread-mutex-make#p-default
 
-%use (sys-mutex-make) "./sys-mutex-make.scm"
+%use (sys-thread-mutex-make) "./sys-thread.scm"
 
 (define dynamic-thread-mutex-make#p-default
-  sys-mutex-make)
+  sys-thread-mutex-make)

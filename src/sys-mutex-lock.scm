@@ -7,6 +7,6 @@
 
 (use-modules (srfi srfi-18))
 
-(define sys-thread-mutex-lock!#p mutex-lock!)
+(define sys-mutex-lock! mutex-lock!)
 
 %end
