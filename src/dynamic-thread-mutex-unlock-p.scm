@@ -1,7 +1,7 @@
 
 %run guile
 
-%var dynamic-thread-mutex-lock!#p
+%var dynamic-thread-mutex-unlock!#p
 
-(define dynamic-thread-mutex-lock!#p
+(define dynamic-thread-mutex-unlock!#p
   (make-parameter #f))
