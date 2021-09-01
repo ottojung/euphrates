@@ -66,7 +66,7 @@
   (define thread-queue (make-queue 16))
   (define current-thread #f)
   (define critical (make-critical))
-  (define start-point (lambda _ (values)))
+  (define start-point #f)
 
   (define (make-np-thread-obj thunk)
     (np-thread-obj thunk #f #t))
@@ -80,14 +80,12 @@
     (with-critical
      critical
      (let loop ((head (queue-pop! thread-queue #f)))
+       (set! current-thread head)
        (if (not head) 'np-thread-empty-list
            (if (and (np-thread-obj-cancel-scheduled? head)
                     (np-thread-obj-cancel-enabled? head))
-               (begin
-                 (loop (queue-pop! thread-queue #f)))
-               (begin
-                 (set! current-thread head)
-                 head))))))
+               (loop (queue-pop! thread-queue #f))
+               head)))))
 
   (define [np-thread-end]
     (let [[p (np-thread-list-switch)]]
