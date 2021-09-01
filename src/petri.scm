@@ -14,6 +14,9 @@
 
 %run guile
 
+;; Inspired from guile-petri library of Julien Lepiller:
+;; https://tyreunom.frama.io/guile-petri/documentation/The-Echo-Server.html
+
 %var petri-push
 %var petri-run-list
 
