@@ -86,7 +86,7 @@
 %use (list-take-while) "./src/list-take-while.scm"
 %use (petri-run-list petri-push) "./src/petri.scm"
 %use (raisu) "./src/raisu.scm"
-%use (with-np-thread-env#non-interruptible) "./src/np-thread.scm"
+%use (with-np-thread-env#non-interruptible) "./src/np-thread-parameterize.scm"
 %use (dynamic-thread-yield) "./src/dynamic-thread-yield.scm"
 %use (dynamic-thread-spawn) "./src/dynamic-thread-spawn.scm"
 %use (dynamic-thread-cancel) "./src/dynamic-thread-cancel.scm"

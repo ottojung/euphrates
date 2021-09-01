@@ -12,6 +12,7 @@
 
 ;; Like uni-spinlock but use arbitary variables as lock target
 ;; and do sleep when wait
+;; FIXME: this leaks memory
 (define-values (universal-lockr! universal-unlockr!)
   (let ((critical (make-uni-spinlock-critical))
         (h (hashmap)))

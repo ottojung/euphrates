@@ -14,9 +14,9 @@
 
 %run guile
 
-;; Do not export make-env, use parameterize instead ;; %var np-thread-make-env
-%var np-thread-parameterize-env
-%var with-np-thread-env#non-interruptible
+;; NOTE: do not use np-thread-make-env,
+;;       use np-thread-parameterize-env instead.
+%var np-thread-make-env
 
 ;; Do not export run ;; %var np-thread-global-run!
 %var np-thread-global-spawn
@@ -32,23 +32,14 @@
 
 %use (define-type9) "./define-type9.scm"
 %use (make-unique) "./make-unique.scm"
-%use (universal-usleep) "./universal-usleep.scm"
-%use (universal-lockr! universal-unlockr!) "./universal-lockr-unlockr.scm"
 %use (with-critical) "./with-critical.scm"
 %use (make-queue queue-empty? queue-peek queue-push! queue-pop!) "./queue.scm"
 %use (raisu) "./raisu.scm"
 %use (dynamic-thread-cancel-tag) "./dynamic-thread-cancel-tag.scm"
-
-%use (dynamic-thread-spawn#p) "./dynamic-thread-spawn-p.scm"
-%use (dynamic-thread-cancel#p) "./dynamic-thread-cancel-p.scm"
-%use (dynamic-thread-disable-cancel#p) "./dynamic-thread-disable-cancel-p.scm"
-%use (dynamic-thread-enable-cancel#p) "./dynamic-thread-enable-cancel-p.scm"
-%use (dynamic-thread-yield#p) "./dynamic-thread-yield-p.scm"
-%use (dynamic-thread-sleep#p) "./dynamic-thread-sleep-p.scm"
-%use (dynamic-thread-mutex-make#p) "./dynamic-thread-mutex-make-p.scm"
-%use (dynamic-thread-mutex-lock!#p) "./dynamic-thread-mutex-lock-p.scm"
-%use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock-p.scm"
-%use (dynamic-thread-critical-make#p) "./dynamic-thread-critical-make-p.scm"
+%use (dynamic-thread-get-wait-delay) "./dynamic-thread-get-wait-delay.scm"
+%use (sys-usleep) "./sys-usleep.scm"
+%use (hashmap) "./hashmap.scm"
+%use (hashmap-set! hashmap-ref) "./ihashmap.scm"
 
 %use (np-thread-obj np-thread-obj-continuation set-np-thread-obj-continuation! np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?! np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!) "./np-thread-obj.scm"
 
@@ -162,6 +153,45 @@
       (let ((me current-thread))
         (set-np-thread-obj-cancel-enabled?! me #t))))
 
+  ;; Basically the ./universal-usleep.scm
+  (define (np-thread-usleep micro-seconds)
+    (let* ((nano-seconds (micro->nano/unit micro-seconds))
+           (start-time (time-get-monotonic-nanoseconds-timestamp))
+           (end-time (+ start-time nano-seconds))
+           (sleep-rate (dynamic-thread-get-wait-delay))
+           (yield np-thread-yield))
+      (let lp ()
+        (yield)
+        (let ((t (time-get-monotonic-nanoseconds-timestamp)))
+          (unless (> t end-time)
+            (let ((s (min sleep-rate (nano->micro/unit (- end-time t)))))
+              (sys-usleep s)
+              (lp)))))))
+
+  (define np-thread-mutex-make
+    (lambda () (box #f)))
+
+  (define np-thread-mutex-lock!
+    (let* ((sleep-time (dynamic-thread-get-wait-delay))
+           (sleep (lambda () (np-thread-yield) (sys-usleep sleep-time))))
+      (lambda (mut)
+        (let lp ()
+          (when
+              (with-critical
+               critical
+               (if (box-ref mut)
+                   #t
+                   (begin
+                     (box-set! mut #t)
+                     #f)))
+            (sleep)
+            (lp))))))
+
+  (define (np-thread-mutex-unlock! mut)
+    (with-critical
+     critical
+     (box-set! mut #f)))
+
   (values
    np-thread-run!
    np-thread-fork
@@ -169,44 +199,11 @@
    np-thread-disable-cancel
    np-thread-enable-cancel
    np-thread-yield
-   universal-usleep
-   make-unique
-   universal-lockr!
-   universal-unlockr!
+   np-thread-usleep
+   np-thread-mutex-make
+   np-thread-mutex-lock!
+   np-thread-mutex-unlock!
    np-thread-make-critical))
-
-(define (np-thread-parameterize-env make-critical thunk)
-  (define-values
-      (np-thread-run!
-       np-thread-fork
-       np-thread-cancel!
-       np-thread-disable-cancel
-       np-thread-enable-cancel
-       np-thread-yield
-       universal-usleep
-       make-unique
-       universal-lockr!
-       universal-unlockr!
-       np-thread-make-critical)
-    (np-thread-make-env make-critical))
-  (parameterize ((dynamic-thread-spawn#p np-thread-fork)
-                 (dynamic-thread-cancel#p np-thread-cancel!)
-                 (dynamic-thread-disable-cancel#p np-thread-disable-cancel)
-                 (dynamic-thread-enable-cancel#p np-thread-enable-cancel)
-                 (dynamic-thread-yield#p np-thread-yield)
-                 (dynamic-thread-sleep#p universal-usleep)
-                 (dynamic-thread-mutex-make#p make-unique)
-                 (dynamic-thread-mutex-lock!#p universal-lockr!)
-                 (dynamic-thread-mutex-unlock!#p universal-unlockr!)
-                 (dynamic-thread-critical-make#p np-thread-make-critical))
-    (np-thread-run! thunk)))
-
-(define-syntax with-np-thread-env#non-interruptible
-  (syntax-rules ()
-    ((_ . bodies)
-     (np-thread-parameterize-env
-      make-no-critical
-      (lambda () . bodies)))))
 
 (define-values
     (np-thread-global-run!
