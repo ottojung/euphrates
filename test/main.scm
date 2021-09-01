@@ -85,6 +85,7 @@
 %use (profun-op-apply) "./src/profun-op-apply.scm"
 %use (list-take-while) "./src/list-take-while.scm"
 %use (petri-run-list petri-push) "./src/petri.scm"
+%use (raisu) "./src/raisu.scm"
 
 (let ()
   (catch-any
@@ -99,7 +100,7 @@
 
 (let ()
   (with-ignore-errors!
-   (throw 'test "arg1" "arg2")))
+   (raisu 'test "arg1" "arg2")))
 
 ;; queue
 (let ()
