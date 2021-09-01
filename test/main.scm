@@ -1494,10 +1494,12 @@
      "zulul at 2"
      "lol after 2"
      "lol at 3"
-     "lol after 3"
-     "lol at 4"
-     "lol after 4"
-     "lol ended"
+     "zulul after 2"
+     "zulul at 3"
+     "zulul after 3"
+     "zulul at 4"
+     "zulul after 4"
+     "zulul ended"
      ""))
    (with-output-to-string
      (lambda ()
@@ -1508,15 +1510,13 @@
 
         (define cycles 4)
 
-        (define zulul-thread #f)
+        (define lol-thread #f)
 
         (define [lol]
           (apploop [n] [0]
                    (if (> n cycles)
                        (dprintln "lol ended")
                        (begin
-                         (when (= n 3)
-                           (dynamic-thread-cancel zulul-thread))
                          (dprintln "lol at ~a" n)
                          (dynamic-thread-yield)
                          (dprintln "lol after ~a" n)
@@ -1528,6 +1528,8 @@
                        (dprintln "zulul ended")
                        (begin
                          (dprintln "zulul at ~a" n)
+                         (when (= n 3)
+                           (dynamic-thread-cancel lol-thread))
                          (dynamic-thread-yield)
                          (dprintln "zulul after ~a" n)
                          (loop (1+ n))))))
@@ -1535,8 +1537,8 @@
         (dprintln "start")
 
         (dynamic-thread-spawn kek)
-        (dynamic-thread-spawn lol)
-        (set! zulul-thread (dynamic-thread-spawn zulul))
+        (set! lol-thread (dynamic-thread-spawn lol))
+        (dynamic-thread-spawn zulul)
 
         (dprintln "end"))
 
