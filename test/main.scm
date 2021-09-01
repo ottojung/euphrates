@@ -86,6 +86,7 @@
 %use (list-take-while) "./src/list-take-while.scm"
 %use (petri-run-list petri-push) "./src/petri.scm"
 %use (raisu) "./src/raisu.scm"
+%use (with-np-thread-env#non-interruptible) "./src/np-thread.scm"
 
 (let ()
   (catch-any
@@ -1466,6 +1467,12 @@
    )
 
   )
+
+;; np-thread
+(let ()
+  (with-np-thread-env#non-interruptible
+   (display "hello") (newline)
+   ))
 
 (display "All good\n")
 
