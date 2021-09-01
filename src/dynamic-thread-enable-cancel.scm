@@ -1,14 +1,12 @@
 
 %run guile
 
-%use (sys-thread-enable-cancel) "./sys-thread-enable-cancel.scm"
-
-%var dynamic-thread-enable-cancel#p
+%use (dynamic-thread-enable-cancel#p) "./dynamic-thread-enable-cancel-p.scm"
+%use (dynamic-thread-enable-cancel#p-default) "./dynamic-thread-enable-cancel-p-default.scm"
 %var dynamic-thread-enable-cancel
 
-(define dynamic-thread-enable-cancel#p
-  (make-parameter sys-thread-enable-cancel))
 (define (dynamic-thread-enable-cancel)
-  ((dynamic-thread-enable-cancel#p)))
+  ((or (dynamic-thread-enable-cancel#p)
+       dynamic-thread-enable-cancel#p-default)))
 
 
