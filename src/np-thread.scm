@@ -41,7 +41,7 @@
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-set! hashmap-ref) "./ihashmap.scm"
 
-%use (np-thread-obj np-thread-obj-continuation set-np-thread-obj-continuation! np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?! np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!) "./np-thread-obj.scm"
+%use (np-thread-obj np-thread-obj? np-thread-obj-continuation set-np-thread-obj-continuation! np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?! np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!) "./np-thread-obj.scm"
 
 ;; Disables critical zones because in non-interruptible mode
 ;; user can assure atomicity by just not calling yield during its evalution.
@@ -92,7 +92,8 @@
        (set! start-point k)
        (set! current-thread (make-np-thread-obj thunk))
        (thunk)
-       (np-thread-end))))
+       (np-thread-end)))
+    (values))
 
   (define [np-thread-yield]
     (if current-thread
@@ -106,7 +107,7 @@
              (set-np-thread-obj-continuation! me k)
              (np-thread-list-add me)
              (np-thread-end))))
-        (np-thread-run! np-thread-yield)))
+        (np-thread-run! (lambda _ (values)))))
 
   (define [np-thread-fork thunk]
     (let ((first? #t)
@@ -131,6 +132,9 @@
       [[chosen] 0]))
 
   (define (np-thread-cancel! chosen)
+    (unless (np-thread-obj? chosen)
+      (raisu 'type-error 'np-thread-cancel! chosen))
+
     (set-np-thread-obj-cancel-scheduled?! chosen #t)
     (when (np-thread-obj-cancel-enabled? chosen)
       (np-thread-cancel!#unsafe chosen)))
@@ -207,7 +211,7 @@
 
 (define-values
     (np-thread-global-run!
-     np-thread-global-spawn
+     np-thread-global-spawn/delayed
      np-thread-global-cancel
      np-thread-global-disable-cancel
      np-thread-global-enable-cancel
@@ -218,3 +222,8 @@
      np-thread-global-mutex-unlock!
      np-thread-global-critical-make)
   (np-thread-make-env make-no-critical))
+
+(define (np-thread-global-spawn thunk)
+  (let ((th (np-thread-global-spawn/delayed thunk)))
+    (np-thread-global-yield)
+    th))
