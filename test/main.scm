@@ -87,6 +87,11 @@
 %use (petri-run-list petri-push) "./src/petri.scm"
 %use (raisu) "./src/raisu.scm"
 %use (with-np-thread-env#non-interruptible) "./src/np-thread.scm"
+%use (dynamic-thread-yield) "./src/dynamic-thread-yield.scm"
+%use (dynamic-thread-spawn) "./src/dynamic-thread-spawn.scm"
+%use (dynamic-thread-cancel) "./src/dynamic-thread-cancel.scm"
+%use (dprintln) "./src/dprintln.scm"
+%use (unlines) "./src/unlines.scm"
 
 (let ()
   (catch-any
@@ -1470,9 +1475,72 @@
 
 ;; np-thread
 (let ()
-  (with-np-thread-env#non-interruptible
-   (display "hello") (newline)
-   ))
+
+  (assert=
+   (unlines
+    (list
+     "start"
+     "end"
+     "in kek"
+     "lol at 0"
+     "zulul at 0"
+     "lol after 0"
+     "lol at 1"
+     "zulul after 0"
+     "zulul at 1"
+     "lol after 1"
+     "lol at 2"
+     "zulul after 1"
+     "zulul at 2"
+     "lol after 2"
+     "lol at 3"
+     "lol after 3"
+     "lol at 4"
+     "lol after 4"
+     "lol ended"
+     ""))
+   (with-output-to-string
+     (lambda ()
+
+       (with-np-thread-env#non-interruptible
+        (define [kek]
+          (dprintln "in kek"))
+
+        (define cycles 4)
+
+        (define zulul-thread #f)
+
+        (define [lol]
+          (apploop [n] [0]
+                   (if (> n cycles)
+                       (dprintln "lol ended")
+                       (begin
+                         (when (= n 3)
+                           (dynamic-thread-cancel zulul-thread))
+                         (dprintln "lol at ~a" n)
+                         (dynamic-thread-yield)
+                         (dprintln "lol after ~a" n)
+                         (loop (1+ n))))))
+
+        (define [zulul]
+          (apploop [n] [0]
+                   (if (> n cycles)
+                       (dprintln "zulul ended")
+                       (begin
+                         (dprintln "zulul at ~a" n)
+                         (dynamic-thread-yield)
+                         (dprintln "zulul after ~a" n)
+                         (loop (1+ n))))))
+
+        (dprintln "start")
+
+        (dynamic-thread-spawn kek)
+        (dynamic-thread-spawn lol)
+        (set! zulul-thread (dynamic-thread-spawn zulul))
+
+        (dprintln "end"))
+
+       ))))
 
 (display "All good\n")
 
