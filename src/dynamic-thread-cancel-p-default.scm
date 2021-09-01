@@ -3,7 +3,7 @@
 
 %var dynamic-thread-cancel#p-default
 
-%use (sys-thread-cancel) "./sys-thread.scm"
+%use (np-thread-global-cancel) "./np-thread.scm"
 
 (define dynamic-thread-cancel#p-default
-  sys-thread-cancel)
+  np-thread-global-cancel)

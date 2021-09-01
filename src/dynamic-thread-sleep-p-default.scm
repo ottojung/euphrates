@@ -1,10 +1,10 @@
 
 %run guile
 
-%use (sys-thread-sleep) "./sys-thread.scm"
+%use (np-thread-global-sleep) "./np-thread.scm"
 
 %var dynamic-thread-sleep#p-default
 
 (define dynamic-thread-sleep#p-default
-  sys-thread-sleep)
+  np-thread-global-sleep)
 
