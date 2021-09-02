@@ -126,6 +126,8 @@
         (thunk)
         (np-thread-end))
       (set! first? #f)
+      (unless current-thread
+        (np-thread-yield))
       ret))
 
   ;; Terminates np-thread
@@ -217,7 +219,7 @@
 
 (define-values
     (np-thread-global-run!
-     np-thread-global-spawn/delayed
+     np-thread-global-spawn
      np-thread-global-cancel
      np-thread-global-disable-cancel
      np-thread-global-enable-cancel
@@ -228,8 +230,3 @@
      np-thread-global-mutex-unlock!
      np-thread-global-critical-make)
   (np-thread-make-env make-no-critical))
-
-(define (np-thread-global-spawn thunk)
-  (let ((th (np-thread-global-spawn/delayed thunk)))
-    (np-thread-global-yield)
-    th))
