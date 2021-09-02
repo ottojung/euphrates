@@ -7,5 +7,5 @@
 %var dynamic-thread-get-delay-procedure
 
 (define (dynamic-thread-get-delay-procedure)
-  ((or (dynamic-thread-get-delay-procedure#p)
-       dynamic-thread-get-delay-procedure#p-default)))
+  (or (dynamic-thread-get-delay-procedure#p)
+      dynamic-thread-get-delay-procedure#p-default))
