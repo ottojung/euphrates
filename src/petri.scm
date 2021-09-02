@@ -178,7 +178,11 @@
 
   ;; handle errors
   (unless (null? errors)
-    (error-handler 'runtime-errors errors))
+    (catch-any
+     (lambda _
+       (error-handler 'runtime-errors errors))
+     (lambda handling-errors
+       (raisu 'error-handling-failed handling-errors queue errors))))
 
   (values))
 
@@ -261,5 +265,11 @@
             (future (cdr future/named)))
         (future 'wait/no-throw)
         (when (eq? 'fail (future 'status))
-          (error-handler 'network-failed net (future 'results)))
+          (catch-any
+           (lambda _
+             (error-handler 'network-failed net (future 'results)))
+           (lambda errors
+             (display "Petri run failed on handling 'network-failed error. Exceptions: " (current-error-port))
+             (display errors (current-error-port))
+             (newline (current-error-port)))))
         (loop)))))
