@@ -81,7 +81,9 @@
   (define [np-thread-end]
     (let [[p (np-thread-list-switch)]]
       (if (eq? p 'np-thread-empty-list)
-          (start-point)
+          (let ((sp start-point))
+            (set! start-point #f)
+            (sp))
           (begin
             ((np-thread-obj-continuation p))
             (np-thread-end)))))
