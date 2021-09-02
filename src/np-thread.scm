@@ -92,8 +92,9 @@
     (call-with-current-continuation
      (lambda [k]
        (set! start-point k)
-       (set! current-thread (make-np-thread-obj thunk))
-       (thunk)
+       (when thunk
+         (set! current-thread (make-np-thread-obj thunk))
+         (thunk))
        (np-thread-end)))
     (values))
 
@@ -109,8 +110,11 @@
              (set-np-thread-obj-continuation! me k)
              (np-thread-list-add me)
              (np-thread-end))))
-        (np-thread-run! (lambda _ (values)))))
+        (np-thread-run! #f)))
 
+  ;; Note: puts the thread TO THE END of the queue,
+  ;; so when you yield, you don't go to the last forked thread,
+  ;; you go to the first one.
   (define [np-thread-fork thunk]
     (let ((first? #t)
           (ret #f))
