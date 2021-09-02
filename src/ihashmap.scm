@@ -13,6 +13,7 @@
 %var hashmap-set!
 %var hashmap-clear!
 %var hashmap-count
+%var hashmap-delete!
 
 %for (COMPILER "guile")
 
@@ -38,6 +39,9 @@
 (define hashmap-foreach hash-for-each)
 
 (define (hashmap-count H) (hash-count (const #t) H))
+
+(define (hashmap-delete! H key)
+  (hash-remove! H key))
 
 %end
 
