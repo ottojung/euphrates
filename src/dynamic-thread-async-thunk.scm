@@ -6,12 +6,14 @@
 %use (sleep-until) "./sleep-until.scm"
 %use (raisu) "./raisu.scm"
 
+;; This is like futures.
+;; Use this when need to join a thread.
 %var dynamic-thread-async-thunk
 
 (define (dynamic-thread-async-thunk thunk)
-  (let ((results #f)
-        (status #f)) ;; \in { #f, 'ok, 'fail }
-
+  (define status #f) ;; \in { #f, 'ok, 'fail }
+  (define results #f)
+  (define thread
     (dynamic-thread-spawn
      (lambda ()
        (catch-any
@@ -22,10 +24,23 @@
               (set! status 'ok))))
         (lambda errors
           (set! results errors)
-          (set! status 'fail)))))
+          (set! status 'fail))))))
 
-    (lambda ()
-      (sleep-until status)
-      (when (eq? 'fail status)
-        (raisu 'dynamic-thread-run-async-failed results))
-      (apply values results))))
+  (define (wait/no-throw)
+    (sleep-until status))
+
+  (define (wait)
+    (sleep-until status)
+    (when (eq? 'fail status)
+      (raisu 'dynamic-thread-run-async-failed results))
+    (apply values results))
+
+  (case-lambda
+   (() (wait))
+   ((operation)
+    (case operation
+      ((wait) (wait))
+      ((wait/no-throw) (wait/no-throw))
+      ((thread) thread)
+      ((status) status)
+      ((results) results)))))
