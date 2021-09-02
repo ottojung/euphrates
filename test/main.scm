@@ -1475,38 +1475,44 @@
 
 ;; np-thread
 (let ()
+  (define println
+    (case-lambda
+     ((msg)
+      (display (string-append msg "\n")))
+     ((msg n)
+      (println (string-append msg " " (number->string n))))))
 
   (define (test-body)
     (define [kek]
-      (dprintln "in kek"))
+      (println "in kek"))
 
     (define cycles 4)
 
     (define lol-thread #f)
 
     (define [lol]
-      (apploop [n] [0]
-               (if (> n cycles)
-                   (dprintln "lol ended")
-                   (begin
-                     (dprintln "lol at ~a" n)
-                     (dynamic-thread-yield)
-                     (dprintln "lol after ~a" n)
-                     (loop (1+ n))))))
+      (let loop ((n 0))
+        (if (> n cycles)
+            (println "lol ended")
+            (begin
+              (println "lol at" n)
+              (dynamic-thread-yield)
+              (println "lol after" n)
+              (loop (+ 1 n))))))
 
     (define [zulul]
-      (apploop [n] [0]
-               (if (> n cycles)
-                   (dprintln "zulul ended")
-                   (begin
-                     (dprintln "zulul at ~a" n)
-                     (when (= n 3)
-                       (dynamic-thread-cancel lol-thread))
-                     (dynamic-thread-yield)
-                     (dprintln "zulul after ~a" n)
-                     (loop (1+ n))))))
+      (let loop ((n 0))
+        (if (> n cycles)
+            (println "zulul ended")
+            (begin
+              (println "zulul at" n)
+              (when (= n 3)
+                (dynamic-thread-cancel lol-thread))
+              (dynamic-thread-yield)
+              (println "zulul after" n)
+              (loop (+ 1 n))))))
 
-    (dprintln "start")
+    (println "start")
 
     (dynamic-thread-yield)
 
@@ -1514,7 +1520,7 @@
     (set! lol-thread (dynamic-thread-spawn lol))
     (dynamic-thread-spawn zulul)
 
-    (dprintln "end"))
+    (println "end"))
 
   (define parameterized-order
     (list
