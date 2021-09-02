@@ -150,12 +150,13 @@
 
   (define (np-thread-make-critical)
     (lambda (fn)
-      (when current-thread
-        (let* [[me current-thread]]
-          (set-np-thread-obj-cancel-enabled?! me #f)
-          (fn) ;; NOTE: must not evaluate non-local jumps
-          (set-np-thread-obj-cancel-enabled?! me #t))
-        (np-thread-yield))))
+      (if current-thread
+          (let* [[me current-thread]]
+            (set-np-thread-obj-cancel-enabled?! me #f)
+            (let ((result (fn)))
+              (set-np-thread-obj-cancel-enabled?! me #t)
+              result))
+          (fn))))
 
   (define [np-thread-disable-cancel]
     (when current-thread
