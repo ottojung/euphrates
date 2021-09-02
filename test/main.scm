@@ -1476,8 +1476,45 @@
 ;; np-thread
 (let ()
 
-  (assert=
-   (unlines
+  (define (test-body)
+    (define [kek]
+      (dprintln "in kek"))
+
+    (define cycles 4)
+
+    (define lol-thread #f)
+
+    (define [lol]
+      (apploop [n] [0]
+               (if (> n cycles)
+                   (dprintln "lol ended")
+                   (begin
+                     (dprintln "lol at ~a" n)
+                     (dynamic-thread-yield)
+                     (dprintln "lol after ~a" n)
+                     (loop (1+ n))))))
+
+    (define [zulul]
+      (apploop [n] [0]
+               (if (> n cycles)
+                   (dprintln "zulul ended")
+                   (begin
+                     (dprintln "zulul at ~a" n)
+                     (when (= n 3)
+                       (dynamic-thread-cancel lol-thread))
+                     (dynamic-thread-yield)
+                     (dprintln "zulul after ~a" n)
+                     (loop (1+ n))))))
+
+    (dprintln "start")
+
+    (dynamic-thread-spawn kek)
+    (set! lol-thread (dynamic-thread-spawn lol))
+    (dynamic-thread-spawn zulul)
+
+    (dprintln "end"))
+
+  (define parameterized-order
     (list
      "start"
      "end"
@@ -1501,48 +1538,66 @@
      "zulul after 4"
      "zulul ended"
      ""))
+
+  (define global-order
+    (list
+     "start"
+     "in kek"
+     "lol at 0"
+     "lol after 0"
+     "lol at 1"
+     "lol after 1"
+     "lol at 2"
+     "lol after 2"
+     "lol at 3"
+     "lol after 3"
+     "lol at 4"
+     "lol after 4"
+     "lol ended"
+     "zulul at 0"
+     "zulul after 0"
+     "zulul at 1"
+     "zulul after 1"
+     "zulul at 2"
+     "zulul after 2"
+     "zulul at 3"
+     "zulul after 3"
+     "zulul at 4"
+     "zulul after 4"
+     "zulul ended"
+     "end"
+     ""))
+
+  (assert=
+   (unlines global-order)
+   (with-output-to-string
+     test-body))
+
+  (assert=
+   (unlines global-order)
+   (with-output-to-string
+     test-body))
+
+  (assert=
+   (unlines parameterized-order)
    (with-output-to-string
      (lambda ()
-
        (with-np-thread-env#non-interruptible
-        (define [kek]
-          (dprintln "in kek"))
+        (test-body)))))
 
-        (define cycles 4)
+  (assert=
+   (unlines parameterized-order)
+   (with-output-to-string
+     (lambda ()
+       (dynamic-thread-spawn
+        test-body))))
 
-        (define lol-thread #f)
+  (assert=
+   (unlines global-order)
+   (with-output-to-string
+     test-body))
 
-        (define [lol]
-          (apploop [n] [0]
-                   (if (> n cycles)
-                       (dprintln "lol ended")
-                       (begin
-                         (dprintln "lol at ~a" n)
-                         (dynamic-thread-yield)
-                         (dprintln "lol after ~a" n)
-                         (loop (1+ n))))))
-
-        (define [zulul]
-          (apploop [n] [0]
-                   (if (> n cycles)
-                       (dprintln "zulul ended")
-                       (begin
-                         (dprintln "zulul at ~a" n)
-                         (when (= n 3)
-                           (dynamic-thread-cancel lol-thread))
-                         (dynamic-thread-yield)
-                         (dprintln "zulul after ~a" n)
-                         (loop (1+ n))))))
-
-        (dprintln "start")
-
-        (dynamic-thread-spawn kek)
-        (set! lol-thread (dynamic-thread-spawn lol))
-        (dynamic-thread-spawn zulul)
-
-        (dprintln "end"))
-
-       ))))
+  )
 
 (display "All good\n")
 
