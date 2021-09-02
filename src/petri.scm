@@ -26,6 +26,9 @@
 %use (list-or-map) "./list-or-map.scm"
 %use (catch-any) "./catch-any.scm"
 %use (cartesian-product/g) "./cartesian-product-g.scm"
+%use (list-map/flatten) "./list-map-flatten.scm"
+
+%use (debug) "./debug.scm"
 
 (define petri-push/p
   (make-parameter #f))
@@ -42,9 +45,29 @@
 ;; TODO: use multithreading
 ;; TODO: delay errors to their own cycles
 
-(define (petri-run-cycle error-handler table todos-work-table
-                         get-names-queue add-name-to-names-queue
-                         global-queue)
+;; Transforms petri global-queue into list of things to evalutate (the "todos").
+;; So a list like:
+;;      (list (cons 'tr-name-1 "arg-a" "arg-b")
+;;            (cons 'tr-name-2 "arg-a" "arg-b" "arg-c")
+;;            (cons 'tr-name-1 #f      "arg-b2"))
+;;  into the list:
+;;      (list (cons 'tr-name-1 (("arg-a" "arg-b")
+;;                              ("arg-a" "arg-b2")))
+;;            (cons 'tr-name-2 (("arg-a" "arg-b" "arg-c"))))
+;;
+;; `table' is a hashmap of "tr-name" -> "transition procedure"
+(define (petri-make-transformer)
+  ;; Hashmap of (cons tr-name arg-index) -> (listof args-at-arg-index)
+  ;;     and of (cons tr-name 'arity) -> arity of tr-name
+  (define todos-work-table (hashmap))
+
+  ;; List of unique names in the queue
+  (define names-queue '())
+  (define (get-names-queue)
+    names-queue) ;; TODO: inline
+  (define (add-name-to-names-queue tr-name)
+    (set! names-queue (cons tr-name names-queue)))
+
   (define (make-arity-key tr-name)
     (cons tr-name 'arity))
 
@@ -94,6 +117,14 @@
     (add-indexed-args-to-hashmap H queue)
     (filter identity (make-products H)))
 
+  (lambda (global-queue)
+    (hashmap-clear! todos-work-table)
+    (set! names-queue '())
+
+    (get-todos todos-work-table global-queue)))
+
+(define (petri-run-cycle error-handler names-table todos)
+
   (define (run-transition tr-name transition args)
     (catch-any
      (lambda _
@@ -102,22 +133,23 @@
        (error-handler 'runtime-error tr-name args errors))))
 
   (define (run-todos todos)
-    (for-each
+    (list-map/flatten
      (lambda (p)
        (define tr-name (car p))
        (define multi-args (cdr p))
-       (define transitions (hashmap-ref table tr-name '()))
-       (for-each
+       (define transitions (hashmap-ref names-table tr-name '()))
+       (list-map/flatten
         (lambda (transition)
-          (for-each
+          (map
            (lambda (args)
              (run-transition tr-name transition args))
            multi-args))
         transitions))
      todos))
 
-  (define todos (get-todos todos-work-table global-queue))
-  (run-todos todos))
+  (define ret (run-todos todos))
+
+  ret)
 
 ;;
 ;; Example `list-of-transitions':
@@ -125,39 +157,30 @@
 ;;         (cons 'bye (lambda (name) (display "Bye ") (display name) (display "!\n"))))
 ;; First transtion must receive 0 arguments.
 (define (petri-run-list error-handler list-of-transitions)
-  (define table (multi-alist->hashmap list-of-transitions))
+  (define names-table (multi-alist->hashmap list-of-transitions))
   (define global-queue (list (cons (car (car list-of-transitions)) '())))
 
+  (define (reset-queue!)
+    (set! global-queue '()))
+
   (define (push tr-name args)
-    (if (hashmap-ref table tr-name #f)
+    (if (hashmap-ref names-table tr-name #f)
         (set! global-queue (cons (cons tr-name args) global-queue))
         (error-handler 'bad-key tr-name args)))
 
-  ;; Table of (cons tr-name arg-index) -> (listof args-at-arg-index)
-  ;;   and of (cons tr-name 'arity) -> arity of tr-name
-  (define todos-work-table (hashmap))
-
-  ;; List of unique names in the queue
-  (define names-queue '())
-  (define (get-names-queue)
-    names-queue)
-  (define (add-name-to-names-queue tr-name)
-    (set! names-queue (cons tr-name names-queue)))
+  (define transformer (petri-make-transformer))
 
   (parameterize ((petri-push/p push))
     (let loop ()
       (unless (null? global-queue)
         (let ((q global-queue))
+          (reset-queue!)
 
-          ;; reset the state
-          (set! global-queue '())
-          (set! names-queue '())
-          (hashmap-clear! todos-work-table)
+          (define todos (transformer q))
+          (debug "TODOS: ~s" todos)
 
           ;; fire the network
-          (petri-run-cycle error-handler table todos-work-table
-                           get-names-queue add-name-to-names-queue
-                           q)
+          (petri-run-cycle error-handler names-table todos)
 
           (loop))))))
 
