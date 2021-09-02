@@ -38,8 +38,9 @@
 %use (dynamic-thread-cancel-tag) "./dynamic-thread-cancel-tag.scm"
 %use (dynamic-thread-get-wait-delay) "./dynamic-thread-get-wait-delay.scm"
 %use (sys-usleep) "./sys-usleep.scm"
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-set! hashmap-ref) "./ihashmap.scm"
+%use (make-box box-ref box-set!) "./box.scm"
+%use (nano->micro/unit micro->nano/unit) "./unit-conversions.scm"
+%use (time-get-monotonic-nanoseconds-timestamp) "./time-get-monotonic-nanoseconds-timestamp.scm"
 
 %use (np-thread-obj np-thread-obj? np-thread-obj-continuation set-np-thread-obj-continuation! np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?! np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!) "./np-thread-obj.scm"
 
@@ -181,7 +182,7 @@
               (lp)))))))
 
   (define np-thread-mutex-make
-    (lambda () (box #f)))
+    (lambda () (make-box #f)))
 
   (define np-thread-mutex-lock!
     (let* ((sleep-time (dynamic-thread-get-wait-delay))
