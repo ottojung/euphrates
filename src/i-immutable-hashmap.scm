@@ -19,6 +19,7 @@
 %var immutable-hashmap->alist
 %var immutable-hashmap-copy
 %var immutable-hashmap-foreach
+%var immutable-hashmap-map
 %var alist->immutable-hashmap
 %var immutable-hashmap-ref
 %var immutable-hashmap-set
@@ -59,4 +60,15 @@
 (define (immutable-hashmap-count T)
   (define H (immutable-hashmap-value T))
   (length H))
+
+(define (immutable-hashmap-map fn T)
+  (define H (immutable-hashmap-value T))
+  (immutable-hashmap-fromlist
+   (map
+    (lambda (p)
+      (define key (car p))
+      (define value (cdr p))
+      (define result (fn key value))
+      (cons key result))
+    H)))
 
