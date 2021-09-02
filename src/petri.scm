@@ -129,8 +129,9 @@
 
   (define (run-transition tr-name transition args)
     (cons tr-name
-          (dynamic-thread-async
-           (apply transition args))))
+          (cons args
+                (dynamic-thread-async
+                 (apply transition args)))))
 
   (define (run-todos todos)
     (list-map/flatten
@@ -157,10 +158,11 @@
    (map
     (lambda (future/named)
       (define name (car future/named))
-      (define future (cdr future/named))
+      (define args (cadr future/named))
+      (define future (cddr future/named))
       (future 'wait/no-throw)
       (and (eq? 'fail (future 'status))
-           (future 'results)))
+           (list name args (future 'results))))
     futures)))
 
 (define (petri-cycle-network error-handler transformer queue net)
