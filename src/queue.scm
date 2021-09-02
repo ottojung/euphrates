@@ -66,7 +66,9 @@
                  (size (vector-length v))
                  (first (queue-first q))
                  (first+1 (+ 1 first))
-                 (new-first (if (< first+1 size) first+1 0)))
+                 (new-first (if (< first+1 size) first+1 0))
+                 (ret (vector-ref v first)))
+            (vector-set! v first #f)
             (set-queue-first! q new-first)
-            (vector-ref v first)))))))
+            ret))))))
 
