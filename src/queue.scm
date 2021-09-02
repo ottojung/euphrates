@@ -7,6 +7,7 @@
 %var queue-push!
 %var queue-pop!
 %var queue->list
+%var queue-unload!
 
 %use (make-unique) "./make-unique.scm"
 %use (raisu) "./raisu.scm"
@@ -87,3 +88,10 @@
          ((= i first) (cons (vector-ref v i) buf))
          ((< i 0) (loop (- (vector-length v) 1) buf))
          (else (loop (- i 1) (cons (vector-ref v i) buf)))))))
+
+(define (queue->unload! q)
+  (let ((lst (queue->list q)))
+    (set-queue-first! q 0)
+    (set-queue-last! q 0)
+    (vector-fill! (queue-vector q) #f)
+    lst))
