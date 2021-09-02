@@ -1508,6 +1508,8 @@
 
     (dprintln "start")
 
+    (dynamic-thread-yield)
+
     (dynamic-thread-spawn kek)
     (set! lol-thread (dynamic-thread-spawn lol))
     (dynamic-thread-spawn zulul)
