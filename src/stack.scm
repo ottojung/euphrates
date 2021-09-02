@@ -35,22 +35,33 @@
 (define (stack-push! S value)
   (set-stack-lst! S (cons value (stack-lst S))))
 
-(define (stack-pop! S)
-  (when (stack-empty? S)
-    (raisu 'pop-on-empty-stack))
-  (let ((top (car (stack-lst S))))
-    (set-stack-lst! S (cdr (stack-lst S)))
-    top))
+(define stack-pop!
+  (case-lambda
+   ((S)
+    (when (stack-empty? S)
+      (raisu 'pop-on-empty-stack))
+    (let ((top (car (stack-lst S))))
+      (set-stack-lst! S (cdr (stack-lst S)))
+      top))
+   ((S default)
+    (if (null? (stack-lst S)) default
+        (let ((top (car (stack-lst S))))
+          (set-stack-lst! S (cdr (stack-lst S)))
+          top)))))
 
-(define (stack-peek S)
-  (when (stack-empty? S)
-    (raisu 'peek-on-empty-stack))
-  (car (stack-lst S)))
+(define stack-peek
+  (case-lambda
+   ((S)
+    (when (stack-empty? S)
+      (raisu 'peek-on-empty-stack))
+    (car (stack-lst S)))
+   ((S default)
+    (if (null? (stack-lst S)) default
+        (car (stack-lst S))))))
 
 (define (stack-discard! S)
-  (when (stack-empty? S)
-    (raisu 'discard-on-empty-stack))
-  (set-stack-lst! S (cdr (stack-lst S))))
+  (unless (stack-empty? S)
+    (set-stack-lst! S (cdr (stack-lst S)))))
 
 (define (stack->list S)
   (stack-lst S))
