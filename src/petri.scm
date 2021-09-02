@@ -30,9 +30,11 @@
 %use (list-map/flatten) "./list-map-flatten.scm"
 %use (petri-net-obj petri-net-obj? petri-net-obj-transitions petri-net-obj-queue petri-net-obj-critical petri-net-obj-finished? set-petri-net-obj-finished?!) "./petri-net-obj.scm"
 %use (raisu) "./raisu.scm"
+%use (stack-make stack-unload! stack-push! stack-pop!) "./stack.scm"
 %use (with-critical) "./with-critical.scm"
-%use (stack-unload! stack-push!) "./stack.scm"
 %use (dynamic-thread-yield) "./dynamic-thread-yield.scm"
+%use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
+%use (dynamic-thread-async) "./dynamic-thread-async.scm"
 
 %use (debug) "./debug.scm"
 
@@ -126,11 +128,9 @@
 (define (petri-run-cycle error-handler names-table todos)
 
   (define (run-transition tr-name transition args)
-    (catch-any
-     (lambda _
-       (apply transition args))
-     (lambda errors
-       (error-handler 'runtime-error tr-name args errors))))
+    (cons tr-name
+          (dynamic-thread-async
+           (apply transition args))))
 
   (define (run-todos todos)
     (list-map/flatten
@@ -151,11 +151,46 @@
 
   ret)
 
-(define (petri-start-network error-handler net)
-  ;; FIXME: handle waiting on the network to finish
+(define (petri-collect-errors futures)
+  (filter
+   identity
+   (map
+    (lambda (future/named)
+      (define name (car future/named))
+      (define future (cdr future/named))
+      (future 'wait/no-throw)
+      (and (eq? 'fail (future 'status))
+           (future 'results)))
+    futures)))
 
+(define (petri-cycle-network error-handler transformer queue net)
+  ;; collect todos
+  (define todos
+    (transformer queue))
+
+  ;; fire the transitions
+  (define futures
+    (petri-run-cycle error-handler (petri-net-obj-transitions net) todos))
+
+  ;; wait until all of them are finished
+  (define errors
+    (petri-collect-errors futures))
+
+  ;; handle errors
+  (unless (null? errors)
+    (error-handler 'runtime-errors errors))
+
+  (values))
+
+(define (petri-loop-network error-handler unload! net)
   (define transformer (petri-make-transformer))
+  (let loop ()
+    (let ((q (unload!)))
+      (unless (null? q)
+        (petri-cycle-network error-handler transformer q net)
+        (loop)))))
 
+(define (petri-start-network error-handler net)
   (define (unload!)
     (with-critical
      (petri-net-obj-critical net)
@@ -165,36 +200,24 @@
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #f))
 
-  (let loop ()
-    ;; (dynamic-thread-yield) ;; DEBUGGGG
-    (let ((q (unload!)))
-      (unless (null? q)
-        ;; collect todos
-        (let ((todos (transformer q)))
-          ;; fire the transitions
-          (petri-run-cycle error-handler (petri-net-obj-transitions net) todos))
-        ;; wait until all of them are finished
-        ;; TODO ^^^
-        (loop))))
+  (petri-loop-network error-handler unload! net)
 
   (with-critical
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #t)))
 
 (define (petri-run error-handler start-transition-name list-of-petri-networks)
-  (let* ((start-transition-name* (cons start-transition-name 0))
-         (start-transitions
-          (filter identity
-                  (map (lambda (net)
-                         (hashmap-ref (petri-net-obj-transitions net) start-transition-name* #f))
-                       list-of-petri-networks))))
-    (when (null? start-transitions)
-      (raisu 'start-transition-does-not-exist-in-any-of-the-networks start-transition-name)))
+  (define networks-futures (stack-make))
+  (define global-critical (dynamic-thread-critical-make))
 
   (define (restart net)
-    ;; (raisu "NOT IMPLEMENTED RESTART YET")
-    (debug "NOT IMPLEMENTED RESTART YET")
-    )
+    (with-critical
+     global-critical
+     (stack-push!
+      networks-futures
+      (cons net
+            (dynamic-thread-async
+             (petri-start-network error-handler net))))))
 
   (define (check-finished net)
     (and (petri-net-obj-finished? net)
@@ -213,10 +236,30 @@
          (restart net)))
      list-of-petri-networks))
 
+  (let* ((start-transition-name* (cons start-transition-name 0))
+         (start-transitions
+          (filter identity
+                  (map (lambda (net)
+                         (hashmap-ref (petri-net-obj-transitions net) start-transition-name* #f))
+                       list-of-petri-networks))))
+    (when (null? start-transitions)
+      (raisu 'start-transition-does-not-exist-in-any-of-the-networks start-transition-name)))
+
   (push start-transition-name '())
 
   (for-each
    (lambda (net)
      (parameterize ((petri-push/p push))
-       (petri-start-network error-handler net)))
-   list-of-petri-networks))
+       (restart net)))
+   list-of-petri-networks)
+
+  (let loop ()
+    (define future/named
+      (with-critical global-critical (stack-pop! networks-futures #f)))
+    (when future/named
+      (let ((net (car future/named))
+            (future (cdr future/named)))
+        (future 'wait/no-throw)
+        (when (eq? 'fail (future 'status))
+          (error-handler 'network-failed net (future 'results)))
+        (loop)))))
