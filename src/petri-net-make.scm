@@ -14,20 +14,16 @@
 
 %run guile
 
-%var petri-net-obj
-%var petri-net-obj?
-%var petri-net-obj-transitions
-%var petri-net-obj-queue
-%var petri-net-obj-critical
-%var petri-net-obj-finished?
-%var set-petri-net-obj-finished?!
+%var petri-net-make
 
-%use (define-type9) "./define-type9.scm"
+%use (petri-net-obj) "./petri-net-obj.scm"
+%use (stack-make) "./stack.scm"
+%use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
 
-(define-type9 <petri-net-obj>
-  (petri-net-obj transitions queue critical finished?) petri-net-obj?
-  (transitions petri-net-obj-transitions)
-  (queue petri-net-obj-queue)
-  (critical petri-net-obj-critical)
-  (finished? petri-net-obj-finished? set-petri-net-obj-finished?!)
-  )
+(define (petri-net-make transitions-hashmap)
+  (petri-net-obj
+   transitions-hashmap
+   (stack-make) ;; queue is a stack because this way is faster (due to the reversing that is done during todos construction)
+   (dynamic-thread-critical-make)
+   #f ;; not finished initially
+   ))

@@ -18,15 +18,21 @@
 ;; https://tyreunom.frama.io/guile-petri/documentation/The-Echo-Server.html
 
 %var petri-push
-%var petri-run-list
+%var petri-run
 
 %use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set! multi-alist->hashmap hashmap-clear!) "./ihashmap.scm"
+%use (hashmap-ref hashmap-set! multi-alist->hashmap hashmap->alist hashmap-clear!) "./ihashmap.scm"
+%use (make-hashset hashset-add! hashset-ref hashset-clear!) "./ihashset.scm"
 %use (range) "./range.scm"
 %use (list-or-map) "./list-or-map.scm"
 %use (catch-any) "./catch-any.scm"
 %use (cartesian-product/g) "./cartesian-product-g.scm"
 %use (list-map/flatten) "./list-map-flatten.scm"
+%use (petri-net-obj petri-net-obj? petri-net-obj-transitions petri-net-obj-queue petri-net-obj-critical petri-net-obj-finished? set-petri-net-obj-finished?!) "./petri-net-obj.scm"
+%use (raisu) "./raisu.scm"
+%use (with-critical) "./with-critical.scm"
+%use (stack-unload! stack-push!) "./stack.scm"
+%use (dynamic-thread-yield) "./dynamic-thread-yield.scm"
 
 %use (debug) "./debug.scm"
 
@@ -51,44 +57,36 @@
 ;;            (cons 'tr-name-2 "arg-a" "arg-b" "arg-c")
 ;;            (cons 'tr-name-1 #f      "arg-b2"))
 ;;  into the list:
-;;      (list (cons 'tr-name-1 (("arg-a" "arg-b")
-;;                              ("arg-a" "arg-b2")))
-;;            (cons 'tr-name-2 (("arg-a" "arg-b" "arg-c"))))
+;;      (list (cons (cons 'tr-name-1 2) (("arg-a" "arg-b")
+;;                                       ("arg-a" "arg-b2")))
+;;            (cons (cons 'tr-name-2 3) (("arg-a" "arg-b" "arg-c"))))
 ;;
 ;; `table' is a hashmap of "tr-name" -> "transition procedure"
 (define (petri-make-transformer)
-  ;; Hashmap of (cons tr-name arg-index) -> (listof args-at-arg-index)
-  ;;     and of (cons tr-name 'arity) -> arity of tr-name
+  ;; Hashmap of (cons (cons tr-name arg-arity) arg-index) -> (listof args-at-arg-index)
   (define todos-work-table (hashmap))
 
   ;; List of unique names in the queue
   (define names-queue '())
-  (define (get-names-queue)
-    names-queue) ;; TODO: inline
-  (define (add-name-to-names-queue tr-name)
-    (set! names-queue (cons tr-name names-queue)))
-
-  (define (make-arity-key tr-name)
-    (cons tr-name 'arity))
-
-  (define (set-transition-arity! H tr-name arity)
-    (define key (make-arity-key tr-name))
-
-    (unless (hashmap-ref H key #f)
-      (add-name-to-names-queue tr-name))
-
-    (hashmap-set! H key arity))
+  (define names-hashset (make-hashset))
+  (define (add-name-to-names-queue! name)
+    (unless (hashset-ref names-hashset name)
+      (hashset-add! names-hashset name)
+      (set! names-queue (cons name names-queue))))
 
   ;; Appends each argument that is not #f
   (define (append-argumets-to-transition H tr-name args)
+    (define arity (length args))
+    (define name (cons tr-name arity))
+    (add-name-to-names-queue! name)
+
     (let loop ((args args) (i 0))
-      (if (null? args)
-          (set-transition-arity! H tr-name i)
-          (let* ((arg (car args))
-                 (key (cons tr-name i)))
-            (when arg
-              (hashmap-set! H key (cons arg (hashmap-ref H key '()))))
-            (loop (cdr args) (+ 1 i))))))
+      (unless (null? args)
+        (let* ((arg (car args)))
+          (when arg
+            (let ((key (cons name i)))
+              (hashmap-set! H key (cons arg (hashmap-ref H key '())))))
+          (loop (cdr args) (+ 1 i))))))
 
   (define (add-indexed-args-to-hashmap H queue)
     (for-each
@@ -99,19 +97,20 @@
      queue))
 
   (define (make-products H)
-    (define (make-one tr-name)
-      (define arity (hashmap-ref H (make-arity-key tr-name) #f))
+    (define (make-one name)
+      (define tr-name (car name))
+      (define arity (cdr name))
 
       (define (construct)
         (define R (range arity))
-        (define lists (map (lambda (i) (hashmap-ref H (cons tr-name i) '())) R))
+        (define lists (map (lambda (i) (hashmap-ref H (cons name i) '())) R))
         (if (list-or-map null? lists) #f
             (cartesian-product/g lists)))
 
       (define args (if (= 0 arity) '(()) (construct)))
-      (and args (cons tr-name args)))
+      (and args (cons name args)))
 
-    (map make-one (get-names-queue)))
+    (map make-one names-queue))
 
   (define (get-todos H queue)
     (add-indexed-args-to-hashmap H queue)
@@ -119,6 +118,7 @@
 
   (lambda (global-queue)
     (hashmap-clear! todos-work-table)
+    (hashset-clear! names-hashset)
     (set! names-queue '())
 
     (get-todos todos-work-table global-queue)))
@@ -151,36 +151,72 @@
 
   ret)
 
-;;
-;; Example `list-of-transitions':
-;;   (list (cons 'hello (lambda () (display "Hello\n") (petri-push 'bye "Robert")))
-;;         (cons 'bye (lambda (name) (display "Bye ") (display name) (display "!\n"))))
-;; First transtion must receive 0 arguments.
-(define (petri-run-list error-handler list-of-transitions)
-  (define names-table (multi-alist->hashmap list-of-transitions))
-  (define global-queue (list (cons (car (car list-of-transitions)) '())))
-
-  (define (reset-queue!)
-    (set! global-queue '()))
-
-  (define (push tr-name args)
-    (if (hashmap-ref names-table tr-name #f)
-        (set! global-queue (cons (cons tr-name args) global-queue))
-        (error-handler 'bad-key tr-name args)))
+(define (petri-start-network error-handler net)
+  ;; FIXME: handle waiting on the network to finish
 
   (define transformer (petri-make-transformer))
 
-  (parameterize ((petri-push/p push))
-    (let loop ()
-      (unless (null? global-queue)
-        (let ((q global-queue))
-          (reset-queue!)
+  (define (unload!)
+    (with-critical
+     (petri-net-obj-critical net)
+     (stack-unload! (petri-net-obj-queue net))))
 
-          (define todos (transformer q))
-          (debug "TODOS: ~s" todos)
+  (with-critical
+   (petri-net-obj-critical net)
+   (set-petri-net-obj-finished?! net #f))
 
-          ;; fire the network
-          (petri-run-cycle error-handler names-table todos)
+  (let loop ()
+    ;; (dynamic-thread-yield) ;; DEBUGGGG
+    (let ((q (unload!)))
+      (unless (null? q)
+        ;; collect todos
+        (let ((todos (transformer q)))
+          ;; fire the transitions
+          (petri-run-cycle error-handler (petri-net-obj-transitions net) todos))
+        ;; wait until all of them are finished
+        ;; TODO ^^^
+        (loop))))
 
-          (loop))))))
+  (with-critical
+   (petri-net-obj-critical net)
+   (set-petri-net-obj-finished?! net #t)))
 
+(define (petri-run error-handler start-transition-name list-of-petri-networks)
+  (let* ((start-transition-name* (cons start-transition-name 0))
+         (start-transitions
+          (filter identity
+                  (map (lambda (net)
+                         (hashmap-ref (petri-net-obj-transitions net) start-transition-name* #f))
+                       list-of-petri-networks))))
+    (when (null? start-transitions)
+      (raisu 'start-transition-does-not-exist-in-any-of-the-networks start-transition-name)))
+
+  (define (restart net)
+    ;; (raisu "NOT IMPLEMENTED RESTART YET")
+    (debug "NOT IMPLEMENTED RESTART YET")
+    )
+
+  (define (check-finished net)
+    (and (petri-net-obj-finished? net)
+         (begin
+           (set-petri-net-obj-finished?! net #f)
+           #t)))
+
+  (define (push tr-name args)
+    (for-each
+     (lambda (net)
+       (when (with-critical
+              (petri-net-obj-critical net)
+              (stack-push! (petri-net-obj-queue net)
+                           (cons tr-name args))
+              (check-finished net))
+         (restart net)))
+     list-of-petri-networks))
+
+  (push start-transition-name '())
+
+  (for-each
+   (lambda (net)
+     (parameterize ((petri-push/p push))
+       (petri-start-network error-handler net)))
+   list-of-petri-networks))

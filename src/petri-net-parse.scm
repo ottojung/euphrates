@@ -16,7 +16,7 @@
 
 %var petri-net-parse
 
-%use (petri-net-obj) "./petri-net-obj.scm"
+%use (petri-net-make) "./petri-net-make.scm"
 %use (raisu) "./raisu.scm"
 %use (list-and-map) "./list-and-map.scm"
 %use (multi-alist->hashmap hashmap-foreach hashmap-map) "./ihashmap.scm"
@@ -29,40 +29,28 @@
   (unless (list-and-map list? list-of-transitions)
     (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists))
 
-  (unless (list-and-map (lambda (lst) (= 3 (length lst))) list-of-transitions)
-    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-of-length-3))
+  (unless (list-and-map (lambda (lst) (= 2 (length lst))) list-of-transitions)
+    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-of-length-2))
 
-  (unless (list-and-map symbol? (map car list-of-transitions))
-    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-where-first-element-is-symbol))
+  (unless (list-and-map pair? (map car list-of-transitions))
+    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-where-first-element-is-pair))
 
-  (unless (list-and-map (lambda (n) (and (integer? n) (<= 0 n)))  (map cadr list-of-transitions))
-    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-where-second-element-is-nonnegative-integer))
+  (unless (list-and-map symbol? (map (compose car car) list-of-transitions))
+    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-where-first-element-of-first-element-is-symbol))
 
-  (unless (list-and-map procedure? (map caddr list-of-transitions))
-    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-where-third-element-is-procedure))
+  (unless (list-and-map (lambda (n) (and (integer? n) (<= 0 n))) (map (compose cdr car) list-of-transitions))
+    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-where-second-element-of-first-element-is-nonnegative-integer))
+
+  (unless (list-and-map procedure? (map cadr list-of-transitions))
+    (raisu 'parse-error 'list-of-transitions-must-be-a-list-of-lists-where-second-element-is-procedure))
 
   #t)
 
 ;; Example `list-of-transitions':
-;;   (list (list 'hello 0 (lambda () (display "Hello\n") (petri-push 'bye "Robert")))
-;;         (list 'bye   1 (lambda (name) (display "Bye ") (display name) (display "!\n")))
-;;         (list 'hi    0 (lambda () (display "Hi\n") (petri-push 'bye "Robert"))))
+;;   (list (list (hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert")))
+;;         (list (bye   . 1) (lambda (name) (display "Bye ") (display name) (display "!\n")))
+;;         (list (hi    . 0) (lambda () (display "Hi\n") (petri-push 'bye "Robert"))))
 (define (petri-net-parse list-of-transitions)
-  (define valid?
-    (petri-net-parse-verify-types list-of-transitions))
-
-  (define first-and-third-columns (map (lambda (p) (cons (car p) (caddr p))) list-of-transitions))
-  (define transitions (multi-alist->hashmap first-and-third-columns))
-
-  (define first-and-second-columns (map (lambda (p) (cons (car p) (cadr p))) list-of-transitions))
-  (define arities0 (multi-alist->hashmap first-and-third-columns))
-  (define arities (hashmap-map (lambda (key value) (car value)) arities0))
-
-  (hashmap-foreach
-   (lambda (key value)
-     (define first (car value))
-     (unless (list-and-map (lambda (elem) (= first elem)) (cdr value))
-       (raisu 'parse-error 'list-of-transitions-has-different-arities-for-the-same-name key value)))
-   arities0)
-
-  (petri-net-obj transitions arities))
+  (petri-net-parse-verify-types list-of-transitions)
+  (let ((consed (map (lambda (p) (cons (car p) (cadr p))) list-of-transitions)))
+    (petri-net-make (multi-alist->hashmap consed))))
