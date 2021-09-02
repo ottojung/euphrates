@@ -4,8 +4,8 @@
 %var dynamic-thread-critical-make#p-default
 
 %use (dynamic-thread-mutex-make) "./dynamic-thread-mutex-make.scm"
-%use (dynamic-thread-mutex-lock!#p) "./dynamic-thread-mutex-lock.scm"
-%use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock.scm"
+%use (dynamic-thread-mutex-lock!#p) "./dynamic-thread-mutex-lock-p.scm"
+%use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock-p.scm"
 %use (dynamic-thread-disable-cancel#p) "./dynamic-thread-disable-cancel-p.scm"
 %use (dynamic-thread-enable-cancel#p) "./dynamic-thread-enable-cancel-p.scm"
 
