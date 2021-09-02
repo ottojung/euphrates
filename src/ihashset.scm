@@ -36,14 +36,17 @@
          (hashmap-set! H (vector-ref v i) #t)))
      H)))
 
-(define (make-hashset collection)
-  (cond
-   ((list? collection)
-    (list->hashset collection))
-   ((vector? collection)
-    (vector->hashset collection))
-   (else
-    (raisu 'expected-list? collection))))
+(define make-hashset
+  (case-lambda
+   (() (make-hashset '()))
+   ((collection)
+    (cond
+     ((list? collection)
+      (list->hashset collection))
+     ((vector? collection)
+      (vector->hashset collection))
+     (else
+      (raisu 'expected-list? collection))))))
 
 (define (hashset->list S)
   (map car (hashmap->alist (hashset-value S))))
