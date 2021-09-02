@@ -6,6 +6,7 @@
 %var queue-peek
 %var queue-push!
 %var queue-pop!
+%var queue->list
 
 %use (make-unique) "./make-unique.scm"
 %use (raisu) "./raisu.scm"
@@ -72,3 +73,17 @@
             (set-queue-first! q new-first)
             ret))))))
 
+(define (queue->list q)
+  (define first (+ 0 (queue-first q)))
+  (define v (queue-vector q))
+
+  (unless (vector? v)
+    (raisu 'bad-queue q))
+
+  (if (queue-empty? q)
+      '()
+      (let loop ((i (- (queue-last q) 1)) (buf '()))
+        (cond
+         ((= i first) (cons (vector-ref v i) buf))
+         ((< i 0) (loop (- (vector-length v) 1) buf))
+         (else (loop (- i 1) (cons (vector-ref v i) buf)))))))
