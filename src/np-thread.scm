@@ -131,22 +131,11 @@
         (np-thread-yield))
       ret))
 
-  ;; Terminates np-thread
-  ;; If no arguments given, current thread will be terminated
-  ;; But if thread is provided, it will be removed from thread list (equivalent to termination if that thread is not the current one)
-  ;; Therefore, don't provide current thread as argument unless you really mean to
-  (define np-thread-cancel!#unsafe
-    (case-lambda
-      [[] (np-thread-end)]
-      [[chosen] 0]))
-
   (define (np-thread-cancel! chosen)
     (unless (np-thread-obj? chosen)
       (raisu 'type-error 'np-thread-cancel! chosen))
 
-    (set-np-thread-obj-cancel-scheduled?! chosen #t)
-    (when (np-thread-obj-cancel-enabled? chosen)
-      (np-thread-cancel!#unsafe chosen)))
+    (set-np-thread-obj-cancel-scheduled?! chosen #t))
 
   (define (np-thread-make-critical)
     (lambda (fn)
