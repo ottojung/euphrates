@@ -1,6 +1,8 @@
 
 %run guile
 
+%var dynamic-thread-async
+
 %use (dynamic-thread-async-thunk) "./dynamic-thread-async-thunk.scm"
 
 (define-syntax dynamic-thread-async
