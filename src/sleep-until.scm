@@ -10,6 +10,7 @@
 %var sleep-until
 
 %use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
+%use (dynamic-thread-yield) "./dynamic-thread-yield.scm"
 %use (time-get-monotonic-nanoseconds-timestamp) "./time-get-monotonic-nanoseconds-timestamp.scm"
 %use (milli->nano/unit) "./unit-conversions.scm"
 
@@ -17,14 +18,16 @@
   (syntax-rules ()
     ((_ condi)
      (let ((sleep (dynamic-thread-get-delay-procedure)))
-       (let loop () (sleep) (or condi (loop)))))
+       (dynamic-thread-yield)
+       (or condi
+           (let loop () (sleep) (or condi (loop))))))
     ((_ condi timeout-milliseconds)
      (let ((sleep (dynamic-thread-get-delay-procedure))
            (target-time (+ (milli->nano/unit timeout-milliseconds) (time-get-monotonic-nanoseconds-timestamp))))
-       (let loop ()
-         (sleep)
-         (or condi
-             (and (> target-time (time-get-monotonic-nanoseconds-timestamp))
-                  (loop))))))))
-
-
+       (dynamic-thread-yield)
+       (or condi
+           (let loop ()
+             (sleep)
+             (or condi
+                 (and (> target-time (time-get-monotonic-nanoseconds-timestamp))
+                      (loop)))))))))
