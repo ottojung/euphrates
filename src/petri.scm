@@ -64,8 +64,8 @@
 ;;                                       ("arg-a" "arg-b2")))
 ;;            (cons (cons 'tr-name-2 3) (("arg-a" "arg-b" "arg-c"))))
 ;;
-;; `table' is a hashmap of "tr-name" -> "transition procedure"
-(define (petri-make-transformer options)
+;; `defined-names' is a hashset of tr-names that are defined in the current network.
+(define (petri-make-transformer defined-names options)
   ;; Hashmap of (cons (cons tr-name arg-arity) arg-index) -> (listof args-at-arg-index)
   (define todos-work-table (hashmap))
 
@@ -75,7 +75,7 @@
   (define deduplication-procedure
     (if deduplicate? list-deduplicate identity))
 
-  ;; List of unique names in the queue
+  ;; List of unique names in the queue. A subset of `defined-names'
   (define names-queue '())
   (define names-hashset (make-hashset))
   (define (add-name-to-names-queue! name)
@@ -87,15 +87,16 @@
   (define (append-argumets-to-transition H tr-name args)
     (define arity (length args))
     (define name (cons tr-name arity))
-    (add-name-to-names-queue! name)
 
-    (let loop ((args args) (i 0))
-      (unless (null? args)
-        (let* ((arg (car args)))
-          (when arg
-            (let ((key (cons name i)))
-              (hashmap-set! H key (cons arg (hashmap-ref H key '())))))
-          (loop (cdr args) (+ 1 i))))))
+    (when (hashset-ref defined-names name)
+      (add-name-to-names-queue! name)
+      (let loop ((args args) (i 0))
+        (unless (null? args)
+          (let* ((arg (car args)))
+            (when arg
+              (let ((key (cons name i)))
+                (hashmap-set! H key (cons arg (hashmap-ref H key '())))))
+            (loop (cdr args) (+ 1 i)))))))
 
   (define (add-indexed-args-to-hashmap H queue)
     (for-each
@@ -197,7 +198,8 @@
   (values))
 
 (define (petri-loop-network error-handler options unload! net)
-  (define transformer (petri-make-transformer options))
+  (define names-set (make-hashset (map car (hashmap->alist (petri-net-obj-transitions net)))))
+  (define transformer (petri-make-transformer names-set options))
   (let loop ()
     (let ((q (unload!)))
       (unless (null? q)
