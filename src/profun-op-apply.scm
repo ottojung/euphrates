@@ -14,19 +14,40 @@
 
 %run guile
 
-;; Expects its procedure to return list of new values for received arguments.
+;; In order to return result during apply evaluation, call `profun-apply-return!';
+;; in order to fail, call `profun-apply-fail!'.
 %var profun-op-apply
+%var profun-apply-return!
+%var profun-apply-fail!
+
+%use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
+%use (make-box box? box-ref box-set!) "./box.scm"
 
 (define profun-op-apply
   (lambda (args ctx)
     (and (not ctx)
-         (let* ((procedure (car args))
-                (arguments (cdr args))
-                (result (apply procedure arguments)))
-           (cond
-            ((eq? #f result)
-             #f)
-            ((pair? result)
-             (cons (cons #t result) #t))
-            (else
-             (cons #t #t)))))))
+         (let ((procedure (car args))
+               (arguments (cdr args))
+               (box (make-box #f)))
+
+           (parameterize ((profun-op-apply/result#p box))
+             (apply procedure arguments))
+
+           (let ((result (box-ref box)))
+             (case result
+               ((fail) #f)
+               ((#f) (cons #t #t))
+               (else
+                (cons (cons #t result) #t))))))))
+
+(define (profun-apply-return! . args)
+  (let ((box (profun-op-apply/result#p)))
+    (unless (box? box)
+      (raisu 'profun-apply-return-called-outside-of-apply box))
+    (box-set! box args)))
+
+(define (profun-apply-fail!)
+  (let ((box (profun-op-apply/result#p)))
+    (unless (box? box)
+      (raisu 'profun-apply-return-called-outside-of-apply box))
+    (box-set! box 'fail)))

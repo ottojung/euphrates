@@ -82,7 +82,7 @@
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
-%use (profun-op-apply) "./src/profun-op-apply.scm"
+%use (profun-op-apply profun-apply-return! profun-apply-fail!) "./src/profun-op-apply.scm"
 %use (list-take-while) "./src/list-take-while.scm"
 %use (petri-run petri-push) "./src/petri.scm"
 %use (raisu) "./src/raisu.scm"
@@ -1408,9 +1408,9 @@
      "apply CASES"
      '()
 
-     (test `((= x 3) (apply ,(lambda (y) (list 2)) x)) '(((x . 2))))
-     (test `((= x 3) (apply ,(lambda (y) (list 2)) y)) '(((x . 3) (y . 2))))
-     (test `((= x 3) (apply ,(lambda (y) #f) x)) '())
+     (test `((= x 3) (apply ,(lambda (y) (profun-apply-return! 2)) x)) '(((x . 2))))
+     (test `((= x 3) (apply ,(lambda (y) (profun-apply-return! 2)) y)) '(((x . 3) (y . 2))))
+     (test `((= x 3) (apply ,(lambda (y) (profun-apply-fail!)) x)) '())
      (test `((= x 3) (apply ,(lambda (y) 9) x)) '(((x . 3))))
      )
 
