@@ -174,21 +174,21 @@
   (define np-thread-mutex-make
     (lambda () (make-box #f)))
 
+  ;; Basically, a spinlock.
+  ;; Wasteful if many threads are waiting on the same lock.
   (define np-thread-mutex-lock!
-    (let* ((sleep-time (dynamic-thread-get-wait-delay))
-           (sleep (lambda () (np-thread-yield) (sys-usleep sleep-time))))
-      (lambda (mut)
-        (let lp ()
-          (when
-              (with-critical
-               critical
-               (if (box-ref mut)
-                   #t
-                   (begin
-                     (box-set! mut #t)
-                     #f)))
-            (sleep)
-            (lp))))))
+    (lambda (mut)
+      (let lp ()
+        (when
+            (with-critical
+             critical
+             (if (box-ref mut)
+                 #t
+                 (begin
+                   (box-set! mut #t)
+                   #f)))
+          (np-thread-yield)
+          (lp)))))
 
   (define (np-thread-mutex-unlock! mut)
     (with-critical
