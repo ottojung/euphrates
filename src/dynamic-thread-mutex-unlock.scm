@@ -6,6 +6,6 @@
 %use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock-p.scm"
 %use (dynamic-thread-mutex-unlock!#p-default) "./dynamic-thread-mutex-unlock-p-default.scm"
 
-(define (dynamic-thread-mutex-unlock!)
+(define (dynamic-thread-mutex-unlock! mut)
   ((or (dynamic-thread-mutex-unlock!#p)
-       dynamic-thread-mutex-unlock!#p-default)))
+       dynamic-thread-mutex-unlock!#p-default) mut))
