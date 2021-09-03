@@ -92,7 +92,7 @@
 %use (dynamic-thread-cancel) "./src/dynamic-thread-cancel.scm"
 %use (dprintln) "./src/dprintln.scm"
 %use (unlines) "./src/unlines.scm"
-%use (petri-net-parse) "./src/petri-net-parse.scm"
+%use (petri-lambda-net) "./src/petri-net-parse.scm"
 %use (petri-profun-net) "./src/petri-net-parse-profun.scm"
 
 (let ()
@@ -1621,7 +1621,7 @@
           (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
           (list
-           (petri-net-parse
+           (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))
                   (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
            )
@@ -1639,9 +1639,9 @@
           (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
           (list
-           (petri-net-parse
+           (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))))
-           (petri-net-parse
+           (petri-lambda-net
             (list (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
            )
           ))))
@@ -1661,9 +1661,9 @@
           (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
           (list
-           (petri-net-parse
+           (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))
-           (petri-net-parse
+           (petri-lambda-net
             (list (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
            )
           ))))
@@ -1764,7 +1764,7 @@
                (apply ,display "Hello\n")
                (push 'bye "Robert" "Smith")
                (push 'bye "Bob" "Rogers"))))
-           (petri-net-parse
+           (petri-lambda-net
             (list (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
            )
           ))))
@@ -1784,7 +1784,7 @@
           (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
           (list
-           (petri-net-parse
+           (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))
            (petri-profun-net
             `(((bye NAME SURNAME)
