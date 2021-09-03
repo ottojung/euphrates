@@ -1470,39 +1470,6 @@
   (assert= '(2 4 6 8) (list-take-while even? '(2 4 6 8)))
   )
 
-;; petri
-(let ()
-
-  ;; (petri-run
-  ;;  (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
-  ;;  'hello
-  ;;  (list
-  ;;   (petri-net-parse
-  ;;    (list (list 'hello 0 (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))))
-  ;;   (petri-net-parse
-  ;;    (list (list 'bye   2 (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
-  ;;   )
-  ;;  )
-
-  (petri-run
-   (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
-   'hello
-   (list
-    (petri-net-parse
-     (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))
-    (petri-net-parse
-     (list (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
-    )
-   )
-
-  ;; (petri-run
-  ;;  (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
-  ;;  (list (cons 'hello (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))
-  ;;        (cons 'bye (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n"))))
-  ;;  )
-
-  )
-
 ;; np-thread
 (let ()
   (define println
@@ -1634,6 +1601,70 @@
    (unlines global-order)
    (with-output-to-string
      test-body))
+
+  )
+
+;; petri
+(let ()
+
+  (assert=
+   (unlines
+    (list
+     "Hello"
+     "Bye Robert the Smith!"
+     ""))
+   (with-output-to-string
+     (lambda _
+       (petri-run
+        (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+        'hello
+        (list
+         (petri-net-parse
+          (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))
+                (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
+         )
+        ))))
+
+  (assert=
+   (unlines
+    (list
+     "Hello"
+     "Bye Robert the Smith!"
+     ""))
+   (with-output-to-string
+     (lambda _
+       (petri-run
+        (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+        'hello
+        (list
+         (petri-net-parse
+          (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))))
+         (petri-net-parse
+          (list (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
+         )
+        ))))
+
+  (assert=
+   (unlines
+    (list
+     "Hello"
+     "Bye Robert the Smith!"
+     "Bye Robert the Rogers!"
+     "Bye Bob the Smith!"
+     "Bye Bob the Rogers!"
+     ""))
+   (with-output-to-string
+     (lambda _
+       (petri-run
+        (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+        'hello
+        (list
+         (petri-net-parse
+          (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))
+         (petri-net-parse
+          (list (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
+         )
+        ))))
 
   )
 
