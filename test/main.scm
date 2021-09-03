@@ -1744,6 +1744,34 @@
                (apply ,display SURNAME)
                (apply ,display "!\n")))))))))
 
+    ;; NOTE: deduplication enabled
+    ;; TODO: investigate switched order
+    (assert=
+     (unlines
+      (list
+       "Hello"
+       "Bye Robert the Rogers!"
+       "Bye Robert the Smith!"
+       ""))
+     (with-output-to-string
+       (lambda _
+         (petri-run
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello
+          '((deduplicate))
+          (list
+           (petri-profun-net
+            `(((name "Robert"))
+              ((surname "Smith"))
+              ((surname "Rogers"))
+              ((hello) (apply ,display "Hello\n") (name N) (surname S) (push 'bye N S))
+              ((bye NAME SURNAME)
+               (apply ,display "Bye ")
+               (apply ,display NAME)
+               (apply ,display " the ")
+               (apply ,display SURNAME)
+               (apply ,display "!\n")))))))))
+
     (assert=
      (unlines
       (list

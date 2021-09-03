@@ -28,6 +28,7 @@
 %use (catch-any) "./catch-any.scm"
 %use (cartesian-product/g) "./cartesian-product-g.scm"
 %use (list-map/flatten) "./list-map-flatten.scm"
+%use (list-deduplicate) "./list-deduplicate.scm"
 %use (petri-net-obj petri-net-obj? petri-net-obj-transitions petri-net-obj-queue petri-net-obj-critical petri-net-obj-finished? set-petri-net-obj-finished?!) "./petri-net-obj.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-make stack-unload! stack-push! stack-pop!) "./stack.scm"
@@ -64,9 +65,15 @@
 ;;            (cons (cons 'tr-name-2 3) (("arg-a" "arg-b" "arg-c"))))
 ;;
 ;; `table' is a hashmap of "tr-name" -> "transition procedure"
-(define (petri-make-transformer)
+(define (petri-make-transformer options)
   ;; Hashmap of (cons (cons tr-name arg-arity) arg-index) -> (listof args-at-arg-index)
   (define todos-work-table (hashmap))
+
+  ;; Deduplication for todos elements
+  (define deduplicate?
+    (assoc 'deduplicate options))
+  (define deduplication-procedure
+    (if deduplicate? list-deduplicate identity))
 
   ;; List of unique names in the queue
   (define names-queue '())
@@ -105,7 +112,8 @@
 
       (define (construct)
         (define R (range arity))
-        (define lists (map (lambda (i) (hashmap-ref H (cons name i) '())) R))
+        (define lists/dupl (map (lambda (i) (hashmap-ref H (cons name i) '())) R))
+        (define lists (map deduplication-procedure lists/dupl))
         (if (list-or-map null? lists) #f
             (cartesian-product/g lists)))
 
@@ -188,15 +196,15 @@
 
   (values))
 
-(define (petri-loop-network error-handler unload! net)
-  (define transformer (petri-make-transformer))
+(define (petri-loop-network error-handler options unload! net)
+  (define transformer (petri-make-transformer options))
   (let loop ()
     (let ((q (unload!)))
       (unless (null? q)
         (petri-cycle-network error-handler transformer q net)
         (loop)))))
 
-(define (petri-start-network error-handler net)
+(define (petri-start-network error-handler options net)
   (define (unload!)
     (with-critical
      (petri-net-obj-critical net)
@@ -206,13 +214,13 @@
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #f))
 
-  (petri-loop-network error-handler unload! net)
+  (petri-loop-network error-handler options unload! net)
 
   (with-critical
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #t)))
 
-(define (petri-run error-handler start-transition-name list-of-petri-networks)
+(define (petri-run/optioned error-handler start-transition-name options list-of-petri-networks)
   (define networks-futures (stack-make))
   (define global-critical (dynamic-thread-critical-make))
 
@@ -223,7 +231,7 @@
       networks-futures
       (cons net
             (dynamic-thread-async
-             (petri-start-network error-handler net))))))
+             (petri-start-network error-handler options net))))))
 
   (define (check-finished net)
     (and (petri-net-obj-finished? net)
@@ -275,3 +283,10 @@
              (display errors (current-error-port))
              (newline (current-error-port)))))
         (loop)))))
+
+(define petri-run
+  (case-lambda
+   ((error-handler start-transition-name list-of-petri-networks)
+    (petri-run/optioned error-handler start-transition-name '() list-of-petri-networks))
+   ((error-handler start-transition-name options list-of-petri-networks)
+    (petri-run/optioned error-handler start-transition-name options list-of-petri-networks))))
