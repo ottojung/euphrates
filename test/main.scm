@@ -91,7 +91,7 @@
 %use (dynamic-thread-spawn) "./src/dynamic-thread-spawn.scm"
 %use (dynamic-thread-cancel) "./src/dynamic-thread-cancel.scm"
 %use (dprintln) "./src/dprintln.scm"
-%use (unlines) "./src/unlines.scm"
+%use (lines->string) "./src/lines-to-string.scm"
 %use (petri-lambda-net) "./src/petri-net-parse.scm"
 %use (petri-profun-net) "./src/petri-net-parse-profun.scm"
 
@@ -1575,31 +1575,31 @@
      ""))
 
   (assert=
-   (unlines global-order)
+   (lines->string global-order)
    (with-output-to-string
      test-body))
 
   (assert=
-   (unlines global-order)
+   (lines->string global-order)
    (with-output-to-string
      test-body))
 
   (assert=
-   (unlines parameterized-order)
+   (lines->string parameterized-order)
    (with-output-to-string
      (lambda ()
        (with-np-thread-env#non-interruptible
         (test-body)))))
 
   (assert=
-   (unlines parameterized-order)
+   (lines->string parameterized-order)
    (with-output-to-string
      (lambda ()
        (dynamic-thread-spawn
         test-body))))
 
   (assert=
-   (unlines global-order)
+   (lines->string global-order)
    (with-output-to-string
      test-body))
 
@@ -1610,7 +1610,7 @@
 
   (let () ;; petrin-lambda-net
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1628,7 +1628,7 @@
           ))))
 
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1647,7 +1647,7 @@
           ))))
 
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1674,7 +1674,7 @@
   (let () ;; petri-profun-net
 
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1695,7 +1695,7 @@
                (apply ,display "!\n")))))))))
 
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1718,7 +1718,7 @@
 
     ;; NOTE: Robert was pushed twice, so he is duplicated.
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1746,7 +1746,7 @@
 
     ;; NOTE: deduplication enabled
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1772,7 +1772,7 @@
                (apply ,display "!\n")))))))))
 
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1800,7 +1800,7 @@
                (apply ,display "!\n")))))))))
 
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
@@ -1825,7 +1825,7 @@
           ))))
 
     (assert=
-     (unlines
+     (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"

@@ -35,7 +35,6 @@
 %use (list-drop-while) "./list-drop-while.scm"
 %use (CFG-lang-modifier-char?) "./compile-cfg-cli.scm"
 %use (print-in-window) "./print-in-window.scm"
-%use (unlines) "./unlines.scm"
 %use (conss) "./conss.scm"
 %use (unwords) "./unwords.scm"
 %use (words) "./words.scm"

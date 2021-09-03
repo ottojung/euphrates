@@ -3,8 +3,8 @@
 
 %use (string-split/simple) "./string-split-simple.scm"
 
-%var lines
+%var string->lines
 
-(define (lines str)
+(define (string->lines str)
   (string-split/simple str #\newline))
 
