@@ -1745,13 +1745,12 @@
                (apply ,display "!\n")))))))))
 
     ;; NOTE: deduplication enabled
-    ;; TODO: investigate switched order
     (assert=
      (unlines
       (list
        "Hello"
-       "Bye Robert the Rogers!"
        "Bye Robert the Smith!"
+       "Bye Robert the Rogers!"
        ""))
      (with-output-to-string
        (lambda _
