@@ -1,13 +1,13 @@
 
 %run guile
 
-%var words
+%var string->words
 
 ;; TODO: make single for guile + racket
 
 %for (COMPILER "guile")
 
-(define (words str)
+(define (string->words str)
   (filter
    (compose not string-null?)
    (string-split
@@ -18,10 +18,9 @@
         (else #f))))))
 
 %end
-
 %for (COMPILER "racket")
 
-(define (words str)
+(define (string->words str)
   (string-split str))
 
 %end

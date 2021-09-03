@@ -1,7 +1,7 @@
 
 %run guile
 
-%var unwords
+%var words->string
 
-(define (unwords lns)
+(define (words->string lns)
   (string-join (filter (negate string-null?) lns) " "))

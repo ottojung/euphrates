@@ -36,8 +36,8 @@
 %use (CFG-lang-modifier-char?) "./compile-cfg-cli.scm"
 %use (print-in-window) "./print-in-window.scm"
 %use (conss) "./conss.scm"
-%use (unwords) "./unwords.scm"
-%use (words) "./words.scm"
+%use (words->string) "./words-to-string.scm"
+%use (string->words) "./string-to-words.scm"
 %use (list-intersperse) "./list-intersperse.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (hashmap) "./hashmap.scm"
@@ -154,7 +154,7 @@
 
                (let ((description (assoc/false #f props)))
                  (when description
-                   (print-option-parts (list-intersperse " " (words (car description))))))
+                   (print-option-parts (list-intersperse " " (string->words (car description))))))
 
                (let ((type (assoc/false 'type props)))
                  (when type
@@ -173,14 +173,14 @@
                      ((#f) (display (pad-option 4 "not the default")))
                      (else
                       (display (pad-option 4 "default:"))
-                      (print-option-parts (list-intersperse " " (words (~s (~a (car def))))))))))
+                      (print-option-parts (list-intersperse " " (string->words (~s (~a (car def))))))))))
 
                (newline)
                (newline))))
        fH-alist))
 
     (define (show-regex regex)
-      (unwords (map ~a regex)))
+      (words->string (map ~a regex)))
 
     (define (show-production prod)
       (define name (strip-modifiers (~a (car prod))))

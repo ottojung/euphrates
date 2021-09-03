@@ -20,8 +20,8 @@
 %use (~a) "./src/tilda-a.scm"
 %use (~s) "./src/tilda-s.scm"
 %use (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys) "./src/mdict.scm"
-%use (words) "./src/words.scm"
-%use (unwords) "./src/unwords.scm"
+%use (string->words) "./src/string-to-words.scm"
+%use (words->string) "./src/words-to-string.scm"
 %use (list->tree) "./src/list-to-tree.scm"
 %use (list-traverse) "./src/list-traverse.scm"
 %use (range) "./src/range.scm"
@@ -110,7 +110,7 @@
   (assert=
    "error:"
    (cadr
-    (words
+    (string->words
      (with-output-to-string
        (lambda ()
          (parameterize ((current-error-port (current-output-port)))
@@ -201,21 +201,21 @@
         (mdict-set! z3 52 9)
         (assert= (z3 52) 9)))))
 
-;; words / unwords
+;; string->words / words->string
 (let ()
   (assert=
-   (words "hello \t \t \n world!")
+   (string->words "hello \t \t \n world!")
    (list "hello" "world!"))
 
   (assert=
-   (unwords (list "hello" "world!"))
+   (words->string (list "hello" "world!"))
    "hello world!"))
 
 ;; list->tree
 (let ()
   (define ex
     (map string->symbol
-         (words "hello < define ex < words x > > bye")))
+         (string->words "hello < define ex < words x > > bye")))
 
   (let ()
     (define (divider x xs)
