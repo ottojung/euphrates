@@ -15,6 +15,7 @@
 %run guile
 
 %var petri-net-parse
+%var petri-lambda-net
 
 %use (petri-net-make) "./petri-net-make.scm"
 %use (raisu) "./raisu.scm"
@@ -54,3 +55,5 @@
   (petri-net-parse-verify-types list-of-transitions)
   (let ((consed (map (lambda (p) (cons (car p) (cadr p))) list-of-transitions)))
     (petri-net-make (multi-alist->hashmap consed))))
+
+(define petri-lambda-net petri-net-parse)
