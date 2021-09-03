@@ -1716,6 +1716,34 @@
                (apply ,display SURNAME)
                (apply ,display "!\n")))))))))
 
+    ;; NOTE: Robert was pushed twice, so he is duplicated.
+    (assert=
+     (unlines
+      (list
+       "Hello"
+       "Bye Robert the Smith!"
+       "Bye Robert the Rogers!"
+       "Bye Robert the Smith!"
+       "Bye Robert the Rogers!"
+       ""))
+     (with-output-to-string
+       (lambda _
+         (petri-run
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello
+          (list
+           (petri-profun-net
+            `(((name "Robert"))
+              ((surname "Smith"))
+              ((surname "Rogers"))
+              ((hello) (apply ,display "Hello\n") (name N) (surname S) (push 'bye N S))
+              ((bye NAME SURNAME)
+               (apply ,display "Bye ")
+               (apply ,display NAME)
+               (apply ,display " the ")
+               (apply ,display SURNAME)
+               (apply ,display "!\n")))))))))
+
     (assert=
      (unlines
       (list
