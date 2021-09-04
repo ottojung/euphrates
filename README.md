@@ -39,3 +39,6 @@ GPL-3
   - [ ] Chibi
   - [ ] Cyclone
 - [ ] Split tests
+- [ ] Add `cut!` to `profun`
+- [ ] Steal regular expressions https://synthcode.com/scheme/irregex/
+- [ ] Steal matcher https://synthcode.com/scheme/match.scm but simplify it
