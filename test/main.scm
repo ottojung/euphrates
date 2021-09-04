@@ -1650,18 +1650,23 @@
 ;; petri
 (let ()
 
+  (define (handler type options)
+    (case type
+      ((network-finished) (display "Finish\n"))
+      (else (display "ERRORS: ") (display options))))
+
   (let () ;; petrin-lambda-net
     (assert=
      (lines->string
       (list
        "Hello"
        "Bye Robert the Smith!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))
@@ -1673,13 +1678,14 @@
      (lines->string
       (list
        "Hello"
+       "Finish"
        "Bye Robert the Smith!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))))
@@ -1692,16 +1698,17 @@
      (lines->string
       (list
        "Hello"
+       "Finish"
        "Bye Robert the Smith!"
        "Bye Robert the Rogers!"
        "Bye Bob the Smith!"
        "Bye Bob the Rogers!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))
@@ -1720,12 +1727,12 @@
       (list
        "Hello"
        "Bye Robert the Smith!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-profun-net
             `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
@@ -1742,12 +1749,12 @@
       (list
        "Hello"
        "Bye Robert the Smith!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (petri-profun-net
            `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
              ((bye NAME SURNAME)
@@ -1762,12 +1769,12 @@
       (list
        "Hello"
        "Bye Robert the Smith!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-profun-net
             `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
@@ -1778,13 +1785,14 @@
      (lines->string
       (list
        "Hello"
+       "Finish"
        "Bye Robert the Smith!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-profun-net
             `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))))
@@ -1805,12 +1813,12 @@
        "Bye Robert the Rogers!"
        "Bye Robert the Smith!"
        "Bye Robert the Rogers!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-profun-net
             `(((name "Robert"))
@@ -1831,13 +1839,12 @@
        "Hello"
        "Bye Robert the Smith!"
        "Bye Robert the Rogers!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          '((deduplicate))
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello '((deduplicate)) handler
           (list
            (petri-profun-net
             `(((name "Robert"))
@@ -1855,16 +1862,17 @@
      (lines->string
       (list
        "Hello"
+       "Finish"
        "Bye Robert the Smith!"
        "Bye Robert the Rogers!"
        "Bye Bob the Smith!"
        "Bye Bob the Rogers!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-profun-net
             `(((hello)
@@ -1878,21 +1886,25 @@
                (apply ,display " the ")
                (apply ,display SURNAME)
                (apply ,display "!\n")))))))))
+    )
+
+  (let () ;; mix petri-profun-net and petri-lambda-net
 
     (assert=
      (lines->string
       (list
        "Hello"
+       "Finish"
        "Bye Robert the Smith!"
        "Bye Robert the Rogers!"
        "Bye Bob the Smith!"
        "Bye Bob the Rogers!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-profun-net
             `(((hello)
@@ -1908,16 +1920,17 @@
      (lines->string
       (list
        "Hello"
+       "Finish"
        "Bye Robert the Smith!"
        "Bye Robert the Rogers!"
        "Bye Bob the Smith!"
        "Bye Bob the Rogers!"
+       "Finish"
        ""))
      (with-output-to-string
        (lambda _
          (petri-run
-          'hello
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello handler
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))

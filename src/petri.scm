@@ -37,6 +37,7 @@
 %use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
 %use (dynamic-thread-async) "./dynamic-thread-async.scm"
 %use (curry-if) "./curry-if.scm"
+%use (patri-handle-make-callback) "./petri-error-handling.scm"
 
 %use (debug) "./debug.scm"
 
@@ -48,12 +49,8 @@
 (define (petri-push tr-name . args)
   ((petri-push/p) tr-name args))
 
-;; TODO: allow restarting the last cycle
-;; TODO: allow restarting the whole thing
 ;; TODO: allow preemptive exiting
-;; FIXME: throw error on bad arity push, not call
-;; TODO: use multithreading
-;; TODO: delay errors to their own cycles
+;; TODO: throw error on bad arity push, not call
 
 ;; Transforms petri global-queue into list of things to evalutate (the "todos").
 ;; So a list like:
@@ -192,7 +189,10 @@
   (unless (null? errors)
     (catch-any
      (lambda _
-       (error-handler 'runtime-errors errors))
+       (error-handler `((type trainsition-failed)
+                        (errors ,errors)
+                        (target ,net)
+                        (restart-cycle ,(lambda () (petri-cycle-network error-handler transformer queue net))))))
      (lambda handling-errors
        (raisu 'error-handling-failed handling-errors queue errors))))
 
@@ -205,7 +205,11 @@
     (let ((q (unload!)))
       (unless (null? q)
         (petri-cycle-network error-handler transformer q net)
-        (loop)))))
+        (loop))))
+
+  (error-handler `((type network-finished)
+                   (restart-network ,(lambda () (petri-loop-network error-handler options unload! net)))))
+  (values))
 
 (define (petri-start-network error-handler options net)
   (define (unload!)
@@ -223,10 +227,11 @@
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #t)))
 
-(define (petri-run/optioned start-transition-name options error-handler list-or-network)
+(define (petri-run/optioned start-transition-name options user-error-handler list-or-network)
   (define list-of-petri-networks ((curry-if petri-net-obj? list) list-or-network))
   (define networks-futures (stack-make))
   (define global-critical (dynamic-thread-critical-make))
+  (define error-handler (patri-handle-make-callback user-error-handler))
 
   (define (restart net)
     (with-critical
@@ -271,6 +276,12 @@
        (restart net)))
    list-of-petri-networks)
 
+  (define (make-network-failed-interface net errors)
+    `((type network-failed)
+      (errors ,errors)
+      (target ,net)
+      (restart-network ,(lambda () (restart net)))))
+
   (let loop ()
     (define future/named
       (with-critical global-critical (stack-pop! networks-futures #f)))
@@ -281,7 +292,7 @@
         (when (eq? 'fail (future 'status))
           (catch-any
            (lambda _
-             (error-handler 'network-failed net (future 'results)))
+             (error-handler (make-network-failed-interface net (future 'results))))
            (lambda errors
              (display "Petri run failed on handling 'network-failed error. Exceptions: " (current-error-port))
              (display errors (current-error-port))
@@ -290,7 +301,7 @@
 
 (define petri-run
   (case-lambda
-   ((start-transition-name error-handler list-of-petri-networks)
-    (petri-run/optioned start-transition-name '()  error-handler list-of-petri-networks))
-   ((start-transition-name options error-handler list-of-petri-networks)
-    (petri-run/optioned start-transition-name options error-handler list-of-petri-networks))))
+   ((start-transition-name user-error-handler list-of-petri-networks)
+    (petri-run/optioned start-transition-name '()  user-error-handler list-of-petri-networks))
+   ((start-transition-name options user-error-handler list-of-petri-networks)
+    (petri-run/optioned start-transition-name options user-error-handler list-of-petri-networks))))
