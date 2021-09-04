@@ -26,6 +26,7 @@
 %use (profun-op-divisible) "./profun-op-divisible.scm"
 %use (profun-op-apply) "./profun-op-apply.scm"
 %use (profun-op-eval) "./profun-op-eval.scm"
+%use (profun-op-print) "./profun-op-print.scm"
 %use (profun-make-handler) "./profun-make-handler.scm"
 %use (profun-create-database profun-eval-query) "./profun.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
@@ -59,6 +60,7 @@
    (divisible profun-op-divisible)
    (apply profun-op-apply)
    (eval profun-op-eval)
+   (print profun-op-print)
    (push petri-profun-push)))
 
 ;; Accepts usual profun definitions and returns respective petri network.

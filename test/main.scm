@@ -1708,6 +1708,44 @@
                (apply ,display SURNAME)
                (apply ,display "!\n")))))))))
 
+    ;; NOTE: not a list of networks, just a single one
+    (assert=
+     (lines->string
+      (list
+       "Hello"
+       "Bye Robert the Smith!"
+       ""))
+     (with-output-to-string
+       (lambda _
+         (petri-run
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello
+          (petri-profun-net
+           `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
+             ((bye NAME SURNAME)
+              (apply ,display "Bye ")
+              (apply ,display NAME)
+              (apply ,display " the ")
+              (apply ,display SURNAME)
+              (apply ,display "!\n"))))))))
+
+    (assert=
+     (lines->string
+      (list
+       "Hello"
+       "Bye Robert the Smith!"
+       ""))
+     (with-output-to-string
+       (lambda _
+         (petri-run
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
+          'hello
+          (list
+           (petri-profun-net
+            `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
+              ((bye NAME SURNAME)
+               (print "Bye ~a the ~a!" NAME SURNAME)))))))))
+
     (assert=
      (lines->string
       (list
