@@ -1645,8 +1645,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))
@@ -1663,8 +1663,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith")))))
@@ -1685,8 +1685,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))
@@ -1709,8 +1709,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-profun-net
             `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
@@ -1731,8 +1731,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (petri-profun-net
            `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
              ((bye NAME SURNAME)
@@ -1751,8 +1751,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-profun-net
             `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
@@ -1768,8 +1768,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-profun-net
             `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))))
@@ -1794,8 +1794,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-profun-net
             `(((name "Robert"))
@@ -1820,9 +1820,9 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
           '((deduplicate))
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-profun-net
             `(((name "Robert"))
@@ -1848,8 +1848,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-profun-net
             `(((hello)
@@ -1876,8 +1876,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-profun-net
             `(((hello)
@@ -1901,8 +1901,8 @@
      (with-output-to-string
        (lambda _
          (petri-run
-          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           'hello
+          (lambda errors (display "PETRI ERRORS: ") (display errors) (newline))
           (list
            (petri-lambda-net
             (list (list '(hello . 0) (lambda () (display "Hello\n") (petri-push 'bye "Robert" "Smith") (petri-push 'bye "Bob" "Rogers")))))

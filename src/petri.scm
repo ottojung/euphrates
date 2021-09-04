@@ -223,7 +223,7 @@
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #t)))
 
-(define (petri-run/optioned error-handler start-transition-name options list-or-network)
+(define (petri-run/optioned start-transition-name options error-handler list-or-network)
   (define list-of-petri-networks ((curry-if petri-net-obj? list) list-or-network))
   (define networks-futures (stack-make))
   (define global-critical (dynamic-thread-critical-make))
@@ -290,7 +290,7 @@
 
 (define petri-run
   (case-lambda
-   ((error-handler start-transition-name list-of-petri-networks)
-    (petri-run/optioned error-handler start-transition-name '() list-of-petri-networks))
-   ((error-handler start-transition-name options list-of-petri-networks)
-    (petri-run/optioned error-handler start-transition-name options list-of-petri-networks))))
+   ((start-transition-name error-handler list-of-petri-networks)
+    (petri-run/optioned start-transition-name '()  error-handler list-of-petri-networks))
+   ((start-transition-name options error-handler list-of-petri-networks)
+    (petri-run/optioned start-transition-name options error-handler list-of-petri-networks))))
