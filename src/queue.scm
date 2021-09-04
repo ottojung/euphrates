@@ -88,7 +88,7 @@
           ret)))))
 
 (define (list->queue lst)
-  (queue (list->vector lst) 0 0))
+  (queue (list->vector lst) 0 (length lst)))
 
 (define (queue->list q)
   (define first (+ 0 (queue-first q)))
