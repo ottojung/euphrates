@@ -122,7 +122,7 @@
   (define last+ (+ 1 (queue-last q)))
   (define new-last (if (>= last+ (queue-capacity q)) 0 last+))
   (set-queue-first! q new-first)
-  (set-queue-first! q new-last))
+  (set-queue-last! q new-last))
 
 ;; equivalent to queue-pop! followed by queue-push!
 (define queue-peek-rotate!
