@@ -8,6 +8,8 @@
 %var queue-pop!
 %var queue->list
 %var queue-unload!
+%var queue-rotate!
+%var queue-peek-rotate!
 
 %use (make-unique) "./make-unique.scm"
 %use (raisu) "./raisu.scm"
@@ -95,3 +97,27 @@
     (set-queue-last! q 0)
     (vector-fill! (queue-vector q) #f)
     lst))
+
+(define (queue-capacity q)
+  (vector-length (queue-vector q)))
+
+;; equivalent to queue-pop! followed by queue-push!
+(define (queue-rotate! q)
+  (define first+ (+ 1 (queue-first q)))
+  (define new-first (if (>= first+ (queue-capacity q)) 0 first+))
+  (define last+ (+ 1 (queue-last q)))
+  (define new-last (if (>= last+ (queue-capacity q)) 0 last+))
+  (set-queue-first! q new-first)
+  (set-queue-first! q new-last))
+
+;; equivalent to queue-pop! followed by queue-push!
+(define queue-peek-rotate!
+  (case-lambda
+   ((q)
+    (let ((ret (queue-peek q)))
+      (queue-rotate! q)
+      ret))
+   ((q default)
+    (let ((ret (queue-peek q default)))
+      (queue-rotate! q)
+      ret))))
