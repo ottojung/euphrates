@@ -6,6 +6,7 @@
 %var queue-peek
 %var queue-push!
 %var queue-pop!
+%var list->queue
 %var queue->list
 %var queue-unload!
 %var queue-rotate!
@@ -75,6 +76,9 @@
             (vector-set! v first #f)
             (set-queue-first! q new-first)
             ret))))))
+
+(define (list->queue lst)
+  (queue (list->vector lst) 0 0))
 
 (define (queue->list q)
   (define first (+ 0 (queue-first q)))
