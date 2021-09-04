@@ -27,7 +27,8 @@
 %use (system*/exit-code) "./system-star-exit-code.scm"
 %use (stringf) "./stringf.scm"
 %use (shell-quote/permissive) "./shell-quote-permissive.scm"
+%use (~a) "./tilda-a.scm"
 
 (define (system-fmt fmt . args)
-  (let* ((command (apply stringf (cons fmt (map shell-quote/permissive args)))))
+  (let* ((command (apply stringf (cons fmt (map (compose shell-quote/permissive ~a) args)))))
     (system*/exit-code "/bin/sh" "-c" command)))
