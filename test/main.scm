@@ -1295,15 +1295,30 @@
 
     (test-definitions
      "ALL ACCEPTING WITH A SPECIAL CASE"
-     '(((abc 8 y) (= y 10))
+     '(((start k u) (abc k u))
+       ((abc 8 y) (= y 10))
        ((abc x y)))
 
-     (test '((abc 2 3)) '(()))
-     (test '((abc "hello" "bye")) '(()))
-     (test '((abc a b)) '(((a . 8) (b . 10)) ()))
-     (test '((abc 8 b)) '(((b . 10)) ()))
-     (test '((abc 8 10)) '(() ()))
-     (test '((abc a 10)) '(((a . 8)) ()))
+     (test '((start 2 3)) '(()))
+     (test '((start "hello" "bye")) '(()))
+     (test '((start a b)) '(((a . 8) (b . 10)) ()))
+     (test '((start 8 b)) '(((b . 10)) ()))
+     (test '((start 8 10)) '(() ()))
+     (test '((start a 10)) '(((a . 8)) ()))
+     )
+
+    (test-definitions
+     "ALL ACCEPTING WITH A SPECIAL CASE 2"
+     '(((start k u) (abc k u))
+       ((abc 8 y) (= y 10))
+       ((abc x y) (= 1 1)))
+
+     (test '((start 2 3)) '(()))
+     (test '((start "hello" "bye")) '(()))
+     (test '((start a b)) '(((a . 8) (b . 10)) ()))
+     (test '((start 8 b)) '(((b . 10)) ()))
+     (test '((start 8 10)) '(() ()))
+     (test '((start a 10)) '(((a . 8)) ()))
      )
 
     (test-definitions
