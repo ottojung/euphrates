@@ -25,10 +25,16 @@
 (define (queue-empty? q)
   (= (queue-first q) (queue-last q)))
 
-(define (queue-peek q)
-  (if (= (queue-first q) (queue-last q))
-      (raisu 'empty-queue-peek)
-      (vector-ref (queue-vector q) (queue-first q))))
+(define queue-peek
+  (case-lambda
+   ((q)
+    (if (= (queue-first q) (queue-last q))
+        (raisu 'empty-queue-peek)
+        (vector-ref (queue-vector q) (queue-first q))))
+   ((q default)
+    (if (= (queue-first q) (queue-last q))
+        default
+        (vector-ref (queue-vector q) (queue-first q))))))
 
 (define (queue-push! q value)
   (let* ((v (queue-vector q))
@@ -57,25 +63,29 @@
           (vector-set! v last value)))))
 
 (define queue-pop!
-  (let ((private-default (make-unique)))
-    (case-lambda
-     ((q)
-      (let ((ret (queue-pop! q private-default)))
-        (if (eq? private-default ret)
-            (raisu 'empty-queue-pop)
-            ret)))
-
-     ((q default)
-      (if (= (queue-first q) (queue-last q)) default
-          (let* ((v (queue-vector q))
-                 (size (vector-length v))
-                 (first (queue-first q))
-                 (first+1 (+ 1 first))
-                 (new-first (if (< first+1 size) first+1 0))
-                 (ret (vector-ref v first)))
-            (vector-set! v first #f)
-            (set-queue-first! q new-first)
-            ret))))))
+  (case-lambda
+   ((q)
+    (if (= (queue-first q) (queue-last q)) (raisu 'empty-queue-pop)
+        (let* ((v (queue-vector q))
+               (size (vector-length v))
+               (first (queue-first q))
+               (first+1 (+ 1 first))
+               (new-first (if (< first+1 size) first+1 0))
+               (ret (vector-ref v first)))
+          (vector-set! v first #f)
+          (set-queue-first! q new-first)
+          ret)))
+   ((q default)
+    (if (= (queue-first q) (queue-last q)) default
+        (let* ((v (queue-vector q))
+               (size (vector-length v))
+               (first (queue-first q))
+               (first+1 (+ 1 first))
+               (new-first (if (< first+1 size) first+1 0))
+               (ret (vector-ref v first)))
+          (vector-set! v first #f)
+          (set-queue-first! q new-first)
+          ret)))))
 
 (define (list->queue lst)
   (queue (list->vector lst) 0 0))
