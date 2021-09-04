@@ -1,6 +1,8 @@
 
 %run guile
 
+;; NOTE: this time is not parameterized because of performance penalty that would introduce.
+;; Therefore, this timestamp should only be used for non-deterministic stuff, or the stuff that noone cares to test.
 %var time-get-monotonic-nanoseconds-timestamp
 
 %for (COMPILER "guile")

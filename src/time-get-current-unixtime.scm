@@ -6,17 +6,9 @@
 ;; @returns Fraction, where integer part is seconds
 %var time-get-current-unixtime
 
-%for (COMPILER "guile")
-
-%use (nano->normal/unit) "./unit-conversions.scm"
-
-(use-modules (srfi srfi-19))
+%use (time-get-current-unixtime#p) "./time-get-current-unixtime-p.scm"
+%use (time-get-current-unixtime#p-default) "./time-get-current-unixtime-p-default.scm"
 
 (define (time-get-current-unixtime)
-  (let ((time (current-time time-utc)))
-    (+ (time-second time)
-       (nano->normal/unit (time-nanosecond time)))))
-
-%end
-
-
+  ((or (time-get-current-unixtime#p)
+       time-get-current-unixtime#p-default)))
