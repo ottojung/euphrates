@@ -97,6 +97,9 @@
 %use (petri-profun-net) "./src/petri-net-parse-profun.scm"
 %use (string-drop-n) "./src/string-drop-n.scm"
 %use (string-take-n) "./src/string-take-n.scm"
+%use (time-get-current-unixtime/values#p) "./src/time-get-current-unixtime-values-p.scm"
+%use (date-get-current-string) "./src/date-get-current-string.scm"
+%use (date-get-current-time24h-string) "./src/date-get-current-time24h-string.scm"
 
 (let ()
   (catch-any
@@ -1970,6 +1973,16 @@
   (assert= "" (string-take-n -1 "hello"))
   (assert= "" (string-take-n 0 ""))
   (assert= "" (string-take-n 5 "")))
+
+(let () ;; date-get-current-string
+  (parameterize ((time-get-current-unixtime/values#p (lambda () (values 567 1234))))
+    (assert= "1970/01/01 01:09:27"
+             (date-get-current-string "~Y/~m/~d ~H:~M:~S"))))
+
+(let () ;; date-get-current-time24h-string
+  (parameterize ((time-get-current-unixtime/values#p (lambda () (values 567 1234))))
+    (assert= "01:09:27"
+             (date-get-current-time24h-string))))
 
 (display "All good\n")
 
