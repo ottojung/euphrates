@@ -36,6 +36,7 @@
 %use (dynamic-thread-yield) "./dynamic-thread-yield.scm"
 %use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
 %use (dynamic-thread-async) "./dynamic-thread-async.scm"
+%use (curry-if) "./curry-if.scm"
 
 %use (debug) "./debug.scm"
 
@@ -222,7 +223,8 @@
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #t)))
 
-(define (petri-run/optioned error-handler start-transition-name options list-of-petri-networks)
+(define (petri-run/optioned error-handler start-transition-name options list-or-network)
+  (define list-of-petri-networks ((curry-if petri-net-obj? list) list-or-network))
   (define networks-futures (stack-make))
   (define global-critical (dynamic-thread-critical-make))
 
