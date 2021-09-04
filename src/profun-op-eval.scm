@@ -16,39 +16,30 @@
 
 ;; In order to return result during apply evaluation, call `profun-apply-return!';
 ;; in order to fail, call `profun-apply-fail!'.
-%var profun-op-apply
-%var profun-apply-return!
-%var profun-apply-fail!
+%var profun-op-eval
+%var profun-eval-return!
+%var profun-eval-fail!
 
-%use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
+%use (profun-op-eval/result#p) "./profun-op-eval-result-p.scm"
 %use (make-box box? box-ref box-set!) "./box.scm"
 
-(define profun-op-apply
+(define profun-op-eval
   (lambda (args ctx)
     (and (not ctx)
          (not (null? args))
-         (let ((procedure (car args))
-               (arguments (cdr args))
+         (not (null? (cdr args)))
+         (let ((destination (car args))
+               (procedure (cadr args))
+               (arguments (cddr args))
                (box (make-box #f)))
 
-           (parameterize ((profun-op-apply/result#p box))
-             (apply procedure arguments))
+           (parameterize ((profun-op-eval/result#p box))
+             (let ((result (apply procedure arguments)))
+               (and (not (eq? 'fail (box-ref box)))
+                    (cons (cons result (cons #t (map (const #t) arguments))) #t))))))))
 
-           (let ((result (box-ref box)))
-             (case result
-               ((fail) #f)
-               ((#f) (cons #t #t))
-               (else
-                (cons (cons #t result) #t))))))))
-
-(define (profun-apply-return! . args)
-  (let ((box (profun-op-apply/result#p)))
+(define (profun-eval-fail!)
+  (let ((box (profun-op-eval/result#p)))
     (unless (box? box)
-      (raisu 'profun-apply-return-called-outside-of-apply box))
-    (box-set! box args)))
-
-(define (profun-apply-fail!)
-  (let ((box (profun-op-apply/result#p)))
-    (unless (box? box)
-      (raisu 'profun-apply-return-called-outside-of-apply box))
+      (raisu 'profun-eval-return-called-outside-of-eval box))
     (box-set! box 'fail)))

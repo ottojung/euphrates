@@ -83,6 +83,7 @@
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
 %use (profun-op-apply profun-apply-return! profun-apply-fail!) "./src/profun-op-apply.scm"
+%use (profun-op-eval profun-eval-fail!) "./src/profun-op-eval.scm"
 %use (list-take-while) "./src/list-take-while.scm"
 %use (petri-run petri-push) "./src/petri.scm"
 %use (raisu) "./src/raisu.scm"
@@ -1234,6 +1235,7 @@
          (< profun-op-less)
          (divisible profun-op-divisible)
          (apply profun-op-apply)
+         (eval profun-op-eval)
          (favorite (profun-make-set (list 777 2 9 3)))
          (favorite2 (cons 2 (profun-make-tuple-set '((777 2) (#t 9) (3 #f)))))
          )))
@@ -1415,6 +1417,16 @@
      (test `((= x 3) (apply ,(lambda (y) (profun-apply-return! 2)) y)) '(((x . 3) (y . 2))))
      (test `((= x 3) (apply ,(lambda (y) (profun-apply-fail!)) x)) '())
      (test `((= x 3) (apply ,(lambda (y) 9) x)) '(((x . 3))))
+     )
+
+    (test-definitions
+     "eval CASES"
+     '()
+
+     (test `((= x 3) (eval r ,(lambda (y) 2) x)) '(((x . 3) (r . 2))))
+     (test `((= x 3) (eval r ,(lambda (y) 2) y)) '(((x . 3) (r . 2))))
+     (test `((= x 3) (eval r ,(lambda (y) (profun-eval-fail!)) x)) '())
+     (test `((= x 3) (eval r ,(lambda (y) 9) x)) '(((x . 3) (r . 9))))
      )
 
     (test-definitions
