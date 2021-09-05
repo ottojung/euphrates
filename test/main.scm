@@ -104,6 +104,9 @@
 %use (syntax-append) "./src/syntax-append.scm"
 %use (syntax-map) "./src/syntax-map.scm"
 %use (fn) "./src/fn.scm"
+%use (list-zip) "./src/list-zip.scm"
+%use (list-zip-with) "./src/list-zip-with.scm"
+%use (fn-tuple) "./src/fn-tuple.scm"
 %use (compose-under) "./src/compose-under.scm"
 
 (let ()
@@ -2014,6 +2017,32 @@
 (let () ;; fn
   (assert= (list 1 2 3)
            ((fn list 1 % 3) 2)))
+
+(let () ;; list-zip
+  (assert= '((1 . a) (2 . b) (3 . c))
+           (list-zip '(1 2 3) '(a b c)))
+  (assert= '((1 . a) (2 . b))
+           (list-zip '(1 2 3) '(a b)))
+  (assert= '((1 . a) (2 . b))
+           (list-zip '(1 2) '(a b)))
+  (assert= '((1 . a) (2 . b))
+           (list-zip '(1 2) '(a b c)))
+  (assert= '()
+           (list-zip '() '(a b c)))
+  )
+
+(let () ;; list-zip-with
+  (assert= '((1 a) (2 b) (3 c))
+           (list-zip-with list '(1 2 3) '(a b c)))
+  (assert= '((1 a) (2 b))
+           (list-zip-with list '(1 2 3) '(a b)))
+  (assert= '((1 a) (2 b))
+           (list-zip-with list '(1 2) '(a b)))
+  (assert= '((1 a) (2 b))
+           (list-zip-with list '(1 2) '(a b c)))
+  (assert= '()
+           (list-zip-with list '() '(a b c)))
+  )
 
 (let () ;; compose-under
   (assert= (list 10 25 0)
