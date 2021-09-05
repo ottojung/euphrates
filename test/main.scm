@@ -100,6 +100,7 @@
 %use (time-get-current-unixtime/values#p) "./src/time-get-current-unixtime-values-p.scm"
 %use (date-get-current-string) "./src/date-get-current-string.scm"
 %use (date-get-current-time24h-string) "./src/date-get-current-time24h-string.scm"
+%use (syntax-flatten*) "./src/syntax-flatten-star.scm"
 %use (syntax-append) "./src/syntax-append.scm"
 %use (syntax-map) "./src/syntax-map.scm"
 %use (fn) "./src/fn.scm"
@@ -1987,24 +1988,31 @@
     (assert= "01:09:27"
              (date-get-current-time24h-string))))
 
+(let () ;; syntax-flatten*
+  (define-syntax cont
+    (syntax-rules () ((_ arg buf) (list arg (quote buf)))))
+
+  (assert= (list 'arg '(a b c g h d h e))
+           (syntax-flatten* (cont 'arg) ((a b (c (g h) d) (h) e)))))
+
 (let () ;; syntax-append
-  (define-syntax kek
+  (define-syntax cont
     (syntax-rules () ((_ arg buf) (list arg . buf))))
 
   (assert= (list 'arg 2 3 4 5 6 7)
-           (syntax-append (kek 'arg) (2 3) (4 5 6 7))))
+           (syntax-append (cont 'arg) (2 3) (4 5 6 7))))
 
 (let () ;; syntax-map
-  (define-syntax kek
+  (define-syntax cont
     (syntax-rules () ((_ arg buf) (list arg . buf))))
 
   (assert=
    '(arg (p . 1) (p . 2) (p . 3) (p . 4) (p . 5))
-   (syntax-map (kek 'arg) cons 'p (1 2 3 4 5))))
+   (syntax-map (cont 'arg) cons 'p (1 2 3 4 5))))
 
-;; (let () ;; fn
-;;   (assert= (list 1 2 3)
-;;            ((fn list 1 % 3) 2)))
+(let () ;; fn
+  (assert= (list 1 2 3)
+           ((fn list 1 % 3) 2)))
 
 (display "All good\n")
 

@@ -17,7 +17,7 @@
 %use (CFG-CLI->CFG-lang) "./compile-cfg-cli.scm"
 %use (get-command-line-arguments) "./get-command-line-arguments.scm"
 %use (make-cfg-machine*) "./cfg-machine.scm"
-%use (flatten-syntax-f-arg) "./flatten-syntax-f.scm"
+%use (syntax-flatten*) "./syntax-flatten-star.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (~a) "./tilda-a.scm"
@@ -219,7 +219,7 @@
   (define-cli:let-list define-cli:let1 bodies args))
 
 (define-syntax-rule (define-cli:let-tree T . bodies)
-  (flatten-syntax-f-arg define-cli:let-list-wrapper bodies T))
+  (syntax-flatten* (define-cli:let-list-wrapper bodies) T))
 
 (define-syntax make-cli/lambda-cli/wrapper
   (syntax-rules ()

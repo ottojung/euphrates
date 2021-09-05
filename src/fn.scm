@@ -7,11 +7,11 @@
 
 (define-syntax identity-continuation
   (syntax-rules ()
-    ((_ arg x) x)))
+    ((_ x) x)))
 
 (define-syntax fn%-replace1
   (syntax-rules (%)
-    ((_ arg-name (x . xs)) (syntax-map identity-continuation 0 fn%-replace1 arg-name (x . xs)))
+    ((_ arg-name (x . xs)) (syntax-map identity-continuation fn%-replace1 arg-name (x . xs)))
     ((_ arg-name %) arg-name)
     ((_ arg-name expr) expr)))
 
