@@ -1992,7 +1992,7 @@
     (syntax-rules () ((_ arg buf) (list arg . buf))))
 
   (assert= (list 'arg 2 3 4 5 6 7)
-           (syntax-append kek 'arg (2 3) (4 5 6 7))))
+           (syntax-append (kek 'arg) (2 3) (4 5 6 7))))
 
 (let () ;; syntax-map
   (define-syntax kek
@@ -2000,11 +2000,11 @@
 
   (assert=
    '(arg (p . 1) (p . 2) (p . 3) (p . 4) (p . 5))
-   (syntax-map kek 'arg cons 'p (1 2 3 4 5))))
+   (syntax-map (kek 'arg) cons 'p (1 2 3 4 5))))
 
-(let () ;; fn
-  (assert= (list 1 2 3)
-           ((fn list 1 % 3) 2)))
+;; (let () ;; fn
+;;   (assert= (list 1 2 3)
+;;            ((fn list 1 % 3) 2)))
 
 (display "All good\n")
 
