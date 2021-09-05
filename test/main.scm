@@ -101,6 +101,7 @@
 %use (date-get-current-string) "./src/date-get-current-string.scm"
 %use (date-get-current-time24h-string) "./src/date-get-current-time24h-string.scm"
 %use (syntax-append) "./src/syntax-append.scm"
+%use (syntax-map) "./src/syntax-map.scm"
 
 (let ()
   (catch-any
@@ -1991,6 +1992,14 @@
 
   (assert= (list 'arg 2 3 4 5 6 7)
            (syntax-append kek 'arg (2 3) (4 5 6 7))))
+
+(let () ;; syntax-map
+  (define-syntax kek
+    (syntax-rules () ((_ arg buf) (list arg . buf))))
+
+  (assert=
+   '(arg (p . 1) (p . 2) (p . 3) (p . 4) (p . 5))
+   (syntax-map kek 'arg cons 'p (1 2 3 4 5))))
 
 (display "All good\n")
 
