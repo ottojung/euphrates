@@ -3,16 +3,16 @@
 
 %var syntax-append
 
-%use (reversed-args) "./reversed-args.scm"
+%use (reverse-syntax-f) "./reverse-syntax-f.scm"
 
 (define-syntax syntax-append/buf
   (syntax-rules ()
-    ((_ buf () ()) (reversed-args . buf))
-    ((_ buf (a . as) bs)
-     (syntax-append/buf (a . buf) as bs))
-    ((_ buf as (b . bs))
-     (syntax-append/buf (b . buf) as bs))))
+    ((_ cont cont-arg buf () ()) (reverse-syntax-f cont cont-arg buf))
+    ((_ cont cont-arg buf (a . as) bs)
+     (syntax-append/buf cont cont-arg (a . buf) as bs))
+    ((_ cont cont-arg buf as (b . bs))
+     (syntax-append/buf cont cont-arg (b . buf) as bs))))
 
 (define-syntax syntax-append
   (syntax-rules ()
-    ((_ a b) (syntax-append/buf () a b))))
+    ((_ cont cont-arg a b) (syntax-append/buf cont cont-arg () a b))))

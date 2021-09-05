@@ -1986,8 +1986,11 @@
              (date-get-current-time24h-string))))
 
 (let () ;; syntax-append
-  (assert= (list 2 3 4 5 6 7)
-           (syntax-append (list 2 3) (4 5 6 7))))
+  (define-syntax kek
+    (syntax-rules () ((_ arg buf) (list arg . buf))))
+
+  (assert= (list 'arg 2 3 4 5 6 7)
+           (syntax-append kek 'arg (2 3) (4 5 6 7))))
 
 (display "All good\n")
 
