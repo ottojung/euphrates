@@ -108,6 +108,7 @@
 %use (list-zip-with) "./src/list-zip-with.scm"
 %use (fn-tuple) "./src/fn-tuple.scm"
 %use (compose-under) "./src/compose-under.scm"
+%use (list-partition) "./src/list-partition.scm"
 
 (let ()
   (catch-any
@@ -2054,6 +2055,11 @@
            ((compose-under list + * -) 5 5))
   (assert= (list 0 1 3 5 7 9)
            (filter (compose-under or zero? odd?) (range 10))))
+
+(let () ;; list-partition
+  (assert= '((#t 8 6 4 2 0)
+             (#f 9 7 5 3 1))
+           (list-partition even? (range 10))))
 
 (display "All good\n")
 
