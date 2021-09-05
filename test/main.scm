@@ -102,6 +102,7 @@
 %use (date-get-current-time24h-string) "./src/date-get-current-time24h-string.scm"
 %use (syntax-append) "./src/syntax-append.scm"
 %use (syntax-map) "./src/syntax-map.scm"
+%use (fn) "./src/fn.scm"
 
 (let ()
   (catch-any
@@ -2000,6 +2001,10 @@
   (assert=
    '(arg (p . 1) (p . 2) (p . 3) (p . 4) (p . 5))
    (syntax-map kek 'arg cons 'p (1 2 3 4 5))))
+
+(let () ;; fn
+  (assert= (list 1 2 3)
+           ((fn list 1 % 3) 2)))
 
 (display "All good\n")
 
