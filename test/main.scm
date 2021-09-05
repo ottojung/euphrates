@@ -970,8 +970,8 @@
 
 ;; system-re
 (let ()
-  (assert= (cons "hello" 0) (system-re "echo hello"))
-  (assert= (cons "hello" 0) (system-re "echo ~a" "hello")))
+  (assert= (cons "hello\n" 0) (system-re "echo hello"))
+  (assert= (cons "hello\n" 0) (system-re "echo ~a" "hello")))
 
 ;; number-list
 (let ()

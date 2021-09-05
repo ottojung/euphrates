@@ -25,7 +25,6 @@
          (p (system*/exit-code
              "/bin/sh" "-c"
              (string-append "/bin/sh -c " (shell-quote/permissive command) " > " temp)))
-         (output (read-string-file temp))
-         (trimed (string-trim-chars output "\n \t" 'both)))
+         (output (read-string-file temp)))
     (file-delete temp)
-    (cons trimed p)))
+    (cons output p)))
