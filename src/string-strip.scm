@@ -7,5 +7,5 @@
 
 (define string-strip
   (case-lambda
-   ((str) (string-trim-chars output "\n \t" 'both))
-   ((str chars) (string-trim-chars output chars 'both))))
+   ((str) (string-trim-chars str "\n \t" 'both))
+   ((str chars) (string-trim-chars str chars 'both))))
