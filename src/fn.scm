@@ -4,14 +4,11 @@
 %var fn
 
 %use (syntax-map) "./syntax-map.scm"
-
-(define-syntax identity-continuation
-  (syntax-rules ()
-    ((_ x) x)))
+%use (syntax-identity) "./syntax-identity.scm"
 
 (define-syntax fn%-replace1
   (syntax-rules (%)
-    ((_ arg-name (x . xs)) (syntax-map identity-continuation fn%-replace1 arg-name (x . xs)))
+    ((_ arg-name (x . xs)) (syntax-map syntax-identity fn%-replace1 arg-name (x . xs)))
     ((_ arg-name %) arg-name)
     ((_ arg-name expr) expr)))
 
