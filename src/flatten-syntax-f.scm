@@ -1,9 +1,10 @@
 
 %run guile
 
-%use (reverse-syntax-f) "./reverse-syntax-f.scm"
 %var flatten-syntax-f
 %var flatten-syntax-f-arg
+
+%use (syntax-reverse) "./syntax-reverse.scm"
 
 (define-syntax flatten-syntax-f-arg-aux
   (syntax-rules ()
@@ -12,7 +13,7 @@
     [(_ f arg (x xs ...) (result ...))
      (flatten-syntax-f-arg-aux f arg (xs ...) (x result ...))]
     [(_ f arg () (result ...))
-     (reverse-syntax-f f arg (result ...))]))
+     (syntax-reverse (f arg) (result ...))]))
 
 (define-syntax flatten-syntax-f-aux
   (syntax-rules ()
@@ -21,7 +22,7 @@
     [(_ f (x xs ...) (result ...))
      (flatten-syntax-f-aux f (xs ...) (x result ...))]
     [(_ f () (result ...))
-     (reverse-syntax-f f (result ...))]))
+     (syntax-reverse f (result ...))]))
 
 (define-syntax flatten-syntax-f-arg
   (syntax-rules ()
