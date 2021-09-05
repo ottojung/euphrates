@@ -100,6 +100,7 @@
 %use (time-get-current-unixtime/values#p) "./src/time-get-current-unixtime-values-p.scm"
 %use (date-get-current-string) "./src/date-get-current-string.scm"
 %use (date-get-current-time24h-string) "./src/date-get-current-time24h-string.scm"
+%use (syntax-append) "./src/syntax-append.scm"
 
 (let ()
   (catch-any
@@ -1983,6 +1984,10 @@
   (parameterize ((time-get-current-unixtime/values#p (lambda () (values 567 1234))))
     (assert= "01:09:27"
              (date-get-current-time24h-string))))
+
+(let () ;; syntax-append
+  (assert= (list 2 3 4 5 6 7)
+           (syntax-append (list 2 3) (4 5 6 7))))
 
 (display "All good\n")
 
