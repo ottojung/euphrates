@@ -14,6 +14,10 @@
 %var hashmap-clear!
 %var hashmap-count
 %var hashmap-delete!
+%var hashmap-merge!
+%var hashmap-merge
+
+%use (make-unique) "./make-unique.scm"
 
 %for (COMPILER "guile")
 
@@ -70,3 +74,32 @@
    H)
 
   ret)
+
+;; Merges two hashmaps.
+;; If `f' is provided then it will be applied to values with the same key.
+(define hashmap-merge!
+  (let ((unique (make-unique)))
+    (case-lambda
+     ((base other)
+      (hashmap-foreach
+       (lambda (key value) (hashmap-set! base key value))
+       other))
+     ((base other f)
+      (hashmap-foreach
+       (lambda (key value)
+         (define base-value (hashmap-ref base key unique))
+         (if (eq? unique base-value)
+             (hashmap-set! base key value)
+             (hashmap-set! base key (f key base-value value))))
+       other)))))
+
+(define hashmap-merge
+  (case-lambda
+   ((a b)
+    (let ((new (hashmap-copy a)))
+      (hashmap-merge! new b)
+      new))
+   ((a b f)
+    (let ((new (hashmap-copy a)))
+      (hashmap-merge! new b f)
+      new))))
