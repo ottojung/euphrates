@@ -9,6 +9,9 @@
 %use (raisu) "./raisu.scm"
 %use (make-unique) "./make-unique.scm"
 
+;; NOTE:
+;; this leaks memory. Only use it for scripts.
+
 ;; usage:
 ;; (define object1 (make-unique))
 ;; (define-property size set-size! z8C4ZLEXPNH4DqCNjk0g1)
