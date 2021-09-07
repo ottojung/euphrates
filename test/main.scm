@@ -109,6 +109,7 @@
 %use (fn-tuple) "./src/fn-tuple.scm"
 %use (compose-under) "./src/compose-under.scm"
 %use (list-partition) "./src/list-partition.scm"
+%use (string->seconds) "./src/string-to-seconds.scm"
 
 (let ()
   (catch-any
@@ -2060,6 +2061,19 @@
   (assert= '((#t 8 6 4 2 0)
              (#f 9 7 5 3 1))
            (list-partition even? (range 10))))
+
+(let () ;; string->seconds
+  (assert= 20 (string->seconds "20s"))
+  (assert= 80 (string->seconds "1m20s"))
+  (assert= (+ (* 2 60 60) (* 1 60) (* 20 1))
+           (string->seconds "2h1m20s"))
+  (assert= (+ (* 2 60 60) (* 1 60) (* 20 1))
+           (string->seconds "2h1m20s"))
+  (assert= (+ (* 2 60 60) (* 1 60) (* 20 1))
+           (string->seconds "1m2h20s"))
+  (assert= (+ (* 5 60 60) (* 1 60) (* 20 1))
+           (string->seconds "1m3h2h20s"))
+  )
 
 (display "All good\n")
 
