@@ -1,61 +1,103 @@
 
 %run guile
 
-%var normal->milli/unit
-%var normal->micro/unit
-%var normal->nano/unit
+%set (unit "pebi")
+%set (unit "peta")
+%set (unit "gibi")
+%set (unit "giga")
+%set (unit "mebi")
+%set (unit "mega")
+%set (unit "kibi")
+%set (unit "kilo")
+%set (unit "milli")
+%set (unit "micro")
+%set (unit "nano")
+%set (unit "pico")
 
-%var milli->normal/unit
-%var milli->micro/unit
-%var milli->nano/unit
+%for (unit @y)
+%var normal->@y/unit
+%var @y->normal/unit
+%end
+%for (unit @a) (unit @b)
+%var @a->@b/unit
+%end
 
-%var micro->normal/unit
-%var micro->milli/unit
-%var micro->nano/unit
+(define-values (
+%for (unit @y)
+     normal->@y/unit
+     @y->normal/unit
+%end
+%for (unit @a) (unit @b)
+     @a->@b/unit
+%end
+     )
 
-%var nano->normal/unit
-%var nano->milli/unit
-%var nano->micro/unit
+  (let ()
 
-(define (normal->milli/unit s)
-  (* 1000 s))
+  (define (normal->pebi x)
+    (/ x (* 1024 1024 1024 1024)))
 
-(define (normal->micro/unit s)
-  (* 1000000 s))
+  (define (normal->peta x)
+    (/ x 1000000000000))
 
-(define (normal->nano/unit s)
-  (* 1000000000 s))
+  (define (normal->gibi x)
+    (/ x (* 1024 1024 1024)))
 
+  (define (normal->giga x)
+    (/ x 1000000000))
 
+  (define (normal->mebi x)
+    (/ x (* 1024 1024)))
 
+  (define (normal->mega x)
+    (/ x 1000000))
 
-(define (milli->normal/unit u)
-  (/ u 1000))
+  (define (normal->kibi x)
+    (/ x 1024))
 
-(define (milli->micro/unit u)
-  (* u 1000))
+  (define (normal->kilo x)
+    (/ x 1000))
 
-(define (milli->nano/unit u)
-  (* 1000000 u))
+  (define (normal->milli x)
+    (* x 1000))
 
+  (define (normal->micro x)
+    (* x 1000000))
 
+  (define (normal->nano x)
+    (* x 1000000000))
 
-(define (micro->normal/unit u)
-  (/ u 1000000))
+  (define (normal->pico x)
+    (* x 1000000000000))
 
-(define (micro->milli/unit u)
-  (/ u 1000))
+%for (unit @y)
 
-(define (micro->nano/unit u)
-  (* 1000 u))
+  (define @y->normal
+    (lambda (x)
+      (/ 1 (normal->@y x))))
 
+%end
 
+%for (unit @a) (unit @b)
 
-(define (nano->normal/unit ns)
-  (/ ns 1000000000))
+  (define @a->@b
+    (lambda (x)
+      (normal->@b (@a->normal x))))
 
-(define (nano->milli/unit ns)
-  (/ ns 1000000))
+%end
 
-(define (nano->micro/unit ns)
-  (/ ns 1000))
+  (values
+
+%for (unit @y)
+
+     normal->@y
+     @y->normal
+
+%end
+
+%for (unit @a) (unit @b)
+
+     @a->@b
+
+%end
+     )))
