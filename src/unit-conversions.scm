@@ -70,13 +70,43 @@
   (define (normal->pico x)
     (* x 1000000000000))
 
-%for (unit @y)
 
-  (define @y->normal
-    (lambda (x)
-      (/ 1 (normal->@y x))))
 
-%end
+  (define (pebi->normal x)
+    (* x (* 1024 1024 1024 1024)))
+
+  (define (peta->normal x)
+    (* x 1000000000000))
+
+  (define (gibi->normal x)
+    (* x (* 1024 1024 1024)))
+
+  (define (giga->normal x)
+    (* x 1000000000))
+
+  (define (mebi->normal x)
+    (* x (* 1024 1024)))
+
+  (define (mega->normal x)
+    (* x 1000000))
+
+  (define (kibi->normal x)
+    (* x 1024))
+
+  (define (kilo->normal x)
+    (* x 1000))
+
+  (define (milli->normal x)
+    (/ x 1000))
+
+  (define (micro->normal x)
+    (/ x 1000000))
+
+  (define (nano->normal x)
+    (/ x 1000000000))
+
+  (define (pico->normal x)
+    (/ x 1000000000000))
 
 %for (unit @a) (unit @b)
 
