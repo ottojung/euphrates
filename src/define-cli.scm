@@ -229,7 +229,7 @@
        (lambda (args)
          (when (M H args)
            (parameterize ((define-cli:current-hashmap H))
-             (define-cli:let-tree cli-decl . bodies))))))))
+             (define-cli:let-tree cli-decl (let () . bodies)))))))))
 
 (define-syntax-rule (lambda-cli cli-decl . args)
   (make-cli-with-handler make-cli/lambda-cli/wrapper cli-decl . args))

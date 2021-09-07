@@ -22,6 +22,7 @@
 
 %use (profun-op-eval/result#p) "./profun-op-eval-result-p.scm"
 %use (make-box box? box-ref box-set!) "./box.scm"
+%use (raisu) "./raisu.scm"
 
 (define profun-op-eval
   (lambda (args ctx)

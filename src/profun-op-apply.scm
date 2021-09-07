@@ -22,6 +22,7 @@
 
 %use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
 %use (make-box box? box-ref box-set!) "./box.scm"
+%use (raisu) "./raisu.scm"
 
 (define profun-op-apply
   (lambda (args ctx)

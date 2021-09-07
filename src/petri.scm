@@ -259,6 +259,12 @@
          (restart net)))
      list-of-petri-networks))
 
+  (define (make-network-failed-interface net errors)
+    `((type network-failed)
+      (errors ,errors)
+      (target ,net)
+      (restart-network ,(lambda () (restart net)))))
+
   (let* ((start-transition-name* (cons start-transition-name 0))
          (start-transitions
           (filter identity
@@ -275,12 +281,6 @@
      (parameterize ((petri-push/p push))
        (restart net)))
    list-of-petri-networks)
-
-  (define (make-network-failed-interface net errors)
-    `((type network-failed)
-      (errors ,errors)
-      (target ,net)
-      (restart-network ,(lambda () (restart net)))))
 
   (let loop ()
     (define future/named

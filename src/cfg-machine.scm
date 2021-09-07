@@ -68,10 +68,9 @@
       (make-regex-machine/full (cadr p))))
    new-grammar)
 
-  (define main
-    (hashmap-ref regexes (car (car grammar))))
-
-  (values new-grammar main))
+  (let ((main
+         (hashmap-ref regexes (car (car grammar)))))
+    (values new-grammar main)))
 
 ;;
 ;; Example grammar:
