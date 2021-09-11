@@ -198,7 +198,7 @@
 
   (values))
 
-(define (petri-loop-network error-handler options unload! net)
+(define (petri-loop-network full-restart error-handler options unload! net)
   (define names-set (make-hashset (map car (hashmap->alist (petri-net-obj-transitions net)))))
   (define transformer (petri-make-transformer names-set options))
   (let loop ()
@@ -208,10 +208,11 @@
         (loop))))
 
   (error-handler `((type network-finished)
-                   (restart-network ,(lambda () (petri-loop-network error-handler options unload! net)))))
+                   (restart-network ,(lambda () (full-restart net)))
+                   (restart-lite ,(lambda () (petri-loop-network full-restart error-handler options unload! net)))))
   (values))
 
-(define (petri-start-network error-handler options net)
+(define (petri-start-network full-restart error-handler options net)
   (define (unload!)
     (with-critical
      (petri-net-obj-critical net)
@@ -221,17 +222,40 @@
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #f))
 
-  (petri-loop-network error-handler options unload! net)
+  (petri-loop-network full-restart error-handler options unload! net)
 
   (with-critical
    (petri-net-obj-critical net)
    (set-petri-net-obj-finished?! net #t)))
 
+;; TODO: need a `restart-transition-name'?
+;;       it could be useful when network fails and needs to be restarted,
+;;       but its todos may be empty even if we push `start-transition-name' to the queue.
 (define (petri-run/optioned start-transition-name options user-error-handler list-or-network)
   (define list-of-petri-networks ((curry-if petri-net-obj? list) list-or-network))
   (define networks-futures (stack-make))
   (define global-critical (dynamic-thread-critical-make))
   (define error-handler (patri-handle-make-callback user-error-handler))
+
+  (define (check-finished net)
+    (and (petri-net-obj-finished? net)
+         (begin
+           (set-petri-net-obj-finished?! net #f)
+           #t)))
+
+  (define (push-to-network net tr-name args)
+    (when (with-critical
+           (petri-net-obj-critical net)
+           (stack-push! (petri-net-obj-queue net)
+                        (cons tr-name args))
+           (check-finished net))
+      (restart net)))
+
+  (define (push tr-name args)
+    (for-each
+     (lambda (net)
+       (push-to-network net tr-name args))
+     list-of-petri-networks))
 
   (define (restart net)
     (with-critical
@@ -240,30 +264,17 @@
       networks-futures
       (cons net
             (dynamic-thread-async
-             (petri-start-network error-handler options net))))))
+             (petri-start-network full-restart error-handler options net))))))
 
-  (define (check-finished net)
-    (and (petri-net-obj-finished? net)
-         (begin
-           (set-petri-net-obj-finished?! net #f)
-           #t)))
-
-  (define (push tr-name args)
-    (for-each
-     (lambda (net)
-       (when (with-critical
-              (petri-net-obj-critical net)
-              (stack-push! (petri-net-obj-queue net)
-                           (cons tr-name args))
-              (check-finished net))
-         (restart net)))
-     list-of-petri-networks))
+  (define (full-restart net)
+    (push-to-network net start-transition-name '())
+    (restart net))
 
   (define (make-network-failed-interface net errors)
     `((type network-failed)
       (errors ,errors)
       (target ,net)
-      (restart-network ,(lambda () (restart net)))))
+      (restart-network ,(lambda () (full-restart net)))))
 
   (let* ((start-transition-name* (cons start-transition-name 0))
          (start-transitions
@@ -274,12 +285,10 @@
     (when (null? start-transitions)
       (raisu 'start-transition-does-not-exist-in-any-of-the-networks start-transition-name)))
 
-  (push start-transition-name '())
-
   (for-each
    (lambda (net)
      (parameterize ((petri-push/p push))
-       (restart net)))
+       (full-restart net)))
    list-of-petri-networks)
 
   (let loop ()
