@@ -87,8 +87,8 @@
 
     (define initial
       (cond
-       ((hashset-ref production-names elem)
-        (list 'call elem))
+       ((hashset-ref production-names stripped)
+        (list 'call (string->symbol stripped)))
        ((placeholder-word? stripped)
         (if (multi-word? stripped)
             (list 'any* selem)
@@ -133,8 +133,8 @@
     ;;     (MAY-OPTS?    (and -p <x>))
     ;;     (JUNE-OPTS*   (or (and -f3) (and -f4))))
 
-    (define production-names ;; : listof symbol?
-      (make-hashset (map car anded-and-ored)))
+    (define production-names ;; : listof string?
+      (make-hashset (map (compose ~a car) anded-and-ored)))
 
     (define pimped
       (map

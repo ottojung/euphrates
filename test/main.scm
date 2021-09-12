@@ -700,13 +700,13 @@
 (let ()
   (define input
     '(run OPTS* DATE <end-statement>
-          OPTS*   : --opts <opts...>*
+          OPTS    : --opts <opts...>*
                   / --param1 <arg1>
                   / --flag1
           DATE    : may  <nth> MAY-OPTS?
                   / june <nth> JUNE-OPTS*
-          MAY-OPTS?    : -p <x>
-          JUNE-OPTS*   : -f3 / -f4))
+          MAY-OPTS     : -p <x>
+          JUNE-OPTS    : -f3 / -f4))
 
   (define synonyms '())
 
@@ -716,20 +716,20 @@
 
   (assert= result
            '((EUPHRATES-CFG-CLI-MAIN (and (= "run" "run")
-                                          (* (call OPTS*))
+                                          (* (call OPTS))
                                           (call DATE)
                                           (any "<end-statement>")))
-             (OPTS* (or (and (= "--opts" "--opts") (* (any* "<opts...>*")))
+             (OPTS (or (and (= "--opts" "--opts") (* (any* "<opts...>*")))
                         (and (= "--param1" "--param1") (any "<arg1>"))
                         (and (= "--flag1" "--flag1"))))
              (DATE (or (and (= "may" "may")
                             (any "<nth>")
-                            (? (call MAY-OPTS?)))
+                            (? (call MAY-OPTS)))
                        (and (= "june" "june")
                             (any "<nth>")
-                            (* (call JUNE-OPTS*)))))
-             (MAY-OPTS? (and (= "-p" "-p") (any "<x>")))
-             (JUNE-OPTS*
+                            (* (call JUNE-OPTS)))))
+             (MAY-OPTS (and (= "-p" "-p") (any "<x>")))
+             (JUNE-OPTS
               (or (and (= "-f3" "-f3")) (and (= "-f4" "-f4")))))))
 
 ;; compile-regex-cli
@@ -769,13 +769,13 @@
   (define M
     (make-cli
      (run OPTS* DATE <end-statement>
-          OPTS*   : --opts <opts...>*
-                  / --param1 <arg1>
-                  / --flag1
-          DATE    : may  <nth> MAY-OPTS?
-                  / june <nth> JUNE-OPTS*
-          MAY-OPTS?    : -p <x>
-          JUNE-OPTS*   : -f3 / -f4)
+          OPTS   : --opts <opts...>*
+                 / --param1 <arg1>
+                 / --flag1
+          DATE   : may  <nth> MAY-OPTS?
+                 / june <nth> JUNE-OPTS*
+          MAY-OPTS    : -p <x>
+          JUNE-OPTS   : -f3 / -f4)
      :synonym (run let go)))
 
   (define M2
@@ -798,13 +798,13 @@
   (define f
     (lambda-cli
      (run OPTS* DATE <end-statement>
-          OPTS*   : --opts <opts...>*
+          OPTS    : --opts <opts...>*
           /         --param1 <arg1>
           /         --flag1
           DATE    : may  <nth> MAY-OPTS?
           /         june <nth> JUNE-OPTS*
-          MAY-OPTS?    : -p <x>
-          JUNE-OPTS*   : -f3 / -f4)
+          MAY-OPTS    : -p <x>
+          JUNE-OPTS   : -f3 / -f4)
      :synonym (run go)
      (string-append run "-suffix")))
 
@@ -822,14 +822,14 @@
 
         (with-cli
          (run OPTS* DATE <end-statement>
-              OPTS*   : --opts <opts...>+
-              /         --param1 <arg1>
-              /         --flag1
-              /         --no-flag1
-              DATE    : may  <nth> MAY-OPTS?
-              /         june <nth> JUNE-OPTS*
-              MAY-OPTS?    : -p <x>
-              JUNE-OPTS*   : -f3 / -f4)
+              OPTS   : --opts <opts...>+
+              /        --param1 <arg1>
+              /        --flag1
+              /        --no-flag1
+              DATE   : may  <nth> MAY-OPTS?
+              /        june <nth> JUNE-OPTS*
+              MAY-OPTS    : -p <x>
+              JUNE-OPTS   : -f3 / -f4)
 
          ;; :exclusive (--flag1 --no-flag1)
          :synonym (--opts --options -o)
@@ -860,12 +860,12 @@
 
       (with-cli
        (OPTS*
-        OPTS* : --in <input-type>
-        /       --soft
-        /       --out <output-type>
-        /       --base <base-raw>
-        /       --inbase <inbase-raw>
-        /       --infinite
+        OPTS : --in <input-type>
+        /      --soft
+        /      --out <output-type>
+        /      --base <base-raw>
+        /      --inbase <inbase-raw>
+        /      --infinite
         )
 
        :type (<input-type> in/out-types)
@@ -890,12 +890,12 @@
 
       (with-cli
        (OPTS*
-        OPTS* : --in <input-type>
-        /       --soft
-        /       --out <output-type>
-        /       --base <base-raw>
-        /       --inbase <inbase-raw>
-        /       --infinite
+        OPTS : --in <input-type>
+        /      --soft
+        /      --out <output-type>
+        /      --base <base-raw>
+        /      --inbase <inbase-raw>
+        /      --infinite
         )
 
        :type (<input-type> in/out-types)
@@ -920,12 +920,12 @@
 
       (with-cli
        (OPTS*
-        OPTS* : --in <input-type>
-        /       --soft
-        /       --out <output-type>
-        /       --base <base-raw>
-        /       --inbase <inbase-raw>
-        /       --infinite
+        OPTS : --in <input-type>
+        /      --soft
+        /      --out <output-type>
+        /      --base <base-raw>
+        /      --inbase <inbase-raw>
+        /      --infinite
         )
 
        :type (<input-type> in/out-types)
@@ -951,13 +951,13 @@
 
       (with-cli
        (OPTS*
-        OPTS* : --in <input-type>
-        /       --soft
-        /       --hard
-        /       --out <output-type>
-        /       --base <base-raw>
-        /       --inbase <inbase-raw>
-        /       --infinite
+        OPTS : --in <input-type>
+        /      --soft
+        /      --hard
+        /      --out <output-type>
+        /      --base <base-raw>
+        /      --inbase <inbase-raw>
+        /      --infinite
         )
 
        :type (<input-type> in/out-types)
