@@ -179,8 +179,22 @@
                (newline))))
        fH-alist))
 
+    (define (show-regex-elem elem)
+      (define selem (~a elem))
+      (define stripped (strip-modifiers selem))
+
+      (cond
+       ((string-suffix? "?" selem)
+        (string-append "[" stripped "]"))
+       ((string-suffix? "*" selem)
+        (string-append "[" stripped "...]"))
+       ((string-suffix? "+" selem)
+        (string-append stripped "..."))
+       (else
+        selem)))
+
     (define (show-regex regex)
-      (words->string (map ~a regex)))
+      (words->string (map show-regex-elem regex)))
 
     (define (show-production prod)
       (define name (strip-modifiers (~a (car prod))))
