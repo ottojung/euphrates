@@ -150,7 +150,7 @@
                (newline))
              (let* ((name (car s))
                     (props (cdr s)))
-               (display (pad-option 2 name))
+               (display (pad-option 2 (strip-modifiers name)))
 
                (let ((description (assoc/false #f props)))
                  (when description
