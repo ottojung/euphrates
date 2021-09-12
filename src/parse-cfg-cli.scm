@@ -69,7 +69,7 @@
   ;;     (MAY-OPTS?    -p <x>)
   ;;     (JUNE-OPTS*   -f3 / -f4))
 
-  (define main-name 'MAIN)
+  (define main-name 'EUPHRATES-CFG-CLI-MAIN)
   (define decorated-first
     (cons (cons main-name (car grouped))
           (cdr grouped)))

@@ -686,8 +686,9 @@
 
   (let ()
     (define m (make-cfg-machine
-               '((MAIN (and (or (= "run" run) (= "let" run) (= "go" run))
-                            (? (= "--flag1" --flag1?)))))))
+               '((EUPHRATES-CFG-CLI-MAIN
+                  (and (or (= "run" run) (= "let" run) (= "go" run))
+                       (? (= "--flag1" --flag1?)))))))
     (define-values (H sucess?) (m (list "go")))
     (assert sucess?)
 
@@ -714,10 +715,10 @@
   (define result (compiler input))
 
   (assert= result
-           '((MAIN (and (= "run" "run")
-                        (* (call OPTS*))
-                        (call DATE)
-                        (any "<end-statement>")))
+           '((EUPHRATES-CFG-CLI-MAIN (and (= "run" "run")
+                                          (* (call OPTS*))
+                                          (call DATE)
+                                          (any "<end-statement>")))
              (OPTS* (or (and (= "--opts" "--opts") (* (any* "<opts...>*")))
                         (and (= "--param1" "--param1") (any "<arg1>"))
                         (and (= "--flag1" "--flag1"))))
