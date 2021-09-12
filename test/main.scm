@@ -53,7 +53,7 @@
 %use (make-regex-machine*) "./src/regex-machine.scm"
 %use (make-cfg-machine) "./src/cfg-machine.scm"
 %use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./src/compile-regex-cli.scm"
-%use (make-cli lambda-cli with-cli define-cli:current-hashmap make-cli-with-handler) "./src/define-cli.scm"
+%use (make-cli lambda-cli with-cli make-cli-with-handler) "./src/define-cli.scm"
 %use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
 %use (system-re) "./src/system-re.scm"
 %use (number->number-list number-list->number number->number-list) "./src/number-list.scm"

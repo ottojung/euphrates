@@ -30,8 +30,6 @@
 %var make-cli
 %var make-cli-with-handler
 %var lambda-cli
-%var define-cli:current-hashmap
-%var define-cli:lookup
 %var with-cli
 %var define-cli:raisu/p
 %var define-cli:raisu/default-exit
@@ -145,7 +143,7 @@
     (lambda (excl)
       (define main-name (tostring (car excl)))
       (define secondary-names (cdr excl))
-      (define true-value (define-cli:lookup/H H main-name))
+      (define true-value (define-cli:lookup H main-name))
 
       (when true-value
         (unless (or (equal? true-value #t)
@@ -200,25 +198,25 @@
 
 (define define-cli:current-hashmap
   (make-parameter #f))
-(define (define-cli:lookup/H H x)
+(define (define-cli:lookup H x)
   (hashmap-ref H (~a x) #f))
-(define (define-cli:lookup x)
-  (define-cli:lookup/H (define-cli:current-hashmap) x))
 
-(define-syntax-rule (define-cli:let1 x)
-  (define-cli:lookup (quote x)))
+(define-syntax-rule (define-cli:let1 H x)
+  (define-cli:lookup H (quote x)))
 
 (define-syntax define-cli:let-list
   (syntax-rules ()
-    [(_ f bodies ()) (let () . bodies)]
-    [(_ f bodies (a . as))
-     (let [[a (f a)]] (define-cli:let-list f bodies as))]))
+    [(_ f H bodies ()) (let () . bodies)]
+    [(_ f H bodies (a . as))
+     (let [[a (f H a)]] (define-cli:let-list f H bodies as))]))
 
-(define-syntax-rule (define-cli:let-list-wrapper bodies args)
-  (define-cli:let-list define-cli:let1 bodies args))
+(define-syntax define-cli:let-list-wrapper
+  (syntax-rules ()
+    ((_ (H bodies) args)
+     (define-cli:let-list define-cli:let1 H bodies args))))
 
-(define-syntax-rule (define-cli:let-tree T . bodies)
-  (syntax-flatten* (define-cli:let-list-wrapper bodies) T))
+(define-syntax-rule (define-cli:let-tree H T . bodies)
+  (syntax-flatten* (define-cli:let-list-wrapper (H bodies)) T))
 
 (define (define-cli:show-help)
   (define cli-decl (list-ref (define-cli:current-values/p) 0))
@@ -235,9 +233,8 @@
             (M (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms)))
        (lambda (args)
          (define errors (M H args))
-         (parameterize ((define-cli:current-hashmap H)
-                        (define-cli:current-values/p (list (quote cli-decl) defaults examples helps types exclusives synonyms)))
-           (define-cli:let-tree cli-decl
+         (parameterize ((define-cli:current-values/p (list (quote cli-decl) defaults examples helps types exclusives synonyms)))
+           (define-cli:let-tree H cli-decl
              (if errors
                  (define-cli:show-help)
                  (let () . bodies)))))))))
