@@ -145,11 +145,15 @@
       (define secondary-names (cdr excl))
       (define true-value (define-cli:lookup H main-name))
 
-      (when true-value
-        (unless (or (equal? true-value #t)
-                    (equal? true-value main-name))
-          (hashmap-set! H main-name #f)
-          (hashmap-set! H true-value true-value)))))
+      (for-each
+       (lambda (name)
+         (hashmap-set! H name #f))
+       (cons main-name secondary-names))
+
+      (hashmap-set!
+       H
+       (if (equal? #t true-value) main-name true-value)
+       true-value)))
 
   (define all-synonyms (append exclusives synonyms))
   (define M (make-cli/f/basic cli-decl all-synonyms))
