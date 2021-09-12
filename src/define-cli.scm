@@ -35,6 +35,7 @@
 %var with-cli
 %var define-cli:raisu/p
 %var define-cli:raisu/default-exit
+%var define-cli:show-help
 
 (define (tostring x)
   (cond
@@ -57,6 +58,9 @@
      (display args (current-error-port))
      (newline (current-error-port))))
   (exit 1))
+
+(define define-cli:current-values/p
+  (make-parameter #f))
 
 (define define-cli:raisu/p
   (make-parameter define-cli:raisu/default-exit))
@@ -152,19 +156,14 @@
   (define all-synonyms (append exclusives synonyms))
   (define M (make-cli/f/basic cli-decl all-synonyms))
 
+  ;; returns #f on success and #t on failure
   (lambda (H T)
     (define _123 (for-each (handle-default H) defaults))
     (define R (M H T))
-
-    (when (or (not R)
-              (hashmap-ref H "--help" #f))
-      (define-cli:raisu 'NO-MATCH
-        ((CFG-AST->CFG-CLI-help helps types defaults) cli-decl)))
-
     (for-each (handle-exclusive H) exclusives)
     (for-each (handle-type H) types)
 
-    (when #f #f)))
+    (not R)))
 
 (define-syntax make-cli-with-handler-helper
   (syntax-rules (:default :example :help :type :exclusive :synonym)
@@ -211,7 +210,7 @@
 
 (define-syntax define-cli:let-list
   (syntax-rules ()
-    [(_ f bodies ()) (begin . bodies)]
+    [(_ f bodies ()) (let () . bodies)]
     [(_ f bodies (a . as))
      (let [[a (f a)]] (define-cli:let-list f bodies as))]))
 
@@ -221,15 +220,27 @@
 (define-syntax-rule (define-cli:let-tree T . bodies)
   (syntax-flatten* (define-cli:let-list-wrapper bodies) T))
 
+(define (define-cli:show-help)
+  (define cli-decl (list-ref (define-cli:current-values/p) 0))
+  (define helps (list-ref (define-cli:current-values/p) 3))
+  (define types (list-ref (define-cli:current-values/p) 4))
+  (define defaults (list-ref (define-cli:current-values/p) 1))
+  (define-cli:raisu 'NO-MATCH
+    ((CFG-AST->CFG-CLI-help helps types defaults) cli-decl)))
+
 (define-syntax make-cli/lambda-cli/wrapper
   (syntax-rules ()
     ((_ cli-decl defaults examples helps types exclusives synonyms bodies)
      (let* ((H (hashmap))
             (M (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms)))
        (lambda (args)
-         (when (M H args)
-           (parameterize ((define-cli:current-hashmap H))
-             (define-cli:let-tree cli-decl (let () . bodies)))))))))
+         (define errors (M H args))
+         (parameterize ((define-cli:current-hashmap H)
+                        (define-cli:current-values/p (list (quote cli-decl) defaults examples helps types exclusives synonyms)))
+           (define-cli:let-tree cli-decl
+             (if errors
+                 (define-cli:show-help)
+                 (let () . bodies)))))))))
 
 (define-syntax-rule (lambda-cli cli-decl . args)
   (make-cli-with-handler make-cli/lambda-cli/wrapper cli-decl . args))

@@ -784,11 +784,12 @@
      :synonym (run let go)))
 
   (assert
-   (M (hashmap)
-      (list "go" "--param1" "somefile" "june" "5" "the-end")))
+   (not
+    (M (hashmap)
+       (list "go" "--param1" "somefile" "june" "5" "the-end"))))
 
-  (assert (M2 (hashmap) (list "go")))
-  (assert (M2 (hashmap) (list "go" "--flag1")))
+  (assert (not (M2 (hashmap) (list "go"))))
+  (assert (not (M2 (hashmap) (list "go" "--flag1"))))
 
   )
 
