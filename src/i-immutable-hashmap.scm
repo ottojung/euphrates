@@ -54,7 +54,7 @@
          (cons (cons k v) H0)
          (let ((x (car H)))
            (if (equal? k (car x))
-               (cons (cons k v) (append buf (cdr H)))
+               (cons (cons k v) (append (reverse buf) (cdr H)))
                (loop (cdr H) (cons x buf))))))))
 
 (define (immutable-hashmap-clear T)
