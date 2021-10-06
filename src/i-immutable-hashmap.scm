@@ -15,6 +15,7 @@
 %run guile
 
 %use (immutable-hashmap immutable-hashmap-fromlist immutable-hashmap-value) "./immutable-hashmap.scm"
+%use (assoc/any) "./assoc-any.scm"
 
 %var immutable-hashmap->alist
 %var immutable-hashmap-copy
@@ -22,6 +23,7 @@
 %var immutable-hashmap-map
 %var alist->immutable-hashmap
 %var immutable-hashmap-ref
+%var immutable-hashmap-ref/first
 %var immutable-hashmap-set
 %var immutable-hashmap-clear
 %var immutable-hashmap-count
@@ -38,6 +40,11 @@
   (define H (immutable-hashmap-value T))
   (define ret (assoc k H))
   (if ret (cdr ret) default))
+
+(define (immutable-hashmap-ref/first T keys default)
+  (define H (immutable-hashmap-value T))
+  (define ret (assoc/any keys H))
+  (or ret default))
 
 (define (immutable-hashmap-set T k v)
   (define H0 (immutable-hashmap-value T))
