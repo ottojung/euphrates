@@ -178,10 +178,15 @@
 
 (define (make-regex-machine pattern)
   (define M (make-regex-machine/full pattern))
-  (lambda (T)
+  (case-lambda
+   ((H T)
+    (M H
+       T
+       (lambda (hash buf) (values hash (null? buf)))))
+   ((T)
     (M (immutable-hashmap)
        T
-       (lambda (hash buf) (values hash (null? buf))))))
+       (lambda (hash buf) (values hash (null? buf)))))))
 
 ;; Same as `make-regex-machine',
 ;; but also accepts H0 as hasmap that output will be written to.

@@ -86,8 +86,11 @@
 (define (make-cfg-machine grammar)
   (define (cont hash buf) (values hash (null? buf)))
   (define M (make-cfg-machine/full grammar))
-  (lambda (T)
-    (M (immutable-hashmap) T cont)))
+  (case-lambda
+   ((H T)
+    (M H T cont))
+   ((T)
+    (M (immutable-hashmap) T cont))))
 
 (define (make-cfg-machine* grammar)
   (define go (make-cfg-machine grammar))
@@ -95,12 +98,12 @@
     (call-with-values (lambda _ (go T))
       (lambda (hash ret)
         (and ret
-             (not
-              (not
+             (begin
                (immutable-hashmap-foreach
                 (lambda (key value)
                   (hashmap-set! H0 key value))
-                hash))))))))
+                hash)
+               #t))))))
 
 
 
