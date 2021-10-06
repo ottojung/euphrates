@@ -16,7 +16,7 @@
 
 %use (CFG-CLI->CFG-lang) "./compile-cfg-cli.scm"
 %use (get-command-line-arguments) "./get-command-line-arguments.scm"
-%use (make-cfg-machine*) "./cfg-machine.scm"
+%use (make-cfg-machine) "./cfg-machine.scm"
 %use (syntax-flatten*) "./syntax-flatten-star.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set!) "./ihashmap.scm"
@@ -24,6 +24,8 @@
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
 %use (CFG-AST->CFG-CLI-help) "./compile-cfg-cli-help.scm"
+%use (alist->immutable-hashmap immutable-hashmap-ref/first immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
+%use (define-pair) "./define-pair.scm"
 
 %var make-cli/f/basic
 %var make-cli/f
@@ -42,7 +44,7 @@
    (else x)))
 
 (define (make-cli/f/basic cli-decl synonyms)
-  ((compose make-cfg-machine*
+  ((compose make-cfg-machine
             (CFG-CLI->CFG-lang synonyms))
    cli-decl))
 
@@ -134,35 +136,40 @@
 
       (hashmap-set! H name R)))
 
-  (define (handle-default H)
-    (lambda (d)
-      (unless (hashmap-ref H (tostring (car d)) #f)
-        (hashmap-set! H (tostring (car d)) (tostring (cadr d))))))
+  (define (handle-default d)
+    (cons (tostring (car d)) (tostring (cadr d))))
 
-  (define (handle-exclusive H)
+  (define (handle-exclusive h H)
     (lambda (excl)
-      (define main-name (tostring (car excl)))
-      (define secondary-names (cdr excl))
-      (define true-value (define-cli:lookup H main-name))
+      (define names (map tostring excl))
+      (define-pair (true-key true-value0)
+        (immutable-hashmap-ref/first h names '(#f . #f)))
+      (define true-value
+        (if (equal? #t true-value0) true-key true-value0))
 
       (for-each
        (lambda (name)
-         (hashmap-set! H name #f))
-       (cons main-name secondary-names))
-
-      (hashmap-set!
-       H
-       (if (equal? #t true-value) main-name true-value)
-       true-value)))
+         (if (equal? name true-value)
+             (hashmap-set! H name true-value)
+             (hashmap-set! H name #f)))
+       names)))
 
   (define all-synonyms (append exclusives synonyms))
   (define M (make-cli/f/basic cli-decl all-synonyms))
 
   ;; returns #f on success and #t on failure
   (lambda (H T)
-    (define _123 (for-each (handle-default H) defaults))
-    (define R (M H T))
-    (for-each (handle-exclusive H) exclusives)
+    (define h0
+      (alist->immutable-hashmap (map handle-default defaults)))
+
+    (define-values (h R) (M h0 T))
+
+    (immutable-hashmap-foreach
+     (lambda (key value)
+       (hashmap-set! H key value))
+     h)
+
+    (for-each (handle-exclusive h H) exclusives)
     (for-each (handle-type H) types)
 
     (not R)))
