@@ -110,6 +110,12 @@
 %use (compose-under) "./src/compose-under.scm"
 %use (list-partition) "./src/list-partition.scm"
 %use (string->seconds) "./src/string-to-seconds.scm"
+%use (monadic) "./src/monadic.scm"
+%use (monadic-id) "./src/monadic-id.scm"
+%use (monad-log) "./src/monad-log.scm"
+%use (monad-maybe) "./src/monad-maybe.scm"
+%use (with-monadic-left with-monadic-right) "./src/monadic-parameterize.scm"
+%use (monad-ret monad-ret-id monad-last?) "./src/monad.scm"
 
 (let ()
   (catch-any
@@ -2075,6 +2081,122 @@
            (string->seconds "1m2h20s"))
   (assert= (+ (* 5 60 60) (* 1 60) (* 20 1))
            (string->seconds "1m3h2h20s"))
+  )
+
+;; monad basics
+(let ()
+
+  (define monad-log/to-string
+    (lambda _
+      (define buffer "")
+      (define (add! monad-input)
+        (let ((s (with-output-to-string
+                   (lambda _ (apply monad-log monad-input)))))
+          (set! buffer (string-append buffer s))))
+
+      (lambda monad-input
+        (add! monad-input)
+        (if (monad-last? monad-input)
+            (monad-ret monad-input buffer)
+            (monad-ret-id monad-input)))))
+
+  (assert=
+   40
+   (monadic-id
+    (x (+ 2 3))
+    ((y m) (values (* x x) (+ x x)))
+    (h (+ x y m) 'tag1)))
+
+  (assert=
+   (lines->string
+    (list "(x = 5 = (+ 2 3))"
+          "((y m) = (25 10) = (values (* x x) (+ x x)))"
+          "(h = 40 = (+ x y m))"
+          "(return 40)"
+          ""))
+
+   (with-output-to-string
+     (lambda _
+       (monadic
+        monad-log
+        (x (+ 2 3))
+        ((y m) (values (* x x) (+ x x)))
+        (h (+ x y m) 'tag1)))))
+
+  (assert=
+   (lines->string
+    (list "(x = 5 = (+ 2 3))"
+          "((y m) = (25 10) = (values (* x x) (+ x x)))"
+          "(h = 40 = (+ x y m))"
+          "(return 40)"
+          ""))
+   (monadic
+    (monad-log/to-string)
+    (x (+ 2 3))
+    ((y m) (values (* x x) (+ x x)))
+    (h (+ x y m) 'tag1)))
+
+  (assert=
+   26
+   (monadic
+    (monad-maybe even?)
+    (x (+ 2 3))
+    (y (+ 1 (* x x)))
+    (h (+ x y) 'tag1)))
+
+  (assert=
+   #f
+   (monadic
+    (monad-maybe not)
+    (x (+ 2 3))
+    (k #f) ;; causing to exit fast
+    (z (raisu "Should not happen"))))
+
+  (with-monadic-right
+   (monad-log/to-string)
+   (assert=
+    (lines->string
+     (list "(x = 5 = (+ 2 3))"
+           "(y = 26 = (+ 1 (* x x)))"
+           "(return 26)"
+           ""))
+    (monadic
+     (monad-maybe (compose-under and number? even?))
+     (x (+ 2 3))
+     (y (+ 1 (* x x)))
+     (h (+ x y) 'tag1)))
+   )
+
+  (with-monadic-left
+   (monad-log/to-string)
+   (assert=
+    (lines->string
+     (list "(x = 5 = (+ 2 3))"
+           "(y = 26 = (+ 1 (* x x)))"
+           "(return 26)"
+           ""))
+    (monadic
+     (monad-maybe (compose-under and number? even?))
+     (x (+ 2 3))
+     (y (+ 1 (* x x)))
+     (h (+ x y) 'tag1)))
+   )
+
+  (with-monadic-left
+   (monad-log/to-string)
+   (assert=
+    (lines->string
+     (list "(x = 5 = (+ 2 3))"
+           "(y = 26 = (+ 1 (* x x)))"
+           "(return 26)"
+           ""))
+    (monadic
+     (monad-maybe even?)
+     (x (+ 2 3))
+     (y (+ 1 (* x x)))
+     (h (+ x y) 'tag1)))
+   )
+
   )
 
 (display "All good\n")
