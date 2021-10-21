@@ -9,8 +9,6 @@
 
 (define-syntax monadic-bare-handle-tags
   (syntax-rules ()
-    ((monadic-bare-handle-tags)
-     (list))
     ((monadic-bare-handle-tags ())
      (list))
     ((monadic-bare-handle-tags . tags)
@@ -22,18 +20,19 @@
     ((_ f ((a . as) b . tags) . ())
      (call-with-values
          (lambda _
-           (f (memconst (call-with-values (lambda _ b) (lambda x x)))
+           (f #f
+              (memconst (call-with-values (lambda _ b) (lambda x x)))
               (lambda args (apply values args))
               (quote (a . as))
               (quote b)
-              (monadic-bare-handle-tags . tags)
-              #f))
-       (lambda (r-x r-cont qvar qval qtags last?)
+              (monadic-bare-handle-tags . tags)))
+       (lambda (last? r-x r-cont qvar qval qtags)
          (r-cont (r-x)))))
     ((_ f ((a . as) b . tags) . bodies)
      (call-with-values
          (lambda _
-           (f (memconst (call-with-values (lambda _ b) (lambda x x)))
+           (f #f
+              (memconst (call-with-values (lambda _ b) (lambda x x)))
               (lambda (k)
                 (apply
                  (lambda (a . as)
@@ -41,32 +40,31 @@
                  k))
               (quote (a . as))
               (quote b)
-              (monadic-bare-handle-tags . tags)
-              #f))
-       (lambda (r-x r-cont qvar qval qtags last?)
+              (monadic-bare-handle-tags . tags)))
+       (lambda (last? r-x r-cont qvar qval qtags)
          (r-cont (r-x)))))
     ((_ f (a b . tags) . ())
      (call-with-values
          (lambda _
-           (f (memconst b)
+           (f #f
+              (memconst b)
               identity
               (quote a)
               (quote b)
-              (monadic-bare-handle-tags . tags)
-              #f))
-       (lambda (r-x r-cont qvar qval qtags last?)
+              (monadic-bare-handle-tags . tags)))
+       (lambda (last? r-x r-cont qvar qval qtags)
          (r-cont (r-x)))))
     ((_ f (a b . tags) . bodies)
      (call-with-values
          (lambda _
-           (f (memconst b)
+           (f #f
+              (memconst b)
               (lambda (a)
                 (monadic-bare-helper f . bodies))
               (quote a)
               (quote b)
-              (monadic-bare-handle-tags . tags)
-              #f))
-       (lambda (r-x r-cont qvar qval qtags last?)
+              (monadic-bare-handle-tags . tags)))
+       (lambda (last? r-x r-cont qvar qval qtags)
          (r-cont (r-x)))))))
 
 (define-syntax monadic-bare
@@ -79,13 +77,13 @@
          (lambda results
            (call-with-values
                (lambda _
-                 (f (lambda _ (apply values results))
+                 (f #t
+                    (lambda _ (apply values results))
                     (lambda as (apply values as))
                     #f
                     #f
-                    '()
-                    #t))
-             (lambda (r-x r-cont qvar qval qtags last?)
+                    '()))
+             (lambda (last? r-x r-cont qvar qval qtags)
                (r-cont (r-x))))))))))
 
 ;; NOTE: uses parameterization
