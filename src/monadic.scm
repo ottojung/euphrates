@@ -6,6 +6,8 @@
 
 %use (memconst) "./memconst.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
+%use (monadarg monadarg-cont monadarg-lval) "./monadarg.scm"
+%use (monadfin monadfin-lval) "./monadfin.scm"
 
 (define-syntax monadic-bare-handle-tags
   (syntax-rules ()
@@ -20,52 +22,52 @@
     ((_ f ((a . as) b . tags) . ())
      (call-with-values
          (lambda _
-           (f #f
-              (memconst (call-with-values (lambda _ b) (lambda x x)))
-              (lambda args (apply values args))
-              (quote (a . as))
-              (quote b)
-              (monadic-bare-handle-tags . tags)))
-       (lambda (last? r-x r-cont qvar qval qtags)
-         (r-cont (r-x)))))
+           (f
+            (monadarg
+             (memconst (call-with-values (lambda _ b) (lambda x x)))
+             (lambda args (apply values args))
+             (quote (a . as))
+             (quote b)
+             (monadic-bare-handle-tags . tags))))
+       (lambda (m)
+         ((monadarg-cont m) ((monadarg-lval m))))))
     ((_ f ((a . as) b . tags) . bodies)
      (call-with-values
          (lambda _
-           (f #f
-              (memconst (call-with-values (lambda _ b) (lambda x x)))
-              (lambda (k)
-                (apply
-                 (lambda (a . as)
-                   (monadic-bare-helper f . bodies))
-                 k))
-              (quote (a . as))
-              (quote b)
-              (monadic-bare-handle-tags . tags)))
-       (lambda (last? r-x r-cont qvar qval qtags)
-         (r-cont (r-x)))))
+           (f (monadarg
+               (memconst (call-with-values (lambda _ b) (lambda x x)))
+               (lambda (k)
+                 (apply
+                  (lambda (a . as)
+                    (monadic-bare-helper f . bodies))
+                  k))
+               (quote (a . as))
+               (quote b)
+               (monadic-bare-handle-tags . tags))))
+       (lambda (m)
+         ((monadarg-cont m) ((monadarg-lval m))))))
     ((_ f (a b . tags) . ())
      (call-with-values
          (lambda _
-           (f #f
-              (memconst b)
-              identity
-              (quote a)
-              (quote b)
-              (monadic-bare-handle-tags . tags)))
-       (lambda (last? r-x r-cont qvar qval qtags)
-         (r-cont (r-x)))))
+           (f (monadarg
+               (memconst b)
+               identity
+               (quote a)
+               (quote b)
+               (monadic-bare-handle-tags . tags))))
+       (lambda (m)
+         ((monadarg-cont m) ((monadarg-lval m))))))
     ((_ f (a b . tags) . bodies)
      (call-with-values
          (lambda _
-           (f #f
-              (memconst b)
-              (lambda (a)
-                (monadic-bare-helper f . bodies))
-              (quote a)
-              (quote b)
-              (monadic-bare-handle-tags . tags)))
-       (lambda (last? r-x r-cont qvar qval qtags)
-         (r-cont (r-x)))))))
+           (f (monadarg
+               (memconst b)
+               (lambda (a) (monadic-bare-helper f . bodies))
+               (quote a)
+               (quote b)
+               (monadic-bare-handle-tags . tags))))
+       (lambda (m)
+         ((monadarg-cont m) ((monadarg-lval m))))))))
 
 (define-syntax monadic-bare
   (syntax-rules ()
@@ -75,16 +77,7 @@
            (lambda _
              (monadic-bare-helper f . args))
          (lambda results
-           (call-with-values
-               (lambda _
-                 (f #t
-                    (lambda _ (apply values results))
-                    (lambda as (apply values as))
-                    #f
-                    #f
-                    '()))
-             (lambda (last? r-x r-cont qvar qval qtags)
-               (r-cont (r-x))))))))))
+           ((monadfin-lval (f (monadfin (lambda _ (apply values results))))))))))))
 
 ;; NOTE: uses parameterization
 (define-syntax monadic

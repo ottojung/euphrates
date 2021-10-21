@@ -3,15 +3,17 @@
 
 %var monad-log
 
-%use (monad-qval monad-qvar monad-arg monad-last? monad-ret-id) "./monad.scm"
+%use (monadarg-qval monadarg-qvar) "./monadarg.scm"
+%use (monadfin?) "./monadfin.scm"
+%use (monad-arg) "./monad.scm"
 %use (dprint) "./dprint.scm"
 
 (define monad-log
-  (lambda monad-input
-    (if (monad-last? monad-input)
+  (lambda (monad-input)
+    (if (monadfin? monad-input)
         (dprint "(return ~a)\n" (monad-arg monad-input))
         (dprint "(~a = ~a = ~a)\n"
-                (monad-qvar monad-input)
+                (monadarg-qvar monad-input)
                 (monad-arg monad-input)
-                (monad-qval monad-input)))
-    (monad-ret-id monad-input)))
+                (monadarg-qval monad-input)))
+    monad-input))
