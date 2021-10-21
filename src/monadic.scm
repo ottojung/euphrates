@@ -84,8 +84,6 @@
        (lambda (m)
          ((monadarg-cont m) (rethunkify m)))))))
 
-%use (debug) "./debug.scm"
-
 (define-syntax monadic-bare
   (syntax-rules ()
     ((_ f0 . args)

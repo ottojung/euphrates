@@ -39,8 +39,6 @@
 %use (curry-if) "./curry-if.scm"
 %use (patri-handle-make-callback) "./petri-error-handling.scm"
 
-%use (debug) "./debug.scm"
-
 (define petri-push/p
   (make-parameter #f))
 
