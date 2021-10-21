@@ -117,6 +117,7 @@
 %use (monad-log) "./src/monad-log.scm"
 %use (with-monadic-left with-monadic-right) "./src/monadic-parameterize.scm"
 %use (monad-ret) "./src/monad.scm"
+%use (monad-lazy) "./src/monad-lazy.scm"
 
 (let ()
   (catch-any
@@ -2153,21 +2154,6 @@
     (k #f) ;; causing to exit fast
     (z (raisu "Should not happen"))))
 
-  (with-monadic-right
-   (monad-log/to-string)
-   (assert=
-    (lines->string
-     (list "(x = 5 = (+ 2 3))"
-           "(y = 26 = (+ 1 (* x x)))"
-           "(return 26)"
-           ""))
-    (monadic
-     (monad-maybe (compose-under and number? even?))
-     (x (+ 2 3))
-     (y (+ 1 (* x x)))
-     (h (+ x y) 'tag1)))
-   )
-
   (with-monadic-left
    (monad-log/to-string)
    (assert=
@@ -2198,7 +2184,40 @@
      (h (+ x y) 'tag1)))
    )
 
+  (with-monadic-right
+   (monad-log/to-string)
+   (assert=
+    (lines->string
+     (list "(x = 5 = (+ 2 3))"
+           "(y = 26 = (+ 1 (* x x)))"
+           "(return 26)"
+           ""))
+    (monadic
+     (monad-maybe (compose-under and number? even?))
+     (x (+ 2 3))
+     (y (+ 1 (* x x)))
+     (h (+ x y) 'tag1)))
+   )
+
   )
+
+;; monad-lazy
+(let ()
+  (assert=
+   31
+   ((monadic
+     monad-lazy
+     (x (+ 2 3))
+     (y (+ 1 (* (x) (x))))
+     (h (+ (x) (y)) 'tag1))))
+
+  (assert=
+   31
+   ((monadic
+     monad-lazy
+     (x (+ 2 3) 'async)
+     (y (+ 1 (* (x) (x))) 'async)
+     (h (+ (x) (y)) 'tag1)))))
 
 (display "All good\n")
 
