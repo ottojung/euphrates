@@ -6,7 +6,7 @@
 
 %use (memconst) "./memconst.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
-%use (monadarg monadarg-cont monadarg-lval) "./monadarg.scm"
+%use (monadarg monadarg-cont monadarg-lval monadarg-lazy?) "./monadarg.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 
 (define-syntax monadic-bare-handle-tags
@@ -15,6 +15,17 @@
      (list))
     ((monadic-bare-handle-tags . tags)
      (list . tags))))
+
+(define (rethunkify m)
+  (define thunk (monadarg-lval m))
+  (if (monadarg-lazy? m) thunk
+      (call-with-values thunk
+        (lambda vals
+          (lambda _ (apply values vals))))))
+
+(define (rethunkify-list thunk)
+  (let ((lst (thunk)))
+    (map (lambda (x) (lambda _ x)) lst)))
 
 ;; This is something like "do syntax" from Haskell
 (define-syntax monadic-bare-helper
@@ -25,12 +36,13 @@
            (f
             (monadarg
              (memconst (call-with-values (lambda _ b) (lambda x x)))
-             (lambda args (apply values args))
+             (lambda (args) (apply values args))
              (quote (a . as))
              (quote b)
-             (monadic-bare-handle-tags . tags))))
+             (monadic-bare-handle-tags . tags)
+             #f)))
        (lambda (m)
-         ((monadarg-cont m) ((monadarg-lval m))))))
+         ((monadarg-cont m) (rethunkify-list (monadarg-lval m))))))
     ((_ f ((a . as) b . tags) . bodies)
      (call-with-values
          (lambda _
@@ -43,9 +55,10 @@
                   k))
                (quote (a . as))
                (quote b)
-               (monadic-bare-handle-tags . tags))))
+               (monadic-bare-handle-tags . tags)
+               #f)))
        (lambda (m)
-         ((monadarg-cont m) ((monadarg-lval m))))))
+         ((monadarg-cont m) (rethunkify-list (monadarg-lval m))))))
     ((_ f (a b . tags) . ())
      (call-with-values
          (lambda _
@@ -54,9 +67,10 @@
                identity
                (quote a)
                (quote b)
-               (monadic-bare-handle-tags . tags))))
+               (monadic-bare-handle-tags . tags)
+               #f)))
        (lambda (m)
-         ((monadarg-cont m) ((monadarg-lval m))))))
+         ((monadarg-cont m) (rethunkify m)))))
     ((_ f (a b . tags) . bodies)
      (call-with-values
          (lambda _
@@ -65,9 +79,12 @@
                (lambda (a) (monadic-bare-helper f . bodies))
                (quote a)
                (quote b)
-               (monadic-bare-handle-tags . tags))))
+               (monadic-bare-handle-tags . tags)
+               #f)))
        (lambda (m)
-         ((monadarg-cont m) ((monadarg-lval m))))))))
+         ((monadarg-cont m) (rethunkify m)))))))
+
+%use (debug) "./debug.scm"
 
 (define-syntax monadic-bare
   (syntax-rules ()
@@ -77,7 +94,9 @@
            (lambda _
              (monadic-bare-helper f . args))
          (lambda results
-           ((monadfin-lval (f (monadfin (lambda _ (apply values results))))))))))))
+           ((monadfin-lval
+             (f (monadfin
+                 (lambda _ (apply values (map (lambda (f) (f)) results)))))))))))))
 
 ;; NOTE: uses parameterization
 (define-syntax monadic

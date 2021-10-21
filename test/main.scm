@@ -119,6 +119,7 @@
 %use (monad-ret) "./src/monad.scm"
 %use (monad-lazy) "./src/monad-lazy.scm"
 %use (monad-except) "./src/monad-except.scm"
+%use (monad-identity) "./src/monad-identity.scm"
 
 (let ()
   (catch-any
@@ -2104,17 +2105,33 @@
             monad-input))))
 
   (assert=
+   30
+   (monadic-id
+    (x (+ 2 3))
+    (y (* (x) (x)))
+    (h (+ (x) (y)) 'tag1)))
+
+  (assert=
    40
    (monadic-id
     (x (+ 2 3))
-    ((y m) (values (* x x) (+ x x)))
-    (h (+ x y m) 'tag1)))
+    ((y m) (values (* (x) (x)) (+ (x) (x))))
+    (h (+ (x) (y) (m)) 'tag1)))
+
+  (call-with-values
+      (lambda _
+        (monadic-id
+         (x (+ 2 3))
+         ((y m) (values (* (x) (x)) (+ (x) (x))))
+         ((h z) (values (+ (x) (y) (m)) 5) 'tag1)))
+    (lambda results
+      (assert= '(40 5) results)))
 
   (assert=
    (lines->string
     (list "(x = 5 = (+ 2 3))"
-          "((y m) = (25 10) = (values (* x x) (+ x x)))"
-          "(h = 40 = (+ x y m))"
+          "((y m) = (25 10) = (values (* (x) (x)) (+ (x) (x))))"
+          "(h = 40 = (+ (x) (y) (m)))"
           "(return 40)"
           ""))
 
@@ -2123,29 +2140,29 @@
        (monadic
         monad-log
         (x (+ 2 3))
-        ((y m) (values (* x x) (+ x x)))
-        (h (+ x y m) 'tag1)))))
+        ((y m) (values (* (x) (x)) (+ (x) (x))))
+        (h (+ (x) (y) (m)) 'tag1)))))
 
   (assert=
    (lines->string
     (list "(x = 5 = (+ 2 3))"
-          "((y m) = (25 10) = (values (* x x) (+ x x)))"
-          "(h = 40 = (+ x y m))"
+          "((y m) = (25 10) = (values (* (x) (x)) (+ (x) (x))))"
+          "(h = 40 = (+ (x) (y) (m)))"
           "(return 40)"
           ""))
    (monadic
     (monad-log/to-string)
     (x (+ 2 3))
-    ((y m) (values (* x x) (+ x x)))
-    (h (+ x y m) 'tag1)))
+    ((y m) (values (* (x) (x)) (+ (x) (x))))
+    (h (+ (x) (y) (m)) 'tag1)))
 
   (assert=
    26
    (monadic
     (monad-maybe even?)
     (x (+ 2 3))
-    (y (+ 1 (* x x)))
-    (h (+ x y) 'tag1)))
+    (y (+ 1 (* (x) (x))))
+    (h (+ (x) (y)) 'tag1)))
 
   (assert=
    #f
@@ -2155,34 +2172,57 @@
     (k #f) ;; causing to exit fast
     (z (raisu "Should not happen"))))
 
-  (with-monadic-left
-   (monad-log/to-string)
-   (assert=
-    (lines->string
-     (list "(x = 5 = (+ 2 3))"
-           "(y = 26 = (+ 1 (* x x)))"
-           "(return 26)"
-           ""))
+  (assert=
+   26
+   (with-monadic-left
+    monad-identity
     (monadic
      (monad-maybe (compose-under and number? even?))
      (x (+ 2 3))
-     (y (+ 1 (* x x)))
-     (h (+ x y) 'tag1)))
-   )
+     (y (+ 1 (* (x) (x))))
+     (h (+ (x) (y)) 'tag1))))
 
   (with-monadic-left
    (monad-log/to-string)
    (assert=
     (lines->string
      (list "(x = 5 = (+ 2 3))"
-           "(y = 26 = (+ 1 (* x x)))"
+           "(y = 26 = (+ 1 (* (x) (x))))"
+           "(return 26)"
+           ""))
+    (monadic
+     (monad-maybe (compose-under and number? even?))
+     (x (+ 2 3))
+     (y (+ 1 (* (x) (x))))
+     (h (+ (x) (y)) 'tag1))))
+
+  (assert=
+   (lines->string
+    (list "(x = 5 = (+ 2 3))"
+          "(y = 26 = (+ 1 (* (x) (x))))"
+          "(return 26)"
+          ""))
+   (with-monadic-left
+    (monad-log/to-string)
+    (monadic
+     (monad-maybe (compose-under and number? even?))
+     (x (+ 2 3))
+     (y (+ 1 (* (x) (x))))
+     (h (+ (x) (y)) 'tag1))))
+
+  (with-monadic-left
+   (monad-log/to-string)
+   (assert=
+    (lines->string
+     (list "(x = 5 = (+ 2 3))"
+           "(y = 26 = (+ 1 (* (x) (x))))"
            "(return 26)"
            ""))
     (monadic
      (monad-maybe even?)
      (x (+ 2 3))
-     (y (+ 1 (* x x)))
-     (h (+ x y) 'tag1)))
+     (y (+ 1 (* (x) (x))))
+     (h (+ (x) (y)) 'tag1)))
    )
 
   (with-monadic-right
@@ -2190,14 +2230,14 @@
    (assert=
     (lines->string
      (list "(x = 5 = (+ 2 3))"
-           "(y = 26 = (+ 1 (* x x)))"
+           "(y = 26 = (+ 1 (* (x) (x))))"
            "(return 26)"
            ""))
     (monadic
      (monad-maybe (compose-under and number? even?))
      (x (+ 2 3))
-     (y (+ 1 (* x x)))
-     (h (+ x y) 'tag1)))
+     (y (+ 1 (* (x) (x))))
+     (h (+ (x) (y)) 'tag1)))
    )
 
   )
@@ -2206,19 +2246,19 @@
 (let ()
   (assert=
    31
-   ((monadic
-     monad-lazy
-     (x (+ 2 3))
-     (y (+ 1 (* (x) (x))))
-     (h (+ (x) (y)) 'tag1))))
+   (monadic
+    monad-lazy
+    (x (+ 2 3))
+    (y (+ 1 (* (x) (x))))
+    (h (+ (x) (y)) 'tag1)))
 
   (assert=
    31
-   ((monadic
-     monad-lazy
-     (x (+ 2 3) 'async)
-     (y (+ 1 (* (x) (x))) 'async)
-     (h (+ (x) (y)) 'tag1)))))
+   (monadic
+    monad-lazy
+    (x (+ 2 3) 'async)
+    (y (+ 1 (* (x) (x))) 'async)
+    (h (+ (x) (y)) 'tag1))))
 
 ;; monad-except
 (let ((ran-always #f)
@@ -2230,13 +2270,15 @@
    (lambda _
      (monadic (monad-except)
               [a (+ 2 7)]
-              [o (+ a a)]
+              [o (+ (a) (a))]
               [b (raisu 'test-abort)]
               [p "after kek" 'always]
+              [q "this should not get a value"]
               [r (set! ran-always #t) 'always]
               [k (set! did-not-ran #f)]
-              [c (- b b)]
-              [r (+ 100 c)])
+              [c (- (b) (b))]
+              [r (+ 100 (c))]
+              )
      (set! throwed #f))
    (lambda errs
      (set! exception-throwed #t)))

@@ -2,7 +2,9 @@
 %run guile
 
 %var monad-cret
+%var monad-cret/thunk
 %var monad-ret
+%var monad-ret/thunk
 %var monad-arg
 %var monad-replicate-multiple
 %var monad-handle-multiple
@@ -27,7 +29,20 @@
                    cont
                    (monadarg-qvar monad-input)
                    (monadarg-qval monad-input)
-                   (monadarg-qtags monad-input))
+                   (monadarg-qtags monad-input)
+                   #f)
+         (monadfin (lambda _ (cont arg)))))))
+
+(define-syntax monad-cret/thunk
+  (syntax-rules ()
+    ((_ monad-input arg cont)
+     (if (monadarg? monad-input)
+         (monadarg arg
+                   cont
+                   (monadarg-qvar monad-input)
+                   (monadarg-qval monad-input)
+                   (monadarg-qtags monad-input)
+                   #t)
          (monadfin (lambda _ (cont arg)))))))
 
 (define-syntax monad-ret
@@ -39,14 +54,29 @@
                    (monadarg-cont monad-input)
                    (monadarg-qvar monad-input)
                    (monadarg-qval monad-input)
-                   (monadarg-qtags monad-input))))))
+                   (monadarg-qtags monad-input)
+                   #f)))))
+
+(define-syntax monad-ret/thunk
+  (syntax-rules ()
+    ((_ monad-input arg)
+     (if (monadfin? monad-input)
+         (monadfin arg)
+         (monadarg arg
+                   (monadarg-cont monad-input)
+                   (monadarg-qvar monad-input)
+                   (monadarg-qval monad-input)
+                   (monadarg-qtags monad-input)
+                   #t)))))
 
 (define (monad-handle-multiple monad-input arg)
-  (let* ((qvar (monadarg-qvar monad-input))
-         (len (if (list? qvar) (length qvar) 1)))
-    (if (< len 2)
-        arg
-        (replicate len (arg)))))
+  (if (monadfin? monad-input)
+      (arg)
+      (let* ((qvar (monadarg-qvar monad-input))
+             (len (if (list? qvar) (length qvar) 1)))
+        (if (< len 2)
+            arg
+            (replicate len (arg))))))
 
 (define (monad-replicate-multiple monad-input arg)
   (let* ((qvar (monadarg-qvar monad-input))

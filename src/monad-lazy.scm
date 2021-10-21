@@ -4,13 +4,13 @@
 %var monad-lazy
 
 %use (monadarg-qvar monadarg-qtags monadarg-lval) "./monadarg.scm"
-%use (monad-arg monad-ret) "./monad.scm"
+%use (monad-arg monad-ret/thunk) "./monad.scm"
 %use (monadfin?) "./monadfin.scm"
 %use (dynamic-thread-async) "./dynamic-thread-async.scm"
 %use (range) "./range.scm"
 %use (memconst) "./memconst.scm"
 
-;; Provides optimistic evaluation
+;; Provides lazy evaluation, with "async" feature
 (define monad-lazy
   (lambda (monad-input)
     (if (monadfin? monad-input) monad-input
@@ -28,4 +28,4 @@
                (return
                 (if single? result
                     (map choose (range len)))))
-          (monad-ret monad-input return)))))
+          (monad-ret/thunk monad-input return)))))
