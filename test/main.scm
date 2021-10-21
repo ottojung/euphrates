@@ -118,6 +118,7 @@
 %use (with-monadic-left with-monadic-right) "./src/monadic-parameterize.scm"
 %use (monad-ret) "./src/monad.scm"
 %use (monad-lazy) "./src/monad-lazy.scm"
+%use (monad-except) "./src/monad-except.scm"
 
 (let ()
   (catch-any
@@ -2218,6 +2219,32 @@
      (x (+ 2 3) 'async)
      (y (+ 1 (* (x) (x))) 'async)
      (h (+ (x) (y)) 'tag1)))))
+
+;; monad-except
+(let ((ran-always #f)
+      (throwed #t)
+      (did-not-ran #t)
+      (exception-throwed #f))
+
+  (catch-any
+   (lambda _
+     (monadic (monad-except)
+              [a (+ 2 7)]
+              [o (+ a a)]
+              [b (raisu 'test-abort)]
+              [p "after kek" 'always]
+              [r (set! ran-always #t) 'always]
+              [k (set! did-not-ran #f)]
+              [c (- b b)]
+              [r (+ 100 c)])
+     (set! throwed #f))
+   (lambda errs
+     (set! exception-throwed #t)))
+
+  (assert exception-throwed)
+  (assert ran-always)
+  (assert did-not-ran)
+  (assert throwed))
 
 (display "All good\n")
 

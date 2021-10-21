@@ -4,6 +4,8 @@
 %var monad-cret
 %var monad-ret
 %var monad-arg
+%var monad-replicate-multiple
+%var monad-handle-multiple
 
 %use (memconst) "./memconst.scm"
 %use (replicate) "./replicate.scm"
