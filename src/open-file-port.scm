@@ -7,6 +7,8 @@
 
 %for (COMPILER "guile")
 
+(use-modules (ice-9 match))
+
 (define (open-file-port path mode)
   (match mode
     ["r" (open-file path mode)]
