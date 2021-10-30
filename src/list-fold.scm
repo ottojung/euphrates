@@ -6,6 +6,19 @@
 
 (define-syntax list-fold
   (syntax-rules ()
+    ((_ ((acc-x . acc-xs) acc-value)
+        (i-name i-value)
+        . bodies)
+     (let loop ((acc-list (call-with-values (lambda _ acc-value) (lambda x x)))
+                (i-all i-value))
+       (if (null? i-all) (apply values acc-list)
+           (let ((i-name (car i-all)))
+             (call-with-values
+                 (lambda _ (apply values acc-list))
+               (lambda (acc-x . acc-xs)
+                 (call-with-values (lambda _ . bodies)
+                   (lambda new-acc
+                     (loop new-acc (cdr i-all))))))))))
     ((_ (acc-name acc-value)
         (i-name i-value)
         . bodies)
