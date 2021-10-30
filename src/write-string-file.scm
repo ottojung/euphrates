@@ -1,7 +1,7 @@
 
 %run guile
 
-%var read-string-file
+%var write-string-file
 
 %use (open-file-port) "./open-file-port.scm"
 
