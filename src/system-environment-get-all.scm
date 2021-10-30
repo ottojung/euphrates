@@ -3,8 +3,8 @@
 
 %var system-environment-get-all
 
-%use (string-split/simple) "./euphrates/string-split-simple.scm"
-%use (string-drop-n) "./euphrates/string-drop-n.scm"
+%use (string-split/simple) "./string-split-simple.scm"
+%use (string-drop-n) "./string-drop-n.scm"
 
 %for (COMPILER "guile")
 
