@@ -1,0 +1,10 @@
+
+%run guile
+
+%var list-length=<?
+
+(define (list-length=<? target-length lst)
+  (let loop ((target-length target-length) (lst lst))
+    (if (zero? target-length) #t
+        (if (null? lst) #f
+            (loop (- target-length 1) (cdr lst))))))

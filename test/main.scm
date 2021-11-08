@@ -122,6 +122,7 @@
 %use (monad-identity) "./src/monad-identity.scm"
 %use (list-fold) "./src/list-fold.scm"
 %use (list-windows) "./src/list-windows.scm"
+%use (list-length=<?) "./src/list-length-geq-q.scm"
 
 (let ()
   (catch-any
@@ -2325,6 +2326,16 @@
   (assert=
    '()
    (list-windows 2 '()))
+
+  )
+
+;; list-length=<?
+(let ()
+
+  (assert (list-length=<? 3 '(1 2 3 4 5 6)))
+  (assert (list-length=<? 3 '(1 2 3)))
+  (assert (not (list-length=<? 3 '(1 2))))
+  (assert (list-length=<? 0 '()))
 
   )
 
