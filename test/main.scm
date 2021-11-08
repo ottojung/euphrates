@@ -2336,6 +2336,8 @@
   (assert (list-length=<? 3 '(1 2 3)))
   (assert (not (list-length=<? 3 '(1 2))))
   (assert (list-length=<? 0 '()))
+  (assert (list-length=<? -3 '(1 2)))
+  (assert (list-length=<? -3 '()))
 
   )
 
