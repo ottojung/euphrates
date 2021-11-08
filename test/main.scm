@@ -121,6 +121,7 @@
 %use (monad-except) "./src/monad-except.scm"
 %use (monad-identity) "./src/monad-identity.scm"
 %use (list-fold) "./src/list-fold.scm"
+%use (list-windows) "./src/list-windows.scm"
 
 (let ()
   (catch-any
@@ -2289,6 +2290,7 @@
   (assert did-not-ran)
   (assert throwed))
 
+;; list-fold
 (let ()
   (assert=
    10
@@ -2306,6 +2308,23 @@
           (cur '(1 2 3 4))
           (values (+ acc1 cur) (* acc2 cur))))
      (lambda x x)))
+
+  )
+
+;; list-windows
+(let ()
+
+  (assert=
+   '((1 2) (3 4) (5 6))
+   (list-windows 2 '(1 2 3 4 5 6)))
+
+  (assert=
+   '((1) (2) (3) (4) (5) (6))
+   (list-windows 1 '(1 2 3 4 5 6)))
+
+  (assert=
+   '()
+   (list-windows 2 '()))
 
   )
 
