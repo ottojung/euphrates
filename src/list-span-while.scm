@@ -1,10 +1,10 @@
 
 %run guile
 
-%var list-span
+%var list-span-while
 
 ;; equivalent to (takeWhile predicate lst, dropWhile predicate lst)
-(define (list-span predicate lst)
+(define (list-span-while predicate lst)
   (let loop ((lst lst) (buf '()))
     (if (or (null? lst)
             (not (predicate (car lst))))

@@ -6,7 +6,7 @@
 %use (memconst) "./memconst.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set!) "./ihashmap.scm"
-%use (list-span) "./list-span.scm"
+%use (list-span-while) "./list-span-while.scm"
 %use (raisu) "./raisu.scm"
 
 ;; NOTE: input is a list of characters or a string!
@@ -41,7 +41,7 @@
            inbase outbase convert-number-base:max-base))
 
   (let ()
-    (define-values (wp0 fp0) (list-span (lambda (x) (not (equal? x #\.))) L))
+    (define-values (wp0 fp0) (list-span-while (lambda (x) (not (equal? x #\.))) L))
     (define fp1 (if (null? fp0) fp0 (cdr fp0)))
     (define wp (map alphanum/alphabet/index wp0))
     (define fp (map alphanum/alphabet/index fp1))
