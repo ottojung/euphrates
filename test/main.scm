@@ -107,6 +107,7 @@
 %use (list-zip) "./src/list-zip.scm"
 %use (list-zip-with) "./src/list-zip-with.scm"
 %use (fn-tuple) "./src/fn-tuple.scm"
+%use (fp) "./src/fp.scm"
 %use (compose-under) "./src/compose-under.scm"
 %use (list-partition) "./src/list-partition.scm"
 %use (string->seconds) "./src/string-to-seconds.scm"
@@ -122,6 +123,7 @@
 %use (monad-identity) "./src/monad-identity.scm"
 %use (list-fold) "./src/list-fold.scm"
 %use (list-blocks) "./src/list-blocks.scm"
+%use (list-windows) "./src/list-windows.scm"
 %use (list-length=<?) "./src/list-length-geq-q.scm"
 
 (let ()
@@ -2064,6 +2066,11 @@
 (let () ;; fn-tuple
   (assert= '((0 2) (2 3) (4 4))
            (map (fn-tuple (lambda (x) (* x 2)) (lambda (x) (+ x 2)))
+                (list-zip-with list (range 3) (range 3)))))
+
+(let () ;; fp
+  (assert= '((0 2) (2 3) (4 4))
+           (map (fp (x y) (list (* x 2) (+ y 2)))
                 (list-zip-with list (range 3) (range 3)))))
 
 (let () ;; compose-under
