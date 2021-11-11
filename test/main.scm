@@ -121,7 +121,7 @@
 %use (monad-except) "./src/monad-except.scm"
 %use (monad-identity) "./src/monad-identity.scm"
 %use (list-fold) "./src/list-fold.scm"
-%use (list-windows) "./src/list-windows.scm"
+%use (list-blocks) "./src/list-blocks.scm"
 %use (list-length=<?) "./src/list-length-geq-q.scm"
 
 (let ()
@@ -2312,20 +2312,20 @@
 
   )
 
-;; list-windows
+;; list-blocks
 (let ()
 
   (assert=
    '((1 2) (3 4) (5 6))
-   (list-windows 2 '(1 2 3 4 5 6)))
+   (list-blocks 2 '(1 2 3 4 5 6)))
 
   (assert=
    '((1) (2) (3) (4) (5) (6))
-   (list-windows 1 '(1 2 3 4 5 6)))
+   (list-blocks 1 '(1 2 3 4 5 6)))
 
   (assert=
    '()
-   (list-windows 2 '()))
+   (list-blocks 2 '()))
 
   )
 
