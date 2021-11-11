@@ -42,6 +42,7 @@ GPL-3
   - [ ] Cyclone
 - [ ] Split tests
 - [ ] Add `cut!` to `profun`
+- [ ] Add recursion to `profun`
 - [ ] Steal regular expressions https://synthcode.com/scheme/irregex/
 - [ ] Steal matcher https://synthcode.com/scheme/match.scm but simplify it
 - [ ] Add prolog to shell integration, a-la https://github.com/thomasrebele/bashlog
