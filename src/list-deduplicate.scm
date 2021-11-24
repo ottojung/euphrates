@@ -4,32 +4,31 @@
 %var list-deduplicate/reverse
 %var list-deduplicate
 
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set! hashmap-clear!) "./ihashmap.scm"
+%use (make-hashset hashset-ref hashset-add!) "./ihashset.scm"
 
 ;; faster!
 (define list-deduplicate/reverse
   (case-lambda
-   ((lst) (list-deduplicate lst equal?))
-   ((lst pred)
-    (let ((H (hashmap)))
+   ((lst) (list-deduplicate lst identity))
+   ((lst projection)
+    (let ((H (make-hashset)))
       (let lp ((buf lst) (mem '()))
         (cond ((null? buf) mem)
-              ((hashmap-ref H (car buf) #f)
+              ((hashset-ref H (projection (car buf)))
                (lp (cdr buf) mem))
               (else
-               (hashmap-set! H (car buf) #t)
+               (hashset-add! H (projection (car buf)))
                (lp (cdr buf) (cons (car buf) mem)))))))))
 
 (define list-deduplicate
   (case-lambda
-   ((lst) (list-deduplicate lst equal?))
-   ((lst pred)
-    (let ((H (hashmap)))
+   ((lst) (list-deduplicate lst identity))
+   ((lst projection)
+    (let ((H (make-hashset)))
       (let lp ((buf lst) (mem '()))
         (cond ((null? buf) (reverse mem))
-              ((hashmap-ref H (car buf) #f)
+              ((hashset-ref H (projection (car buf)))
                (lp (cdr buf) mem))
               (else
-               (hashmap-set! H (car buf) #t)
+               (hashset-add! H (projection (car buf)))
                (lp (cdr buf) (cons (car buf) mem)))))))))
