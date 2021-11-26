@@ -3,6 +3,7 @@
 
 %use (hashmap) "./hashmap.scm"
 
+%var make-hashmap
 %var hashmap->alist
 %var hashmap-copy
 %var hashmap-foreach
@@ -23,6 +24,7 @@
 
 (use-modules (ice-9 hash-table))
 
+(define make-hashmap hashmap)
 (define hashmap-ref hash-ref)
 (define hashmap-set! hash-set!)
 (define hashmap-clear! hash-clear!)
