@@ -16,9 +16,19 @@
 
 %var list-and-map
 
-(define (list-and-map f lst)
-  (let loop ((buf lst))
-    (if (null? buf) #t
-        (if (f (car buf))
-            (loop (cdr buf))
-            #f))))
+(define list-and-map
+  (case-lambda
+   ((f lst)
+    (let loop ((buf lst))
+      (if (null? buf) #t
+          (if (f (car buf))
+              (loop (cdr buf))
+              #f))))
+   ((f lst1 lst2)
+    ;; TODO: extend to any number of args.
+    (let loop ((lst1 lst1) (lst2 lst2))
+      (if (null? lst1) (null? lst2)
+          (if (null? lst2) #f
+              (if (f (car lst1) (car lst2))
+                  (loop (cdr lst1) (cdr lst2))
+                  #f)))))))
