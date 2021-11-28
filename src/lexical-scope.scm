@@ -22,7 +22,8 @@
 
 %use (lexical-scope-wrap lexical-scope-unwrap) "./lexical-scope-obj.scm"
 %use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
-%use (stack-make stack-peek stack-push! stack-discard!) "./stack.scm"
+%use (stack-make stack-peek stack->list stack-push! stack-discard!) "./stack.scm"
+%use (make-unique) "./make-unique.scm"
 
 (define (lexical-scope-make)
   (define st (stack-make))
@@ -37,8 +38,14 @@
 
 (define (lexical-scope-ref scope key default)
   (define st (lexical-scope-unwrap scope))
-  (define H (stack-peek st))
-  (hashmap-ref H key default))
+  (define lst (stack->list st))
+  (define unique (make-unique))
+  (let loop ((lst lst))
+    (if (null? lst) default
+        (let ((get (hashmap-ref (car lst) key unique)))
+          (if (eq? get unique)
+              (loop (cdr lst))
+              get)))))
 
 (define (lexical-scope-stage! scope)
   (define st (lexical-scope-unwrap scope))
