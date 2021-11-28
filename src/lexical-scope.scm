@@ -26,10 +26,13 @@
 %use (stack-make stack-peek stack->list stack-push! stack-discard!) "./stack.scm"
 %use (make-unique) "./make-unique.scm"
 
-(define (lexical-scope-make)
-  (define st (stack-make))
-  (stack-push! st (cons #f (make-hashmap)))
-  (lexical-scope-wrap st))
+(define lexical-scope-make
+  (case-lambda
+   (() (lexical-scope-make #f))
+   ((namespace)
+    (define st (stack-make))
+    (stack-push! st (cons namespace (make-hashmap)))
+    (lexical-scope-wrap st))))
 
 (define (lexical-scope-set! scope key value)
   (define st (lexical-scope-unwrap scope))
