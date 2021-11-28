@@ -19,6 +19,7 @@
 %var lexical-scope-ref
 %var lexical-scope-stage!
 %var lexical-scope-unstage!
+%var lexical-scope-namespace
 
 %use (lexical-scope-wrap lexical-scope-unwrap) "./lexical-scope-obj.scm"
 %use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
@@ -27,12 +28,12 @@
 
 (define (lexical-scope-make)
   (define st (stack-make))
-  (stack-push! st (make-hashmap))
+  (stack-push! st (cons #f (make-hashmap)))
   (lexical-scope-wrap st))
 
 (define (lexical-scope-set! scope key value)
   (define st (lexical-scope-unwrap scope))
-  (define H (stack-peek st))
+  (define H (cdr (stack-peek st)))
   (hashmap-set! H key value)
   (values))
 
@@ -42,17 +43,25 @@
   (define unique (make-unique))
   (let loop ((lst lst))
     (if (null? lst) default
-        (let ((get (hashmap-ref (car lst) key unique)))
+        (let ((get (hashmap-ref (cdr (car lst)) key unique)))
           (if (eq? get unique)
               (loop (cdr lst))
               get)))))
 
-(define (lexical-scope-stage! scope)
-  (define st (lexical-scope-unwrap scope))
-  (stack-push! st (make-hashmap))
-  (values))
+(define lexical-scope-stage!
+  (case-lambda
+   ((scope)
+    (lexical-scope-stage! scope (lexical-scope-namespace scope)))
+   ((scope namespace)
+    (let ((st (lexical-scope-unwrap scope)))
+      (stack-push! st (cons namespace (make-hashmap)))
+      (values)))))
 
 (define (lexical-scope-unstage! scope)
   (define st (lexical-scope-unwrap scope))
   (stack-discard! st)
   (values))
+
+(define (lexical-scope-namespace scope)
+  (define st (lexical-scope-unwrap scope))
+  (car (stack-peek st)))
