@@ -107,6 +107,7 @@
 %use (list-zip) "./src/list-zip.scm"
 %use (list-zip-with) "./src/list-zip-with.scm"
 %use (fn-tuple) "./src/fn-tuple.scm"
+%use (fn-cons) "./src/fn-cons.scm"
 %use (fp) "./src/fp.scm"
 %use (compose-under) "./src/compose-under.scm"
 %use (list-partition) "./src/list-partition.scm"
@@ -2068,6 +2069,22 @@
   (assert= '((0 2) (2 3) (4 4))
            (map (fn-tuple (lambda (x) (* x 2)) (lambda (x) (+ x 2)))
                 (list-zip-with list (range 3) (range 3)))))
+
+(let () ;; fn-cons
+  (assert= '((0 . 2) (2 . 3) (4 . 4))
+           (map (fn-cons (lambda (x) (* x 2)) (lambda (x) (+ x 2)))
+                (list-zip-with cons (range 3) (range 3))))
+  (assert= (cons 5 (cons 8 25))
+           ((fn-cons (lambda (x) (+ x 2))
+                     (lambda (x) (* x 2))
+                     (lambda (x) (expt (car x) 2)))
+            (cons 3 (cons 4 (cons 5 6)))))
+  (assert= (cons 5 (cons 8 (cons 25 4)))
+           ((fn-cons (lambda (x) (+ x 2))
+                     (lambda (x) (* x 2))
+                     (lambda (x) (expt x 2))
+                     (lambda (x) (- x 2)))
+            (cons 3 (cons 4 (cons 5 6))))))
 
 (let () ;; fp
   (assert= '((0 2) (2 3) (4 4))
