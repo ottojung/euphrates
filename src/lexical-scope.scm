@@ -25,6 +25,7 @@
 %use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (stack-make stack-peek stack->list stack-push! stack-discard!) "./stack.scm"
 %use (make-unique) "./make-unique.scm"
+%use (raisu) "./raisu.scm"
 
 (define lexical-scope-make
   (case-lambda
@@ -34,11 +35,24 @@
     (stack-push! st (cons namespace (make-hashmap)))
     (lexical-scope-wrap st))))
 
-(define (lexical-scope-set! scope key value)
-  (define st (lexical-scope-unwrap scope))
-  (define H (cdr (stack-peek st)))
-  (hashmap-set! H key value)
-  (values))
+(define lexical-scope-set!
+  (case-lambda
+   ((scope key value)
+    (define st (lexical-scope-unwrap scope))
+    (define H (cdr (stack-peek st)))
+    (hashmap-set! H key value)
+    (values))
+   ((scope namespace key value)
+    (define st (lexical-scope-unwrap scope))
+    (define lst (stack->list st))
+    (let loop ((lst lst))
+      (if (null? lst) (raisu 'namespace-not-found namespace key)
+          (let ((cur (car lst)))
+            (if (equal? (car cur) namespace)
+                (begin
+                  (hashmap-set! (cdr cur) key value)
+                  (values))
+                (loop (cdr lst)))))))))
 
 (define (lexical-scope-ref scope key default)
   (define st (lexical-scope-unwrap scope))
