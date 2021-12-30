@@ -50,7 +50,7 @@
 ;; but implementation must be changed,
 ;; because system mutexes will not allow to do yield
 ;; while waiting on mutex.
-(define (make-no-critical . args)
+(define (np-thread-make-no-critical . args)
   (lambda (fn) (fn)))
 
 (define (np-thread-make-env make-critical)
@@ -220,4 +220,4 @@
      np-thread-global-mutex-lock!
      np-thread-global-mutex-unlock!
      np-thread-global-critical-make)
-  (np-thread-make-env make-no-critical))
+  (np-thread-make-env np-thread-make-no-critical))
