@@ -10,6 +10,9 @@ cleanrun-s: | clean-czempak run run-inlined
 clean-czempak:
 	rm -rf .czempak-*
 
+clean:
+	git clean -dfx
+
 run-inlined:
 	echo '(inlined-dest inlined) ?' | \
 		czempak build test/main.scm | \
