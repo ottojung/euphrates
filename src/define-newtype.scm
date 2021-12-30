@@ -22,6 +22,31 @@
 (use-modules (srfi srfi-9))
 
 (define-syntax define-newtype
+  (lambda (stx)
+    (syntax-case stx ()
+      ((_ constructor predicate get)
+       (with-syntax
+        ((<newtype> (datum->syntax #'constructor
+                                   (symbol-append
+                                    '< (syntax->datum #'constructor) '>))))
+        #'(define-record-type <newtype>
+            (constructor constructor)
+            predicate
+            (constructor get))))
+      ((_ constructor predicate get set)
+       (with-syntax
+        ((<newtype> (datum->syntax #'constructor
+                                   (symbol-append
+                                    '< (syntax->datum #'constructor) '>))))
+        #'(define-record-type <newtype>
+            (constructor constructor)
+            predicate
+            (constructor get set)))))))
+
+%end
+%for (COMPILER "TODO:some-standard-r7rs")
+
+(define-syntax define-newtype
   (syntax-rules ()
     ((_ constructor predicate get)
      (define-record-type <newtype>
