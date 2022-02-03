@@ -12,11 +12,11 @@
    (() (read-string-line (current-input-port)))
    ((port)
     (list->string
-    (let loop ((buf '()))
-      (let ((c (get-char port)))
-        (if (or (eof-object? c)
-                (equal? #\newline c))
-            (reverse buf)
-            (loop (cons c buf)))))))))
+     (let loop ((buf '()))
+       (let ((c (get-char port)))
+         (if (or (eof-object? c)
+                 (equal? #\newline c))
+             (reverse buf)
+             (loop (cons c buf)))))))))
 
 %end
