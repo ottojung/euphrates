@@ -32,6 +32,7 @@ GPL-3
   - [ ] alternatively - many targets
 - [ ] Add monads back
 - [ ] Add `tree-future` back
+- [ ] Handle $PWD the way Racket does
 - [ ] Move `szcalc`'s core rewriting system here
 - [ ] Make system threads parameterizable, so make an `np-parameterize-env` equivalent for `sys-thread.scm`
 - [ ] Port everything to other scheme compilers (this involves making czempak runners for them)
