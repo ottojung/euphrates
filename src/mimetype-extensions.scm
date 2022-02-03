@@ -1,7 +1,7 @@
 
 %run guile
 
-%var mimetype/files
+%var mimetype/extensions
 
 ;; Taken from:
 ;; https://github.com/broofa/mime/tree/master/types
@@ -311,7 +311,7 @@
     ("video/ogg" "ogv")
     ("video/quicktime" "qt" "mov")
     ("video/webm" "webm")
-    ( "application/prs.cww" "cww")
+    ("application/prs.cww" "cww")
     ("application/vnd.1000minds.decision-model+xml" "1km")
     ("application/vnd.3gpp.pic-bw-large" "plb")
     ("application/vnd.3gpp.pic-bw-small" "psb")
