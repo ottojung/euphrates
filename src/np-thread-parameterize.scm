@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2019, 2020, 2021  Otto Jung
+;;;; Copyright (C) 2019, 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 %run guile
 
 %var np-thread-parameterize-env
-%var with-np-thread-env#non-interruptible
+%var with-np-thread-env/non-interruptible
 
 %use (dynamic-thread-spawn#p) "./dynamic-thread-spawn-p.scm"
 %use (dynamic-thread-cancel#p) "./dynamic-thread-cancel-p.scm"
@@ -65,7 +65,7 @@
                  (dynamic-thread-critical-make#p np-thread-make-critical))
     (np-thread-run! thunk)))
 
-(define-syntax with-np-thread-env#non-interruptible
+(define-syntax with-np-thread-env/non-interruptible
   (syntax-rules ()
     ((_ . bodies)
      (np-thread-parameterize-env
