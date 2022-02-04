@@ -2432,7 +2432,8 @@
        (print-in-window 2 10 1 #\space "the quick brown fox jumps over a lazy dog"))))
 
   (assert=
-   " the quick 
+   " the 
+  quick 
   brown 
   fox 
   jumps 
