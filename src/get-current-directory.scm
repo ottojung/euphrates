@@ -1,7 +1,7 @@
 
 %run guile
 
-%var (current-directory/p)
+%var current-directory/p
 
 %var get-current-directory
 
