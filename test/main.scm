@@ -2525,6 +2525,53 @@
   │jumps │
   │over a│
   │lazy  │
+  │dog   │
+  └──────┘"
+   (with-output-to-string
+     (lambda _
+       (newline)
+       (print-in-frame #t #t 2 10 0
+                       #\space
+                       (list-intersperse
+                        #\space
+                        (string->words
+                         "the quick brown fox jumps over a lazy dog"))))))
+
+  (assert=
+   "
+  ┌──────┐
+  │the   │
+  │quick │
+  │brown │
+  │fox ab│
+  │cdefya│
+  │wbyxnw│
+  │oeqe  │
+  │jumps │
+  │over a│
+  │lazy  │
+  │dog   │
+  └──────┘"
+   (with-output-to-string
+     (lambda _
+       (newline)
+       (print-in-frame #t #t 2 10 0
+                       #\space
+                       (list-intersperse
+                        #\space
+                        (string->words
+                         "the quick brown fox abcdefyawbyxnwoeqe jumps over a lazy dog"))))))
+
+  (assert=
+   "
+  ┌──────┐
+  │the   │
+  │quick │
+  │brown │
+  │fox   │
+  │jumps │
+  │over a│
+  │lazy  │
   │dog   │"
    (with-output-to-string
      (lambda _

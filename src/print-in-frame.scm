@@ -96,18 +96,31 @@
                       (loop (+ current-x 1) (cdr parts))))
                 (let* ((len (string-length word))
                        (next-x (+ current-x len)))
-                  (if (> next-x end-x1)
-                      (begin
-                        (fill-space (- end-x1 current-x))
-                        (display "│")
-                        (newline)
-                        (fill-space start-x)
-                        (display "│")
-                        (display word)
-                        (loop (+ start-x len 1) (cdr parts)))
-                      (begin
-                        (display word)
-                        (loop (+ current-x len) (cdr parts))))))))))
+                  (cond
+                   ((> len width)
+                    (let ()
+                      (define left (- end-x1 current-x))
+                      (define-values
+                          (cur/list next/list) (list-span-n left (string->list word)))
+                      (define cur (list->string cur/list))
+                      (define next (list->string next/list))
+                      (display cur)
+                      (display "│")
+                      (newline)
+                      (fill-space start-x)
+                      (display "│")
+                      (loop (+ start-x 1) (cons next (cdr parts)))))
+                   ((> next-x end-x1)
+                    (fill-space (- end-x1 current-x))
+                    (display "│")
+                    (newline)
+                    (fill-space start-x)
+                    (display "│")
+                    (display word)
+                    (loop (+ start-x len 1) (cdr parts)))
+                   (else
+                    (display word)
+                    (loop (+ current-x len) (cdr parts))))))))))
 
    (else
     (raisu 'bad-type `(expected list or string but got ,parts-or-string))))
