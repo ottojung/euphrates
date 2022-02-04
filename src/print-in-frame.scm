@@ -34,6 +34,7 @@
 %use (raisu) "./raisu.scm"
 %use (replicate) "./replicate.scm"
 %use (list-span-n) "./list-span-n.scm"
+%use (string->lines) "./string-to-lines.scm"
 
 (define (print-in-frame top? bottom? start-x end-x initial-x fill-character parts-or-string)
   (define (fill-space-x amount char)
@@ -52,6 +53,13 @@
   (define end-x1
     (- end-x 1))
 
+  (define parts
+    (cond
+     ((string? parts-or-string) (string->lines parts-or-string))
+     ((pair? parts-or-string) parts-or-string)
+     (else
+      (raisu 'bad-type `(expected list or string but got ,parts-or-string)))))
+
   (unless (> end-x (+ start-x 2))
     (raisu 'second-argument-is-end-coordinate,not-the-width start-x end-x))
 
@@ -64,66 +72,47 @@
     (newline)
     (fill-space start-x))
 
-  (cond
-   ((string? parts-or-string)
-    (let loop ((buf (string->list parts-or-string)))
-      (define-values (current next) (list-span-n width buf))
-      (display "│")
-      (display (list->string current))
-      (unless (null? next)
-        (display "│")
-        (newline)
-        (fill-space start-x)
-        (loop next))
-      (when (null? next)
-        (fill-space (- width (length current)))
-        (display "│"))))
-
-   ((pair? parts-or-string)
-    (display "│")
-    (let loop ((current-x begin-at) (parts parts-or-string))
-      (if (null? parts)
-          (begin
-            (fill-space (- end-x1 current-x))
-            (display "│"))
-          (let* ((word (car parts)))
-            (if (equal? word fill-character)
-                (if (= current-x initial-x)
-                    (loop current-x (cdr parts))
-                    (begin
-                      (unless (= current-x end-x1)
-                        (display word))
-                      (loop (+ current-x 1) (cdr parts))))
-                (let* ((len (string-length word))
-                       (next-x (+ current-x len)))
-                  (cond
-                   ((> len width)
-                    (let ()
-                      (define left (- end-x1 current-x))
-                      (define-values
-                          (cur/list next/list) (list-span-n left (string->list word)))
-                      (define cur (list->string cur/list))
-                      (define next (list->string next/list))
-                      (display cur)
-                      (display "│")
-                      (newline)
-                      (fill-space start-x)
-                      (display "│")
-                      (loop (+ start-x 1) (cons next (cdr parts)))))
-                   ((> next-x end-x1)
-                    (fill-space (- end-x1 current-x))
+  (display "│")
+  (let loop ((current-x begin-at) (parts parts))
+    (if (null? parts)
+        (begin
+          (fill-space (- end-x1 current-x))
+          (display "│"))
+        (let* ((word (car parts)))
+          (if (equal? word fill-character)
+              (if (= current-x initial-x)
+                  (loop current-x (cdr parts))
+                  (begin
+                    (unless (= current-x end-x1)
+                      (display word))
+                    (loop (+ current-x 1) (cdr parts))))
+              (let* ((len (string-length word))
+                     (next-x (+ current-x len)))
+                (cond
+                 ((> len width)
+                  (let ()
+                    (define left (- end-x1 current-x))
+                    (define-values
+                        (cur/list next/list) (list-span-n left (string->list word)))
+                    (define cur (list->string cur/list))
+                    (define next (list->string next/list))
+                    (display cur)
                     (display "│")
                     (newline)
                     (fill-space start-x)
                     (display "│")
-                    (display word)
-                    (loop (+ start-x len 1) (cdr parts)))
-                   (else
-                    (display word)
-                    (loop (+ current-x len) (cdr parts))))))))))
-
-   (else
-    (raisu 'bad-type `(expected list or string but got ,parts-or-string))))
+                    (loop (+ start-x 1) (cons next (cdr parts)))))
+                 ((> next-x end-x1)
+                  (fill-space (- end-x1 current-x))
+                  (display "│")
+                  (newline)
+                  (fill-space start-x)
+                  (display "│")
+                  (display word)
+                  (loop (+ start-x len 1) (cdr parts)))
+                 (else
+                  (display word)
+                  (loop (+ current-x len) (cdr parts)))))))))
 
   (when bottom?
     (newline)
