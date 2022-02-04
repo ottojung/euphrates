@@ -48,7 +48,7 @@
   (define width (- end-x start-x 2))
 
   (define begin-at
-    (+ 1 start-x))
+    (+ 1 (if top? start-x (max initial-x start-x))))
 
   (define end-x1
     (- end-x 1))
