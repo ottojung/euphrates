@@ -33,30 +33,47 @@
 
 %use (raisu) "./raisu.scm"
 %use (replicate) "./replicate.scm"
+%use (list-span-n) "./list-span-n.scm"
 
-(define (print-in-window start-x end-x initial-x fill-character parts)
+(define (print-in-window start-x end-x initial-x fill-character parts-or-string)
   (define (fill-space amount)
     (display (list->string (replicate amount fill-character))))
+
+  (define width (- end-x start-x))
 
   (unless (> end-x start-x)
     (raisu 'second-argument-is-end-coordinate,not-the-width start-x end-x))
 
   (fill-space (- start-x initial-x))
 
-  (let loop ((current-x initial-x) (parts parts))
-    (unless (null? parts)
-      (let* ((word (car parts))
-             (len (string-length word))
-             (next-x (+ current-x len)))
+  (cond
+   ((string? parts-or-string)
+    (let loop ((buf (string->list parts-or-string)))
+      (define-values (current next) (list-span-n width buf))
+      (display (list->string current))
+      (unless (null? next)
+        (newline)
+        (fill-space start-x)
+        (loop next))))
 
-        (if (> next-x end-x)
-            (begin
-              (newline)
-              (fill-space start-x)
-              (display word)
-              (loop (+ start-x len) (cdr parts)))
-            (begin
-              (display word)
-              (loop (+ current-x len) (cdr parts))))))))
+   ((pair? parts-or-string)
+    (let loop ((current-x initial-x) (parts parts-or-string))
+      (unless (null? parts)
+        (let* ((word (car parts))
+               (len (string-length word))
+               (next-x (+ current-x len)))
+
+          (if (> next-x end-x)
+              (begin
+                (newline)
+                (fill-space start-x)
+                (display word)
+                (loop (+ start-x len) (cdr parts)))
+              (begin
+                (display word)
+                (loop (+ current-x len) (cdr parts))))))))
+
+   (else
+    (raisu 'bad-type `(expected list or string but got ,parts-or-string)))))
 
 
