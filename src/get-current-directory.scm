@@ -1,9 +1,9 @@
 
 %run guile
 
-%var current-directory/p
-
 %var get-current-directory
+
+%use (current-directory/p) "./current-directory-p.scm"
 
 %for (COMPILER "guile")
 
