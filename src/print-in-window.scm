@@ -19,7 +19,7 @@
 ;; Useful for displaying text to the console.
 ;;
 ;; May be used in conjunction with `words` function,
-;; like this `(print-in-window (words "...some long text..."))`
+;; like this `(print-in-window (list-intersperse #\space (words "...some long text...")))`
 ;;
 ;; For printing to the console, use `(getenv "COLUMNS") * 2` as `end-x` coordinate.
 ;;
@@ -59,19 +59,24 @@
    ((pair? parts-or-string)
     (let loop ((current-x initial-x) (parts parts-or-string))
       (unless (null? parts)
-        (let* ((word (car parts))
-               (len (string-length word))
-               (next-x (+ current-x len)))
-
-          (if (> next-x end-x)
-              (begin
-                (newline)
-                (fill-space start-x)
-                (display word)
-                (loop (+ start-x len) (cdr parts)))
-              (begin
-                (display word)
-                (loop (+ current-x len) (cdr parts))))))))
+        (let* ((word (car parts)))
+          (if (equal? word fill-character)
+              (if (= current-x initial-x)
+                  (loop current-x (cdr parts))
+                  (begin
+                    (display word)
+                    (loop (+ current-x 1) (cdr parts))))
+              (let* ((len (string-length word))
+                     (next-x (+ current-x len)))
+                (if (> next-x end-x)
+                    (begin
+                      (newline)
+                      (fill-space start-x)
+                      (display word)
+                      (loop (+ start-x len) (cdr parts)))
+                    (begin
+                      (display word)
+                      (loop (+ current-x len) (cdr parts))))))))))
 
    (else
     (raisu 'bad-type `(expected list or string but got ,parts-or-string)))))
