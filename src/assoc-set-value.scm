@@ -1,9 +1,9 @@
 
 %run guile
 
-%var assoc-set-value!
+%var assoc-set-value
 
-(define (assoc-set-value! key value alist)
+(define (assoc-set-value key value alist)
   (let loop ((alist alist))
     (if (null? alist)
         `((,key . ,value))
