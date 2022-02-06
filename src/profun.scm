@@ -151,28 +151,32 @@
 (define (make-unique-varname symb rule)
   (usymbol symb rule))
 
-(define (alpha-reduce rule args)
-  (define r-args (rule-args rule))
+;; TODO: garbage-collect redundant variables?
+(define alpha-reduce
+  (let ((counter 0))
+    (lambda (rule args)
+      (define r-args (rule-args rule))
 
-  (define (repl symb)
-    (if (not (profun-varname? symb)) symb
-        (let lp ((rbuf r-args)
-                 (abuf args))
-          (if (null? rbuf)
-              (make-unique-varname symb rule)
-              (if (equal? symb (car rbuf))
-                  (car abuf)
-                  (lp (cdr rbuf) (cdr abuf)))))))
+      (define (repl symb)
+        (if (not (profun-varname? symb)) symb
+            (let lp ((rbuf r-args)
+                     (abuf args))
+              (if (null? rbuf)
+                  (make-unique-varname symb counter)
+                  (if (equal? symb (car rbuf))
+                      (car abuf)
+                      (lp (cdr rbuf) (cdr abuf)))))))
 
-  (define (app-pair body)
-    (map
-     (lambda (x)
-       (cons
-        (car x)
-        (map repl (cdr x))))
-     body))
+      (define (app-pair body)
+        (map
+         (lambda (x)
+           (cons
+            (car x)
+            (map repl (cdr x))))
+         body))
 
-  (app-pair (rule-body rule)))
+      (set! counter (+ 1 counter))
+      (app-pair (rule-body rule)))))
 
 ;; uses alpha, then builds the alpha body,
 ;; and returns first instruction
