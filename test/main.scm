@@ -1522,17 +1522,17 @@
 
     (test-definitions
      "TUPLE IN THE DATABASE 1"
-     '(((inputs y) (= y (((abc def))))))
+     '(((inputs y) (= y ((("abc" "def"))))))
 
-     (test '((inputs x)) '(((x . (((abc def)))))))
+     (test '((inputs x)) '(((x . ((("abc" "def")))))))
 
      )
 
     (test-definitions
      "TUPLE IN THE DATABASE 2"
-     '(((inputs (((abc def))))))
+     '(((inputs ((("abc" "def"))))))
 
-     (test '((inputs x)) '(((x . (((abc def)))))))
+     (test '((inputs x)) '(((x . ((("abc" "def")))))))
 
      )
 
@@ -1801,7 +1801,7 @@
           'hello handler
           (list
            (petri-profun-net
-            `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
+            `(((hello) (apply ,display "Hello\n") (push "bye" "Robert" "Smith"))
               ((bye NAME SURNAME)
                (apply ,display "Bye ")
                (apply ,display NAME)
@@ -1822,7 +1822,7 @@
          (petri-run
           'hello handler
           (petri-profun-net
-           `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
+           `(((hello) (apply ,display "Hello\n") (push "bye" "Robert" "Smith"))
              ((bye NAME SURNAME)
               (apply ,display "Bye ")
               (apply ,display NAME)
@@ -1843,7 +1843,7 @@
           'hello handler
           (list
            (petri-profun-net
-            `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))
+            `(((hello) (apply ,display "Hello\n") (push "bye" "Robert" "Smith"))
               ((bye NAME SURNAME)
                (print "Bye ~a the ~a!" NAME SURNAME)))))))))
 
@@ -1861,7 +1861,7 @@
           'hello handler
           (list
            (petri-profun-net
-            `(((hello) (apply ,display "Hello\n") (push 'bye "Robert" "Smith"))))
+            `(((hello) (apply ,display "Hello\n") (push "bye" "Robert" "Smith"))))
            (petri-profun-net
             `(((bye NAME SURNAME)
                (apply ,display "Bye ")
@@ -1890,7 +1890,7 @@
             `(((name "Robert"))
               ((surname "Smith"))
               ((surname "Rogers"))
-              ((hello) (apply ,display "Hello\n") (name N) (surname S) (push 'bye N S))
+              ((hello) (apply ,display "Hello\n") (name N) (surname S) (push "bye" N S))
               ((bye NAME SURNAME)
                (apply ,display "Bye ")
                (apply ,display NAME)
@@ -1916,7 +1916,7 @@
             `(((name "Robert"))
               ((surname "Smith"))
               ((surname "Rogers"))
-              ((hello) (apply ,display "Hello\n") (name N) (surname S) (push 'bye N S))
+              ((hello) (apply ,display "Hello\n") (name N) (surname S) (push "bye" N S))
               ((bye NAME SURNAME)
                (apply ,display "Bye ")
                (apply ,display NAME)
@@ -1943,8 +1943,8 @@
            (petri-profun-net
             `(((hello)
                (apply ,display "Hello\n")
-               (push 'bye "Robert" "Smith")
-               (push 'bye "Bob" "Rogers"))))
+               (push "bye" "Robert" "Smith")
+               (push "bye" "Bob" "Rogers"))))
            (petri-profun-net
             `(((bye NAME SURNAME)
                (apply ,display "Bye ")
@@ -1975,8 +1975,8 @@
            (petri-profun-net
             `(((hello)
                (apply ,display "Hello\n")
-               (push 'bye "Robert" "Smith")
-               (push 'bye "Bob" "Rogers"))))
+               (push "bye" "Robert" "Smith")
+               (push "bye" "Bob" "Rogers"))))
            (petri-lambda-net
             (list (list '(bye   . 2) (lambda (name surname) (display "Bye ") (display name) (display " the ") (display surname) (display "!\n")))))
            )

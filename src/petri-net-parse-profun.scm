@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -39,13 +39,10 @@
          (unless (pair? argv)
            (raisu 'empty-profun-push argv))
 
-         (unless (list? (car argv))
-           (raisu 'profun-push-first-argument-is-not-list argv))
+         (unless (string? (car argv))
+           (raisu 'profun-push-first-argument-is-not-string argv))
 
-         (unless (symbol? (car (car argv)))
-           (raisu 'profun-push-car-of-first-argument-is-not-symbol argv))
-
-         (let ((name (cadr (car argv)))
+         (let ((name (string->symbol (car argv)))
                (args (cdr argv)))
            (apply petri-push (cons name args))
            #t))))

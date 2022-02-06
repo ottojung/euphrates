@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by

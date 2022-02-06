@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -158,14 +158,19 @@
       (define r-args (rule-args rule))
 
       (define (repl symb)
-        (if (not (profun-varname? symb)) symb
-            (let lp ((rbuf r-args)
-                     (abuf args))
-              (if (null? rbuf)
-                  (make-unique-varname symb counter)
-                  (if (equal? symb (car rbuf))
-                      (car abuf)
-                      (lp (cdr rbuf) (cdr abuf)))))))
+        (cond
+         ((pair? symb)
+          (cons (repl (car symb))
+                (repl (cdr symb))))
+         ((not (profun-varname? symb)) symb)
+         (else
+          (let lp ((rbuf r-args)
+                   (abuf args))
+            (if (null? rbuf)
+                (make-unique-varname symb counter)
+                (if (equal? symb (car rbuf))
+                    (car abuf)
+                    (lp (cdr rbuf) (cdr abuf))))))))
 
       (define (app-pair body)
         (map
