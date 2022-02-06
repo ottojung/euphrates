@@ -87,7 +87,7 @@
 %use (list-take-while) "./src/list-take-while.scm"
 %use (petri-run petri-push) "./src/petri.scm"
 %use (raisu) "./src/raisu.scm"
-%use (with-np-thread-env#non-interruptible) "./src/np-thread-parameterize.scm"
+%use (with-np-thread-env/non-interruptible) "./src/np-thread-parameterize.scm"
 %use (dynamic-thread-yield) "./src/dynamic-thread-yield.scm"
 %use (dynamic-thread-spawn) "./src/dynamic-thread-spawn.scm"
 %use (dynamic-thread-cancel) "./src/dynamic-thread-cancel.scm"
@@ -1664,7 +1664,7 @@
    (lines->string parameterized-order)
    (with-output-to-string
      (lambda ()
-       (with-np-thread-env#non-interruptible
+       (with-np-thread-env/non-interruptible
         (test-body)))))
 
   (assert=
