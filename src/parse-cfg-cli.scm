@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 %use (raisu) "./raisu.scm"
 %use (list-split-on) "./list-split-on.scm"
+%use (~a) "./tilda-a.scm"
 
 (define (CFG-CLI->CFG-AST body)
   ;; Example body:
@@ -35,13 +36,28 @@
   ;;     MAY-OPTS?    : -p <x>
   ;;     JUNE-OPTS*   : -f3 / -f4)
 
+  (define _1
+    (begin
+      (unless (list? body)
+        (raisu 'cfg-cli-must-be-a-list body))
+      (when (null? body)
+        (raisu 'cfg-cli-must-be-non-empty body))))
+
+  (define (semicolon? x)
+    (or (equal? ': x)
+        (equal? ":" (~a x))))
+
+  (define (slash? x)
+    (or (equal? '/ x)
+        (equal? "/" (~a x))))
+
   (define shifted-semilocons
     (let loop ((body body) (last ':))
       (if (null? body)
           (list last)
           (let ((cur (car body)))
-            (if (equal? ': cur)
-                (if (equal? ': last)
+            (if (semicolon? cur)
+                (if (semicolon? last)
                     (raisu 'cannot-start-with-a-semicolon last body)
                     (cons cur (loop (cdr body) last)))
                 (cons last (loop (cdr body) cur)))))))
@@ -57,7 +73,7 @@
   ;;     : JUNE-OPTS*   -f3 / -f4)
 
   (define grouped
-    (list-split-on (lambda (word) (eq? ': word)) shifted-semilocons))
+    (list-split-on semicolon? shifted-semilocons))
 
   ;; Example grouped:
   ;;   '((run OPTS* DATE <end-statement>)
@@ -89,7 +105,7 @@
      (lambda (production)
        (define name (car production))
        (define regex (cdr production))
-       (cons name (list-split-on (lambda (word) (equal? '/ word)) regex)))
+       (cons name (list-split-on slash? regex)))
      decorated-first))
 
   ;; Example split-by-cases:
