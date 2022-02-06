@@ -44,6 +44,7 @@ GPL-3
 - [ ] Split tests
 - [ ] Add `cut!` to `profun`
 - [ ] Add recursion to `profun`
+- [ ] Add structures to `profun`. Simple `cons` should be very easy to implement
 - [ ] Steal regular expressions https://synthcode.com/scheme/irregex/
 - [ ] Steal matcher https://synthcode.com/scheme/match.scm but simplify it
 - [ ] Add prolog to shell integration, a-la https://github.com/thomasrebele/bashlog
