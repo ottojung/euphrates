@@ -1,16 +1,15 @@
 
 %run guile
 
-%var list-blocks
+%var list-chunks
 
 %use (raisu) "./raisu.scm"
-%use (list-span) "./list-span.scm"
+%use (list-span-n) "./list-span-n.scm"
 
-;; `(length lst)` must be divisible by `block-size`!
-(define (list-blocks block-size lst)
+(define (list-chunks block-size lst)
   (let loop ((lst lst) (ret '()))
     (if (null? lst) (reverse ret)
         (call-with-values
-            (lambda _ (list-span block-size lst))
+            (lambda _ (list-span-n block-size lst))
           (lambda (left right)
             (loop right (cons left ret)))))))

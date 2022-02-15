@@ -123,7 +123,7 @@
 %use (monad-except) "./src/monad-except.scm"
 %use (monad-identity) "./src/monad-identity.scm"
 %use (list-fold) "./src/list-fold.scm"
-%use (list-blocks) "./src/list-blocks.scm"
+%use (list-chunks) "./src/list-chunks.scm"
 %use (list-windows) "./src/list-windows.scm"
 %use (list-length=<?) "./src/list-length-geq-q.scm"
 %use (compose-under-par) "./src/compose-under-par.scm"
@@ -2379,37 +2379,41 @@
 
   )
 
-;; list-blocks
+;; list-chunks
 (let ()
 
   (assert=
    '((1 2) (3 4) (5 6))
-   (list-blocks 2 '(1 2 3 4 5 6)))
+   (list-chunks 2 '(1 2 3 4 5 6)))
 
   (assert=
    '((1) (2) (3) (4) (5) (6))
-   (list-blocks 1 '(1 2 3 4 5 6)))
+   (list-chunks 1 '(1 2 3 4 5 6)))
 
   (assert=
    '()
-   (list-blocks 2 '()))
+   (list-chunks 2 '()))
 
   )
 
-;; list-blocks
+;; list-chunks
 (let ()
 
   (assert=
    '((1 2) (3 4) (5 6))
-   (list-blocks 2 '(1 2 3 4 5 6)))
+   (list-chunks 2 '(1 2 3 4 5 6)))
 
   (assert=
    '((1) (2) (3) (4) (5) (6))
-   (list-blocks 1 '(1 2 3 4 5 6)))
+   (list-chunks 1 '(1 2 3 4 5 6)))
 
   (assert=
    '()
-   (list-blocks 2 '()))
+   (list-chunks 2 '()))
+
+  (assert=
+   '((1 2 3) (4 5 6) (7 8))
+   (list-chunks 3 '(1 2 3 4 5 6 7 8)))
 
   )
 
