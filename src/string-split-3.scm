@@ -1,0 +1,37 @@
+
+%run guile
+
+%var string-split-3
+
+%use (list-prefix?) "./list-prefix-q.scm"
+%use (list-drop-n) "./list-drop-n.scm"
+%use (raisu) "./raisu.scm"
+
+(define (string-split-3 delimiter str)
+  (define (string-split-first/lambda predicate str)
+    (define lst (string->list str))
+    (let loop ((buf lst) (ret '()))
+      (if (null? buf) (values str "" "")
+          (let ((cur (car buf)))
+            (if (predicate cur)
+                (values (list->string (reverse ret))
+                        (list->string (list cur))
+                        (list->string (cdr buf)))
+                (loop (cdr buf) (cons cur ret)))))))
+
+  (define (string-split-first/string delimiter str)
+    (define lst (string->list str))
+    (define len (length delimiter))
+    (let loop ((buf lst) (ret '()))
+      (if (null? buf) (values str "" "")
+          (if (list-prefix? delimiter buf)
+              (values (list->string (reverse ret))
+                      (list->string delimiter)
+                      (list->string (list-drop-n len buf)))
+              (loop (cdr buf) (cons (car buf) ret))))))
+
+  (cond
+   ((string? delimiter) (string-split-first/string (string->list delimiter) str))
+   ((char? delimiter) (string-split-first/string (list delimiter) str))
+   ((procedure? delimiter) (string-split-first/lambda delimiter str))
+   (else (raisu 'delimiter-must-be-string-or-char-or-procedure delimiter))))
