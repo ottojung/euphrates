@@ -130,6 +130,7 @@
 %use (print-in-window) "./src/print-in-window.scm"
 %use (print-in-frame) "./src/print-in-frame.scm"
 %use (string-split-3) "./src/string-split-3.scm"
+%use (json-parse) "./src/json-parse.scm"
 
 (let ()
   (catch-any
@@ -2731,6 +2732,16 @@
     (assert= post ""))
 
   )
+
+;; json-parse
+(let ()
+  (let ()
+    (define inp "{ \"hello\": true, \"bye\": null }")
+    (define parsed
+      (call-with-input-string
+       inp (lambda (p) (json-parse p))))
+    (assert= '(("bye" . null) ("hello" . #t))
+             parsed)))
 
 (display "All good\n")
 
