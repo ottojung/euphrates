@@ -28,28 +28,28 @@
 (define (json-exception port)
   (raisu 'json-invalid port))
 
-(define (digit? c)
+(define (json-digit? c)
   (case c
     ((#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9) #t)
     (else #f)))
 
-(define (whitespace? c)
+(define (json-whitespace? c)
   (case c
     ((#\sp #\ht #\lf #\cr) #t)
     (else #f)))
 
-(define (control-char? ch)
+(define (json-control-char? ch)
   (<= (char->integer ch) #x1F))
 
-(define (skip-whitespaces port)
+(define (json-skip-whitespaces port)
   (let ((ch (peek-char port)))
     (cond
-     ((whitespace? ch)
+     ((json-whitespace? ch)
       (read-char port)
-      (skip-whitespaces port))
+      (json-skip-whitespaces port))
      (else *unspecified*))))
 
-(define (expect-string port expected return)
+(define (json-expect-string port expected return)
   (let loop ((n 0))
     (cond
      ;; All characters match.
@@ -60,32 +60,27 @@
      ;; Anything else is an error.
      (else (json-exception port)))))
 
-(define (expect-delimiter port delimiter)
+(define (json-expect-delimiter port delimiter)
   (let ((ch (read-char port)))
     (cond
      ((not (eqv? ch delimiter)) (json-exception port))
      ;; Unexpected EOF.
      ((eof-object? ch) (json-exception port)))))
 
-(define (skip-record-separators port)
-  (when (eqv? #\rs (peek-char port))
-    (read-char port)
-    (skip-record-separators port)))
-
 ;;
 ;; Number parsing helpers
 ;;
 
-(define (expect-digit port)
+(define (json-expect-digit port)
   (let ((ch (peek-char port)))
     (cond
-     ((not (digit? ch)) (json-exception port))
+     ((not (json-digit? ch)) (json-exception port))
      ;; Unexpected EOF.
      ((eof-object? ch) (json-exception port)))))
 
 ;; Read + or -, and return 1 or -1 respectively. If something different is
 ;; found, return 1.
-(define (read-sign port)
+(define (json-read-sign port)
   (let ((ch (peek-char port)))
     (cond
      ((eqv? ch #\+)
@@ -96,7 +91,7 @@
       -1)
      (else 1))))
 
-(define (read-digit-value port)
+(define (json-read-digit-value port)
   (let ((ch (read-char port)))
     (cond
      ((eqv? ch #\0) 0)
@@ -112,46 +107,46 @@
      (else (json-exception port)))))
 
 ;; Read digits [0..9].
-(define (read-digits port)
-  (expect-digit port)
+(define (json-read-digits port)
+  (json-expect-digit port)
   (let loop ((ch (peek-char port)) (number 0))
     (cond
-     ((digit? ch)
-      (let ((value (read-digit-value port)))
+     ((json-digit? ch)
+      (let ((value (json-read-digit-value port)))
         (loop (peek-char port) (+ (* number 10) value))))
      (else number))))
 
-(define (read-digits-fraction port)
-  (expect-digit port)
+(define (json-read-digits-fraction port)
+  (json-expect-digit port)
   (let loop ((ch (peek-char port)) (number 0) (length 0))
     (cond
-     ((digit? ch)
-      (let ((value (read-digit-value port)))
+     ((json-digit? ch)
+      (let ((value (json-read-digit-value port)))
         (loop (peek-char port) (+ (* number 10) value) (+ length 1))))
      (else
       (/ number (expt 10 length))))))
 
-(define (read-exponent port)
+(define (json-read-exponent port)
   (let ((ch (peek-char port)))
     (cond
      ((or (eqv? ch #\e) (eqv? ch #\E))
       (read-char port)
-      (let ((sign (read-sign port))
-            (digits (read-digits port)))
+      (let ((sign (json-read-sign port))
+            (digits (json-read-digits port)))
         (if (<= digits 1000) ;; Some maximum exponent.
             (expt 10 (* sign digits))
             (json-exception port))))
      (else 1))))
 
-(define (read-fraction port)
+(define (json-read-fraction port)
   (let ((ch (peek-char port)))
     (cond
      ((eqv? ch #\.)
       (read-char port)
-      (read-digits-fraction port))
+      (json-read-digits-fraction port))
      (else 0))))
 
-(define (read-positive-number port)
+(define (json-read-positive-number port)
   (let* ((number
           (let ((ch (peek-char port)))
             (cond
@@ -160,9 +155,9 @@
               (read-char port)
               0)
              ;; Otherwise read more digits.
-             (else (read-digits port)))))
-         (fraction (read-fraction port))
-         (exponent (read-exponent port))
+             (else (json-read-digits port)))))
+         (fraction (json-read-fraction port))
+         (exponent (json-read-exponent port))
          (result (* (+ number fraction) exponent)))
     (if (and (zero? fraction) (>= exponent 1))
         result
@@ -174,11 +169,11 @@
      ;; Negative numbers.
      ((eqv? ch #\-)
       (read-char port)
-      (expect-digit port)
-      (* -1 (read-positive-number port)))
+      (json-expect-digit port)
+      (* -1 (json-read-positive-number port)))
      ;; Positive numbers.
-     ((digit? ch)
-      (read-positive-number port))
+     ((json-digit? ch)
+      (json-read-positive-number port))
      ;; Anything else is an error.
      (else (json-exception port)))))
 
@@ -186,10 +181,10 @@
 ;; Object parsing helpers
 ;;
 
-(define (read-pair port)
+(define (json-read-pair port)
   ;; Read key.
   (let ((key (json-read-string port)))
-    (skip-whitespaces port)
+    (json-skip-whitespaces port)
     (let ((ch (peek-char port)))
       (cond
        ;; Skip colon and read value.
@@ -200,9 +195,9 @@
        (else (json-exception port))))))
 
 (define (json-read-object port)
-  (expect-delimiter port #\{)
+  (json-expect-delimiter port #\{)
   (let loop ((pairs '()) (added #t))
-    (skip-whitespaces port)
+    (json-skip-whitespaces port)
     (let ((ch (peek-char port)))
       (cond
        ;; End of object.
@@ -213,7 +208,7 @@
          (else (json-exception port))))
        ;; Read one pair and continue.
        ((eqv? ch #\")
-        (let ((pair (read-pair port)))
+        (let ((pair (json-read-pair port)))
           (loop (cons pair pairs) #t)))
        ;; Skip comma and read more pairs.
        ((eqv? ch #\,)
@@ -229,8 +224,8 @@
 ;;
 
 (define (json-read-array port)
-  (expect-delimiter port #\[)
-  (skip-whitespaces port)
+  (json-expect-delimiter port #\[)
+  (json-skip-whitespaces port)
   (cond
    ;; Special case when array is empty.
    ((eqv? (peek-char port) #\])
@@ -239,7 +234,7 @@
    (else
     ;; Read first element in array.
     (let loop ((values (list (json-parse port))))
-      (skip-whitespaces port)
+      (json-skip-whitespaces port)
       (let ((ch (peek-char port)))
         (cond
          ;; Unexpected EOF.
@@ -259,7 +254,7 @@
 ;; String parsing helpers
 ;;
 
-(define (read-hex-digit->integer port)
+(define (json-read-hex-digit->integer port)
   (let ((ch (read-char port)))
     (cond
      ((eqv? ch #\0) 0)
@@ -280,11 +275,11 @@
      ((or (eqv? ch #\F) (eqv? ch #\f)) 15)
      (else (json-exception port)))))
 
-(define (read-unicode-value port)
-  (+ (* 4096 (read-hex-digit->integer port))
-      (* 256 (read-hex-digit->integer port))
-      (* 16 (read-hex-digit->integer port))
-      (read-hex-digit->integer port)))
+(define (json-read-unicode-value port)
+  (+ (* 4096 (json-read-hex-digit->integer port))
+      (* 256 (json-read-hex-digit->integer port))
+      (* 16 (json-read-hex-digit->integer port))
+      (json-read-hex-digit->integer port)))
 
 ;; Unicode codepoint with surrogates is:
 ;;   10000 + (high - D800) + (low - DC00)
@@ -295,15 +290,15 @@
 (define (json-surrogate-pair->unicode high low)
   (+ (* high #x400) low #x-35FDC00))
 
-(define (read-unicode-char port)
-  (let ((codepoint (read-unicode-value port)))
+(define (json-read-unicode-char port)
+  (let ((codepoint (json-read-unicode-value port)))
     (cond
      ;; Surrogate pairs. `codepoint` already contains the higher surrogate
      ;; (between D800 and DC00) . At this point we are expecting another
      ;; \uXXXX that holds the lower surrogate (between DC00 and DFFF).
      ((and (>= codepoint #xD800) (< codepoint #xDC00))
-      (expect-string port "\\u" #f)
-      (let ((low-surrogate (read-unicode-value port)))
+      (json-expect-string port "\\u" #f)
+      (let ((low-surrogate (json-read-unicode-value port)))
         (if (and (>= low-surrogate #xDC00) (< low-surrogate #xE000))
             (integer->char (json-surrogate-pair->unicode codepoint low-surrogate))
             (json-exception port))))
@@ -313,7 +308,7 @@
       (json-exception port))
      (else (integer->char codepoint)))))
 
-(define (read-control-char port)
+(define (json-read-control-char port)
   (let ((ch (read-char port)))
     (cond
      ((eqv? ch #\") #\")
@@ -324,22 +319,22 @@
      ((eqv? ch #\n) #\lf)
      ((eqv? ch #\r) #\cr)
      ((eqv? ch #\t) #\ht)
-     ((eqv? ch #\u) (read-unicode-char port))
+     ((eqv? ch #\u) (json-read-unicode-char port))
      (else (json-exception port)))))
 
 (define (json-read-string port)
-  (expect-delimiter port #\")
+  (json-expect-delimiter port #\")
   (let loop ((chars '()) (ch (read-char port)))
     (cond
      ;; Unexpected EOF.
      ((eof-object? ch) (json-exception port))
      ;; Unescaped control characters are not allowed.
-     ((control-char? ch) (json-exception port))
+     ((json-control-char? ch) (json-exception port))
      ;; End of string.
      ((eqv? ch #\") (reverse-list->string chars))
      ;; Escaped characters.
      ((eqv? ch #\\)
-      (loop (cons (read-control-char port) chars) (read-char port)))
+      (loop (cons (json-read-control-char port) chars) (read-char port)))
      ;; All other characters.
      (else
       (loop (cons ch chars) (read-char port))))))
@@ -349,20 +344,20 @@
 ;;
 
 (define (json-read-true port)
-  (expect-string port "true" #t))
+  (json-expect-string port "true" #t))
 
 (define (json-read-false port)
-  (expect-string port "false" #f))
+  (json-expect-string port "false" #f))
 
 (define (json-read-null port)
-  (expect-string port "null" 'null))
+  (json-expect-string port "null" 'null))
 
 ;;
 ;; Main parser functions
 ;;
 
 (define (json-parse port)
-  (skip-whitespaces port)
+  (json-skip-whitespaces port)
   (let ((ch (peek-char port)))
     (cond
      ;; Unexpected EOF.
