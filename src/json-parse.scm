@@ -186,7 +186,7 @@
 ;; Object parsing helpers
 ;;
 
-(define (read-pair port null)
+(define (read-pair port)
   ;; Read key.
   (let ((key (json-read-string port)))
     (skip-whitespaces port)
@@ -195,11 +195,11 @@
        ;; Skip colon and read value.
        ((eqv? ch #\:)
         (read-char port)
-        (cons key (json-read port null)))
+        (cons key (json-parse port)))
        ;; Anything other than colon is an error.
        (else (json-exception port))))))
 
-(define (json-read-object port null)
+(define (json-read-object port)
   (expect-delimiter port #\{)
   (let loop ((pairs '()) (added #t))
     (skip-whitespaces port)
@@ -213,7 +213,7 @@
          (else (json-exception port))))
        ;; Read one pair and continue.
        ((eqv? ch #\")
-        (let ((pair (read-pair port null)))
+        (let ((pair (read-pair port)))
           (loop (cons pair pairs) #t)))
        ;; Skip comma and read more pairs.
        ((eqv? ch #\,)
@@ -228,7 +228,7 @@
 ;; Array parsing helpers
 ;;
 
-(define (json-read-array port null)
+(define (json-read-array port)
   (expect-delimiter port #\[)
   (skip-whitespaces port)
   (cond
@@ -238,7 +238,7 @@
     #())
    (else
     ;; Read first element in array.
-    (let loop ((values (list (json-read port null))))
+    (let loop ((values (list (json-parse port))))
       (skip-whitespaces port)
       (let ((ch (peek-char port)))
         (cond
@@ -247,7 +247,7 @@
          ;; Handle comma (if there's a comma there should be another element).
          ((eqv? ch #\,)
           (read-char port)
-          (loop (cons (json-read port null) values)))
+          (loop (cons (json-parse port) values)))
          ;; End of array.
          ((eqv? ch #\])
           (read-char port)
@@ -354,14 +354,14 @@
 (define (json-read-false port)
   (expect-string port "false" #f))
 
-(define (json-read-null port null)
-  (expect-string port "null" null))
+(define (json-read-null port)
+  (expect-string port "null" 'null))
 
 ;;
 ;; Main parser functions
 ;;
 
-(define (json-read port null)
+(define (json-parse port)
   (skip-whitespaces port)
   (let ((ch (peek-char port)))
     (cond
@@ -370,34 +370,9 @@
      ;; Read JSON values.
      ((eqv? ch #\t) (json-read-true port))
      ((eqv? ch #\f) (json-read-false port))
-     ((eqv? ch #\n) (json-read-null port null))
-     ((eqv? ch #\{) (json-read-object port null))
-     ((eqv? ch #\[) (json-read-array port null))
+     ((eqv? ch #\n) (json-read-null port))
+     ((eqv? ch #\{) (json-read-object port))
+     ((eqv? ch #\[) (json-read-array port))
      ((eqv? ch #\") (json-read-string port))
      ;; Anything else should be a number.
      (else (json-read-number port)))))
-
-;;
-;; Public procedures
-;;
-
-(define* (json-parse #:optional
-                    (port (current-input-port)) (concatenated #f))
-  "Parse a JSON document into native. Takes one optional argument,
-@var{port}, which defaults to the current input port from where the JSON
-document is read. It also takes a few of keyword arguments: @{null}: value for
-JSON's null, it defaults to the 'null symbol, @{ordered} to indicate whether
-JSON objects order should be preserved or not (the default) and @{concatenated}
-which can be used to tell the parser that more JSON documents might come after a
-properly parsed document."
-  (let loop ((value (json-read port 'null)))
-    ;; Skip any trailing whitespaces.
-    (skip-whitespaces port)
-    (cond
-     ;; If we reach the end the parsing succeeded.
-     ((eof-object? (peek-char port)) value)
-     ;; If there's anything else other than the end, check if user wants to keep
-     ;; parsing concatenated valid JSON documents, otherwise parser fails.
-     (else
-      (cond (concatenated value)
-            (else (json-exception port)))))))
