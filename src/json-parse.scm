@@ -34,20 +34,17 @@
     (else #f)))
 
 (define (json-whitespace? c)
-  (case c
-    ((#\sp #\ht #\lf #\cr) #t)
-    (else #f)))
+  (char-whitespace? c))
 
 (define (json-control-char? ch)
   (<= (char->integer ch) #x1F))
 
 (define (json-skip-whitespaces port)
-  (let ((ch (peek-char port)))
-    (cond
-     ((json-whitespace? ch)
-      (read-char port)
-      (json-skip-whitespaces port))
-     (else *unspecified*))))
+  (let loop ()
+    (let ((ch (peek-char port)))
+      (when (json-whitespace? ch)
+        (read-char port)
+        (loop)))))
 
 (define (json-expect-string port expected return)
   (let loop ((n 0))
@@ -246,7 +243,7 @@
          ;; End of array.
          ((eqv? ch #\])
           (read-char port)
-          (list->vector (reverse! values)))
+          (list->vector (reverse values)))
          ;; Anything else other than comma and end of array is wrong.
          (else (json-exception port))))))))
 
@@ -314,11 +311,11 @@
      ((eqv? ch #\") #\")
      ((eqv? ch #\\) #\\)
      ((eqv? ch #\/) #\/)
-     ((eqv? ch #\b) #\bs)
-     ((eqv? ch #\f) #\ff)
-     ((eqv? ch #\n) #\lf)
-     ((eqv? ch #\r) #\cr)
-     ((eqv? ch #\t) #\ht)
+     ((eqv? ch #\b) (integer->char 8))
+     ((eqv? ch #\f) (integer->char 12))
+     ((eqv? ch #\n) (integer->char 10))
+     ((eqv? ch #\r) (integer->char 13))
+     ((eqv? ch #\t) (integer->char 9))
      ((eqv? ch #\u) (json-read-unicode-char port))
      (else (json-exception port)))))
 
@@ -331,7 +328,7 @@
      ;; Unescaped control characters are not allowed.
      ((json-control-char? ch) (json-exception port))
      ;; End of string.
-     ((eqv? ch #\") (reverse-list->string chars))
+     ((eqv? ch #\") (list->string (reverse chars)))
      ;; Escaped characters.
      ((eqv? ch #\\)
       (loop (cons (json-read-control-char port) chars) (read-char port)))
