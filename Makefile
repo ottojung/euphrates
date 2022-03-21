@@ -1,31 +1,41 @@
 
+SUBMODULES = deps/czempak/.git
+
+CZEMPAK = CZEMPAK_ROOT=$(PWD)/.czempak-root ./build/czempak
+
 run:
-	czempak run test/main.scm
+	$(CZEMPAK) run test/main.scm
 
-cleanrun:
-	CZEMPAK_ROOT=.czempak-root $(MAKE) cleanrun-s
+all: build/czempak
+	$(CZEMPAK) build test/main.scm
 
-cleanrun-s: | clean-czempak run run-inlined
-
-clean-czempak:
-	rm -rf .czempak-*
+cleanrun: | clean run run-inlined
 
 clean:
+	git submodule foreach --recursive 'git clean -dfx'
 	git clean -dfx
+
+clean-czempak:
+	rm -rf $(PWD)/.czempak-root
 
 run-inlined:
 	echo '(inlined-dest inlined) ?' | \
-		czempak build test/main.scm | \
+		$(CZEMPAK) build test/main.scm | \
 		guile -c '(load (cdr (car (read))))'
 
 get-inlined:
 	echo '(inlined-dest inlined) ?' | \
-		czempak build test/main.scm | \
+		$(CZEMPAK) build test/main.scm | \
 		guile -c '(display (cdr (car (read))))'
 
-time: | clean-czempak time-build
+time: | clean-czempak build/czempak
+	time sh -c "echo | $(CZEMPAK) build test/main.scm"
 
-time-build:
-	CZEMPAK_ROOT=.czempak-root $(MAKE) time-build-s
-time-build-s: clean-czempak
-	time sh -c "echo | czempak build test/main.scm"
+build/czempak: $(SUBMODULES)
+	cd deps/czempak && $(MAKE) PREFIXBIN=$(PWD)/build
+
+deps/czempak/.git:
+	git submodule update --init
+
+build:
+	mkdir -p "$@"
