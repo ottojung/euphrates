@@ -126,6 +126,7 @@
 %use (list-chunks) "./src/list-chunks.scm"
 %use (list-windows) "./src/list-windows.scm"
 %use (list-length=<?) "./src/list-length-geq-q.scm"
+%use (list-length=) "./src/list-length-eq.scm"
 %use (compose-under-par) "./src/compose-under-par.scm"
 %use (print-in-window) "./src/print-in-window.scm"
 %use (print-in-frame) "./src/print-in-frame.scm"
@@ -2455,6 +2456,18 @@
   (assert (list-length=<? 0 '()))
   (assert (list-length=<? -3 '(1 2)))
   (assert (list-length=<? -3 '()))
+
+  )
+
+;; list-length=
+(let ()
+
+  (assert (not (list-length= 3 '(1 2 3 4 5 6))))
+  (assert (list-length= 3 '(1 2 3)))
+  (assert (not (list-length= 3 '(1 2))))
+  (assert (list-length= 0 '()))
+  (assert (not (list-length= -3 '(1 2))))
+  (assert (not (list-length= -3 '())))
 
   )
 
