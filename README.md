@@ -7,6 +7,7 @@ Personal all-in-one library for schemes.
 
 - CFG-based CLI parsing `src/define-cli.scm`
 - Embedabble mini prolog `src/profun.scm`
+- JSON parser `src/json-parse.scm`
 - Petri networks `src/petri.scm`
   - with `profun` integration `src/petri-net-parse-profun.scm`
 - Dynamic threading environment `src/dynamic-thread-*.scm`
