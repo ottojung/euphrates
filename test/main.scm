@@ -132,6 +132,7 @@
 %use (print-in-frame) "./src/print-in-frame.scm"
 %use (string-split-3) "./src/string-split-3.scm"
 %use (json-parse) "./src/json-parse.scm"
+%use (make-prefixtree prefixtree-add! prefixtree-ref prefixtree-ref-closest prefixtree->tree) "./src/prefixtree.scm"
 
 (let ()
   (catch-any
@@ -2757,6 +2758,53 @@
        inp (lambda (p) (json-parse p))))
     (assert= '(("bye" . null) ("hello" . #t))
              parsed)))
+
+;; prefixtree
+(let ()
+  (define root (make-prefixtree 'r))
+  (assert= '(r)
+           (prefixtree->tree root))
+
+  (prefixtree-add! root '(1 2 3 4) 'a)
+  (assert= '(r ((1 . ?) ((2 . ?) ((3 . ?) ((4 . a))))))
+           (prefixtree->tree root))
+
+  (prefixtree-add! root '(1 2 3 5) 'b)
+  (prefixtree-add! root '(1 2 3 6) 'c)
+  (assert= '(r ((1 . ?) ((2 . ?) ((3 . ?) ((6 . c)) ((5 . b)) ((4 . a))))))
+           (prefixtree->tree root))
+
+  (prefixtree-add! root '(1 2 7 6) 'd)
+  (prefixtree-add! root '(1 2 7 8) 'e)
+  (assert= '(r ((1 . ?) ((2 . ?) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c)) ((5 . b)) ((4 . a))))))
+           (prefixtree->tree root))
+
+  (prefixtree-add! root '(1 2) 'f)
+  (assert= '(r ((1 . ?) ((2 . f) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c)) ((5 . b)) ((4 . a))))))
+           (prefixtree->tree root))
+
+  (prefixtree-add! root '(1 2 3 6 9) 'g)
+  (assert= '(r ((1 . ?) ((2 . f) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c) ((9 . g))) ((5 . b)) ((4 . a))))))
+           (prefixtree->tree root))
+
+  (assert= 'f (prefixtree-ref root '(1 2) #f))
+  (assert= 'c (prefixtree-ref root '(1 2 3 6) #f))
+  (assert= #f (prefixtree-ref root '(1 2 3 6 7) #f))
+  (assert= #f (prefixtree-ref root '(1 2 3 8) #f))
+  (assert= #f (prefixtree-ref root '(1 2 3) #f))
+  (assert= #f (prefixtree-ref root '(1 8) #f))
+  (assert= #f (prefixtree-ref root '(1 6) #f))
+  (assert= #f (prefixtree-ref root '(1 3 6) #f))
+
+  (assert= '(f) (prefixtree-ref-closest root '(1 2)))
+  (assert= '(c) (prefixtree-ref-closest root '(1 2 3 6)))
+  (assert= '() (prefixtree-ref-closest root '(1 2 3 6 7)))
+  (assert= '() (prefixtree-ref-closest root '(1 2 3 8)))
+  (assert= '() (prefixtree-ref-closest root '(1 2 3)))
+  (assert= '(e) (prefixtree-ref-closest root '(1 8)))
+  (assert= '(d c) (prefixtree-ref-closest root '(1 6)))
+  (assert= '(c) (prefixtree-ref-closest root '(1 3 6)))
+  )
 
 (display "All good\n")
 
