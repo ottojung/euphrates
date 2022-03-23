@@ -15,7 +15,7 @@
 %run guile
 
 %var make-prefixtree
-%var prefixtree-add!
+%var prefixtree-set!
 %var prefixtree-ref
 %var prefixtree-ref-closest
 %var prefixtree->tree
@@ -28,7 +28,7 @@
 (define (make-prefixtree value)
   (prefixtree value '()))
 
-(define (prefixtree-add! this key-sequence value)
+(define (prefixtree-set! this key-sequence value)
   (let loop ((this this) (key-sequence key-sequence))
     (if (null? key-sequence)
         (set-prefixtree-value! this value)

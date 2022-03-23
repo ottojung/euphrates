@@ -132,7 +132,7 @@
 %use (print-in-frame) "./src/print-in-frame.scm"
 %use (string-split-3) "./src/string-split-3.scm"
 %use (json-parse) "./src/json-parse.scm"
-%use (make-prefixtree prefixtree-add! prefixtree-ref prefixtree-ref-closest prefixtree->tree) "./src/prefixtree.scm"
+%use (make-prefixtree prefixtree-set! prefixtree-ref prefixtree-ref-closest prefixtree->tree) "./src/prefixtree.scm"
 
 (let ()
   (catch-any
@@ -2765,29 +2765,29 @@
   (assert= '(r)
            (prefixtree->tree root))
 
-  (prefixtree-add! root '(1 2 3 4) 'a)
+  (prefixtree-set! root '(1 2 3 4) 'a)
   (assert= '(r ((1 . ?) ((2 . ?) ((3 . ?) ((4 . a))))))
            (prefixtree->tree root))
 
-  (prefixtree-add! root '(1 2 3 5) 'b)
-  (prefixtree-add! root '(1 2 3 6) 'c)
+  (prefixtree-set! root '(1 2 3 5) 'b)
+  (prefixtree-set! root '(1 2 3 6) 'c)
   (assert= '(r ((1 . ?) ((2 . ?) ((3 . ?) ((6 . c)) ((5 . b)) ((4 . a))))))
            (prefixtree->tree root))
 
-  (prefixtree-add! root '(1 2 7 6) 'd)
-  (prefixtree-add! root '(1 2 7 8) 'e)
+  (prefixtree-set! root '(1 2 7 6) 'd)
+  (prefixtree-set! root '(1 2 7 8) 'e)
   (assert= '(r ((1 . ?) ((2 . ?) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c)) ((5 . b)) ((4 . a))))))
            (prefixtree->tree root))
 
-  (prefixtree-add! root '(1 2) 'f)
+  (prefixtree-set! root '(1 2) 'f)
   (assert= '(r ((1 . ?) ((2 . f) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c)) ((5 . b)) ((4 . a))))))
            (prefixtree->tree root))
 
-  (prefixtree-add! root '(1 2 3 6 9) 'g)
+  (prefixtree-set! root '(1 2 3 6 9) 'g)
   (assert= '(r ((1 . ?) ((2 . f) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c) ((9 . g))) ((5 . b)) ((4 . a))))))
            (prefixtree->tree root))
 
-  (prefixtree-add! root '(1 2 3 6 9) 'h)
+  (prefixtree-set! root '(1 2 3 6 9) 'h)
   (assert= '(r ((1 . ?) ((2 . f) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c) ((9 . h))) ((5 . b)) ((4 . a))))))
            (prefixtree->tree root))
 
