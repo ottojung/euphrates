@@ -2787,6 +2787,10 @@
   (assert= '(r ((1 . ?) ((2 . f) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c) ((9 . g))) ((5 . b)) ((4 . a))))))
            (prefixtree->tree root))
 
+  (prefixtree-add! root '(1 2 3 6 9) 'h)
+  (assert= '(r ((1 . ?) ((2 . f) ((7 . ?) ((8 . e)) ((6 . d))) ((3 . ?) ((6 . c) ((9 . h))) ((5 . b)) ((4 . a))))))
+           (prefixtree->tree root))
+
   (assert= 'f (prefixtree-ref root '(1 2) #f))
   (assert= 'c (prefixtree-ref root '(1 2 3 6) #f))
   (assert= #f (prefixtree-ref root '(1 2 3 6 7) #f))
