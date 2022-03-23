@@ -18,6 +18,7 @@
 %var prefixtree-set!
 %var prefixtree-ref
 %var prefixtree-ref-closest
+%var prefixtree-ref-furthest
 %var prefixtree->tree
 
 %use (prefixtree prefixtree? prefixtree-value set-prefixtree-value! prefixtree-children set-prefixtree-children!) "./prefixtree-obj.scm"
@@ -79,6 +80,24 @@
                append
                (map (lambda (child) (loop (cdr child) key-sequence))
                     children)))))))
+
+(define (prefixtree-ref-furthest this key-sequence)
+  (let loop ((this this) (key-sequence key-sequence))
+    (if (null? key-sequence)
+        (prefixtree-value this)
+        (let* ((key (car key-sequence))
+               (children (prefixtree-children this))
+               (existing (list-find-first
+                          (lambda (child-pair)
+                            (define child-key (car child-pair))
+                            (equal? key child-key))
+                          #f children)))
+          (if existing
+              (let ((rec (loop (cdr existing) (cdr key-sequence))))
+                (if (eq? rec prefixtree-novalue)
+                    (prefixtree-value this)
+                    rec))
+              (prefixtree-value this))))))
 
 (define (prefixtree->tree this)
   (let loop ((this this))
