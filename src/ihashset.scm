@@ -9,6 +9,7 @@
 %var make-hashset
 %var list->hashset
 %var vector->hashset
+%var hashset-length
 %var hashset->list
 %var hashset-equal?
 %var hashset-ref
@@ -48,6 +49,9 @@
       (vector->hashset collection))
      (else
       (raisu 'expected-list? collection))))))
+
+(define (hashset-length S)
+  (hashmap-count (hashset-value S)))
 
 (define (hashset->list S)
   (map car (hashmap->alist (hashset-value S))))
