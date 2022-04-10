@@ -14,9 +14,11 @@
     (list->string
      (let loop ((buf '()))
        (let ((c (get-char port)))
-         (if (or (eof-object? c)
-                 (equal? #\newline c))
-             (reverse buf)
-             (loop (cons c buf)))))))))
+         (cond
+          ((eof-object? c)
+           (if (null? buf) c (reverse buf)))
+          ((equal? #\newline c)
+           (reverse buf))
+          (else (loop (cons c buf))))))))))
 
 %end
