@@ -11,14 +11,14 @@
   (case-lambda
    (() (read-string-line (current-input-port)))
    ((port)
-    (list->string
-     (let loop ((buf '()))
-       (let ((c (get-char port)))
-         (cond
-          ((eof-object? c)
-           (if (null? buf) c (reverse buf)))
-          ((equal? #\newline c)
-           (reverse buf))
-          (else (loop (cons c buf))))))))))
+    (let loop ((buf '()))
+      (let ((c (get-char port)))
+        (cond
+         ((eof-object? c)
+          (if (null? buf) c
+              (list->string (reverse buf))))
+         ((equal? #\newline c)
+          (list->string (reverse buf)))
+         (else (loop (cons c buf)))))))))
 
 %end
