@@ -3,7 +3,7 @@ SUBMODULES = deps/czempak/.git
 
 CZEMPAK = CZEMPAK_ROOT=$(PWD)/.czempak-root ./build/czempak
 
-run:
+run: build/czempak
 	$(CZEMPAK) run test/main.scm
 
 all: build/czempak
@@ -31,7 +31,7 @@ get-inlined:
 time: | clean-czempak build/czempak
 	time sh -c "echo | $(CZEMPAK) build test/main.scm"
 
-build/czempak: $(SUBMODULES)
+build/czempak: $(SUBMODULES) build
 	cd deps/czempak && $(MAKE) PREFIXBIN=$(PWD)/build
 
 deps/czempak/.git:
