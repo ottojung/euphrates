@@ -133,6 +133,7 @@
 %use (string-split-3) "./src/string-split-3.scm"
 %use (json-parse) "./src/json-parse.scm"
 %use (make-prefixtree prefixtree-set! prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree->tree) "./src/prefixtree.scm"
+%use (list-levenshtein-distance) "./src/list-levenshtein-distance.scm"
 
 (let ()
   (catch-any
@@ -2820,6 +2821,21 @@
   (assert= 'r (prefixtree-ref-furthest root '(1 6)))
   (assert= 'r (prefixtree-ref-furthest root '(1 3 6)))
   (assert= 'r (prefixtree-ref-furthest root '()))
+  )
+
+;; list-levenshtein-distance
+(let ()
+  (define (test n a b)
+    (assert= n (list-levenshtein-distance
+                (string->list a)
+                (string->list b))))
+
+  (test 1 "kitten" "sitten")
+  (test 1 "sitten" "sittin")
+  (test 1 "sittin" "sitting")
+  (test 2 "kitten" "sittin")
+  (test 2 "sitten" "sitting")
+  (test 3 "kitten" "sitting")
   )
 
 (display "All good\n")
