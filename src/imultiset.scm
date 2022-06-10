@@ -77,6 +77,6 @@
   (hashmap-foreach
    (lambda (key value)
      (when (predicate key value)
-       (hashmap-set! R key value)))
+       (hashmap-set! RH key value)))
    H)
   R)
