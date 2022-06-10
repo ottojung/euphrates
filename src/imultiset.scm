@@ -73,9 +73,10 @@
 (define (multiset-filter S predicate)
   (define H (multiset-value S))
   (define R (list->multiset '()))
+  (define RH (multiset-value R))
   (hashmap-foreach
    (lambda (key value)
-     (when (predicate key)
-       (multiset-add! key)))
+     (when (predicate key value)
+       (hashmap-set! R key value)))
    H)
   R)
