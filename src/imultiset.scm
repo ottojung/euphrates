@@ -13,6 +13,7 @@
 %var multiset-equal?
 %var multiset-ref
 %var multiset-add!
+%var multiset-filter
 
 (define (list->multiset lst)
   (multiset
@@ -39,7 +40,7 @@
    ((vector? collection)
     (vector->multiset collection))
    (else
-    (raisu 'expected-list? collection))))
+    (raisu 'expected-list-or-vector collection))))
 
 (define (multiset->list S)
   (map car (hashmap->alist (multiset-value S))))
@@ -68,3 +69,13 @@
   (hashmap-set! (multiset-value H)
                 key
                 (+ 1 (hashmap-ref (multiset-value H) key 0))))
+
+(define (multiset-filter S predicate)
+  (define H (multiset-value S))
+  (define R (list->multiset '()))
+  (hashmap-foreach
+   (lambda (key value)
+     (when (predicate key)
+       (multiset-add! key)))
+   H)
+  R)
