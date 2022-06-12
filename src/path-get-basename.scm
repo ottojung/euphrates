@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -16,14 +16,11 @@
 
 %var path-get-basename
 
-%use (list-split-on) "./list-split-on.scm"
+%use (string-split/simple) "./list-split-on.scm"
 %use (list-last) "./list-last.scm"
 
 (define (path-get-basename path)
-  (list->string
-   (list-last
-    (list-split-on
-     (lambda (c) (equal? #\/ c))
-     (string->list path)))))
+  (list-last
+   (string-split/simple path #\/)))
 
 
