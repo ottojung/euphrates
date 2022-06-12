@@ -24,7 +24,8 @@
   (let loop ((filled-out filled-out))
     (unless (null? filled-out)
       (unless (number? (car filled-out))
-        (raisu 'bad-format:expected-all-numbers))))
+        (raisu 'bad-format:expected-all-numbers))
+      (loop (cdr filled-out))))
 
   (+ (* (list-ref filled-out 0) 24 60 60)
      (* (list-ref filled-out 1) 60 60)
