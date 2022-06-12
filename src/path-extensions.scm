@@ -4,6 +4,9 @@
 ;; Returns leftmost extension with a dot or ""
 %var path-extensions
 
+%use (path-get-basename) "./path-get-basename.scm"
+
 (define (path-extensions str)
-  (let ((index (string-index str #\.)))
-    (if index (string-drop str index) "")))
+  (define basename (path-get-basename str))
+  (let ((index (string-index basename #\.)))
+    (if index (string-drop basename index) "")))
