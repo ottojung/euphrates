@@ -134,6 +134,7 @@
 %use (json-parse) "./src/json-parse.scm"
 %use (make-prefixtree prefixtree-set! prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree->tree) "./src/prefixtree.scm"
 %use (list-levenshtein-distance) "./src/list-levenshtein-distance.scm"
+%use (string->seconds/columned) "./src/string-to-seconds-columned.scm"
 
 (let ()
   (catch-any
@@ -2836,6 +2837,19 @@
   (test 2 "kitten" "sittin")
   (test 2 "sitten" "sitting")
   (test 3 "kitten" "sitting")
+  )
+
+(let () ;; string->seconds/columned
+  (assert= 20 (string->seconds "20s"))
+  (assert= 80 (string->seconds "1m20s"))
+  (assert= (+ (* 2 60 60) (* 1 60) (* 20 1))
+           (string->seconds/columned "2:1:20"))
+  (assert= (+ (* 2 60 60) (* 1 60) (* 20 1))
+           (string->seconds/columned "02:01:20"))
+  (assert= (+ (* 2 60 60) (* 1 60) (* 20.341 1))
+           (string->seconds/columned "02:01:20.341"))
+  (assert= (+ (* 50 24 60 60) (* 2 60 60) (* 1 60) (* 20.341 1))
+           (string->seconds/columned "50:02:01:20.341"))
   )
 
 (display "All good\n")
