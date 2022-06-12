@@ -16,7 +16,7 @@
 
 %var path-get-basename
 
-%use (string-split/simple) "./list-split-on.scm"
+%use (string-split/simple) "./string-split-simple.scm"
 %use (list-last) "./list-last.scm"
 
 (define (path-get-basename path)
