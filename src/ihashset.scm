@@ -3,7 +3,7 @@
 
 %use (hashset hashset-value) "./hashset.scm"
 %use (hashmap) "./hashmap.scm"
-%use (hashmap-set! hashmap-copy hashmap-count hashmap-foreach hashmap-map hashmap->alist hashmap-clear!) "./ihashmap.scm"
+%use (hashmap-set! hashmap-copy hashmap-count hashmap-foreach hashmap-map hashmap->alist hashmap-clear! hashmap-delete!) "./ihashmap.scm"
 %use (raisu) "./raisu.scm"
 
 %var make-hashset
@@ -20,6 +20,7 @@
 %var hashset-foreach
 %var hashset-map
 %var hashset-clear!
+%var hashset-delete!
 
 (define (list->hashset lst)
   (hashset
@@ -137,3 +138,7 @@
 (define (hashset-clear! H)
   (define M (hashset-value H))
   (hashmap-clear! M))
+
+(define (hashset-delete! H key)
+  (define M (hashset-value H))
+  (hashmap-delete! M key))
