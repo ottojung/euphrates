@@ -64,6 +64,7 @@
 %use (time-get-monotonic-nanoseconds-timestamp) "./src/time-get-monotonic-nanoseconds-timestamp.scm"
 %use (path-without-extension) "./src/path-without-extension.scm"
 %use (path-extension) "./src/path-extension.scm"
+%use (path-extensions) "./src/path-extensions.scm"
 %use (shell-quote) "./src/shell-quote.scm"
 %use (immutable-hashmap) "./src/immutable-hashmap.scm"
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap->alist) "./src/i-immutable-hashmap.scm"
@@ -1118,6 +1119,22 @@
   (assert= "" (path-extension "hello"))
   (assert= "" (path-extension ""))
   (assert= "." (path-extension "."))
+  )
+
+;; path-extensions
+(let ()
+  (assert= ".txt" (path-extensions "hello.txt"))
+  (assert= ".txt.tar" (path-extensions "hello.txt.tar"))
+  (assert= ".txt.tar.enc" (path-extensions "hello.txt.tar.enc"))
+
+  (assert= ".txt" (path-extensions "/hi/hello.txt"))
+  (assert= ".txt.tar" (path-extensions "/hi/hello.txt.tar"))
+  (assert= ".txt.tar.enc" (path-extensions "/hi/hello.txt.tar.enc"))
+
+  (assert= "" (path-extensions "hello"))
+  (assert= "" (path-extensions ""))
+  (assert= "" (path-extensions "."))
+  (assert= "" (path-extensions ".."))
   )
 
 ;; shell-quote
