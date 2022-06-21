@@ -138,6 +138,7 @@
 %use (string->seconds/columned) "./src/string-to-seconds-columned.scm"
 %use (url-get-hostname-and-port) "./src/url-get-hostname-and-port.scm"
 %use (url-get-protocol) "./src/url-get-protocol.scm"
+%use (url-get-path) "./src/url-get-path.scm"
 
 (let ()
   (catch-any
@@ -2890,6 +2891,7 @@
 
 ;; url-get-hostname-and-port
 (let ()
+  (assert= #f (url-get-hostname-and-port "not-a-url"))
   (assert= "gnu.org" (url-get-hostname-and-port "https://gnu.org"))
   (assert= "gnu.org" (url-get-hostname-and-port "https://gnu.org/fun/humor.en.html"))
   (assert= "gnu.org" (url-get-hostname-and-port "blob:https://gnu.org/fun/humor.en.html"))
@@ -2902,6 +2904,7 @@
 
 ;; url-get-protocol
 (let ()
+  (assert= #f (url-get-protocol "not-a-url"))
   (assert= "https" (url-get-protocol "https://gnu.org"))
   (assert= "https" (url-get-protocol "https://gnu.org/fun/humor.en.html"))
   (assert= "blob:https" (url-get-protocol "blob:https://gnu.org/fun/humor.en.html"))
@@ -2911,6 +2914,20 @@
   (assert= "https" (url-get-protocol "https://gnu.org://hello"))
   (assert= "https" (url-get-protocol "https://gnu.org:80//hello"))
   (assert= "http" (url-get-protocol "http://gnu.org:80//hello"))
+  )
+
+;; url-get-path
+(let ()
+  (assert= #f (url-get-path "not-a-url"))
+  (assert= "/" (url-get-path "https://gnu.org"))
+  (assert= "/fun/humor.en.html" (url-get-path "https://gnu.org/fun/humor.en.html"))
+  (assert= "/fun/humor.en.html" (url-get-path "blob:https://gnu.org/fun/humor.en.html"))
+  (assert= "/" (url-get-path "https://gnu.org/"))
+  (assert= "//" (url-get-path "https://gnu.org//"))
+  (assert= "//" (url-get-path "https://gnu.org://"))
+  (assert= "//hello" (url-get-path "https://gnu.org://hello"))
+  (assert= "//hello" (url-get-path "https://gnu.org:80//hello"))
+  (assert= "//hello" (url-get-path "http://gnu.org:80//hello"))
   )
 
 (display "All good\n")
