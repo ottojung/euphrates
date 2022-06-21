@@ -139,6 +139,7 @@
 %use (url-get-hostname-and-port) "./src/url-get-hostname-and-port.scm"
 %use (url-get-protocol) "./src/url-get-protocol.scm"
 %use (url-get-path) "./src/url-get-path.scm"
+%use (url-decompose) "./src/url-decompose.scm"
 
 (let ()
   (catch-any
@@ -2928,6 +2929,57 @@
   (assert= "//hello" (url-get-path "https://gnu.org://hello"))
   (assert= "//hello" (url-get-path "https://gnu.org:80//hello"))
   (assert= "//hello" (url-get-path "http://gnu.org:80//hello"))
+  )
+
+;; url-decompose
+(let ()
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" "some-fragment")
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2#some-fragment"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "some-fragment?a=1&b=2")
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here#some-fragment?a=1&b=2"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" #f)
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" "")
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2#"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "" "some-fragment")
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?#some-fragment"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "some-fragment")
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here#some-fragment"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "")
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here#"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "" "")
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?#"))
+
+  (assert=
+   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f #f)
+   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here"))
+
+  (assert=
+   #("http" "gnu.org:80" "/" "a=1&b=c" #f)
+   (url-decompose "http://gnu.org:80/?a=1&b=c"))
+
+  (assert=
+   #("http" "gnu.org:80?a=1&b=c" "" #f #f)
+   (url-decompose "http://gnu.org:80?a=1&b=c"))
+
+  (assert=
+   #("http" "gnu.org:80" "/" #f #f)
+   (url-decompose "http://gnu.org:80/"))
   )
 
 (display "All good\n")
