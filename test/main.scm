@@ -137,6 +137,7 @@
 %use (list-levenshtein-distance) "./src/list-levenshtein-distance.scm"
 %use (string->seconds/columned) "./src/string-to-seconds-columned.scm"
 %use (url-get-hostname-and-port) "./src/url-get-hostname-and-port.scm"
+%use (url-get-protocol) "./src/url-get-protocol.scm"
 
 (let ()
   (catch-any
@@ -2897,6 +2898,19 @@
   (assert= "gnu.org:" (url-get-hostname-and-port "https://gnu.org://"))
   (assert= "gnu.org:" (url-get-hostname-and-port "https://gnu.org://hello"))
   (assert= "gnu.org:80" (url-get-hostname-and-port "https://gnu.org:80//hello"))
+  )
+
+;; url-get-protocol
+(let ()
+  (assert= "https" (url-get-protocol "https://gnu.org"))
+  (assert= "https" (url-get-protocol "https://gnu.org/fun/humor.en.html"))
+  (assert= "blob:https" (url-get-protocol "blob:https://gnu.org/fun/humor.en.html"))
+  (assert= "https" (url-get-protocol "https://gnu.org/"))
+  (assert= "https" (url-get-protocol "https://gnu.org//"))
+  (assert= "https" (url-get-protocol "https://gnu.org://"))
+  (assert= "https" (url-get-protocol "https://gnu.org://hello"))
+  (assert= "https" (url-get-protocol "https://gnu.org:80//hello"))
+  (assert= "http" (url-get-protocol "http://gnu.org:80//hello"))
   )
 
 (display "All good\n")
