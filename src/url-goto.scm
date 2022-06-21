@@ -18,7 +18,6 @@
 
 %use (url-decompose) "./url-decompose.scm"
 %use (raisu) "./raisu.scm"
-%use (string-drop-n) "./string-drop-n.scm"
 %use (url-get-protocol) "./url-get-protocol.scm"
 %use (url-get-hostname-and-port) "./url-get-hostname-and-port.scm"
 %use (url-get-path) "./url-get-path.scm"
@@ -29,8 +28,7 @@
 
   (cond
    ((string-prefix? "//" relative)
-    (string-append (url-get-protocol base)
-                   (string-drop-n 2 relative)))
+    (string-append (url-get-protocol base) ":" relative))
    ((string-prefix? "/" relative)
     (string-append (url-get-protocol base)
                    "://"
