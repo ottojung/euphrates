@@ -16,11 +16,8 @@
 
 %var url-get-protocol
 
-%use (string-split-3) "./string-split-3.scm"
+%use (url-decompose) "./url-decompose.scm"
 
 (define (url-get-protocol url)
-  (define-values (protocol _sep rest)
-    (string-split-3 "://" url))
-
-  (if (string-null? _sep) #f
-      protocol))
+  (let ((decomp (url-decompose url)))
+    (and decomp (vector-ref decomp 0))))

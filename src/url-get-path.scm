@@ -16,16 +16,8 @@
 
 %var url-get-path
 
-%use (string-split-3) "./string-split-3.scm"
+%use (url-decompose) "./url-decompose.scm"
 
 (define (url-get-path url)
-  (define-values (protocol _sep rest)
-    (string-split-3 "://" url))
-
-  (if (string-null? _sep) #f
-      (let ()
-        (define-values (hostname _slash rest2)
-          (string-split-3 "/" rest))
-
-        (if (string-null? _slash) "/"
-            (string-append _slash rest2)))))
+  (let ((decomp (url-decompose url)))
+    (and decomp (vector-ref decomp 2))))

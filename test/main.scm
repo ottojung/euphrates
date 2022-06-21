@@ -2920,7 +2920,7 @@
 ;; url-get-path
 (let ()
   (assert= #f (url-get-path "not-a-url"))
-  (assert= "/" (url-get-path "https://gnu.org"))
+  (assert= "" (url-get-path "https://gnu.org"))
   (assert= "/fun/humor.en.html" (url-get-path "https://gnu.org/fun/humor.en.html"))
   (assert= "/fun/humor.en.html" (url-get-path "blob:https://gnu.org/fun/humor.en.html"))
   (assert= "/" (url-get-path "https://gnu.org/"))
