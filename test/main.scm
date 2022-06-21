@@ -136,6 +136,7 @@
 %use (make-prefixtree prefixtree-set! prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree->tree) "./src/prefixtree.scm"
 %use (list-levenshtein-distance) "./src/list-levenshtein-distance.scm"
 %use (string->seconds/columned) "./src/string-to-seconds-columned.scm"
+%use (url-get-hostname-and-port) "./src/url-get-hostname-and-port.scm"
 
 (let ()
   (catch-any
@@ -2884,6 +2885,18 @@
            (string->seconds/columned "02:01:20.341"))
   (assert= (+ (* 50 24 60 60) (* 2 60 60) (* 1 60) (* 20.341 1))
            (string->seconds/columned "50:02:01:20.341"))
+  )
+
+;; url-get-hostname-and-port
+(let ()
+  (assert= "gnu.org" (url-get-hostname-and-port "https://gnu.org"))
+  (assert= "gnu.org" (url-get-hostname-and-port "https://gnu.org/fun/humor.en.html"))
+  (assert= "gnu.org" (url-get-hostname-and-port "blob:https://gnu.org/fun/humor.en.html"))
+  (assert= "gnu.org" (url-get-hostname-and-port "https://gnu.org/"))
+  (assert= "gnu.org" (url-get-hostname-and-port "https://gnu.org//"))
+  (assert= "gnu.org:" (url-get-hostname-and-port "https://gnu.org://"))
+  (assert= "gnu.org:" (url-get-hostname-and-port "https://gnu.org://hello"))
+  (assert= "gnu.org:80" (url-get-hostname-and-port "https://gnu.org:80//hello"))
   )
 
 (display "All good\n")
