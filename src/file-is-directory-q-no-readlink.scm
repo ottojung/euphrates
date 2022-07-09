@@ -19,7 +19,7 @@
 %for (COMPILER "guile")
 
 (define (file-is-directory?/no-readlink path)
-  (define s (stat path))
+  (define s (stat path #f))
   (and s (equal? 'directory (stat:type s))))
 
 %end

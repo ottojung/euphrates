@@ -19,7 +19,7 @@
 %for (COMPILER "guile")
 
 (define (file-is-regular-file?/no-readlink path)
-  (define s (stat path))
+  (define s (stat path #f))
   (and s (equal? 'regular (stat:type s))))
 
 %end
