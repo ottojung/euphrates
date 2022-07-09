@@ -14,11 +14,11 @@
 
 %run guile
 
-%var file-is-regular-file?
+%var file-is-regular-file?/no-readlink
 
 %for (COMPILER "guile")
 
-(define (file-is-regular-file? path)
+(define (file-is-regular-file?/no-readlink path)
   (define s (stat path))
   (and s (equal? 'regular (stat:type s))))
 
@@ -26,7 +26,7 @@
 
 %for (COMPILER "racket")
 
-(define (file-is-regular-file? path)
+(define (file-is-regular-file?/no-readlink path)
   (file-exists? path))
 
 %end

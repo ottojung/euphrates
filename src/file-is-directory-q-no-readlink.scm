@@ -14,11 +14,11 @@
 
 %run guile
 
-%var file-is-directory?
+%var file-is-directory?/no-readlink
 
 %for (COMPILER "guile")
 
-(define (file-is-directory? path)
+(define (file-is-directory?/no-readlink path)
   (define s (stat path))
   (and s (equal? 'directory (stat:type s))))
 
@@ -26,7 +26,7 @@
 
 %for (COMPILER "racket")
 
-(define (file-is-directory? path)
+(define (file-is-directory?/no-readlink path)
   (directory-exists? path))
 
 %end
