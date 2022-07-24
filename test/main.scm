@@ -141,6 +141,7 @@
 %use (url-get-path) "./src/url-get-path.scm"
 %use (url-decompose) "./src/url-decompose.scm"
 %use (url-goto) "./src/url-goto.scm"
+%use (path-normalize) "./src/path-normalize.scm"
 
 (let ()
   (catch-any
@@ -2981,6 +2982,45 @@
   (assert=
    #("http" "gnu.org:80" "/" #f #f)
    (url-decompose "http://gnu.org:80/"))
+  )
+
+(let () ;; path-normalize
+  (assert= "../../some/to/a/dir"
+           (path-normalize "../.././some/path/../to/a/dir/."))
+
+  (assert= "/some/to/a/dir"
+           (path-normalize "/../.././some/path/../to/a/dir/."))
+
+  (assert= "/some/to/a/dir"
+           (path-normalize "/../.././some/path/../to/a/dir/"))
+
+  (assert= "/some/to/a/dir"
+           (path-normalize "/../.././some/path/../to/a/dir///"))
+
+  (assert= "/some/to/a"
+           (path-normalize "/../.././some/path/../to/a/dir///.."))
+
+  (assert= "/"
+           (path-normalize "/"))
+  (assert= "/"
+           (path-normalize "//"))
+  (assert= "/"
+           (path-normalize "/////"))
+  (assert= "/"
+           (path-normalize "/././"))
+  (assert= "/"
+           (path-normalize "/././../.././"))
+  (assert= "/"
+           (path-normalize "/././../.././."))
+  (assert= "/"
+           (path-normalize "/././../.././.."))
+
+  (assert= ""
+           (path-normalize ""))
+
+  (assert= " "
+           (path-normalize " "))
+
   )
 
 ;; url-goto
