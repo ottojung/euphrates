@@ -143,6 +143,7 @@
 %use (url-goto) "./src/url-goto.scm"
 %use (path-normalize) "./src/path-normalize.scm"
 %use (catchu-case) "./src/catchu-case.scm"
+%use (random-variable-name) "./src/random-variable-name.scm"
 
 (let ()
   (catch-any
@@ -3059,6 +3060,12 @@
     (('some-bad-exception-type-2 arg1 arg2 arg3)
      (raisu 'bad-catch-2!))))
 
+  )
+
+(let () ;; random-variable-name
+  (define n1 (random-variable-name 20))
+  (assert= 20 (string-length n1))
+  (assert= n1 (string-downcase n1))
   )
 
 ;; url-goto
