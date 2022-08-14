@@ -9,7 +9,7 @@
 ;; faster!
 (define list-deduplicate/reverse
   (case-lambda
-   ((lst) (list-deduplicate lst identity))
+   ((lst) (list-deduplicate/reverse lst identity))
    ((lst projection)
     (let ((H (make-hashset)))
       (let lp ((buf lst) (mem '()))
