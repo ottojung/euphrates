@@ -16,8 +16,12 @@
              (loop (cdr lst) (cons x buf)))
             (else
              (let* ((last-number (string->number (list->string (reverse buf)))))
-               (case x
-                 ((#\s) (+ (* last-number 1) (loop (cdr lst) '())))
-                 ((#\m) (+ (* last-number 60) (loop (cdr lst) '())))
-                 ((#\h) (+ (* last-number 60 60) (loop (cdr lst) '())))
-                 (else (raisu 'bad-format-for-string->seconds s))))))))))
+               (or
+                (and
+                 last-number
+                 (case x
+                   ((#\s) (+ (* last-number 1) (loop (cdr lst) '())))
+                   ((#\m) (+ (* last-number 60) (loop (cdr lst) '())))
+                   ((#\h) (+ (* last-number 60 60) (loop (cdr lst) '())))
+                   (else #f)))
+                (raisu 'bad-format-for-string->seconds s)))))))))
