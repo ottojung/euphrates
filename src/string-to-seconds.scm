@@ -1,7 +1,7 @@
 
 %run guile
 
-;; accepts format like "2h30m" or "30m2h" or "2h20s3m"
+;; accepts format like "2h30m" or "30m2h" or "2h20s3m" or "2.5h20s3m"
 %var string->seconds
 
 %use (raisu) "./raisu.scm"
@@ -12,7 +12,7 @@
     (if (null? lst) 0
         (let ((x (car lst)))
           (case x
-            ((#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9)
+            ((#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\.)
              (loop (cdr lst) (cons x buf)))
             (else
              (let* ((last-number (string->number (list->string (reverse buf)))))
