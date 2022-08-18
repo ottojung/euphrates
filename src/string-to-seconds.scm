@@ -21,7 +21,9 @@
                  last-number
                  (case x
                    ((#\s) (+ (* last-number 1) (loop (cdr lst) '())))
-                   ((#\m) (+ (* last-number 60) (loop (cdr lst) '())))
-                   ((#\h) (+ (* last-number 60 60) (loop (cdr lst) '())))
+                   ((#\m) (+ (* last-number 1 60) (loop (cdr lst) '())))
+                   ((#\h) (+ (* last-number 1 60 60) (loop (cdr lst) '())))
+                   ((#\d) (+ (* last-number 1 60 60 24) (loop (cdr lst) '())))
+                   ((#\w) (+ (* last-number 1 60 60 24 7) (loop (cdr lst) '())))
                    (else #f)))
                 (raisu 'bad-format-for-string->seconds s)))))))))
