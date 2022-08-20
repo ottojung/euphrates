@@ -26,7 +26,7 @@
 %var :random-source-make-reals
 %var :random-source-current-time
 
-%use (time-get-monotonic-nanoseconds-timestamp) "./time-get-monotonic-nanoseconds-timestamp.scm"
+%use (time-get-fast-parameterizeable-timestamp) "./time-get-fast-parameterizeable-timestamp.scm"
 
 (define (:random-source-make a0 a1 a2 a3 a4 a5)
   (vector a0 a1 a2 a3 a4 a5))
@@ -54,4 +54,4 @@
   (vector-ref s 5))
 
 (define (:random-source-current-time)
-  (time-get-monotonic-nanoseconds-timestamp))
+  (time-get-fast-parameterizeable-timestamp))
