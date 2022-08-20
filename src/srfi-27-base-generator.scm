@@ -14,142 +14,142 @@
 
 ;; Originally taken from: https://github.com/scheme-requests-for-implementation/srfi-27/blob/master/reference/mrg32k3a-a.scm
 
-; GENERIC PART OF MRG32k3a-GENERATOR FOR SRFI-27
-; ==============================================
-;
-; Sebastian.Egner@philips.com, 2002.
-;
-; This is the generic R5RS-part of the implementation of the MRG32k3a
-; generator to be used in SRFI-27. It is based on a separate implementation
-; of the core generator (presumably in native code) and on code to
-; provide essential functionality not available in R5RS (see below).
-;
-; compliance:
-;   Scheme R5RS with integer covering at least {-2^53..2^53-1}.
-;   In addition,
-;     SRFI-23: error
-;
-; history of this file:
-;   SE, 22-Mar-2002: refactored from earlier versions
-;   SE, 25-Mar-2002: pack/unpack need not allocate
-;   SE, 27-Mar-2002: changed interface to core generator
-;   SE, 10-Apr-2002: updated spec of mrg32k3a-random-integer
+;; GENERIC PART OF MRG32k3a-GENERATOR FOR SRFI-27
+;; ==============================================
+;;
+;; Sebastian.Egner@philips.com, 2002.
+;;
+;; This is the generic R5RS-part of the implementation of the MRG32k3a
+;; generator to be used in SRFI-27. It is based on a separate implementation
+;; of the core generator (presumably in native code) and on code to
+;; provide essential functionality not available in R5RS (see below).
+;;
+;; compliance:
+;;   Scheme R5RS with integer covering at least {-2^53..2^53-1}.
+;;   In addition,
+;;     SRFI-23: error
+;;
+;; history of this file:
+;;   SE, 22-Mar-2002: refactored from earlier versions
+;;   SE, 25-Mar-2002: pack/unpack need not allocate
+;;   SE, 27-Mar-2002: changed interface to core generator
+;;   SE, 10-Apr-2002: updated spec of mrg32k3a-random-integer
 
-; Generator
-; =========
-;
-; Pierre L'Ecuyer's MRG32k3a generator is a Combined Multiple Recursive
-; Generator. It produces the sequence {(x[1,n] - x[2,n]) mod m1 : n}
-; defined by the two recursive generators
-;
-;   x[1,n] = (               a12 x[1,n-2] + a13 x[1,n-3]) mod m1,
-;   x[2,n] = (a21 x[2,n-1] +                a23 x[2,n-3]) mod m2,
-;
-; where the constants are
-;   m1       = 4294967087 = 2^32 - 209    modulus of 1st component
-;   m2       = 4294944443 = 2^32 - 22853  modulus of 2nd component
-;   a12      =  1403580                   recursion coefficients
-;   a13      =  -810728
-;   a21      =   527612
-;   a23      = -1370589
-;
-; The generator passes all tests of G. Marsaglia's Diehard testsuite.
-; Its period is (m1^3 - 1)(m2^3 - 1)/2 which is nearly 2^191.
-; L'Ecuyer reports: "This generator is well-behaved in all dimensions
-; up to at least 45: ..." [with respect to the spectral test, SE].
-;
-; The period is maximal for all values of the seed as long as the
-; state of both recursive generators is not entirely zero.
-;
-; As the successor state is a linear combination of previous
-; states, it is possible to advance the generator by more than one
-; iteration by applying a linear transformation. The following
-; publication provides detailed information on how to do that:
-;
-;    [1] P. L'Ecuyer, R. Simard, E. J. Chen, W. D. Kelton:
-;        An Object-Oriented Random-Number Package With Many Long
-;        Streams and Substreams. 2001.
-;        To appear in Operations Research.
-;
-; Arithmetics
-; ===========
-;
-; The MRG32k3a generator produces values in {0..2^32-209-1}. All
-; subexpressions of the actual generator fit into {-2^53..2^53-1}.
-; The code below assumes that Scheme's "integer" covers this range.
-; In addition, it is assumed that floating point literals can be
-; read and there is some arithmetics with inexact numbers.
-;
-; However, for advancing the state of the generator by more than
-; one step at a time, the full range {0..2^32-209-1} is needed.
-
-
-; Required: Backbone Generator
-; ============================
-;
-; At this point in the code, the following procedures are assumed
-; to be defined to execute the core generator:
-;
-;   (mrg32k3a-pack-state unpacked-state) -> packed-state
-;   (mrg32k3a-unpack-state packed-state) -> unpacked-state
-;      pack/unpack a state of the generator. The core generator works
-;      on packed states, passed as an explicit argument, only. This
-;      allows native code implementations to store their state in a
-;      suitable form. Unpacked states are #(x10 x11 x12 x20 x21 x22)
-;      with integer x_ij. Pack/unpack need not allocate new objects
-;      in case packed and unpacked states are identical.
-;
-;   (mrg32k3a-random-range) -> m-max
-;   (mrg32k3a-random-integer packed-state range) -> x in {0..range-1}
-;      advance the state of the generator and return the next random
-;      range-limited integer.
-;        Note that the state is not necessarily advanced by just one
-;      step because we use the rejection method to avoid any problems
-;      with distribution anomalies.
-;        The range argument must be an exact integer in {1..m-max}.
-;      It can be assumed that range is a fixnum if the Scheme system
-;      has such a number representation.
-;
-;   (mrg32k3a-random-real packed-state) -> x in (0,1)
-;      advance the state of the generator and return the next random
-;      real number between zero and one (both excluded). The type of
-;      the result should be a flonum if possible.
-
-; Required: Record Data Type
-; ==========================
-;
-; At this point in the code, the following procedures are assumed
-; to be defined to create and access a new record data type:
-;
-;   (:random-source-make a0 a1 a2 a3 a4 a5) -> s
-;     constructs a new random source object s consisting of the
-;     objects a0 .. a5 in this order.
-;
-;   (:random-source? obj) -> bool
-;     tests if a Scheme object is a :random-source.
-;
-;   (:random-source-state-ref         s) -> a0
-;   (:random-source-state-set!        s) -> a1
-;   (:random-source-randomize!        s) -> a2
-;   (:random-source-pseudo-randomize! s) -> a3
-;   (:random-source-make-integers     s) -> a4
-;   (:random-source-make-reals        s) -> a5
-;     retrieve the values in the fields of the object s.
-
-; Required: Current Time as an Integer
-; ====================================
-;
-; At this point in the code, the following procedure is assumed
-; to be defined to obtain a value that is likely to be different
-; for each invokation of the Scheme system:
-;
-;   (:random-source-current-time) -> x
-;     an integer that depends on the system clock. It is desired
-;     that the integer changes as fast as possible.
+;; Generator
+;; =========
+;;
+;; Pierre L'Ecuyer's MRG32k3a generator is a Combined Multiple Recursive
+;; Generator. It produces the sequence {(x[1,n] - x[2,n]) mod m1 : n}
+;; defined by the two recursive generators
+;;
+;;   x[1,n] = (               a12 x[1,n-2] + a13 x[1,n-3]) mod m1,
+;;   x[2,n] = (a21 x[2,n-1] +                a23 x[2,n-3]) mod m2,
+;;
+;; where the constants are
+;;   m1       = 4294967087 = 2^32 - 209    modulus of 1st component
+;;   m2       = 4294944443 = 2^32 - 22853  modulus of 2nd component
+;;   a12      =  1403580                   recursion coefficients
+;;   a13      =  -810728
+;;   a21      =   527612
+;;   a23      = -1370589
+;;
+;; The generator passes all tests of G. Marsaglia's Diehard testsuite.
+;; Its period is (m1^3 - 1)(m2^3 - 1)/2 which is nearly 2^191.
+;; L'Ecuyer reports: "This generator is well-behaved in all dimensions
+;; up to at least 45: ..." [with respect to the spectral test, SE].
+;;
+;; The period is maximal for all values of the seed as long as the
+;; state of both recursive generators is not entirely zero.
+;;
+;; As the successor state is a linear combination of previous
+;; states, it is possible to advance the generator by more than one
+;; iteration by applying a linear transformation. The following
+;; publication provides detailed information on how to do that:
+;;
+;;    [1] P. L'Ecuyer, R. Simard, E. J. Chen, W. D. Kelton:
+;;        An Object-Oriented Random-Number Package With Many Long
+;;        Streams and Substreams. 2001.
+;;        To appear in Operations Research.
+;;
+;; Arithmetics
+;; ===========
+;;
+;; The MRG32k3a generator produces values in {0..2^32-209-1}. All
+;; subexpressions of the actual generator fit into {-2^53..2^53-1}.
+;; The code below assumes that Scheme's "integer" covers this range.
+;; In addition, it is assumed that floating point literals can be
+;; read and there is some arithmetics with inexact numbers.
+;;
+;; However, for advancing the state of the generator by more than
+;; one step at a time, the full range {0..2^32-209-1} is needed.
 
 
-; Accessing the State
-; ===================
+;; Required: Backbone Generator
+;; ============================
+;;
+;; At this point in the code, the following procedures are assumed
+;; to be defined to execute the core generator:
+;;
+;;   (mrg32k3a-pack-state unpacked-state) -> packed-state
+;;   (mrg32k3a-unpack-state packed-state) -> unpacked-state
+;;      pack/unpack a state of the generator. The core generator works
+;;      on packed states, passed as an explicit argument, only. This
+;;      allows native code implementations to store their state in a
+;;      suitable form. Unpacked states are #(x10 x11 x12 x20 x21 x22)
+;;      with integer x_ij. Pack/unpack need not allocate new objects
+;;      in case packed and unpacked states are identical.
+;;
+;;   (mrg32k3a-random-range) -> m-max
+;;   (mrg32k3a-random-integer packed-state range) -> x in {0..range-1}
+;;      advance the state of the generator and return the next random
+;;      range-limited integer.
+;;        Note that the state is not necessarily advanced by just one
+;;      step because we use the rejection method to avoid any problems
+;;      with distribution anomalies.
+;;        The range argument must be an exact integer in {1..m-max}.
+;;      It can be assumed that range is a fixnum if the Scheme system
+;;      has such a number representation.
+;;
+;;   (mrg32k3a-random-real packed-state) -> x in (0,1)
+;;      advance the state of the generator and return the next random
+;;      real number between zero and one (both excluded). The type of
+;;      the result should be a flonum if possible.
+
+;; Required: Record Data Type
+;; ==========================
+;;
+;; At this point in the code, the following procedures are assumed
+;; to be defined to create and access a new record data type:
+;;
+;;   (:random-source-make a0 a1 a2 a3 a4 a5) -> s
+;;     constructs a new random source object s consisting of the
+;;     objects a0 .. a5 in this order.
+;;
+;;   (:random-source? obj) -> bool
+;;     tests if a Scheme object is a :random-source.
+;;
+;;   (:random-source-state-ref         s) -> a0
+;;   (:random-source-state-set!        s) -> a1
+;;   (:random-source-randomize!        s) -> a2
+;;   (:random-source-pseudo-randomize! s) -> a3
+;;   (:random-source-make-integers     s) -> a4
+;;   (:random-source-make-reals        s) -> a5
+;;     retrieve the values in the fields of the object s.
+
+;; Required: Current Time as an Integer
+;; ====================================
+;;
+;; At this point in the code, the following procedure is assumed
+;; to be defined to obtain a value that is likely to be different
+;; for each invokation of the Scheme system:
+;;
+;;   (:random-source-current-time) -> x
+;;     an integer that depends on the system clock. It is desired
+;;     that the integer changes as fast as possible.
+
+
+;; Accessing the State
+;; ===================
 
 (define (mrg32k3a-state-ref packed-state)
   (cons 'lecuyer-mrg32k3a
@@ -181,40 +181,40 @@
       (error "malformed state" external-state)))
 
 
-; Pseudo-Randomization
-; ====================
-;
-; Reference [1] above shows how to obtain many long streams and
-; substream from the backbone generator.
-;
-; The idea is that the generator is a linear operation on the state.
-; Hence, we can express this operation as a 3x3-matrix acting on the
-; three most recent states. Raising the matrix to the k-th power, we
-; obtain the operation to advance the state by k steps at once. The
-; virtual streams and substreams are now simply parts of the entire
-; periodic sequence (which has period around 2^191).
-;
-; For the implementation it is necessary to compute with matrices in
-; the ring (Z/(m1*m1)*Z)^(3x3). By the Chinese-Remainder Theorem, this
-; is isomorphic to ((Z/m1*Z) x (Z/m2*Z))^(3x3). We represent such a pair
-; of matrices
-;   [ [[x00 x01 x02],
-;      [x10 x11 x12],
-;      [x20 x21 x22]], mod m1
-;     [[y00 y01 y02],
-;      [y10 y11 y12],
-;      [y20 y21 y22]]  mod m2]
-; as a vector of length 18 of the integers as writen above:
-;   #(x00 x01 x02 x10 x11 x12 x20 x21 x22
-;     y00 y01 y02 y10 y11 y12 y20 y21 y22)
-;
-; As the implementation should only use the range {-2^53..2^53-1}, the
-; fundamental operation (x*y) mod m, where x, y, m are nearly 2^32,
-; is computed by breaking up x and y as x = x1*w + x0 and y = y1*w + y0
-; where w = 2^16. In this case, all operations fit the range because
-; w^2 mod m is a small number. If proper multiprecision integers are
-; available this is not necessary, but pseudo-randomize! is an expected
-; to be called only occasionally so we do not provide this implementation.
+;; Pseudo-Randomization
+;; ====================
+;;
+;; Reference [1] above shows how to obtain many long streams and
+;; substream from the backbone generator.
+;;
+;; The idea is that the generator is a linear operation on the state.
+;; Hence, we can express this operation as a 3x3-matrix acting on the
+;; three most recent states. Raising the matrix to the k-th power, we
+;; obtain the operation to advance the state by k steps at once. The
+;; virtual streams and substreams are now simply parts of the entire
+;; periodic sequence (which has period around 2^191).
+;;
+;; For the implementation it is necessary to compute with matrices in
+;; the ring (Z/(m1*m1)*Z)^(3x3). By the Chinese-Remainder Theorem, this
+;; is isomorphic to ((Z/m1*Z) x (Z/m2*Z))^(3x3). We represent such a pair
+;; of matrices
+;;   [ [[x00 x01 x02],
+;;      [x10 x11 x12],
+;;      [x20 x21 x22]], mod m1
+;;     [[y00 y01 y02],
+;;      [y10 y11 y12],
+;;      [y20 y21 y22]]  mod m2]
+;; as a vector of length 18 of the integers as writen above:
+;;   #(x00 x01 x02 x10 x11 x12 x20 x21 x22
+;;     y00 y01 y02 y10 y11 y12 y20 y21 y22)
+;;
+;; As the implementation should only use the range {-2^53..2^53-1}, the
+;; fundamental operation (x*y) mod m, where x, y, m are nearly 2^32,
+;; is computed by breaking up x and y as x = x1*w + x0 and y = y1*w + y0
+;; where w = 2^16. In this case, all operations fit the range because
+;; w^2 mod m is a small number. If proper multiprecision integers are
+;; available this is not necessary, but pseudo-randomize! is an expected
+;; to be called only occasionally so we do not provide this implementation.
 
 (define mrg32k3a-m1 4294967087) ; modulus of component 1
 (define mrg32k3a-m2 4294944443) ; modulus of component 2
@@ -311,14 +311,14 @@
             1       0          0
             0       1          0))
 
-  ; check arguments
+  ;; check arguments
   (if (not (and (integer? i)
                 (exact? i)
                 (integer? j)
                 (exact? j)))
       (error "i j must be exact integer" i j))
 
-  ; precompute A^(2^127) and A^(2^76) only once
+  ;; precompute A^(2^127) and A^(2^76) only once
 
   (if (not mrg32k3a-generators)
       (set! mrg32k3a-generators
@@ -326,7 +326,7 @@
                   (power-power A  76)
                   (power A 16))))
 
-  ; compute M = A^(16 + i*2^127 + j*2^76)
+  ;; compute M = A^(16 + i*2^127 + j*2^76)
   (let ((M (product
             (list-ref mrg32k3a-generators 2)
             (product
@@ -343,16 +343,16 @@
       (vector-ref M 12)
       (vector-ref M 15)))))
 
-; True Randomization
-; ==================
-;
-; The value obtained from the system time is feed into a very
-; simple pseudo random number generator. This in turn is used
-; to obtain numbers to randomize the state of the MRG32k3a
-; generator, avoiding period degeneration.
+;; True Randomization
+;; ==================
+;;
+;; The value obtained from the system time is feed into a very
+;; simple pseudo random number generator. This in turn is used
+;; to obtain numbers to randomize the state of the MRG32k3a
+;; generator, avoiding period degeneration.
 
 (define (mrg32k3a-randomize-state state)
-  ;; G. Marsaglia's simple 16-bit generator with carry
+  ;;; G. Marsaglia's simple 16-bit generator with carry
   (let* ((m 65536)
 	 (x (modulo (:random-source-current-time) m)))
     (define (random-m)
@@ -362,7 +362,7 @@
     (define (random n)			; m < n < m^2
       (modulo (+ (* (random-m) m) (random-m)) n))
 
-					; modify the state
+					;; modify the state
     (let ((m1 mrg32k3a-m1)
 	  (m2 mrg32k3a-m2)
 	  (s (mrg32k3a-unpack-state state)))
@@ -376,13 +376,13 @@
 	(modulo (+ (vector-ref s 5) (random m2)) m2))))))
 
 
-; Large Integers
-; ==============
-;
-; To produce large integer random deviates, for n > m-max, we first
-; construct large random numbers in the range {0..m-max^k-1} for some
-; k such that m-max^k >= n and then use the rejection method to choose
-; uniformly from the range {0..n-1}.
+;; Large Integers
+;; ==============
+;;
+;; To produce large integer random deviates, for n > m-max, we first
+;; construct large random numbers in the range {0..m-max^k-1} for some
+;; k such that m-max^k >= n and then use the rejection method to choose
+;; uniformly from the range {0..n-1}.
 
 (define mrg32k3a-m-max
   (mrg32k3a-random-range))
@@ -404,14 +404,14 @@
              ((< x a) (quotient x mk-by-n)))))))
 
 
-; Multiple Precision Reals
-; ========================
-;
-; To produce multiple precision reals we produce a large integer value
-; and convert it into a real value. This value is then normalized.
-; The precision goal is unit <= 1/(m^k + 1), or 1/unit - 1 <= m^k.
-; If you know more about the floating point number types of the
-; Scheme system, this can be improved.
+;; Multiple Precision Reals
+;; ========================
+;;
+;; To produce multiple precision reals we produce a large integer value
+;; and convert it into a real value. This value is then normalized.
+;; The precision goal is unit <= 1/(m^k + 1), or 1/unit - 1 <= m^k.
+;; If you know more about the floating point number types of the
+;; Scheme system, this can be improved.
 
 (define (mrg32k3a-random-real-mp state unit)
   (do ((k 1 (+ k 1))
@@ -421,12 +421,12 @@
           (exact->inexact (+ (expt mrg32k3a-m-max k) 1))))))
 
 
-; Provide the Interface as Specified in the SRFI
-; ==============================================
-;
-; An object of type random-source is a record containing the procedures
-; as components. The actual state of the generator is stored in the
-; binding-time environment of make-random-source.
+;; Provide the Interface as Specified in the SRFI
+;; ==============================================
+;;
+;; An object of type random-source is a record containing the procedures
+;; as components. The actual state of the generator is stored in the
+;; binding-time environment of make-random-source.
 
 (define (make-random-source)
   (let ((state (mrg32k3a-pack-state ; make a new copy
@@ -483,7 +483,7 @@
 (define (random-source-pseudo-randomize! s i j)
   ((:random-source-pseudo-randomize! s) i j))
 
-; ---
+;; ---
 
 (define (random-source-make-integers s)
   ((:random-source-make-integers s)))
@@ -491,7 +491,7 @@
 (define (random-source-make-reals s . unit)
   (apply (:random-source-make-reals s) unit))
 
-; ---
+;; ---
 
 (define default-random-source
   (make-random-source))
