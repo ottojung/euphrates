@@ -222,7 +222,7 @@
 (define mrg32k3a-initial-state ; 0 3 6 9 12 15 of A^16, see below
   '#( 1062452522
       2961816100
-       342112271
+      0342112271
       2854655037
       3321940838
       3542344109))
@@ -354,26 +354,26 @@
 (define (mrg32k3a-randomize-state state)
   ;; G. Marsaglia's simple 16-bit generator with carry
   (let* ((m 65536)
-     (x (modulo (:random-source-current-time) m)))
+         (x (modulo (:random-source-current-time) m)))
     (define (random-m)
       (let ((y (modulo x m)))
-    (set! x (+ (* 30903 y) (quotient x m)))
-    y))
+        (set! x (+ (* 30903 y) (quotient x m)))
+        y))
     (define (random n)            ; m < n < m^2
       (modulo (+ (* (random-m) m) (random-m)) n))
 
     ;; modify the state
     (let ((m1 mrg32k3a-m1)
-      (m2 mrg32k3a-m2)
-      (s (mrg32k3a-unpack-state state)))
+          (m2 mrg32k3a-m2)
+          (s (mrg32k3a-unpack-state state)))
       (mrg32k3a-pack-state
        (vector
-    (+ 1 (modulo (+ (vector-ref s 0) (random (- m1 1))) (- m1 1)))
-    (modulo (+ (vector-ref s 1) (random m1)) m1)
-    (modulo (+ (vector-ref s 2) (random m1)) m1)
-    (+ 1 (modulo (+ (vector-ref s 3) (random (- m2 1))) (- m2 1)))
-    (modulo (+ (vector-ref s 4) (random m2)) m2)
-    (modulo (+ (vector-ref s 5) (random m2)) m2))))))
+        (+ 1 (modulo (+ (vector-ref s 0) (random (- m1 1))) (- m1 1)))
+        (modulo (+ (vector-ref s 1) (random m1)) m1)
+        (modulo (+ (vector-ref s 2) (random m1)) m1)
+        (+ 1 (modulo (+ (vector-ref s 3) (random (- m2 1))) (- m2 1)))
+        (modulo (+ (vector-ref s 4) (random m2)) m2)
+        (modulo (+ (vector-ref s 5) (random m2)) m2))))))
 
 
 ;; Large Integers
