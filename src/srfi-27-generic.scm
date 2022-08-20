@@ -16,8 +16,9 @@
 
 %run guile
 
-%var random-integer
-%var random-real
+%var default-random-source
+%var random-source-make-integers
+%var random-source-make-reals
 
 %use (:random-source-make :random-source? :random-source-state-ref :random-source-state-set! :random-source-randomize! :random-source-pseudo-randomize! :random-source-make-integers :random-source-make-reals :random-source-current-time) "./srfi-27-random-source-obj.scm"
 %use (mrg32k3a-pack-state mrg32k3a-unpack-state mrg32k3a-random-range mrg32k3a-random-integer mrg32k3a-random-real) "./srfi-27-backbone-generator.scm"
