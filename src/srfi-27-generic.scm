@@ -18,7 +18,6 @@
 
 %var default-random-source
 %var make-random-source
-%var random-source-make
 %var random-source?
 %var random-source-state-ref
 %var random-source-state-set!
