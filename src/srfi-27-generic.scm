@@ -28,6 +28,7 @@
 
 %use (:random-source-make :random-source? :random-source-state-ref :random-source-state-set! :random-source-randomize! :random-source-pseudo-randomize! :random-source-make-integers :random-source-make-reals :random-source-current-time) "./srfi-27-random-source-obj.scm"
 %use (mrg32k3a-pack-state mrg32k3a-unpack-state mrg32k3a-random-range mrg32k3a-random-integer mrg32k3a-random-real) "./srfi-27-backbone-generator.scm"
+%use (raisu) "./raisu.scm"
 
 ;; GENERIC PART OF MRG32k3a-GENERATOR FOR SRFI-27
 ;; ==============================================
@@ -177,7 +178,7 @@
              (exact? x)
              (<= 0 x (- m 1)))
         #t
-        (error "illegal value" x)))
+        (raisu 'illegal-value "Must be an exact integer" x)))
 
   (if (and (list? external-state)
            (= (length external-state) 7)
@@ -191,9 +192,10 @@
         (check-value (list-ref s 5) mrg32k3a-m2)
         (if (or (zero? (+ (list-ref s 0) (list-ref s 1) (list-ref s 2)))
                 (zero? (+ (list-ref s 3) (list-ref s 4) (list-ref s 5))))
-            (error "illegal degenerate state" external-state))
+            (raisu 'illegal-degenerate-state
+                   "illegal degenerate state" external-state))
         (mrg32k3a-pack-state (list->vector s)))
-      (error "malformed state" external-state)))
+      (raisu 'malformed-state "malformed state" external-state)))
 
 
 ;; Pseudo-Randomization
@@ -331,7 +333,8 @@
                 (exact? i)
                 (integer? j)
                 (exact? j)))
-      (error "i j must be exact integer" i j))
+      (raisu 'bad-randomizer-arguments
+             "i j must be exact integer" i j))
 
   ;; precompute A^(2^127) and A^(2^76) only once
 
@@ -459,7 +462,7 @@
        (lambda (n)
          (cond
           ((not (and (integer? n) (exact? n) (positive? n)))
-           (error "range must be exact positive integer" n))
+           (raisu 'bad-range-value "range must be exact positive integer" n))
           ((<= n mrg32k3a-m-max)
            (mrg32k3a-random-integer state n))
           (else
@@ -473,7 +476,7 @@
          (let ((unit (car args)))
            (cond
             ((not (and (real? unit) (< 0 unit 1)))
-             (error "unit must be real in (0,1)" unit))
+             (raisu 'bad-unit-value "unit must be real in (0,1)" unit))
             ((<= (- (/ 1 unit) 1) mrg32k3a-m1)
              (lambda ()
                (mrg32k3a-random-real state)))
@@ -481,7 +484,7 @@
              (lambda ()
                (mrg32k3a-random-real-mp state unit))))))
         (else
-         (error "illegal arguments" args)))))))
+         (raisu 'illegal-arguments "illegal arguments" args)))))))
 
 (define random-source?
   :random-source?)
