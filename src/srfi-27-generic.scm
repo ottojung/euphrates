@@ -17,6 +17,13 @@
 %run guile
 
 %var default-random-source
+%var make-random-source
+%var random-source-make
+%var random-source?
+%var random-source-state-ref
+%var random-source-state-set!
+%var random-source-randomize!
+%var random-source-pseudo-randomize!
 %var random-source-make-integers
 %var random-source-make-reals
 
@@ -476,6 +483,9 @@
                (mrg32k3a-random-real-mp state unit))))))
         (else
          (error "illegal arguments" args)))))))
+
+(define random-source?
+  :random-source?)
 
 (define (random-source-state-ref s)
   ((:random-source-state-ref s)))
