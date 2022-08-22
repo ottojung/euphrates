@@ -16,7 +16,7 @@
 
 %var path-get-dirname
 
-%use (string-split/simplie) "./string-split-simple.scm"
+%use (string-split/simple) "./string-split-simple.scm"
 %use (list-init) "./list-init.scm"
 
 (define (path-get-dirname path)
