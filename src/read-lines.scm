@@ -14,11 +14,15 @@
   (case-lambda
    ((path)
     (define p (if (port? path) path (open path O_RDONLY)))
-    (let loop ()
-      (define line (read-line p))
-      (cond
-       ((eof-object? line) '())
-       (else (cons line (loop))))))
+    (define ret
+      (let loop ()
+        (define line (read-line p))
+        (cond
+         ((eof-object? line) '())
+         (else (cons line (loop))))))
+    (when (string? path)
+      (close-port p))
+    ret)
    ((path map-fn)
     (define p (if (port? path) path (open path O_RDONLY)))
     (let loop ((i 0))
