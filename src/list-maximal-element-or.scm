@@ -21,6 +21,6 @@
     (if (null? lst) (if max max-elem default)
         (let* ((x (car lst))
                (p (projection x))
-               (new-max (if (> p max) p max))
-               (new-max-elem (if (> p max) x max-elem)))
+               (new-max (if max (if (> p max) p max) p))
+               (new-max-elem (if max (if (> p max) x max-elem) x)))
           (loop (cdr lst) new-max new-max-elem)))))

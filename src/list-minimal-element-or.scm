@@ -21,6 +21,6 @@
     (if (null? lst) (if min min-elem default)
         (let* ((x (car lst))
                (p (projection x))
-               (new-min (if (< p min) p min))
-               (new-min-elem (if (< p min) x min-elem)))
+               (new-min (if min (if (< p min) p min) p))
+               (new-min-elem (if min (if (< p min) x min-elem) x)))
           (loop (cdr lst) new-min new-min-elem)))))
