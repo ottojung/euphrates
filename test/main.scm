@@ -148,6 +148,7 @@
 %use (with-randomizer-seed) "./src/with-randomizer-seed.scm"
 %use (vector-random-shuffle!) "./src/vector-random-shuffle-bang.scm"
 %use (list-random-shuffle) "./src/list-random-shuffle.scm"
+%use (list-group-by) "./src/list-group-by.scm"
 
 (let ()
   (catch-any
@@ -3167,6 +3168,13 @@
      (assert= '(b d a c) L)
      (set! L (list-random-shuffle L))
      (assert= '(c a d b) L))))
+
+(let () ;; list-group-by
+  (assert=HS '((#t 4 2) (#f 5 3 1))
+             (list-group-by even? '(1 2 3 4 5)))
+  (assert=HS '((0 3) (1 4 1) (2 5 2))
+             (list-group-by (lambda (x) (modulo x 3)) '(1 2 3 4 5)))
+  )
 
 (display "All good\n")
 
