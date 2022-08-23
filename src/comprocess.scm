@@ -1,34 +1,27 @@
 
 %run guile
 
-%set (field "command")
-%set (field "args")
-%set (field "pipe")
-%set (field "pid")
-%set (field "status")
-%set (field "exited?")
-
-%for (field @x)
-%var comprocess-@x
-%var set-comprocess-@x!
-%end
-
 %var comprocess
 %var comprocess?
+%var comprocess-command
+%var comprocess-args
+%var comprocess-pipe
+%var set-comprocess-pipe!
+%var comprocess-pid
+%var set-comprocess-pid!
+%var comprocess-status
+%var set-comprocess-status!
+%var comprocess-exited?
+%var set-comprocess-exited?!
 
 %use (define-type9) "./define-type9.scm"
 
 (define-type9 <comprocess>
-  (comprocess
-
-%for (field @x)
-     @x
-%end
-
-  ) comprocess?
-
-%for (field @x)
-   (@x comprocess-@x set-comprocess-@x!)
-%end
-
+  (comprocess command args pipe pid status exited?) comprocess?
+  (command comprocess-command)
+  (args comprocess-args)
+  (pipe comprocess-pipe set-comprocess-pipe!)
+  (pid comprocess-pid set-comprocess-pid!)
+  (status comprocess-status set-comprocess-status!)
+  (exited? comprocess-exited? set-comprocess-exited?!)
   )
