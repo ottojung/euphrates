@@ -16,7 +16,7 @@
 
 %var list-maximal-element-or
 
-(define (list-maximal-element-or projection lst default)
+(define (list-maximal-element-or default projection lst)
   (let loop ((lst lst) (max #f) (max-elem #f))
     (if (null? lst) (if max max-elem default)
         (let* ((x (car lst))

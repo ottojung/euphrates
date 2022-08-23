@@ -16,7 +16,7 @@
 
 %var list-minimal-element-or
 
-(define (list-minimal-element-or projection lst default)
+(define (list-minimal-element-or default projection lst)
   (let loop ((lst lst) (min #f) (min-elem #f))
     (if (null? lst) (if min min-elem default)
         (let* ((x (car lst))
