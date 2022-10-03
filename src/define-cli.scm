@@ -216,8 +216,10 @@
   (define-cli:lookup H (quote x)))
 
 (define-syntax define-cli:let-list
-  (syntax-rules ()
+  (syntax-rules (/ :)
     [(_ f H bodies ()) (let () . bodies)]
+    [(_ f H bodies (/ . as)) (define-cli:let-list f H bodies as)]
+    [(_ f H bodies (: . as)) (define-cli:let-list f H bodies as)]
     [(_ f H bodies (a . as))
      (let [[a (f H a)]] (define-cli:let-list f H bodies as))]))
 

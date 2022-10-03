@@ -854,6 +854,27 @@
 ;; with-cli
 (let ()
   (let ()
+    (parameterize
+        ((command-line-argumets/p
+          (list "--opt1" "cmdarg1")))
+      (with-cli
+       (OPT
+        OPT : --opt1 <arg1>
+        /     --opt2 <arg2>
+        /     --opt3 <arg3>
+        )
+
+       (assert (procedure? /))
+       (assert (string? <arg1>))
+       (assert --opt1)
+       (assert= #f --opt2)
+       (assert= #f --opt3)
+       (assert= #f <arg2>)
+       (assert= #f <arg3>)
+
+       )))
+
+  (let ()
 
     (define ret
       (parameterize
