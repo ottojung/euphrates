@@ -36,6 +36,7 @@ build/czempak: $(SUBMODULES) build
 
 deps/czempak/.git:
 	git submodule update --init
+	git submodule foreach --recursive 'git submodule update --init'
 
 build:
 	mkdir -p "$@"
