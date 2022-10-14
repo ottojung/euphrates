@@ -637,17 +637,30 @@
 
 ;; regex-machine
 (let ()
-  (define m (make-regex-machine*
-             '(and (any x z)
-                   (or (= 3) (= 2 m k))
-                   (and* (any* i))
-                   (any y))))
-  (define H (hashmap))
-  (assert (m H (list 1 2 3 9 8 7)))
 
-  (assert=HS
-   '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
-   (hashmap->alist H)))
+  (let ()
+    (define m (make-regex-machine*
+               '(and (any x z)
+                     (or (= 3) (= 2 m k))
+                     (and* (any* i))
+                     (any y))))
+    (define H (hashmap))
+    (assert (m H (list 1 2 3 9 8 7)))
+
+    (assert=HS
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     (hashmap->alist H)))
+
+  (let ()
+    (define m (make-regex-machine*
+               '(and (* (any* <group1...>))
+                     (* (any* <group2...>)))))
+    (define H (hashmap))
+    (assert (m H (list "a" "b" "c" "d" "e")))
+    (assert= (hashmap-ref H '<group1...>)
+             '("e" "d" "c" "b" "a")))
+
+  )
 
 ;; cfg-machine
 (let ()
@@ -871,6 +884,21 @@
        (assert= #f --opt3)
        (assert= #f <arg2>)
        (assert= #f <arg3>)
+
+       )))
+
+  (let ()
+    (parameterize
+        ((command-line-argumets/p
+          (list "a" "b" "c" "d" "e")))
+      (with-cli
+       (OPT
+        OPT : GROUP1* GROUP2*
+        GROUP1 : <group1...>
+        GROUP2 : <group2...>
+        )
+
+       (assert= <group1...> '("e" "d" "c" "b" "a"))
 
        )))
 

@@ -57,11 +57,11 @@
                 (lambda (new-hash ret)
                   (if ret
                       (call-with-values
-                          (lambda _ (cont new-hash ret))
+                          (lambda _ (loop new-hash ret))
                         (lambda (h ret2)
                           (if ret2
                               (values h ret2)
-                              (loop new-hash ret))))
+                              (cont new-hash ret))))
                       (cont hash buf)))))))
 
 (define (match-and pattern hash buf cont)
