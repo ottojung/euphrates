@@ -182,9 +182,12 @@
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:exclusive x . xs))
      (make-cli-with-handler-helper
       f cli-decl defaults examples helps types ((quote x) . exclusives) synonyms xs))
+    ((_ f cli-decl defaults examples helps types exclusives synonyms (:help (x . ys) . xs))
+     (make-cli-with-handler-helper
+      f cli-decl defaults examples ((cons (quote x) (list . ys)) . helps) types exclusives synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:help x . xs))
      (make-cli-with-handler-helper
-      f cli-decl defaults examples ((quote x) . helps) types exclusives synonyms xs))
+      f cli-decl defaults examples (x . helps) types exclusives synonyms xs))
     ((_ f cli-decl defaults examples helps types exclusives synonyms (:type (x . ys) . xs))
      (make-cli-with-handler-helper
       f cli-decl defaults examples helps ((list (quote x) . ys) . types) exclusives synonyms xs))
