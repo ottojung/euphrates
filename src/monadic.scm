@@ -7,6 +7,7 @@
 %use (identity*) "./identity-star.scm"
 %use (memconst) "./memconst.scm"
 %use (monad-current-arg/p) "./monad-current-arg-p.scm"
+%use (monad-current/p) "./monad-current-p.scm"
 %use (monadarg-cont monadarg-lval monadarg-make-empty monadarg-qvar set-monadarg-cont! set-monadarg-lval! set-monadarg-qtags! set-monadarg-qval! set-monadarg-qvar!) "./monadarg.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
@@ -88,5 +89,6 @@
      (let* ((p (monadic-global/p))
             (f fexpr)
             (m (if p (p f (quote fexpr)) f)))
-       (parameterize ((monad-current-arg/p (monadarg-make-empty)))
+       (parameterize ((monad-current/p m)
+                      (monad-current-arg/p (monadarg-make-empty)))
          (monadic-bare m . argv))))))
