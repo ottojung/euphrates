@@ -2280,8 +2280,6 @@
             (monad-ret monad-input (list buffer))
             monad-input))))
 
-  (debug "HERE1")
-
   (assert=
    30
    (monadic-id
@@ -2289,16 +2287,12 @@
     (y (* (x) (x)))
     (h (+ (x) (y)) 'tag1)))
 
-  (debug "HERE2")
-
   (assert=
    '40
    (monadic-id
     (x (+ 2 3))
     ((y m) (values (* (x) (x)) (+ (x) (x))))
     (h (+ (x) (y) (m)) 'tag1)))
-
-  (debug "HERE3")
 
   (call-with-values
       (lambda _
@@ -2308,8 +2302,6 @@
          ((h z) (values (+ (x) (y) (m)) 5) 'tag1)))
     (lambda results
       (assert= '(40 5) results)))
-
-  (debug "HERE4")
 
   (assert=
    (lines->string
@@ -2326,8 +2318,6 @@
         ((y m) (values (* (x) (x)) (+ (x) (x))))
         (h (+ (x) (y) (m)) 'tag1)))))
 
-  (debug "HERE6")
-
   (assert=
    (lines->string
     (list "(x = 5 = (+ 2 3))"
@@ -2341,8 +2331,6 @@
     ((y m) (values (* (x) (x)) (+ (x) (x))))
     (h (+ (x) (y) (m)) 'tag1)))
 
-  (debug "HERE7")
-
   (assert=
    26
    (monadic
@@ -2351,8 +2339,6 @@
     (y (+ 1 (* (x) (x))))
     (h (+ (x) (y)) 'tag1)))
 
-  (debug "HERE8")
-
   (assert=
    #f
    (monadic
@@ -2360,8 +2346,6 @@
     (x (+ 2 3))
     (k #f) ;; causing to exit fast
     (z (raisu 'should-not-happen))))
-
-  (debug "HERE9")
 
   (assert=
    26
@@ -2372,8 +2356,6 @@
      (x (+ 2 3))
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
-
-  (debug "HERE10")
 
   (with-monadic-left
    (monad-log/to-string)
@@ -2389,8 +2371,6 @@
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
 
-  (debug "HERE11")
-
   (assert=
    (lines->string
     (list "(x = 5 = (+ 2 3))"
@@ -2404,8 +2384,6 @@
      (x (+ 2 3))
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
-
-  (debug "HERE12")
 
   (with-monadic-left
    (monad-log/to-string)
@@ -2422,8 +2400,6 @@
      (h (+ (x) (y)) 'tag1)))
    )
 
-  (debug "HERE13")
-
   (with-monadic-right
    (monad-log/to-string)
    (assert=
@@ -2439,8 +2415,6 @@
      (h (+ (x) (y)) 'tag1)))
    )
 
-  (debug "HERE14")
-
   )
 
 ;; monad-lazy
@@ -2453,8 +2427,6 @@
     (y (+ 1 (* (x) (x))))
     (h (+ (x) (y)) 'tag1)))
 
-  (debug "HERE15")
-
   (assert=
    31
    (monadic
@@ -2462,8 +2434,6 @@
     (x (+ 2 3) 'async)
     (y (+ 1 (* (x) (x))) 'async)
     (h (+ (x) (y)) 'tag1)))
-
-  (debug "HERE16")
 
   (assert=
    "5.4.1.3.2."
@@ -2480,8 +2450,6 @@
         (r (begin (display "5.") (let* ((zz (z)) (pp (p))) (+ zz pp))))
         ))))
 
-  (debug "HERE17")
-
   )
 
 ;; monad-except
@@ -2489,8 +2457,6 @@
       (throwed #t)
       (did-not-ran #t)
       (exception-throwed #f))
-
-  (debug "HERE18")
 
   (catch-any
    (lambda _
@@ -2508,8 +2474,6 @@
      (set! throwed #f))
    (lambda errs
      (set! exception-throwed #t)))
-
-  (debug "HERE19")
 
   (assert exception-throwed)
   (assert ran-always)
