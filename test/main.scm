@@ -2489,9 +2489,9 @@
   (assert=
    (lines->string
     (list
-     "(x = 8 = (+ 3 5))"
+     "(#f = 8 = (+ 3 5))"
      "This is not inside of a monad"
-     "(y = 16 = (* 8 2))"
+     "(#f = 16 = (* 8 2))"
      "(return 16)"
      ""))
    (with-output-to-string
@@ -2500,12 +2500,12 @@
        (with-monad
         monad-log
 
-        (monadic-do (x (+ 3 5) '(hello)))
+        (monadic-do (+ 3 5) 'hello)
 
         (display "This is not inside of a monad")
         (newline)
 
-        (monadic-do (y (* 8 2) '(bye)))
+        (monadic-do (* 8 2) 'bye)
 
         ))))
 

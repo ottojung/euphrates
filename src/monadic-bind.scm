@@ -16,15 +16,15 @@
 
 %var monadic-bind
 
-%use (monadic-do) "./monadic-do.scm"
+%use (monadic-do/generic) "./monadic-do.scm"
 
 (define-syntax monadic-bind
   (syntax-rules ()
     ((_ (x . xs) val . tags)
      (begin
-       (define-values (x . xs) (monadic-do ((x . xs) val (list . tags))))
+       (define-values (x . xs) (monadic-do/generic ((x . xs) val (list . tags))))
        (values x . xs)))
     ((_ var val . tags)
      (begin
-       (define var (monadic-do (var val (list . tags))))
+       (define var (monadic-do/generic (var val (list . tags))))
        var))))

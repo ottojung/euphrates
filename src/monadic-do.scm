@@ -46,6 +46,13 @@
 
 (define-syntax monadic-do/generic
   (syntax-rules ()
+    ((_ (var val qtags))
+     (let ((f (monad-current/p)))
+       (monadic-do/generic (f var val qtags))))
+    ((_ (f var val qtags))
+     (call-with-current-continuation
+      (lambda (cont)
+        (monadic-do/generic (f var val qtags) cont))))
     ((_ (f var val qtags) cont)
      (let ((arg (monad-current-arg/p)))
        (set-monadstate-lval! arg (memconst (call-with-values (lambda _ val) list)))
@@ -59,19 +66,5 @@
 
 (define-syntax monadic-do
   (syntax-rules ()
-    ((_ (var val qtags) cont)
-     (let ((f (monad-current/p)))
-       (monadic-do/generic (f var val qtags) cont)))
-    ((_ (var val qtags))
-     (call-with-current-continuation
-      (lambda (cont)
-        (let ((f (monad-current/p)))
-          (monadic-do/generic (f var val qtags) cont)))))
-    ((_ (val qtags) cont)
-     (let ((f (monad-current/p)))
-       (monadic-do/generic (f #f val qtags) cont)))
-    ((_ (val qtags))
-     (call-with-current-continuation
-      (lambda (cont)
-        (let ((f (monad-current/p)))
-          (monadic-do/generic (f #f val qtags) cont)))))))
+    ((_ val . tags)
+     (monadic-do/generic (#f val (list . tags))))))
