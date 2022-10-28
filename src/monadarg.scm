@@ -13,6 +13,7 @@
 %var set-monadarg-qval!
 %var monadarg-qtags
 %var set-monadarg-qtags!
+%var monadarg-make-empty
 
 %use (define-type9) "./define-type9.scm"
 
@@ -23,3 +24,7 @@
   (qvar monadarg-qvar set-monadarg-qvar!)
   (qval monadarg-qval set-monadarg-qval!)
   (qtags monadarg-qtags set-monadarg-qtags!))
+
+(define (monadarg-make-empty)
+  (monadarg #f #f #f #f #f))
+

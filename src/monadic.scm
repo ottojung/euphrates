@@ -6,7 +6,8 @@
 
 %use (identity*) "./identity-star.scm"
 %use (memconst) "./memconst.scm"
-%use (monadarg monadarg-cont monadarg-lval monadarg-qvar) "./monadarg.scm"
+%use (monad-current-arg/p) "./monad-current-arg-p.scm"
+%use (monadarg-cont monadarg-lval monadarg-make-empty monadarg-qvar set-monadarg-cont! set-monadarg-lval! set-monadarg-qtags! set-monadarg-qval! set-monadarg-qvar!) "./monadarg.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
 %use (raisu) "./raisu.scm"
@@ -35,14 +36,13 @@
 (define-syntax monadic-bare-single
   (syntax-rules ()
     ((_ (f var val tags) cont)
-     (monadic-bare-continue
-      (f
-       (monadarg
-        (memconst (call-with-values (lambda _ val) list))
-        cont
-        (quote var)
-        (quote val)
-        (list . tags)))))))
+     (let ((arg (monad-current-arg/p)))
+       (set-monadarg-lval! arg (memconst (call-with-values (lambda _ val) list)))
+       (set-monadarg-cont! arg cont)
+       (set-monadarg-qvar! arg (quote var))
+       (set-monadarg-qval! arg (quote val))
+       (set-monadarg-qtags! arg (list . tags))
+       (monadic-bare-continue (f arg))))))
 
 ;; This is something like "do syntax" from Haskell
 (define-syntax monadic-bare-helper
@@ -88,4 +88,5 @@
      (let* ((p (monadic-global/p))
             (f fexpr)
             (m (if p (p f (quote fexpr)) f)))
-       (monadic-bare m . argv)))))
+       (parameterize ((monad-current-arg/p (monadarg-make-empty)))
+         (monadic-bare m . argv))))))
