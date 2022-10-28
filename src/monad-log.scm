@@ -5,7 +5,7 @@
 
 %use (dprint) "./dprint.scm"
 %use (monad-args) "./monad.scm"
-%use (monadarg-qval monadarg-qvar) "./monadarg.scm"
+%use (monadstate-qval monadstate-qvar) "./monadstate.scm"
 %use (monadfin?) "./monadfin.scm"
 %use (~a) "./tilda-a.scm"
 %use (words->string) "./words-to-string.scm"
@@ -18,7 +18,7 @@
     (if (monadfin? monad-input)
         (dprint "(return ~a)\n" (monad-log-show-values monad-input))
         (dprint "(~a = ~a = ~a)\n"
-                (monadarg-qvar monad-input)
+                (monadstate-qvar monad-input)
                 (monad-log-show-values monad-input)
-                (monadarg-qval monad-input)))
+                (monadstate-qval monad-input)))
     monad-input))

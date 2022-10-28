@@ -18,7 +18,7 @@
 
 %use (monad-current-arg/p) "./monad-current-arg-p.scm"
 %use (monad-current/p) "./monad-current-p.scm"
-%use (monadarg-make-empty) "./monadarg.scm"
+%use (monadstate-make-empty) "./monadstate.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
 
@@ -29,7 +29,7 @@
             (f fexpr)
             (m (if p (p f (quote fexpr)) f)))
        (parameterize ((monad-current/p m)
-                      (monad-current-arg/p (monadarg-make-empty)))
+                      (monad-current-arg/p (monadstate-make-empty)))
          (apply
           values
           (call-with-values
