@@ -17,7 +17,6 @@
 %var with-monad
 
 %use (monad-current/p) "./monad-current-p.scm"
-%use (monadstate-make-empty) "./monadstate.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
 
