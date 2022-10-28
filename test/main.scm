@@ -2444,7 +2444,7 @@
         monad-lazy
         (x (begin (display "first.") (+ 2 3)) 'async)
         (y (begin (display "second.") (+ 1 (* (x) (x)))) 'async)
-        (h (begin (display "third.") (+ (x) (y))) 'tag1)))))
+        ((p t) (begin (display "third.") (values (+ (x) (y)) (* (x) (y)))) 'tag1)))))
 
   )
 

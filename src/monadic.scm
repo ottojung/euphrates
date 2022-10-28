@@ -5,9 +5,10 @@
 %var monadic
 
 %use (memconst) "./memconst.scm"
-%use (monadic-global/p) "./monadic-global-p.scm"
-%use (monadarg monadarg-cont monadarg-lval monadarg-lazy?) "./monadarg.scm"
+%use (monadarg monadarg-cont monadarg-lazy? monadarg-lval) "./monadarg.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
+%use (monadic-global/p) "./monadic-global-p.scm"
+%use (raisu) "./raisu.scm"
 
 (define-syntax monadic-bare-handle-tags
   (syntax-rules ()
@@ -24,8 +25,13 @@
           (lambda _ (apply values vals))))))
 
 (define (rethunkify-list thunk)
-  (let ((lst (thunk)))
-    (map (lambda (x) (lambda _ x)) lst)))
+  (cond
+   ((list? thunk) thunk)
+   ((procedure? thunk)
+    (let ((lst (thunk)))
+      (map (lambda (x) (lambda _ x)) lst)))
+   (else
+    (raisu 'bad-thunk-type thunk))))
 
 ;; This is something like "do syntax" from Haskell
 (define-syntax monadic-bare-helper
