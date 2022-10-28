@@ -74,24 +74,22 @@
 
 (define-syntax monadic-bare
   (syntax-rules ()
-    ((_ f0 . args)
+    ((_ m . args)
      (apply
       values
-      (let ((f f0))
-        (call-with-values
-            (lambda _
-              (monadic-bare-helper f . args))
-          (lambda results
-            ((monadfin-lval
-              (f (monadfin
-                  (lambda _ (map (lambda (f) (f)) results)))))))))))))
+      (call-with-values
+          (lambda _
+            (monadic-bare-helper m . args))
+        (lambda results
+          ((monadfin-lval
+            (m (monadfin
+                (lambda _ (map (lambda (f) (f)) results))))))))))))
 
 ;; NOTE: uses parameterization
 (define-syntax monadic
   (syntax-rules ()
     ((_ fexpr . argv)
      (let* ((p (monadic-global/p))
-            (f fexpr))
-       (if p
-           (monadic-bare (p f (quote fexpr)) . argv)
-           (monadic-bare f . argv))))))
+            (f fexpr)
+            (m (if p (p f (quote fexpr)) f)))
+       (monadic-bare m . argv)))))
