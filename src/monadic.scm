@@ -5,7 +5,7 @@
 %var monadic
 
 %use (memconst) "./memconst.scm"
-%use (monadarg monadarg-cont monadarg-lazy? monadarg-lval) "./monadarg.scm"
+%use (monadarg monadarg-cont monadarg-lval) "./monadarg.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
 %use (raisu) "./raisu.scm"
@@ -19,10 +19,7 @@
 
 (define (rethunkify m)
   (define thunk (monadarg-lval m))
-  (if (monadarg-lazy? m) thunk
-      (call-with-values thunk
-        (lambda vals
-          (lambda _ (apply values vals))))))
+  thunk)
 
 (define (rethunkify-list thunk)
   (cond
@@ -45,8 +42,7 @@
              (lambda (args) (apply values args))
              (quote (a . as))
              (quote b)
-             (monadic-bare-handle-tags . tags)
-             #f)))
+             (monadic-bare-handle-tags . tags))))
        (lambda (m)
          ((monadarg-cont m) (rethunkify-list (monadarg-lval m))))))
     ((_ f ((a . as) b . tags) . bodies)
@@ -61,8 +57,7 @@
                   k))
                (quote (a . as))
                (quote b)
-               (monadic-bare-handle-tags . tags)
-               #f)))
+               (monadic-bare-handle-tags . tags))))
        (lambda (m)
          ((monadarg-cont m) (rethunkify-list (monadarg-lval m))))))
     ((_ f (a b . tags) . ())
@@ -73,8 +68,7 @@
                identity
                (quote a)
                (quote b)
-               (monadic-bare-handle-tags . tags)
-               #f)))
+               (monadic-bare-handle-tags . tags))))
        (lambda (m)
          ((monadarg-cont m) (rethunkify m)))))
     ((_ f (a b . tags) . bodies)
@@ -85,8 +79,7 @@
                (lambda (a) (monadic-bare-helper f . bodies))
                (quote a)
                (quote b)
-               (monadic-bare-handle-tags . tags)
-               #f)))
+               (monadic-bare-handle-tags . tags))))
        (lambda (m)
          ((monadarg-cont m) (rethunkify m)))))))
 

@@ -10,11 +10,9 @@
 %var monad-handle-multiple
 
 %use (memconst) "./memconst.scm"
+%use (monadarg monadarg-cont monadarg-lval monadarg-qtags monadarg-qval monadarg-qvar monadarg?) "./monadarg.scm"
+%use (monadfin monadfin-lval monadfin?) "./monadfin.scm"
 %use (replicate) "./replicate.scm"
-%use (define-type9) "./define-type9.scm"
-
-%use (monadarg monadarg? monadarg-lval monadarg-cont monadarg-qvar monadarg-qval monadarg-qtags) "./monadarg.scm"
-%use (monadfin monadfin? monadfin-lval) "./monadfin.scm"
 
 (define (monad-arg monad-input)
   (if (monadarg? monad-input)
@@ -29,8 +27,7 @@
                    cont
                    (monadarg-qvar monad-input)
                    (monadarg-qval monad-input)
-                   (monadarg-qtags monad-input)
-                   #f)
+                   (monadarg-qtags monad-input))
          (monadfin (lambda _ (cont arg)))))))
 
 (define-syntax monad-cret/thunk
@@ -41,8 +38,7 @@
                    cont
                    (monadarg-qvar monad-input)
                    (monadarg-qval monad-input)
-                   (monadarg-qtags monad-input)
-                   #t)
+                   (monadarg-qtags monad-input))
          (monadfin (lambda _ (cont arg)))))))
 
 (define-syntax monad-ret
@@ -54,8 +50,7 @@
                    (monadarg-cont monad-input)
                    (monadarg-qvar monad-input)
                    (monadarg-qval monad-input)
-                   (monadarg-qtags monad-input)
-                   #f)))))
+                   (monadarg-qtags monad-input))))))
 
 (define-syntax monad-ret/thunk
   (syntax-rules ()
@@ -66,8 +61,7 @@
                    (monadarg-cont monad-input)
                    (monadarg-qvar monad-input)
                    (monadarg-qval monad-input)
-                   (monadarg-qtags monad-input)
-                   #t)))))
+                   (monadarg-qtags monad-input))))))
 
 (define (monad-handle-multiple monad-input arg)
   (if (monadfin? monad-input)
