@@ -6,7 +6,7 @@
 
 %use (identity*) "./identity-star.scm"
 %use (monad-current/p) "./monad-current-p.scm"
-%use (monad-do/generic) "./monad-do.scm"
+%use (monadic-do/generic) "./monadic-do.scm"
 %use (with-monad) "./with-monad.scm"
 
 ;; This is something like "do syntax" from Haskell
@@ -14,22 +14,22 @@
   (syntax-rules ()
 
     ((_ f ((x . xs) y . tags) . ())
-     (monad-do/generic
+     (monadic-do/generic
       (f (x . xs) y (list . tags))
       identity*))
 
     ((_ f ((x . xs) y . tags) . bodies)
-     (monad-do/generic
+     (monadic-do/generic
       (f (x . xs) y (list . tags))
       (lambda (x . xs) (monadic-bare-helper f . bodies))))
 
     ((_ f (x y . tags) . ())
-     (monad-do/generic
+     (monadic-do/generic
       (f x y (list . tags))
       identity))
 
     ((_ f (x y . tags) . bodies)
-     (monad-do/generic
+     (monadic-do/generic
       (f x y (list . tags))
       (lambda (x) (monadic-bare-helper f . bodies))))))
 

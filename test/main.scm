@@ -123,7 +123,7 @@
 %use (monad-lazy) "./src/monad-lazy.scm"
 %use (monad-except) "./src/monad-except.scm"
 %use (monad-identity) "./src/monad-identity.scm"
-%use (monad-do) "./src/monad-do.scm"
+%use (monadic-do) "./src/monadic-do.scm"
 %use (monad-bind) "./src/monad-bind.scm"
 %use (with-monad) "./src/with-monad.scm"
 %use (list-fold) "./src/list-fold.scm"
@@ -2500,12 +2500,12 @@
        (with-monad
         monad-log
 
-        (monad-do (x (+ 3 5) '(hello)))
+        (monadic-do (x (+ 3 5) '(hello)))
 
         (display "This is not inside of a monad")
         (newline)
 
-        (monad-do (y (* 8 2) '(bye)))
+        (monadic-do (y (* 8 2) '(bye)))
 
         ))))
 

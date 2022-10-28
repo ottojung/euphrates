@@ -14,8 +14,8 @@
 
 %run guile
 
-%var monad-do
-%var monad-do/generic
+%var monadic-do
+%var monadic-do/generic
 
 %use (memconst) "./memconst.scm"
 %use (monad-current-arg/p) "./monad-current-arg-p.scm"
@@ -24,7 +24,7 @@
 %use (raisu) "./raisu.scm"
 %use (range) "./range.scm"
 
-(define (monad-do/rethunkify m)
+(define (monadic-do/rethunkify m)
   (define thunk (monadarg-lval m))
   (define qvar (monadarg-qvar m))
   (define len (if (list? qvar) (length qvar) 1))
@@ -41,10 +41,10 @@
    (else
     (raisu 'bad-thunk-type thunk))))
 
-(define (monad-do/continue m)
-  (apply (monadarg-cont m) (monad-do/rethunkify m)))
+(define (monadic-do/continue m)
+  (apply (monadarg-cont m) (monadic-do/rethunkify m)))
 
-(define-syntax monad-do/generic
+(define-syntax monadic-do/generic
   (syntax-rules ()
     ((_ (f var val qtags) cont)
      (let ((arg (monad-current-arg/p)))
@@ -55,23 +55,23 @@
          (set-monadarg-qvar! arg qvar))
        (set-monadarg-qval! arg (quote val))
        (set-monadarg-qtags! arg qtags)
-       (monad-do/continue (f arg))))))
+       (monadic-do/continue (f arg))))))
 
-(define-syntax monad-do
+(define-syntax monadic-do
   (syntax-rules ()
     ((_ (var val qtags) cont)
      (let ((f (monad-current/p)))
-       (monad-do/generic (f var val qtags) cont)))
+       (monadic-do/generic (f var val qtags) cont)))
     ((_ (var val qtags))
      (call-with-current-continuation
       (lambda (cont)
         (let ((f (monad-current/p)))
-          (monad-do/generic (f var val qtags) cont)))))
+          (monadic-do/generic (f var val qtags) cont)))))
     ((_ (val qtags) cont)
      (let ((f (monad-current/p)))
-       (monad-do/generic (f #f val qtags) cont)))
+       (monadic-do/generic (f #f val qtags) cont)))
     ((_ (val qtags))
      (call-with-current-continuation
       (lambda (cont)
         (let ((f (monad-current/p)))
-          (monad-do/generic (f #f val qtags) cont)))))))
+          (monadic-do/generic (f #f val qtags) cont)))))))
