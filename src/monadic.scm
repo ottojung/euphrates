@@ -5,10 +5,11 @@
 %var monadic
 
 %use (memconst) "./memconst.scm"
-%use (monadarg monadarg-cont monadarg-lval) "./monadarg.scm"
+%use (monadarg monadarg-cont monadarg-lval monadarg-qvar) "./monadarg.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
 %use (raisu) "./raisu.scm"
+%use (range) "./range.scm"
 
 (define-syntax monadic-bare-handle-tags
   (syntax-rules ()
@@ -21,12 +22,19 @@
   (define thunk (monadarg-lval m))
   thunk)
 
-(define (rethunkify-list thunk)
+(define (rethunkify-list m)
+  (define thunk (monadarg-lval m))
+  (define qvar (monadarg-qvar m))
+
   (cond
    ((list? thunk) thunk)
    ((procedure? thunk)
-    (let ((lst (thunk)))
-      (map (lambda (x) (lambda _ x)) lst)))
+    (let ((result (memconst (thunk))))
+      (map
+       (lambda (i)
+         (memconst
+          (list-ref (result) i)))
+       (range (length qvar)))))
    (else
     (raisu 'bad-thunk-type thunk))))
 
@@ -39,27 +47,24 @@
            (f
             (monadarg
              (memconst (call-with-values (lambda _ b) (lambda x x)))
-             (lambda (args) (apply values args))
+             (lambda args (apply values args))
              (quote (a . as))
              (quote b)
              (monadic-bare-handle-tags . tags))))
        (lambda (m)
-         ((monadarg-cont m) (rethunkify-list (monadarg-lval m))))))
+         (apply (monadarg-cont m) (rethunkify-list m)))))
     ((_ f ((a . as) b . tags) . bodies)
      (call-with-values
          (lambda _
            (f (monadarg
                (memconst (call-with-values (lambda _ b) (lambda x x)))
-               (lambda (k)
-                 (apply
-                  (lambda (a . as)
-                    (monadic-bare-helper f . bodies))
-                  k))
+               (lambda (a . as)
+                 (monadic-bare-helper f . bodies))
                (quote (a . as))
                (quote b)
                (monadic-bare-handle-tags . tags))))
        (lambda (m)
-         ((monadarg-cont m) (rethunkify-list (monadarg-lval m))))))
+         (apply (monadarg-cont m) (rethunkify-list m)))))
     ((_ f (a b . tags) . ())
      (call-with-values
          (lambda _

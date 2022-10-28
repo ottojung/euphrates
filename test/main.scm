@@ -2437,14 +2437,19 @@
     (h (+ (x) (y)) 'tag1)))
 
   (assert=
-   "first.second.third."
+   "5.4.1.3.2."
    (with-output-to-string
      (lambda _
        (monadic
         monad-lazy
-        (x (begin (display "first.") (+ 2 3)) 'async)
-        (y (begin (display "second.") (+ 1 (* (x) (x)))) 'async)
-        ((p t) (begin (display "third.") (values (+ (x) (y)) (* (x) (y)))) 'tag1)))))
+        (x (begin (display "1.") (+ 2 3)))
+        (y (begin (display "2.") (* 4 5)))
+        ((p t) (begin
+                 (display "3.")
+                 (values (+ (y) (y)) (* (y) (y)))))
+        (z (begin (display "4.") (+ (x) (x))))
+        (r (begin (display "5.") (let* ((zz (z)) (pp (p))) (+ zz pp))))
+        ))))
 
   )
 
