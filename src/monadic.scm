@@ -18,13 +18,10 @@
     ((monadic-bare-handle-tags . tags)
      (list . tags))))
 
-(define (rethunkify m)
-  (define thunk (monadarg-lval m))
-  thunk)
-
 (define (rethunkify-list m)
   (define thunk (monadarg-lval m))
   (define qvar (monadarg-qvar m))
+  (define len (if (list? qvar) (length qvar) 1))
 
   (cond
    ((list? thunk) thunk)
@@ -34,13 +31,14 @@
        (lambda (i)
          (memconst
           (list-ref (result) i)))
-       (range (length qvar)))))
+       (range len))))
    (else
     (raisu 'bad-thunk-type thunk))))
 
 ;; This is something like "do syntax" from Haskell
 (define-syntax monadic-bare-helper
   (syntax-rules ()
+
     ((_ f ((a . as) b . tags) . ())
      (call-with-values
          (lambda _
@@ -53,6 +51,7 @@
              (monadic-bare-handle-tags . tags))))
        (lambda (m)
          (apply (monadarg-cont m) (rethunkify-list m)))))
+
     ((_ f ((a . as) b . tags) . bodies)
      (call-with-values
          (lambda _
@@ -65,40 +64,44 @@
                (monadic-bare-handle-tags . tags))))
        (lambda (m)
          (apply (monadarg-cont m) (rethunkify-list m)))))
+
     ((_ f (a b . tags) . ())
      (call-with-values
          (lambda _
            (f (monadarg
-               (memconst b)
+               (memconst (list b))
                identity
                (quote a)
                (quote b)
                (monadic-bare-handle-tags . tags))))
        (lambda (m)
-         ((monadarg-cont m) (rethunkify m)))))
+         (apply (monadarg-cont m) (rethunkify-list m)))))
+
     ((_ f (a b . tags) . bodies)
      (call-with-values
          (lambda _
            (f (monadarg
-               (memconst b)
+               (memconst (list b))
                (lambda (a) (monadic-bare-helper f . bodies))
                (quote a)
                (quote b)
                (monadic-bare-handle-tags . tags))))
        (lambda (m)
-         ((monadarg-cont m) (rethunkify m)))))))
+         (apply (monadarg-cont m) (rethunkify-list m)))))))
 
 (define-syntax monadic-bare
   (syntax-rules ()
     ((_ f0 . args)
-     (let ((f f0))
-       (call-with-values
-           (lambda _
-             (monadic-bare-helper f . args))
-         (lambda results
-           ((monadfin-lval
-             (f (monadfin
-                 (lambda _ (apply values (map (lambda (f) (f)) results)))))))))))))
+     (apply
+      values
+      (let ((f f0))
+        (call-with-values
+            (lambda _
+              (monadic-bare-helper f . args))
+          (lambda results
+            ((monadfin-lval
+              (f (monadfin
+                  (lambda _ (map (lambda (f) (f)) results)))))))))))))
 
 ;; NOTE: uses parameterization
 (define-syntax monadic

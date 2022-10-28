@@ -14,6 +14,9 @@
    (monad-input)
    (define result
      (if (memq 'async (monadarg-qtags monad-input))
-         (dynamic-thread-async (monad-arg monad-input))
+         (dynamic-thread-async
+          (call-with-values
+              (lambda _ (monad-arg monad-input))
+            list))
          (monadarg-lval monad-input)))
    (monad-ret/thunk monad-input result)))

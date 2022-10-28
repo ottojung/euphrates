@@ -3,11 +3,15 @@
 
 %var monad-maybe
 
+%use (monad-make/simple) "./monad-make-simple.scm"
 %use (monad-arg monad-cret monad-ret) "./monad.scm"
 
 (define (monad-maybe predicate)
-  (lambda (monad-input)
-    (let ((arg (monad-arg monad-input)))
-      (if (predicate arg)
-          (monad-cret monad-input arg identity)
-          (monad-ret  monad-input arg)))))
+  (monad-make/simple
+   (monad-input)
+   (call-with-values
+       (lambda _ (monad-arg monad-input))
+     (lambda args
+       (if (apply predicate args)
+           (monad-cret monad-input args identity)
+           (monad-ret  monad-input args))))))
