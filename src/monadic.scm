@@ -34,11 +34,11 @@
 
 (define-syntax monadic-bare-single
   (syntax-rules ()
-    ((_ (f var val tags) arg cont)
+    ((_ (f var val tags) cont)
      (monadic-bare-continue
       (f
        (monadarg
-        (memconst arg)
+        (memconst (call-with-values (lambda _ val) list))
         cont
         (quote var)
         (quote val)
@@ -51,25 +51,21 @@
     ((_ f ((x . xs) y . tags) . ())
      (monadic-bare-single
       (f (x . xs) y tags)
-      (call-with-values (lambda _ y) list)
       identity*))
 
     ((_ f ((x . xs) y . tags) . bodies)
      (monadic-bare-single
       (f (x . xs) y tags)
-      (call-with-values (lambda _ y) list)
       (lambda (x . xs) (monadic-bare-helper f . bodies))))
 
     ((_ f (x y . tags) . ())
      (monadic-bare-single
       (f x y tags)
-      (list y)
       identity))
 
     ((_ f (x y . tags) . bodies)
      (monadic-bare-single
       (f x y tags)
-      (list y)
       (lambda (x) (monadic-bare-helper f . bodies))))))
 
 (define-syntax monadic-bare
