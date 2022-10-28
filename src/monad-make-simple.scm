@@ -14,15 +14,14 @@
 
 %run guile
 
-%var define-simple-monad
+%var monad-make/simple
 
 %use (monadfin?) "./monadfin.scm"
 
-(define-syntax define-simple-monad
+(define-syntax monad-make/simple
   (syntax-rules ()
-    ((_ (fn-name monad-input-name) . bodies)
-     (define fn-name
-       (lambda (monad-something)
-         (if (monadfin? monad-something) monad-something
-             ((lambda (monad-input-name) . bodies)
-              monad-something)))))))
+    ((_ (monad-input-name) . bodies)
+     (lambda (monad-something)
+       (if (monadfin? monad-something) monad-something
+           ((lambda (monad-input-name) . bodies)
+            monad-something))))))
