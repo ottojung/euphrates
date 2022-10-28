@@ -123,6 +123,9 @@
 %use (monad-lazy) "./src/monad-lazy.scm"
 %use (monad-except) "./src/monad-except.scm"
 %use (monad-identity) "./src/monad-identity.scm"
+%use (monad-do) "./src/monad-do.scm"
+%use (monad-bind) "./src/monad-bind.scm"
+%use (with-monad) "./src/with-monad.scm"
 %use (list-fold) "./src/list-fold.scm"
 %use (list-chunks) "./src/list-chunks.scm"
 %use (list-windows) "./src/list-windows.scm"
@@ -2479,6 +2482,75 @@
   (assert ran-always)
   (assert did-not-ran)
   (assert throwed))
+
+;; monad-bind
+(let ()
+
+  (assert=
+   (lines->string
+    (list
+     "(x = 8 = (+ 3 5))"
+     "This is not inside of a monad"
+     "(y = 16 = (* 8 2))"
+     "(return 16)"
+     ""))
+   (with-output-to-string
+     (lambda _
+
+       (with-monad
+        monad-log
+
+        (monad-do (x (+ 3 5) '(hello)))
+
+        (display "This is not inside of a monad")
+        (newline)
+
+        (monad-do (y (* 8 2) '(bye)))
+
+        ))))
+
+  (assert=
+   (lines->string
+    (list
+     "(x = 8 = (+ 3 5))"
+     "This is not inside of a monad"
+     "The value of x is 8"
+     "(y = 16 = (* 8 2))"
+     "(return 16)"
+     ""))
+   (with-output-to-string
+     (lambda _
+
+       (with-monad
+        monad-log
+
+        (monad-bind x (+ 3 5) 'kek)
+
+        (display "This is not inside of a monad")
+        (newline)
+        (display "The value of x is ")
+        (write (x))
+        (newline)
+
+        (monad-bind y (* 8 2) 'bye)
+
+        ))))
+
+  (assert=
+   '(10 40)
+   (call-with-values
+       (lambda _
+         (with-monad
+          (monad-maybe (lambda _ #f))
+
+          (define x 10)
+          (monad-bind y (+ x x))
+          (monad-bind (r1 r2) (values x (+ (y) (y))))
+
+          ))
+     list))
+
+  )
 
 ;; ;; list-fold
 ;; (let ()
