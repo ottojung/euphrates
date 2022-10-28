@@ -14,11 +14,11 @@
 
 %run guile
 
-%var monad-bind
+%var monadic-bind
 
 %use (monadic-do) "./monadic-do.scm"
 
-(define-syntax monad-bind
+(define-syntax monadic-bind
   (syntax-rules ()
     ((_ (x . xs) val . tags)
      (begin

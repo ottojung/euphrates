@@ -124,7 +124,7 @@
 %use (monad-except) "./src/monad-except.scm"
 %use (monad-identity) "./src/monad-identity.scm"
 %use (monadic-do) "./src/monadic-do.scm"
-%use (monad-bind) "./src/monad-bind.scm"
+%use (monadic-bind) "./src/monadic-bind.scm"
 %use (with-monad) "./src/with-monad.scm"
 %use (list-fold) "./src/list-fold.scm"
 %use (list-chunks) "./src/list-chunks.scm"
@@ -2483,7 +2483,7 @@
   (assert did-not-ran)
   (assert throwed))
 
-;; monad-bind
+;; monadic-bind
 (let ()
 
   (assert=
@@ -2524,7 +2524,7 @@
        (with-monad
         monad-log
 
-        (monad-bind x (+ 3 5) 'kek)
+        (monadic-bind x (+ 3 5) 'kek)
 
         (display "This is not inside of a monad")
         (newline)
@@ -2532,7 +2532,7 @@
         (write (x))
         (newline)
 
-        (monad-bind y (* 8 2) 'bye)
+        (monadic-bind y (* 8 2) 'bye)
 
         ))))
 
@@ -2544,8 +2544,8 @@
           (monad-maybe (lambda _ #f))
 
           (define x 10)
-          (monad-bind y (+ x x))
-          (monad-bind (r1 r2) (values x (+ (y) (y))))
+          (monadic-bind y (+ x x))
+          (monadic-bind (r1 r2) (values x (+ (y) (y))))
 
           ))
      list))
