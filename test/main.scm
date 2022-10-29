@@ -2506,6 +2506,7 @@
 
         (monadic-do (* 8 2) 'bye)
 
+        16
         ))))
 
   (assert=
@@ -2533,6 +2534,7 @@
 
         (monadic-bind y (* 8 2) 'bye)
 
+        (y)
         ))))
 
   (assert=
@@ -2546,8 +2548,19 @@
           (monadic-bind y (+ x x))
           (monadic-bind (r1 r2) (values x (+ (y) (y))))
 
-          ))
+          (values (r1) (r2))))
      list))
+
+  (assert=
+   10
+   (with-monad
+    monad-identity
+
+    (define x 10)
+    (monadic-bind y (+ x x))
+    (monadic-bind (r1 r2) (values x (+ (y) (y))))
+
+    x))
 
   )
 

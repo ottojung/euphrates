@@ -49,4 +49,11 @@
 (define-syntax monadic
   (syntax-rules ()
     ((_ fexpr . argv)
-     (with-monad fexpr (monadic-bare-helper (monad-current/p) . argv)))))
+     (with-monad
+      fexpr
+      (let ((m (monad-current/p)))
+        (call-with-values
+            (lambda _
+              (monadic-bare-helper m . argv))
+          (lambda results
+            (apply values (map (lambda (f) (f)) results)))))))))
