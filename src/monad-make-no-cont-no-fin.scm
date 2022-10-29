@@ -14,11 +14,11 @@
 
 %run guile
 
-%var monad-make/simple
+%var monad-make/no-cont/no-fin
 
 %use (monadfinobj?) "./monadfinobj.scm"
 
-(define-syntax monad-make/simple
+(define-syntax monad-make/no-cont/no-fin
   (syntax-rules ()
     ((_ (monad-input-name) . bodies)
      (lambda (monad-something)

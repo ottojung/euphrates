@@ -16,11 +16,11 @@
 
 %var monad-maybe
 
-%use (monad-make/simple) "./monad-make-simple.scm"
+%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
 %use (monadstate-arg monadstate-cret monadstate-ret) "./monadstate.scm"
 
 (define (monad-maybe predicate)
-  (monad-make/simple
+  (monad-make/no-cont/no-fin
    (monad-input)
    (call-with-values
        (lambda _ (monadstate-arg monad-input))

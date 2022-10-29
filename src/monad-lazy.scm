@@ -17,12 +17,12 @@
 %var monad-lazy
 
 %use (dynamic-thread-async) "./dynamic-thread-async.scm"
-%use (monad-make/simple) "./monad-make-simple.scm"
+%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
 %use (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret/thunk) "./monadstate.scm"
 
 ;; Provides lazy evaluation, with "async" feature
 (define monad-lazy
-  (monad-make/simple
+  (monad-make/no-cont/no-fin
    (monad-input)
    (define result
      (if (memq 'async (monadstate-qtags monad-input))
