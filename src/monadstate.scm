@@ -71,7 +71,7 @@
    ((monadstate-input)
     (if (monadstateobj? monadstate-input)
         (monadstateobj-lval monadstate-input)
-        '()))))
+        (monadfinobj-lval monadstate-input)))))
 
 (define monadstate-args
   (case-lambda
