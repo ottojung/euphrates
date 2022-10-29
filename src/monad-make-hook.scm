@@ -16,7 +16,7 @@
 
 %var monad-make/hook
 
-%use (monad-args) "./monad.scm"
+%use (monadstate-args) "./monadstate.scm"
 %use (monadfin?) "./monadfin.scm"
 
 (define-syntax monad-make/hook
@@ -25,4 +25,4 @@
      (lambda (monad-input)
        (if (monadfin? monad-input) monad-input
            (apply (lambda args . bodies)
-                  (monad-args monad-input)))))))
+                  (monadstate-args monad-input)))))))

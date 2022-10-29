@@ -18,15 +18,15 @@
 %var monadic-do/generic
 
 %use (memconst) "./memconst.scm"
-%use (monad-current-arg/p) "./monad-current-arg-p.scm"
+%use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monad-current/p) "./monad-current-p.scm"
-%use (monadstate-cont monadstate-lval monadstate-qvar set-monadstate-cont! set-monadstate-lval! set-monadstate-qtags! set-monadstate-qval! set-monadstate-qvar!) "./monadstate.scm"
+%use (monadstateobj-cont monadstateobj-lval monadstateobj-qvar set-monadstateobj-cont! set-monadstateobj-lval! set-monadstateobj-qtags! set-monadstateobj-qval! set-monadstateobj-qvar!) "./monadstateobj.scm"
 %use (raisu) "./raisu.scm"
 %use (range) "./range.scm"
 
 (define (monadic-do/rethunkify m)
-  (define thunk (monadstate-lval m))
-  (define qvar (monadstate-qvar m))
+  (define thunk (monadstateobj-lval m))
+  (define qvar (monadstateobj-qvar m))
   (define len (if (list? qvar) (length qvar) 1))
 
   (cond
@@ -42,7 +42,7 @@
     (raisu 'bad-thunk-type thunk))))
 
 (define (monadic-do/continue m)
-  (apply (monadstate-cont m) (monadic-do/rethunkify m)))
+  (apply (monadstateobj-cont m) (monadic-do/rethunkify m)))
 
 (define-syntax monadic-do/generic
   (syntax-rules ()
@@ -54,14 +54,14 @@
       (lambda (cont)
         (monadic-do/generic (f var val qtags) cont))))
     ((_ (f var val qtags) cont)
-     (let ((arg (monad-current-arg/p)))
-       (set-monadstate-lval! arg (memconst (call-with-values (lambda _ val) list)))
-       (set-monadstate-cont! arg cont)
+     (let ((arg (monadstate-current/p)))
+       (set-monadstateobj-lval! arg (memconst (call-with-values (lambda _ val) list)))
+       (set-monadstateobj-cont! arg cont)
        (let* ((qvar0 (quote var))
               (qvar (if (equal? qvar0 (quote #f)) #f qvar0)))
-         (set-monadstate-qvar! arg qvar))
-       (set-monadstate-qval! arg (quote val))
-       (set-monadstate-qtags! arg qtags)
+         (set-monadstateobj-qvar! arg qvar))
+       (set-monadstateobj-qval! arg (quote val))
+       (set-monadstateobj-qtags! arg qtags)
        (monadic-do/continue (f arg))))))
 
 (define-syntax monadic-do

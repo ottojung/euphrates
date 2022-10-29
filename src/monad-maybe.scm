@@ -17,14 +17,14 @@
 %var monad-maybe
 
 %use (monad-make/simple) "./monad-make-simple.scm"
-%use (monad-arg monad-cret monad-ret) "./monad.scm"
+%use (monadstate-arg monadstate-cret monadstate-ret) "./monadstate.scm"
 
 (define (monad-maybe predicate)
   (monad-make/simple
    (monad-input)
    (call-with-values
-       (lambda _ (monad-arg monad-input))
+       (lambda _ (monadstate-arg monad-input))
      (lambda args
        (if (apply predicate args)
-           (monad-cret monad-input args identity)
-           (monad-ret  monad-input args))))))
+           (monadstate-cret monad-input args identity)
+           (monadstate-ret  monad-input args))))))

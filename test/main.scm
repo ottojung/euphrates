@@ -119,7 +119,7 @@
 %use (monadfin?) "./src/monadfin.scm"
 %use (monad-log) "./src/monad-log.scm"
 %use (with-monadic-left with-monadic-right) "./src/monadic-parameterize.scm"
-%use (monad-ret) "./src/monad.scm"
+%use (monadstate-ret) "./src/monadstate.scm"
 %use (monad-lazy) "./src/monad-lazy.scm"
 %use (monad-except) "./src/monad-except.scm"
 %use (monad-identity) "./src/monad-identity.scm"
@@ -2280,7 +2280,7 @@
       (lambda (monad-input)
         (add! monad-input)
         (if (monadfin? monad-input)
-            (monad-ret monad-input (list buffer))
+            (monadstate-ret monad-input (list buffer))
             monad-input))))
 
   (assert=

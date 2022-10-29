@@ -14,7 +14,7 @@
 
 %run guile
 
-%var monad-current-arg/p
+%var monadstate-current/p
 
-(define monad-current-arg/p
+(define monadstate-current/p
   (make-parameter #f))
