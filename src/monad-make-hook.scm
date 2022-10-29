@@ -18,17 +18,18 @@
 
 %use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
 %use (monadstate-current/p) "./monadstate-current-p.scm"
-%use (monadstate-args monadstate-ret) "./monadstate.scm"
+%use (monadstate-args monadstate-qtags monadstate-ret) "./monadstate.scm"
 
 (define-syntax monad-make/hook
   (syntax-rules ()
-    ((_ args . bodies)
+    ((_ tags-name args-list-name . bodies)
      (monad-make/no-cont/no-fin
       (lambda (monad-input)
         (call-with-values
             (lambda _
               (parameterize ((monadstate-current/p monad-input))
-                (apply (lambda args . bodies)
-                       (monadstate-args monad-input))))
+                (let ((tags-name (monadstate-qtags monad-input)))
+                  (apply (lambda args-list-name . bodies)
+                         (monadstate-args monad-input)))))
           (lambda results
             (monadstate-ret monad-input results))))))))
