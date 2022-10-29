@@ -18,8 +18,8 @@
 %var monadic-do/generic
 
 %use (memconst) "./memconst.scm"
-%use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monad-current/p) "./monad-current-p.scm"
+%use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstateobj-cont monadstateobj-lval monadstateobj-qvar set-monadstateobj-cont! set-monadstateobj-lval! set-monadstateobj-qtags! set-monadstateobj-qval! set-monadstateobj-qvar!) "./monadstateobj.scm"
 %use (raisu) "./raisu.scm"
 %use (range) "./range.scm"
@@ -48,6 +48,8 @@
   (syntax-rules ()
     ((_ (var val qtags))
      (let ((f (monad-current/p)))
+       (unless (procedure? f)
+         (raisu 'no-current-monad-specified f))
        (monadic-do/generic (f var val qtags))))
     ((_ (f var val qtags))
      (call-with-current-continuation
