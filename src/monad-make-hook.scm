@@ -23,6 +23,7 @@
   (syntax-rules ()
     ((_ args . bodies)
      (lambda (monad-input)
-       (if (monadfinobj? monad-input) monad-input
-           (apply (lambda args . bodies)
-                  (monadstate-args monad-input)))))))
+       (unless (monadfinobj? monad-input)
+         (apply (lambda args . bodies)
+                (monadstate-args monad-input)))
+       monad-input))))
