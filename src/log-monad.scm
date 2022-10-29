@@ -14,7 +14,7 @@
 
 %run guile
 
-%var monad-log
+%var log-monad
 
 %use (dprint) "./dprint.scm"
 %use (monad-make/no-cont) "./monad-make-no-cont.scm"
@@ -23,16 +23,16 @@
 %use (~a) "./tilda-a.scm"
 %use (words->string) "./words-to-string.scm"
 
-(define (monad-log-show-values monad-input)
+(define (log-monad-show-values monad-input)
   (words->string (map ~a (monadstate-args monad-input))))
 
-(define monad-log
+(define log-monad
   (monad-make/no-cont
    (lambda (monad-input)
      (if (monadfinobj? monad-input)
-         (dprint "(return ~a)\n" (monad-log-show-values monad-input))
+         (dprint "(return ~a)\n" (log-monad-show-values monad-input))
          (dprint "(~a = ~a = ~a)\n"
                  (monadstate-qvar monad-input)
-                 (monad-log-show-values monad-input)
+                 (log-monad-show-values monad-input)
                  (monadstate-qval monad-input)))
      monad-input)))

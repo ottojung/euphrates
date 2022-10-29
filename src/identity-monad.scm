@@ -14,9 +14,9 @@
 
 %run guile
 
-%var monad-identity
+%var identity-monad
 
 %use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
 
-(define monad-identity
+(define identity-monad
   (monad-make/no-cont/no-fin identity))

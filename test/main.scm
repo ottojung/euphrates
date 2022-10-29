@@ -117,13 +117,13 @@
 %use (monad-apply) "./src/monad-apply.scm"
 %use (monadic) "./src/monadic.scm"
 %use (monadic-id) "./src/monadic-id.scm"
-%use (monad-maybe) "./src/monad-maybe.scm"
-%use (monad-log) "./src/monad-log.scm"
+%use (maybe-monad) "./src/maybe-monad.scm"
+%use (log-monad) "./src/log-monad.scm"
 %use (with-monadic-left with-monadic-right) "./src/monadic-parameterize.scm"
 %use (monadstate? monadstate-ret) "./src/monadstate.scm"
-%use (monad-lazy) "./src/monad-lazy.scm"
-%use (monad-except) "./src/monad-except.scm"
-%use (monad-identity) "./src/monad-identity.scm"
+%use (lazy-monad) "./src/lazy-monad.scm"
+%use (exception-monad) "./src/exception-monad.scm"
+%use (identity-monad) "./src/identity-monad.scm"
 %use (monadic-do) "./src/monadic-do.scm"
 %use (monadic-bind) "./src/monadic-bind.scm"
 %use (with-monad) "./src/with-monad.scm"
@@ -2270,12 +2270,12 @@
 ;; monad basics
 (let ()
 
-  (define monad-log/to-string
+  (define log-monad/to-string
     (lambda _
       (define buffer "")
       (define (add! monad-input)
         (let ((s (with-output-to-string
-                   (lambda _ (monad-apply monad-log monad-input)))))
+                   (lambda _ (monad-apply log-monad monad-input)))))
           (set! buffer (string-append buffer s))))
 
       (monad-make/no-cont
@@ -2318,7 +2318,7 @@
    (with-output-to-string
      (lambda _
        (monadic
-        monad-log
+        log-monad
         (x (+ 2 3))
         ((y m) (values (* (x) (x)) (+ (x) (x))))
         (h (+ (x) (y) (m)) 'tag1)))))
@@ -2331,7 +2331,7 @@
           "(return 40)"
           ""))
    (monadic
-    (monad-log/to-string)
+    (log-monad/to-string)
     (x (+ 2 3))
     ((y m) (values (* (x) (x)) (+ (x) (x))))
     (h (+ (x) (y) (m)) 'tag1)))
@@ -2339,7 +2339,7 @@
   (assert=
    26
    (monadic
-    (monad-maybe even?)
+    (maybe-monad even?)
     (x (+ 2 3))
     (y (+ 1 (* (x) (x))))
     (h (+ (x) (y)) 'tag1)))
@@ -2347,7 +2347,7 @@
   (assert=
    #f
    (monadic
-    (monad-maybe not)
+    (maybe-monad not)
     (x (+ 2 3))
     (k #f) ;; causing to exit fast
     (z (raisu 'should-not-happen))))
@@ -2355,15 +2355,15 @@
   (assert=
    26
    (with-monadic-left
-    monad-identity
+    identity-monad
     (monadic
-     (monad-maybe (compose-under and number? even?))
+     (maybe-monad (compose-under and number? even?))
      (x (+ 2 3))
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
 
   (with-monadic-left
-   (monad-log/to-string)
+   (log-monad/to-string)
    (assert=
     (lines->string
      (list "(x = 5 = (+ 2 3))"
@@ -2371,7 +2371,7 @@
            "(return 26)"
            ""))
     (monadic
-     (monad-maybe (compose-under and number? even?))
+     (maybe-monad (compose-under and number? even?))
      (x (+ 2 3))
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
@@ -2383,15 +2383,15 @@
           "(return 26)"
           ""))
    (with-monadic-left
-    (monad-log/to-string)
+    (log-monad/to-string)
     (monadic
-     (monad-maybe (compose-under and number? even?))
+     (maybe-monad (compose-under and number? even?))
      (x (+ 2 3))
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
 
   (with-monadic-left
-   (monad-log/to-string)
+   (log-monad/to-string)
    (assert=
     (lines->string
      (list "(x = 5 = (+ 2 3))"
@@ -2399,14 +2399,14 @@
            "(return 26)"
            ""))
     (monadic
-     (monad-maybe even?)
+     (maybe-monad even?)
      (x (+ 2 3))
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1)))
    )
 
   (with-monadic-right
-   (monad-log/to-string)
+   (log-monad/to-string)
    (assert=
     (lines->string
      (list "(x = 5 = (+ 2 3))"
@@ -2414,7 +2414,7 @@
            "(return 26)"
            ""))
     (monadic
-     (monad-maybe (compose-under and number? even?))
+     (maybe-monad (compose-under and number? even?))
      (x (+ 2 3))
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1)))
@@ -2422,12 +2422,12 @@
 
   )
 
-;; monad-lazy
+;; lazy-monad
 (let ()
   (assert=
    31
    (monadic
-    monad-lazy
+    lazy-monad
     (x (+ 2 3))
     (y (+ 1 (* (x) (x))))
     (h (+ (x) (y)) 'tag1)))
@@ -2435,7 +2435,7 @@
   (assert=
    31
    (monadic
-    monad-lazy
+    lazy-monad
     (x (+ 2 3) 'async)
     (y (+ 1 (* (x) (x))) 'async)
     (h (+ (x) (y)) 'tag1)))
@@ -2445,7 +2445,7 @@
    (with-output-to-string
      (lambda _
        (monadic
-        monad-lazy
+        lazy-monad
         (x (begin (display "1.") (+ 2 3)))
         (y (begin (display "2.") (* 4 5)))
         ((p t) (begin
@@ -2457,7 +2457,7 @@
 
   )
 
-;; monad-except
+;; exception-monad
 (let ((ran-always #f)
       (throwed #t)
       (did-not-ran #t)
@@ -2465,7 +2465,7 @@
 
   (catch-any
    (lambda _
-     (monadic (monad-except)
+     (monadic (exception-monad)
               [a (+ 2 7)]
               [o (+ (a) (a))]
               [b (raisu 'test-abort)]
@@ -2500,7 +2500,7 @@
      (lambda _
 
        (with-monad
-        monad-log
+        log-monad
 
         (monadic-do (+ 3 5) 'hello)
 
@@ -2525,7 +2525,7 @@
      (lambda _
 
        (with-monad
-        monad-log
+        log-monad
 
         (monadic-bind x (+ 3 5) 'kek)
 
@@ -2545,7 +2545,7 @@
    (call-with-values
        (lambda _
          (with-monad
-          (monad-maybe (lambda _ #f))
+          (maybe-monad (lambda _ #f))
 
           (define x 10)
           (monadic-bind y (+ x x))
@@ -2557,7 +2557,7 @@
   (assert=
    10
    (with-monad
-    monad-identity
+    identity-monad
 
     (define x 10)
     (monadic-bind y (+ x x))

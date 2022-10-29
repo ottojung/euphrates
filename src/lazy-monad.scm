@@ -14,16 +14,21 @@
 
 %run guile
 
-%var monad-filter
+%var lazy-monad
 
-%use (monad-replace) "./monad-replace.scm"
-%use (raisu) "./raisu.scm"
+%use (dynamic-thread-async) "./dynamic-thread-async.scm"
+%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
+%use (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret/thunk) "./monadstate.scm"
 
-;; Skips evaluation based on given predicate
-;; NOTE: don't use on multiple-values!
-(define (monad-filter test-any)
-  (monad-replace
-   (lambda (tags arg#lazy)
-     (if (or-map test-any tags)
-         (lambda _ (raisu 'filter-monad-skipped-evaluation))
-         arg#lazy))))
+;; Provides lazy evaluation, with "async" feature
+(define lazy-monad
+  (monad-make/no-cont/no-fin
+   (lambda (monad-input)
+     (define result
+       (if (memq 'async (monadstate-qtags monad-input))
+           (dynamic-thread-async
+            (call-with-values
+                (lambda _ (monadstate-arg monad-input))
+              list))
+           (monadstate-lval monad-input)))
+     (monadstate-ret/thunk monad-input result))))

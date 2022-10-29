@@ -14,7 +14,7 @@
 
 %run guile
 
-%var monad-except
+%var exception-monad
 
 %use (catch-any) "./catch-any.scm"
 %use (cons!) "./cons-bang.scm"
@@ -23,7 +23,7 @@
 %use (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret monadstate-ret/thunk) "./monadstate.scm"
 %use (raisu) "./raisu.scm"
 
-(define (monad-except)
+(define (exception-monad)
   (let ((exceptions '()))
     (monad-make/no-cont
      (lambda (monad-input)
@@ -44,7 +44,7 @@
                        (lambda _ (apply values vals)))))
                  (lambda args
                    (cons! args exceptions)
-                   (lambda _ (raisu 'monad-except-default)))))
+                   (lambda _ (raisu 'exception-monad-default)))))
                (monadstate-ret/thunk
                 monad-input
-                (lambda _ (raisu 'monad-except-default)))))))))
+                (lambda _ (raisu 'exception-monad-default)))))))))

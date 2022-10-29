@@ -17,9 +17,9 @@
 %var monadic-id
 
 %use (monadic) "./monadic.scm"
-%use (monad-identity) "./monad-identity.scm"
+%use (identity-monad) "./identity-monad.scm"
 
 (define-syntax monadic-id
   (syntax-rules ()
     ((_ . argv)
-     (monadic monad-identity . argv))))
+     (monadic identity-monad . argv))))

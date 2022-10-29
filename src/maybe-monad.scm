@@ -14,13 +14,13 @@
 
 %run guile
 
-%var monad-maybe
+%var maybe-monad
 
 %use (identity*) "./identity-star.scm"
 %use (monad-make) "./monad-make.scm"
 %use (monadstate-args monadstate-cret monadstate-ret) "./monadstate.scm"
 
-(define (monad-maybe predicate)
+(define (maybe-monad predicate)
   (monad-make
    (lambda (monad-input)
      (define args (monadstate-args monad-input))
