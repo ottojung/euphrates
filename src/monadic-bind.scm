@@ -23,8 +23,8 @@
     ((_ (x . xs) val . tags)
      (begin
        (define-values (x . xs) (monadic-do/generic ((x . xs) val (list . tags))))
-       (values x . xs)))
+       (when #f #f)))
     ((_ var val . tags)
      (begin
        (define var (monadic-do/generic (var val (list . tags))))
-       var))))
+       (when #f #f)))))
