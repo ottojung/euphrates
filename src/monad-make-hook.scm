@@ -23,12 +23,12 @@
 (define-syntax monad-make/hook
   (syntax-rules ()
     ((_ args . bodies)
-     (lambda (monad-input)
-       (if (monadfinobj? monad-input) monad-input
-           (call-with-values
-               (lambda _
-                 (parameterize ((monadstate-current/p monad-input))
-                   (apply (lambda args . bodies)
-                          (monadstate-args monad-input))))
-             (lambda results
-               (monadstate-ret monad-input results))))))))
+     (monad-make/no-cont/no-fin
+      (lambda (monad-input)
+        (call-with-values
+            (lambda _
+              (parameterize ((monadstate-current/p monad-input))
+                (apply (lambda args . bodies)
+                       (monadstate-args monad-input))))
+          (lambda results
+            (monadstate-ret monad-input results))))))))
