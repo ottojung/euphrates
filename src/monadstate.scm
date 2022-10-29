@@ -14,21 +14,32 @@
 
 %run guile
 
+%var monadstate?
 %var monadstate-cret
 %var monadstate-cret/thunk
 %var monadstate-ret
 %var monadstate-ret/thunk
+%var monadstate-make-empty
+%var monadstate-qvar
+%var monadstate-qval
+%var monadstate-qtags
+%var monadstate-lval
 %var monadstate-arg
 %var monadstate-args
 %var monadstate-replicate-multiple
 %var monadstate-handle-multiple
 
 %use (memconst) "./memconst.scm"
-%use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadfin monadfin-lval monadfin?) "./monadfin.scm"
+%use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?) "./monadstateobj.scm"
 %use (raisu) "./raisu.scm"
 %use (replicate) "./replicate.scm"
+
+(define monadstate? monadstateobj?)
+
+(define (monadstate-make-empty)
+  (monadstateobj #f #f #f #f #f))
 
 (define monadstate-qvar
   (case-lambda
@@ -52,6 +63,14 @@
    ((monadstate-input)
     (if (monadstateobj? monadstate-input)
         (monadstateobj-qtags monadstate-input)
+        '()))))
+
+(define monadstate-lval
+  (case-lambda
+   (() (monadstate-lval (monadstate-current/p)))
+   ((monadstate-input)
+    (if (monadstateobj? monadstate-input)
+        (monadstateobj-lval monadstate-input)
         '()))))
 
 (define monadstate-args

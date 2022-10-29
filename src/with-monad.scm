@@ -16,11 +16,11 @@
 
 %var with-monad
 
-%use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monad-current/p) "./monad-current-p.scm"
-%use (monadstateobj-make-empty) "./monadstateobj.scm"
 %use (monadfin monadfin-lval) "./monadfin.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
+%use (monadstate-current/p) "./monadstate-current-p.scm"
+%use (monadstate-make-empty) "./monadstate.scm"
 
 (define-syntax with-monad
   (syntax-rules ()
@@ -29,7 +29,7 @@
             (f fexpr)
             (m (if p (p f (quote fexpr)) f)))
        (parameterize ((monad-current/p m)
-                      (monadstate-current/p (monadstateobj-make-empty)))
+                      (monadstate-current/p (monadstate-make-empty)))
          (apply
           values
           (call-with-values

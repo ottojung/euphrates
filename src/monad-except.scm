@@ -16,12 +16,11 @@
 
 %var monad-except
 
-%use (monadstateobj-lval monadstateobj-qtags) "./monadstateobj.scm"
-%use (monadfin?) "./monadfin.scm"
-%use (monadstate-arg monadstate-ret monadstate-ret/thunk monadstate-replicate-multiple monadstate-handle-multiple) "./monadstate.scm"
-%use (raisu) "./raisu.scm"
 %use (catch-any) "./catch-any.scm"
 %use (cons!) "./cons-bang.scm"
+%use (monadfin?) "./monadfin.scm"
+%use (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret monadstate-ret/thunk) "./monadstate.scm"
+%use (raisu) "./raisu.scm"
 
 (define (monad-except)
   (let ((exceptions '()))
@@ -32,13 +31,13 @@
                          (monadstate-arg monad-input)
                          (apply raisu 'except-monad exceptions)))
           (if (or (null? exceptions)
-                  (memq 'always (monadstateobj-qtags monad-input)))
+                  (memq 'always (monadstate-qtags monad-input)))
               (monadstate-ret/thunk
                monad-input
                (catch-any
                 (lambda _
                   (call-with-values
-                      (lambda _ ((monadstateobj-lval monad-input)))
+                      (lambda _ ((monadstate-lval monad-input)))
                     (lambda vals
                       (lambda _ (apply values vals)))))
                 (lambda args

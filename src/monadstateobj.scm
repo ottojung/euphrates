@@ -13,7 +13,6 @@
 %var set-monadstateobj-qval!
 %var monadstateobj-qtags
 %var set-monadstateobj-qtags!
-%var monadstateobj-make-empty
 
 %use (define-type9) "./define-type9.scm"
 
@@ -24,7 +23,3 @@
   (qvar monadstateobj-qvar set-monadstateobj-qvar!)
   (qval monadstateobj-qval set-monadstateobj-qval!)
   (qtags monadstateobj-qtags set-monadstateobj-qtags!))
-
-(define (monadstateobj-make-empty)
-  (monadstateobj #f #f #f #f #f))
-
