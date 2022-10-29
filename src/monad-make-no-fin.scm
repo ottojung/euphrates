@@ -14,11 +14,16 @@
 
 %run guile
 
-%var monad-make/no-cont
+%var monad-make/no-fin
 
+%use (monadfinobj?) "./monadfinobj.scm"
 %use (monadobj-constructor) "./monadobj.scm"
 
-(define (monad-make/no-cont proc)
-  (define uses-continuations? #f)
-  (define handles-fin? #t)
-  (monadobj-constructor proc uses-continuations? handles-fin?))
+(define (monad-make/no-fin proc)
+  (define uses-continuations? #t)
+  (define handles-fin? #f)
+  (monadobj-constructor
+   (lambda (monad-input)
+     (if (monadfinobj? monad-input) monad-input
+         (proc monad-input)))
+   uses-continuations? handles-fin?))

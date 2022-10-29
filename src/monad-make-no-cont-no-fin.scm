@@ -17,8 +17,13 @@
 %var monad-make/no-cont/no-fin
 
 %use (monadfinobj?) "./monadfinobj.scm"
+%use (monadobj-constructor) "./monadobj.scm"
 
 (define (monad-make/no-cont/no-fin proc)
-  (lambda (monad-something)
-    (if (monadfinobj? monad-something) monad-something
-        (proc monad-something))))
+  (define uses-continuations? #f)
+  (define handles-fin? #f)
+  (monadobj-constructor
+   (lambda (monad-input)
+     (if (monadfinobj? monad-input) monad-input
+         (proc monad-input)))
+   uses-continuations? handles-fin?))

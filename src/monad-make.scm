@@ -16,5 +16,9 @@
 
 %var monad-make
 
+%use (monadobj-constructor) "./monadobj.scm"
+
 (define (monad-make proc)
-  proc)
+  (define uses-continuations? #t)
+  (define handles-fin? #t)
+  (monadobj-constructor proc uses-continuations? handles-fin?))
