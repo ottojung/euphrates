@@ -16,15 +16,14 @@
 
 %var monad-maybe
 
-%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
-%use (monadstate-arg monadstate-cret monadstate-ret) "./monadstate.scm"
+%use (identity*) "./identity-star.scm"
+%use (monad-make) "./monad-make.scm"
+%use (monadstate-args monadstate-cret monadstate-ret) "./monadstate.scm"
 
 (define (monad-maybe predicate)
-  (monad-make/no-cont/no-fin
-   (monad-input)
-   (call-with-values
-       (lambda _ (monadstate-arg monad-input))
-     (lambda args
-       (if (apply predicate args)
-           (monadstate-cret monad-input args identity)
-           (monadstate-ret  monad-input args))))))
+  (monad-make
+   (lambda (monad-input)
+     (define args (monadstate-args monad-input))
+     (if (apply predicate args)
+         (monadstate-cret monad-input args identity*)
+         (monadstate-ret  monad-input args)))))

@@ -16,4 +16,7 @@
 
 %var monad-identity
 
-(define monad-identity identity)
+%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
+
+(define monad-identity
+  (monad-make/no-cont/no-fin identity))

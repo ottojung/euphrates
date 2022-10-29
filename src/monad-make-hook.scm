@@ -16,14 +16,17 @@
 
 %var monad-make/hook
 
-%use (monadstate-args) "./monadstate.scm"
 %use (monadfinobj?) "./monadfinobj.scm"
+%use (monadstate-args monadstate-ret) "./monadstate.scm"
 
 (define-syntax monad-make/hook
   (syntax-rules ()
     ((_ args . bodies)
      (lambda (monad-input)
-       (unless (monadfinobj? monad-input)
-         (apply (lambda args . bodies)
-                (monadstate-args monad-input)))
-       monad-input))))
+       (if (monadfinobj? monad-input) monad-input
+           (call-with-values
+               (lambda _
+                 (apply (lambda args . bodies)
+                        (monadstate-args monad-input)))
+             (lambda results
+               (monadstate-ret monad-input results))))))))

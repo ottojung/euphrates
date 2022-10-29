@@ -18,10 +18,7 @@
 
 %use (monadfinobj?) "./monadfinobj.scm"
 
-(define-syntax monad-make/no-cont/no-fin
-  (syntax-rules ()
-    ((_ (monad-input-name) . bodies)
-     (lambda (monad-something)
-       (if (monadfinobj? monad-something) monad-something
-           ((lambda (monad-input-name) . bodies)
-            monad-something))))))
+(define (monad-make/no-cont/no-fin proc)
+  (lambda (monad-something)
+    (if (monadfinobj? monad-something) monad-something
+        (proc monad-something))))

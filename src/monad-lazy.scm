@@ -23,12 +23,12 @@
 ;; Provides lazy evaluation, with "async" feature
 (define monad-lazy
   (monad-make/no-cont/no-fin
-   (monad-input)
-   (define result
-     (if (memq 'async (monadstate-qtags monad-input))
-         (dynamic-thread-async
-          (call-with-values
-              (lambda _ (monadstate-arg monad-input))
-            list))
-         (monadstate-lval monad-input)))
-   (monadstate-ret/thunk monad-input result)))
+   (lambda (monad-input)
+     (define result
+       (if (memq 'async (monadstate-qtags monad-input))
+           (dynamic-thread-async
+            (call-with-values
+                (lambda _ (monadstate-arg monad-input))
+              list))
+           (monadstate-lval monad-input)))
+     (monadstate-ret/thunk monad-input result))))

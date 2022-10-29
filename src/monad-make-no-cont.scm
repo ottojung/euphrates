@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
+;;;; Copyright (C) 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -14,16 +14,7 @@
 
 %run guile
 
-%var monad-replace
+%var monad-make/no-cont
 
-%use (monad-make/no-cont) "./monad-make-no-cont.scm"
-%use (monadstate-lval monadstate-qtags monadstate-ret/thunk) "./monadstate.scm"
-
-;; Replaces expressions by different ones based on associted tags
-;; Can be used for deriving many less general monads, like lazy-monad or filter-monad
-(define (monad-replace test/replace-procedure)
-  (monad-make/no-cont
-   (lambda (monad-input)
-     (let ((tags (monadstate-qtags monad-input))
-           (arg#lazy (monadstate-lval monad-input)))
-       (monadstate-ret/thunk (test/replace-procedure tags arg#lazy))))))
+(define (monad-make/no-cont proc)
+  proc)

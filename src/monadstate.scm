@@ -29,6 +29,7 @@
 %var monadstate-replicate-multiple
 %var monadstate-handle-multiple
 
+%use (identity*) "./identity-star.scm"
 %use (memconst) "./memconst.scm"
 %use (monadfinobj monadfinobj-lval monadfinobj?) "./monadfinobj.scm"
 %use (monadstate-current/p) "./monadstate-current-p.scm"
@@ -97,16 +98,17 @@
          (raisu 'monadstate-lval-must-be-list arg))
 
        (if (monadstateobj? monadstate-input)
-           (monadstateobj (memconst arg)
-                     cont
-                     (monadstateobj-qvar monadstate-input)
-                     (monadstateobj-qval monadstate-input)
-                     (monadstateobj-qtags monadstate-input))
+           (monadstateobj
+            (memconst arg)
+            cont
+            (monadstateobj-qvar monadstate-input)
+            (monadstateobj-qval monadstate-input)
+            (monadstateobj-qtags monadstate-input))
            (monadfinobj
             (memconst
-              (call-with-values
-                  (lambda _ (cont arg))
-                (lambda vals vals)))))))))
+             (call-with-values
+                 (lambda _ (cont arg))
+               identity*))))))))
 
 (define-syntax monadstate-cret/thunk
   (syntax-rules ()
@@ -118,16 +120,17 @@
          (raisu 'monadstate-lval-must-be-list arg))
 
        (if (monadstateobj? monadstate-input)
-           (monadstateobj arg
-                     cont
-                     (monadstateobj-qvar monadstate-input)
-                     (monadstateobj-qval monadstate-input)
-                     (monadstateobj-qtags monadstate-input))
+           (monadstateobj
+            arg
+            cont
+            (monadstateobj-qvar monadstate-input)
+            (monadstateobj-qval monadstate-input)
+            (monadstateobj-qtags monadstate-input))
            (monadfinobj
             (memconst
-              (call-with-values
-                  (lambda _ (cont arg))
-                (lambda vals vals)))))))))
+             (call-with-values
+                 (lambda _ (cont arg))
+               identity*))))))))
 
 (define-syntax monadstate-ret
   (syntax-rules ()
@@ -140,11 +143,12 @@
 
        (if (monadfinobj? monadstate-input)
            (monadfinobj (lambda _ arg))
-           (monadstateobj (memconst arg)
-                     (monadstateobj-cont monadstate-input)
-                     (monadstateobj-qvar monadstate-input)
-                     (monadstateobj-qval monadstate-input)
-                     (monadstateobj-qtags monadstate-input)))))))
+           (monadstateobj
+            (lambda _ arg)
+            (monadstateobj-cont monadstate-input)
+            (monadstateobj-qvar monadstate-input)
+            (monadstateobj-qval monadstate-input)
+            (monadstateobj-qtags monadstate-input)))))))
 
 (define-syntax monadstate-ret/thunk
   (syntax-rules ()
@@ -153,11 +157,12 @@
     ((_ monadstate-input arg)
      (if (monadfinobj? monadstate-input)
          (monadfinobj arg)
-         (monadstateobj arg
-                   (monadstateobj-cont monadstate-input)
-                   (monadstateobj-qvar monadstate-input)
-                   (monadstateobj-qval monadstate-input)
-                   (monadstateobj-qtags monadstate-input))))))
+         (monadstateobj
+          arg
+          (monadstateobj-cont monadstate-input)
+          (monadstateobj-qvar monadstate-input)
+          (monadstateobj-qval monadstate-input)
+          (monadstateobj-qtags monadstate-input))))))
 
 (define monadstate-handle-multiple
   (case-lambda

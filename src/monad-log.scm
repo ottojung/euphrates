@@ -17,6 +17,7 @@
 %var monad-log
 
 %use (dprint) "./dprint.scm"
+%use (monad-make/no-cont) "./monad-make-no-cont.scm"
 %use (monadfinobj?) "./monadfinobj.scm"
 %use (monadstate-args monadstate-qval monadstate-qvar) "./monadstate.scm"
 %use (~a) "./tilda-a.scm"
@@ -26,11 +27,12 @@
   (words->string (map ~a (monadstate-args monad-input))))
 
 (define monad-log
-  (lambda (monad-input)
-    (if (monadfinobj? monad-input)
-        (dprint "(return ~a)\n" (monad-log-show-values monad-input))
-        (dprint "(~a = ~a = ~a)\n"
-                (monadstate-qvar monad-input)
-                (monad-log-show-values monad-input)
-                (monadstate-qval monad-input)))
-    monad-input))
+  (monad-make/no-cont
+   (lambda (monad-input)
+     (if (monadfinobj? monad-input)
+         (dprint "(return ~a)\n" (monad-log-show-values monad-input))
+         (dprint "(~a = ~a = ~a)\n"
+                 (monadstate-qvar monad-input)
+                 (monad-log-show-values monad-input)
+                 (monadstate-qval monad-input)))
+     monad-input)))
