@@ -30,6 +30,30 @@
 %use (raisu) "./raisu.scm"
 %use (replicate) "./replicate.scm"
 
+(define monad-qvar
+  (case-lambda
+   (() (monad-qvar (monad-current-arg/p)))
+   ((monad-input)
+    (if (monadstate? monad-input)
+        (monadstate-qvar monad-input)
+        '()))))
+
+(define monad-qval
+  (case-lambda
+   (() (monad-qval (monad-current-arg/p)))
+   ((monad-input)
+    (if (monadstate? monad-input)
+        (monadstate-qval monad-input)
+        '()))))
+
+(define monad-qtags
+  (case-lambda
+   (() (monad-qtags (monad-current-arg/p)))
+   ((monad-input)
+    (if (monadstate? monad-input)
+        (monadstate-qtags monad-input)
+        '()))))
+
 (define monad-args
   (case-lambda
    (() (monad-args (monad-current-arg/p)))
