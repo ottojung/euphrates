@@ -113,7 +113,8 @@
 %use (compose-under) "./src/compose-under.scm"
 %use (list-partition) "./src/list-partition.scm"
 %use (string->seconds) "./src/string-to-seconds.scm"
-%use (monad-make) "./src/monad-make.scm"
+%use (monad-make/no-cont) "./src/monad-make-no-cont.scm"
+%use (monad-apply) "./src/monad-apply.scm"
 %use (monadic) "./src/monadic.scm"
 %use (monadic-id) "./src/monadic-id.scm"
 %use (monad-maybe) "./src/monad-maybe.scm"
@@ -2270,14 +2271,14 @@
 (let ()
 
   (define monad-log/to-string
-    (monad-make
-     (lambda _
-       (define buffer "")
-       (define (add! monad-input)
-         (let ((s (with-output-to-string
-                    (lambda _ (monad-log monad-input)))))
-           (set! buffer (string-append buffer s))))
+    (lambda _
+      (define buffer "")
+      (define (add! monad-input)
+        (let ((s (with-output-to-string
+                   (lambda _ (monad-apply monad-log monad-input)))))
+          (set! buffer (string-append buffer s))))
 
+      (monad-make/no-cont
        (lambda (monad-input)
          (add! monad-input)
          (if (monadstate? monad-input)

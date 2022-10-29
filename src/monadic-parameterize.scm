@@ -18,6 +18,7 @@
 %var with-monadic-left
 %var with-monadic-right
 
+%use (monad-compose) "./monad-compose.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
 
 (define-syntax monadic-parameterize
@@ -35,7 +36,7 @@
                 (let ((applied (if current-monad
                                    (current-monad old-monad old-monad-quoted)
                                    old-monad)))
-                  (compose f applied)))))
+                  (monad-compose f applied)))))
          (parameterize ((monadic-global/p new-monad))
            (begin . body)))))))
 
@@ -48,6 +49,6 @@
                 (let ((applied (if current-monad
                                    (current-monad old-monad old-monad-quoted)
                                    old-monad)))
-                  (compose applied f)))))
+                  (monad-compose applied f)))))
          (parameterize ((monadic-global/p new-monad))
            (begin . body)))))))

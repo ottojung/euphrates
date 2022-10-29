@@ -16,6 +16,7 @@
 
 %var with-monad
 
+%use (monad-apply) "./monad-apply.scm"
 %use (monad-current/p) "./monad-current-p.scm"
 %use (monadfinobj) "./monadfinobj.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
@@ -34,5 +35,4 @@
              (lambda _ body . bodies)
            (lambda results
              (monadstate-arg
-              (m (monadfinobj (lambda _ results)))))))))))
-
+              (monad-apply m (monadfinobj (lambda _ results)))))))))))

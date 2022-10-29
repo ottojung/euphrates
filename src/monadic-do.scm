@@ -18,7 +18,9 @@
 %var monadic-do/generic
 
 %use (memconst) "./memconst.scm"
+%use (monad-apply) "./monad-apply.scm"
 %use (monad-current/p) "./monad-current-p.scm"
+%use (monadobj?) "./monadobj.scm"
 %use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstateobj-cont monadstateobj-lval monadstateobj-qvar set-monadstateobj-cont! set-monadstateobj-lval! set-monadstateobj-qtags! set-monadstateobj-qval! set-monadstateobj-qvar!) "./monadstateobj.scm"
 %use (raisu) "./raisu.scm"
@@ -48,7 +50,7 @@
   (syntax-rules ()
     ((_ (var val qtags))
      (let ((f (monad-current/p)))
-       (unless (procedure? f)
+       (unless (monadobj? f)
          (raisu 'no-current-monad-specified f))
        (monadic-do/generic (f var val qtags))))
     ((_ (f var val qtags))
@@ -64,7 +66,7 @@
          (set-monadstateobj-qvar! arg qvar))
        (set-monadstateobj-qval! arg (quote val))
        (set-monadstateobj-qtags! arg qtags)
-       (monadic-do/continue (f arg))))))
+       (monadic-do/continue (monad-apply f arg))))))
 
 (define-syntax monadic-do
   (syntax-rules ()
