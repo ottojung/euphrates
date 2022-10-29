@@ -14,8 +14,8 @@
 
 %run guile
 
-;; NOTE: use `monadic-parameterize' to change the value.
-%var monadic-global/p
+;; NOTE: use `monad-parameterize' to change the value.
+%var monad-transformer-current/p
 
-(define monadic-global/p
+(define monad-transformer-current/p
   (make-parameter #f))

@@ -14,14 +14,14 @@
 
 %run guile
 
-%var monad-replace
+%var replacement-monad
 
 %use (monad-make/no-cont) "./monad-make-no-cont.scm"
 %use (monadstate-lval monadstate-qtags monadstate-ret/thunk) "./monadstate.scm"
 
 ;; Replaces expressions by different ones based on associted tags
 ;; Can be used for deriving many less general monads, like lazy-monad or filter-monad
-(define (monad-replace test/replace-procedure)
+(define (replacement-monad test/replace-procedure)
   (monad-make/no-cont
    (lambda (monad-input)
      (let ((tags (monadstate-qtags monad-input))

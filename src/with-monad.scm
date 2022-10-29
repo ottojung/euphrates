@@ -19,14 +19,14 @@
 %use (monad-apply) "./monad-apply.scm"
 %use (monad-current/p) "./monad-current-p.scm"
 %use (monadfinobj) "./monadfinobj.scm"
-%use (monadic-global/p) "./monadic-global-p.scm"
+%use (monad-transformer-current/p) "./monad-transformer-current-p.scm"
 %use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstate-arg monadstate-make-empty) "./monadstate.scm"
 
 (define-syntax with-monad
   (syntax-rules ()
     ((_ fexpr body . bodies)
-     (let* ((p (monadic-global/p))
+     (let* ((p (monad-transformer-current/p))
             (f fexpr)
             (m (if p (p f (quote fexpr)) f)))
        (parameterize ((monad-current/p m)

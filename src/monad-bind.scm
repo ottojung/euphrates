@@ -14,17 +14,17 @@
 
 %run guile
 
-%var monadic-bind
+%var monad-bind
 
-%use (monadic-do/generic) "./monadic-do.scm"
+%use (monad-do/generic) "./monad-do.scm"
 
-(define-syntax monadic-bind
+(define-syntax monad-bind
   (syntax-rules ()
     ((_ (x . xs) val . tags)
      (begin
-       (define-values (x . xs) (monadic-do/generic ((x . xs) val (list . tags))))
+       (define-values (x . xs) (monad-do/generic ((x . xs) val (list . tags))))
        (when #f #f)))
     ((_ var val . tags)
      (begin
-       (define var (monadic-do/generic (var val (list . tags))))
+       (define var (monad-do/generic (var val (list . tags))))
        (when #f #f)))))

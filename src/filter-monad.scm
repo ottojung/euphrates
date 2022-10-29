@@ -16,13 +16,13 @@
 
 %var filter-monad
 
-%use (monad-replace) "./monad-replace.scm"
+%use (replacement-monad) "./replacement-monad.scm"
 %use (raisu) "./raisu.scm"
 
 ;; Skips evaluation based on given predicate
 ;; NOTE: don't use on multiple-values!
 (define (filter-monad test-any)
-  (monad-replace
+  (replacement-monad
    (lambda (tags arg#lazy)
      (if (or-map test-any tags)
          (lambda _ (raisu 'filter-monad-skipped-evaluation))

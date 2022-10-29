@@ -119,13 +119,13 @@
 %use (monadic-id) "./src/monadic-id.scm"
 %use (maybe-monad) "./src/maybe-monad.scm"
 %use (log-monad) "./src/log-monad.scm"
-%use (with-monadic-left with-monadic-right) "./src/monadic-parameterize.scm"
+%use (with-monad-left with-monad-right) "./src/monad-parameterize.scm"
 %use (monadstate? monadstate-ret) "./src/monadstate.scm"
 %use (lazy-monad) "./src/lazy-monad.scm"
 %use (exception-monad) "./src/exception-monad.scm"
 %use (identity-monad) "./src/identity-monad.scm"
-%use (monadic-do) "./src/monadic-do.scm"
-%use (monadic-bind) "./src/monadic-bind.scm"
+%use (monad-do) "./src/monad-do.scm"
+%use (monad-bind) "./src/monad-bind.scm"
 %use (with-monad) "./src/with-monad.scm"
 %use (list-fold) "./src/list-fold.scm"
 %use (list-chunks) "./src/list-chunks.scm"
@@ -2354,7 +2354,7 @@
 
   (assert=
    26
-   (with-monadic-left
+   (with-monad-left
     identity-monad
     (monadic
      (maybe-monad (compose-under and number? even?))
@@ -2362,7 +2362,7 @@
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
 
-  (with-monadic-left
+  (with-monad-left
    (log-monad/to-string)
    (assert=
     (lines->string
@@ -2382,7 +2382,7 @@
           "(y = 26 = (+ 1 (* (x) (x))))"
           "(return 26)"
           ""))
-   (with-monadic-left
+   (with-monad-left
     (log-monad/to-string)
     (monadic
      (maybe-monad (compose-under and number? even?))
@@ -2390,7 +2390,7 @@
      (y (+ 1 (* (x) (x))))
      (h (+ (x) (y)) 'tag1))))
 
-  (with-monadic-left
+  (with-monad-left
    (log-monad/to-string)
    (assert=
     (lines->string
@@ -2405,7 +2405,7 @@
      (h (+ (x) (y)) 'tag1)))
    )
 
-  (with-monadic-right
+  (with-monad-right
    (log-monad/to-string)
    (assert=
     (lines->string
@@ -2485,7 +2485,7 @@
   (assert did-not-ran)
   (assert throwed))
 
-;; monadic-bind
+;; monad-bind
 (let ()
 
   (assert=
@@ -2502,12 +2502,12 @@
        (with-monad
         log-monad
 
-        (monadic-do (+ 3 5) 'hello)
+        (monad-do (+ 3 5) 'hello)
 
         (display "This is not inside of a monad")
         (newline)
 
-        (monadic-do (* 8 2) 'bye)
+        (monad-do (* 8 2) 'bye)
 
         16
         ))))
@@ -2527,7 +2527,7 @@
        (with-monad
         log-monad
 
-        (monadic-bind x (+ 3 5) 'kek)
+        (monad-bind x (+ 3 5) 'kek)
 
         (display "This is not inside of a monad")
         (newline)
@@ -2535,7 +2535,7 @@
         (write (x))
         (newline)
 
-        (monadic-bind y (* 8 2) 'bye)
+        (monad-bind y (* 8 2) 'bye)
 
         (y)
         ))))
@@ -2548,8 +2548,8 @@
           (maybe-monad (lambda _ #f))
 
           (define x 10)
-          (monadic-bind y (+ x x))
-          (monadic-bind (r1 r2) (values x (+ (y) (y))))
+          (monad-bind y (+ x x))
+          (monad-bind (r1 r2) (values x (+ (y) (y))))
 
           (values (r1) (r2))))
      list))
@@ -2560,8 +2560,8 @@
     identity-monad
 
     (define x 10)
-    (monadic-bind y (+ x x))
-    (monadic-bind (r1 r2) (values x (+ (y) (y))))
+    (monad-bind y (+ x x))
+    (monad-bind (r1 r2) (values x (+ (y) (y))))
 
     x))
 

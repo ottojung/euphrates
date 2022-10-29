@@ -14,41 +14,41 @@
 
 %run guile
 
-%var monadic-parameterize
-%var with-monadic-left
-%var with-monadic-right
+%var monad-parameterize
+%var with-monad-left
+%var with-monad-right
 
 %use (monad-compose) "./monad-compose.scm"
-%use (monadic-global/p) "./monadic-global-p.scm"
+%use (monad-transformer-current/p) "./monad-transformer-current-p.scm"
 
-(define-syntax monadic-parameterize
+(define-syntax monad-parameterize
   (syntax-rules ()
     ((_ f . body)
-     (parameterize ((monadic-global/p f))
+     (parameterize ((monad-transformer-current/p f))
        (begin . body)))))
 
-(define-syntax with-monadic-left
+(define-syntax with-monad-left
   (syntax-rules ()
     ((_ f . body)
-     (let ((current-monad (monadic-global/p)))
+     (let ((current-monad (monad-transformer-current/p)))
        (let ((new-monad
               (lambda (old-monad old-monad-quoted)
                 (let ((applied (if current-monad
                                    (current-monad old-monad old-monad-quoted)
                                    old-monad)))
                   (monad-compose f applied)))))
-         (parameterize ((monadic-global/p new-monad))
+         (parameterize ((monad-transformer-current/p new-monad))
            (begin . body)))))))
 
-(define-syntax with-monadic-right
+(define-syntax with-monad-right
   (syntax-rules ()
     ((_ f . body)
-     (let ((current-monad (monadic-global/p)))
+     (let ((current-monad (monad-transformer-current/p)))
        (let ((new-monad
               (lambda (old-monad old-monad-quoted)
                 (let ((applied (if current-monad
                                    (current-monad old-monad old-monad-quoted)
                                    old-monad)))
                   (monad-compose applied f)))))
-         (parameterize ((monadic-global/p new-monad))
+         (parameterize ((monad-transformer-current/p new-monad))
            (begin . body)))))))
