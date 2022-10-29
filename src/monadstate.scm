@@ -30,7 +30,7 @@
 %var monadstate-handle-multiple
 
 %use (memconst) "./memconst.scm"
-%use (monadfin monadfin-lval monadfin?) "./monadfin.scm"
+%use (monadfinobj monadfinobj-lval monadfinobj?) "./monadfinobj.scm"
 %use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?) "./monadstateobj.scm"
 %use (raisu) "./raisu.scm"
@@ -79,7 +79,7 @@
    ((monadstate-input)
     (if (monadstateobj? monadstate-input)
         ((monadstateobj-lval monadstate-input))
-        ((monadfin-lval monadstate-input))))))
+        ((monadfinobj-lval monadstate-input))))))
 
 (define monadstate-arg
   (case-lambda
@@ -102,7 +102,7 @@
                      (monadstateobj-qvar monadstate-input)
                      (monadstateobj-qval monadstate-input)
                      (monadstateobj-qtags monadstate-input))
-           (monadfin
+           (monadfinobj
             (memconst
               (call-with-values
                   (lambda _ (cont arg))
@@ -123,7 +123,7 @@
                      (monadstateobj-qvar monadstate-input)
                      (monadstateobj-qval monadstate-input)
                      (monadstateobj-qtags monadstate-input))
-           (monadfin
+           (monadfinobj
             (memconst
               (call-with-values
                   (lambda _ (cont arg))
@@ -138,8 +138,8 @@
        (unless (list? arg)
          (raisu 'monadstate-lval-must-be-list arg))
 
-       (if (monadfin? monadstate-input)
-           (monadfin (lambda _ arg))
+       (if (monadfinobj? monadstate-input)
+           (monadfinobj (lambda _ arg))
            (monadstateobj (memconst arg)
                      (monadstateobj-cont monadstate-input)
                      (monadstateobj-qvar monadstate-input)
@@ -151,8 +151,8 @@
     ((_ arg)
      (monadstate-ret (monadstate-current/p) arg))
     ((_ monadstate-input arg)
-     (if (monadfin? monadstate-input)
-         (monadfin arg)
+     (if (monadfinobj? monadstate-input)
+         (monadfinobj arg)
          (monadstateobj arg
                    (monadstateobj-cont monadstate-input)
                    (monadstateobj-qvar monadstate-input)
@@ -163,7 +163,7 @@
   (case-lambda
    ((arg) (monadstate-handle-multiple (monadstate-current/p) arg))
    ((monadstate-input arg)
-    (if (monadfin? monadstate-input)
+    (if (monadfinobj? monadstate-input)
         (arg)
         (let* ((qvar (monadstateobj-qvar monadstate-input))
                (len (if (list? qvar) (length qvar) 1)))

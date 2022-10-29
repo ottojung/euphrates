@@ -16,12 +16,12 @@
 
 %var monad-make/simple
 
-%use (monadfin?) "./monadfin.scm"
+%use (monadfinobj?) "./monadfinobj.scm"
 
 (define-syntax monad-make/simple
   (syntax-rules ()
     ((_ (monad-input-name) . bodies)
      (lambda (monad-something)
-       (if (monadfin? monad-something) monad-something
+       (if (monadfinobj? monad-something) monad-something
            ((lambda (monad-input-name) . bodies)
             monad-something))))))

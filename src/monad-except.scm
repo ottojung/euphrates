@@ -18,14 +18,14 @@
 
 %use (catch-any) "./catch-any.scm"
 %use (cons!) "./cons-bang.scm"
-%use (monadfin?) "./monadfin.scm"
+%use (monadfinobj?) "./monadfinobj.scm"
 %use (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret monadstate-ret/thunk) "./monadstate.scm"
 %use (raisu) "./raisu.scm"
 
 (define (monad-except)
   (let ((exceptions '()))
     (lambda (monad-input)
-      (if (monadfin? monad-input)
+      (if (monadfinobj? monad-input)
           (monadstate-ret monad-input
                      (if (null? exceptions)
                          (monadstate-arg monad-input)

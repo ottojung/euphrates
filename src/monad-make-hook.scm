@@ -17,12 +17,12 @@
 %var monad-make/hook
 
 %use (monadstate-args) "./monadstate.scm"
-%use (monadfin?) "./monadfin.scm"
+%use (monadfinobj?) "./monadfinobj.scm"
 
 (define-syntax monad-make/hook
   (syntax-rules ()
     ((_ args . bodies)
      (lambda (monad-input)
-       (if (monadfin? monad-input) monad-input
+       (if (monadfinobj? monad-input) monad-input
            (apply (lambda args . bodies)
                   (monadstate-args monad-input)))))))

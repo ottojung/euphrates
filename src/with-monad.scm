@@ -17,7 +17,7 @@
 %var with-monad
 
 %use (monad-current/p) "./monad-current-p.scm"
-%use (monadfin monadfin-lval) "./monadfin.scm"
+%use (monadfinobj monadfinobj-lval) "./monadfinobj.scm"
 %use (monadic-global/p) "./monadic-global-p.scm"
 %use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstate-make-empty) "./monadstate.scm"
@@ -35,6 +35,6 @@
           (call-with-values
               (lambda _ body . bodies)
             (lambda results
-              ((monadfin-lval
-                (m (monadfin
+              ((monadfinobj-lval
+                (m (monadfinobj
                     (lambda _ (map (lambda (f) (f)) results))))))))))))))

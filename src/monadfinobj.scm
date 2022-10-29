@@ -14,12 +14,12 @@
 
 %run guile
 
-%var monadfin
-%var monadfin?
-%var monadfin-lval
+%var monadfinobj
+%var monadfinobj?
+%var monadfinobj-lval
 
 %use (define-type9) "./define-type9.scm"
 
-(define-type9 <monadfin>
-  (monadfin lval) monadfin?
-  (lval monadfin-lval))
+(define-type9 <monadfinobj>
+  (monadfinobj lval) monadfinobj?
+  (lval monadfinobj-lval))
