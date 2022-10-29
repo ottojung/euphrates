@@ -7,6 +7,9 @@ Personal all-in-one library for schemes.
 
 - CFG-based CLI parsing `src/define-cli.scm`
 - Embedabble mini prolog `src/profun.scm`
+- Composable monads `src/monadic.scm`
+  - work kind of like `Redux`, but more powerful thanks to macros and continuations
+  - suppport Haskell-like DSL for do-notation
 - JSON parser `src/json-parse.scm`
 - Petri networks `src/petri.scm`
   - with `profun` integration `src/petri-net-parse-profun.scm`
@@ -31,7 +34,7 @@ GPL-3
 
 - [ ] GUI library targeting the browser
   - [ ] alternatively - many targets
-- [ ] Add monads back
+- [x] Add monads back
 - [ ] Add `tree-future` back
 - [ ] Handle $PWD the way Racket does
 - [ ] Move `szcalc`'s core rewriting system here
