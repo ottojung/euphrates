@@ -49,8 +49,12 @@
   (syntax-rules ()
     ((_ (var val qtags))
      (let ((f (monad-current/p)))
-       (unless (monadobj? f)
+       (cond
+        ((not f)
          (raisu 'no-current-monad-specified f))
+        ((not (monadobj? f))
+         (raisu 'bad-monad-type f)))
+
        (monad-do/generic (f var val qtags))))
     ((_ (f var val qtags))
      (call-with-current-continuation
