@@ -21,8 +21,7 @@
 %use (monad-apply) "./monad-apply.scm"
 %use (monad-current/p) "./monad-current-p.scm"
 %use (monadobj?) "./monadobj.scm"
-%use (monadstate-current/p) "./monadstate-current-p.scm"
-%use (monadstateobj-cont monadstateobj-lval monadstateobj-qvar set-monadstateobj-cont! set-monadstateobj-lval! set-monadstateobj-qtags! set-monadstateobj-qval! set-monadstateobj-qvar!) "./monadstateobj.scm"
+%use (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qvar) "./monadstateobj.scm"
 %use (raisu) "./raisu.scm"
 %use (range) "./range.scm"
 
@@ -58,14 +57,14 @@
       (lambda (cont)
         (monad-do/generic (f var val qtags) cont))))
     ((_ (f var val qtags) cont)
-     (let ((arg (monadstate-current/p)))
-       (set-monadstateobj-lval! arg (memconst (call-with-values (lambda _ val) list)))
-       (set-monadstateobj-cont! arg cont)
-       (let* ((qvar0 (quote var))
-              (qvar (if (equal? qvar0 (quote #f)) #f qvar0)))
-         (set-monadstateobj-qvar! arg qvar))
-       (set-monadstateobj-qval! arg (quote val))
-       (set-monadstateobj-qtags! arg qtags)
+     (let ((arg (monadstateobj
+                 (memconst (call-with-values (lambda _ val) list))
+                 cont
+                 (let* ((qvar0 (quote var))
+                        (qvar (if (equal? qvar0 (quote #f)) #f qvar0)))
+                   qvar)
+                 (quote val)
+                 qtags)))
        (monad-do/continue (monad-apply f arg))))))
 
 (define-syntax monad-do
