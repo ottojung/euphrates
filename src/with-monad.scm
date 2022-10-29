@@ -18,10 +18,9 @@
 
 %use (monad-apply) "./monad-apply.scm"
 %use (monad-current/p) "./monad-current-p.scm"
-%use (monadfinobj) "./monadfinobj.scm"
 %use (monad-transformer-current/p) "./monad-transformer-current-p.scm"
-%use (monadstate-current/p) "./monadstate-current-p.scm"
-%use (monadstate-arg monadstate-make-empty) "./monadstate.scm"
+%use (monadfinobj) "./monadfinobj.scm"
+%use (monadstate-arg) "./monadstate.scm"
 
 (define-syntax with-monad
   (syntax-rules ()
@@ -29,8 +28,7 @@
      (let* ((p (monad-transformer-current/p))
             (f fexpr)
             (m (if p (p f (quote fexpr)) f)))
-       (parameterize ((monad-current/p m)
-                      (monadstate-current/p (monadstate-make-empty)))
+       (parameterize ((monad-current/p m))
          (call-with-values
              (lambda _ body . bodies)
            (lambda results

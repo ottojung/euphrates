@@ -17,6 +17,7 @@
 %var monad-make/hook
 
 %use (monadfinobj?) "./monadfinobj.scm"
+%use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstate-args monadstate-ret) "./monadstate.scm"
 
 (define-syntax monad-make/hook
@@ -26,7 +27,8 @@
        (if (monadfinobj? monad-input) monad-input
            (call-with-values
                (lambda _
-                 (apply (lambda args . bodies)
-                        (monadstate-args monad-input)))
+                 (parameterize ((monadstate-current/p monad-input))
+                   (apply (lambda args . bodies)
+                          (monadstate-args monad-input))))
              (lambda results
                (monadstate-ret monad-input results))))))))
