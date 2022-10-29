@@ -16,7 +16,7 @@
 
 %var monad-make/hook
 
-%use (monadfinobj?) "./monadfinobj.scm"
+%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
 %use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstate-args monadstate-ret) "./monadstate.scm"
 
