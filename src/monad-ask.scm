@@ -36,7 +36,7 @@
                      default-value
                      (raisu 'monad-ask-did-not-receive-a-value val qtags)))
                 ((not (null? (cdr results)))
-                 (raisu 'monad-ask-received-too-many-values val qtags (length result)))
+                 (raisu 'monad-ask-received-too-many-values val qtags (length results)))
                 (else (car results)))))))
        (when #f #f)))))
 
