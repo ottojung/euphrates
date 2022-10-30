@@ -20,6 +20,9 @@
 %use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstate-args monadstate-qtags monadstate-ret) "./monadstate.scm"
 
+(define monad-make/hook/undefined-list
+  (list (when #f #f)))
+
 (define-syntax monad-make/hook
   (syntax-rules ()
     ((_ tags-name args-list-name . bodies)
@@ -32,4 +35,6 @@
                   (apply (lambda args-list-name . bodies)
                          (monadstate-args monad-input)))))
           (lambda results
-            (monadstate-ret monad-input results))))))))
+            (if (equal? results monad-make/hook/undefined-list)
+                (monadstate-ret monad-input '())
+                (monadstate-ret monad-input results)))))))))
