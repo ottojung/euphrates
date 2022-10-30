@@ -18,8 +18,8 @@
 
 (define-syntax list-ref-or
   (syntax-rules ()
-    ((_ lst ref default)
-     (let lp ((lst lst) (ref ref))
+    ((_ lst-0 ref-0 default)
+     (let lp ((lst lst-0) (ref ref-0))
        (if (null? lst) default
            (if (= 0 ref)
                (car lst)
