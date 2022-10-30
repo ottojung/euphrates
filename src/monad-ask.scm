@@ -42,7 +42,7 @@
 
 (define-syntax monad-ask
   (syntax-rules (:default)
-    ((_ var . tags)
-     (monad-ask/helper var #f #f . tags))
     ((_ var :default default-value . tags)
-     (monad-ask/helper var default-value #t . tags))))
+     (monad-ask/helper var default-value #t . tags))
+    ((_ var . tags)
+     (monad-ask/helper var #f #f . tags))))
