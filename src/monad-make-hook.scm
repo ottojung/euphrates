@@ -23,17 +23,15 @@
 (define monad-make/hook/undefined-list
   (list (when #f #f)))
 
-(define-syntax monad-make/hook
-  (syntax-rules ()
-    ((_ tags-name proc)
-     (monad-make/no-cont/no-fin
-      (lambda (monad-input)
-        (call-with-values
-            (lambda _
-              (parameterize ((monadstate-current/p monad-input))
-                (proc (monadstate-qtags monad-input)
-                      (monadstate-args monad-input))))
-          (lambda results
-            (if (equal? results monad-make/hook/undefined-list)
-                (monadstate-ret monad-input '())
-                (monadstate-ret monad-input results)))))))))
+(define (monad-make/hook proc)
+  (monad-make/no-cont/no-fin
+   (lambda (monad-input)
+     (call-with-values
+         (lambda _
+           (parameterize ((monadstate-current/p monad-input))
+             (proc (monadstate-qtags monad-input)
+                   (monadstate-args monad-input))))
+       (lambda results
+         (if (equal? results monad-make/hook/undefined-list)
+             (monadstate-ret monad-input '())
+             (monadstate-ret monad-input results)))))))
