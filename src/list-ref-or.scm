@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -16,9 +16,11 @@
 
 %var list-ref-or
 
-(define (list-ref-or lst ref default)
-  (let lp ((lst lst) (ref ref))
-    (if (null? lst) default
-        (if (= 0 ref)
-            (car lst)
-            (lp (cdr lst) (- ref 1))))))
+(define-syntax list-ref-or
+  (syntax-rules ()
+    ((_ lst ref default)
+     (let lp ((lst lst) (ref ref))
+       (if (null? lst) default
+           (if (= 0 ref)
+               (car lst)
+               (lp (cdr lst) (- ref 1))))))))
