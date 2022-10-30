@@ -15,19 +15,36 @@
 %run guile
 
 %var string-percent-encode
+%var string-percent-encode/generic
 
-(define (string-percent-encode s ok-char?)
-  (define not-ok? (negate ok-char?))
-  (if (string-index s not-ok?)
+%use (alphanum/alphabet alphanum/alphabet/index) "./alphanum-alphabet.scm"
+%use (convert-number-base/generic) "./convert-number-base.scm"
+
+(define (string-percent-encode/generic s alphabet in-alphabet? percent-char)
+  (define len (string-length s))
+  (define counter 0)
+
+  (if (string-index s (negate in-alphabet?))
       (call-with-output-string
        (lambda (port)
          (string-for-each
           (lambda (ch)
-            (if (ok-char? ch)
+            (set! counter (+ 1 counter))
+            (if (in-alphabet? ch)
                 (display ch port)
                 (begin
-                  (display #\% port)
-                  (display (char->integer ch) port)
-                  (display #\% port))))
+                  (display percent-char port)
+                  (display
+                   (list->string
+                    (convert-number-base/generic
+                     alphabet
+                     (vector-length alphabet)
+                     (char->integer ch)))
+                   port)
+                  (unless (= len counter)
+                    (display percent-char port)))))
           s)))
       s))
+
+(define (string-percent-encode s)
+  (string-percent-encode/generic s alphanum/alphabet alphanum/alphabet/index #\%))
