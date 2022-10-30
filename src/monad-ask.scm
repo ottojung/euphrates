@@ -16,6 +16,7 @@
 
 %var monad-ask
 
+%use (catchu-case) "./catchu-case.scm"
 %use (monad-do/generic) "./monad-do.scm"
 %use (raisu) "./raisu.scm"
 
@@ -26,18 +27,19 @@
        (define var
          (let ((qtags (list 'ask . tags))
                (val (quote var)))
-           (call-with-values
-               (lambda _
-                 (monad-do/generic (var val qtags)))
-             (lambda results
-               (cond
-                ((null? results)
-                 (if default-value-provided?
-                     default-value
-                     (raisu 'monad-ask-did-not-receive-a-value val qtags)))
-                ((not (null? (cdr results)))
-                 (raisu 'monad-ask-received-too-many-values val qtags (length results)))
-                (else ((car results))))))))
+           (define result
+             (monad-do/generic (var val qtags)))
+           (catchu-case
+            (result)
+            (('incorrect-number-of-arguments-returned-by-monad
+              actual-length expected-length)
+             (cond
+              ((< actual-length 1)
+               (raisu 'monad-ask-did-not-receive-a-value val qtags))
+              ((> actual-length 1)
+               (raisu 'monad-ask-received-too-many-values val qtags (length results)))
+              (else
+               (raisu 'impossible-case-for-monad-ask val qtags (length results))))))))
        (when #f #f)))))
 
 (define-syntax monad-ask

@@ -33,7 +33,11 @@
   (cond
    ((list? thunk) thunk)
    ((procedure? thunk)
-    (let ((result (memconst (thunk))))
+    (let ((result (memconst
+                   (let ((ret (thunk)))
+                     (unless (= len (length ret))
+                       (raisu 'incorrect-number-of-arguments-returned-by-monad (length ret) len))
+                     ret))))
       (map
        (lambda (i)
          (memconst
