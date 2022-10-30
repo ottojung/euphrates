@@ -24,7 +24,7 @@
     ((_ var . tags)
      (begin
        (define var
-         (let ((qtags (list 'say . tags))
+         (let ((qtags (list 'ask . tags))
                (val (quote var)))
            (call-with-values
                (lambda _
