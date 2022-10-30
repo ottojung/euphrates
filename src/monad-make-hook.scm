@@ -25,15 +25,14 @@
 
 (define-syntax monad-make/hook
   (syntax-rules ()
-    ((_ tags-name args-list-name . bodies)
+    ((_ tags-name proc)
      (monad-make/no-cont/no-fin
       (lambda (monad-input)
         (call-with-values
             (lambda _
               (parameterize ((monadstate-current/p monad-input))
-                (let ((tags-name (monadstate-qtags monad-input)))
-                  (apply (lambda args-list-name . bodies)
-                         (monadstate-args monad-input)))))
+                (proc (monadstate-qtags monad-input)
+                      (monadstate-args monad-input))))
           (lambda results
             (if (equal? results monad-make/hook/undefined-list)
                 (monadstate-ret monad-input '())
