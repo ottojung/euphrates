@@ -19,9 +19,9 @@
 %use (monad-do/generic) "./monad-do.scm"
 %use (raisu) "./raisu.scm"
 
-(define-syntax monad-ask
+(define-syntax monad-ask/helper
   (syntax-rules ()
-    ((_ var . tags)
+    ((_ var default-value default-value-provided? . tags)
      (begin
        (define var
          (let ((qtags (list 'ask . tags))
@@ -30,10 +30,19 @@
                (lambda _
                  (monad-do/generic (var val qtags)))
              (lambda results
-               (when (null? results)
-                 (raisu 'monad-ask-did-not-receive-a-value val qtags))
-               (unless (null? (cdr results))
+               (cond
+                ((null? results)
+                 (if default-value-provided?
+                     default-value
+                     (raisu 'monad-ask-did-not-receive-a-value val qtags)))
+                ((not (null? (cdr results)))
                  (raisu 'monad-ask-received-too-many-values val qtags (length result)))
-
-               (car results)))))
+                (else (car results)))))))
        (when #f #f)))))
+
+(define-syntax monad-ask
+  (syntax-rules (:default)
+    ((_ var . tags)
+     (monad-ask/helper var #f #f . tags))
+    ((_ var :default default-value . tags)
+     (monad-ask/helper var default-value #t . tags))))
