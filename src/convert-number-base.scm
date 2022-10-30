@@ -11,18 +11,20 @@
 
 ;; NOTE: input is a list of characters or a string!
 %var convert-number-base
-%var convert-number-base:max-base
+%var convert-number-base/generic
+%var convert-number-base:default-max-base
 
-(define convert-number-base:max-base
+(define convert-number-base:default-max-base
   (vector-length alphanum/alphabet))
 
-(define (convert-number-base/number outbase x)
-  (define (get-char n) (vector-ref alphanum/alphabet n))
+(define (convert-number-base/number/generic alphabet outbase x)
+  (define max-base (vector-length alphabet))
+  (define (get-char n) (vector-ref alphabet n))
 
-  (when (> outbase convert-number-base:max-base)
+  (when (> outbase max-base)
     (raisu 'OUT-OF-RANGE-ERROR
            'only-small-bases-are-supported
-           outbase convert-number-base:max-base))
+           outbase max-base))
 
   (let ()
     (define-values (rwp0 rfp0)
@@ -34,11 +36,12 @@
         rwp
         (append rwp (list #\.) rfp))))
 
-(define (convert-number-base/list inbase outbase L)
-  (when (> (max inbase outbase) convert-number-base:max-base)
+(define (convert-number-base/list/generic alphabet inbase outbase L)
+  (define max-base (vector-length alphabet))
+  (when (> (max inbase outbase) max-base)
     (raisu 'OUT-OF-RANGE-ERROR
            'only-small-bases-are-supported
-           inbase outbase convert-number-base:max-base))
+           inbase outbase max-base))
 
   (let ()
     (define-values (wp0 fp0) (list-span-while (lambda (x) (not (equal? x #\.))) L))
@@ -46,18 +49,25 @@
     (define wp (map alphanum/alphabet/index wp0))
     (define fp (map alphanum/alphabet/index fp1))
     (define x (number-list->number inbase wp fp))
-    (convert-number-base/number outbase x)))
+    (convert-number-base/number/generic alphabet outbase x)))
 
 (define convert-number-base
   (case-lambda
    ((outbase x)
-    (convert-number-base/number outbase x))
+    (convert-number-base/generic alphanum/alphabet outbase x))
    ((inbase outbase x)
+    (convert-number-base/generic alphanum/alphabet inbase outbase x))))
+
+(define convert-number-base/generic
+  (case-lambda
+   ((alphabet outbase x)
+    (convert-number-base/number/generic alphabet outbase x))
+   ((alphabet inbase outbase x)
     (cond
      ((list? x)
-      (convert-number-base/list inbase outbase x))
+      (convert-number-base/list/generic alphabet inbase outbase x))
      ((string? x)
-      (list->string (convert-number-base/list
-                     inbase outbase (string->list x))))
+      (list->string (convert-number-base/list/generic
+                     alphabet inbase outbase (string->list x))))
      (else
       (raisu 'TYPE-ERROR 'expected-list-or-string x))))))
