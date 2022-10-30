@@ -37,9 +37,9 @@
               ((< actual-length 1)
                (raisu 'monad-ask-did-not-receive-a-value val qtags))
               ((> actual-length 1)
-               (raisu 'monad-ask-received-too-many-values val qtags (length results)))
+               (raisu 'monad-ask-received-too-many-values val qtags actual-length))
               (else
-               (raisu 'impossible-case-for-monad-ask val qtags (length results))))))))
+               (raisu 'impossible-case-for-monad-ask val qtags actual-length)))))))
        (when #f #f)))))
 
 (define-syntax monad-ask
