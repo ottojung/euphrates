@@ -23,70 +23,90 @@
 %use (raisu) "./raisu.scm"
 %use (range) "./range.scm"
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Begin auto-generated content ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define-type9 r0
   (r0-constructor id) r0-predicate
-  (id r0-id-accessor)
-  )
+  (id r0-id-accessor))
+
+(define-type9 r0m
+  (r0m-constructor id) r0m-predicate
+  (id r0m-id-accessor))
 
 (define-type9 r1
   (r1-constructor id a) r1-predicate
   (id r1-id-accessor)
-  (a r1-a-field-accessor)
-  )
+  (a r1-a-field-accessor))
+
+(define-type9 r1m
+  (r1m-constructor id a) r1m-predicate
+  (id r1m-id-accessor)
+  (a r1m-a-field-accessor r1m-a-field-setter))
 
 (define-type9 r2
   (r2-constructor id a b) r2-predicate
   (id r2-id-accessor)
   (a r2-a-field-accessor)
-  (b r2-b-field-accessor)
-  )
-
-(define-type9 r0m
-  (r0m-constructor id) r0m-predicate
-  (id r0m-id-accessor)
-  )
-
-(define-type9 r1m
-  (r1m-constructor id a) r1m-predicate
-  (id r1m-id-accessor)
-  (a r1m-a-field-accessor r1m-a-field-setter)
-  )
+  (b r2-b-field-accessor))
 
 (define-type9 r2m
   (r2m-constructor id a b) r2m-predicate
   (id r2m-id-accessor)
   (a r2m-a-field-accessor r2m-a-field-setter)
-  (b r2m-b-field-accessor r2m-b-field-setter)
-  )
+  (b r2m-b-field-accessor r2m-b-field-setter))
+
+(define-type9 r3
+  (r3-constructor id a b c) r3-predicate
+  (id r3-id-accessor)
+  (a r3-a-field-accessor)
+  (b r3-b-field-accessor)
+  (c r3-c-field-accessor))
+
+(define-type9 r3m
+  (r3m-constructor id a b c) r3m-predicate
+  (id r3m-id-accessor)
+  (a r3m-a-field-accessor r3m-a-field-setter)
+  (b r3m-b-field-accessor r3m-b-field-setter)
+  (c r3m-c-field-accessor r3m-c-field-setter))
 
 (define type8-immutable-constructors
-  (vector r0-constructor r1-constructor r2-constructor))
+  (vector r0-constructor r1-constructor r2-constructor r3-constructor))
 
 (define type8-mutable-constructors
-  (vector r0m-constructor r1m-constructor r2m-constructor))
+  (vector r0-constructor r1-constructor r2-constructor r3-constructor))
 
 (define type8-immutable-predicates
-  (vector r0-predicate r1-predicate r2-predicate))
+  (vector r0-predicate r1-predicate r2-predicate r3-predicate))
 
 (define type8-mutable-predicates
-  (vector r0m-predicate r1m-predicate r2m-predicate))
+  (vector r0-predicate r1-predicate r2-predicate r3-predicate))
 
 (define type8-immutable-accessors
-  (vector (vector)
-          (vector r1-a-field-accessor)
-          (vector r2-a-field-accessor r2-b-field-accessor)))
+  (vector
+    (vector)
+    (vector r1-a-field-accessor)
+    (vector r2-a-field-accessor r2-b-field-accessor)
+    (vector r3-a-field-accessor r3-b-field-accessor r3-c-field-accessor)))
 
 (define type8-mutable-accessors
-  (vector (vector)
-          (vector r1m-a-field-accessor)
-          (vector r2m-a-field-accessor r2m-b-field-accessor)))
+  (vector
+    (vector)
+    (vector r1m-a-field-accessor)
+    (vector r2m-a-field-accessor r2m-b-field-accessor)
+    (vector r3m-a-field-accessor r3m-b-field-accessor r3m-c-field-accessor)))
 
 (define type8-mutable-setters
-  (vector (vector)
-          (vector r1m-a-field-setter)
-          (vector r2m-a-field-setter r2m-b-field-setter)))
+  (vector
+    (vector)
+    (vector r1m-a-field-setter)
+    (vector r2m-a-field-setter r2m-b-field-setter)
+    (vector r3m-a-field-setter r3m-b-field-setter r3m-c-field-setter)))
 
-;;;; END OF GENERATED CONTENT ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; End of auto-generated content ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define type8-id-hashmap
   (make-hashmap))
