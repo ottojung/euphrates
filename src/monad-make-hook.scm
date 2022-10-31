@@ -20,18 +20,15 @@
 %use (monadstate-current/p) "./monadstate-current-p.scm"
 %use (monadstate-args monadstate-qtags monadstate-ret) "./monadstate.scm"
 
-(define monad-make/hook/undefined-list
-  (list (when #f #f)))
-
 (define (monad-make/hook proc)
   (monad-make/no-cont/no-fin
    (lambda (monad-input)
      (call-with-values
          (lambda _
            (parameterize ((monadstate-current/p monad-input))
-             (proc (monadstate-qtags monad-input)
-                   (monadstate-args monad-input))))
+             (let ((ret (proc (monadstate-qtags monad-input))))
+               (if (procedure? ret)
+                   (ret (monadstate-args monad-input))
+                   (values)))))
        (lambda results
-         (if (equal? results monad-make/hook/undefined-list)
-             (monadstate-ret monad-input '())
-             (monadstate-ret monad-input results)))))))
+         (monadstate-ret monad-input results))))))
