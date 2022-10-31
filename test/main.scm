@@ -154,7 +154,7 @@
 %use (list-random-shuffle) "./src/list-random-shuffle.scm"
 %use (list-group-by) "./src/list-group-by.scm"
 %use (string->numstring) "./src/string-to-numstring.scm"
-%use (string-percent-encode) "./src/string-percent-encode.scm"
+%use (string-plus-encode) "./src/string-plus-encode.scm"
 %use (alphanum/alphabet alphanum/alphabet/index) "./src/alphanum-alphabet.scm"
 
 (let ()
@@ -3346,14 +3346,14 @@
   (assert= "+20320-22909-19990-30028" (string->numstring "你好世界"))
   )
 
-(let () ;; string-percent-encode
+(let () ;; string-plus-encode
   (define (test1 a b)
-    (assert= a (string-percent-encode b)))
+    (assert= a (string-plus-encode b)))
 
   (test1 "1234" "1234")
   (test1 "abcd" "abcd")
   (test1 "" "")
-  (test1 "%5hK%%5Xv%%5cq%%7Ok" "你好世界")
+  (test1 "+5gK++5Wv++5bq++7Nk" "你好世界")
   )
 
 (display "All good\n")
