@@ -16,12 +16,13 @@
 
 %var string-plus-encode
 %var string-plus-encode/generic
+%var string-plus-encoding-make
 
 %use (alphanum/alphabet alphanum/alphabet/index) "./alphanum-alphabet.scm"
 %use (convert-number-base/generic) "./convert-number-base.scm"
 
 ;; NOTE: this is like the uri-encoding, but compresses better.
-(define-values (string-plus-encode/generic string-plus-encode)
+(define-values (string-plus-encode/generic string-plus-encode string-plus-encoding-make)
   (let ()
     (define (generic s alphabet in-alphabet? maxcode open-char)
       (define len (string-length s))
@@ -53,13 +54,11 @@
               s)))
           s))
 
-    (define default-alphabet alphanum/alphabet)
-    (define default-alphabet-index alphanum/alphabet/index)
-    (define default-alphabet-maxcode
-      (let loop ((m 0) (i (- (vector-length default-alphabet) 1)))
+    (define (get-alphabet-maxcode alphabet)
+      (let loop ((m 0) (i (- (vector-length alphabet) 1)))
         (if (< i 0) m
             (loop
-             (let* ((c (vector-ref default-alphabet i))
+             (let* ((c (vector-ref alphabet i))
                     (code (char->integer c)))
                (max code m))
              (- i 1)))))
@@ -72,7 +71,14 @@
         (char->integer (vector-ref alphabet (- code maxcode 1))))
        (else (- code alen))))
 
-    (define (simple s)
-      (generic s default-alphabet default-alphabet-index default-alphabet-maxcode #\+))
+    (define (make alphabet in-alphabet? open-char)
+      (define maxcode (get-alphabet-maxcode alphabet))
+      (lambda (s)
+        (generic s alphabet in-alphabet? maxcode open-char)))
 
-    (values generic simple)))
+    (define default-alphabet alphanum/alphabet)
+    (define default-alphabet-index alphanum/alphabet/index)
+    (define simple
+      (make default-alphabet default-alphabet-index #\+))
+
+    (values generic simple make)))
