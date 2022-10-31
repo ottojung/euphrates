@@ -28,7 +28,7 @@
            (parameterize ((monadstate-current/p monad-input))
              (let ((ret (proc (monadstate-qtags monad-input))))
                (if (procedure? ret)
-                   (ret (monadstate-args monad-input))
+                   (apply ret (monadstate-args monad-input))
                    (values)))))
        (lambda results
          (monadstate-ret monad-input results))))))
