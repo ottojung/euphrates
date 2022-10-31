@@ -156,6 +156,7 @@
 %use (string->numstring) "./src/string-to-numstring.scm"
 %use (string-plus-encode) "./src/string-plus-encode.scm"
 %use (alphanum/alphabet alphanum/alphabet/index) "./src/alphanum-alphabet.scm"
+%use (uri-encode) "./src/uri-encode.scm"
 
 (let ()
   (catch-any
@@ -3358,5 +3359,16 @@
   (test1 "hello+J+x+5gL+5Ww+5br+7Nl+J+x+0c+3e+x+0va+12" "hello, 你好世界, cą va?")
   )
 
-(display "All good\n")
+(let () ;; uri-encode
+  (define (test1 a b)
+    (assert= a (uri-encode b)))
 
+  (test1 "1234" "1234")
+  (test1 "hello" "hello")
+  (test1 "" "")
+  (test1 "%E4%BD%A0%E5%A5%BD%E4%B8%96%E7%95%8C" "你好世界")
+  (test1 "hello%2C%20%E4%BD%A0%E5%A5%BD%E4%B8%96%E7%95%8C" "hello, 你好世界")
+  (test1 "hello%2C%20%E4%BD%A0%E5%A5%BD%E4%B8%96%E7%95%8C%2C%20c%C4%85%20va%3F" "hello, 你好世界, cą va?")
+  )
+
+(display "All good\n")
