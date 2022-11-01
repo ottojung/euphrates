@@ -4,23 +4,23 @@
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
 %use (debugv) "./src/debugv.scm"
-%use (define-type8 type8-get-record-descriptor) "./src/define-type8.scm"
+%use (define-type9 type9-get-record-descriptor) "./src/define-type9.scm"
 
-(define-type8 mybox0
+(define-type9 mybox0
   (make-mybox0) mybox0?
   )
 
-(define-type8 mybox1
+(define-type9 mybox1
   (make-mybox1 a) mybox1?
   (a mybox1-a)
   )
 
-(define-type8 mybox1m
+(define-type9 mybox1m
   (make-mybox1m a) mybox1m?
   (a mybox1m-a set-mybox1m-val1!)
   )
 
-(define-type8 mybox
+(define-type9 mybox
   (make-mybox val1 val2) mybox?
   (val1 mybox-val1 set-mybox-val1!)
   (val2 mybox-val2)
@@ -42,4 +42,4 @@
 
 (assert=
  'mybox
- (cdr (assoc 'name (type8-get-record-descriptor obj1))))
+ (cdr (assoc 'name (type9-get-record-descriptor obj1))))

@@ -18,8 +18,8 @@
 %var monadfinobj?
 %var monadfinobj-lval
 
-%use (define-type9) "./define-type9.scm"
+%use (define-dumb-record) "./define-dumb-record.scm"
 
-(define-type9 <monadfinobj>
+(define-dumb-record <monadfinobj>
   (monadfinobj lval) monadfinobj?
   (lval monadfinobj-lval))

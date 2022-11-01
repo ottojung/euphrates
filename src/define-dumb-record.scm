@@ -1,6 +1,6 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2021  Otto Jung
 ;;;;
-;;;; This program is free software; you can redistribute it and/or modify
+;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
 ;;;; the Free Software Foundation; version 3 of the License.
 ;;;;
@@ -14,15 +14,25 @@
 
 %run guile
 
-%var usymbol
-%var usymbol?
-%var usymbol-name
-%var usymbol-qualifier
+;; The srfi-9 define-record-type.
+;; Look into srfi-99 if your system does not implement srfi-9.
+%var define-dumb-record
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%for (COMPILER "guile")
 
-(define-dumb-record <usymbol>
-  (usymbol a b) usymbol?
-  (a usymbol-name) ;; printable name - usually what was read
-  (b usymbol-qualifier) ;; unique qualifier
-  )
+(use-modules (srfi srfi-9))
+
+(define-syntax define-dumb-record
+  (syntax-rules ()
+    ((_ . args) (define-record-type . args))))
+
+%end
+%for (COMPILER "racket")
+
+(require srfi/9)
+
+(define-syntax define-dumb-record
+  (syntax-rules ()
+    ((_ . args) (define-record-type . args))))
+
+%end

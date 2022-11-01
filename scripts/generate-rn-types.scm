@@ -34,7 +34,7 @@
 (define (print-definition n mutable?)
   (define fields (get-field-names n))
   (define ns (if mutable? (string-append (~a n) "m") n))
-  (printf "(define-type9 r~a" ns)
+  (printf "(define-dumb-record r~a" ns)
   (newline)
   (printf "  (r~a-constructor :" ns)
   (unless (null? fields)
@@ -67,7 +67,7 @@
    (range (+ 1 N))))
 
 (define (print-vector1/g field mutable?)
-  (printf "(define type8-~amutable-~as"
+  (printf "(define type9-~amutable-~as"
           (if mutable? "" "im")
           field)
   (newline)
@@ -96,7 +96,7 @@
   (print-vector1 ":-accessor"))
 
 (define (print-vector2/g field mutable?)
-  (printf "(define type8-~amutable-~as"
+  (printf "(define type9-~amutable-~as"
           (if mutable? "" "im")
           field)
   (newline)

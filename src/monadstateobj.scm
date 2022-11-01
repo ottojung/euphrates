@@ -22,9 +22,9 @@
 %var monadstateobj-qval
 %var monadstateobj-qtags
 
-%use (define-type9) "./define-type9.scm"
+%use (define-dumb-record) "./define-dumb-record.scm"
 
-(define-type9 <monadstateobj>
+(define-dumb-record <monadstateobj>
   (monadstateobj lval cont qvar qval qtags) monadstateobj?
   (lval monadstateobj-lval)
   (cont monadstateobj-cont)

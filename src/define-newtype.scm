@@ -14,7 +14,7 @@
 
 %run guile
 
-;; a simpler, less-demanding alternative to define-type9 and define-rec
+;; a simpler, less-demanding alternative to define-dumb-record and define-rec
 %var define-newtype
 
 %for (COMPILER "guile")

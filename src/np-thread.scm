@@ -30,7 +30,7 @@
 %var np-thread-global-mutex-unlock!
 %var np-thread-global-critical-make
 
-%use (define-type9) "./define-type9.scm"
+%use (define-dumb-record) "./define-dumb-record.scm"
 %use (make-unique) "./make-unique.scm"
 %use (with-critical) "./with-critical.scm"
 %use (make-queue queue-empty? queue-peek queue-push! queue-pop!) "./queue.scm"
