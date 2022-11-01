@@ -26,13 +26,24 @@
   (map (lambda (field)
          (define name (list-ref field 0))
          (define accessor (list-ref field 1))
-         (accessor obj)) fields))
+         (list name (loop (accessor obj)))) fields))
 
 (define serialize/human
   (serialize/sexp/generic serialize-type9-fields))
 
 (define (deserialize-type9-fields obj descriptor loop)
-  (cdr obj))
+  (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
+  (define n (length fields))
+  (define se-fields (cdr obj))
+  (define args
+    (map
+     (lambda (field)
+       (define name (car field))
+       (define arg/l (assoc-or name se-fields (raisu 'serialized-record-missing-a-field name obj)))
+       (define arg (car arg/l))
+       arg)
+     fields))
+  (map loop args))
 
 (define deserialize/human
   (deserialize/sexp/generic deserialize-type9-fields))
