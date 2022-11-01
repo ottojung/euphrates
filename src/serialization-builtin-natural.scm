@@ -17,8 +17,8 @@
 %var serialize-builtin/natural
 %var deserialize-builtin/natural
 
-%use (atomic-box-ref atomic-box?) "./atomic-box.scm"
-%use (box-ref box?) "./box.scm"
+%use (atomic-box-ref atomic-box? make-atomic-box) "./atomic-box.scm"
+%use (box-ref box? make-box) "./box.scm"
 %use (raisu) "./raisu.scm"
 
 %for (COMPILER "guile")
@@ -28,20 +28,55 @@
 (define (serialize/human-hashtable o) (hash-map->list cons o))
 %end
 
-(define (serialize-builtin/natural o loop)
-  (cond
-   ((number? o) o)
-   ((string? o) o)
-   ((symbol? o) `(quote ,o))
-   ((char? o) o)
-   ((equal? #t o) o)
-   ((equal? #f o) o)
-   ((list? o) `(list ,@(map loop o)))
-   ((pair? o) `(cons ,(loop (car o)) ,(loop (cdr o))))
-   ((vector? o) `(vector ,@(map loop o)))
-   ((parameter? o) `(make-parameter ,@(loop (o))))
-   ((serialize/human-hashtable? o) `(alist->hash-table ,(loop (serialize/human-hashtable o))))
-   ((box? o) `(box ,(loop (box-ref o))))
-   ((atomic-box? o) `(box ,(loop (atomic-box-ref o))))
-   ((procedure? o) o)
-   (else (raisu 'unknown-builtin-type o))))
+(define-syntax serialize-builtin/natural
+  (syntax-rules ()
+    ((_ o0 loop0)
+     (let ((o o0) (loop loop0))
+       (serialize-builtin/natural o loop (raisu 'unknown-builtin-type o))))
+    ((_ o0 loop0 fail)
+     (let ((o o0) (loop loop0))
+       (cond
+        ((number? o) o)
+        ((string? o) o)
+        ((symbol? o) `(quote ,o))
+        ((char? o) o)
+        ((equal? #t o) o)
+        ((equal? #f o) o)
+        ((list? o) `(list ,@(map loop o)))
+        ((pair? o) `(cons ,(loop (car o)) ,(loop (cdr o))))
+        ((vector? o) `(vector ,@(map loop o)))
+        ((parameter? o) `(make-parameter ,@(loop (o))))
+        ((serialize/human-hashtable? o) `(alist->hash-table ,(loop (serialize/human-hashtable o))))
+        ((box? o) `(box ,(loop (box-ref o))))
+        ((atomic-box? o) `(box ,(loop (atomic-box-ref o))))
+        ((procedure? o) o)
+        (else fail))))))
+
+
+(define-syntax deserialize-builtin/natural
+  (syntax-rules ()
+    ((_ o0 loop0)
+     (let ((o o0) (loop loop0))
+       (deserialize-builtin/natural o loop (raisu 'unknown-tag o))))
+    ((_ o0 loop0 fail)
+     (let ((o o0) (loop loop0))
+       (cond
+        ((number? o) o)
+        ((string? o) o)
+        ((char? o) o)
+        ((equal? #t o) o)
+        ((equal? #f o) o)
+        ((procedure? o) o)
+
+        ((pair? o)
+         (case (car o)
+           ((quote) (cadr o))
+           ((list) (map loop (cdr o)))
+           ((cons) (cons (loop (cadr o)) (loop (caddr o))))
+           ((vector) (apply vector (map loop (cdr o))))
+           ((make-parameter) (make-parameter (loop (cadr o))))
+           ((alist->hash-table) (alist->hash-table (loop (cadr o))))
+           ((make-box) (make-box (loop (cadr o))))
+           ((make-atomic-box) (make-atomic-box (loop (cadr o))))
+           (else fail)))
+        (else (raisu 'unknown-builtin-object o)))))))
