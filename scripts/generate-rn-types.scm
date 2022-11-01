@@ -36,12 +36,12 @@
   (define ns (if mutable? (string-append (~a n) "m") n))
   (printf "(define-type9 r~a" ns)
   (newline)
-  (printf "  (r~a-constructor id" ns)
+  (printf "  (r~a-constructor :" ns)
   (unless (null? fields)
     (printf " ~a" (words->string fields)))
   (printf ") r~a-predicate" ns)
   (newline)
-  (printf "  (id r~a-id-accessor)" ns)
+  (printf "  (: r~a-:-accessor)" ns)
 
   (for-each
    (lambda (field)
@@ -74,7 +74,8 @@
   (printf "  (vector")
   (for-each
    (lambda (n)
-     (printf " r~a-~a" n field))
+     (define ns (if mutable? (string-append (~a n) "m") n))
+     (printf " r~a-~a" ns field))
    (range (+ 1 N)))
   (printf "))")
   (newline))
@@ -90,6 +91,9 @@
 
 (define (print-predicates)
   (print-vector1 "predicate"))
+
+(define (print-:s)
+  (print-vector1 ":-accessor"))
 
 (define (print-vector2/g field mutable?)
   (printf "(define type8-~amutable-~as"
@@ -127,6 +131,7 @@
 (print-definitions)
 (print-constructors)
 (print-predicates)
+(print-:s)
 (print-accessors)
 (print-setters)
 (newline)
