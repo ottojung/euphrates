@@ -8,6 +8,8 @@
 ;;    (fullname name)
 ;;     ....
 
+%use (path-normalize) "./path-normalize.scm"
+
 %for (COMPILER "guile")
 
 (use-modules (ice-9 ftw))
@@ -16,15 +18,12 @@
   (case-lambda
     ((directory0) (directory-files directory0 #f))
     ((directory0 include-directories?)
-     ;; Append '/' at the end because guile wont work otherwise
      (define directory
-       (if (string-suffix? "/" directory0)
-           (identity directory0)
-           (string-append directory0 "/")))
+       (path-normalize directory0))
 
      ;; Skip everything
      (define (enter? name stat result)
-       (string=? name directory))
+       (string=? directory (path-normalize name)))
 
      (define (leaf name stat result)
        (cons (list name (basename name)) result))
