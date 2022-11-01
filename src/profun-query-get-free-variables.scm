@@ -19,4 +19,4 @@
 %use (profun-varname?) "./profun-varname-q.scm"
 
 (define (profun-query-get-free-variables q)
-  (filter varname? (apply append (map cdr q))))
+  (filter profun-varname? (apply append (map cdr q))))
