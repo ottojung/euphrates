@@ -21,7 +21,7 @@
 %use (~a) "./euphrates/tilda-a.scm"
 %use (words->string) "./euphrates/words-to-string.scm"
 
-(define N 3)
+(define N 9)
 
 (define (get-field-names n)
   (map
