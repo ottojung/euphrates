@@ -349,7 +349,7 @@
 %use (sys-mutex-unlock!) "./src/sys-mutex-unlock.scm"
 %use (sys-thread-current#p-default) "./src/sys-thread-current-p-default.scm"
 %use (sys-thread-current#p) "./src/sys-thread-current-p.scm"
-%use (set-sys-thread-obj-calcel-enabled?! set-sys-thread-obj-calcel-scheduled?! set-sys-thread-obj-handle! sys-thread-obj sys-thread-obj-calcel-enabled? sys-thread-obj-calcel-scheduled? sys-thread-obj-handle sys-thread-obj?) "./src/sys-thread-obj.scm"
+%use (set-sys-thread-obj-cancel-enabled?! set-sys-thread-obj-cancel-scheduled?! set-sys-thread-obj-handle! sys-thread-obj sys-thread-obj-cancel-enabled? sys-thread-obj-cancel-scheduled? sys-thread-obj-handle sys-thread-obj?) "./src/sys-thread-obj.scm"
 %use (sys-thread-cancel sys-thread-current sys-thread-disable-cancel sys-thread-enable-cancel sys-thread-mutex-lock! sys-thread-mutex-make sys-thread-mutex-unlock! sys-thread-sleep sys-thread-spawn) "./src/sys-thread.scm"
 %use (sys-usleep) "./src/sys-usleep.scm"
 %use (system-environment-get-all) "./src/system-environment-get-all.scm"
