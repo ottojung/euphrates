@@ -29,7 +29,6 @@
 %use (letin) "./src/letin.scm"
 %use (list-intersperse) "./src/list-intersperse.scm"
 %use (path-replace-extension) "./src/path-replace-extension.scm"
-%use (define-rec define-rec?) "./src/define-rec.scm"
 %use (apploop) "./src/apploop.scm"
 %use (string-trim-chars) "./src/string-trim-chars.scm"
 %use (file-or-directory-exists?) "./src/file-or-directory-exists-q.scm"
@@ -422,17 +421,6 @@
   (assert=
    "file.b.c"
    (path-replace-extension "file.b.a" ".c")))
-
-;; define-rec
-(let ()
-  (define-rec rec1 aa bb)
-
-  (let ((rec (rec1 1 2)))
-
-    (assert (define-rec? rec))
-    (assert= 1 (rec1-aa rec))
-    (set-rec1-aa! rec 10)
-    (assert= 10 (rec1-aa rec))))
 
 ;; apploop
 (let ()
