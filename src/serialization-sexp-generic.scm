@@ -32,7 +32,7 @@
           (let ((r9d (type9-get-record-descriptor o)))
             (if r9d
                 (cons (cdr (assoc 'name r9d))
-                      (map loop (serialize-type9-fields o r9d)))
+                      (serialize-type9-fields o r9d loop))
                 (raisu 'unknown-type o)))))))
 
 (define (deserialize/sexp/generic deserialize-type9-fields)
@@ -48,5 +48,5 @@
            (let ((r9d (or (descriptors-registry-get name)
                           (raisu 'unkown-type-tag name))))
              (define constructor (assoc-or 'constructor r9d (raisu 'no-constructor-in-descriptor r9d)))
-             (define args (deserialize-type9-fields o r9d))
-             (apply constructor (map loop args)))))))))
+             (define args (deserialize-type9-fields o r9d loop))
+             (apply constructor args))))))))

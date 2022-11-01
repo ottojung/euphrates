@@ -21,16 +21,17 @@
 %use (raisu) "./raisu.scm"
 %use (deserialize/sexp/generic serialize/sexp/generic) "./serialization-sexp-generic.scm"
 
-(define (serialize-type9-fields obj descriptor)
+(define (serialize-type9-fields obj descriptor loop)
   (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
-  (define accessors
-    (map (lambda (field) (list-ref field 1)) fields))
-  (map (lambda (a) (a obj)) accessors))
+  (map (lambda (field)
+         (define name (list-ref field 0))
+         (define accessor (list-ref field 1))
+         (accessor obj)) fields))
 
 (define serialize/human
   (serialize/sexp/generic serialize-type9-fields))
 
-(define (deserialize-type9-fields obj descriptor)
+(define (deserialize-type9-fields obj descriptor loop)
   (cdr obj))
 
 (define deserialize/human
