@@ -5,10 +5,10 @@ CZEMPAK_ROOT = $(PWD)/.czempak-root
 CZEMPAK = CZEMPAK_ROOT=$(CZEMPAK_ROOT) ./build/czempak
 
 compile:
-	sh scripts/make-test-compilation.sh
+	sh scripts/make-test-compilation.sh || true
 	$(MAKE) one TARGET=test/test-compilation.scm
 
-all: build/czempak
+all: build/czempak compile
 	CZEMPAK_ROOT=$(PWD)/.czempak-root sh scripts/run-tests.sh
 
 one: build/czempak
