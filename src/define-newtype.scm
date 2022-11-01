@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -14,72 +14,17 @@
 
 %run guile
 
-;; a simpler, less-demanding alternative to define-dumb-record and define-rec
 %var define-newtype
 
-%for (COMPILER "guile")
-
-(use-modules (srfi srfi-9))
-
-(define-syntax define-newtype
-  (lambda (stx)
-    (syntax-case stx ()
-      ((_ constructor predicate get)
-       (with-syntax
-        ((<newtype> (datum->syntax #'constructor
-                                   (symbol-append
-                                    '< (syntax->datum #'constructor) '>))))
-        #'(define-record-type <newtype>
-            (constructor constructor)
-            predicate
-            (constructor get))))
-      ((_ constructor predicate get set)
-       (with-syntax
-        ((<newtype> (datum->syntax #'constructor
-                                   (symbol-append
-                                    '< (syntax->datum #'constructor) '>))))
-        #'(define-record-type <newtype>
-            (constructor constructor)
-            predicate
-            (constructor get set)))))))
-
-%end
-%for (COMPILER "TODO:some-standard-r7rs")
+%use (define-type9) "./define-type9.scm"
 
 (define-syntax define-newtype
   (syntax-rules ()
     ((_ constructor predicate get)
-     (define-record-type <newtype>
-       (constructor constructor)
-       predicate
-       (constructor get)))
+     (define-type9 constructor
+       (constructor field) predicate (field get)))
     ((_ constructor predicate get set)
-     (define-record-type <newtype>
-       (constructor constructor)
+     (define-type9 constructor
+       (constructor field)
        predicate
-       (constructor get set)))))
-
-%end
-%for (COMPILER "racket")
-
-(define-syntax define-newtype
-  (syntax-rules ()
-    ((_ constructor predicate get)
-     (begin
-       (struct <newtype>
-               (e)
-               #:reflection-name (quote constructor))
-       (define constructor <newtype>)
-       (define predicate <newtype>?)
-       (define get <newtype>-e)))
-    ((_ name constructor predicate get set)
-     (begin
-       (struct <newtype>
-               ([e #:mutable])
-               #:reflection-name (quote constructor))
-       (define constructor <newtype>)
-       (define predicate <newtype>?)
-       (define get <newtype>-e)
-       (define set set-<newtype>-e!)))))
-
-%end
+       (field get set)))))
