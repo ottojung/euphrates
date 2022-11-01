@@ -18,39 +18,20 @@
 %var deserialize/human
 
 %use (assoc-or) "./assoc-or.scm"
-%use (builtin-type?) "./builtin-type-huh.scm"
-%use (type9-get-record-descriptor) "./define-type9.scm"
-%use (descriptors-registry-get) "./descriptors-registry.scm"
 %use (raisu) "./raisu.scm"
-%use (deserialize-builtin/natural serialize-builtin/natural) "./serialization-builtin-natural.scm"
+%use (deserialize/sexp/generic serialize/sexp/generic) "./serialization-sexp-generic.scm"
 
-(define (serialize-type9-fields obj descriptor loop)
+(define (serialize-type9-fields obj descriptor)
   (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
   (define accessors
     (map (lambda (field) (list-ref field 1)) fields))
-  (map (lambda (a) (loop (a obj))) accessors))
+  (map (lambda (a) (a obj)) accessors))
 
-(define (serialize/human o)
-  (let loop ((o o))
-    (if (builtin-type? o)
-        (serialize-builtin/natural o loop)
-        (let ((r9d (type9-get-record-descriptor o)))
-          (if r9d
-              (cons (cdr (assoc 'name r9d))
-                    (serialize-type9-fields o r9d loop))
-              (raisu 'unknown-type o))))))
+(define serialize/human
+  (serialize/sexp/generic serialize-type9-fields))
 
-(define (deserialize/human o)
-  (let loop ((o o))
-    (deserialize-builtin/natural
-     o loop
-     (let ()
-       (when (or (not (list? o))
-                 (null? o))
-         (raisu 'bad-format:expecting-list o))
-       (let ((name (car o))
-             (args (cdr o)))
-         (let ((r9d (or (descriptors-registry-get name)
-                        (raisu 'unkown-type-tag name))))
-           (define constructor (assoc-or 'constructor r9d (raisu 'no-constructor-in-descriptor r9d)))
-           (apply constructor (map loop args))))))))
+(define (deserialize-type9-fields obj descriptor)
+  (cdr obj))
+
+(define deserialize/human
+  (deserialize/sexp/generic deserialize-type9-fields))
