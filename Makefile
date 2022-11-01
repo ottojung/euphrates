@@ -4,6 +4,10 @@ TARGET=test/main.scm
 CZEMPAK_ROOT = $(PWD)/.czempak-root
 CZEMPAK = CZEMPAK_ROOT=$(CZEMPAK_ROOT) ./build/czempak
 
+compile:
+	sh scripts/make-test-compilation.sh
+	$(MAKE) one TARGET=test/test-compilation.scm
+
 all: build/czempak
 	CZEMPAK_ROOT=$(PWD)/.czempak-root sh scripts/run-tests.sh
 
