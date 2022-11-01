@@ -1,15 +1,11 @@
 #! /bin/sh
 
-export GUILE_AUTO_COMPILE=0
-
 for FILE in test/test-*.scm
 do
 	printf "> %s ..." "$FILE"
 
-	if build/czempak run "$FILE"
+	if build/czempak run "$FILE" 2>&1
 	then printf " ✓"
 	else printf " X"
-	fi
-
-	echo
+	fi | grep -v -e '^;;;'
 done
