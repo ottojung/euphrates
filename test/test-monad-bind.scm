@@ -54,11 +54,13 @@
 
         (monad-bind x (+ 3 5) 'kek)
 
-        (display "This is not inside of a monad")
-        (newline)
-        (display "The value of x is ")
-        (write (x))
-        (newline)
+        (define _pp
+          (begin
+            (display "This is not inside of a monad")
+            (newline)
+            (display "The value of x is ")
+            (write (x))
+            (newline)))
 
         (monad-bind y (* 8 2) 'bye)
 

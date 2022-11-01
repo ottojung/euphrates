@@ -21,10 +21,6 @@
 (define-syntax monad-bind
   (syntax-rules ()
     ((_ (x . xs) val . tags)
-     (begin
-       (define-values (x . xs) (monad-do/generic ((x . xs) val (list . tags))))
-       (when #f #f)))
+     (define-values (x . xs) (monad-do/generic ((x . xs) val (list . tags)))))
     ((_ var val . tags)
-     (begin
-       (define var (monad-do/generic (var val (list . tags))))
-       (when #f #f)))))
+     (define var (monad-do/generic (var val (list . tags)))))))
