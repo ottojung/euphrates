@@ -19,7 +19,6 @@
 %var type8-get-descriptor-by-name
 
 %use (builtin-descriptors) "./builtin-descriptors.scm"
-%use (debugv) "./debugv.scm"
 %use (define-type9) "./define-type9.scm"
 %use (hashmap-count hashmap-ref hashmap-set! make-hashmap) "./ihashmap.scm"
 %use (raisu) "./raisu.scm"
@@ -234,22 +233,16 @@
 (define (type8-define-things qq)
   (define name0 (list-ref qq 0))
   (define name (type8-decolisify-name name0))
-  (debugv name)
   (define constructor-group (list-ref qq 1))
-  (debugv constructor-group)
   (define field-names (cdr constructor-group))
-  (debugv field-names)
   (define field-specs (list-ref qq 3))
-  (debugv field-specs)
   (define mutable?
     (not
      (null?
       (filter
        (lambda (p) (< 2 (length p)))
        field-specs))))
-  (debugv mutable?)
   (define n (length field-names))
-  (debugv n)
 
   (define (get field-index)
     (define mut-field?
@@ -293,8 +286,6 @@
     (map (lambda (field-name field) (cons field-name field))
          field-names fields))
   (type8-register-descriptor! name constructor predicate mutable? named-fields)
-
-  (debugv (length ret))
 
   (apply values ret))
 
