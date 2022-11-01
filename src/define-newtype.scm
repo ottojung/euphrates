@@ -22,9 +22,9 @@
   (syntax-rules ()
     ((_ constructor predicate get)
      (define-type9 constructor
-       (constructor field) predicate (field get)))
+       (constructor get) predicate (get get)))
     ((_ constructor predicate get set)
      (define-type9 constructor
-       (constructor field)
+       (constructor get)
        predicate
-       (field get set)))))
+       (get get set)))))
