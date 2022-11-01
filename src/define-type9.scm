@@ -373,8 +373,8 @@
 
   (define constructor0
     (if mutable?
-        (type9-get-immutable-constructor n)
-        (type9-get-mutable-constructor n)))
+        (type9-get-mutable-constructor n)
+        (type9-get-immutable-constructor n)))
 
   (define (constructor . args)
     (unless (= n (length args))
@@ -384,8 +384,8 @@
 
   (define predicate
     (if mutable?
-        (type9-get-immutable-predicate n)
-        (type9-get-mutable-predicate n)))
+        (type9-get-mutable-predicate n)
+        (type9-get-immutable-predicate n)))
 
   (define fields
     (map get (range n)))

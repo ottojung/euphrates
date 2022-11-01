@@ -35,7 +35,7 @@
 (assert (not (eq? obj1 obj2)))
 
 (assert=
- "#<r2 :: mybox a: 1 b: 2>"
+ "#<r2m :: mybox a: 1 b: 2>"
  (with-output-to-string
    (lambda _ (write obj1))))
 

@@ -1,9 +1,10 @@
 
 %run guile
 
-%use (hashset hashset-value) "./hashset.scm"
+%use (fn) "./fn.scm"
 %use (hashmap) "./hashmap.scm"
-%use (hashmap-set! hashmap-copy hashmap-count hashmap-foreach hashmap-map hashmap->alist hashmap-clear! hashmap-delete!) "./ihashmap.scm"
+%use (hashset hashset-value) "./hashset.scm"
+%use (hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set!) "./ihashmap.scm"
 %use (raisu) "./raisu.scm"
 
 %var make-hashset
