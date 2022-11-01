@@ -1,13 +1,14 @@
 
 SUBMODULES = deps/czempak/.git
-
-CZEMPAK = CZEMPAK_ROOT=$(PWD)/.czempak-root ./build/czempak
-
-run: build/czempak
-	$(CZEMPAK) run test/main.scm
+TARGET=test/main.scm
+CZEMPAK_ROOT = $(PWD)/.czempak-root
+CZEMPAK = CZEMPAK_ROOT=$(CZEMPAK_ROOT) ./build/czempak
 
 all: build/czempak
-	$(CZEMPAK) build test/main.scm
+	CZEMPAK_ROOT=$(PWD)/.czempak-root sh scripts/run-tests.sh
+
+one: build/czempak
+	$(CZEMPAK) run $(TARGET)
 
 cleanrun: | clean run run-inlined
 
