@@ -18,9 +18,8 @@
 %var type9-get-record-descriptor
 %var type9-get-descriptor-by-name
 
-%use (builtin-descriptors) "./builtin-descriptors.scm"
 %use (define-dumb-record) "./define-dumb-record.scm"
-%use (hashmap-count hashmap-ref hashmap-set! make-hashmap) "./ihashmap.scm"
+%use (descriptors-registry-get descriptors-registry-set! descritors-registry-decolisify-name) "./descriptors-registry.scm"
 %use (raisu) "./raisu.scm"
 %use (range) "./range.scm"
 
@@ -311,29 +310,6 @@
 ;; End of helper functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define type9-descriptor-hashmap
-  (let ((ret (make-hashmap)))
-    (for-each
-     (lambda (descriptor)
-       (hashmap-set! ret (cdr (assoc 'name descriptor)) descriptor))
-     builtin-descriptors)
-    ret))
-
-(define (type9-decolisify-name name)
-  (define (combine name suffix)
-    (if (= 0 suffix) name
-        (string->symbol
-         (string-append
-          (symbol->string name) "." (number->string suffix)))))
-  (define top (+ 2 (hashmap-count type9-descriptor-hashmap)))
-
-  (let loop ((suffix 0))
-    (if (> suffix top) #f
-        (let ((comb (combine name suffix)))
-          (if (hashmap-ref type9-descriptor-hashmap comb #f)
-              (loop (+ 1 suffix))
-              comb)))))
-
 (define (type9-register-descriptor! name constructor predicate mutable? fields)
   (define descriptor
     `((name . ,name)
@@ -344,10 +320,7 @@
       (fields . ,fields)
       (builtin . #f)
       ))
-  (hashmap-set! type9-descriptor-hashmap name descriptor))
-
-(define (type9-get-descriptor-by-name name)
-  (hashmap-ref type9-descriptor-hashmap name #f))
+  (descriptors-registry-set! name descriptor))
 
 ;; Returns #f if record is not a type9 record.
 (define (type9-get-record-name record)
@@ -372,11 +345,11 @@
 
 (define (type9-get-record-descriptor record)
   (define name (type9-get-record-name record))
-  (and name (type9-get-descriptor-by-name name)))
+  (and name (descriptors-registry-get name)))
 
 (define (type9-define-things qq)
   (define name0 (list-ref qq 0))
-  (define name (type9-decolisify-name name0))
+  (define name (descritors-registry-decolisify-name name0))
   (define constructor-group (list-ref qq 1))
   (define field-names (cdr constructor-group))
   (define field-specs (list-ref qq 3))

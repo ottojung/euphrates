@@ -3,7 +3,6 @@
 
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
-%use (debugv) "./src/debugv.scm"
 %use (define-type9 type9-get-record-descriptor) "./src/define-type9.scm"
 
 (define-type9 mybox0
@@ -40,6 +39,8 @@
  (with-output-to-string
    (lambda _ (write obj1))))
 
-(assert=
- 'mybox
- (cdr (assoc 'name (type9-get-record-descriptor obj1))))
+(define desc1
+  (type9-get-record-descriptor obj1))
+
+(assert desc1)
+(assert= 'mybox (cdr (assoc 'name desc1)))
