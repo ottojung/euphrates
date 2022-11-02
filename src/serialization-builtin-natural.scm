@@ -26,6 +26,7 @@
 
 (define (serialize/human-hashtable? o) (hash-table? o))
 (define (serialize/human-hashtable o) (hash-map->list cons o))
+(define (deserialize/human-hashtable o) (alist->hash-table o))
 %end
 
 (define-syntax serialize-builtin/natural
@@ -75,7 +76,7 @@
            ((cons) (cons (loop (cadr o)) (loop (caddr o))))
            ((vector) (apply vector (map loop (cdr o))))
            ((make-parameter) (make-parameter (loop (cadr o))))
-           ((alist->hash-table) (alist->hash-table (loop (cadr o))))
+           ((alist->hash-table) (deserialize/human-hashtable (loop (cadr o))))
            ((make-box) (make-box (loop (cadr o))))
            ((make-atomic-box) (make-atomic-box (loop (cadr o))))
            (else fail)))
