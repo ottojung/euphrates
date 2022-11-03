@@ -21,17 +21,15 @@
 
 (define profun-op-less
   (profun-op-lambda
-   2 (args ctx)
-   (define xv (car args))
-   (define yv (cadr args))
+   ctx (xv yv)
 
    (unless (number? yv)
-     (raisu 'non-number-in-less args))
+     (raisu 'non-number-in-less yv))
 
    (if xv
        (if (number? xv)
            (and (not ctx) (< xv yv) #t)
-           (raisu 'non-number-in-less args))
+           (raisu 'non-number-in-less xv))
        (if (< yv 1) #f
            (let* ((ctxx (or ctx yv))
                   (ctxm (- ctxx 1)))

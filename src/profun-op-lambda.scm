@@ -17,9 +17,15 @@
 %var profun-op-lambda
 
 %use (profun-op) "./profun-op.scm"
+%use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-lambda
   (syntax-rules ()
-    ((_ arity args . bodies)
+    ((_ ctx args . bodies)
      (profun-op
-      arity (lambda args . bodies)))))
+      (let ((qargs (quote args)))
+        (if (pair? qargs)
+            (length qargs)
+            profun-variable-arity-op-keyword))
+      (lambda (args-got ctx)
+        (apply (lambda args . bodies) args-got))))))

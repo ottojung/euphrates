@@ -20,15 +20,13 @@
 
 (define profun-op-divisible
   (profun-op-lambda
-   2 (args ctx)
-   (let ((x (cadr args))
-         (y (car args))
-         (last (or ctx 1)))
-     (if x
-         (and (not (= 0 x))
-              (= 0 (remainder y x)))
-         (and (< last y)
-              (let loop ((i last) (cnt 0))
-                (if (= 0 (remainder y i))
-                    (cons (list #t i) (+ i 1))
-                    (loop (+ 1 i) cnt))))))))
+   ctx (y x)
+   (define last (or ctx 1))
+   (if x
+       (and (not (= 0 x))
+            (= 0 (remainder y x)))
+       (and (< last y)
+            (let loop ((i last) (cnt 0))
+              (if (= 0 (remainder y i))
+                  (cons (list #t i) (+ i 1))
+                  (loop (+ 1 i) cnt)))))))

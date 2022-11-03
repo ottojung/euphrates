@@ -38,14 +38,10 @@
                (cons (repack ind result) #f)))))
 
   (profun-op-lambda
-   3 (args ctx)
-   (define x (car args))
-   (define y (cadr args))
-   (define z (car (cdr (cdr args))))
-
+   ctx (x y z)
    (cond
     ((and x y) (g-op 2 x y z action))
     ((and x z) (g-op 1 z x y left-inverse))
     ((and y z) (g-op 0 z y x right-inverse))
-    (else (raisu 'need-more-info-in-+ args)))))
+    (else (raisu 'need-more-info-in-+ x y z)))))
 

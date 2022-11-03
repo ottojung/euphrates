@@ -24,8 +24,7 @@
     ((_ value)
      (let ((lst #f))
        (profun-op-lambda
-        1 (args ctx)
-        (define x (car args))
+        ctx (x)
         (unless lst (set! lst value))
         (if x (not (not (member x lst)))
             (let ((ctxx (or ctx lst)))

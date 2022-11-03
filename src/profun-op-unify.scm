@@ -17,19 +17,16 @@
 %var profun-op-unify
 
 %use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (raisu) "./raisu.scm"
 %use (profun-variable-equal?) "./profun-variable-equal-q.scm"
+%use (raisu) "./raisu.scm"
 
 (define profun-op-unify
   (profun-op-lambda
-   2 (args ctx)
-   (define x (car args))
-   (define y (cadr args))
-
+   ctx (x y)
    (case (profun-variable-equal? x y)
      ((#t) #t)
      ((#f) #f)
      ((x-false) (cons (list y #t) #f))
      ((y-false) (cons (list #t x) #f))
      ((both-false)
-      (raisu 'TODO-3:both-undefined args)))))
+      (raisu 'TODO-3:both-undefined x y)))))

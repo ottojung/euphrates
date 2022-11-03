@@ -22,14 +22,11 @@
 
 (define profun-op-separate
   (profun-op-lambda
-   2 (args ctx)
-   (define x (car args))
-   (define y (cadr args))
-
+   ctx (x y)
    (case (profun-variable-equal? x y)
      ((#t) #f)
      ((#f) #t)
      ((x-false) #f)
      ((y-false) #f)
      ((both-false)
-      (raisu 'TODO-4:both-undefined-in-separate args)))))
+      (raisu 'TODO-4:both-undefined-in-separate x y)))))
