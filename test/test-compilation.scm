@@ -57,6 +57,7 @@
 %use (date-get-current-string) "./src/date-get-current-string.scm"
 %use (date-get-current-time24h-string) "./src/date-get-current-time24h-string.scm"
 %use (debug) "./src/debug.scm"
+%use (debugs) "./src/debugs.scm"
 %use (debugv) "./src/debugv.scm"
 %use (define-cli:raisu/default-exit define-cli:raisu/p define-cli:show-help lambda-cli make-cli make-cli-with-handler make-cli/f make-cli/f/basic with-cli) "./src/define-cli.scm"
 %use (define-dumb-record) "./src/define-dumb-record.scm"
