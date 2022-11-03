@@ -15,7 +15,7 @@
 %run guile
 
 %var define-type9
-%var define-type9/random-descriptor
+%var define-type9/nobind-descriptor
 %var type9-get-record-descriptor
 %var type9-get-descriptor-by-name
 
@@ -455,23 +455,23 @@
                 field-specs)))
        name constructor-name predicate-name . field-specs))))
 
-(define-syntax define-type9/random-descriptor-helper
+(define-syntax define-type9/nobind-descriptor-helper
   (syntax-rules ()
     ((_ buf body constructor-name predicate-name)
      (define-values (constructor-name predicate-name . buf)
        (apply values body)))
     ((_ buf body constructor-name predicate-name (field-name field-accessor) . field-specs)
-     (define-type9/random-descriptor-helper (field-accessor . buf) body constructor-name predicate-name . field-specs))
+     (define-type9/nobind-descriptor-helper (field-accessor . buf) body constructor-name predicate-name . field-specs))
     ((_ buf body constructor-name predicate-name (field-name field-accessor field-setter) . field-specs)
-     (define-type9/random-descriptor-helper (field-accessor field-setter . buf) body constructor-name predicate-name . field-specs))
+     (define-type9/nobind-descriptor-helper (field-accessor field-setter . buf) body constructor-name predicate-name . field-specs))
     ))
 
-(define-syntax define-type9/random-descriptor
+(define-syntax define-type9/nobind-descriptor
   (syntax-rules ()
     ((_ (constructor-name . field-names)
         predicate-name
         . field-specs)
-     (define-type9/random-descriptor-helper
+     (define-type9/nobind-descriptor-helper
        ()
        (cdr
         (type9-define-things

@@ -64,7 +64,7 @@
 %use (define-newtype) "./src/define-newtype.scm"
 %use (define-pair) "./src/define-pair.scm"
 %use (define-tuple) "./src/define-tuple.scm"
-%use (define-type9 define-type9/random-descriptor type9-get-descriptor-by-name type9-get-record-descriptor) "./src/define-type9.scm"
+%use (define-type9 define-type9/nobind-descriptor type9-get-descriptor-by-name type9-get-record-descriptor) "./src/define-type9.scm"
 %use (descriptors-registry-get descriptors-registry-set! descritors-registry-decolisify-name) "./src/descriptors-registry.scm"
 %use (directory-files-depth-foreach) "./src/directory-files-depth-foreach.scm"
 %use (directory-files-rec/filter) "./src/directory-files-rec-filter.scm"
