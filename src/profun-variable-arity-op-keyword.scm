@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
+;;;; Copyright (C) 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -14,12 +14,7 @@
 
 %run guile
 
-%var profun-handler-lambda
+%var profun-variable-arity-op-keyword
 
-%use (profun-handler) "./profun-handler.scm"
-
-(define-syntax profun-handler-lambda
-  (syntax-rules ()
-    ((_ arity args . bodies)
-     (profun-handler
-      arity (lambda args . bodies)))))
+(define profun-variable-arity-op-keyword
+  'variable-arity)

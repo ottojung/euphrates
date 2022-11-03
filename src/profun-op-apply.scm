@@ -22,11 +22,11 @@
 
 %use (box-ref box-set! box? make-box) "./box.scm"
 %use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
-%use (profun-variable-arity-handler) "./profun-variable-arity-handler.scm"
+%use (profun-variable-arity-op) "./profun-variable-arity-op.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-apply
-  (profun-variable-arity-handler
+  (profun-variable-arity-op
    (lambda (args ctx)
      (and (not ctx)
           (not (null? args))

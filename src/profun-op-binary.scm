@@ -16,7 +16,7 @@
 
 %var profun-op-binary
 
-%use (profun-handler-lambda) "./profun-handler-lambda.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (raisu) "./raisu.scm"
 
 (define (profun-op-binary action left-inverse right-inverse)
@@ -37,7 +37,7 @@
                (= z result)
                (cons (repack ind result) #f)))))
 
-  (profun-handler-lambda
+  (profun-op-lambda
    3 (args ctx)
    (define x (car args))
    (define y (cadr args))

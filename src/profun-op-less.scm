@@ -16,11 +16,11 @@
 
 %var profun-op-less
 
-%use (profun-handler-lambda) "./profun-handler-lambda.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-less
-  (profun-handler-lambda
+  (profun-op-lambda
    2 (args ctx)
    (define xv (car args))
    (define yv (cadr args))

@@ -30,12 +30,12 @@
 %use (profun-op-print) "./profun-op-print.scm"
 %use (profun-op-separate) "./profun-op-separate.scm"
 %use (profun-op-unify) "./profun-op-unify.scm"
-%use (profun-variable-arity-handler) "./profun-variable-arity-handler.scm"
+%use (profun-variable-arity-op) "./profun-variable-arity-op.scm"
 %use (profun-create-database profun-eval-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
 
 (define petri-profun-push
-  (profun-variable-arity-handler
+  (profun-variable-arity-op
    (lambda (argv ctx)
      (and (not ctx)
           (begin

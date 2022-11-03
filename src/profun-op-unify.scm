@@ -16,12 +16,12 @@
 
 %var profun-op-unify
 
-%use (profun-handler-lambda) "./profun-handler-lambda.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (raisu) "./raisu.scm"
 %use (profun-variable-equal?) "./profun-variable-equal-q.scm"
 
 (define profun-op-unify
-  (profun-handler-lambda
+  (profun-op-lambda
    2 (args ctx)
    (define x (car args))
    (define y (cadr args))

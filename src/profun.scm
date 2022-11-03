@@ -21,7 +21,7 @@
 %use (hashmap) "./hashmap.scm"
 %use (hashmap->alist hashmap-copy hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
-%use (profun-handler-procedure) "./profun-handler-obj.scm"
+%use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
 
@@ -220,7 +220,7 @@
 (define (enter-foreign db s instruction)
   (define env (state-env s))
   (define handler (instruction-sign instruction))
-  (define func (profun-handler-procedure handler))
+  (define func (profun-op-procedure handler))
   (define context (instruction-context instruction))
   (define args (instruction-args instruction))
   (define argv (map (lambda (a) (env-get env a)) args))

@@ -16,10 +16,10 @@
 
 %var profun-op-divisible
 
-%use (profun-handler-lambda) "./profun-handler-lambda.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 
 (define profun-op-divisible
-  (profun-handler-lambda
+  (profun-op-lambda
    2 (args ctx)
    (let ((x (cadr args))
          (y (car args))

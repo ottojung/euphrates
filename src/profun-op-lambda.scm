@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -14,15 +14,12 @@
 
 %run guile
 
-%var profun-handler-constructor
-%var profun-handler?
-%var profun-handler-arity
-%var profun-handler-procedure
+%var profun-op-lambda
 
-%use (define-type9) "./define-type9.scm"
+%use (profun-op) "./profun-op.scm"
 
-(define-type9 profun-handler-obj
-  (profun-handler-constructor arity procedure) profun-handler?
-  (arity profun-handler-arity)
-  (arity profun-handler-procedure)
-  )
+(define-syntax profun-op-lambda
+  (syntax-rules ()
+    ((_ arity args . bodies)
+     (profun-op
+      arity (lambda args . bodies)))))

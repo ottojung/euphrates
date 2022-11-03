@@ -17,13 +17,13 @@
 ;; Used in bottom-handler to return just some predefined values
 %var profun-make-set
 
-%use (profun-handler-lambda) "./profun-handler-lambda.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 
 (define-syntax profun-make-set
   (syntax-rules ()
     ((_ value)
      (let ((lst #f))
-       (profun-handler-lambda
+       (profun-op-lambda
         1 (args ctx)
         (define x (car args))
         (unless lst (set! lst value))

@@ -3,7 +3,7 @@
 
 ;; profun
 %use (assert=) "./src/assert-equal.scm"
-%use (profun-handler) "./src/profun-handler.scm"
+%use (profun-op) "./src/profun-op.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
@@ -59,7 +59,7 @@
        (eval profun-op-eval)
        (favorite (profun-make-set (list 777 2 9 3)))
        (favorite2
-        (profun-handler
+        (profun-op
          2 (profun-make-tuple-set '((777 2) (#t 9) (3 #f)))))
        )))
 

@@ -14,7 +14,10 @@
 
 %run guile
 
-%var profun-variable-arity-handler-keyword
+%var profun-op
 
-(define profun-variable-arity-handler-keyword
-  'variable-arity)
+%use (profun-op-constructor) "./profun-op-obj.scm"
+
+(define (profun-op arity handler-procedure)
+  (profun-op-constructor
+   arity handler-procedure))

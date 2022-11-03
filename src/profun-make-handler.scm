@@ -19,8 +19,8 @@
 %use (debugs) "./debugs.scm"
 %use (hashmap-ref multi-alist->hashmap) "./ihashmap.scm"
 %use (list-find-first) "./list-find-first.scm"
-%use (profun-handler-arity) "./profun-handler-obj.scm"
-%use (profun-variable-arity-handler?) "./profun-variable-arity-handler-huh.scm"
+%use (profun-op-arity) "./profun-op-obj.scm"
+%use (profun-variable-arity-op?) "./profun-variable-arity-op-huh.scm"
 
 (define-syntax profun-make-handler-helper
   (syntax-rules ()
@@ -31,8 +31,8 @@
          (let ((ret (hashmap-ref H key '())))
            (list-find-first
             (lambda (handler)
-              (or (profun-variable-arity-handler? handler)
-                  (= (profun-handler-arity handler)
+              (or (profun-variable-arity-op? handler)
+                  (= (profun-op-arity handler)
                      ex-arity)))
             #f
             ret)))))
