@@ -16,15 +16,13 @@
 
 %var define-newtype
 
-%use (define-type9) "./define-type9.scm"
+%use (define-type9/random-descriptor) "./define-type9.scm"
 
 (define-syntax define-newtype
   (syntax-rules ()
     ((_ constructor predicate get)
-     (define-type9 constructor
+     (define-type9/random-descriptor
        (constructor value) predicate (value get)))
     ((_ constructor predicate get set)
-     (define-type9 constructor
-       (constructor value)
-       predicate
-       (value get set)))))
+     (define-type9/random-descriptor
+       (constructor value) predicate (value get set)))))

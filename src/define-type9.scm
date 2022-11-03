@@ -15,6 +15,7 @@
 %run guile
 
 %var define-type9
+%var define-type9/random-descriptor
 %var type9-get-record-descriptor
 %var type9-get-descriptor-by-name
 
@@ -426,12 +427,13 @@
          field-names fields))
   (type9-register-descriptor! name constructor predicate mutable? named-fields)
 
-  (apply values ret))
+  ret)
 
 (define-syntax define-type9-helper
   (syntax-rules ()
     ((_ buf body name constructor-name predicate-name)
-     (define-values (name constructor-name predicate-name . buf) body))
+     (define-values (name constructor-name predicate-name . buf)
+       (apply values body)))
     ((_ buf body name constructor-name predicate-name (field-name field-accessor) . field-specs)
      (define-type9-helper (field-accessor . buf) body name constructor-name predicate-name . field-specs))
     ((_ buf body name constructor-name predicate-name (field-name field-accessor field-setter) . field-specs)
@@ -452,3 +454,29 @@
                 predicate-name
                 field-specs)))
        name constructor-name predicate-name . field-specs))))
+
+(define-syntax define-type9/random-descriptor-helper
+  (syntax-rules ()
+    ((_ buf body constructor-name predicate-name)
+     (define-values (constructor-name predicate-name . buf)
+       (apply values body)))
+    ((_ buf body constructor-name predicate-name (field-name field-accessor) . field-specs)
+     (define-type9/random-descriptor-helper (field-accessor . buf) body constructor-name predicate-name . field-specs))
+    ((_ buf body constructor-name predicate-name (field-name field-accessor field-setter) . field-specs)
+     (define-type9/random-descriptor-helper (field-accessor field-setter . buf) body constructor-name predicate-name . field-specs))
+    ))
+
+(define-syntax define-type9/random-descriptor
+  (syntax-rules ()
+    ((_ (constructor-name . field-names)
+        predicate-name
+        . field-specs)
+     (define-type9/random-descriptor-helper
+       ()
+       (cdr
+        (type9-define-things
+         (quote (constructor-name
+                 (constructor-name . field-names)
+                 predicate-name
+                 field-specs))))
+       constructor-name predicate-name . field-specs))))
