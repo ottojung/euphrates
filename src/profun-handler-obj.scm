@@ -14,10 +14,15 @@
 
 %run guile
 
-%var profun-handler
+%var profun-handler-constructor
+%var profun-handler?
+%var profun-handler-arity
+%var profun-handler-procedure
 
-%use (profun-handler-constructor) "./profun-handler-obj.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define (profun-handler arity handler-procedure)
-  (profun-handler-constructor
-   arity handler-procedure))
+(define-type9 profun-handler-obj
+  (profun-handler-constructor arity procedure) profun-handler?
+  (arity profun-handler-arity)
+  (arity profun-handler-procedure)
+  )

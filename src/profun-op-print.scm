@@ -17,11 +17,13 @@
 %var profun-op-print
 
 %use (dprintln) "./dprintln.scm"
+%use (profun-variable-arity-handler) "./profun-variable-arity-handler.scm"
 
 (define profun-op-print
-  (lambda (args ctx)
-    (and (not ctx)
-         (not (null? args))
-         (begin
-           (apply dprintln args)
-           (cons #t #t)))))
+  (profun-variable-arity-handler
+   (lambda (args ctx)
+     (and (not ctx)
+          (not (null? args))
+          (begin
+            (apply dprintln args)
+            (cons #t #t))))))

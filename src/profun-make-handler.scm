@@ -16,18 +16,34 @@
 
 %var profun-make-handler
 
+%use (debugs) "./debugs.scm"
+%use (hashmap-ref multi-alist->hashmap) "./ihashmap.scm"
+%use (list-find-first) "./list-find-first.scm"
+%use (profun-handler-arity) "./profun-handler-obj.scm"
+%use (profun-variable-arity-handler?) "./profun-variable-arity-handler-huh.scm"
+
 (define-syntax profun-make-handler-helper
   (syntax-rules ()
-    ((_ key ex-arity buf ())
-     (case key . buf))
+    ((_ kkk zzzz buf ())
+     (let ((H (multi-alist->hashmap buf)))
+       (lambda (key ex-arity)
+         ;; (debugs `(get ,key ,ex-arity))
+         (let ((ret (hashmap-ref H key '())))
+           (list-find-first
+            (lambda (handler)
+              (or (profun-variable-arity-handler? handler)
+                  (= (profun-handler-arity handler)
+                     ex-arity)))
+            #f
+            ret)))))
+
     ((_ key ex-arity buf ((name op) . rest))
      (profun-make-handler-helper
       key ex-arity
-      (((name) (if (pair? op) (and (= (car op) ex-arity) (cdr op)) op)) . buf)
+      (cons (cons (quote name) op) buf)
       rest))))
 
 (define-syntax profun-make-handler
   (syntax-rules ()
     ((_ . cases)
-     (lambda (key ex-arity)
-       (profun-make-handler-helper key ex-arity ((else #f)) cases)))))
+     (profun-make-handler-helper 0 0 '() cases))))

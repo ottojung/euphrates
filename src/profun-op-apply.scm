@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -20,27 +20,29 @@
 %var profun-apply-return!
 %var profun-apply-fail!
 
+%use (box-ref box-set! box? make-box) "./box.scm"
 %use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
-%use (make-box box? box-ref box-set!) "./box.scm"
+%use (profun-variable-arity-handler) "./profun-variable-arity-handler.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-apply
-  (lambda (args ctx)
-    (and (not ctx)
-         (not (null? args))
-         (let ((procedure (car args))
-               (arguments (cdr args))
-               (box (make-box #f)))
+  (profun-variable-arity-handler
+   (lambda (args ctx)
+     (and (not ctx)
+          (not (null? args))
+          (let ((procedure (car args))
+                (arguments (cdr args))
+                (box (make-box #f)))
 
-           (parameterize ((profun-op-apply/result#p box))
-             (apply procedure arguments))
+            (parameterize ((profun-op-apply/result#p box))
+              (apply procedure arguments))
 
-           (let ((result (box-ref box)))
-             (case result
-               ((fail) #f)
-               ((#f) (cons #t #t))
-               (else
-                (cons (cons #t result) #t))))))))
+            (let ((result (box-ref box)))
+              (case result
+                ((fail) #f)
+                ((#f) (cons #t #t))
+                (else
+                 (cons (cons #t result) #t)))))))))
 
 (define (profun-apply-return! . args)
   (let ((box (profun-op-apply/result#p)))
