@@ -16,36 +16,39 @@
 
 %var petri-profun-net
 
-%use (petri-push) "./petri.scm"
-%use (petri-net-make) "./petri-net-make.scm"
-%use (profun-op-unify) "./profun-op-unify.scm"
-%use (profun-op-separate) "./profun-op-separate.scm"
-%use (profun-op+) "./profun-op-plus.scm"
-%use (profun-op*) "./profun-op-mult.scm"
-%use (profun-op-less) "./profun-op-less.scm"
-%use (profun-op-divisible) "./profun-op-divisible.scm"
-%use (profun-op-apply) "./profun-op-apply.scm"
-%use (profun-op-eval) "./profun-op-eval.scm"
-%use (profun-op-print) "./profun-op-print.scm"
-%use (profun-make-handler) "./profun-make-handler.scm"
-%use (profun-create-database profun-eval-query) "./profun.scm"
-%use (list-deduplicate) "./list-deduplicate.scm"
 %use (multi-alist->hashmap) "./ihashmap.scm"
+%use (list-deduplicate) "./list-deduplicate.scm"
+%use (petri-net-make) "./petri-net-make.scm"
+%use (petri-push) "./petri.scm"
+%use (profun-make-handler) "./profun-make-handler.scm"
+%use (profun-op-apply) "./profun-op-apply.scm"
+%use (profun-op-divisible) "./profun-op-divisible.scm"
+%use (profun-op-eval) "./profun-op-eval.scm"
+%use (profun-op-less) "./profun-op-less.scm"
+%use (profun-op*) "./profun-op-mult.scm"
+%use (profun-op+) "./profun-op-plus.scm"
+%use (profun-op-print) "./profun-op-print.scm"
+%use (profun-op-separate) "./profun-op-separate.scm"
+%use (profun-op-unify) "./profun-op-unify.scm"
+%use (profun-variable-arity-handler) "./profun-variable-arity-handler.scm"
+%use (profun-create-database profun-eval-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
 
-(define (petri-profun-push argv ctx)
-  (and (not ctx)
-       (begin
-         (unless (pair? argv)
-           (raisu 'empty-profun-push argv))
+(define petri-profun-push
+  (profun-variable-arity-handler
+   (lambda (argv ctx)
+     (and (not ctx)
+          (begin
+            (unless (pair? argv)
+              (raisu 'empty-profun-push argv))
 
-         (unless (string? (car argv))
-           (raisu 'profun-push-first-argument-is-not-string argv))
+            (unless (string? (car argv))
+              (raisu 'profun-push-first-argument-is-not-string argv))
 
-         (let ((name (string->symbol (car argv)))
-               (args (cdr argv)))
-           (apply petri-push (cons name args))
-           #t))))
+            (let ((name (string->symbol (car argv)))
+                  (args (cdr argv)))
+              (apply petri-push (cons name args))
+              #t))))))
 
 (define bottom-handler
   (profun-make-handler
