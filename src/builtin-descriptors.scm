@@ -37,6 +37,8 @@
    (make-builtin-descriptor 'cons pair?)
    (make-builtin-descriptor 'vector vector?)
    (make-builtin-descriptor 'parameter parameter?)
+   (make-builtin-descriptor 'unspecified (lambda (x) (equal? x (when #f #f))))
+   (make-builtin-descriptor 'eof eof-object?)
 
 %for (COMPILER "guile")
    (make-builtin-descriptor 'hash-table hash-table?)

@@ -49,6 +49,8 @@
         ((pair? o) `(cons ,(loop (car o)) ,(loop (cdr o))))
         ((vector? o) `(vector ,@(map loop o)))
         ((parameter? o) `(make-parameter ,@(loop (o))))
+        ((equal? (when #f #f) o) o)
+        ((eof-object? o) o)
         ((serialize/human-hashtable? o) `(alist->hash-table ,(loop (serialize/human-hashtable o))))
         ((box? o) `(box ,(loop (box-ref o))))
         ((atomic-box? o) `(box ,(loop (atomic-box-ref o))))
