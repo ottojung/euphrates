@@ -9,10 +9,10 @@
 %var rtree-children
 %var set-rtree-children!
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
 ;; recursive tree structure
-(define-dumb-record <rtree>
+(define-type9 <rtree>
   (rtree ref value children) rtree?
   (ref rtree-ref set-rtree-ref!)
   (value rtree-value)

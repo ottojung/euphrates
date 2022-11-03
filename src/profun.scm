@@ -17,20 +17,20 @@
 %var profun-create-database
 %var profun-eval-query
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap-ref hashmap-set! hashmap-copy hashmap->alist) "./ihashmap.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 
-(define-dumb-record <database>
+(define-type9 <database>
   (database a b) database?
   (a database-table)
   (b database-handler)
   )
 
-(define-dumb-record <rule>
+(define-type9 <rule>
   (rule a b c d) rule?
   (a rule-name) ;; : symbol
   (b rule-index) ;; : number (together with "name" gives a unique index)
@@ -38,7 +38,7 @@
   (d rule-body) ;; : list of lists of symbols
   )
 
-(define-dumb-record <instruction>
+(define-type9 <instruction>
   (instruction a b c d e) instruction?
   (a instruction-sign) ;; operation signature, like name and version for alternative
   (b instruction-args) ;; arguments
@@ -47,7 +47,7 @@
   (e instruction-context) ;; : #f | any
   )
 
-(define-dumb-record <state>
+(define-type9 <state>
   (state a b c d) state?
   (a state-current) ;; current `instruction`
   (b state-stack) ;; list of `instruction`s

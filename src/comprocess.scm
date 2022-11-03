@@ -14,9 +14,9 @@
 %var comprocess-exited?
 %var set-comprocess-exited?!
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-dumb-record <comprocess>
+(define-type9 <comprocess>
   (comprocess command args pipe pid status exited?) comprocess?
   (command comprocess-command)
   (args comprocess-args)

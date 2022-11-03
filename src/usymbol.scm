@@ -19,9 +19,9 @@
 %var usymbol-name
 %var usymbol-qualifier
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-dumb-record <usymbol>
+(define-type9 <usymbol>
   (usymbol a b) usymbol?
   (a usymbol-name) ;; printable name - usually what was read
   (b usymbol-qualifier) ;; unique qualifier

@@ -10,9 +10,9 @@
 %var set-queue-first!
 %var set-queue-last!
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-dumb-record <queue>
+(define-type9 <queue>
   (queue vector first last) queue?
   (vector queue-vector set-queue-vector!)
   (first queue-first set-queue-first!)

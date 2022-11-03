@@ -19,9 +19,9 @@
 %var stack-lst
 %var set-stack-lst!
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-dumb-record <stack>
+(define-type9 <stack>
   (stack lst) stack?
   (lst stack-lst set-stack-lst!)
   )

@@ -20,9 +20,9 @@
 %var monadobj-uses-continuations?
 %var monadobj-handles-fin?
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-dumb-record <monadobj>
+(define-type9 <monadobj>
   (monadobj-constructor procedure uses-continuations? handles-fin?) monadobj?
   (procedure monadobj-procedure)
   (uses-continuations? monadobj-uses-continuations?)

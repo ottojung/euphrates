@@ -21,9 +21,9 @@
 %var prefixtree-children
 %var set-prefixtree-children!
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-dumb-record <prefixtree>
+(define-type9 <prefixtree>
   (prefixtree value children) prefixtree?
   (value prefixtree-value set-prefixtree-value!)
   (children prefixtree-children set-prefixtree-children!)

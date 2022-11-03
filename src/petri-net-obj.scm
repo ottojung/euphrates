@@ -22,9 +22,9 @@
 %var petri-net-obj-finished?
 %var set-petri-net-obj-finished?!
 
-%use (define-dumb-record) "./define-dumb-record.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-dumb-record <petri-net-obj>
+(define-type9 <petri-net-obj>
   (petri-net-obj transitions queue critical finished?) petri-net-obj?
   (transitions petri-net-obj-transitions)
   (queue petri-net-obj-queue)
