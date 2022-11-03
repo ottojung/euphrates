@@ -25,14 +25,26 @@
   (val2 mybox-val2)
   )
 
+(define-type9 myboxc
+  (make-myboxc val1 val2) myboxc?
+  (val1 myboxc-val1 set-myboxc-val1!)
+  (val2 myboxc-val2)
+  )
+
 (define obj1
   (make-mybox 1 2))
 
 (define obj2
   (make-mybox 1 2))
 
+(assert (mybox? obj1))
+(assert (mybox? obj2))
 (assert= obj1 obj2)
 (assert (not (eq? obj1 obj2)))
+
+(assert (not (mybox1? obj1)))
+(assert (not (mybox1m? obj1)))
+(assert (not (myboxc? obj1)))
 
 (assert=
  "#<r2m :: mybox a: 1 b: 2>"

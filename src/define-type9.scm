@@ -282,6 +282,16 @@
     (raisu 'do-not-have-that-many-constructors n))
   (vector-ref type9-mutable-constructors n))
 
+(define (type9-get-immutable-:-accessor n)
+  (unless (< n (vector-length type9-immutable-:-accessors))
+    (raisu 'do-not-have-that-many-:-accessors n))
+  (vector-ref type9-immutable-:-accessors n))
+
+(define (type9-get-mutable-:-accessor n)
+  (unless (< n (vector-length type9-mutable-:-accessors))
+    (raisu 'do-not-have-that-many-:-accessors n))
+  (vector-ref type9-mutable-:-accessors n))
+
 (define (type9-get-immutable-accessor n k)
   (unless (< n (vector-length type9-immutable-accessors))
     (raisu 'do-not-have-that-many-record-templates n))
@@ -382,10 +392,20 @@
              n (length args) name))
     (apply constructor0 (cons name args)))
 
-  (define predicate
+  (define predicate0
     (if mutable?
         (type9-get-mutable-predicate n)
         (type9-get-immutable-predicate n)))
+
+  (define :-accessor
+    (if mutable?
+        (type9-get-mutable-:-accessor n)
+        (type9-get-immutable-:-accessor n)))
+
+  (define predicate
+    (lambda (obj)
+      (and (predicate0 obj)
+           (equal? name (:-accessor obj)))))
 
   (define fields
     (map get (range n)))
