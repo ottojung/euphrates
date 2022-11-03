@@ -46,6 +46,11 @@
 (assert (not (mybox1m? obj1)))
 (assert (not (myboxc? obj1)))
 
+(assert= 'mybox mybox)
+(assert= 'mybox0 mybox0)
+(assert= 'mybox1 mybox1)
+(assert= 'mybox1m mybox1m)
+
 (assert=
  "#<r2m :: mybox a: 1 b: 2>"
  (with-output-to-string
