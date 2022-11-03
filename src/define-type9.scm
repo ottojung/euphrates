@@ -338,7 +338,7 @@
   (define (check n) (or (check-immutable n) (check-mutable n)))
 
   (or (let loop ((n 1))
-        (and (<= n N)
+        (and (< n N)
              (or (check n)
                  (loop (+ 1 n)))))
       (check 0)))
