@@ -29,7 +29,8 @@
          (list name (loop (accessor obj)))) fields))
 
 (define serialize/human
-  (serialize/sexp/generic serialize-type9-fields))
+  (serialize/sexp/generic
+   serialize-type9-fields (const '(procedure ???))))
 
 (define (deserialize-type9-fields obj descriptor loop)
   (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
@@ -46,4 +47,8 @@
   (map loop args))
 
 (define deserialize/human
-  (deserialize/sexp/generic deserialize-type9-fields))
+  (deserialize/sexp/generic
+   deserialize-type9-fields
+   (lambda (o)
+     (and (equal? o '(procedure))
+          (raisu 'cannot-deserialize-procedures o)))))

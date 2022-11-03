@@ -24,29 +24,34 @@
 %use (raisu) "./raisu.scm"
 %use (deserialize-builtin/natural serialize-builtin/natural) "./serialization-builtin-natural.scm"
 
-(define (serialize/sexp/generic serialize-type9-fields)
+(define (serialize/sexp/generic serialize-type9-fields procedure-serialization)
   (lambda (o)
     (let loop ((o o))
-      (if (builtin-type? o)
-          (serialize-builtin/natural o loop)
-          (let ((r9d (type9-get-record-descriptor o)))
-            (if r9d
-                (cons (cdr (assoc 'name r9d))
-                      (serialize-type9-fields o r9d loop))
-                (raisu 'unknown-type o)))))))
+      (cond
+       ((procedure? o)
+        (procedure-serialization o))
+       ((builtin-type? o)
+        (serialize-builtin/natural o loop))
+       (else
+        (let ((r9d (type9-get-record-descriptor o)))
+          (if r9d
+              (cons (cdr (assoc 'name r9d))
+                    (serialize-type9-fields o r9d loop))
+              (raisu 'unknown-type o))))))))
 
-(define (deserialize/sexp/generic deserialize-type9-fields)
+(define (deserialize/sexp/generic deserialize-type9-fields procedure-serialization)
   (lambda (o)
     (let loop ((o o))
       (deserialize-builtin/natural
        o loop
-       (let ()
-         (when (or (not (list? o))
-                   (null? o))
-           (raisu 'bad-format:expecting-list o))
-         (let ((name (car o)))
-           (let ((r9d (or (descriptors-registry-get name)
-                          (raisu 'unkown-type-tag name))))
-             (define constructor (assoc-or 'constructor r9d (raisu 'no-constructor-in-descriptor r9d)))
-             (define args (deserialize-type9-fields o r9d loop))
-             (apply constructor args))))))))
+       (or (procedure-serialization o)
+           (let ()
+             (when (or (not (list? o))
+                       (null? o))
+               (raisu 'bad-format:expecting-list o))
+             (let ((name (car o)))
+               (let ((r9d (or (descriptors-registry-get name)
+                              (raisu 'unkown-type-tag name))))
+                 (define constructor (assoc-or 'constructor r9d (raisu 'no-constructor-in-descriptor r9d)))
+                 (define args (deserialize-type9-fields o r9d loop))
+                 (apply constructor args)))))))))

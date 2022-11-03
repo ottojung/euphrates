@@ -28,10 +28,17 @@
   (map (lambda (a) (loop (a obj))) accessors))
 
 (define serialize/runnable
-  (serialize/sexp/generic serialize-type9-fields))
+  (serialize/sexp/generic
+   serialize-type9-fields
+   (lambda (o)
+     (cons 'procedure o))))
 
 (define (deserialize-type9-fields obj descriptor loop)
   (map loop (cdr obj)))
 
 (define deserialize/runnable
-  (deserialize/sexp/generic deserialize-type9-fields))
+  (deserialize/sexp/generic
+   deserialize-type9-fields
+   (lambda (o)
+     (and (equal? 'procedure (car o))
+          (cdr o)))))

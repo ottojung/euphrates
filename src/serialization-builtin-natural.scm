@@ -14,6 +14,8 @@
 
 %run guile
 
+;; NOTE: does not handle `procedure's!
+
 %var serialize-builtin/natural
 %var deserialize-builtin/natural
 
@@ -33,7 +35,7 @@
   (syntax-rules ()
     ((_ o0 loop0)
      (let ((o o0) (loop loop0))
-       (serialize-builtin/natural o loop (raisu 'unknown-builtin-type o))))
+       (serialize-builtin/natural o loop (raisu 'unknown-builtin-type 'serialize o))))
     ((_ o0 loop0 fail)
      (let ((o o0) (loop loop0))
        (cond
@@ -50,7 +52,6 @@
         ((serialize/human-hashtable? o) `(alist->hash-table ,(loop (serialize/human-hashtable o))))
         ((box? o) `(box ,(loop (box-ref o))))
         ((atomic-box? o) `(box ,(loop (atomic-box-ref o))))
-        ((procedure? o) o)
         (else fail))))))
 
 
@@ -67,7 +68,6 @@
         ((char? o) o)
         ((equal? #t o) o)
         ((equal? #f o) o)
-        ((procedure? o) o)
 
         ((pair? o)
          (case (car o)

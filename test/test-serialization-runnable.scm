@@ -3,6 +3,7 @@
 
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
+%use (hashset) "./src/hashset.scm"
 %use (list->hashset) "./src/ihashset.scm"
 %use (deserialize/runnable serialize/runnable) "./src/serialization-runnable.scm"
 
@@ -39,3 +40,7 @@
                 'you?))
 
 (assert (not (eq? d2 obj2)))
+
+(assert=
+ identity
+ (deserialize/runnable (serialize/runnable identity)))
