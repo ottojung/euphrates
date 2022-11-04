@@ -225,7 +225,7 @@
                (instruction-next inst)
                #f)) ;; ctx
 
-(define (handle-accept s env instruction args ret)
+(define (handle-accept-change s env instruction args ret)
   (define new-context (profun-accept-ctx ret))
   (define new-failstate
     (if (profun-accept-ctx-changed? ret)
@@ -234,9 +234,6 @@
         (state-failstate s)))
 
   (define alist (profun-accept-alist ret))
-
-  ;; (if (and (not (profun-accept-ctx-changed? ret)) (null? alist))  ;; TODO: optimize
-
   (define alist/vars
     (map
      (fn-pair
@@ -246,7 +243,9 @@
       (cons name value))
      alist))
 
-  (define new-env (env-copy env))
+  (define new-env
+    (if (null? alist) env
+        (env-copy env)))
 
   (for-each
    (fn-pair
@@ -259,6 +258,12 @@
           (state-stack s)
           new-env
           new-failstate)))
+
+(define (handle-accept s env instruction args ret)
+  (if (and (not (profun-accept-ctx-changed? ret))
+           (null? (profun-accept-alist ret)))
+      (continue s)
+      (handle-accept-change s env instruction args ret)))
 
 (define (enter-foreign db s instruction)
   (define env (state-env s))
