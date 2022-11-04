@@ -14,21 +14,13 @@
 
 %run guile
 
-%var profun-op-unify
+%var bool->profun-result
 
-%use (profun-accept profun-set) "./profun-accept.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-accept) "./profun-accept.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-variable-equal?) "./profun-variable-equal-q.scm"
-%use (raisu) "./raisu.scm"
 
-(define profun-op-unify
-  (profun-op-lambda
-   ctx (x y)
-   (case (profun-variable-equal? x y)
-     ((#t) (profun-accept))
-     ((#f) (profun-reject))
-     ((x-false) (profun-set ([0] <- y)))
-     ((y-false) (profun-set ([1] <- x)))
-     ((both-false)
-      (raisu 'TODO-3:both-undefined x y)))))
+(define (bool->profun-result b)
+  (cond
+   ((equal? #t b) (profun-accept))
+   ((equal? #f b) (profun-reject))
+   (else b)))

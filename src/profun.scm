@@ -18,11 +18,15 @@
 %var profun-eval-query
 
 %use (define-type9) "./define-type9.scm"
+%use (fn-pair) "./fn-pair.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap->alist hashmap-copy hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
+%use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
+%use (profun-reject?) "./profun-reject.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
+%use (raisu) "./raisu.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
 
 (define-type9 <database>
@@ -115,10 +119,14 @@
   (if (profun-varname? key)
       (hashmap-ref env key #f)
       key))
+(define (env-set! env key value)
+  (hashmap-set! env key value))
 (define (env-set env key value)
   (let ((copy (hashmap-copy env)))
     (hashmap-set! copy key value)
     copy))
+(define (env-copy env)
+  (hashmap-copy env))
 
 ;; returns instruction or #f
 (define (get-alternative-instruction db s)
@@ -217,6 +225,41 @@
                (instruction-next inst)
                #f)) ;; ctx
 
+(define (handle-accept s env instruction args ret)
+  (define new-context (profun-accept-ctx ret))
+  (define new-failstate
+    (if (profun-accept-ctx-changed? ret)
+        (construct-from-alt
+         s (instruction-set-ctx instruction new-context))
+        (state-failstate s)))
+
+  (define alist (profun-accept-alist ret))
+
+  ;; (if (and (not (profun-accept-ctx-changed? ret)) (null? alist))  ;; TODO: optimize
+
+  (define alist/vars
+    (map
+     (fn-pair
+      (index value)
+      (define name
+        (list-ref-or args index (raisu 'foreign-returned-an-index-too-large index args)))
+      (cons name value))
+     alist))
+
+  (define new-env (env-copy env))
+
+  (for-each
+   (fn-pair
+    (name value)
+    (env-set! new-env name value))
+   alist/vars)
+
+  (continue
+   (state instruction
+          (state-stack s)
+          new-env
+          new-failstate)))
+
 (define (enter-foreign db s instruction)
   (define env (state-env s))
   (define handler (instruction-sign instruction))
@@ -224,29 +267,15 @@
   (define context (instruction-context instruction))
   (define args (instruction-args instruction))
   (define argv (map (lambda (a) (env-get env a)) args))
-  (define ret-all (func argv context))
-  (if (eq? #t ret-all) (continue s)
-      (let ((ret (and ret-all (car ret-all)))
-            (ctx (and ret-all (cdr ret-all))))
-        (if (not ret) (backtrack db s)
-            (continue
-             (let* ((m (if (eq? ret #t) '() (map cons args ret)))
-                    (new-env
-                     (let loop ((e env) (buf m))
-                       (if (null? buf) e
-                           (let* ((cur (car buf))
-                                  (key (car cur))
-                                  (val (cdr cur))
-                                  (nee (if (eq? #t val) e (env-set e key val))))
-                             (loop nee (cdr buf))))))
-                    (new-failstate
-                     (if ctx
-                         (construct-from-alt s (instruction-set-ctx instruction ctx))
-                         (state-failstate s))))
-               (state instruction
-                      (state-stack s)
-                      new-env
-                      new-failstate)))))))
+  (define ret (func argv context))
+
+  (cond
+   ((profun-reject? ret)
+    (backtrack db s))
+   ((profun-accept? ret)
+    (handle-accept s env instruction args ret))
+   (else
+    (raisu 'bad-type-of-object-returned-from-foreign ret))))
 
 ;; takes a state, makes step forward, returns new state
 (define (continue s)

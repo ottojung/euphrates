@@ -18,21 +18,32 @@
 ;; Really this creates a hypergraph.
 %var profun-make-tuple-set
 
+%use (profun-accept profun-ctx-set profun-set) "./profun-accept.scm"
+%use (profun-reject) "./profun-reject.scm"
+
 (define (try-assign-multi args lst)
-  (let loop ((args args) (lst lst) (ret (list)))
-    (if (null? args) (reverse ret)
+  (let loop ((i 0)
+             (args args)
+             (lst lst)
+             (ret (profun-accept)))
+    (if (null? args) ret
         (if (not (car args))
-            (if (not (car lst))
-                (loop (cdr args) (cdr lst) (cons #t ret))
-                (loop (cdr args) (cdr lst) (cons (car lst) ret)))
+            (if (or (not (car lst))
+                    (equal? #t (car lst)))
+                (loop (+ 1 i) (cdr args) (cdr lst) ret)
+                (loop (+ 1 i) (cdr args) (cdr lst)
+                      (profun-set ([i] <- (car lst)) ret)))
             (and (or (equal? #t (car lst)) (equal? (car args) (car lst))) ;; they are equal
-                 (loop (cdr args) (cdr lst) (cons #t ret)))))))
+                 (loop (+ 1 i) (cdr args) (cdr lst) ret))))))
 
 (define (assign-multi args lst)
   (let loop ((lst lst))
-    (if (null? lst) #f
+    (if (null? lst)
+        (profun-reject)
         (let ((try (try-assign-multi args (car lst))))
-          (if try (cons try (cdr lst))
+          (if try
+              (profun-ctx-set
+               (cdr lst) try)
               (loop (cdr lst)))))))
 
 (define-syntax profun-make-tuple-set
@@ -40,6 +51,6 @@
     ((_ value)
      (let ((lst #f))
        (lambda (args ctx)
-         (define x (car args))
-         (let ((ctxx (or ctx (begin (unless lst (set! lst value)) lst))))
-           (assign-multi args ctxx)))))))
+         (define ctxx
+           (or ctx (begin (unless lst (set! lst value)) lst)))
+         (assign-multi args ctxx))))))

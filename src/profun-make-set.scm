@@ -17,7 +17,10 @@
 ;; Used in bottom-handler to return just some predefined values
 %var profun-make-set
 
+%use (bool->profun-result) "./bool-to-profun-result.scm"
+%use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-reject) "./profun-reject.scm"
 
 (define-syntax profun-make-set
   (syntax-rules ()
@@ -26,7 +29,12 @@
        (profun-op-lambda
         ctx (x)
         (unless lst (set! lst value))
-        (if x (not (not (member x lst)))
+        (if x
+            (bool->profun-result
+             (not (not (member x lst))))
             (let ((ctxx (or ctx lst)))
-              (if (null? ctxx) #f
-                  (cons (list (car ctxx)) (cdr ctxx))))))))))
+              (if (null? ctxx)
+                  (profun-reject)
+                  (profun-set
+                   ([0] <- (car ctxx))
+                   (profun-ctx-set (cdr ctxx)))))))))))

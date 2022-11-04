@@ -16,6 +16,11 @@
 
 %var profun-accept
 %var profun-accept?
+%var profun-accept-alist
+%var profun-accept-ctx
+%var profun-accept-ctx-changed?
+%var profun-set
+%var profun-ctx-set
 
 %use (define-type9) "./define-type9.scm"
 %use (raisu) "./raisu.scm"
@@ -33,7 +38,7 @@
 (define (profun-accept? o)
   (profun-accept-obj? o))
 
-(define (profun-set variable-index variable-value current-return-value)
+(define (profun-set-fn variable-index variable-value current-return-value)
   (unless (profun-accept-obj? current-return-value)
     (raisu 'current-return-value-must-be-a-profun-accept-obj current-return-value))
   (unless (and (integer? variable-index) (<= 0 variable-index))
@@ -46,9 +51,19 @@
          (new-alist (cons additional alist)))
     (profun-accept-constructor new-alist ctx ctx-changed?)))
 
-(define (profun-ctx-set new-context current-return-value)
-  (unless (profun-accept-obj? current-return-value)
-    (raisu 'current-return-value-must-be-a-profun-accept-obj current-return-value))
+(define-syntax profun-set
+  (syntax-rules ()
+    ((_ ([variable-index] <- variable-value))
+     (profun-set-fn variable-index variable-value (profun-accept)))
+    ((_ ([variable-index] <- variable-value) current-return-value)
+     (profun-set-fn variable-index variable-value current-return-value))))
 
-  (let* ((alist (profun-accept-alist current-return-value)))
-    (profun-accept-constructor alist new-context #t)))
+(define profun-ctx-set
+  (case-lambda
+   ((new-context) (profun-ctx-set new-context (profun-accept)))
+   ((new-context current-return-value)
+    (unless (profun-accept-obj? current-return-value)
+      (raisu 'current-return-value-must-be-a-profun-accept-obj current-return-value))
+
+    (let* ((alist (profun-accept-alist current-return-value)))
+      (profun-accept-constructor alist new-context #t)))))

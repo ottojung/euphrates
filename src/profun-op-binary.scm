@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
 
 %var profun-op-binary
 
+%use (bool->profun-result) "./bool-to-profun-result.scm"
+%use (profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (raisu) "./raisu.scm"
 
@@ -23,19 +25,16 @@
   (define (g-op ind x y z op)
     (define (in-op-domain? x)
       (and (integer? x) (>= x 0)))
-    (define (repack ind z)
-      (case ind
-        ((0) (list z #t #t))
-        ((1) (list #t z #t))
-        ((2) (list #t #t z))))
 
     (unless (and (in-op-domain? x) (in-op-domain? y))
       (raisu 'TODO-6:non-naturals-in-op x y))
+
     (let ((result (op x y)))
-      (and result (in-op-domain? result)
-           (if z
-               (= z result)
-               (cons (repack ind result) #f)))))
+      (bool->profun-result
+       (and result (in-op-domain? result)
+            (if z
+                (= z result)
+                (profun-set ([ind] <- result)))))))
 
   (profun-op-lambda
    ctx (x y z)

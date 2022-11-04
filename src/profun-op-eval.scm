@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -21,25 +21,31 @@
 %var profun-eval-fail!
 
 %use (box-ref box-set! box? make-box) "./box.scm"
+%use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-eval/result#p) "./profun-op-eval-result-p.scm"
+%use (profun-reject) "./profun-reject.scm"
 %use (profun-variable-arity-op) "./profun-variable-arity-op.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-eval
   (profun-variable-arity-op
    (lambda (args ctx)
-     (and (not ctx)
-          (not (null? args))
-          (not (null? (cdr args)))
-          (let ((destination (car args))
-                (procedure (cadr args))
-                (arguments (cddr args))
-                (box (make-box #f)))
+     (if (or ctx
+             (null? args)
+             (null? (cdr args)))
+         (profun-reject)
+         (let ((destination (car args))
+               (procedure (cadr args))
+               (arguments (cddr args))
+               (box (make-box #f)))
 
-            (parameterize ((profun-op-eval/result#p box))
-              (let ((result (apply procedure arguments)))
-                (and (not (eq? 'fail (box-ref box)))
-                     (cons (cons result (cons #t (map (const #t) arguments))) #t)))))))))
+           (parameterize ((profun-op-eval/result#p box))
+             (let ((result (apply procedure arguments)))
+               (if (equal? 'fail (box-ref box))
+                   (profun-reject)
+                   (profun-set
+                    ([0] <- result)
+                    (profun-ctx-set #t))))))))))
 
 (define (profun-eval-fail!)
   (let ((box (profun-op-eval/result#p)))

@@ -16,14 +16,16 @@
 
 %var profun-op-print
 
+%use (bool->profun-result) "./bool-to-profun-result.scm"
 %use (dprintln) "./dprintln.scm"
 %use (profun-variable-arity-op) "./profun-variable-arity-op.scm"
 
 (define profun-op-print
   (profun-variable-arity-op
    (lambda (args ctx)
-     (and (not ctx)
-          (not (null? args))
-          (begin
-            (apply dprintln args)
-            (cons #t #t))))))
+     (bool->profun-result
+      (and (not ctx)
+           (not (null? args))
+           (begin
+             (apply dprintln args)
+             #t))))))

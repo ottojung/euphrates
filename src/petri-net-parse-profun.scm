@@ -16,6 +16,7 @@
 
 %var petri-profun-net
 
+%use (bool->profun-result) "./bool-to-profun-result.scm"
 %use (multi-alist->hashmap) "./ihashmap.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (petri-net-make) "./petri-net-make.scm"
@@ -37,18 +38,19 @@
 (define petri-profun-push
   (profun-variable-arity-op
    (lambda (argv ctx)
-     (and (not ctx)
-          (begin
-            (unless (pair? argv)
-              (raisu 'empty-profun-push argv))
+     (bool->profun-result
+      (and (not ctx)
+           (begin
+             (unless (pair? argv)
+               (raisu 'empty-profun-push argv))
 
-            (unless (string? (car argv))
-              (raisu 'profun-push-first-argument-is-not-string argv))
+             (unless (string? (car argv))
+               (raisu 'profun-push-first-argument-is-not-string argv))
 
-            (let ((name (string->symbol (car argv)))
-                  (args (cdr argv)))
-              (apply petri-push (cons name args))
-              #t))))))
+             (let ((name (string->symbol (car argv)))
+                   (args (cdr argv)))
+               (apply petri-push (cons name args))
+               #t)))))))
 
 (define bottom-handler
   (profun-make-handler

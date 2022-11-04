@@ -16,7 +16,10 @@
 
 %var profun-op-less
 
+%use (bool->profun-result) "./bool-to-profun-result.scm"
+%use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-reject) "./profun-reject.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-less
@@ -26,12 +29,15 @@
    (unless (number? yv)
      (raisu 'non-number-in-less yv))
 
-   (if xv
-       (if (number? xv)
-           (and (not ctx) (< xv yv) #t)
-           (raisu 'non-number-in-less xv))
-       (if (< yv 1) #f
-           (let* ((ctxx (or ctx yv))
-                  (ctxm (- ctxx 1)))
-             (and (>= ctxm 0)
-                  (cons (list ctxm #t) ctxm)))))))
+   (bool->profun-result
+    (if xv
+        (if (number? xv)
+            (and (not ctx) (< xv yv))
+            (raisu 'non-number-in-less xv))
+        (if (< yv 1) (profun-reject)
+            (let* ((ctxx (or ctx yv))
+                   (ctxm (- ctxx 1)))
+              (and (>= ctxm 0)
+                   (profun-set
+                    ([0] <- ctxm)
+                    (profun-ctx-set ctxm)))))))))

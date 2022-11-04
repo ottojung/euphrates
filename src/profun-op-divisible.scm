@@ -16,17 +16,22 @@
 
 %var profun-op-divisible
 
+%use (bool->profun-result) "./bool-to-profun-result.scm"
+%use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 
 (define profun-op-divisible
   (profun-op-lambda
    ctx (y x)
    (define last (or ctx 1))
-   (if x
-       (and (not (= 0 x))
-            (= 0 (remainder y x)))
-       (and (< last y)
-            (let loop ((i last) (cnt 0))
-              (if (= 0 (remainder y i))
-                  (cons (list #t i) (+ i 1))
-                  (loop (+ 1 i) cnt)))))))
+   (bool->profun-result
+    (if x
+        (and (not (= 0 x))
+             (= 0 (remainder y x)))
+        (and (< last y)
+             (let loop ((i last) (cnt 0))
+               (if (= 0 (remainder y i))
+                   (profun-set
+                    ([1] <- i)
+                    (profun-ctx-set (+ 1 i)))
+                   (loop (+ 1 i) cnt))))))))
