@@ -16,12 +16,14 @@
 
 %var profun-variable-equal?
 
+%use (profun-unbound-value?) "./profun.scm"
+
 (define (profun-variable-equal? x y)
-  (if x
-      (if y
-          (equal? x y)
-          'y-false)
-      (if y
-          'x-false
-          'both-false)))
+  (if (profun-unbound-value? x)
+      (if (profun-unbound-value? y)
+          'both-false
+          'x-false)
+      (if (profun-unbound-value? y)
+          'y-false
+          (equal? x y))))
 

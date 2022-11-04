@@ -21,6 +21,7 @@
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-bound-value?) "./profun.scm"
 
 (define-syntax profun-make-set
   (syntax-rules ()
@@ -29,7 +30,7 @@
        (profun-op-lambda
         ctx (x)
         (unless lst (set! lst value))
-        (if x
+        (if (profun-bound-value? x)
             (bool->profun-result
              (not (not (member x lst))))
             (let ((ctxx (or ctx lst)))

@@ -20,6 +20,7 @@
 
 %use (profun-accept profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-unbound-value?) "./profun.scm"
 
 (define (try-assign-multi args lst)
   (let loop ((i 0)
@@ -27,7 +28,7 @@
              (lst lst)
              (ret (profun-accept)))
     (if (null? args) ret
-        (if (not (car args))
+        (if (profun-unbound-value? (car args))
             (if (or (not (car lst))
                     (equal? #t (car lst)))
                 (loop (+ 1 i) (cdr args) (cdr lst) ret)

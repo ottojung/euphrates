@@ -19,13 +19,14 @@
 %use (bool->profun-result) "./bool-to-profun-result.scm"
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-bound-value?) "./profun.scm"
 
 (define profun-op-divisible
   (profun-op-lambda
    ctx (y x)
    (define last (or ctx 1))
    (bool->profun-result
-    (if x
+    (if (profun-bound-value? x)
         (and (not (= 0 x))
              (= 0 (remainder y x)))
         (and (< last y)

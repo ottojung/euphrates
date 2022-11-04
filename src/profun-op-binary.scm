@@ -19,6 +19,7 @@
 %use (bool->profun-result) "./bool-to-profun-result.scm"
 %use (profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-bound-value?) "./profun.scm"
 %use (raisu) "./raisu.scm"
 
 (define (profun-op-binary action left-inverse right-inverse)
@@ -32,15 +33,21 @@
     (let ((result (op x y)))
       (bool->profun-result
        (and result (in-op-domain? result)
-            (if z
+            (if (profun-bound-value? z)
                 (= z result)
                 (profun-set ([ind] <- result)))))))
 
   (profun-op-lambda
    ctx (x y z)
    (cond
-    ((and x y) (g-op 2 x y z action))
-    ((and x z) (g-op 1 z x y left-inverse))
-    ((and y z) (g-op 0 z y x right-inverse))
+    ((and (profun-bound-value? x)
+          (profun-bound-value? y))
+     (g-op 2 x y z action))
+    ((and (profun-bound-value? x)
+          (profun-bound-value? z))
+     (g-op 1 z x y left-inverse))
+    ((and (profun-bound-value? y)
+          (profun-bound-value? z))
+     (g-op 0 z y x right-inverse))
     (else (raisu 'need-more-info-in-+ x y z)))))
 

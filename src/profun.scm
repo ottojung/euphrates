@@ -17,10 +17,15 @@
 %var profun-create-database
 %var profun-eval-query
 
+%var profun-make-reset-value
+%var profun-unbound-value?
+%var profun-bound-value?
+
+%use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
 %use (fn-pair) "./fn-pair.scm"
 %use (hashmap) "./hashmap.scm"
-%use (hashmap->alist hashmap-copy hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
@@ -59,6 +64,36 @@
   (c state-env) ;; hashmap of `variable`s
   (d state-failstate) ;; `state` to go to if this `state` fails. Initially #f
   )
+
+;; denotes value of an unbound variable
+(define-type9 <unbound-value>
+  (unbound-value-constructor counter) unbound-value?
+  (counter unbound-value-counter)
+  )
+
+;; denotes value of a variable to-be unbound
+(define-type9 <reset-value>
+  (reset-value-constructor counter) reset-value?
+  (counter reset-value-counter)
+  )
+
+(define (profun-unbound-value? x)
+  (unbound-value? x))
+
+(define (profun-bound-value? x)
+  (not (unbound-value? x)))
+
+(define profun-make-unbound-value
+  (let ((counter 0))
+    (lambda ()
+      (set! counter (+ 1 counter))
+      (unbound-value-constructor counter))))
+
+(define profun-make-reset-value
+  (let ((counter 0))
+    (lambda ()
+      (set! counter (+ 1 counter))
+      (reset-value-constructor counter))))
 
 (define (make-state start-instruction)
   (state start-instruction
@@ -117,14 +152,12 @@
   (hashmap))
 (define (env-get env key)
   (if (profun-varname? key)
-      (hashmap-ref env key #f)
+      (hashmap-ref env key (profun-make-unbound-value))
       key))
 (define (env-set! env key value)
   (hashmap-set! env key value))
-(define (env-set env key value)
-  (let ((copy (hashmap-copy env)))
-    (hashmap-set! copy key value)
-    copy))
+(define (env-unset! env key)
+  (hashmap-delete! env key))
 (define (env-copy env)
   (hashmap-copy env))
 
@@ -250,7 +283,9 @@
   (for-each
    (fn-pair
     (name value)
-    (env-set! new-env name value))
+    (if (reset-value? value)
+        (env-unset! new-env name)
+        (env-set! new-env name value)))
    alist/vars)
 
   (continue
@@ -271,7 +306,7 @@
   (define func (profun-op-procedure handler))
   (define context (instruction-context instruction))
   (define args (instruction-args instruction))
-  (define argv (map (lambda (a) (env-get env a)) args))
+  (define argv (map (comp (env-get env)) args))
   (define ret (func argv context))
 
   (cond
