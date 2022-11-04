@@ -1,7 +1,10 @@
 
 %run guile
 
+%use (fn) "./fn.scm"
 %use (hashmap) "./hashmap.scm"
+%use (make-unique) "./make-unique.scm"
+%use (raisu) "./raisu.scm"
 
 %var make-hashmap
 %var hashmap->alist
@@ -25,7 +28,7 @@
 (use-modules (ice-9 hash-table))
 
 (define make-hashmap hashmap)
-(define hashmap-ref hash-ref)
+(define hashmap-true-ref hash-ref)
 (define hashmap-set! hash-set!)
 (define hashmap-clear! hash-clear!)
 
@@ -50,6 +53,22 @@
   (hash-remove! H key))
 
 %end
+
+(define hashmap-ref-default-value
+  (make-unique))
+
+(define-syntax hashmap-ref
+  (syntax-rules ()
+    ((_ H key0)
+     (let ((key key0))
+       (hashmap-ref
+        H key
+        (raisu 'hashmap-key-not-found key))))
+    ((_ H key default)
+     (let ((get (hashmap-true-ref H key hashmap-ref-default-value)))
+       (if (eq? get hashmap-ref-default-value)
+           default
+           get)))))
 
 ;; multi-alist example:
 ;;    '((a . 3) (b . 2) (a . 4))
