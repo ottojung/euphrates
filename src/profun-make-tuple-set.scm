@@ -27,15 +27,20 @@
              (args args)
              (lst lst)
              (ret (profun-accept)))
+    (define (continue new-ret) (loop (+ 1 i) (cdr args) (cdr lst) new-ret))
+
     (if (null? args) ret
-        (if (profun-unbound-value? (car args))
-            (if (or (not (car lst))
-                    (equal? #t (car lst)))
-                (loop (+ 1 i) (cdr args) (cdr lst) ret)
-                (loop (+ 1 i) (cdr args) (cdr lst)
-                      (profun-set ([i] <- (car lst)) ret)))
-            (and (or (equal? #t (car lst)) (equal? (car args) (car lst))) ;; they are equal
-                 (loop (+ 1 i) (cdr args) (cdr lst) ret))))))
+        (let ((a (car args))
+              (v (car lst)))
+          (case v
+            ((#t) (continue ret))
+            ((#f) (and (profun-unbound-value? a)
+                       (continue ret)))
+            (else
+             (if (profun-unbound-value? a)
+                 (continue (profun-set ([i] <- v) ret))
+                 (and (equal? a v)
+                      (continue ret)))))))))
 
 (define (assign-multi args lst)
   (let loop ((lst lst))
