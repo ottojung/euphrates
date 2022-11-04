@@ -436,7 +436,7 @@
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists
-(define (profun-eval-query db query)
+(define (profun-eval-query/lazy db query)
   (define (backtrack-eval db s)
     (let ((b (backtrack db s)))
       (and b (eval-state db b))))
@@ -446,11 +446,24 @@
 
   (define start-instruction (build-body query))
   (define initial-state (make-state start-instruction))
-  (define final-state (eval-state db initial-state))
+  (define current-state #t)
 
-  (let lp ((s final-state))
-    (if s
-        (cons (filter (lambda (x) (not (usymbol? (car x)))) (take-vars s))
-              (lp (backtrack-eval db s)))
-        (list))))
+  (lambda _
+    (case current-state
+     ((#t)
+      (set! current-state (eval-state db initial-state)))
+     (else
+      (set! current-state (backtrack-eval db current-state))))
 
+    (and current-state
+         (filter (lambda (x) (not (usymbol? (car x))))
+                 (take-vars current-state)))))
+
+;; accepts database `db` and list of symbols `query`
+;; returns a list of result alists
+(define (profun-eval-query db query)
+  (define iterator (profun-eval-query/lazy db query))
+  (let loop ()
+    (let ((r (iterator)))
+      (if r (cons r (loop))
+          '()))))
