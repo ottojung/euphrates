@@ -17,7 +17,6 @@
 %var profun-create-database
 %var profun-eval-query
 
-%var profun-make-reset-value
 %var profun-unbound-value?
 %var profun-bound-value?
 
@@ -71,12 +70,6 @@
   (counter unbound-value-counter)
   )
 
-;; denotes value of a variable to-be unbound
-(define-type9 <reset-value>
-  (reset-value-constructor counter) reset-value?
-  (counter reset-value-counter)
-  )
-
 (define (profun-unbound-value? x)
   (unbound-value? x))
 
@@ -88,12 +81,6 @@
     (lambda ()
       (set! counter (+ 1 counter))
       (unbound-value-constructor counter))))
-
-(define profun-make-reset-value
-  (let ((counter 0))
-    (lambda ()
-      (set! counter (+ 1 counter))
-      (reset-value-constructor counter))))
 
 (define (make-state start-instruction)
   (state start-instruction
@@ -283,9 +270,7 @@
   (for-each
    (fn-pair
     (name value)
-    (if (reset-value? value)
-        (env-unset! new-env name)
-        (env-set! new-env name value)))
+    (env-set! new-env name value))
    alist/vars)
 
   (continue
