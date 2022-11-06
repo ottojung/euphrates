@@ -16,16 +16,22 @@
 
 %var profun-op-lambda
 
+%use (define-tuple) "./define-tuple.scm"
 %use (profun-op) "./profun-op.scm"
+%use (profun-value-name profun-value-unwrap) "./profun-value.scm"
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-lambda
   (syntax-rules ()
-    ((_ ctx args . bodies)
+    ((_ (ctx args args-names) . bodies)
      (profun-op
       (let ((qargs (quote args)))
         (if (pair? qargs)
             (length qargs)
             profun-variable-arity-op-keyword))
-      (lambda (args-got ctx)
-        (apply (lambda args . bodies) args-got))))))
+      (lambda (vars ctx)
+        (define-tuple args
+          (map profun-value-unwrap vars))
+        (define-tuple args-names
+          (map profun-value-name vars))
+        (let () . bodies))))))

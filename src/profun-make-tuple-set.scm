@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -19,10 +19,11 @@
 %var profun-make-tuple-set
 
 %use (profun-accept profun-ctx-set profun-set) "./profun-accept.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-unbound-value?) "./profun.scm"
+%use (profun-unbound-value?) "./profun-value.scm"
 
-(define (try-assign-multi args lst)
+(define (try-assign-multi args names lst)
   (let loop ((i 0)
              (args args)
              (lst lst)
@@ -38,25 +39,33 @@
                        (continue ret)))
             (else
              (if (profun-unbound-value? a)
-                 (continue (profun-set ([i] <- v) ret))
+                 (continue (profun-set ((list-ref names i) <- v) ret))
                  (and (equal? a v)
                       (continue ret)))))))))
 
-(define (assign-multi args lst)
+(define (assign-multi args names lst)
   (let loop ((lst lst))
     (if (null? lst)
         (profun-reject)
-        (let ((try (try-assign-multi args (car lst))))
+        (let ((try (try-assign-multi args names (car lst))))
           (if try
               (profun-ctx-set
                (cdr lst) try)
               (loop (cdr lst)))))))
 
+(define-syntax profun-make-tuple-set/help
+  (syntax-rules ()
+    ((_ args-list args value)
+     (let ((lst #f))
+       (profun-op-lambda
+        (ctx args-list names)
+        (define ctxx
+          (or ctx (begin (unless lst (set! lst value)) lst)))
+        (assign-multi args names ctxx))))))
+
 (define-syntax profun-make-tuple-set
   (syntax-rules ()
-    ((_ value)
-     (let ((lst #f))
-       (lambda (args ctx)
-         (define ctxx
-           (or ctx (begin (unless lst (set! lst value)) lst)))
-         (assign-multi args ctxx))))))
+    ((_ (a . args) value)
+     (profun-make-tuple-set/help (a . args) (list a . args) value))
+    ((_ args value)
+     (profun-make-tuple-set/help args args value))))

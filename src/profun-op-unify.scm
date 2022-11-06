@@ -24,11 +24,11 @@
 
 (define profun-op-unify
   (profun-op-lambda
-   ctx (x y)
+   (ctx (x y) (x-name y-name))
    (case (profun-variable-equal? x y)
      ((#t) (profun-accept))
      ((#f) (profun-reject))
-     ((x-false) (profun-set ([0] <- y)))
-     ((y-false) (profun-set ([1] <- x)))
+     ((x-false) (profun-set (x-name <- y)))
+     ((y-false) (profun-set (y-name <- x)))
      ((both-false)
       (raisu 'TODO-3:both-undefined x y)))))

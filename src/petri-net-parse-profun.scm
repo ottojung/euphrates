@@ -25,32 +25,32 @@
 %use (profun-op-apply) "./profun-op-apply.scm"
 %use (profun-op-divisible) "./profun-op-divisible.scm"
 %use (profun-op-eval) "./profun-op-eval.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-op-less) "./profun-op-less.scm"
 %use (profun-op*) "./profun-op-mult.scm"
 %use (profun-op+) "./profun-op-plus.scm"
 %use (profun-op-print) "./profun-op-print.scm"
 %use (profun-op-separate) "./profun-op-separate.scm"
 %use (profun-op-unify) "./profun-op-unify.scm"
-%use (profun-variable-arity-op) "./profun-variable-arity-op.scm"
 %use (profun-create-database profun-eval-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
 
 (define petri-profun-push
-  (profun-variable-arity-op
-   (lambda (argv ctx)
-     (bool->profun-result
-      (and (not ctx)
-           (begin
-             (unless (pair? argv)
-               (raisu 'empty-profun-push argv))
+  (profun-op-lambda
+   (ctx argv names)
+   (bool->profun-result
+    (and (not ctx)
+         (begin
+           (unless (pair? argv)
+             (raisu 'empty-profun-push argv))
 
-             (unless (string? (car argv))
-               (raisu 'profun-push-first-argument-is-not-string argv))
+           (unless (string? (car argv))
+             (raisu 'profun-push-first-argument-is-not-string argv))
 
-             (let ((name (string->symbol (car argv)))
-                   (args (cdr argv)))
-               (apply petri-push (cons name args))
-               #t)))))))
+           (let ((name (string->symbol (car argv)))
+                 (args (cdr argv)))
+             (apply petri-push (cons name args))
+             #t))))))
 
 (define bottom-handler
   (profun-make-handler

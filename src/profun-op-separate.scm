@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 (define profun-op-separate
   (profun-op-lambda
-   ctx (x y)
+   (ctx (x y) names)
    (case (profun-variable-equal? x y)
      ((#t) (profun-reject))
      ((#f) (profun-accept))

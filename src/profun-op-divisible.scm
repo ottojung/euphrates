@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -19,11 +19,11 @@
 %use (bool->profun-result) "./bool-to-profun-result.scm"
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-bound-value?) "./profun.scm"
+%use (profun-bound-value?) "./profun-value.scm"
 
 (define profun-op-divisible
   (profun-op-lambda
-   ctx (y x)
+   (ctx (y x) (x-name y-name))
    (define last (or ctx 1))
    (bool->profun-result
     (if (profun-bound-value? x)
@@ -33,6 +33,6 @@
              (let loop ((i last) (cnt 0))
                (if (= 0 (remainder y i))
                    (profun-set
-                    ([1] <- i)
+                    (y-name <- i)
                     (profun-ctx-set (+ 1 i)))
                    (loop (+ 1 i) cnt))))))))

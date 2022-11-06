@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -18,14 +18,14 @@
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
 %use (dprintln) "./dprintln.scm"
-%use (profun-variable-arity-op) "./profun-variable-arity-op.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 
 (define profun-op-print
-  (profun-variable-arity-op
-   (lambda (args ctx)
-     (bool->profun-result
-      (and (not ctx)
-           (not (null? args))
-           (begin
-             (apply dprintln args)
-             #t))))))
+  (profun-op-lambda
+   (ctx args names)
+   (bool->profun-result
+    (and (not ctx)
+         (not (null? args))
+         (begin
+           (apply dprintln args)
+           #t)))))

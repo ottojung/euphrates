@@ -16,7 +16,7 @@
 
 %var profun-variable-equal?
 
-%use (profun-unbound-value?) "./profun.scm"
+%use (profun-unbound-value?) "./profun-value.scm"
 
 (define (profun-variable-equal? x y)
   (if (profun-unbound-value? x)

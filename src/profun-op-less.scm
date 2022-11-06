@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -20,25 +20,25 @@
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-bound-value?) "./profun.scm"
+%use (profun-bound-value?) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-less
   (profun-op-lambda
-   ctx (xv yv)
+   (ctx (x y) (x-name y-name))
 
-   (unless (number? yv)
-     (raisu 'non-number-in-less yv))
+   (unless (number? y)
+     (raisu 'non-number-in-less y))
 
    (bool->profun-result
-    (if (profun-bound-value? xv)
-        (if (number? xv)
-            (and (not ctx) (< xv yv))
-            (raisu 'non-number-in-less xv))
-        (if (< yv 1) (profun-reject)
-            (let* ((ctxx (or ctx yv))
+    (if (profun-bound-value? x)
+        (if (number? x)
+            (and (not ctx) (< x y))
+            (raisu 'non-number-in-less x))
+        (if (< y 1) (profun-reject)
+            (let* ((ctxx (or ctx y))
                    (ctxm (- ctxx 1)))
               (and (>= ctxm 0)
                    (profun-set
-                    ([0] <- ctxm)
+                    (x-name <- ctxm)
                     (profun-ctx-set ctxm)))))))))

@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -21,14 +21,14 @@
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-bound-value?) "./profun.scm"
+%use (profun-bound-value?) "./profun-value.scm"
 
 (define-syntax profun-make-set
   (syntax-rules ()
     ((_ value)
      (let ((lst #f))
        (profun-op-lambda
-        ctx (x)
+        (ctx (x) (x-name))
         (unless lst (set! lst value))
         (if (profun-bound-value? x)
             (bool->profun-result
@@ -37,5 +37,5 @@
               (if (null? ctxx)
                   (profun-reject)
                   (profun-set
-                   ([0] <- (car ctxx))
+                   (x-name <- (car ctxx))
                    (profun-ctx-set (cdr ctxx)))))))))))

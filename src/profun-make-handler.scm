@@ -16,7 +16,6 @@
 
 %var profun-make-handler
 
-%use (debugs) "./debugs.scm"
 %use (hashmap-ref multi-alist->hashmap) "./ihashmap.scm"
 %use (list-find-first) "./list-find-first.scm"
 %use (profun-op-arity) "./profun-op-obj.scm"
@@ -27,7 +26,6 @@
     ((_ kkk zzzz buf ())
      (let ((H (multi-alist->hashmap buf)))
        (lambda (key ex-arity)
-         ;; (debugs `(get ,key ,ex-arity))
          (let ((ret (hashmap-ref H key '())))
            (list-find-first
             (lambda (handler)

@@ -17,11 +17,9 @@
 %var profun-create-database
 %var profun-eval-query
 
-%var profun-unbound-value?
-%var profun-bound-value?
-
 %use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
+%use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
@@ -29,6 +27,7 @@
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
+%use (profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
@@ -63,24 +62,6 @@
   (c state-env) ;; hashmap of `variable`s
   (d state-failstate) ;; `state` to go to if this `state` fails. Initially #f
   )
-
-;; denotes value of an unbound variable
-(define-type9 <unbound-value>
-  (unbound-value-constructor counter) unbound-value?
-  (counter unbound-value-counter)
-  )
-
-(define (profun-unbound-value? x)
-  (unbound-value? x))
-
-(define (profun-bound-value? x)
-  (not (unbound-value? x)))
-
-(define profun-make-unbound-value
-  (let ((counter 0))
-    (lambda ()
-      (set! counter (+ 1 counter))
-      (unbound-value-constructor counter))))
 
 (define (make-state start-instruction)
   (state start-instruction
@@ -139,8 +120,8 @@
   (hashmap))
 (define (env-get env key)
   (if (profun-varname? key)
-      (hashmap-ref env key (profun-make-unbound-value))
-      key))
+      (hashmap-ref env key (profun-make-unbound-var key))
+      (profun-make-constant key)))
 (define (env-set! env key value)
   (hashmap-set! env key value))
 (define (env-unset! env key)
@@ -253,24 +234,18 @@
          s (instruction-set-ctx instruction new-context))
         (state-failstate s)))
 
-  (define alist (profun-accept-alist ret))
   (define alist/vars
-    (map
-     (fn-pair
-      (index value)
-      (define name
-        (list-ref-or args index (raisu 'foreign-returned-an-index-too-large index args)))
-      (cons name value))
-     alist))
+    (profun-accept-alist ret))
 
   (define new-env
-    (if (null? alist) env
+    (if (null? alist/vars) env
         (env-copy env)))
 
   (for-each
    (fn-pair
     (name value)
-    (env-set! new-env name value))
+    (define wrapped (profun-make-var name value))
+    (env-set! new-env name wrapped))
    alist/vars)
 
   (continue
@@ -441,8 +416,10 @@
       (set! current-state (backtrack-eval db current-state))))
 
     (and current-state
-         (filter (lambda (x) (not (usymbol? (car x))))
-                 (take-vars current-state)))))
+         ;; TODO: optimize by using hashmap-foreach.
+         (map (fn-cons identity profun-value-unwrap)
+              (filter (lambda (x) (not (usymbol? (car x))))
+                      (take-vars current-state))))))
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists

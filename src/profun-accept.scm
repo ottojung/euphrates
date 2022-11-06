@@ -23,6 +23,7 @@
 %var profun-ctx-set
 
 %use (define-type9) "./define-type9.scm"
+%use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
 
 (define-type9 profun-accept-obj
@@ -38,25 +39,25 @@
 (define (profun-accept? o)
   (profun-accept-obj? o))
 
-(define (profun-set-fn variable-index variable-value current-return-value)
+(define (profun-set-fn variable variable-value current-return-value)
   (unless (profun-accept-obj? current-return-value)
     (raisu 'current-return-value-must-be-a-profun-accept-obj current-return-value))
-  (unless (and (integer? variable-index) (<= 0 variable-index))
-    (raisu 'variable-index-must-be-a-nonnegative-integer current-return-value))
+  (unless (profun-varname? variable)
+    (raisu 'not-a-variable-name variable current-return-value))
 
   (let* ((alist (profun-accept-alist current-return-value))
          (ctx (profun-accept-ctx current-return-value))
          (ctx-changed? (profun-accept-ctx-changed? current-return-value))
-         (additional (cons variable-index variable-value))
+         (additional (cons variable variable-value))
          (new-alist (cons additional alist)))
     (profun-accept-constructor new-alist ctx ctx-changed?)))
 
 (define-syntax profun-set
   (syntax-rules ()
-    ((_ ([variable-index] <- variable-value))
-     (profun-set-fn variable-index variable-value (profun-accept)))
-    ((_ ([variable-index] <- variable-value) current-return-value)
-     (profun-set-fn variable-index variable-value current-return-value))))
+    ((_ (variable <- variable-value))
+     (profun-set-fn variable variable-value (profun-accept)))
+    ((_ (variable <- variable-value) current-return-value)
+     (profun-set-fn variable variable-value current-return-value))))
 
 (define profun-ctx-set
   (case-lambda

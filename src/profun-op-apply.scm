@@ -23,33 +23,33 @@
 %use (box-ref box-set! box? make-box) "./box.scm"
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
+%use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-variable-arity-op) "./profun-variable-arity-op.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-apply
-  (profun-variable-arity-op
-   (lambda (args ctx)
-     (if (or ctx (null? args)) (profun-reject)
-         (let ((procedure (car args))
-               (arguments (cdr args))
-               (box (make-box #f)))
+  (profun-op-lambda
+   (ctx args names)
+   (if (or ctx (null? args)) (profun-reject)
+       (let ((procedure (car args))
+             (arguments (cdr args))
+             (box (make-box #f)))
 
-           (parameterize ((profun-op-apply/result#p box))
-             (apply procedure arguments))
+         (parameterize ((profun-op-apply/result#p box))
+           (apply procedure arguments))
 
-           (let ((result (box-ref box))
-                 (len (length arguments)))
-             (case result
-               ((fail) (profun-reject))
-               ((#f) (profun-ctx-set #t))
-               (else
-                (let loop ((i 1) (rest result))
-                  (if (<= i len)
-                      (profun-set
-                       ([i] <- (car rest))
-                       (loop (+ 1 i) (cdr rest)))
-                      (profun-ctx-set #t)))))))))))
+         (let ((result (box-ref box))
+               (len (length arguments)))
+           (case result
+             ((fail) (profun-reject))
+             ((#f) (profun-ctx-set #t))
+             (else
+              (let loop ((i 1) (rest result))
+                (if (<= i len)
+                    (profun-set
+                     ((list-ref names i) <- (car rest))
+                     (loop (+ 1 i) (cdr rest)))
+                    (profun-ctx-set #t))))))))))
 
 (define (profun-apply-return! . args)
   (let ((box (profun-op-apply/result#p)))

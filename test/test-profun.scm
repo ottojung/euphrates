@@ -3,7 +3,7 @@
 
 ;; profun
 %use (assert=) "./src/assert-equal.scm"
-%use (profun-op) "./src/profun-op.scm"
+%use (debugs) "./src/debugs.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
@@ -28,6 +28,9 @@
   (define definitions (current-definitions))
   (define db (profun-create-database handler definitions))
   (define result (profun-eval-query db query))
+  (unless (equal? expected-result result)
+    (debugs expected-result)
+    (debugs result))
   (assert= expected-result result))
 
 (define-syntax test-definitions
@@ -58,9 +61,7 @@
        (apply profun-op-apply)
        (eval profun-op-eval)
        (favorite (profun-make-set (list 777 2 9 3)))
-       (favorite2
-        (profun-op
-         2 (profun-make-tuple-set '((777 2) (#t 9) (3 #f)))))
+       (favorite2 (profun-make-tuple-set (a b) '((777 2) (#t 9) (3 #f))))
        )))
 
   (test-definitions
@@ -79,6 +80,15 @@
    (test '((abc 2 3)) '(()))
    (test '((abc "hello" "bye")) '(()))
    (test '((abc a b)) '(()))
+   )
+
+  (test-definitions
+   "MULTIPLE ACCEPTING"
+   '(((abc x) (= x 1))
+     ((abc x) (= x 2))
+     ((abc x) (= x 3)))
+
+   (test '((abc x)) '(((x . 1)) ((x . 2)) ((x . 3))))
    )
 
   (test-definitions
