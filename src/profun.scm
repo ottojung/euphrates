@@ -514,6 +514,8 @@
   (let loop ()
     (let ((r (iterator)))
       (cond
+       ((or (pair? r) (null? r)) (cons r (loop)))
+       ((equal? #f r) '())
        ((profun-IDR? r) (loop))
-       (r (cons r (loop)))
-       (else '())))))
+       ((profun-RFC? r) (cons r (loop)))
+       (else (raisu 'unknown-result-type-in-profun-query r))))))
