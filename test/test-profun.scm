@@ -4,8 +4,8 @@
 ;; profun
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
+%use (catchu-case) "./src/catchu-case.scm"
 %use (debugs) "./src/debugs.scm"
-%use (list-and-map) "./src/list-and-map.scm"
 %use (profun-RFC-continuation profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
@@ -18,7 +18,7 @@
 %use (profun-op+) "./src/profun-op-plus.scm"
 %use (profun-op-separate) "./src/profun-op-separate.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
-%use (profun-create-database profun-eval-query) "./src/profun.scm"
+%use (profun-create-database profun-eval-query profun-run-query) "./src/profun.scm"
 
 (define current-handler
   (make-parameter #f))
@@ -26,10 +26,17 @@
 (define current-definitions
   (make-parameter #f))
 
-(define (run-query query)
+(define (get-db)
   (define handler (current-handler))
   (define definitions (current-definitions))
-  (define db (profun-create-database handler definitions))
+  (profun-create-database handler definitions))
+
+(define (get-iter query)
+  (define db (get-db))
+  (profun-run-query db query))
+
+(define (run-query query)
+  (define db (get-db))
   (profun-eval-query db query))
 
 (define (test query expected-result)
@@ -373,50 +380,76 @@
 
    )
 
-  ;; (test-definitions
-  ;;  "IGNORE profun-RFC"
-  ;;  '(((abc x) (= x 1))
-  ;;    ((abc x) (= x 2))
-  ;;    ((abc x) (= x 3)))
+  (test-definitions
+   "IGNORE profun-RFC IN QUERY"
+   '(((abc x) (= x 1))
+     ((abc x) (= x 2))
+     ((abc x) (= x 3)))
 
-  ;;  (define x
-  ;;    (run-query '((= z w))))
-  ;;  (assert= 1 (length x))
-  ;;  (assert (list-and-map profun-RFC? x))
+   (define threw #f)
 
-  ;;  )
+   (catchu-case
+    (run-query '((= z w)))
+    (('profun-needs-more-info what)
+     (set! threw #t)))
 
-  ;; (test-definitions
-  ;;  "RERUN profun-RFC"
-  ;;  '(((abc x) (= x 1))
-  ;;    ((abc x) (= x 2))
-  ;;    ((abc x) (= x 3)))
+   (assert threw)
 
-  ;;  (define lst (run-query '((= z w))))
-  ;;  (define first (car lst))
-  ;;  (define cont (profun-RFC-continuation first))
+   )
 
-  ;;  (define resume-yes (cont '() '((= z 3) (= w 3))))
-  ;;  (assert= (resume-yes) '((z . 3) (w . 3)))
-  ;;  (assert= #f (resume-yes))
-  ;;  (assert= #f (resume-yes))
+  (test-definitions
+   "IGNORE profun-RFC"
+   '(((abc x) (= x 1))
+     ((abc x) (= x 2))
+     ((abc x) (= x 3)))
 
-  ;;  (define resume-no  (cont '() '((= z 3) (= w 4))))
-  ;;  (assert= #f (resume-no))
-  ;;  (assert= #f (resume-no))
+   (define x
+     (get-iter '((= z w))))
+   (assert (profun-RFC? (x)))
+   (assert= #f (x))
+   (assert= #f (x))
 
-  ;;  )
+   )
 
-  ;; (test-definitions
-  ;;  "RERUN DEEP profun-RFC"
-  ;;  '(((abc x) (= 1 1) (= u k) (= 3 3)))
+  (test-definitions
+   "RERUN profun-RFC"
+   '(((abc x) (= x 1))
+     ((abc x) (= x 2))
+     ((abc x) (= x 3)))
 
-  ;;  (define lst (run-query '((abc 0))))
-  ;;  (define first (car lst))
-  ;;  (define cont (profun-RFC-continuation first))
-  ;;  (define resume (cont '() '((= z 3) (= w 3))))
-  ;;  (assert (profun-RFC? (resume)))
+   (define x (get-iter '((= z w))))
+   (define first (x))
+   (define second (x))
+   (define cont (profun-RFC-continuation first))
 
-  ;;  )
+   (define resume-yes (cont '() '((= z 3) (= w 3))))
+   (define resume-no  (cont '() '((= z 3) (= w 4))))
+
+   (assert= #f second)
+
+   (assert= #f (resume-no))
+   (assert= #f (resume-no))
+
+   (assert= (resume-yes) '((z . 3) (w . 3)))
+   (assert= #f (resume-yes))
+   (assert= #f (resume-yes))
+
+   )
+
+  (test-definitions
+   "RERUN DEEP profun-RFC"
+   '(((abc x) (= 1 1) (= u k) (= 3 3)))
+
+   (define x (get-iter '((abc 0))))
+   (define first (x))
+   (define cont (profun-RFC-continuation first))
+   (define resume (cont '() '((= z 3) (= w 3))))
+   (assert= #f (x))
+   (assert= #f (x))
+   (assert (profun-RFC? (resume)))
+   (assert= #f (resume))
+   (assert= #f (resume))
+
+   )
 
   )
