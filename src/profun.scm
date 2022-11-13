@@ -25,6 +25,7 @@
 %use (hashmap) "./hashmap.scm"
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
+%use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
@@ -365,7 +366,7 @@
           (let ((target-rule (database-handle db key arity)))
             (if target-rule
                 (enter-foreign db s (init-foreign-instruction instruction target-rule))
-                (backtrack db s))))))
+                (make-profun-IDR key arity))))))
 
 (define (construct-from-alt s alt)
   (state alt
@@ -465,6 +466,14 @@
     (hashmap->alist (state-env s)))
 
   (define current-state #t)
+
+  (define (ret-this last-state)
+    (define copy current-state)
+    (set! current-state
+          (if (equal? #t last-state) #f
+              (backtrack-eval db last-state)))
+    copy)
+
   (lambda _
     (define last-state current-state)
     (case current-state
@@ -484,11 +493,10 @@
      ((equal? #f current-state) #f)
 
      ((profun-RFC? current-state)
-      (let ((copy current-state))
-        (set! current-state
-              (if (equal? #t last-state) #f
-                  (backtrack-eval db last-state)))
-        copy))
+      (ret-this last-state))
+
+     ((profun-IDR? current-state)
+      (ret-this last-state))
 
      (else (raisu 'unknown-state-type-in-profun-run current-state)))))
 
@@ -505,5 +513,7 @@
   (define iterator (profun-run-query db query))
   (let loop ()
     (let ((r (iterator)))
-      (if r (cons r (loop))
-          '()))))
+      (cond
+       ((profun-IDR? r) (loop))
+       (r (cons r (loop)))
+       (else '())))))
