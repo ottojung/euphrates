@@ -16,6 +16,7 @@
 
 %var profun-create-database
 %var profun-database-add-rule!
+%var profun-database-copy
 %var profun-eval-query
 %var profun-run-query
 
@@ -312,7 +313,7 @@
   (define what (profun-RFC-what ret))
   (define continuation
     (lambda (db-additions instruction-prefix)
-      (define new-db (database-copy db))
+      (define new-db (profun-database-copy db))
       (define new-s (add-prefix-to-instruction new-db s instruction-prefix))
       (for-each (comp (profun-database-add-rule! new-db)) db-additions)
       (profun-run new-db new-s)))
@@ -417,7 +418,7 @@
 (define (build-body body)
   (build-body/next body #f))
 
-(define (database-copy db)
+(define (profun-database-copy db)
   (database
    (hashmap-copy (database-table db))
    (database-handler db)))
