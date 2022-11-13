@@ -16,6 +16,7 @@
 
 %var profun-create-database
 %var profun-eval-query
+%var profun-run-query
 
 %use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
@@ -310,7 +311,7 @@
       (define new-db (database-copy db))
       (define new-s (add-prefix-to-instruction new-db s instruction-prefix))
       (for-each (comp (database-add-rule! new-db)) db-additions)
-      (profun-eval/lazy new-db new-s)))
+      (profun-run new-db new-s)))
 
   (profun-RFC continuation what))
 
@@ -456,7 +457,7 @@
   (for-each (comp (database-add-rule! db)) lst-of-rules)
   db)
 
-(define (profun-eval/lazy db initial-state)
+(define (profun-run db initial-state)
   (define (backtrack-eval db s)
     (let ((b (backtrack db s)))
       (and b (eval-state db b))))
@@ -489,19 +490,19 @@
                   (backtrack-eval db last-state)))
         copy))
 
-     (else (raisu 'unknown-state-type-in-profun-eval/lazy current-state)))))
+     (else (raisu 'unknown-state-type-in-profun-run current-state)))))
 
 ;; accepts database `db` and list of symbols `query`
-;; returns a list of result alists
-(define (profun-eval-query/lazy db query)
+;; returns an iterator
+(define (profun-run-query db query)
   (define start-instruction (build-body query))
   (define initial-state (make-state start-instruction))
-  (profun-eval/lazy db initial-state))
+  (profun-run db initial-state))
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists
 (define (profun-eval-query db query)
-  (define iterator (profun-eval-query/lazy db query))
+  (define iterator (profun-run-query db query))
   (let loop ()
     (let ((r (iterator)))
       (if r (cons r (loop))
