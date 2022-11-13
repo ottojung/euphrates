@@ -16,19 +16,18 @@
 
 %var profun-op-separate
 
+%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-accept) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
 %use (profun-variable-equal?) "./profun-variable-equal-q.scm"
-%use (raisu) "./raisu.scm"
 
 (define profun-op-separate
   (profun-op-lambda
-   (ctx (x y) names)
+   (ctx (x y) (x-name y-name))
    (case (profun-variable-equal? x y)
      ((#t) (profun-reject))
      ((#f) (profun-accept))
-     ((x-false) (profun-reject)) ;; FIXME: ask what is x, y.
-     ((y-false) (profun-reject)) ;; FIXME: ask what is x, y.
-     ((both-false)
-      (raisu 'TODO-4:both-undefined-in-separate x y)))))
+     ((x-false) (make-profun-RFC #f `((what ,x-name))))
+     ((y-false) (make-profun-RFC #f `((what ,y-name))))
+     ((both-false) (make-profun-RFC #f `((what ,x-name ,y-name)))))))

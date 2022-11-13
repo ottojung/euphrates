@@ -185,7 +185,6 @@
    (test '((abc 8 8)) '())
    (test '((abc 3 3)) '())
    (test '((abc "hello" "bye")) '())
-   (test '((abc a b)) '()) ;; because 'a ('k) is not instantiated
    )
 
   (test-definitions
