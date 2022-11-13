@@ -3,7 +3,10 @@
 
 ;; profun
 %use (assert=) "./src/assert-equal.scm"
+%use (assert) "./src/assert.scm"
 %use (debugs) "./src/debugs.scm"
+%use (list-and-map) "./src/list-and-map.scm"
+%use (profun-RFC-continuation profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
@@ -23,11 +26,14 @@
 (define current-definitions
   (make-parameter #f))
 
-(define (test query expected-result)
+(define (run-query query)
   (define handler (current-handler))
   (define definitions (current-definitions))
   (define db (profun-create-database handler definitions))
-  (define result (profun-eval-query db query))
+  (profun-eval-query db query))
+
+(define (test query expected-result)
+  (define result (run-query query))
   (unless (equal? expected-result result)
     (debugs expected-result)
     (debugs result))
@@ -43,7 +49,7 @@
        (test '((bad-op 1 2 3)) '())
        (test '((= 1 2 3)) '()) ;; bad arity
 
-       (begin . body)))))
+       (let () . body)))))
 
   ;;;;;;;;;;;
 ;; TESTS ;;
@@ -364,6 +370,52 @@
                                        ((y . "Bart"))
                                        ((y . "Megie"))
                                        ((y . "Skippy"))))
+
+   )
+
+  (test-definitions
+   "IGNORE profun-RFC"
+   '(((abc x) (= x 1))
+     ((abc x) (= x 2))
+     ((abc x) (= x 3)))
+
+   (define x
+     (run-query '((= z w))))
+   (assert= 1 (length x))
+   (assert (list-and-map profun-RFC? x))
+
+   )
+
+  (test-definitions
+   "RERUN profun-RFC"
+   '(((abc x) (= x 1))
+     ((abc x) (= x 2))
+     ((abc x) (= x 3)))
+
+   (define lst (run-query '((= z w))))
+   (define first (car lst))
+   (define cont (profun-RFC-continuation first))
+
+   (define resume-yes (cont '() '((= z 3) (= w 3))))
+   (assert= (resume-yes) '((z . 3) (w . 3)))
+   (assert= #f (resume-yes))
+   (assert= #f (resume-yes))
+
+   (define resume-no  (cont '() '((= z 3) (= w 4))))
+   (assert= #f (resume-no))
+   (assert= #f (resume-no))
+
+   )
+
+  (test-definitions
+   "RERUN DEEP profun-RFC"
+   '(((abc x) (= 1 1) (= u k) (= 3 3)))
+
+   (define lst (run-query '((abc 0))))
+   (define first (car lst))
+   (define cont (profun-RFC-continuation first))
+   (define resume (cont '() '((= z 3) (= w 3))))
+   (assert (profun-RFC? (resume)))
 
    )
 

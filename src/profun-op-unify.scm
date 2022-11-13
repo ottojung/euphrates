@@ -16,6 +16,7 @@
 
 %var profun-op-unify
 
+%use (profun-RFC) "./profun-RFC.scm"
 %use (profun-accept profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
@@ -25,10 +26,11 @@
 (define profun-op-unify
   (profun-op-lambda
    (ctx (x y) (x-name y-name))
-   (case (profun-variable-equal? x y)
+   (define ret (profun-variable-equal? x y))
+   (case ret
      ((#t) (profun-accept))
      ((#f) (profun-reject))
      ((x-false) (profun-set (x-name <- y)))
      ((y-false) (profun-set (y-name <- x)))
-     ((both-false)
-      (raisu 'TODO-3:both-undefined x y)))))
+     ((both-false) (profun-RFC #f `((what ,x-name ,y-name))))
+     (else (raisu 'impossible-case-for-op-unify ret x y)))))

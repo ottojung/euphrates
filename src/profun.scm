@@ -24,12 +24,14 @@
 %use (hashmap) "./hashmap.scm"
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
+%use (profun-RFC profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
 %use (profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
+%use (stack) "./stack-obj.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
 
 (define-type9 <database>
@@ -39,7 +41,7 @@
   )
 
 (define-type9 <rule>
-  (rule a b c d) rule?
+  (rule-constructor a b c d) rule?
   (a rule-name) ;; : symbol
   (b rule-index) ;; : number (together with "name" gives a unique index)
   (c rule-args) ;; : list of symbols
@@ -47,7 +49,7 @@
   )
 
 (define-type9 <instruction>
-  (instruction a b c d e) instruction?
+  (instruction-constructor a b c d e) instruction?
   (a instruction-sign) ;; operation signature, like name and version for alternative
   (b instruction-args) ;; arguments
   (c instruction-arity) ;; arity
@@ -71,7 +73,7 @@
          ))
 
 (define (state-final? s)
-  (not (and s (state-current s))))
+  (not (and (state? s) (state-current s))))
 (define (state-finish s)
   (state #f
          (state-stack s)
@@ -83,7 +85,7 @@
 
 (define (database-handle db key arity)
   (let ((function ((database-handler db) key arity)))
-    (and function (rule key 0 (list) function))))
+    (and function (rule-constructor key 0 (list) function))))
 
 (define (double-hashmap-ref H key1 key2)
   (define h (hashmap-ref H key1 #f))
@@ -105,11 +107,12 @@
       (get db (car k) (cdr k) arity)
       (get db k 0 arity)))
 
-(define (database-set! db name args body)
+(define (database-add! db name args body)
   (let* ((arity (length args))
-         (existing (or (double-hashmap-ref (database-table db) name arity) '()))
+         (table (database-table db))
+         (existing (or (double-hashmap-ref table name arity) '()))
          (index (length existing))
-         (value (rule name index args body)))
+         (value (rule-constructor name index args body)))
 
     (double-hashmap-set!
      (database-table db)
@@ -150,7 +153,7 @@
              (else (get-from-pair (cons sign 0) arity)))))
 
       (and rule
-           (instruction
+           (instruction-constructor
             (cons (rule-name rule)
                   (rule-index rule))
             (instruction-args inst)
@@ -213,18 +216,21 @@
   new-state)
 
 (define (instruction-set-ctx inst new-ctx)
-  (instruction (instruction-sign inst)
-               (instruction-args inst)
-               (instruction-arity inst)
-               (instruction-next inst)
-               new-ctx))
+  (instruction-constructor
+   (instruction-sign inst)
+   (instruction-args inst)
+   (instruction-arity inst)
+   (instruction-next inst)
+   new-ctx))
 
 (define (init-foreign-instruction inst target-rule)
-  (instruction (rule-body target-rule) ;; sign
-               (instruction-args inst)
-               (instruction-arity inst)
-               (instruction-next inst)
-               #f)) ;; ctx
+  (instruction-constructor
+   (rule-body target-rule) ;; sign
+   (instruction-args inst)
+   (instruction-arity inst)
+   (instruction-next inst)
+   #f ;; ctx
+   ))
 
 (define (handle-accept-change s env instruction args ret)
   (define new-context (profun-accept-ctx ret))
@@ -260,6 +266,54 @@
       (continue s)
       (handle-accept-change s env instruction args ret)))
 
+(define (get-current-subroutine s)
+  (define stack (state-stack s))
+  (if (null? stack)
+      (values #f #f)
+      (let ()
+        (define instruction (car stack))
+        (define key (instruction-sign instruction))
+        (define arity (instruction-arity instruction))
+        (values key arity))))
+
+(define (add-prefix-to-instruction db s instruction-prefix)
+  (define-values (key arity) (get-current-subroutine s))
+  (define current (state-current s))
+  (define table (database-table db))
+  (define rules (or (double-hashmap-ref table key arity) '()))
+  (define (add-to-rule rule)
+    (define body (rule-body rule))
+    (define new-body (append instruction-prefix body))
+    (rule-constructor
+     (rule-name rule)
+     (rule-index rule)
+     (rule-args rule)
+     new-body))
+  (define new-rules
+    (if (list? rules)
+        (map add-to-rule rules)
+        (add-to-rule rules)))
+  (define new-current
+    (build-body/next instruction-prefix current))
+
+  (double-hashmap-set! table key arity new-rules)
+
+  (state new-current
+         (state-stack s)
+         (state-env s)
+         (state-failstate s)))
+
+(define (handle-RFC db s ret)
+  (define what (profun-RFC-what ret))
+  (define continuation
+    (lambda (db-additions instruction-prefix)
+      (define new-db (database-copy db))
+      (define new-s (add-prefix-to-instruction new-db s instruction-prefix))
+      (for-each (comp (database-add-rule! new-db)) db-additions)
+      (profun-eval/lazy new-db new-s)))
+
+  (profun-RFC continuation what))
+
 (define (enter-foreign db s instruction)
   (define env (state-env s))
   (define handler (instruction-sign instruction))
@@ -274,6 +328,8 @@
     (backtrack db s))
    ((profun-accept? ret)
     (handle-accept s env instruction args ret))
+   ((profun-RFC? ret)
+    (handle-RFC db s ret))
    (else
     (raisu 'bad-type-of-object-returned-from-foreign ret))))
 
@@ -333,24 +389,61 @@
       new-state
       (eval-state db new-state)))
 
-;; accepts list of symbols "body"
-;; and returns first instruction
-(define (build-body body)
+(define (build-body/next body next)
   (define rev (reverse body))
 
   (define (make-one block next)
     (define sign (car block))
     (define args (cdr block))
-    (instruction sign args (length args) next #f))
+    (instruction-constructor
+     sign args (length args) next #f))
 
   (define result
-    (let lp ((buf rev) (prev #f))
+    (let lp ((buf rev) (prev next))
       (if (null? buf)
           prev
           (let ((current (make-one (car buf) prev)))
             (lp (cdr buf) current)))))
 
   result)
+
+;; accepts list of symbols "body"
+;; and returns first instruction
+(define (build-body body)
+  (build-body/next body #f))
+
+(define (database-copy db)
+  (database
+   (hashmap-copy (database-table db))
+   (database-handler db)))
+
+(define (database-add-rule! db r)
+  (define first (car r))
+  (define name (car first))
+  (define args-init (cdr first))
+  (define body-init (cdr r))
+
+  (define (ret args body-app)
+    (let ((body (append body-app body-init)))
+      (database-add! db name args body)))
+
+  (let lp ((buf args-init)
+           (i 0)
+           (aret (list))
+           (bret-app (list)))
+    (if (null? buf)
+        (ret (reverse aret) (reverse bret-app))
+        (let ((x (car buf)))
+          (if (not (profun-varname? x))
+              (let ((u (usymbol name `(arg ,i))))
+                (lp (cdr buf)
+                    (+ i 1)
+                    (cons u aret)
+                    (cons `(= ,u ,x) bret-app))) ;; NOTE: relies on =/2 to be provided by handler
+              (lp (cdr buf)
+                  (+ i 1)
+                  (cons x aret)
+                  bret-app))))))
 
 ;; accepts list of rules that looks like:
 ;; '(((abc x) (= x 2))
@@ -360,66 +453,50 @@
 ;; returns database
 (define (profun-create-database botom-handler lst-of-rules)
   (define db (make-database botom-handler))
-
-  (define (handle-rule r)
-    (define first (car r))
-    (define name (car first))
-
-    (define args-init (cdr first))
-    (define body-init (cdr r))
-
-    (define (ret args body-app)
-      (let ((body (append body-app body-init)))
-        (database-set! db name args body)))
-
-    (let lp ((buf args-init)
-             (i 0)
-             (aret (list))
-             (bret-app (list)))
-      (if (null? buf)
-          (ret (reverse aret) (reverse bret-app))
-          (let ((x (car buf)))
-            (if (not (profun-varname? x))
-                (let ((u (usymbol name `(arg ,i))))
-                  (lp (cdr buf)
-                      (+ i 1)
-                      (cons u aret)
-                      (cons `(= ,u ,x) bret-app))) ;; NOTE: relies on =/2 to be provided by handler
-                (lp (cdr buf)
-                    (+ i 1)
-                    (cons x aret)
-                    bret-app))))))
-
-  (for-each handle-rule lst-of-rules)
-
+  (for-each (comp (database-add-rule! db)) lst-of-rules)
   db)
+
+(define (profun-eval/lazy db initial-state)
+  (define (backtrack-eval db s)
+    (let ((b (backtrack db s)))
+      (and b (eval-state db b))))
+  (define (take-vars s)
+    (hashmap->alist (state-env s)))
+
+  (define current-state #t)
+  (lambda _
+    (define last-state current-state)
+    (case current-state
+      ((#t)
+       (set! current-state (eval-state db initial-state)))
+      ((#f) #f)
+      (else
+       (set! current-state (backtrack-eval db current-state))))
+
+    (cond
+     ((state? current-state)
+      ;; TODO: optimize by using hashmap-foreach.
+      (map (fn-cons identity profun-value-unwrap)
+           (filter (lambda (x) (not (usymbol? (car x))))
+                   (take-vars current-state))))
+
+     ((equal? #f current-state) #f)
+
+     ((profun-RFC? current-state)
+      (let ((copy current-state))
+        (set! current-state
+              (if (equal? #t last-state) #f
+                  (backtrack-eval db last-state)))
+        copy))
+
+     (else (raisu 'unknown-state-type-in-profun-eval/lazy current-state)))))
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists
 (define (profun-eval-query/lazy db query)
-  (define (backtrack-eval db s)
-    (let ((b (backtrack db s)))
-      (and b (eval-state db b))))
-
-  (define (take-vars s)
-    (hashmap->alist (state-env s)))
-
   (define start-instruction (build-body query))
   (define initial-state (make-state start-instruction))
-  (define current-state #t)
-
-  (lambda _
-    (case current-state
-     ((#t)
-      (set! current-state (eval-state db initial-state)))
-     (else
-      (set! current-state (backtrack-eval db current-state))))
-
-    (and current-state
-         ;; TODO: optimize by using hashmap-foreach.
-         (map (fn-cons identity profun-value-unwrap)
-              (filter (lambda (x) (not (usymbol? (car x))))
-                      (take-vars current-state))))))
+  (profun-eval/lazy db initial-state))
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists
