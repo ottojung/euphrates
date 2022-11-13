@@ -17,28 +17,31 @@
 %var profun-op-less
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
+%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-bound-value?) "./profun-value.scm"
+%use (profun-bound-value? profun-unbound-value?) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-less
   (profun-op-lambda
    (ctx (x y) (x-name y-name))
 
-   (unless (number? y)
-     (raisu 'non-number-in-less y))
-
-   (bool->profun-result
-    (if (profun-bound-value? x)
-        (if (number? x)
-            (and (not ctx) (< x y))
-            (raisu 'non-number-in-less x))
-        (if (< y 1) (profun-reject)
-            (let* ((ctxx (or ctx y))
-                   (ctxm (- ctxx 1)))
-              (and (>= ctxm 0)
-                   (profun-set
-                    (x-name <- ctxm)
-                    (profun-ctx-set ctxm)))))))))
+   (if (profun-unbound-value? y)
+       (make-profun-RFC #f `((what ,y-name)))
+       (begin
+         (unless (number? y)
+           (raisu 'non-number-in-less y))
+         (bool->profun-result
+          (if (profun-bound-value? x)
+              (if (number? x)
+                  (and (not ctx) (< x y))
+                  (raisu 'non-number-in-less x))
+              (if (< y 1) (profun-reject)
+                  (let* ((ctxx (or ctx y))
+                         (ctxm (- ctxx 1)))
+                    (and (>= ctxm 0)
+                         (profun-set
+                          (x-name <- ctxm)
+                          (profun-ctx-set ctxm)))))))))))
