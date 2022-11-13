@@ -517,5 +517,5 @@
        ((or (pair? r) (null? r)) (cons r (loop)))
        ((equal? #f r) '())
        ((profun-IDR? r) (loop))
-       ((profun-RFC? r) (cons r (loop)))
+       ((profun-RFC? r) (raisu 'profun-needs-more-info (profun-RFC-what r)))
        (else (raisu 'unknown-result-type-in-profun-query r))))))

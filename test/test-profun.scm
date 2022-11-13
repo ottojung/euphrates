@@ -373,50 +373,50 @@
 
    )
 
-  (test-definitions
-   "IGNORE profun-RFC"
-   '(((abc x) (= x 1))
-     ((abc x) (= x 2))
-     ((abc x) (= x 3)))
+  ;; (test-definitions
+  ;;  "IGNORE profun-RFC"
+  ;;  '(((abc x) (= x 1))
+  ;;    ((abc x) (= x 2))
+  ;;    ((abc x) (= x 3)))
 
-   (define x
-     (run-query '((= z w))))
-   (assert= 1 (length x))
-   (assert (list-and-map profun-RFC? x))
+  ;;  (define x
+  ;;    (run-query '((= z w))))
+  ;;  (assert= 1 (length x))
+  ;;  (assert (list-and-map profun-RFC? x))
 
-   )
+  ;;  )
 
-  (test-definitions
-   "RERUN profun-RFC"
-   '(((abc x) (= x 1))
-     ((abc x) (= x 2))
-     ((abc x) (= x 3)))
+  ;; (test-definitions
+  ;;  "RERUN profun-RFC"
+  ;;  '(((abc x) (= x 1))
+  ;;    ((abc x) (= x 2))
+  ;;    ((abc x) (= x 3)))
 
-   (define lst (run-query '((= z w))))
-   (define first (car lst))
-   (define cont (profun-RFC-continuation first))
+  ;;  (define lst (run-query '((= z w))))
+  ;;  (define first (car lst))
+  ;;  (define cont (profun-RFC-continuation first))
 
-   (define resume-yes (cont '() '((= z 3) (= w 3))))
-   (assert= (resume-yes) '((z . 3) (w . 3)))
-   (assert= #f (resume-yes))
-   (assert= #f (resume-yes))
+  ;;  (define resume-yes (cont '() '((= z 3) (= w 3))))
+  ;;  (assert= (resume-yes) '((z . 3) (w . 3)))
+  ;;  (assert= #f (resume-yes))
+  ;;  (assert= #f (resume-yes))
 
-   (define resume-no  (cont '() '((= z 3) (= w 4))))
-   (assert= #f (resume-no))
-   (assert= #f (resume-no))
+  ;;  (define resume-no  (cont '() '((= z 3) (= w 4))))
+  ;;  (assert= #f (resume-no))
+  ;;  (assert= #f (resume-no))
 
-   )
+  ;;  )
 
-  (test-definitions
-   "RERUN DEEP profun-RFC"
-   '(((abc x) (= 1 1) (= u k) (= 3 3)))
+  ;; (test-definitions
+  ;;  "RERUN DEEP profun-RFC"
+  ;;  '(((abc x) (= 1 1) (= u k) (= 3 3)))
 
-   (define lst (run-query '((abc 0))))
-   (define first (car lst))
-   (define cont (profun-RFC-continuation first))
-   (define resume (cont '() '((= z 3) (= w 3))))
-   (assert (profun-RFC? (resume)))
+  ;;  (define lst (run-query '((abc 0))))
+  ;;  (define first (car lst))
+  ;;  (define cont (profun-RFC-continuation first))
+  ;;  (define resume (cont '() '((= z 3) (= w 3))))
+  ;;  (assert (profun-RFC? (resume)))
 
-   )
+  ;;  )
 
   )
