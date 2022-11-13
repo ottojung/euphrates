@@ -15,6 +15,7 @@
 %run guile
 
 %var profun-create-database
+%var profun-database-add-rule!
 %var profun-eval-query
 %var profun-run-query
 
@@ -313,7 +314,7 @@
     (lambda (db-additions instruction-prefix)
       (define new-db (database-copy db))
       (define new-s (add-prefix-to-instruction new-db s instruction-prefix))
-      (for-each (comp (database-add-rule! new-db)) db-additions)
+      (for-each (comp (profun-database-add-rule! new-db)) db-additions)
       (profun-run new-db new-s)))
 
   (make-profun-RFC continuation what))
@@ -421,7 +422,7 @@
    (hashmap-copy (database-table db))
    (database-handler db)))
 
-(define (database-add-rule! db r)
+(define (profun-database-add-rule! db r)
   (define first (car r))
   (define name (car first))
   (define args-init (cdr first))
@@ -457,7 +458,7 @@
 ;; returns database
 (define (profun-create-database botom-handler lst-of-rules)
   (define db (make-database botom-handler))
-  (for-each (comp (database-add-rule! db)) lst-of-rules)
+  (for-each (comp (profun-database-add-rule! db)) lst-of-rules)
   db)
 
 (define (profun-run db initial-state)
