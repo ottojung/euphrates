@@ -19,7 +19,7 @@
 ;; Returned by an agent that needs more info on one of its arguments in order to complete computation.
 ;; For example, if agent receives query `(+ 1 x y)', he may return an RFC for argument `x' to avoid returning infinitely many results.
 
-%var profun-RFC
+%var make-profun-RFC
 %var profun-RFC?
 %var profun-RFC-what
 %var profun-RFC-continuation
@@ -35,5 +35,5 @@
 (define (profun-RFC? x)
   (profun-RFC-obj? x))
 
-(define (profun-RFC continuation what)
+(define (make-profun-RFC continuation what)
   (profun-RFC-constructor continuation what))

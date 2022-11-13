@@ -16,7 +16,7 @@
 
 %var profun-op-unify
 
-%use (profun-RFC) "./profun-RFC.scm"
+%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-accept profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
@@ -32,5 +32,5 @@
      ((#f) (profun-reject))
      ((x-false) (profun-set (x-name <- y)))
      ((y-false) (profun-set (y-name <- x)))
-     ((both-false) (profun-RFC #f `((what ,x-name ,y-name))))
+     ((both-false) (make-profun-RFC #f `((what ,x-name ,y-name))))
      (else (raisu 'impossible-case-for-op-unify ret x y)))))

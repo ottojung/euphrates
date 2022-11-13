@@ -26,7 +26,7 @@
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
-%use (profun-RFC profun-RFC-what profun-RFC?) "./profun-RFC.scm"
+%use (make-profun-RFC profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
@@ -314,7 +314,7 @@
       (for-each (comp (database-add-rule! new-db)) db-additions)
       (profun-run new-db new-s)))
 
-  (profun-RFC continuation what))
+  (make-profun-RFC continuation what))
 
 (define (enter-foreign db s instruction)
   (define env (state-env s))
