@@ -284,6 +284,8 @@
   (define table (database-table db))
   (define rules (or (double-hashmap-ref table key arity) '()))
   (define (add-to-rule rule)
+    ;; FIXME: add not at a begining of a rule,
+    ;;        but before current instruction.
     (define body (rule-body rule))
     (define new-body (append instruction-prefix body))
     (rule-constructor
