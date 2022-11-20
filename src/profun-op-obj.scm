@@ -24,5 +24,5 @@
 (define-type9 profun-op-obj
   (profun-op-constructor arity procedure) profun-op?
   (arity profun-op-arity)
-  (arity profun-op-procedure)
+  (procedure profun-op-procedure)
   )
