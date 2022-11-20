@@ -62,7 +62,7 @@
   )
 
 (define-type9 <state>
-  (state a b c d) state?
+  (state-constructor a b c d) state?
   (a state-current) ;; current `instruction`
   (b state-stack) ;; list of `instruction`s
   (c state-env) ;; hashmap of `variable`s
@@ -70,19 +70,21 @@
   )
 
 (define (make-state start-instruction)
-  (state start-instruction
-         (list) ;; stack
-         (make-env) ;; env
-         #f ;; failstate
-         ))
+  (state-constructor
+   start-instruction
+   (list) ;; stack
+   (make-env) ;; env
+   #f ;; failstate
+   ))
 
 (define (state-final? s)
   (not (and (state? s) (state-current s))))
 (define (state-finish s)
-  (state #f
-         (state-stack s)
-         (state-env s)
-         (state-failstate s)))
+  (state-constructor
+   #f
+   (state-stack s)
+   (state-env s)
+   (state-failstate s)))
 
 (define (make-database botom-handler)
   (database (hashmap) botom-handler))
@@ -212,10 +214,11 @@
     (beta-reduce target-rule (instruction-args instruction)))
 
   (define new-state
-    (state replaced
-           (cons instruction (state-stack s))
-           (state-env s)
-           s)) ;; failstate
+    (state-constructor
+     replaced
+     (cons instruction (state-stack s))
+     (state-env s)
+     s)) ;; failstate
 
   new-state)
 
@@ -259,10 +262,11 @@
    alist/vars)
 
   (continue
-   (state instruction
-          (state-stack s)
-          new-env
-          new-failstate)))
+   (state-constructor
+    instruction
+    (state-stack s)
+    new-env
+    new-failstate)))
 
 (define (handle-accept s env instruction args ret)
   (if (and (not (profun-accept-ctx-changed? ret))
@@ -304,10 +308,11 @@
 
   (double-hashmap-set! table key arity new-rules)
 
-  (state new-current
-         (state-stack s)
-         (state-env s)
-         (state-failstate s)))
+  (state-constructor
+   new-current
+   (state-stack s)
+   (state-env s)
+   (state-failstate s)))
 
 (define (handle-RFC db s ret)
   (define what (profun-RFC-what ret))
@@ -345,17 +350,19 @@
   (define next (instruction-next current))
 
   (if next
-      (state next
-             (state-stack s)
-             (state-env s)
-             (state-failstate s))
+      (state-constructor
+       next
+       (state-stack s)
+       (state-env s)
+       (state-failstate s))
       (if (null? (state-stack s))
           (state-finish s)
           (continue
-           (state (car (state-stack s))
-                  (cdr (state-stack s))
-                  (state-env s)
-                  (state-failstate s))))))
+           (state-constructor
+            (car (state-stack s))
+            (cdr (state-stack s))
+            (state-env s)
+            (state-failstate s))))))
 
 (define (apply-instruction db s)
   (define instruction (state-current s))
@@ -373,10 +380,11 @@
                 (make-profun-IDR key arity))))))
 
 (define (construct-from-alt s alt)
-  (state alt
-         (state-stack s)
-         (state-env s)
-         (state-failstate s)))
+  (state-constructor
+   alt
+   (state-stack s)
+   (state-env s)
+   (state-failstate s)))
 
 (define (backtrack db initial-state)
   (let lp ((s (state-failstate initial-state)))
