@@ -13,10 +13,12 @@
 %use (profun-apply-fail! profun-apply-return! profun-op-apply) "./src/profun-op-apply.scm"
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
 %use (profun-eval-fail! profun-op-eval) "./src/profun-op-eval.scm"
+%use (profun-op-false) "./src/profun-op-false.scm"
 %use (profun-op-less) "./src/profun-op-less.scm"
 %use (profun-op*) "./src/profun-op-mult.scm"
 %use (profun-op+) "./src/profun-op-plus.scm"
 %use (profun-op-separate) "./src/profun-op-separate.scm"
+%use (profun-op-true) "./src/profun-op-true.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-create-database profun-eval-query profun-run-query) "./src/profun.scm"
 
@@ -66,6 +68,8 @@
     ((current-handler
       (profun-make-handler
        (= profun-op-unify)
+       (true profun-op-true)
+       (false profun-op-false)
        (!= profun-op-separate)
        (+ profun-op+)
        (* profun-op*)
@@ -207,6 +211,20 @@
      ((foo) (= 1 1)))
 
    (test '((foo)) '(()))
+   )
+
+  (test-definitions
+   "TRUTH"
+   '()
+
+   (test '((true)) '(()))
+   )
+
+  (test-definitions
+   "LIE"
+   '()
+
+   (test '((false)) '())
    )
 
   (test-definitions
