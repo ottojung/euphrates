@@ -14,13 +14,13 @@
 
 %run guile
 
-%var profun-op-true
+%var profun-op-false
 
-%use (profun-accept) "./profun-accept.scm"
 %use (make-profun-op) "./profun-op.scm"
+%use (profun-reject) "./profun-reject.scm"
 
-(define profun-op-true
+(define profun-op-false
   (make-profun-op
    0
    (lambda _
-     (profun-accept))))
+     (profun-reject))))
