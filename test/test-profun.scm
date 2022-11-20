@@ -286,7 +286,8 @@
    "apply CASES"
    '()
 
-   (test `((= x 3) (apply ,(lambda (y) (profun-apply-return! 2)) x)) '(((x . 2))))
+   (test `((= x 3) (apply ,(lambda (y) (profun-apply-return! 3)) x)) '(((x . 3))))
+   (test `((= x 3) (apply ,(lambda (y) (profun-apply-return! 2)) x)) '())
    (test `((= x 3) (apply ,(lambda (y) (profun-apply-return! 2)) y)) '(((x . 3) (y . 2))))
    (test `((= x 3) (apply ,(lambda (y) (profun-apply-fail!)) x)) '())
    (test `((= x 3) (apply ,(lambda (y) 9) x)) '(((x . 3))))

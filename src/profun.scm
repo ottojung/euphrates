@@ -21,6 +21,8 @@
 %var profun-run-query
 
 %use (comp) "./comp.scm"
+%use (cons!) "./cons-bang.scm"
+%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
@@ -32,7 +34,7 @@
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
-%use (profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
+%use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
 %use (stack) "./stack-obj.scm"
@@ -68,6 +70,12 @@
   (c state-env) ;; hashmap of `variable`s
   (d state-failstate) ;; `state` to go to if this `state` fails. Initially #f
   (e state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
+  )
+
+(define-type9 <set-var-command>
+  (make-set-var-command name value) set-var-command?
+  (name set-var-command-name)
+  (value set-var-command-value)
   )
 
 (define (make-state start-instruction)
@@ -269,6 +277,14 @@
    (fn-pair
     (name value)
     (define wrapped (profun-make-var name value))
+    (define old (env-get env name))
+    (define undo-command (make-set-var-command name old))
+    (when (profun-bound-value? old)
+      (debugs instruction)
+      (debugs name)
+      (debugs old)
+      (raisu 'operation-rebinds-a-bound-variable instruction name old))
+    (cons! undo-command new-undo-list)
     (env-set! new-env name wrapped))
    alist/vars)
 

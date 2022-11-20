@@ -25,6 +25,7 @@
 %use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-bound-value?) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
 (define profun-op-apply
@@ -44,11 +45,16 @@
              ((fail) (profun-reject))
              ((#f) (profun-ctx-set #t))
              (else
-              (let loop ((i 1) (rest result))
+              (let loop ((i 1) (rest result) (arguments arguments))
                 (if (<= i len)
-                    (profun-set
-                     ((list-ref names i) <- (car rest))
-                     (loop (+ 1 i) (cdr rest)))
+                    (if (profun-bound-value? (car arguments))
+                        (if (equal? (car arguments)
+                                    (car rest))
+                            (loop (+ 1 i) (cdr rest) (cdr arguments))
+                            (profun-reject))
+                        (profun-set
+                         ((list-ref names i) <- (car rest))
+                         (loop (+ 1 i) (cdr rest) (cdr arguments))))
                     (profun-ctx-set #t))))))))))
 
 (define (profun-apply-return! . args)
