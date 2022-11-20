@@ -21,8 +21,6 @@
 %var profun-run-query
 
 %use (comp) "./comp.scm"
-%use (cons!) "./cons-bang.scm"
-%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
@@ -73,7 +71,8 @@
   )
 
 (define-type9 <set-var-command>
-  (make-set-var-command name value) set-var-command?
+  (make-set-var-command inst name value) set-var-command?
+  (inst set-var-command-inst)
   (name set-var-command-name)
   (value set-var-command-value)
   )
@@ -147,7 +146,9 @@
       (hashmap-ref env key (profun-make-unbound-var key))
       (profun-make-constant key)))
 (define (env-set! env key value)
-  (hashmap-set! env key value))
+  (if (profun-bound-value? value)
+      (hashmap-set! env key value)
+      (hashmap-delete! env key)))
 (define (env-unset! env key)
   (hashmap-delete! env key))
 (define (env-copy env)
@@ -249,49 +250,43 @@
 
 (define (init-foreign-instruction inst target-rule)
   (instruction-constructor
-   (rule-body target-rule) ;; sign
+   (cons (instruction-sign inst) (rule-body target-rule)) ;; sign
    (instruction-args inst)
    (instruction-arity inst)
    (instruction-next inst)
    #f ;; ctx
    ))
 
-(define (handle-accept-change s env instruction args ret)
+(define (handle-accept-change s0 env instruction args ret)
   (define new-context (profun-accept-ctx ret))
   (define new-failstate
     (if (profun-accept-ctx-changed? ret)
         (set-state-current
-         s (instruction-set-ctx instruction new-context))
-        (state-failstate s)))
+         s0 (instruction-set-ctx instruction new-context))
+        s0))
 
   (define alist/vars
     (profun-accept-alist ret))
 
-  (define new-env
-    (if (null? alist/vars) env
-        (env-copy env)))
+  (define new-env env)
 
-  (define new-undo-list '()) ;; FIXME: do the undo list
-
-  (for-each
-   (fn-pair
-    (name value)
-    (define wrapped (profun-make-var name value))
-    (define old (env-get env name))
-    (define undo-command (make-set-var-command name old))
-    (when (profun-bound-value? old)
-      (debugs instruction)
-      (debugs name)
-      (debugs old)
-      (raisu 'operation-rebinds-a-bound-variable instruction name old))
-    (cons! undo-command new-undo-list)
-    (env-set! new-env name wrapped))
-   alist/vars)
+  (define new-undo-list
+    (map
+     (fn-pair
+      (name value)
+      (define wrapped (profun-make-var name value))
+      (define old (env-get env name))
+      (define undo-command (make-set-var-command instruction name old))
+      (when (profun-bound-value? old)
+        (raisu 'operation-rebinds-a-bound-variable instruction name old))
+      (env-set! new-env name wrapped)
+      undo-command)
+     alist/vars))
 
   (continue
    (state-constructor
     instruction
-    (state-stack s)
+    (state-stack s0)
     new-env
     new-failstate
     new-undo-list
@@ -352,7 +347,8 @@
 
 (define (enter-foreign db s instruction)
   (define env (state-env s))
-  (define handler (instruction-sign instruction))
+  (define sign (instruction-sign instruction))
+  (define handler (cdr sign))
   (define func (profun-op-procedure handler))
   (define context (instruction-context instruction))
   (define args (instruction-args instruction))
@@ -402,13 +398,28 @@
                 (enter-foreign db s (init-foreign-instruction instruction target-rule))
                 (make-profun-IDR key arity))))))
 
+(define (run-undos s)
+  (define env (state-env s))
+  (for-each
+   (lambda (undo-command)
+     (cond
+      ((set-var-command? undo-command)
+       (env-set! env
+                 (set-var-command-name undo-command)
+                 (set-var-command-value undo-command)))
+      (else
+       (raisu 'unknown-undo-command undo-command))))
+   (state-undo s)))
+
 (define (backtrack db initial-state)
+  (run-undos initial-state)
   (let lp ((s (state-failstate initial-state)))
     (if (not s) #f
         (let ((alt (get-alternative-instruction db s)))
           (case alt
-            ((#f) (lp (state-failstate s)))
-            ((builtin) s)
+            ((#f)
+             (run-undos s)
+             (lp (state-failstate s)))
             (else (set-state-current s alt)))))))
 
 (define (eval-state db initial-state)
