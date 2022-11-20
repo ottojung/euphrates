@@ -16,8 +16,8 @@
 
 %var profun-variable-arity-op
 
-%use (profun-op) "./profun-op.scm"
+%use (make-profun-op) "./profun-op.scm"
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define (profun-variable-arity-op proc)
-  (profun-op profun-variable-arity-op-keyword proc))
+  (make-profun-op profun-variable-arity-op-keyword proc))

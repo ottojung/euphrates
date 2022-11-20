@@ -17,14 +17,14 @@
 %var profun-op-lambda
 
 %use (define-tuple) "./define-tuple.scm"
-%use (profun-op) "./profun-op.scm"
+%use (make-profun-op) "./profun-op.scm"
 %use (profun-value-name profun-value-unwrap) "./profun-value.scm"
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-lambda
   (syntax-rules ()
     ((_ (ctx args args-names) . bodies)
-     (profun-op
+     (make-profun-op
       (let ((qargs (quote args)))
         (if (pair? qargs)
             (length qargs)

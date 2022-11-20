@@ -1,6 +1,6 @@
 ;;;; Copyright (C) 2022  Otto Jung
 ;;;;
-;;;; This program is free software; you can redistribute it and/or modify
+;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
 ;;;; the Free Software Foundation; version 3 of the License.
 ;;;;
@@ -14,10 +14,10 @@
 
 %run guile
 
-%var make-profun-op
+%var profun-op-true
 
-%use (profun-op-constructor) "./profun-op-obj.scm"
-
-(define (make-profun-op arity handler-procedure)
-  (profun-op-constructor
-   arity handler-procedure))
+(define profun-op-true
+  (profun-op
+   0
+   (lambda _ 
+   (profun-accept)))
