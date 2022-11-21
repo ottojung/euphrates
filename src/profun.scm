@@ -338,6 +338,7 @@
 (define (set-remaining-instructions s0 instruction-prefix)
   (define new-current (build-body instruction-prefix))
   (define new-stack '())
+  ;; FIXME: set backtracking history to empty.
   (set-state-current s0 new-current new-stack))
 
 (define (handle-RFC db s ret)
