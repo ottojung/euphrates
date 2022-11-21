@@ -26,16 +26,19 @@
 ;;   B: whats, value(or(X, Y)).
 ;;   A: its, X = 9.
 ;;   B: its, Y = 3.
+;;   A: bye.
 ;;
 ;;   (same as above, but A is straightforward)
 ;;   A: whats, X = 9, sqrt(X, Y).
 ;;   B: its, Y = 3.
+;;   A: bye.
 ;;
 ;;   (A makes a typo)
 ;;   A: whats, X = 9, swrt(X, Y).
 ;;   B: i-dont-recognize, swrt, 2.
 ;;   A: whats, X = 9, sqrt(X, Y).
 ;;   B: its, Y = 3.
+;;   A: bye.
 ;;
 ;;   (A is calling B's tegfs API -- he wants to query entries with their previews)
 ;;   A: listen, query("image+funny"), diropen?(#t), whats, shared-preview(E, P).
@@ -45,9 +48,10 @@
 ;;   A: more.
 ;;   B: its, E = ..., P = ....
 ;;   A: more.
-;;   B: its, false.
+;;   B: its, false().
+;;   A: bye.
 ;;
-;; Every communicator must know these words: "whats", "its", "listen", "more", and "i-dont-recognize".
+;; Every communicator must know these words: "whats", "its", "listen", "more", "bye", and "i-dont-recognize".
 ;;
 
 %use (comp) "./comp.scm"
@@ -137,6 +141,8 @@
 
   (define (handle-more op args next)
     (define n (get-more-s-arg args))
+    (unless (null? next)
+      (raisu 'more-must-be-the-last-command next))
     (collect-n n))
 
   (define (handle-its op args next)
@@ -149,24 +155,33 @@
 
     (handle-query next))
 
+  (define (handle-bye op args next)
+    (set! db #f)
+    (set! current-answer-iterator #f)
+    (set! current-results-buffer #f)
+    (set! current-continuation #f)
+
+    (unless (and (null? args) (null? next))
+      (raisu 'bye-must-not-have-any-arguments op args next)))
+
+  (define (handle-listen op args next)
+    (for-each (comp (profun-database-add-rule! db)) args)
+    (handle next))
+
   (define (handle commands)
     (if (null? commands)
-        (raisu 'TODO)
+        (raisu 'expecting-more-commands-than-this)
         (let ()
           (define-values (op args next)
             (split-commands commands))
-
+          (unless current-results-buffer
+            (raisu 'already-said-bye-bye))
           (case op
-            ((listen)
-             (for-each (comp (profun-database-add-rule! db)) args)
-             (handle next))
-            ((whats)
-             (handle-whats op args next))
-            ((its)
-             (handle-its op args next))
-            ((more)
-             (handle-more op args next))
-            (else
-             (raisu 'not-implemented-ccc))))))
+            ((listen) (handle-listen op args next))
+            ((whats) (handle-whats op args next))
+            ((its) (handle-its op args next))
+            ((more) (handle-more op args next))
+            ((bye) (handle-bye op args next))
+            (else (raisu 'not-implemented-ccc))))))
 
   handle)
