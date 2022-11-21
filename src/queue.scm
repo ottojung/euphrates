@@ -2,6 +2,7 @@
 %run guile
 
 %var make-queue
+%var queue?
 %var queue-empty?
 %var queue-peek
 %var queue-push!
@@ -12,15 +13,16 @@
 %var queue-rotate!
 %var queue-peek-rotate!
 
-%use (make-unique) "./make-unique.scm"
+%use (queue-constructor queue-first queue-last queue-predicate queue-vector set-queue-first! set-queue-last! set-queue-vector!) "./queue-obj.scm"
 %use (raisu) "./raisu.scm"
-%use (queue queue? queue-vector queue-first queue-last set-queue-vector! set-queue-first! set-queue-last!) "./queue-obj.scm"
+
+(define queue? queue-predicate)
 
 (define make-queue
   (case-lambda
    (() (make-queue 10))
    ((initial-size)
-    (queue (make-vector initial-size) 0 0))))
+    (queue-constructor (make-vector initial-size) 0 0))))
 
 (define (queue-empty? q)
   (= (queue-first q) (queue-last q)))
@@ -88,7 +90,7 @@
           ret)))))
 
 (define (list->queue lst)
-  (queue (list->vector lst) 0 (length lst)))
+  (queue-constructor (list->vector lst) 0 (length lst)))
 
 (define (queue->list q)
   (define first (+ 0 (queue-first q)))
