@@ -71,8 +71,7 @@
   )
 
 (define-type9 <set-var-command>
-  (make-set-var-command inst name value) set-var-command?
-  (inst set-var-command-inst)
+  (make-set-var-command name value) set-var-command?
   (name set-var-command-name)
   (value set-var-command-value)
   )
@@ -280,9 +279,9 @@
       (name value)
       (define wrapped (profun-make-var name value))
       (define old (env-get env name))
-      (define undo-command (make-set-var-command instruction name old))
+      (define undo-command (make-set-var-command name old))
       (when (profun-bound-value? old)
-        (raisu 'operation-rebinds-a-bound-variable instruction name old))
+        (raisu 'operation-rebinds-a-bound-variable name old))
       (env-set! new-env name wrapped)
       undo-command)
      alist/vars))
