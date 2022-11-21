@@ -2,6 +2,7 @@
 %run guile
 
 %var make-hashmap
+%var hashmap?
 %var hashmap->alist
 %var hashmap-copy
 %var hashmap-foreach
@@ -18,7 +19,7 @@
 %var hashmap-merge
 
 %use (fn) "./fn.scm"
-%use (hashmap) "./hashmap.scm"
+%use (hashmap-constructor hashmap-predicate) "./hashmap.scm"
 %use (make-unique) "./make-unique.scm"
 %use (raisu) "./raisu.scm"
 
@@ -26,7 +27,8 @@
 
 (use-modules (ice-9 hash-table))
 
-(define make-hashmap hashmap)
+(define hashmap? hashmap-predicate)
+(define make-hashmap hashmap-constructor)
 (define hashmap-true-ref hash-ref)
 (define hashmap-set! hash-set!)
 (define hashmap-clear! hash-clear!)
@@ -37,7 +39,7 @@
   (hash-map->list cons h))
 
 (define (hashmap-copy h)
-  (let [[ret (hashmap)]]
+  (let [[ret (make-hashmap)]]
     (hash-for-each
      (lambda (key value)
        (hash-set! ret key value))
@@ -79,7 +81,7 @@
 ;; which is equivalent to this alist:
 ;;    '((a . (4 3)) (b . (2)))
 (define (multi-alist->hashmap multi-alist)
-  (let ((ret (hashmap)))
+  (let ((ret (make-hashmap)))
     (for-each
      (lambda (p)
        (define key (car p))
@@ -91,7 +93,7 @@
     ret))
 
 (define (hashmap-map fn H)
-  (define ret (hashmap))
+  (define ret (make-hashmap))
 
   (hashmap-foreach
    (lambda (key value)

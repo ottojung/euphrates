@@ -3,11 +3,10 @@
 
 %var define-property
 
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-set! hashmap-ref) "./ihashmap.scm"
+%use (hashmap-ref hashmap-set! make-hashmap) "./ihashmap.scm"
+%use (make-unique) "./make-unique.scm"
 %use (memconst) "./memconst.scm"
 %use (raisu) "./raisu.scm"
-%use (make-unique) "./make-unique.scm"
 
 ;; NOTE:
 ;; this leaks memory. Only use it for scripts.
@@ -32,7 +31,7 @@
   (syntax-rules ()
     ((_ getter setter H)
      (begin
-       (define H (hashmap))
+       (define H (make-hashmap))
        (define-syntax setter
          (syntax-rules ()
            ((_2 obj value)

@@ -18,8 +18,7 @@
 %use (get-command-line-arguments) "./get-command-line-arguments.scm"
 %use (make-cfg-machine) "./cfg-machine.scm"
 %use (syntax-flatten*) "./syntax-flatten-star.scm"
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (~a) "./tilda-a.scm"
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
@@ -245,7 +244,7 @@
 (define-syntax make-cli/lambda-cli/wrapper
   (syntax-rules ()
     ((_ cli-decl defaults examples helps types exclusives synonyms bodies)
-     (let* ((H (hashmap))
+     (let* ((H (make-hashmap))
             (M (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms)))
        (lambda (args)
          (define errors (M H args))

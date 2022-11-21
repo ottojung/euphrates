@@ -1,15 +1,15 @@
 
 %run guile
 
-%var hashmap
-%var hashmap?
+%var hashmap-constructor
+%var hashmap-predicate
 
 %for (COMPILER "guile")
-(define hashmap make-hash-table)
-(define hashmap? hash-table?)
+(define hashmap-constructor make-hash-table)
+(define hashmap-predicate hash-table?)
 %end
 
 %for (COMPILER "racket")
-(define hashmap make-hash)
-(define hashmap? hash?)
+(define hashmap-constructor make-hash)
+(define hashmap-predicate hash?)
 %end

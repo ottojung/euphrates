@@ -25,9 +25,8 @@
 %use (curry-if) "./curry-if.scm"
 %use (dynamic-thread-async) "./dynamic-thread-async.scm"
 %use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
-%use (hashmap) "./hashmap.scm"
-%use (hashmap->alist hashmap-clear! hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (hashset-add! hashset-clear! hashset-has? make-hashset) "./hashset.scm"
+%use (hashmap->alist hashmap-clear! hashmap-ref hashmap-set! make-hashmap) "./ihashmap.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (list-map/flatten) "./list-map-flatten.scm"
 %use (list-or-map) "./list-or-map.scm"
@@ -63,7 +62,7 @@
 ;; `defined-names' is a hashset of tr-names that are defined in the current network.
 (define (petri-make-transformer defined-names options)
   ;; Hashmap of (cons (cons tr-name arg-arity) arg-index) -> (listof args-at-arg-index)
-  (define todos-work-table (hashmap))
+  (define todos-work-table (make-hashmap))
 
   ;; Deduplication for todos elements
   (define deduplicate?

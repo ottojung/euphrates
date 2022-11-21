@@ -3,9 +3,9 @@
 
 %use (assert=) "./src/assert-equal.scm"
 %use (get-object-descriptor) "./src/get-object-descriptor.scm"
-%use (hashmap) "./src/hashmap.scm"
 %use (hashset) "./src/hashset-obj.scm"
 %use (list->hashset) "./src/hashset.scm"
+%use (make-hashmap) "./src/ihashmap.scm"
 
 (define (test1 name obj)
   (assert=
@@ -15,5 +15,5 @@
 
 (test1 'true #t)
 (test1 'string "hello")
-(test1 'hash-table (hashmap))
+(test1 'hash-table (make-hashmap))
 (test1 'hashset (list->hashset '()))

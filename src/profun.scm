@@ -24,8 +24,7 @@
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
-%use (hashmap) "./hashmap.scm"
-%use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-set-continuation profun-RFC-what profun-RFC?) "./profun-RFC.scm"
@@ -101,7 +100,7 @@
   (set-state-current s #f))
 
 (define (make-database botom-handler)
-  (database-constructor (hashmap) botom-handler))
+  (database-constructor (make-hashmap) botom-handler))
 
 (define (profun-database-copy db)
   (database-constructor
@@ -119,7 +118,7 @@
 (define (double-hashmap-set! H key1 key2 value)
   (define h0 (hashmap-ref H key1 #f))
   (define h
-    (or h0 (begin (let ((h (hashmap)))
+    (or h0 (begin (let ((h (make-hashmap)))
                     (hashmap-set! H key1 h) h))))
   (hashmap-set! h key2 value))
 
@@ -145,7 +144,7 @@
      (append existing (list value)))))
 
 (define (make-env)
-  (hashmap))
+  (make-hashmap))
 (define (env-get env key)
   (if (profun-varname? key)
       (hashmap-ref env key (profun-make-unbound-var key))

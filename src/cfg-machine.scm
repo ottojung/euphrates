@@ -14,8 +14,7 @@
 
 %run guile
 
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (immutable-hashmap) "./immutable-hashmap.scm"
 %use (immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
 %use (~s) "./tilda-s.scm"
@@ -34,7 +33,7 @@
 ;; Injects functions to call regexes in place of (call "name")
 ;; and returns (values new-grammar main)
 (define (inject-calls grammar)
-  (define regexes (hashmap))
+  (define regexes (make-hashmap))
 
   (define call
     (lambda (name/lst hash T cont)

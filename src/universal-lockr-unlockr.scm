@@ -4,8 +4,7 @@
 %var universal-lockr!
 %var universal-unlockr!
 
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set! hashmap-delete!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set! hashmap-delete!) "./ihashmap.scm"
 %use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
 %use (with-critical) "./with-critical.scm"
 %use (make-uni-spinlock-critical) "./uni-spinlock.scm"
@@ -14,7 +13,7 @@
 ;; and do sleep when wait
 (define-values (universal-lockr! universal-unlockr!)
   (let ((critical (make-uni-spinlock-critical))
-        (h (hashmap)))
+        (h (make-hashmap)))
     (values
      (lambda (resource)
        (let ((sleep (dynamic-thread-get-delay-procedure)))

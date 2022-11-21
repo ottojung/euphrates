@@ -5,8 +5,7 @@
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
-%use (hashmap) "./src/hashmap.scm"
-%use (hashmap->alist hashmap-ref) "./src/ihashmap.scm"
+%use (hashmap->alist hashmap-ref make-hashmap) "./src/ihashmap.scm"
 %use (make-regex-machine*) "./src/regex-machine.scm"
 
 (let ()
@@ -17,7 +16,7 @@
                      (or (= 3) (= 2 m k))
                      (and* (any* i))
                      (any y))))
-    (define H (hashmap))
+    (define H (make-hashmap))
     (assert (m H (list 1 2 3 9 8 7)))
 
     (assert=HS
@@ -28,7 +27,7 @@
     (define m (make-regex-machine*
                '(and (* (any* <group1...>))
                      (* (any* <group2...>)))))
-    (define H (hashmap))
+    (define H (make-hashmap))
     (assert (m H (list "a" "b" "c" "d" "e")))
     (assert= (hashmap-ref H '<group1...>)
              '("e" "d" "c" "b" "a")))

@@ -24,8 +24,7 @@
 %use (alphanum/alphabet/index) "./alphanum-alphabet.scm"
 %use (CFG-lang-modifier-char?) "./compile-cfg-cli.scm"
 %use (get-current-program-path) "./get-current-program-path.scm"
-%use (hashmap) "./hashmap.scm"
-%use (hashmap->alist hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap->alist hashmap-ref hashmap-set!) "./ihashmap.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (list-drop-while) "./list-drop-while.scm"
 %use (list-fold) "./list-fold.scm"
@@ -69,7 +68,7 @@
       (list-deduplicate
        (flatten* cli-decl)))
 
-    (define fH (hashmap))
+    (define fH (make-hashmap))
 
     (define _
       (for-each

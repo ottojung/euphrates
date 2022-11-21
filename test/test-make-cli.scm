@@ -4,7 +4,7 @@
 ;; make-cli
 %use (assert) "./src/assert.scm"
 %use (make-cli) "./src/define-cli.scm"
-%use (hashmap) "./src/hashmap.scm"
+%use (make-hashmap) "./src/ihashmap.scm"
 
 (let ()
   (define M
@@ -26,10 +26,10 @@
 
   (assert
    (not
-    (M (hashmap)
+    (M (make-hashmap)
        (list "go" "--param1" "somefile" "june" "5" "the-end"))))
 
-  (assert (not (M2 (hashmap) (list "go"))))
-  (assert (not (M2 (hashmap) (list "go" "--flag1"))))
+  (assert (not (M2 (make-hashmap) (list "go"))))
+  (assert (not (M2 (make-hashmap) (list "go" "--flag1"))))
 
   )

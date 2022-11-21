@@ -1,12 +1,10 @@
 
 %run guile
 
-%use (number-list->number number->number-list) "./number-list.scm"
 %use (alphanum/alphabet alphanum/alphabet/index) "./alphanum-alphabet.scm"
-%use (memconst) "./memconst.scm"
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (fp) "./fp.scm"
 %use (list-span-while) "./list-span-while.scm"
+%use (number->number-list number-list->number) "./number-list.scm"
 %use (raisu) "./raisu.scm"
 
 ;; NOTE: input is a list of characters or a string!

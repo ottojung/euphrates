@@ -2,8 +2,7 @@
 %run guile
 
 %use (make-unique) "./make-unique.scm"
-%use (hashmap) "./hashmap.scm"
-%use (hashmap->alist alist->hashmap hashmap-foreach) "./ihashmap.scm"
+%use (make-hashmap hashmap->alist alist->hashmap hashmap-foreach) "./ihashmap.scm"
 %use (raisu) "./raisu.scm"
 
 %var hash->mdict
@@ -24,7 +23,7 @@
              (raisu 'mdict-key-not-found key h)
              g))]
       [[key value]
-       (let* [[new (hashmap)]]
+       (let* [[new (make-hashmap)]]
          (hashmap-foreach
           (lambda (key value)
             (hash-set! new key value))

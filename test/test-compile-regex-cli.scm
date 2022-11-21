@@ -6,8 +6,7 @@
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
 %use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./src/compile-regex-cli.scm"
-%use (hashmap) "./src/hashmap.scm"
-%use (hashmap->alist) "./src/ihashmap.scm"
+%use (hashmap->alist make-hashmap) "./src/ihashmap.scm"
 %use (make-regex-machine*) "./src/regex-machine.scm"
 
 (let ()
@@ -25,7 +24,7 @@
     (define M
       (make-regex-machine* Regex))
 
-    (define H (hashmap))
+    (define H (make-hashmap))
     (define R (M H (list "go" "--flag1" "somefile" "june" "5" "the-end")))
 
     (assert=
