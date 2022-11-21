@@ -17,14 +17,12 @@
 ;; This is a hashmap that is optimized for read and copy
 ;; It makes a new copy on each write
 
-%var immutable-hashmap
-%var immutable-hashmap-fromlist
-%var immutable-hashmap?
+%var immutable-hashmap-constructor
+%var immutable-hashmap-predicate
 %var immutable-hashmap-value
 
-%use (define-newtype) "./define-newtype.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-newtype immutable-hashmap-fromlist immutable-hashmap? immutable-hashmap-value)
-
-(define (immutable-hashmap)
-  (immutable-hashmap-fromlist '()))
+(define-type9 immutable-hashmap
+  (immutable-hashmap-constructor value) immutable-hashmap-predicate
+  (value immutable-hashmap-value))

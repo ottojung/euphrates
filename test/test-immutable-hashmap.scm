@@ -3,11 +3,10 @@
 
 ;; immutable-hashmap
 %use (assert=) "./src/assert-equal.scm"
-%use (immutable-hashmap-ref immutable-hashmap-set) "./src/i-immutable-hashmap.scm"
-%use (immutable-hashmap) "./src/immutable-hashmap.scm"
+%use (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set) "./src/i-immutable-hashmap.scm"
 
 (let ()
-  (define H (immutable-hashmap))
+  (define H (make-immutable-hashmap))
   (define H2 (immutable-hashmap-set H 'a 5))
   (define H3 (immutable-hashmap-set H2 'b 9))
   (define H4 (immutable-hashmap-set H3 'a 7))

@@ -14,9 +14,9 @@
 
 %run guile
 
-%use (immutable-hashmap immutable-hashmap-fromlist immutable-hashmap-value) "./immutable-hashmap.scm"
-%use (assoc/any) "./assoc-any.scm"
-
+%var make-immutable-hashmap
+%var immutable-hashmap?
+%var immutable-hashmap-fromlist
 %var immutable-hashmap->alist
 %var immutable-hashmap-copy
 %var immutable-hashmap-foreach
@@ -27,6 +27,18 @@
 %var immutable-hashmap-set
 %var immutable-hashmap-clear
 %var immutable-hashmap-count
+
+%use (assoc/any) "./assoc-any.scm"
+%use (fn) "./fn.scm"
+%use (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value) "./immutable-hashmap-obj.scm"
+
+(define immutable-hashmap? immutable-hashmap-predicate)
+
+(define (make-immutable-hashmap)
+  (immutable-hashmap-constructor '()))
+
+(define (immutable-hashmap-fromlist lst)
+  (immutable-hashmap-constructor lst))
 
 (define (alist->immutable-hashmap L)
   (immutable-hashmap-fromlist L))
@@ -58,7 +70,7 @@
                (loop (cdr H) (cons x buf))))))))
 
 (define (immutable-hashmap-clear T)
-  (immutable-hashmap))
+  (make-immutable-hashmap))
 
 (define (immutable-hashmap-foreach fn T)
   (define H (immutable-hashmap-value T))
