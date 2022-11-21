@@ -27,7 +27,7 @@
 %use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
 %use (hashmap) "./hashmap.scm"
 %use (hashmap->alist hashmap-clear! hashmap-ref hashmap-set!) "./ihashmap.scm"
-%use (hashset-add! hashset-clear! hashset-has? make-hashset) "./ihashset.scm"
+%use (hashset-add! hashset-clear! hashset-has? make-hashset) "./hashset.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (list-map/flatten) "./list-map-flatten.scm"
 %use (list-or-map) "./list-or-map.scm"

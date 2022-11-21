@@ -4,7 +4,7 @@
 %var list-deduplicate/reverse
 %var list-deduplicate
 
-%use (hashset-add! hashset-has? make-hashset) "./ihashset.scm"
+%use (hashset-add! hashset-has? make-hashset) "./hashset.scm"
 
 ;; faster!
 (define list-deduplicate/reverse

@@ -3,7 +3,7 @@
 
 ;; hashset-negative
 %use (assert) "./src/assert.scm"
-%use (hashset-equal? make-hashset) "./src/ihashset.scm"
+%use (hashset-equal? make-hashset) "./src/hashset.scm"
 
 (let ()
   (assert

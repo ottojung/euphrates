@@ -5,7 +5,7 @@
 
 %use (directory-files-rec) "./directory-files-rec.scm"
 %use (file-mtime) "./file-mtime.scm"
-%use (list->hashset) "./ihashset.scm"
+%use (list->hashset) "./hashset.scm"
 %use (with-ignore-errors!) "./with-ignore-errors.scm"
 
 ;; returns set of all files from the directory and their modification times

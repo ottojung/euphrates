@@ -5,7 +5,7 @@
 %use (get-object-descriptor) "./src/get-object-descriptor.scm"
 %use (hashmap) "./src/hashmap.scm"
 %use (hashset) "./src/hashset-obj.scm"
-%use (list->hashset) "./src/ihashset.scm"
+%use (list->hashset) "./src/hashset.scm"
 
 (define (test1 name obj)
   (assert=

@@ -34,7 +34,7 @@
 %var CFG-CLI->CFG-lang
 %var CFG-lang-modifier-char?
 
-%use (hashset-has? make-hashset) "./ihashset.scm"
+%use (hashset-has? make-hashset) "./hashset.scm"
 %use (CFG-CLI->CFG-AST) "./parse-cfg-cli.scm"
 %use (raisu) "./raisu.scm"
 %use (~a) "./tilda-a.scm"

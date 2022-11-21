@@ -3,7 +3,7 @@
 
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
-%use (list->hashset) "./src/ihashset.scm"
+%use (list->hashset) "./src/hashset.scm"
 %use (deserialize/human serialize/human) "./src/serialization-human.scm"
 
 (use-modules (ice-9 pretty-print))

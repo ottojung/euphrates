@@ -4,7 +4,7 @@
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
 %use (hashset) "./src/hashset-obj.scm"
-%use (list->hashset) "./src/ihashset.scm"
+%use (list->hashset) "./src/hashset.scm"
 %use (deserialize/runnable serialize/runnable) "./src/serialization-runnable.scm"
 
 (use-modules (ice-9 pretty-print))
