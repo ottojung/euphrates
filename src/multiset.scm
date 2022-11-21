@@ -1,11 +1,12 @@
 
 %run guile
 
-%var multiset
-%var multiset?
+%var multiset-constructor
+%var multiset-predicate
 %var multiset-value
 
-%use (define-newtype) "./define-newtype.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-newtype multiset multiset? multiset-value)
-
+(define-type9 multiset
+  (multiset-constructor value) multiset-predicate
+  (value multiset-value))

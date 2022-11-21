@@ -1,11 +1,12 @@
 
 %run guile
 
-%use (multiset multiset-value) "./multiset.scm"
-%use (make-hashmap hashmap-ref hashmap-set! hashmap-count hashmap-foreach hashmap->alist) "./hashmap.scm"
+%use (hashmap->alist hashmap-count hashmap-foreach hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
+%use (multiset-constructor multiset-predicate multiset-value) "./multiset.scm"
 %use (raisu) "./raisu.scm"
 
 %var make-multiset
+%var multiset?
 %var list->multiset
 %var vector->multiset
 %var multiset->list
@@ -14,8 +15,10 @@
 %var multiset-add!
 %var multiset-filter
 
+(define multiset? multiset-predicate)
+
 (define (list->multiset lst)
-  (multiset
+  (multiset-constructor
    (let ((H (make-hashmap)))
      (for-each
       (lambda (key)
@@ -24,7 +27,7 @@
      H)))
 
 (define (vector->multiset v)
-  (multiset
+  (multiset-constructor
    (let ((H (make-hashmap)))
      (let loop ((i (- (vector-length v) 1)))
        (when (>= i 0)
