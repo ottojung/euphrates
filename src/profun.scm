@@ -154,8 +154,6 @@
       (hashmap-delete! env key)))
 (define (env-unset! env key)
   (hashmap-delete! env key))
-(define (env-copy env)
-  (hashmap-copy env))
 
 ;; returns instruction or #f
 (define (get-alternative-instruction db s)
