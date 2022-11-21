@@ -62,12 +62,11 @@
   )
 
 (define-type9 <state>
-  (state-constructor a b c d e) state?
+  (state-constructor a b c d) state?
   (a state-current) ;; current `instruction`
   (b state-stack) ;; list of `instruction`s
-  (c state-env) ;; hashmap of `variable`s
-  (d state-failstate) ;; `state` to go to if this `state` fails. Initially #f
-  (e state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
+  (c state-failstate) ;; `state` to go to if this `state` fails. Initially #f
+  (d state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
   )
 
 (define-type9 <set-var-command>
@@ -80,7 +79,6 @@
   (state-constructor
    start-instruction
    (list) ;; stack
-   (make-env) ;; env
    #f ;; failstate
    '()
    ))
@@ -93,7 +91,6 @@
     (state-constructor
      instruction
      stack
-     (state-env s)
      (state-failstate s)
      (state-undo s)
      ))))
@@ -234,7 +231,6 @@
     (state-constructor
      replaced
      (cons instruction (state-stack s))
-     (state-env s)
      s ;; failstate
      '()
      ))
@@ -269,8 +265,6 @@
   (define alist/vars
     (profun-accept-alist ret))
 
-  (define new-env env)
-
   (define new-undo-list
     (map
      (fn-pair
@@ -280,7 +274,7 @@
       (define undo-command (make-set-var-command name old))
       (when (profun-bound-value? old)
         (raisu 'operation-rebinds-a-bound-variable name old))
-      (env-set! new-env name wrapped)
+      (env-set! env name wrapped)
       undo-command)
      alist/vars))
 
@@ -288,12 +282,11 @@
    (state-constructor
     instruction
     (state-stack s0)
-    new-env
     new-failstate
     new-undo-list
     )))
 
-(define (handle-accept s env instruction args ret)
+(define (handle-accept env s instruction args ret)
   (if (and (not (profun-accept-ctx-changed? ret))
            (null? (profun-accept-alist ret)))
       (continue s)
@@ -341,7 +334,7 @@
   ;; FIXME: set backtracking history to empty.
   (set-state-current s0 new-current new-stack))
 
-(define (handle-RFC db s ret)
+(define (handle-RFC db env s ret)
   (define continuation
     (lambda (continue? db-additions instruction-prefix)
       (define new-db (profun-database-copy db))
@@ -350,12 +343,11 @@
             (add-prefix-to-instruction new-db s instruction-prefix)
             (set-remaining-instructions s instruction-prefix)))
       (for-each (comp (profun-database-add-rule! new-db)) db-additions)
-      (profun-run new-db new-s)))
+      (profun-run new-db env new-s)))
 
   (profun-RFC-set-continuation ret continuation))
 
-(define (enter-foreign db s instruction)
-  (define env (state-env s))
+(define (enter-foreign db env s instruction)
   (define sign (instruction-sign instruction))
   (define handler (cdr sign))
   (define func (profun-op-procedure handler))
@@ -366,11 +358,11 @@
 
   (cond
    ((profun-reject? ret)
-    (backtrack db s))
+    (backtrack db env s))
    ((profun-accept? ret)
-    (handle-accept s env instruction args ret))
+    (handle-accept env s instruction args ret))
    ((profun-RFC? ret)
-    (handle-RFC db s ret))
+    (handle-RFC db env s ret))
    (else
     (raisu 'bad-type-of-object-returned-from-foreign ret))))
 
@@ -389,7 +381,7 @@
             (car (state-stack s))
             (cdr (state-stack s)))))))
 
-(define (apply-instruction db s)
+(define (apply-instruction db env s)
   (define instruction (state-current s))
   (define key (instruction-sign instruction))
   (define arity (instruction-arity instruction))
@@ -398,14 +390,13 @@
   (if target-rule
       (enter-subroutine s instruction target-rule)
       (if (instruction-context instruction)
-          (enter-foreign db s instruction)
+          (enter-foreign db env s instruction)
           (let ((target-rule (database-handle db key arity)))
             (if target-rule
-                (enter-foreign db s (init-foreign-instruction instruction target-rule))
+                (enter-foreign db env s (init-foreign-instruction instruction target-rule))
                 (make-profun-IDR key arity))))))
 
-(define (run-undos s)
-  (define env (state-env s))
+(define (run-undos env s)
   (for-each
    (lambda (undo-command)
      (cond
@@ -417,24 +408,24 @@
        (raisu 'unknown-undo-command undo-command))))
    (state-undo s)))
 
-(define (backtrack db initial-state)
-  (run-undos initial-state)
+(define (backtrack db env initial-state)
+  (run-undos env initial-state)
   (let lp ((s (state-failstate initial-state)))
     (if (not s) #f
         (let ((alt (get-alternative-instruction db s)))
           (case alt
             ((#f)
-             (run-undos s)
+             (run-undos env s)
              (lp (state-failstate s)))
             (else (set-state-current s alt)))))))
 
-(define (eval-state db initial-state)
+(define (eval-state db env initial-state)
   (define new-state
-    (apply-instruction db initial-state))
+    (apply-instruction db env initial-state))
 
   (if (state-final? new-state)
       new-state
-      (eval-state db new-state)))
+      (eval-state db env new-state)))
 
 (define (build-body/next body next)
   (define rev (reverse body))
@@ -503,12 +494,12 @@
   (for-each (comp (profun-database-add-rule! db)) lst-of-rules)
   db)
 
-(define (profun-run db initial-state)
-  (define (backtrack-eval db s)
-    (let ((b (backtrack db s)))
-      (and b (eval-state db b))))
+(define (profun-run db env initial-state)
+  (define (backtrack-eval db env s)
+    (let ((b (backtrack db env s)))
+      (and b (eval-state db env b))))
   (define (take-vars s)
-    (hashmap->alist (state-env s)))
+    (hashmap->alist env))
 
   (define current-state #t)
 
@@ -516,17 +507,17 @@
     (define copy current-state)
     (set! current-state
           (if (equal? #t last-state) #f
-              (backtrack-eval db last-state)))
+              (backtrack-eval db env last-state)))
     copy)
 
   (lambda _
     (define last-state current-state)
     (case current-state
       ((#t)
-       (set! current-state (eval-state db initial-state)))
+       (set! current-state (eval-state db env initial-state)))
       ((#f) #f)
       (else
-       (set! current-state (backtrack-eval db current-state))))
+       (set! current-state (backtrack-eval db env current-state))))
 
     (cond
      ((state? current-state)
@@ -550,7 +541,8 @@
 (define (profun-run-query db query)
   (define start-instruction (build-body query))
   (define initial-state (make-state start-instruction))
-  (profun-run db initial-state))
+  (define env (make-env))
+  (profun-run db env initial-state))
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists
