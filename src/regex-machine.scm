@@ -14,7 +14,7 @@
 
 %run guile
 
-%use (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
+%use (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./immutable-hashmap.scm"
 %use (hashmap-set!) "./hashmap.scm"
 
 ;;

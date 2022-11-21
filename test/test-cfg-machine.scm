@@ -5,7 +5,7 @@
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (assert) "./src/assert.scm"
 %use (make-cfg-machine) "./src/cfg-machine.scm"
-%use (immutable-hashmap->alist) "./src/i-immutable-hashmap.scm"
+%use (immutable-hashmap->alist) "./src/immutable-hashmap.scm"
 
 (let ()
   (let ()

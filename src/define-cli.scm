@@ -23,7 +23,7 @@
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"
 %use (CFG-AST->CFG-CLI-help) "./compile-cfg-cli-help.scm"
-%use (alist->immutable-hashmap immutable-hashmap-ref/first immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
+%use (alist->immutable-hashmap immutable-hashmap-ref/first immutable-hashmap-foreach) "./immutable-hashmap.scm"
 %use (define-pair) "./define-pair.scm"
 
 %var make-cli/f/basic
