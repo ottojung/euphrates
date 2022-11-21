@@ -18,6 +18,7 @@
 %use (profun-op*) "./src/profun-op-mult.scm"
 %use (profun-op+) "./src/profun-op-plus.scm"
 %use (profun-op-separate) "./src/profun-op-separate.scm"
+%use (profun-op-sqrt) "./src/profun-op-sqrt.scm"
 %use (profun-op-true) "./src/profun-op-true.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-create-database profun-eval-query profun-run-query) "./src/profun.scm"
@@ -73,6 +74,7 @@
        (!= profun-op-separate)
        (+ profun-op+)
        (* profun-op*)
+       (sqrt profun-op-sqrt)
        (< profun-op-less)
        (divisible profun-op-divisible)
        (apply profun-op-apply)
@@ -265,6 +267,19 @@
    (test '((* 0 3 z)) '(((z . 0))))
    (test '((* 0 y 6)) '())
    (test '((* x 3 6)) '(((x . 2))))
+   )
+
+  (test-definitions
+   "SQRT CASES"
+   '()
+
+   (test '((sqrt 9 3)) '(()))
+   (test '((sqrt 10 3)) '())
+   (test '((sqrt 0 3)) '())
+   (test '((sqrt 1 3)) '())
+
+   (test '((sqrt 9 y)) '(((y . 3))))
+   (test '((sqrt x 3)) '(((x . 9))))
    )
 
   (test-definitions
