@@ -19,7 +19,7 @@
 %var hashmap-merge
 
 %use (fn) "./fn.scm"
-%use (hashmap-constructor hashmap-predicate) "./hashmap.scm"
+%use (hashmap-constructor hashmap-predicate) "./hashmap-obj.scm"
 %use (make-unique) "./make-unique.scm"
 %use (raisu) "./raisu.scm"
 

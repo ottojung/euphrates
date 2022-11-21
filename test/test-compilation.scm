@@ -142,7 +142,7 @@
 %use (get-object-descriptor) "./src/get-object-descriptor.scm"
 %use (global-debug-mode-filter) "./src/global-debug-mode-filter.scm"
 %use (group-by/sequential group-by/sequential*) "./src/group-by-sequential.scm"
-%use (hashmap-constructor hashmap-predicate) "./src/hashmap.scm"
+%use (hashmap-constructor hashmap-predicate) "./src/hashmap-obj.scm"
 %use (hashset hashset-value hashset?) "./src/hashset-obj.scm"
 %use (hashset->list hashset-add! hashset-clear! hashset-delete! hashset-difference hashset-equal? hashset-foreach hashset-has? hashset-intersection hashset-length hashset-map hashset-ref hashset-union list->hashset make-hashset vector->hashset) "./src/hashset.scm"
 %use (alist->immutable-hashmap immutable-hashmap->alist immutable-hashmap-clear immutable-hashmap-copy immutable-hashmap-count immutable-hashmap-foreach immutable-hashmap-map immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set) "./src/i-immutable-hashmap.scm"
