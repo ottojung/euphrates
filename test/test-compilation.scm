@@ -236,7 +236,7 @@
 %use (monadstate-current/p) "./src/monadstate-current-p.scm"
 %use (monadstate-arg monadstate-args monadstate-cret monadstate-cret/thunk monadstate-handle-multiple monadstate-lval monadstate-make-empty monadstate-qtags monadstate-qval monadstate-qvar monadstate-replicate-multiple monadstate-ret monadstate-ret/thunk monadstate?) "./src/monadstate.scm"
 %use (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?) "./src/monadstateobj.scm"
-%use (multiset-constructor multiset-predicate multiset-value) "./src/multiset.scm"
+%use (multiset-constructor multiset-predicate multiset-value) "./src/multiset-obj.scm"
 %use (node/directed node/directed-children node/directed-label node/directed? set-node/directed-children! set-node/directed-label!) "./src/node-directed-obj.scm"
 %use (make-node/directed) "./src/node-directed.scm"
 %use (np-thread-obj np-thread-obj-cancel-enabled? np-thread-obj-cancel-scheduled? np-thread-obj-continuation np-thread-obj? set-np-thread-obj-cancel-scheduled?! set-np-thread-obj-continuation!) "./src/np-thread-obj.scm"

@@ -2,7 +2,7 @@
 %run guile
 
 %use (hashmap->alist hashmap-count hashmap-foreach hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
-%use (multiset-constructor multiset-predicate multiset-value) "./multiset.scm"
+%use (multiset-constructor multiset-predicate multiset-value) "./multiset-obj.scm"
 %use (raisu) "./raisu.scm"
 
 %var make-multiset
