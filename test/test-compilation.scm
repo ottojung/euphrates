@@ -143,7 +143,7 @@
 %use (global-debug-mode-filter) "./src/global-debug-mode-filter.scm"
 %use (group-by/sequential group-by/sequential*) "./src/group-by-sequential.scm"
 %use (hashmap hashmap?) "./src/hashmap.scm"
-%use (hashset hashset-value hashset?) "./src/hashset.scm"
+%use (hashset hashset-value hashset?) "./src/hashset-obj.scm"
 %use (alist->immutable-hashmap immutable-hashmap->alist immutable-hashmap-clear immutable-hashmap-copy immutable-hashmap-count immutable-hashmap-foreach immutable-hashmap-map immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set) "./src/i-immutable-hashmap.scm"
 %use (identity-monad) "./src/identity-monad.scm"
 %use (identity*) "./src/identity-star.scm"
