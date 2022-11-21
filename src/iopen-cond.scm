@@ -1,19 +1,26 @@
 
 %run guile
 
-%use (open-cond) "./open-cond.scm"
+%use (open-cond-constructor open-cond-predicate open-cond-value set-open-cond-value!) "./open-cond-obj.scm"
 
 %var define-open-cond
+%var open-cond?
 %var define-open-cond-instance
 %var open-cond-lambda
 
-(define-syntax-rule (define-open-cond name)
-  (define name (open-cond '())))
+(define open-cond? open-cond-predicate)
 
-(define-syntax-rule (define-open-cond-instance open-cond function)
-  (set-open-cond-value!
-   open-cond
-   (cons function (open-cond-value open-cond))))
+(define-syntax define-open-cond
+  (syntax-rules ()
+    ((_ name)
+     (define name (open-cond-constructor '())))))
+
+(define-syntax define-open-cond-instance
+  (syntax-rules ()
+    ((_ open-cond function)
+     (set-open-cond-value!
+      open-cond
+      (cons function (open-cond-value open-cond))))))
 
 (define-syntax open-cond-lambda
   (syntax-rules ()
