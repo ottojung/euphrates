@@ -12,6 +12,7 @@
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
 %use (profun-apply-fail! profun-apply-return! profun-op-apply) "./src/profun-op-apply.scm"
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
+%use (profun-op-equals) "./src/profun-op-equals.scm"
 %use (profun-eval-fail! profun-op-eval) "./src/profun-op-eval.scm"
 %use (profun-op-false) "./src/profun-op-false.scm"
 %use (profun-op-less) "./src/profun-op-less.scm"
@@ -62,23 +63,26 @@
        (let () . body)))))
 
   ;;;;;;;;;;;
-;; TESTS ;;
+  ;; TESTS ;;
   ;;;;;;;;;;;
 
 (parameterize
     ((current-handler
       (profun-make-handler
        (= profun-op-unify)
+       (!= profun-op-separate)
        (true profun-op-true)
        (false profun-op-false)
-       (!= profun-op-separate)
        (+ profun-op+)
        (* profun-op*)
        (sqrt profun-op-sqrt)
        (< profun-op-less)
        (divisible profun-op-divisible)
+       (equals profun-op-equals)
+
        (apply profun-op-apply)
        (eval profun-op-eval)
+
        (favorite (profun-make-set (list 777 2 9 3)))
        (favorite2 (profun-make-tuple-set (a b) '((777 2) (#t 9) (3 #f))))
        )))
@@ -216,6 +220,14 @@
    )
 
   (test-definitions
+   "UNIQUENESS"
+   '(((foo 1))
+     ((foo 2)))
+
+   (test '((foo x) (foo y) (!= x y)) '(((x . 1) (y . 2)) ((x . 2) (y . 1))))
+   )
+
+  (test-definitions
    "TRUTH"
    '()
 
@@ -227,14 +239,6 @@
    '()
 
    (test '((false)) '())
-   )
-
-  (test-definitions
-   "UNIQUENESS"
-   '(((foo 1))
-     ((foo 2)))
-
-   (test '((foo x) (foo y) (!= x y)) '(((x . 1) (y . 2)) ((x . 2) (y . 1))))
    )
 
   (test-definitions
@@ -314,6 +318,26 @@
    (test '((divisible 10 x)) '(((x . 1)) ((x . 2)) ((x . 5)) ((x . 10))))
    (test '((divisible 12 x)) '(((x . 1)) ((x . 2)) ((x . 3)) ((x . 4)) ((x . 6)) ((x . 12))))
    (test '((< x 12) (divisible 12 x)) '(((x . 6)) ((x . 4)) ((x . 3)) ((x . 2)) ((x . 1))))
+   )
+
+  (test-definitions
+   "equals CASES"
+   '()
+
+   (test '((equals (((X . 1))))) '(((X . 1))))
+   (test '((equals (((Y . 2) (X . 1))))) '(((Y . 2) (X . 1))))
+   (test '((equals (((Y . 2) (X . 1))
+                    ((Y . 3) (X . 4)))))
+         '(((Y . 2) (X . 1))
+           ((Y . 3) (X . 4))))
+   (test '((equals (((Y . 2) (X . 1))
+                    ((Y . 3) (X . 4))
+                    ((Y . 5) (X . 6))
+                    )))
+         '(((Y . 2) (X . 1))
+           ((Y . 3) (X . 4))
+           ((Y . 5) (X . 6))
+           ))
    )
 
   (test-definitions
