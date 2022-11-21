@@ -32,6 +32,13 @@
 ;;   B: its, Y = 3.
 ;;   A: bye.
 ;;
+;;   (A continues)
+;;   A: whats, X = 9, sqrt(X, Y).
+;;   B: its, Y = 3.
+;;   A: whats, Y = 4, sqrt(X, Y).
+;;   B: its, X = 16.
+;;   A: bye.
+;;
 ;;   (A makes a typo)
 ;;   A: whats, X = 9, swrt(X, Y).
 ;;   B: i-dont-recognize, swrt, 2.

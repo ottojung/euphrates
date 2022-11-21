@@ -13,6 +13,7 @@
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-create-database) "./src/profun.scm"
 %use (make-profune-communicator profune-communicator-handle) "./src/profune-communicator.scm"
+%use (raisu) "./src/raisu.scm"
 
 (define server-handler
   (profun-make-handler
@@ -36,77 +37,76 @@
 (define db1
   (profun-create-database server-handler definitions1))
 
-(let ()
-  (define c1
-    (make-profune-communicator db1))
+(define (test-dialog sentences)
+  (define comm (make-profune-communicator db1))
 
-  (define got1
-    (profune-communicator-handle c1 '(whats (person X))))
+  (unless (= 0 (remainder (length sentences) 2))
+    (raisu 'must-be-even-number-of-sentences (length sentences)))
 
-  (assert= got1 `(its (equals (((X . "bart"))))))
+  (let loop ((sentences sentences))
+    (unless (null? sentences)
+      (let ()
+        (define a (list-ref sentences 0))
+        (define b (list-ref sentences 1))
+        (define ans
+          (profune-communicator-handle comm a))
+        (assert= b ans)
+        (loop (cdr (cdr sentences)))))))
 
-  (define got2
-    (profune-communicator-handle c1 '(more (2))))
+(test-dialog
+ '((whats (sqrt 9 Y))
+   (its (equals (((Y . 3)))))
+   ))
 
-  (assert= got2 `(its (equals (((X . "lisa")) ((X . "megie"))))))
+(test-dialog
+ '((whats (= X 9) (sqrt X Y))
+   (its (equals (((Y . 3) (X . 9)))))
+   ))
 
-  (define got3
-    (profune-communicator-handle c1 '(more (100))))
+(test-dialog
+ '((whats (= X 9) (sqrt X Y) more (2))
+   (its (equals (((Y . 3) (X . 9)))))
+   ))
 
-  (assert= got3 `(its (equals (((X . "homer")) ((X . "marge"))))))
+(test-dialog
+ '((whats (= X 9) (sqrt X Y))
+   (its (equals (((Y . 3) (X . 9)))))
+   (whats (= Y 4) (sqrt X Y))
+   (its (equals (((Y . 4) (X . 16)))))
+   ))
 
-  (define got4
-    (profune-communicator-handle c1 '(more (50))))
+(test-dialog
+ '((whats (sqrt X Y))
+   (whats (value (or X Y)))
+   (its (= X 9))
+   (its (equals (((Y . 3) (X . 9)))))
+   ))
 
-  (assert= got4 `(its (equals ())))
+(test-dialog
+ '((whats (= X 10) (sqrt X Y))
+   (its (equals ()))
+   ))
 
-  (define got5
-    (profune-communicator-handle c1 '(more (40))))
+(test-dialog
+ '((whats (person X))
+   (its (equals (((X . "bart")))))
+   (more (2))
+   (its (equals (((X . "lisa")) ((X . "megie")))))
+   (more (100))
+   (its (equals (((X . "homer")) ((X . "marge")))))
+   (more (50))
+   (its (equals ()))
+   (more (40))
+   (its (equals ()))
+   ))
 
-  (assert= got5 `(its (equals ())))
-
-  )
-
-(let ()
-  (define c1
-    (make-profune-communicator db1))
-
-  (define got1
-    (profune-communicator-handle c1 '(whats (person X) more (2))))
-
-  (assert= got1 `(its (equals (((X . "bart")) ((X . "lisa")) ((X . "megie"))))))
-
-  (define got2
-    (profune-communicator-handle c1 '(more (100))))
-
-  (assert= got2 `(its (equals (((X . "homer")) ((X . "marge"))))))
-
-  (define got3
-    (profune-communicator-handle c1 '(more (50))))
-
-  (assert= got3 `(its (equals ())))
-
-  (define got4
-    (profune-communicator-handle c1 '(more (40))))
-
-  (assert= got4 `(its (equals ())))
-
-  )
-
-(let ()
-  (define c1
-    (make-profune-communicator db1))
-
-  (define got1
-    (profune-communicator-handle c1 '(whats (sqrt X Y) more (2))))
-
-  (assert= got1 '(whats (value (or X Y))))
-
-  (define got2
-    (profune-communicator-handle c1 '(its (= X 9))))
-
-  (assert= got2 '(its (equals (((Y . 3) (X . 9))))))
-
-  )
-
-
+(test-dialog
+ '((whats (person X) more (2))
+   (its (equals (((X . "bart")) ((X . "lisa")) ((X . "megie")))))
+   (more (100))
+   (its (equals (((X . "homer")) ((X . "marge")))))
+   (more (50))
+   (its (equals ()))
+   (more (40))
+   (its (equals ()))
+   ))
