@@ -79,8 +79,18 @@
 
 (define (hashset-has? H key)
   (hash-ref (hashset-value H) key #f))
-(define (hashset-ref H key)
-  (hash-ref (hashset-value H) key #f))
+
+(define-syntax hashset-ref
+  (syntax-rules ()
+    ((_ H key0)
+     (let ((key key0))
+       (hashset-ref
+        H key
+        (raisu 'hashset-key-not-found key))))
+    ((_ H key default)
+     (let ((get (hash-ref (hashset-value H) key #f)))
+       (or get default)))))
+
 (define (hashset-add! H key)
   (hash-set! (hashset-value H) key #t))
 

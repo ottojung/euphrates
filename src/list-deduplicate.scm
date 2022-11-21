@@ -4,7 +4,7 @@
 %var list-deduplicate/reverse
 %var list-deduplicate
 
-%use (make-hashset hashset-ref hashset-add!) "./ihashset.scm"
+%use (hashset-add! hashset-has? make-hashset) "./ihashset.scm"
 
 ;; faster!
 (define list-deduplicate/reverse
@@ -14,7 +14,7 @@
     (let ((H (make-hashset)))
       (let lp ((buf lst) (mem '()))
         (cond ((null? buf) mem)
-              ((hashset-ref H (projection (car buf)))
+              ((hashset-has? H (projection (car buf)))
                (lp (cdr buf) mem))
               (else
                (hashset-add! H (projection (car buf)))
@@ -27,7 +27,7 @@
     (let ((H (make-hashset)))
       (let lp ((buf lst) (mem '()))
         (cond ((null? buf) (reverse mem))
-              ((hashset-ref H (projection (car buf)))
+              ((hashset-has? H (projection (car buf)))
                (lp (cdr buf) mem))
               (else
                (hashset-add! H (projection (car buf)))

@@ -34,10 +34,10 @@
 %var CFG-CLI->CFG-lang
 %var CFG-lang-modifier-char?
 
-%use (~a) "./tilda-a.scm"
-%use (raisu) "./raisu.scm"
-%use (make-hashset hashset-ref hashset->list) "./ihashset.scm"
+%use (hashset-has? make-hashset) "./ihashset.scm"
 %use (CFG-CLI->CFG-AST) "./parse-cfg-cli.scm"
+%use (raisu) "./raisu.scm"
+%use (~a) "./tilda-a.scm"
 
 (define (CFG-lang-modifier-char->CFG-function c)
   (case c
@@ -87,7 +87,7 @@
 
     (define initial
       (cond
-       ((hashset-ref production-names stripped)
+       ((hashset-has? production-names stripped)
         (list 'call (string->symbol stripped)))
        ((placeholder-word? stripped)
         (if (multi-word? stripped)

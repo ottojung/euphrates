@@ -20,24 +20,24 @@
 %var petri-push
 %var petri-run
 
-%use (hashmap) "./hashmap.scm"
-%use (hashmap-ref hashmap-set! multi-alist->hashmap hashmap->alist hashmap-clear!) "./ihashmap.scm"
-%use (make-hashset hashset-add! hashset-ref hashset-clear!) "./ihashset.scm"
-%use (range) "./range.scm"
-%use (list-or-map) "./list-or-map.scm"
-%use (catch-any) "./catch-any.scm"
 %use (cartesian-product/g) "./cartesian-product-g.scm"
-%use (list-map/flatten) "./list-map-flatten.scm"
-%use (list-deduplicate) "./list-deduplicate.scm"
-%use (petri-net-obj petri-net-obj? petri-net-obj-transitions petri-net-obj-queue petri-net-obj-critical petri-net-obj-finished? set-petri-net-obj-finished?!) "./petri-net-obj.scm"
-%use (raisu) "./raisu.scm"
-%use (stack-make stack-unload! stack-push! stack-pop!) "./stack.scm"
-%use (with-critical) "./with-critical.scm"
-%use (dynamic-thread-yield) "./dynamic-thread-yield.scm"
-%use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
-%use (dynamic-thread-async) "./dynamic-thread-async.scm"
+%use (catch-any) "./catch-any.scm"
 %use (curry-if) "./curry-if.scm"
+%use (dynamic-thread-async) "./dynamic-thread-async.scm"
+%use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
+%use (hashmap) "./hashmap.scm"
+%use (hashmap->alist hashmap-clear! hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (hashset-add! hashset-clear! hashset-has? make-hashset) "./ihashset.scm"
+%use (list-deduplicate) "./list-deduplicate.scm"
+%use (list-map/flatten) "./list-map-flatten.scm"
+%use (list-or-map) "./list-or-map.scm"
 %use (patri-handle-make-callback) "./petri-error-handling.scm"
+%use (petri-net-obj-critical petri-net-obj-finished? petri-net-obj-queue petri-net-obj-transitions petri-net-obj? set-petri-net-obj-finished?!) "./petri-net-obj.scm"
+%use (queue) "./queue-obj.scm"
+%use (raisu) "./raisu.scm"
+%use (range) "./range.scm"
+%use (stack-make stack-pop! stack-push! stack-unload!) "./stack.scm"
+%use (with-critical) "./with-critical.scm"
 
 (define petri-push/p
   (make-parameter #f))
@@ -75,7 +75,7 @@
   (define names-queue '())
   (define names-hashset (make-hashset))
   (define (add-name-to-names-queue! name)
-    (unless (hashset-ref names-hashset name)
+    (unless (hashset-has? names-hashset name)
       (hashset-add! names-hashset name)
       (set! names-queue (cons name names-queue))))
 
@@ -84,7 +84,7 @@
     (define arity (length args))
     (define name (cons tr-name arity))
 
-    (when (hashset-ref defined-names name)
+    (when (hashset-has? defined-names name)
       (add-name-to-names-queue! name)
       (let loop ((args args) (i 0))
         (unless (null? args)
