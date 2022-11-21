@@ -13,6 +13,7 @@
 %var hashset-length
 %var hashset->list
 %var hashset-equal?
+%var hashset-has?
 %var hashset-ref
 %var hashset-add!
 %var hashset-difference
@@ -76,6 +77,8 @@
                  (hashmap-count B))
          (each-is-equal? A B))))
 
+(define (hashset-has? H key)
+  (hash-ref (hashset-value H) key #f))
 (define (hashset-ref H key)
   (hash-ref (hashset-value H) key #f))
 (define (hashset-add! H key)
