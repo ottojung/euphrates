@@ -2,8 +2,8 @@
 %run guile
 
 %use (fn) "./fn.scm"
-%use (hashset hashset-value) "./hashset-obj.scm"
-%use (make-hashmap hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set!) "./hashmap.scm"
+%use (hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set! make-hashmap) "./hashmap.scm"
+%use (hashset-constructor hashset-predicate hashset-value) "./hashset-obj.scm"
 %use (raisu) "./raisu.scm"
 
 %var make-hashset
@@ -23,8 +23,10 @@
 %var hashset-clear!
 %var hashset-delete!
 
+(define hashset? hashset-predicate)
+
 (define (list->hashset lst)
-  (hashset
+  (hashset-constructor
    (let ((H (make-hashmap)))
      (for-each
       (lambda (key)
@@ -33,7 +35,7 @@
      H)))
 
 (define (vector->hashset v)
-  (hashset
+  (hashset-constructor
    (let ((H (make-hashmap)))
      (let loop ((i (- (vector-length v) 1)))
        (when (>= i 0)
@@ -104,7 +106,7 @@
          (hashmap-set! H key #t)))
      A))
 
-  (hashset H))
+  (hashset-constructor H))
 
 (define (hashset-intersection a b)
   (define H (make-hashmap))
@@ -117,7 +119,7 @@
          (hashmap-set! H key #t)))
      A))
 
-  (hashset H))
+  (hashset-constructor H))
 
 (define (hashset-union a b)
   (define H (make-hashmap))
@@ -133,7 +135,7 @@
        (hashmap-set! H key #t))
      B))
 
-  (hashset H))
+  (hashset-constructor H))
 
 
 (define (hashset-foreach fn H)
@@ -146,7 +148,8 @@
 
 (define (hashset-map fn H)
   (define M (hashset-value H))
-  (hashset (hashmap-map (lambda (key value) (fn key)) M)))
+  (hashset-constructor
+   (hashmap-map (lambda (key value) (fn key)) M)))
 
 (define (hashset-clear! H)
   (define M (hashset-value H))

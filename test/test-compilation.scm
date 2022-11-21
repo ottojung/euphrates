@@ -144,7 +144,7 @@
 %use (group-by/sequential group-by/sequential*) "./src/group-by-sequential.scm"
 %use (hashmap-constructor hashmap-predicate) "./src/hashmap-obj.scm"
 %use (alist->hashmap hashmap->alist hashmap-clear! hashmap-copy hashmap-count hashmap-delete! hashmap-foreach hashmap-has? hashmap-map hashmap-merge hashmap-merge! hashmap-ref hashmap-set! hashmap? make-hashmap multi-alist->hashmap) "./src/hashmap.scm"
-%use (hashset hashset-value hashset?) "./src/hashset-obj.scm"
+%use (hashset-constructor hashset-predicate hashset-value) "./src/hashset-obj.scm"
 %use (hashset->list hashset-add! hashset-clear! hashset-delete! hashset-difference hashset-equal? hashset-foreach hashset-has? hashset-intersection hashset-length hashset-map hashset-ref hashset-union list->hashset make-hashset vector->hashset) "./src/hashset.scm"
 %use (identity-monad) "./src/identity-monad.scm"
 %use (identity*) "./src/identity-star.scm"

@@ -1,11 +1,12 @@
 
-
 %run guile
 
-%var hashset
-%var hashset?
+%var hashset-constructor
+%var hashset-predicate
 %var hashset-value
 
-%use (define-newtype) "./define-newtype.scm"
+%use (define-type9) "./define-type9.scm"
 
-(define-newtype hashset hashset? hashset-value)
+(define-type9 hashset
+  (hashset-constructor value) hashset-predicate
+  (value hashset-value))
