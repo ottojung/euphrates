@@ -39,34 +39,34 @@
 %use (usymbol usymbol?) "./usymbol.scm"
 
 (define-type9 <database>
-  (database-constructor a b) database?
-  (a database-table)
-  (b database-handler)
+  (database-constructor table handler) database?
+  (table database-table)
+  (handler database-handler)
   )
 
 (define-type9 <rule>
-  (rule-constructor a b c d) rule?
-  (a rule-name) ;; : symbol
-  (b rule-index) ;; : number (together with "name" gives a unique index)
-  (c rule-args) ;; : list of symbols
-  (d rule-body) ;; : list of lists of symbols
+  (rule-constructor name index args body) rule?
+  (name rule-name) ;; : symbol
+  (index rule-index) ;; : number (together with "name" gives a unique index)
+  (args rule-args) ;; : list of symbols
+  (body rule-body) ;; : list of lists of symbols
   )
 
 (define-type9 <instruction>
-  (instruction-constructor a b c d e) instruction?
-  (a instruction-sign) ;; operation signature, like name and version for alternative
-  (b instruction-args) ;; arguments
-  (c instruction-arity) ;; arity
-  (d instruction-next) ;; link to next `instruction`, or #f is this is the last one
-  (e instruction-context) ;; : #f | any
+  (instruction-constructor sign args arity next context) instruction?
+  (sign instruction-sign) ;; operation signature, like name and version for alternative
+  (args instruction-args) ;; arguments
+  (arity instruction-arity) ;; arity
+  (next instruction-next) ;; link to next `instruction`, or #f is this is the last one
+  (context instruction-context) ;; : #f | any
   )
 
 (define-type9 <state>
-  (state-constructor a b c d) state?
-  (a state-current) ;; current `instruction`
-  (b state-stack) ;; list of `instruction`s
-  (c state-failstate) ;; `state` to go to if this `state` fails. Initially #f
-  (d state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
+  (state-constructor current stack failstate undo) state?
+  (current state-current) ;; current `instruction`
+  (stack state-stack) ;; list of `instruction`s
+  (failstate state-failstate) ;; `state` to go to if this `state` fails. Initially #f
+  (undo state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
   )
 
 (define-type9 <set-var-command>
