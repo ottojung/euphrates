@@ -86,14 +86,18 @@
    '()
    ))
 
-(define (set-state-current s alt)
-  (state-constructor
-   alt
-   (state-stack s)
-   (state-env s)
-   (state-failstate s)
-   (state-undo s)
-   ))
+(define set-state-current
+  (case-lambda
+   ((s instruction)
+    (set-state-current s instruction (state-stack s)))
+   ((s instruction stack)
+    (state-constructor
+     instruction
+     stack
+     (state-env s)
+     (state-failstate s)
+     (state-undo s)
+     ))))
 
 (define (state-final? s)
   (not (and (state? s) (state-current s))))
@@ -334,12 +338,20 @@
 
   (set-state-current s new-current))
 
+(define (set-remaining-instructions s0 instruction-prefix)
+  (define new-current (build-body instruction-prefix))
+  (define new-stack '())
+  (set-state-current s0 new-current new-stack))
+
 (define (handle-RFC db s ret)
   (define what (profun-RFC-what ret))
   (define continuation
-    (lambda (db-additions instruction-prefix)
+    (lambda (continue? db-additions instruction-prefix)
       (define new-db (profun-database-copy db))
-      (define new-s (add-prefix-to-instruction new-db s instruction-prefix))
+      (define new-s
+        (if continue?
+            (add-prefix-to-instruction new-db s instruction-prefix)
+            (set-remaining-instructions s instruction-prefix)))
       (for-each (comp (profun-database-add-rule! new-db)) db-additions)
       (profun-run new-db new-s)))
 
@@ -375,13 +387,10 @@
       (if (null? (state-stack s))
           (state-finish s)
           (continue
-           (state-constructor
+           (set-state-current
+            s
             (car (state-stack s))
-            (cdr (state-stack s))
-            (state-env s)
-            (state-failstate s)
-            (state-undo s)
-            )))))
+            (cdr (state-stack s)))))))
 
 (define (apply-instruction db s)
   (define instruction (state-current s))

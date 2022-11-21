@@ -22,18 +22,39 @@
 %var make-profun-RFC
 %var profun-RFC?
 %var profun-RFC-what
-%var profun-RFC-continuation
+%var profun-RFC-add-info
+%var profun-RFC-continue-with-inserted
+%var profun-RFC-eval-inserted
 
 %use (define-type9) "./define-type9.scm"
 
 (define-type9 profun-RFC-obj
-  (profun-RFC-constructor continuation what) profun-RFC-obj?
+  (profun-RFC-constructor continuation what additional) profun-RFC-obj?
   (continuation profun-RFC-continuation)
   (what profun-RFC-what)
+  (additional profun-RFC-additional)
   )
 
 (define (profun-RFC? x)
   (profun-RFC-obj? x))
 
+;; FIXME: dont accept continuation
 (define (make-profun-RFC continuation what)
-  (profun-RFC-constructor continuation what))
+  (define additional '())
+  (profun-RFC-constructor continuation what additional))
+
+(define (profun-RFC-continue-with-inserted self inserted)
+  "Inserts `inserted' just before the instruction that throwed this RFC, and continues evaluation."
+
+  (define continuation (profun-RFC-continuation self))
+  (define additional (profun-RFC-additional self))
+  (define continue? #t)
+  (continuation continue? additional inserted))
+
+(define (profun-RFC-eval-inserted self inserted)
+  "Evaluates `inserted' starting from state before the RFC was thrown. Any later computation is ignored."
+
+  (define continuation (profun-RFC-continuation self))
+  (define additional (profun-RFC-additional self))
+  (define continue? #f)
+  (continuation continue? additional inserted))

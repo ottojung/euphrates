@@ -6,7 +6,7 @@
 %use (assert) "./src/assert.scm"
 %use (catchu-case) "./src/catchu-case.scm"
 %use (debugs) "./src/debugs.scm"
-%use (profun-RFC-continuation profun-RFC?) "./src/profun-RFC.scm"
+%use (profun-RFC-continue-with-inserted profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
@@ -478,10 +478,11 @@
    (define x (get-iter '((= z w))))
    (define first (x))
    (define second (x))
-   (define cont (profun-RFC-continuation first))
 
-   (define resume-yes (cont '() '((= z 3) (= w 3))))
-   (define resume-no  (cont '() '((= z 3) (= w 4))))
+   (define resume-yes
+     (profun-RFC-continue-with-inserted first '((= z 3) (= w 3))))
+   (define resume-no
+     (profun-RFC-continue-with-inserted first '((= z 3) (= w 4))))
 
    (assert= #f second)
 
@@ -500,8 +501,8 @@
 
    (define x (get-iter '((abc 0))))
    (define first (x))
-   (define cont (profun-RFC-continuation first))
-   (define resume (cont '() '((= z 3) (= w 3))))
+   (define resume
+     (profun-RFC-continue-with-inserted first '((= z 3) (= w 3))))
    (assert= #f (x))
    (assert= #f (x))
    (assert (profun-RFC? (resume)))
