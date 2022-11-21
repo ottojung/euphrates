@@ -24,7 +24,7 @@
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
-%use (make-hashmap hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./hashmap.scm"
+%use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-set-continuation profun-RFC-what profun-RFC?) "./profun-RFC.scm"
@@ -34,7 +34,6 @@
 %use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
-%use (stack) "./stack-obj.scm"
 %use (usymbol usymbol?) "./usymbol.scm"
 
 (define-type9 <database>

@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 %run guile
 
 %var stack-make
+%var stack?
 %var stack-empty?
 %var stack-push!
 %var stack-pop!
@@ -23,11 +24,13 @@
 %var stack->list
 %var stack-unload!
 
-%use (stack stack? stack-lst set-stack-lst!) "./stack-obj.scm"
 %use (raisu) "./raisu.scm"
+%use (set-stack-lst! stack-constructor stack-lst stack-predicate) "./stack-obj.scm"
+
+(define stack? stack-predicate)
 
 (define (stack-make)
-  (stack '()))
+  (stack-constructor '()))
 
 (define (stack-empty? S)
   (null? (stack-lst S)))

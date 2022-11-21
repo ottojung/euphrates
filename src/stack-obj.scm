@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2022  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -14,14 +14,14 @@
 
 %run guile
 
-%var stack
-%var stack?
+%var stack-constructor
+%var stack-predicate
 %var stack-lst
 %var set-stack-lst!
 
 %use (define-type9) "./define-type9.scm"
 
-(define-type9 <stack>
-  (stack lst) stack?
+(define-type9 stack
+  (stack-constructor lst) stack-predicate
   (lst stack-lst set-stack-lst!)
   )
