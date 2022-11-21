@@ -29,7 +29,7 @@
    (define last (or ctx 1))
 
    (if (profun-unbound-value? y)
-       (make-profun-RFC #f `((what ,y-name)))
+       (make-profun-RFC `((what ,y-name)))
        (and
         (or (number? y)
             (raisu 'non-number-in-divisible y-name y))

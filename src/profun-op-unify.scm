@@ -32,5 +32,5 @@
      ((#f) (profun-reject))
      ((x-false) (profun-set (x-name <- y)))
      ((y-false) (profun-set (y-name <- x)))
-     ((both-false) (make-profun-RFC #f `((what ,x-name ,y-name))))
+     ((both-false) (make-profun-RFC `((what ,x-name ,y-name))))
      (else (raisu 'impossible-case-for-op-unify ret x y)))))

@@ -22,6 +22,8 @@
 %var make-profun-RFC
 %var profun-RFC?
 %var profun-RFC-what
+%var profun-RFC-set-continuation
+
 %var profun-RFC-add-info
 %var profun-RFC-continue-with-inserted
 %var profun-RFC-eval-inserted
@@ -38,10 +40,22 @@
 (define (profun-RFC? x)
   (profun-RFC-obj? x))
 
-;; FIXME: dont accept continuation
-(define (make-profun-RFC continuation what)
+(define (make-profun-RFC what)
   (define additional '())
+  (define continuation #f)
   (profun-RFC-constructor continuation what additional))
+
+(define (profun-RFC-set-continuation self continuation)
+  (define what (profun-RFC-what self))
+  (define additional (profun-RFC-additional self))
+  (profun-RFC-constructor continuation what additional))
+
+(define (profun-RFC-add-info self additional-rules)
+  (define what (profun-RFC-what self))
+  (define continuation (profun-RFC-continuation self))
+  (define additional (profun-RFC-additional self))
+  (define new-additional (append additional additional-rules))
+  (profun-RFC-constructor continuation what new-additional))
 
 (define (profun-RFC-continue-with-inserted self inserted)
   "Inserts `inserted' just before the instruction that throwed this RFC, and continues evaluation."
