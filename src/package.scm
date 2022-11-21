@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
 
 %var use-svars
 %var with-svars

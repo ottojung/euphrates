@@ -24,7 +24,7 @@
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
-%use (make-hashmap hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set!) "./hashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-set-continuation profun-RFC-what profun-RFC?) "./profun-RFC.scm"

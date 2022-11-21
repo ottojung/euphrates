@@ -5,7 +5,7 @@
 %use (assert=HS) "./src/assert-equal-hs.scm"
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
-%use (hashmap->alist hashmap-ref make-hashmap) "./src/ihashmap.scm"
+%use (hashmap->alist hashmap-ref make-hashmap) "./src/hashmap.scm"
 %use (make-regex-machine*) "./src/regex-machine.scm"
 
 (let ()

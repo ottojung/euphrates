@@ -20,7 +20,7 @@
 %use (petri-net-make) "./petri-net-make.scm"
 %use (raisu) "./raisu.scm"
 %use (list-and-map) "./list-and-map.scm"
-%use (multi-alist->hashmap hashmap-foreach hashmap-map) "./ihashmap.scm"
+%use (multi-alist->hashmap hashmap-foreach hashmap-map) "./hashmap.scm"
 
 (define (petri-net-parse-verify-types list-of-transitions)
 

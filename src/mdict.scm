@@ -2,7 +2,7 @@
 %run guile
 
 %use (make-unique) "./make-unique.scm"
-%use (make-hashmap hashmap->alist alist->hashmap hashmap-foreach) "./ihashmap.scm"
+%use (make-hashmap hashmap->alist alist->hashmap hashmap-foreach) "./hashmap.scm"
 %use (raisu) "./raisu.scm"
 
 %var hash->mdict

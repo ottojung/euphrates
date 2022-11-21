@@ -16,7 +16,7 @@
 
 %var profun-make-handler
 
-%use (hashmap-ref multi-alist->hashmap) "./ihashmap.scm"
+%use (hashmap-ref multi-alist->hashmap) "./hashmap.scm"
 %use (list-find-first) "./list-find-first.scm"
 %use (profun-op-arity) "./profun-op-obj.scm"
 %use (profun-variable-arity-op?) "./profun-variable-arity-op-huh.scm"

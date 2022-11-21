@@ -6,7 +6,7 @@
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
 %use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./src/compile-regex-cli.scm"
-%use (hashmap->alist make-hashmap) "./src/ihashmap.scm"
+%use (hashmap->alist make-hashmap) "./src/hashmap.scm"
 %use (make-regex-machine*) "./src/regex-machine.scm"
 
 (let ()

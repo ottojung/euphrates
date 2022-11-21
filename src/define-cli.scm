@@ -18,7 +18,7 @@
 %use (get-command-line-arguments) "./get-command-line-arguments.scm"
 %use (make-cfg-machine) "./cfg-machine.scm"
 %use (syntax-flatten*) "./syntax-flatten-star.scm"
-%use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
 %use (~a) "./tilda-a.scm"
 %use (list-init) "./list-init.scm"
 %use (list-last) "./list-last.scm"

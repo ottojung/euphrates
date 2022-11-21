@@ -3,7 +3,7 @@
 
 %var list-partition
 
-%use (hashmap->alist hashmap-ref hashmap-set! make-hashmap) "./ihashmap.scm"
+%use (hashmap->alist hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 
 (define (list-partition distriminator L)
   (define H (make-hashmap))

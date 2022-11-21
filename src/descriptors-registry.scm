@@ -19,7 +19,7 @@
 %var descritors-registry-decolisify-name
 
 %use (builtin-descriptors) "./builtin-descriptors.scm"
-%use (hashmap-count hashmap-ref hashmap-set! make-hashmap) "./ihashmap.scm"
+%use (hashmap-count hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 %use (list-and-map) "./list-and-map.scm"
 %use (raisu) "./raisu.scm"
 

@@ -16,7 +16,7 @@
 
 %use (immutable-hashmap) "./immutable-hashmap.scm"
 %use (immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
-%use (hashmap-set!) "./ihashmap.scm"
+%use (hashmap-set!) "./hashmap.scm"
 
 ;;
 ;; Regex Machine.

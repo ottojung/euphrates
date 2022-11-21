@@ -4,7 +4,7 @@
 ;; make-cli
 %use (assert) "./src/assert.scm"
 %use (make-cli) "./src/define-cli.scm"
-%use (make-hashmap) "./src/ihashmap.scm"
+%use (make-hashmap) "./src/hashmap.scm"
 
 (let ()
   (define M

@@ -22,7 +22,7 @@
 %var lexical-scope-namespace
 
 %use (lexical-scope-wrap lexical-scope-unwrap) "./lexical-scope-obj.scm"
-%use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
 %use (stack-make stack-peek stack->list stack-push! stack-discard!) "./stack.scm"
 %use (make-unique) "./make-unique.scm"
 %use (raisu) "./raisu.scm"

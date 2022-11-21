@@ -17,7 +17,7 @@
 %var petri-profun-net
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (multi-alist->hashmap) "./ihashmap.scm"
+%use (multi-alist->hashmap) "./hashmap.scm"
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (petri-net-make) "./petri-net-make.scm"
 %use (petri-push) "./petri.scm"

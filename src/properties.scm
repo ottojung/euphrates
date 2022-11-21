@@ -3,7 +3,7 @@
 
 %var define-property
 
-%use (hashmap-ref hashmap-set! make-hashmap) "./ihashmap.scm"
+%use (hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 %use (make-unique) "./make-unique.scm"
 %use (memconst) "./memconst.scm"
 %use (raisu) "./raisu.scm"

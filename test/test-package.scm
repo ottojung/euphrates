@@ -3,7 +3,7 @@
 
 ;; package
 %use (assert=) "./src/assert-equal.scm"
-%use (hashmap-ref) "./src/ihashmap.scm"
+%use (hashmap-ref) "./src/hashmap.scm"
 %use (make-package use-svars with-package with-svars) "./src/package.scm"
 
 (let ()

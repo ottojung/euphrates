@@ -4,7 +4,7 @@
 %var universal-lockr!
 %var universal-unlockr!
 
-%use (make-hashmap hashmap-ref hashmap-set! hashmap-delete!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set! hashmap-delete!) "./hashmap.scm"
 %use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
 %use (with-critical) "./with-critical.scm"
 %use (make-uni-spinlock-critical) "./uni-spinlock.scm"

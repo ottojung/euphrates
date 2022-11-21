@@ -16,7 +16,7 @@
 
 %var list-group-by
 
-%use (make-hashmap hashmap-ref hashmap-set! hashmap->alist) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set! hashmap->alist) "./hashmap.scm"
 
 ;; Returns values of type
 ;; (((projection x1) x1 x2 x3 ...) ((projection y1) y2 y3 ...) ...)

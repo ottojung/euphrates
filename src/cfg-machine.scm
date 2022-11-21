@@ -14,7 +14,7 @@
 
 %run guile
 
-%use (make-hashmap hashmap-ref hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
 %use (immutable-hashmap) "./immutable-hashmap.scm"
 %use (immutable-hashmap-foreach) "./i-immutable-hashmap.scm"
 %use (~s) "./tilda-s.scm"

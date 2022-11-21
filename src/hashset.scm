@@ -3,7 +3,7 @@
 
 %use (fn) "./fn.scm"
 %use (hashset hashset-value) "./hashset-obj.scm"
-%use (make-hashmap hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set!) "./ihashmap.scm"
+%use (make-hashmap hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set!) "./hashmap.scm"
 %use (raisu) "./raisu.scm"
 
 %var make-hashset
