@@ -1,11 +1,6 @@
 
 %run guile
 
-%use (fn) "./fn.scm"
-%use (hashmap) "./hashmap.scm"
-%use (make-unique) "./make-unique.scm"
-%use (raisu) "./raisu.scm"
-
 %var make-hashmap
 %var hashmap->alist
 %var hashmap-copy
@@ -13,6 +8,7 @@
 %var hashmap-map
 %var alist->hashmap
 %var multi-alist->hashmap
+%var hashmap-has?
 %var hashmap-ref
 %var hashmap-set!
 %var hashmap-clear!
@@ -21,7 +17,10 @@
 %var hashmap-merge!
 %var hashmap-merge
 
+%use (fn) "./fn.scm"
+%use (hashmap) "./hashmap.scm"
 %use (make-unique) "./make-unique.scm"
+%use (raisu) "./raisu.scm"
 
 %for (COMPILER "guile")
 
@@ -56,6 +55,11 @@
 
 (define hashmap-ref-default-value
   (make-unique))
+
+(define (hashmap-has? H key)
+  (define get
+    (hashmap-true-ref H key hashmap-ref-default-value))
+  (eq? get hashmap-ref-default-value))
 
 (define-syntax hashmap-ref
   (syntax-rules ()
