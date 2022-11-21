@@ -150,7 +150,7 @@
 %use (identity*) "./src/identity-star.scm"
 %use (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value) "./src/immutable-hashmap-obj.scm"
 %use (alist->immutable-hashmap immutable-hashmap->alist immutable-hashmap-clear immutable-hashmap-copy immutable-hashmap-count immutable-hashmap-foreach immutable-hashmap-fromlist immutable-hashmap-map immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set immutable-hashmap? make-immutable-hashmap) "./src/immutable-hashmap.scm"
-%use (list->multiset make-multiset multiset->list multiset-add! multiset-equal? multiset-filter multiset-ref multiset? vector->multiset) "./src/imultiset.scm"
+%use (list->multiset make-multiset multiset->list multiset-add! multiset-equal? multiset-filter multiset-ref multiset? vector->multiset) "./src/multiset.scm"
 %use (define-open-cond define-open-cond-instance open-cond-lambda) "./src/iopen-cond.scm"
 %use (json-parse) "./src/json-parse.scm"
 %use (lazy-monad) "./src/lazy-monad.scm"

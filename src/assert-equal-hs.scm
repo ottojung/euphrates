@@ -2,7 +2,7 @@
 %run guile
 
 %use (assert) "./assert.scm"
-%use (make-multiset multiset-equal?) "./imultiset.scm"
+%use (make-multiset multiset-equal?) "./multiset.scm"
 
 %var assert=HS
 
