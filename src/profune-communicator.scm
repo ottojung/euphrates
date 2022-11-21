@@ -23,7 +23,7 @@
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
-%use (profun-RFC-continuation profun-RFC-what profun-RFC?) "./profun-RFC.scm"
+%use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-database-add-rule! profun-database-copy profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
 
@@ -39,7 +39,7 @@
   (define db (profun-database-copy db0))
   (define current-answer-iterator #f)
   (define current-results-buffer '())
-  (define current-continuation #f)
+  (define current-RFC #f)
 
   (define (split-commands commands)
     (if (null? commands)
@@ -73,7 +73,7 @@
               `(i-dont-recognize ,(profun-IDR-name r) ,(profun-IDR-arity r)))
              ((profun-RFC? r)
               (set! current-results-buffer buf)
-              (set! current-continuation (profun-RFC-continuation r))
+              (set! current-RFC r)
               `(whats ,@(profun-RFC-what r)))
 
              (else
@@ -119,12 +119,12 @@
     (collect-n n))
 
   (define (handle-its op args next)
-    (unless current-continuation
+    (unless current-RFC
       (raisu 'did-not-ask-anything op args))
 
     (set! current-answer-iterator
-          (current-continuation '() args))
-    (set! current-continuation #f)
+          (profun-RFC-continue-with-inserted current-RFC args))
+    (set! current-RFC #f)
 
     (handle-query next))
 
@@ -132,7 +132,7 @@
     (set! db #f)
     (set! current-answer-iterator #f)
     (set! current-results-buffer #f)
-    (set! current-continuation #f)
+    (set! current-RFC #f)
 
     (unless (and (null? args) (null? next))
       (raisu 'bye-must-not-have-any-arguments op args next)))

@@ -103,16 +103,16 @@
    (its (equals (((Y . 4) (X . 16)))))
    ))
 
-(test-dialog
- '((whats (sqrt X Y))
-   (whats (value (or X Y)))
-   (whats (sqrt W Z))
-   (whats (value (or W Z)))
-   (its (equals (((W . 9)))))
-   (its (equals (((W . 9) (Z . 3)))))
-   (its (= X 9))
-   (ok)
-   ))
+;; (test-dialog
+;;  '((whats (sqrt X Y))
+;;    (whats (value (or X Y)))
+;;    (whats (sqrt W Z))
+;;    (whats (value (or W Z)))
+;;    (its (equals (((W . 9)))))
+;;    (its (equals (((W . 9) (Z . 3)))))
+;;    (its (= X 9))
+;;    (ok)
+;;    ))
 
 (test-dialog
  '((whats (person X))
