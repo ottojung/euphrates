@@ -2,7 +2,6 @@
 %run guile
 
 %use (assert=) "./src/assert-equal.scm"
-%use (debugv) "./src/debugv.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-op-false) "./src/profun-op-false.scm"
 %use (profun-op-less) "./src/profun-op-less.scm"
@@ -13,7 +12,7 @@
 %use (profun-op-true) "./src/profun-op-true.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-create-database) "./src/profun.scm"
-%use (make-profune-communicator) "./src/profune-communications.scm"
+%use (make-profune-communicator) "./src/profune-communicator.scm"
 
 (define server-handler
   (profun-make-handler
