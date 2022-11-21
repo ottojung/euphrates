@@ -2,7 +2,10 @@
 %run guile
 
 %use (assert=) "./src/assert-equal.scm"
+%use (debugv) "./src/debugv.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
+%use (profun-op-divisible) "./src/profun-op-divisible.scm"
+%use (profun-op-equals) "./src/profun-op-equals.scm"
 %use (profun-op-false) "./src/profun-op-false.scm"
 %use (profun-op-less) "./src/profun-op-less.scm"
 %use (profun-op*) "./src/profun-op-mult.scm"
@@ -18,13 +21,15 @@
 (define server-handler
   (profun-make-handler
    (= profun-op-unify)
+   (!= profun-op-separate)
    (true profun-op-true)
    (false profun-op-false)
-   (!= profun-op-separate)
    (+ profun-op+)
    (* profun-op*)
    (sqrt profun-op-sqrt)
    (< profun-op-less)
+   (divisible profun-op-divisible)
+   (equals profun-op-equals)
    ))
 
 (define definitions1
@@ -46,11 +51,13 @@
   (let loop ((sentences sentences))
     (unless (null? sentences)
       (let ()
-        (define a (list-ref sentences 0))
-        (define b (list-ref sentences 1))
-        (define ans
-          (profune-communicator-handle comm a))
-        (assert= b ans)
+        (define question (list-ref sentences 0))
+        (define expected (list-ref sentences 1))
+        (define actual (profune-communicator-handle comm question))
+        (unless (equal? expected actual)
+          (debugv expected)
+          (debugv actual))
+        (assert= expected actual)
         (loop (cdr (cdr sentences)))))))
 
 (test-dialog
@@ -85,6 +92,26 @@
 (test-dialog
  '((whats (= X 10) (sqrt X Y))
    (its (equals ()))
+   ))
+
+(test-dialog
+ '((whats (sqrt X Y))
+   (whats (value (or X Y)))
+   (whats (sqrt 9 Z))
+   (its (equals (((Z . 3)))))
+   (its (equals (((Y . 4)))))
+   (its (equals (((Y . 4) (X . 16)))))
+   ))
+
+(test-dialog
+ '((whats (sqrt X Y))
+   (whats (value (or X Y)))
+   (whats (sqrt W Z))
+   (whats (value (or W Z)))
+   (its (equals (((W . 9)))))
+   (its (equals (((W . 9) (Z . 3)))))
+   (its (= X 9))
+   (ok)
    ))
 
 (test-dialog
