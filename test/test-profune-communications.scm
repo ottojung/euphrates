@@ -12,7 +12,7 @@
 %use (profun-op-true) "./src/profun-op-true.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-create-database) "./src/profun.scm"
-%use (make-profune-communicator) "./src/profune-communicator.scm"
+%use (make-profune-communicator profune-communicator-handle) "./src/profune-communicator.scm"
 
 (define server-handler
   (profun-make-handler
@@ -37,73 +37,73 @@
   (profun-create-database server-handler definitions1))
 
 (let ()
-  (define server-comm1
+  (define c1
     (make-profune-communicator db1))
 
   (define got1
-    (server-comm1 '(whats (person X))))
+    (profune-communicator-handle c1 '(whats (person X))))
 
   (assert= got1 `(its (equals (((X . "bart"))))))
 
   (define got2
-    (server-comm1 '(more (2))))
+    (profune-communicator-handle c1 '(more (2))))
 
   (assert= got2 `(its (equals (((X . "lisa")) ((X . "megie"))))))
 
   (define got3
-    (server-comm1 '(more (100))))
+    (profune-communicator-handle c1 '(more (100))))
 
   (assert= got3 `(its (equals (((X . "homer")) ((X . "marge"))))))
 
   (define got4
-    (server-comm1 '(more (50))))
+    (profune-communicator-handle c1 '(more (50))))
 
   (assert= got4 `(its (equals ())))
 
   (define got5
-    (server-comm1 '(more (40))))
+    (profune-communicator-handle c1 '(more (40))))
 
   (assert= got5 `(its (equals ())))
 
   )
 
 (let ()
-  (define server-comm1
+  (define c1
     (make-profune-communicator db1))
 
   (define got1
-    (server-comm1 '(whats (person X) more (2))))
+    (profune-communicator-handle c1 '(whats (person X) more (2))))
 
   (assert= got1 `(its (equals (((X . "bart")) ((X . "lisa")) ((X . "megie"))))))
 
   (define got2
-    (server-comm1 '(more (100))))
+    (profune-communicator-handle c1 '(more (100))))
 
   (assert= got2 `(its (equals (((X . "homer")) ((X . "marge"))))))
 
   (define got3
-    (server-comm1 '(more (50))))
+    (profune-communicator-handle c1 '(more (50))))
 
   (assert= got3 `(its (equals ())))
 
   (define got4
-    (server-comm1 '(more (40))))
+    (profune-communicator-handle c1 '(more (40))))
 
   (assert= got4 `(its (equals ())))
 
   )
 
 (let ()
-  (define server-comm1
+  (define c1
     (make-profune-communicator db1))
 
   (define got1
-    (server-comm1 '(whats (sqrt X Y) more (2))))
+    (profune-communicator-handle c1 '(whats (sqrt X Y) more (2))))
 
   (assert= got1 '(whats (value (or X Y))))
 
   (define got2
-    (server-comm1 '(its (= X 9))))
+    (profune-communicator-handle c1 '(its (= X 9))))
 
   (assert= got2 '(its (equals (((Y . 3) (X . 9))))))
 

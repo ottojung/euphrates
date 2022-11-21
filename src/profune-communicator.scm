@@ -15,14 +15,25 @@
 %run guile
 
 %var make-profune-communicator
+%var profune-communicator?
+%var profune-communicator-handle
 
 %use (comp) "./comp.scm"
+%use (define-type9) "./define-type9.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-continuation profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-database-add-rule! profun-database-copy profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
+
+(define-type9 <profune-communicator>
+  (profune-communicator-constructor proc) profune-communicator?
+  (proc profune-communicator-proc)
+  )
+
+(define (profune-communicator-handle communicator commands)
+  ((profune-communicator-proc communicator) commands))
 
 (define (make-profune-communicator db0)
   (define db (profun-database-copy db0))
@@ -146,5 +157,5 @@
             ((bye) (handle-bye op args next))
             (else (raisu 'not-implemented-ccc))))))
 
-  handle)
+  (profune-communicator-constructor handle))
 
