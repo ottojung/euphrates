@@ -39,7 +39,7 @@
 %use (usymbol usymbol?) "./usymbol.scm"
 
 (define-type9 <database>
-  (database a b) database?
+  (database-constructor a b) database?
   (a database-table)
   (b database-handler)
   )
@@ -101,7 +101,12 @@
   (set-state-current s #f))
 
 (define (make-database botom-handler)
-  (database (hashmap) botom-handler))
+  (database-constructor (hashmap) botom-handler))
+
+(define (profun-database-copy db)
+  (database-constructor
+   (hashmap-copy (database-table db))
+   (database-handler db)))
 
 (define (database-handle db key arity)
   (let ((function ((database-handler db) key arity)))
@@ -447,11 +452,6 @@
 ;; and returns first instruction
 (define (build-body body)
   (build-body/next body #f))
-
-(define (profun-database-copy db)
-  (database
-   (hashmap-copy (database-table db))
-   (database-handler db)))
 
 (define (profun-database-add-rule! db r)
   (define first (car r))
