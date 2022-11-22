@@ -142,19 +142,25 @@
     (handle next))
 
   (define (handle commands)
-    (if (null? commands)
-        (raisu 'expecting-more-commands-than-this)
-        (let ()
-          (define-values (op args next)
-            (split-commands commands))
-          (unless current-results-buffer
-            (raisu 'already-said-bye-bye))
-          (case op
-            ((listen) (handle-listen op args next))
-            ((whats) (handle-whats op args next))
-            ((its) (handle-its op args next))
-            ((more) (handle-more op args next))
-            ((bye) (handle-bye op args next))
-            (else (raisu 'not-implemented-ccc))))))
+    (cond
+     ((null? commands)
+      (raisu 'expecting-more-commands-than-this))
+     ((not (list? commands))
+      (raisu 'commands-must-be-a-list commands))
+     ((not (symbol? (car commands)))
+      (raisu 'commands-must-start-from-an-operation commands))
+     (else
+      (let ()
+        (define-values (op args next)
+          (split-commands commands))
+        (unless current-results-buffer
+          (raisu 'already-said-bye-bye))
+        (case op
+          ((listen) (handle-listen op args next))
+          ((whats) (handle-whats op args next))
+          ((its) (handle-its op args next))
+          ((more) (handle-more op args next))
+          ((bye) (handle-bye op args next))
+          (else (raisu 'not-implemented-ccc)))))))
 
   (profune-communicator-constructor handle))
