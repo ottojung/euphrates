@@ -97,7 +97,9 @@
 
              ((profun-IDR? r)
               (collect-finish!)
-              `(i-dont-recognize ,(profun-IDR-name r) ,(profun-IDR-arity r)))
+              (let ((name (profun-IDR-name r))
+                    (arity (profun-IDR-arity r)))
+                `(i-dont-recognize ,name ,arity)))
              ((profun-RFC? r)
               (set-current-results-buffer! buf)
               (set-current-RFC! r)

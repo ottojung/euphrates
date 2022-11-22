@@ -115,6 +115,13 @@
    ))
 
 (test-dialog
+ '((whats (swrt 9 Y))
+   (i-dont-recognize swrt 2)
+   (whats (sqrt 9 Y))
+   (its (equals (((Y . 3)))))
+   ))
+
+(test-dialog
  '((whats (person X))
    (its (equals (((X . "bart")))))
    (more (2))
