@@ -2,6 +2,8 @@
 %run guile
 
 %use (assert=) "./src/assert-equal.scm"
+%use (assert) "./src/assert.scm"
+%use (catchu-case) "./src/catchu-case.scm"
 %use (debugv) "./src/debugv.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
@@ -144,3 +146,31 @@
    (more (40))
    (its (equals ()))
    ))
+
+(let ()
+  (define threw? #f)
+
+  (catchu-case
+   (test-dialog
+    '((its ok)
+      (noooooo)
+      ))
+   (('did-not-ask-anything args)
+    (set! threw? #t)))
+
+  (assert threw?))
+
+(let ()
+  (define threw? #f)
+
+  (catchu-case
+   (test-dialog
+    '((whats (= 0 1))
+      (its (equals ()))
+      (its ok)
+      (noooooo)
+      ))
+   (('did-not-ask-anything args)
+    (set! threw? #t)))
+
+  (assert threw?))

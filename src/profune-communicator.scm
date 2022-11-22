@@ -26,7 +26,7 @@
 %use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database? profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
-%use (stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
+%use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
 (define-type9 profune-communicator
   (profune-communicator-constructor db stages) profune-communicator?
@@ -149,8 +149,13 @@
     (collect-n n))
 
   (define (handle-its op args next)
+    (when (stack-empty? stages)
+      (raisu 'did-not-ask-anything args))
+
     (unless (current-RFC)
-      (stack-pop! stages))
+      (stack-pop! stages)
+      (when (stack-empty? stages)
+        (raisu 'did-not-ask-anything args)))
 
     (set-current-answer-iterator!
      (profun-RFC-continue-with-inserted (current-RFC) args))
