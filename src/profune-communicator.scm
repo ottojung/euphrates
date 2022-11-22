@@ -164,6 +164,6 @@
         ((its) (handle-its op args next))
         ((more) (handle-more op args next))
         ((bye) (handle-bye op args next))
-        (else (raisu 'not-implemented-ccc)))))
+        (else (raisu 'operation-not-supported op)))))
 
   (profune-communicator-constructor handle))
