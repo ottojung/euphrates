@@ -28,7 +28,7 @@
 
 (define-type9 profun-IDR-obj
   (profun-IDR-constructor name arity) profun-IDR-obj?
-  (name profun-IDR-what)
+  (name profun-IDR-name)
   (arity profun-IDR-arity)
   )
 
