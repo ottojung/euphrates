@@ -410,10 +410,10 @@
    "RECURSION 1"
    '(((parent "Homer" "Lisa"))
      ((parent "Homer" "Bart"))
-     ((parent "Homer" "Megie"))
+     ((parent "Homer" "Maggie"))
      ((parent "Marge" "Lisa"))
      ((parent "Marge" "Bart"))
-     ((parent "Marge" "Megie"))
+     ((parent "Marge" "Maggie"))
      ((parent "Abraham" "Homer"))
      ((parent "Mona" "Homer"))
      ((parent "Mr. Olsen" "Mona"))
@@ -423,7 +423,7 @@
      ((relative x y) (parent x z) (relative z y))
      )
 
-   (test '((parent "Homer" y)) '(((y . "Lisa")) ((y . "Bart")) ((y . "Megie"))))
+   (test '((parent "Homer" y)) '(((y . "Lisa")) ((y . "Bart")) ((y . "Maggie"))))
    (test '((parent x "Lisa")) '(((x . "Homer")) ((x . "Marge"))))
    (test '((parent x "Lisa")) '(((x . "Homer")) ((x . "Marge"))))
    (test '((relative "Bart" y)) '(((y . "Skippy"))))
@@ -433,7 +433,7 @@
                                        ((y . "Homer"))
                                        ((y . "Lisa"))
                                        ((y . "Bart"))
-                                       ((y . "Megie"))
+                                       ((y . "Maggie"))
                                        ((y . "Skippy"))))
 
    )

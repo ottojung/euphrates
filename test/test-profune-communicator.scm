@@ -35,7 +35,7 @@
 (define definitions1
   `(((person "bart"))
     ((person "lisa"))
-    ((person "megie"))
+    ((person "maggie"))
     ((person "homer"))
     ((person "marge"))))
 
@@ -125,7 +125,7 @@
  '((whats (person X))
    (its (equals (((X . "bart")))))
    (more (2))
-   (its (equals (((X . "lisa")) ((X . "megie")))))
+   (its (equals (((X . "lisa")) ((X . "maggie")))))
    (more (100))
    (its (equals (((X . "homer")) ((X . "marge")))))
    (more (50))
@@ -136,7 +136,7 @@
 
 (test-dialog
  '((whats (person X) more (2))
-   (its (equals (((X . "bart")) ((X . "lisa")) ((X . "megie")))))
+   (its (equals (((X . "bart")) ((X . "lisa")) ((X . "maggie")))))
    (more (100))
    (its (equals (((X . "homer")) ((X . "marge")))))
    (more (50))
