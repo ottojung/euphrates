@@ -106,8 +106,11 @@
               `(whats ,@(profun-RFC-what r)))
 
              (else
-              (raisu 'unexpected-result-from-profun-iterator r)
-              #f))))))
+              (collect-finish!)
+              (parameterize ((current-output-port (current-error-port)))
+                (display "Unexpected result from profun iterator: ")
+                (write r))
+              `(error unexpected-result-from-profun-iterator)))))))
 
   (define (handle-whats op args next)
     (define iterator
@@ -123,75 +126,84 @@
       ((#f)
        (collect-n 1))
       ((more)
-       (unless (null? next-next)
-         (raisu 'operation-whats/its-must-be-last next))
-       (let ((n (get-more-s-arg next-args)))
-         (collect-n (+ 1 n))))
+       (if (null? next-next)
+           (let ((n (get-more-s-arg next-args)))
+             (collect-n (+ 1 n)))
+           `(error operation-whats/its-must-be-last)))
       (else
-       (raisu 'unexpected-op next-op))))
+       `(error unexpected-operation ,next-op))))
 
   (define (get-more-s-arg args)
     (cond
      ((null? args) 1)
      ((null? (cdr args))
       (let ((nl (car args)))
-        (unless (list-singleton? nl)
-          (raisu 'more-s-argument-must-be-a-singleton-list nl))
-        (unless (and (integer? (car nl)) (<= 0 (car nl)))
-          (raisu 'more-s-argument-must-a-natural-number nl))
-        (car nl)))
-     (else (raisu 'more-must-have-atmost-single-argument args))))
+        (cond
+         ((not (list-singleton? nl))
+          `(error more-s-argument-must-be-a-singleton-list))
+         ((not (and (integer? (car nl)) (<= 0 (car nl))))
+          `(error more-s-argument-must-a-natural-number))
+         (else (car nl)))))
+     (else
+      `(error more-must-have-atmost-single-argument))))
 
   (define (handle-more op args next)
     (define n (get-more-s-arg args))
-    (unless (null? next)
-      (raisu 'more-must-be-the-last-command next))
-    (collect-n n))
+    (cond
+     ((not (null? next)) `(error more-must-be-the-last-command))
+     ((not (number? n)) n)
+     (else (collect-n n))))
 
-  (define (handle-its op args next)
-    (when (stack-empty? stages)
-      (raisu 'did-not-ask-anything args))
-
-    (unless (current-RFC)
-      (stack-pop! stages)
-      (when (stack-empty? stages)
-        (raisu 'did-not-ask-anything args)))
-
+  (define (handle-its-cont op args next)
     (set-current-answer-iterator!
      (profun-RFC-continue-with-inserted (current-RFC) args))
     (set-current-RFC! #f)
 
     (handle-query next))
 
+  (define (handle-its op args next)
+    (cond
+     ((stack-empty? stages)
+      `(error did-not-ask-anything))
+     ((current-RFC)
+      (handle-its-cont op args next))
+     (else
+      (stack-pop! stages)
+      (if (stack-empty? stages)
+          `(error did-not-ask-anything)
+          (handle-its-cont op args next)))))
+
   (define (handle-bye op args next)
     (set! db #f)
     (set! stages #f)
-    (unless (and (null? args) (null? next))
-      (raisu 'bye-must-not-have-any-arguments op args next)))
+    (if (and (null? args) (null? next))
+        `(bye)
+        `(error bye-must-not-have-any-arguments)))
 
   (define (handle-listen op args next)
     (for-each (comp (profun-database-add-rule! db)) args)
     (handle next))
 
   (define (handle commands)
-    (when (null? commands)
-      (raisu 'expecting-more-commands-than-this))
-    (unless (list? commands)
-      (raisu 'commands-must-be-a-list commands))
-    (unless (symbol? (car commands))
-      (raisu 'commands-must-start-from-an-operation commands))
-    (unless db
-      (raisu 'already-said-bye-bye))
-
-    (let ()
-      (define-values (op args next)
-        (split-commands commands))
-      (case op
-        ((listen) (handle-listen op args next))
-        ((whats) (handle-whats op args next))
-        ((its) (handle-its op args next))
-        ((more) (handle-more op args next))
-        ((bye) (handle-bye op args next))
-        (else (raisu 'operation-not-supported op)))))
+    (cond
+     ((null? commands)
+      `(error expecting-more-commands-than-this))
+     ((not (list? commands))
+      `(error commands-must-be-a-list))
+     ((not (symbol? (car commands)))
+      `(error commands-must-start-from-an-operation))
+     ((not db)
+      `(error 'already-said-bye-bye))
+     (else
+      (let ()
+        (define-values (op args next)
+          (split-commands commands))
+        (case op
+          ((listen) (handle-listen op args next))
+          ((whats) (handle-whats op args next))
+          ((its) (handle-its op args next))
+          ((more) (handle-more op args next))
+          ((bye) (handle-bye op args next))
+          (else `(error operation-not-supported ,op)))))))
 
   (handle commands))

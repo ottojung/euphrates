@@ -147,30 +147,33 @@
    (its (equals ()))
    ))
 
-(let ()
-  (define threw? #f)
+(test-dialog
+ '((nonexisting x y z)
+   (error operation-not-supported nonexisting)
+   ))
 
-  (catchu-case
-   (test-dialog
-    '((its ok)
-      (noooooo)
-      ))
-   (('did-not-ask-anything args)
-    (set! threw? #t)))
+(test-dialog
+ '((whats (person X) nonexisting x y z)
+   (error unexpected-operation nonexisting)
+   ))
 
-  (assert threw?))
+(test-dialog
+ '((its ok)
+   (error did-not-ask-anything)
+   ))
 
-(let ()
-  (define threw? #f)
+(test-dialog
+ '((whats (= 0 1))
+   (its (equals ()))
+   (its ok)
+   (error did-not-ask-anything)
+   ))
 
-  (catchu-case
-   (test-dialog
-    '((whats (= 0 1))
-      (its (equals ()))
-      (its ok)
-      (noooooo)
-      ))
-   (('did-not-ask-anything args)
-    (set! threw? #t)))
-
-  (assert threw?))
+(test-dialog
+ '((whats (= 0 1))
+   (its (equals ()))
+   (its ok)
+   (error did-not-ask-anything)
+   (whats (= X 3))
+   (its (equals (((X . 3)))))
+   ))

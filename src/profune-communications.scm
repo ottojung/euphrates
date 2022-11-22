@@ -57,6 +57,6 @@
 ;;   B: its, false().
 ;;   A: bye.
 ;;
-;; Every communicator must know these words: "whats", "its", "listen", "more", "bye", and "i-dont-recognize".
+;; Every communicator must know these words: "whats", "its", "listen", "more", "bye", "i-dont-recognize" and "error".
 ;;
 
