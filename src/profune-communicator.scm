@@ -19,14 +19,15 @@
 %var profune-communicator-handle
 
 %use (comp) "./comp.scm"
+%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
-%use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
+%use (profun-RFC-continue-with-inserted profun-RFC-eval-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database? profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
-%use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
+%use (stack->list stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
 (define-type9 profune-communicator
   (profune-communicator-constructor db stages) profune-communicator?
@@ -59,7 +60,8 @@
   (define (current-results-buffer)
     (stage-results-buffer (stack-peek stages)))
   (define (current-RFC)
-    (stage-rfc (stack-peek stages)))
+    (if (stack-empty? stages) #f
+        (stage-rfc (stack-peek stages))))
 
   (define (set-current-answer-iterator! new)
     (set-stage-answer-iterator! (stack-peek stages) new))
@@ -114,7 +116,9 @@
 
   (define (handle-whats op args next)
     (define iterator
-      (profun-run-query db args))
+      (if (current-RFC)
+          (profun-RFC-eval-inserted (current-RFC) args)
+          (profun-run-query db args)))
     (stack-push! stages (make-stage iterator '() #f))
     (handle-query next))
 
