@@ -26,8 +26,9 @@
 %use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database? profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
+%use (stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
-(define-type9 <profune-communicator>
+(define-type9 profune-communicator
   (profune-communicator-constructor proc) profune-communicator?
   (proc profune-communicator-proc)
   )
@@ -35,15 +36,34 @@
 (define (profune-communicator-handle communicator commands)
   ((profune-communicator-proc communicator) commands))
 
+(define-type9 stage
+  (make-stage answer-iterator results-buffer rfc) stage?
+  (answer-iterator stage-answer-iterator set-stage-answer-iterator!)
+  (results-buffer stage-results-buffer set-stage-results-buffer!)
+  (rfc stage-rfc set-stage-rfc!)
+  )
+
 (define (make-profune-communicator db0)
   (define db
     (if (profun-database? db0)
         (profun-database-copy db0)
         (raisu 'expected-a-profun-database db0)))
 
-  (define current-answer-iterator #f)
-  (define current-results-buffer '())
-  (define current-RFC #f)
+  (define stages (stack-make))
+
+  (define (current-answer-iterator)
+    (stage-answer-iterator (stack-peek stages)))
+  (define (current-results-buffer)
+    (stage-results-buffer (stack-peek stages)))
+  (define (current-RFC)
+    (stage-rfc (stack-peek stages)))
+
+  (define (set-current-answer-iterator! new)
+    (set-stage-answer-iterator! (stack-peek stages) new))
+  (define (set-current-results-buffer! new)
+    (set-stage-results-buffer! (stack-peek stages) new))
+  (define (set-current-RFC! new)
+    (set-stage-rfc! (stack-peek stages) new))
 
   (define (split-commands commands)
     (if (null? commands)
@@ -56,15 +76,15 @@
           (values op args next))))
 
   (define (collect-finish!)
-    (set! current-results-buffer '())
-    (set! current-answer-iterator #f))
+    (set-current-results-buffer! '())
+    (set-current-answer-iterator! #f))
 
   (define (collect-n n)
-    (let loop ((i 0) (buf current-results-buffer))
+    (let loop ((i 0) (buf (current-results-buffer)))
       (if (>= i n)
           `(its (equals ,(reverse! buf)))
-          (let ((r (and current-answer-iterator
-                        (current-answer-iterator))))
+          (let ((r (and (current-answer-iterator)
+                        ((current-answer-iterator)))))
             (cond
              ((or (pair? r) (null? r))
               (loop (+ 1 i) (cons r buf)))
@@ -76,8 +96,8 @@
               (collect-finish!)
               `(i-dont-recognize ,(profun-IDR-name r) ,(profun-IDR-arity r)))
              ((profun-RFC? r)
-              (set! current-results-buffer buf)
-              (set! current-RFC r)
+              (set-current-results-buffer! buf)
+              (set-current-RFC! r)
               `(whats ,@(profun-RFC-what r)))
 
              (else
@@ -85,8 +105,9 @@
               #f))))))
 
   (define (handle-whats op args next)
-    (set! current-answer-iterator
-          (profun-run-query db args))
+    (define iterator
+      (profun-run-query db args))
+    (stack-push! stages (make-stage iterator '() #f))
     (handle-query next))
 
   (define (handle-query next)
@@ -123,21 +144,18 @@
     (collect-n n))
 
   (define (handle-its op args next)
-    (unless current-RFC
-      (raisu 'did-not-ask-anything op args))
+    (unless (current-RFC)
+      (stack-pop! stages))
 
-    (set! current-answer-iterator
-          (profun-RFC-continue-with-inserted current-RFC args))
-    (set! current-RFC #f)
+    (set-current-answer-iterator!
+     (profun-RFC-continue-with-inserted (current-RFC) args))
+    (set-current-RFC! #f)
 
     (handle-query next))
 
   (define (handle-bye op args next)
     (set! db #f)
-    (set! current-answer-iterator #f)
-    (set! current-results-buffer #f)
-    (set! current-RFC #f)
-
+    (set! stages #f)
     (unless (and (null? args) (null? next))
       (raisu 'bye-must-not-have-any-arguments op args next)))
 
