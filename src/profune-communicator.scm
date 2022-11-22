@@ -29,12 +29,10 @@
 %use (stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
 (define-type9 profune-communicator
-  (profune-communicator-constructor proc) profune-communicator?
-  (proc profune-communicator-proc)
+  (profune-communicator-constructor db stages) profune-communicator?
+  (db profune-communicator-db)
+  (stages profune-communicator-stages)
   )
-
-(define (profune-communicator-handle communicator commands)
-  ((profune-communicator-proc communicator) commands))
 
 (define-type9 stage
   (make-stage answer-iterator results-buffer rfc) stage?
@@ -48,8 +46,13 @@
     (if (profun-database? db0)
         (profun-database-copy db0)
         (raisu 'expected-a-profun-database db0)))
-
   (define stages (stack-make))
+
+  (profune-communicator-constructor db stages))
+
+(define (profune-communicator-handle comm commands)
+  (define db (profune-communicator-db comm))
+  (define stages (profune-communicator-stages comm))
 
   (define (current-answer-iterator)
     (stage-answer-iterator (stack-peek stages)))
@@ -184,4 +187,4 @@
         ((bye) (handle-bye op args next))
         (else (raisu 'operation-not-supported op)))))
 
-  (profune-communicator-constructor handle))
+  (handle commands))
