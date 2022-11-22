@@ -14,6 +14,7 @@
 
 %run guile
 
+%var profun-database?
 %var profun-create-database
 %var profun-database-add-rule!
 %var profun-database-copy
@@ -37,7 +38,7 @@
 %use (usymbol usymbol?) "./usymbol.scm"
 
 (define-type9 <database>
-  (database-constructor table handler) database?
+  (database-constructor table handler) profun-database?
   (table database-table)
   (handler database-handler)
   )

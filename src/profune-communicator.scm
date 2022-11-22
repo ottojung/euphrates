@@ -24,7 +24,7 @@
 %use (list-span-while) "./list-span-while.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
-%use (profun-database-add-rule! profun-database-copy profun-run-query) "./profun.scm"
+%use (profun-database-add-rule! profun-database-copy profun-database? profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
 
 (define-type9 <profune-communicator>
@@ -36,7 +36,11 @@
   ((profune-communicator-proc communicator) commands))
 
 (define (make-profune-communicator db0)
-  (define db (profun-database-copy db0))
+  (define db
+    (if (profun-database? db0)
+        (profun-database-copy db0)
+        (raisu 'expected-a-profun-database db0)))
+
   (define current-answer-iterator #f)
   (define current-results-buffer '())
   (define current-RFC #f)
@@ -149,12 +153,12 @@
       (raisu 'commands-must-be-a-list commands))
      ((not (symbol? (car commands)))
       (raisu 'commands-must-start-from-an-operation commands))
+     ((not db)
+      (raisu 'already-said-bye-bye))
      (else
       (let ()
         (define-values (op args next)
           (split-commands commands))
-        (unless current-results-buffer
-          (raisu 'already-said-bye-bye))
         (case op
           ((listen) (handle-listen op args next))
           ((whats) (handle-whats op args next))
