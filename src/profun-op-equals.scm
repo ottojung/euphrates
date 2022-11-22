@@ -54,7 +54,7 @@
    (cond
     (ctx (profun-op-equals-aux ctx))
     ((profun-unbound-value? lst)
-     (make-profun-RFC lst-name))
+     (make-profun-RFC `((value lst-name))))
     ((profun-op-equals-argument? lst)
      (let ((ctxx (or ctx lst)))
        (profun-op-equals-aux ctxx)))

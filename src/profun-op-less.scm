@@ -29,7 +29,7 @@
    (ctx (x y) (x-name y-name))
 
    (if (profun-unbound-value? y)
-       (make-profun-RFC `((what ,y-name)))
+       (make-profun-RFC `((value ,y-name)))
        (begin
          (unless (number? y)
            (raisu 'non-number-in-less y))
