@@ -155,6 +155,8 @@
       (hashmap-delete! env key)))
 (define (env-unset! env key)
   (hashmap-delete! env key))
+(define (env-copy env)
+  (hashmap-copy env))
 
 ;; returns instruction or #f
 (define (get-alternative-instruction db s)
@@ -339,13 +341,14 @@
 (define (handle-RFC db env s ret)
   (define continuation
     (lambda (continue? db-additions instruction-prefix)
+      (define new-env (env-copy env))
       (define new-db (profun-database-copy db))
       (define new-s
         (if continue?
             (add-prefix-to-instruction new-db s instruction-prefix)
             (set-remaining-instructions s instruction-prefix)))
       (for-each (comp (profun-database-add-rule! new-db)) db-additions)
-      (profun-run new-db env new-s)))
+      (profun-run new-db new-env new-s)))
 
   (profun-RFC-set-continuation ret continuation))
 
