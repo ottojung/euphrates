@@ -7,7 +7,6 @@
 %use (catchu-case) "./src/catchu-case.scm"
 %use (debug) "./src/debug.scm"
 %use (debugs) "./src/debugs.scm"
-%use (profun-CR-what) "./src/profun-CR.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
@@ -18,6 +17,7 @@
 %use (profun-eval-fail! profun-op-eval) "./src/profun-op-eval.scm"
 %use (profun-op-false) "./src/profun-op-false.scm"
 %use (profun-op-less) "./src/profun-op-less.scm"
+%use (profun-op-modulo) "./src/profun-op-modulo.scm"
 %use (profun-op*) "./src/profun-op-mult.scm"
 %use (profun-op+) "./src/profun-op-plus.scm"
 %use (profun-op-separate) "./src/profun-op-separate.scm"
@@ -110,6 +110,7 @@
        (false profun-op-false)
        (+ profun-op+)
        (* profun-op*)
+       (modulo profun-op-modulo)
        (sqrt profun-op-sqrt)
        (< profun-op-less)
        (divisible profun-op-divisible)
@@ -333,6 +334,58 @@
    (test '((* 4 z z)) '())
    (test '((* 0 z z)) '(((z . 0))))
    (test '((* z 0 z)) '(((z . 0))))
+
+   )
+
+  (test-definitions
+   "modulo CASES"
+   '()
+
+   (test '((modulo 6 3 2 0)) '(()))
+   (test '((modulo 6 3 2 r)) '(((r . 0))))
+   (test '((modulo 6 3 q 0)) '(((q . 2))))
+   (test '((modulo 6 3 q r)) '(((q . 2) (r . 0))))
+   (test '((modulo x 3 2 0)) '(((x . 6))))
+   (test '((modulo 6 y 2 0)) '(((y . 3))))
+
+   (test '((modulo 9 4 2 1)) '(()))
+   (test '((modulo 9 4 2 r)) '(((r . 1))))
+   (test '((modulo 9 4 q 1)) '(((q . 2))))
+   (test '((modulo 9 4 q r)) '(((q . 2) (r . 1))))
+   (test '((modulo x 4 2 1)) '(((x . 9))))
+   (test '((modulo 9 y 2 1)) '(((y . 4))))
+
+   (test '((modulo 777 23 33 18)) '(()))
+   (test '((modulo 777 23 33 r)) '(((r . 18))))
+   (test '((modulo 777 23 q 18)) '(((q . 33))))
+   (test '((modulo 777 23 q r)) '(((q . 33) (r . 18))))
+   (test '((modulo x 23 33 18)) '(((x . 777))))
+   (test '((modulo 777 y 33 18)) '(((y . 23))))
+
+   (test '((modulo x x 2 1)) '())
+   (test '((modulo x x 2 0)) '(((x . 0))))
+   (test-rfc '((modulo x x 1 0)) '((value x)))
+   (test-rfc '((modulo x x 1 r)) '((value (any x r))))
+   (test-rfc '((modulo x x q 0)) '((value (any x q))))
+
+   (test '((modulo x 1 x 2)) '())
+   (test-rfc '((modulo x y x r)) '((value x)))
+   (test-rfc '((modulo x 1 x 0)) '((value x)))
+
+   (test '((modulo x 0 0 x)) '(()))
+   (test '((modulo x 1 1 x)) '())
+   (test '((modulo x y q x)) '(((q . 0) (y . 0))))
+
+   (test '((modulo 5 y y 1)) '(((y . 2))))
+   (test '((modulo 7 y y 2)) '())
+   (test '((modulo 10 y y 1)) '(((y . 3))))
+   (test '((modulo 9 y y 1)) '())
+
+   (test '((modulo 5 y 2 y)) '())
+   (test-rfc '((modulo x y q y)) '((value y)))
+
+   (test '((modulo 3 7 0 3)) '())
+   (test '((modulo 3 7 q r)) '())
 
    )
 
