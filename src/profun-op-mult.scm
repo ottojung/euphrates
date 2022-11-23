@@ -21,5 +21,9 @@
 (define profun-op*
   (let ((safe-div
          (lambda (a b)
-           (and (not (= 0 b)) (/ a b)))))
-    (profun-op-binary * safe-div safe-div)))
+           (and (not (= 0 b)) (/ a b))))
+        (safe-sqrt
+         (lambda (x y)
+           (let ((z (sqrt x)))
+             (and (integer? z) (inexact->exact z))))))
+    (profun-op-binary * safe-div safe-div safe-sqrt)))

@@ -18,4 +18,8 @@
 
 %use (profun-op-binary) "./profun-op-binary.scm"
 
-(define profun-op+ (profun-op-binary + - -))
+(define profun-op+
+  (let ((div2
+         (lambda (x y)
+           (/ x 2))))
+    (profun-op-binary + - - div2)))

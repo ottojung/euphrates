@@ -17,12 +17,13 @@
 %var profun-op-binary
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
+%use (debugs) "./debugs.scm"
 %use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-bound-value?) "./profun-value.scm"
 
-(define (profun-op-binary action left-inverse right-inverse)
+(define (profun-op-binary action left-inverse right-inverse both-inverse)
   (define (in-op-domain? x)
     (and (integer? x) (>= x 0)))
 
@@ -54,6 +55,8 @@
     ((profun-bound-value? y)
      (make-profun-RFC `((value (any ,x-name ,z-name)))))
     ((profun-bound-value? z)
-     (make-profun-RFC `((value (any ,x-name ,y-name)))))
+     (if (equal? x y)
+         (g-op x-name z z x both-inverse)
+         (make-profun-RFC `((value (any ,x-name ,y-name))))))
     (else
      (make-profun-RFC `((value (any ,x-name ,y-name ,z-name))))))))
