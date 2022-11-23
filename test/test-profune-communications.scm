@@ -66,10 +66,10 @@
   (profun-create-database server-handler definitions1))
 
 (define client-comm
-  (make-profune-communicator client-db))
+  (make-profune-communicator client-db #f))
 
 (define server-comm
-  (make-profune-communicator server-db))
+  (make-profune-communicator server-db #f))
 
 (parameterize ((profune-communications-hook/p
                 (lambda (recepient args)
