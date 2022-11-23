@@ -28,7 +28,7 @@
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
-%use (profun-RFC-set-continuation profun-RFC-what profun-RFC?) "./profun-RFC.scm"
+%use (profun-abort-set-continuation profun-abort-what profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
@@ -338,7 +338,7 @@
   (define new-current (build-body instruction-prefix))
   (make-state new-current))
 
-(define (handle-RFC db env s ret)
+(define (handle-abort db env s ret)
   (define continuation
     (lambda (continue? db-additions instruction-prefix)
       (define new-env (env-copy env))
@@ -350,7 +350,7 @@
       (for-each (comp (profun-database-add-rule! new-db)) db-additions)
       (profun-run new-db new-env new-s)))
 
-  (profun-RFC-set-continuation ret continuation))
+  (profun-abort-set-continuation ret continuation))
 
 (define (enter-foreign db env s instruction)
   (define sign (instruction-sign instruction))
@@ -366,8 +366,8 @@
     (backtrack db env s))
    ((profun-accept? ret)
     (handle-accept env s instruction args ret))
-   ((profun-RFC? ret)
-    (handle-RFC db env s ret))
+   ((profun-abort? ret)
+    (handle-abort db env s ret))
    (else
     (raisu 'bad-type-of-object-returned-from-foreign ret))))
 
@@ -528,7 +528,7 @@
 
      ((equal? #f current-state) #f)
 
-     ((profun-RFC? current-state)
+     ((profun-abort? current-state)
       (ret-this last-state))
 
      ((profun-IDR? current-state)
@@ -554,5 +554,5 @@
        ((or (pair? r) (null? r)) (cons r (loop)))
        ((equal? #f r) '())
        ((profun-IDR? r) (loop))
-       ((profun-RFC? r) (raisu 'profun-needs-more-info (profun-RFC-what r)))
+       ((profun-abort? r) (raisu 'profun-needs-more-info (profun-abort-what r)))
        (else (raisu 'unknown-result-type-in-profun-query r))))))

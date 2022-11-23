@@ -28,47 +28,18 @@
 %var profun-RFC-continue-with-inserted
 %var profun-RFC-eval-inserted
 
-%use (define-type9) "./define-type9.scm"
-
-(define-type9 profun-RFC-obj
-  (profun-RFC-constructor continuation what additional) profun-RFC-obj?
-  (continuation profun-RFC-continuation)
-  (what profun-RFC-what)
-  (additional profun-RFC-additional)
-  )
-
-(define (profun-RFC? x)
-  (profun-RFC-obj? x))
+%use (make-profun-abort profun-abort-add-info profun-abort-continue-with-inserted profun-abort-eval-inserted profun-abort-set-continuation profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
 
 (define (make-profun-RFC what)
-  (define additional '())
-  (define continuation #f)
-  (profun-RFC-constructor continuation what additional))
+  (make-profun-abort 'RFC what))
 
-(define (profun-RFC-set-continuation self continuation)
-  (define what (profun-RFC-what self))
-  (define additional (profun-RFC-additional self))
-  (profun-RFC-constructor continuation what additional))
+(define (profun-RFC? x)
+  (and (profun-abort? x)
+       (equal? 'RFC (profun-abort-type x))))
 
-(define (profun-RFC-add-info self additional-rules)
-  (define what (profun-RFC-what self))
-  (define continuation (profun-RFC-continuation self))
-  (define additional (profun-RFC-additional self))
-  (define new-additional (append additional additional-rules))
-  (profun-RFC-constructor continuation what new-additional))
+(define profun-RFC-what profun-abort-what)
+(define profun-RFC-set-continuation profun-abort-set-continuation)
 
-(define (profun-RFC-continue-with-inserted self inserted)
-  "Inserts `inserted' just before the instruction that throwed this RFC, and continues evaluation."
-
-  (define continuation (profun-RFC-continuation self))
-  (define additional (profun-RFC-additional self))
-  (define continue? #t)
-  (continuation continue? additional inserted))
-
-(define (profun-RFC-eval-inserted self inserted)
-  "Evaluates `inserted' starting from state before the RFC was thrown. Any later computation is ignored."
-
-  (define continuation (profun-RFC-continuation self))
-  (define additional (profun-RFC-additional self))
-  (define continue? #f)
-  (continuation continue? additional inserted))
+(define profun-RFC-add-info profun-abort-add-info)
+(define profun-RFC-continue-with-inserted profun-abort-continue-with-inserted)
+(define profun-RFC-eval-inserted profun-abort-eval-inserted)
