@@ -44,4 +44,4 @@
     ((profun-bound-value? y)
      (g-op x-name y x inverse))
     (else
-     (make-profun-RFC `((value (or ,x-name ,y-name))))))))
+     (make-profun-RFC `((value (any ,x-name ,y-name))))))))
