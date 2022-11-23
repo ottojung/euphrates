@@ -37,8 +37,6 @@
    (equals profun-op-equals)
    ))
 
-(define custom-its 'profune-custom-its)
-
 (define client-handler
   (profun-make-handler
    (= profun-op-unify)
@@ -51,7 +49,7 @@
    (< profun-op-less)
    (divisible profun-op-divisible)
    (equals profun-op-equals)
-   (value (profun-op-value custom-its '((M (< M 17))) '((X . 9) (Y . 16))))
+   (value (profun-op-value '((M (< M 17))) '((X . 9) (Y . 16))))
    ))
 
 (define definitions1
@@ -68,10 +66,10 @@
   (profun-create-database server-handler definitions1))
 
 (define client-comm
-  (make-profune-communicator client-db custom-its))
+  (make-profune-communicator client-db))
 
 (define server-comm
-  (make-profune-communicator server-db custom-its))
+  (make-profune-communicator server-db))
 
 (parameterize ((profune-communications-hook/p
                 (lambda (recepient args)

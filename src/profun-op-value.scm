@@ -24,7 +24,7 @@
 %use (profun-unbound-value? profun-value-name) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
-(define (profun-op-value custom-its custom-alist value-alist)
+(define (profun-op-value custom-alist value-alist)
   (profun-op-lambda
    (ctx (x) (x-name))
    (let loop ((x x))

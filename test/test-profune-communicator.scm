@@ -45,7 +45,7 @@
   (profun-create-database server-handler definitions1))
 
 (define (test-dialog sentences)
-  (define comm (make-profune-communicator db1 #f))
+  (define comm (make-profune-communicator db1))
 
   (unless (= 0 (remainder (length sentences) 2))
     (raisu 'must-be-even-number-of-sentences (length sentences)))

@@ -30,10 +30,9 @@
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
 (define-type9 profune-communicator
-  (profune-communicator-constructor db stages custom-its) profune-communicator?
+  (profune-communicator-constructor db stages) profune-communicator?
   (db profune-communicator-db)
   (stages profune-communicator-stages)
-  (custom-its profune-communicator-custom-its)
   )
 
 (define-type9 stage
@@ -44,25 +43,18 @@
   (rfc stage-rfc set-stage-rfc!)
   )
 
-(define (make-profune-communicator db0 custom-its)
-  "Makes communicator from database `db0' and custom-its-variable-name `custom-its'. If set, the value of `custom-its' will change the response of the communicator after `its' operation, replacing the default form `its (equals (<... bindings ...>))' by `its <values of custom-its var in the env...>'."
-
+(define (make-profune-communicator db0)
   (define db
     (if (profun-database? db0)
         (profun-database-copy db0)
         (raisu 'expected-a-profun-database db0)))
   (define stages (stack-make))
 
-  (unless (or (symbol? custom-its)
-              (equal? #f custom-its))
-    (raisu 'custom-its-must-be-a-symbol-or-false custom-its))
-
-  (profune-communicator-constructor db stages custom-its))
+  (profune-communicator-constructor db stages))
 
 (define (profune-communicator-handle comm commands)
   (define db (profune-communicator-db comm))
   (define stages (profune-communicator-stages comm))
-  (define custom-its-varname (profune-communicator-custom-its comm))
 
   (define (current-answer-iterator)
     (stage-answer-iterator (stack-peek stages)))

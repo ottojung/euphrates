@@ -67,8 +67,6 @@
   ;; TESTS ;;
   ;;;;;;;;;;;
 
-(define custom-its 'test-custom-its)
-
 (parameterize
     ((current-handler
       (profun-make-handler
@@ -82,7 +80,7 @@
        (< profun-op-less)
        (divisible profun-op-divisible)
        (equals profun-op-equals)
-       (value (profun-op-value custom-its '((M (< M 17))) '((X . 9) (Y . 16))))
+       (value (profun-op-value '((M (< M 17))) '((X . 9) (Y . 16))))
 
        (apply profun-op-apply)
        (eval profun-op-eval)
