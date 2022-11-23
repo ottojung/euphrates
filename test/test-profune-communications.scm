@@ -37,6 +37,8 @@
    (equals profun-op-equals)
    ))
 
+(define custom-its 'profune-custom-its)
+
 (define client-handler
   (profun-make-handler
    (= profun-op-unify)
@@ -49,7 +51,7 @@
    (< profun-op-less)
    (divisible profun-op-divisible)
    (equals profun-op-equals)
-   (value (profun-op-value '() '((X . 9) (Y . 16))))
+   (value (profun-op-value custom-its '((M (< M 17))) '((X . 9) (Y . 16))))
    ))
 
 (define definitions1
@@ -66,10 +68,10 @@
   (profun-create-database server-handler definitions1))
 
 (define client-comm
-  (make-profune-communicator client-db #f))
+  (make-profune-communicator client-db custom-its))
 
 (define server-comm
-  (make-profune-communicator server-db #f))
+  (make-profune-communicator server-db custom-its))
 
 (parameterize ((profune-communications-hook/p
                 (lambda (recepient args)
@@ -110,6 +112,14 @@
                "[client] its (equals (((X . 9))))"
                "[server] its (equals (((Y . 3) (X . 9))))"
                "result = (((Y . 3) (X . 9)))"
+               )
+
+  (test-dialog '(whats (sqrt M Y))
+               "[client] whats (sqrt M Y)"
+               "[server] whats (value (any M Y))"
+               "[client] its (< M 17)"
+               "[server] its (equals (((Y . 4) (M . 16))))"
+               "result = (((Y . 4) (M . 16)))"
                )
 
   )
