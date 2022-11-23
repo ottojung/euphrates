@@ -102,13 +102,13 @@
 
              ((or (pair? r) (null? r))
               (if custom-its-varname
-                  (let ((val (assq custom-its-varname r)))
-                    (if val
+                  (let ((val/p (assq custom-its-varname r)))
+                    (if val/p
                         (begin
                           (collect-finish!)
-                          (if (list? val)
-                              (cons 'its val)
-                              (list 'its val)))
+                          (if (list? (cdr val/p))
+                              (cons 'its (cdr val/p))
+                              (list 'its (cdr val/p))))
                         (loop (+ 1 i) (cons r buf))))
                   (loop (+ 1 i) (cons r buf))))
 
