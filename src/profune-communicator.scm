@@ -93,12 +93,13 @@
     (set-current-answer-iterator! #f))
 
   (define (collect-n n)
+    (define iter (current-answer-iterator))
     (let loop ((i 0) (buf (current-results-buffer)))
       (if (>= i n)
           `(its (equals ,(reverse! buf)))
-          (let ((r (and (current-answer-iterator)
-                        ((current-answer-iterator)))))
+          (let ((r (and iter (iter))))
             (cond
+
              ((or (pair? r) (null? r))
               (if custom-its-varname
                   (let ((val (assq custom-its-varname r)))
@@ -110,6 +111,7 @@
                               (list 'its val)))
                         (loop (+ 1 i) (cons r buf))))
                   (loop (+ 1 i) (cons r buf))))
+
              ((equal? #f r)
               (collect-finish!)
               `(its (equals ,(reverse! buf))))
@@ -119,6 +121,7 @@
               (let ((name (profun-IDR-name r))
                     (arity (profun-IDR-arity r)))
                 `(i-dont-recognize ,name ,arity)))
+
              ((profun-RFC? r)
               (set-current-results-buffer! buf)
               (set-current-RFC! r)
