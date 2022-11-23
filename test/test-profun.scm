@@ -7,6 +7,7 @@
 %use (catchu-case) "./src/catchu-case.scm"
 %use (debug) "./src/debug.scm"
 %use (debugs) "./src/debugs.scm"
+%use (profun-CR-what) "./src/profun-CR.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
@@ -61,6 +62,22 @@
         (run-query query)
         (('profun-needs-more-info rfc)
          (set! actual-what (profun-RFC-what rfc))
+         (set! threw? #t)))
+       (assert threw?)
+       (unless (equal? expected-what actual-what)
+         (debug "expected: ~s" expected-what)
+         (debug "actual: ~s" actual-what))
+       (assert= expected-what actual-what)))))
+
+(define-syntax test-cr
+  (syntax-rules ()
+    ((_ query expected-what)
+     (let ((threw? #f)
+           (actual-what #f))
+       (catchu-case
+        (run-query query)
+        (('profun-returned-custom-value cr)
+         (set! actual-what cr)
          (set! threw? #t)))
        (assert threw?)
        (unless (equal? expected-what actual-what)
@@ -403,23 +420,9 @@
    (test '((value (or X X))) '(((X . 9))))
    (test '((value (or X X X))) '(((X . 9))))
 
-   (let ((threw? #f))
-     (catchu-case
-      (test '((value M)) `((< M 17)))
-      (('profun-returned-custom-value v) (set! threw? #t)))
-     (assert threw?))
-
-   (let ((threw? #f))
-     (catchu-case
-      (test '((value (or M M))) `((< M 17)))
-      (('profun-returned-custom-value v) (set! threw? #t)))
-     (assert threw?))
-
-   (let ((threw? #f))
-     (catchu-case
-      (test '((value (or M X))) `((< M 17)))
-      (('profun-returned-custom-value v) (set! threw? #t)))
-     (assert threw?))
+   (test-cr '((value M)) `((< M 17)))
+   (test-cr '((value (or M M))) `((< M 17)))
+   (test-cr '((value (or M X))) `((< M 17)))
    )
 
   (test-definitions
