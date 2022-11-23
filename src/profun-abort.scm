@@ -24,6 +24,7 @@
 %var profun-abort-type
 %var profun-abort-what
 %var profun-abort-set-continuation
+%var profun-abort-modify-continuation
 
 %var profun-abort-add-info
 %var profun-abort-continue-with-inserted
@@ -51,6 +52,15 @@
   (define type (profun-abort-type self))
   (define what (profun-abort-what self))
   (define additional (profun-abort-additional self))
+  (profun-abort-constructor type continuation what additional))
+
+(define (profun-abort-modify-continuation self modification)
+  (define type (profun-abort-type self))
+  (define what (profun-abort-what self))
+  (define additional (profun-abort-additional self))
+  (define continuation
+    (lambda args
+      (modification (apply args continuation))))
   (profun-abort-constructor type continuation what additional))
 
 (define (profun-abort-add-info self additional-rules)

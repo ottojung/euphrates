@@ -29,8 +29,8 @@
 %use (list-ref-or) "./list-ref-or.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
-%use (profun-RFC?) "./profun-RFC.scm"
-%use (profun-abort-set-continuation profun-abort-what profun-abort?) "./profun-abort.scm"
+%use (profun-RFC-modify-continuation profun-RFC?) "./profun-RFC.scm"
+%use (profun-abort-set-continuation profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
@@ -540,16 +540,23 @@
   (define env (make-env))
   (profun-run db env initial-state))
 
-;; accepts database `db` and list of symbols `query`
-;; returns a list of result alists
-(define (profun-eval-query db query)
-  (define iterator (profun-run-query db query))
-  (let loop ((buf '()))
+(define (profun-eval-from iterator start)
+  (let loop ((buf start))
     (let ((r (iterator)))
       (cond
        ((or (pair? r) (null? r)) (loop (cons r buf)))
        ((equal? #f r) (reverse! buf))
        ((profun-IDR? r) (loop buf))
-       ((profun-RFC? r) (raisu 'profun-needs-more-info (profun-abort-what r)))
        ((profun-CR? r) (profun-CR-what r))
+       ((profun-RFC? r)
+        (let ((mod (profun-RFC-modify-continuation
+                    r
+                    (lambda (new-iter) (profun-eval-from new-iter buf)))))
+          (raisu 'profun-needs-more-info mod)))
        (else (raisu 'unknown-result-type-in-profun-query r))))))
+
+;; accepts database `db` and list of symbols `query`
+;; returns a list of result alists
+(define (profun-eval-query db query)
+  (define iterator (profun-run-query db query))
+  (profun-eval-from iterator '()))
