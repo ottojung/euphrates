@@ -38,11 +38,8 @@
 (define (profun-make-constant c)
   (profun-value-constructor c #f #f))
 
-(define profun-make-unbound-var
-  (let ((counter 0))
-    (lambda (name)
-      (set! counter (+ 1 counter))
-      (profun-value-constructor counter #t name))))
+(define (profun-make-unbound-var name)
+  (profun-value-constructor #f #t name))
 
 (define (profun-value-unwrap var)
   (if (profun-value-empty? var) var
