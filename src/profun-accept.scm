@@ -23,7 +23,7 @@
 %var profun-set
 %var profun-ctx-set
 
-%use (assoc-set-value) "./assoc-set-value.scm"
+%use (assq-set-value) "./assq-set-value.scm"
 %use (define-type9) "./define-type9.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
@@ -53,7 +53,7 @@
   (let* ((alist (profun-accept-alist current-return-value))
          (ctx (profun-accept-ctx current-return-value))
          (ctx-changed? (profun-accept-ctx-changed? current-return-value))
-         (new-alist (assoc-set-value variable variable-value alist)))
+         (new-alist (assq-set-value variable variable-value alist)))
     (profun-accept-constructor new-alist ctx ctx-changed?)))
 
 (define-syntax profun-set
