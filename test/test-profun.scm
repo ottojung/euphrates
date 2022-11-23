@@ -358,9 +358,24 @@
    (test '((value (any))) '())
    (test '((value (or X X))) '(((X . 9))))
    (test '((value (or X X X))) '(((X . 9))))
-   (test '((value M)) `((< M 17)))
-   (test '((value (or M M))) `((< M 17)))
-   (test '((value (or M X))) `((< M 17)))
+
+   (let ((threw? #f))
+     (catchu-case
+      (test '((value M)) `((< M 17)))
+      (('profun-returned-custom-value v) (set! threw? #t)))
+     (assert threw?))
+
+   (let ((threw? #f))
+     (catchu-case
+      (test '((value (or M M))) `((< M 17)))
+      (('profun-returned-custom-value v) (set! threw? #t)))
+     (assert threw?))
+
+   (let ((threw? #f))
+     (catchu-case
+      (test '((value (or M X))) `((< M 17)))
+      (('profun-returned-custom-value v) (set! threw? #t)))
+     (assert threw?))
    )
 
   (test-definitions

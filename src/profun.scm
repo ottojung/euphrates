@@ -547,7 +547,8 @@
        ((or (pair? r) (null? r)) (loop (cons r buf)))
        ((equal? #f r) (reverse! buf))
        ((profun-IDR? r) (loop buf))
-       ((profun-CR? r) (profun-CR-what r))
+       ((profun-CR? r)
+        (raisu 'profun-returned-custom-value (profun-CR-what r)))
        ((profun-RFC? r)
         (let ((mod (profun-RFC-modify-continuation
                     r
