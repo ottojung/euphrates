@@ -22,16 +22,19 @@
 %use (profun-reject) "./profun-reject.scm"
 %use (raisu) "./raisu.scm"
 
-(define (profun-op-value alist)
+(define (profun-op-value custom-alist value-alist)
   (profun-op-lambda
    (ctx (x) (x-name))
    (let loop ((x x))
      (cond
       ((symbol? x)
-       (let ((val/p (assq x alist)))
+       (let ((val/p (assq x value-alist)))
          (if val/p
              (profun-set (x <- (cdr val/p)))
-             (profun-reject))))
+             (let ((val/p (assq x custom-alist)))
+               (if val/p
+                   (cdr val/p)
+                   (profun-reject))))))
       ((and (pair? x)
             (list? (cdr x)))
        (let ((composer

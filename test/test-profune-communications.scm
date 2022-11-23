@@ -49,7 +49,7 @@
    (< profun-op-less)
    (divisible profun-op-divisible)
    (equals profun-op-equals)
-   (value (profun-op-value '((X . 9) (Y . 16))))
+   (value (profun-op-value '() '((X . 9) (Y . 16))))
    ))
 
 (define definitions1
