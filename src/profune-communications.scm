@@ -60,3 +60,16 @@
 ;; Every communicator must know these words: "whats", "its", "listen", "more", "bye", "i-dont-recognize" and "error".
 ;;
 
+%use (profune-communicator-handle) "./profune-communicator.scm"
+
+(define (profune-communications client-comm server-comm)
+  (lambda (question)
+    (let loop ((question question))
+      (define answer
+        (profune-communicator-handle server-comm question))
+      (define response
+        (profune-communicator-handle client-comm answer))
+
+      (if (equal? response `(error did-not-ask-anything))
+          answer
+          (loop response)))))
