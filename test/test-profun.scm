@@ -360,9 +360,9 @@
    (test '((value (any))) '())
    (test '((value (or X X))) '(((X . 9))))
    (test '((value (or X X X))) '(((X . 9))))
-   (test '((value M)) `(((,custom-its (< M 17)))))
-   (test '((value (or M M))) `(((,custom-its (< M 17)))))
-   (test '((value (or M X))) `(((X . 9) (,custom-its (< M 17)))))
+   (test '((value M)) `((< M 17)))
+   (test '((value (or M M))) `((< M 17)))
+   (test '((value (or M X))) `((< M 17)))
    )
 
   (test-definitions

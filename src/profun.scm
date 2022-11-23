@@ -27,6 +27,7 @@
 %use (fn-pair) "./fn-pair.scm"
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
+%use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-set-continuation profun-abort-what profun-abort?) "./profun-abort.scm"
@@ -543,11 +544,12 @@
 ;; returns a list of result alists
 (define (profun-eval-query db query)
   (define iterator (profun-run-query db query))
-  (let loop ()
+  (let loop ((buf '()))
     (let ((r (iterator)))
       (cond
-       ((or (pair? r) (null? r)) (cons r (loop)))
-       ((equal? #f r) '())
-       ((profun-IDR? r) (loop))
+       ((or (pair? r) (null? r)) (loop (cons r buf)))
+       ((equal? #f r) (reverse! buf))
+       ((profun-IDR? r) (loop buf))
        ((profun-RFC? r) (raisu 'profun-needs-more-info (profun-abort-what r)))
+       ((profun-CR? r) (profun-CR-what r))
        (else (raisu 'unknown-result-type-in-profun-query r))))))

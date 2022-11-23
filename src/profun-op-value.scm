@@ -16,6 +16,7 @@
 
 %var profun-op-value
 
+%use (make-profun-CR) "./profun-CR.scm"
 %use (profun-accept profun-set) "./profun-accept.scm"
 %use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./profun-answer-join.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
@@ -34,7 +35,7 @@
              (profun-set (x <- (cdr val/p)))
              (let ((val/p (assq x custom-alist)))
                (if val/p
-                   (profun-set (custom-its <- (cdr val/p)))
+                   (make-profun-CR (cdr val/p))
                    (profun-reject))))))
       ((and (pair? x)
             (list? (cdr x)))

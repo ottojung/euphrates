@@ -26,8 +26,8 @@
 
 %use (make-profun-abort profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
 
-(define (make-profun-CR key arity)
-  (make-profun-abort 'CR (list key arity)))
+(define (make-profun-CR what)
+  (make-profun-abort 'CR what))
 
 (define (profun-CR? x)
   (and (profun-abort? x)

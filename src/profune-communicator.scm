@@ -19,15 +19,15 @@
 %var profune-communicator-handle
 
 %use (comp) "./comp.scm"
-%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
+%use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-eval-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database? profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
-%use (stack->list stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
+%use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
 (define-type9 profune-communicator
   (profune-communicator-constructor db stages custom-its) profune-communicator?
@@ -110,16 +110,7 @@
             (cond
 
              ((or (pair? r) (null? r))
-              (if custom-its-varname
-                  (let ((val/p (assq custom-its-varname r)))
-                    (if val/p
-                        (begin
-                          (collect-finish!)
-                          (if (list? (cdr val/p))
-                              (cons 'its (cdr val/p))
-                              (list 'its (cdr val/p))))
-                        (loop (+ 1 i) (cons r buf))))
-                  (loop (+ 1 i) (cons r buf))))
+              (loop (+ 1 i) (cons r buf)))
 
              ((equal? #f r)
               (collect-finish!)
@@ -130,6 +121,13 @@
               (let ((name (profun-IDR-name r))
                     (arity (profun-IDR-arity r)))
                 `(i-dont-recognize ,name ,arity)))
+
+             ((profun-CR? r)
+              (collect-finish!)
+              (let ((what (profun-CR-what r)))
+                (if (list? what)
+                    (cons 'its what)
+                    (list 'its what))))
 
              ((profun-RFC? r)
               (set-current-results-buffer! buf)
