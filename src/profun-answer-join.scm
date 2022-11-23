@@ -19,6 +19,7 @@
 %var profun-answer-join/and
 
 %use (alist->hashmap hashmap->alist) "./hashmap.scm"
+%use (profun-abort?) "./profun-abort.scm"
 %use (make-profun-accept profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-reject?) "./profun-reject.scm"
 %use (raisu) "./raisu.scm"
@@ -39,9 +40,12 @@
   (cond
    ((profun-accept? a) a)
    ((profun-reject? a)
-    (unless (or (profun-accept? b) (profun-reject? b))
+    (unless (or (profun-accept? b)
+                (profun-reject? b)
+                (profun-abort? b))
       (raisu 'b-is-not-an-answer b))
     b)
+   ((profun-abort? a) a)
    (else (raisu 'a-is-not-an-answer a))))
 
 (define (profun-answer-join/or a b)
@@ -50,11 +54,15 @@
     (cond
      ((profun-accept? b) (profun-answer-join-positives a b))
      ((profun-reject? b) a)
+     ((profun-abort? b) b)
      (else (raisu 'b-is-not-an-answer b))))
    ((profun-reject? a)
-    (unless (or (profun-accept? b) (profun-reject? b))
+    (unless (or (profun-accept? b)
+                (profun-reject? b)
+                (profun-abort? b))
       (raisu 'b-is-not-an-answer b))
     b)
+   ((profun-abort? a) a)
    (else (raisu 'a-is-not-an-answer a))))
 
 (define (profun-answer-join/and a b)
@@ -63,9 +71,13 @@
     (cond
      ((profun-accept? b) (profun-answer-join-positives a b))
      ((profun-reject? b) b)
+     ((profun-abort? b) b)
      (else (raisu 'b-is-not-an-answer b))))
    ((profun-reject? a)
-    (unless (or (profun-accept? b) (profun-reject? b))
+    (unless (or (profun-accept? b)
+                (profun-reject? b)
+                (profun-abort? b))
       (raisu 'b-is-not-an-answer b))
-    a)
+    (if (profun-abort? b) b a))
+   ((profun-abort? a) a)
    (else (raisu 'a-is-not-an-answer a))))
