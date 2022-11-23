@@ -16,10 +16,11 @@
 
 %var profun-op-value
 
-%use (profun-set) "./profun-accept.scm"
+%use (profun-accept profun-set) "./profun-accept.scm"
 %use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./profun-answer-join.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-unbound-value? profun-value-name) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
 (define (profun-op-value custom-its custom-alist value-alist)
@@ -37,17 +38,19 @@
                    (profun-reject))))))
       ((and (pair? x)
             (list? (cdr x)))
-       (let ((composer
-              (case (car x)
-                ((any) profun-answer-join/any)
-                ((or) profun-answer-join/or)
-                ((and) profun-answer-join/and)
-                (else (raisu 'uknown-value-composer (car x))))))
+       (let* ((op (car x))
+              (composer
+               (case op
+                 ((any) profun-answer-join/any)
+                 ((or) profun-answer-join/or)
+                 ((and) profun-answer-join/and)
+                 (else (raisu 'uknown-value-composer op)))))
          (let lp2 ((buf (cdr x))
-                   (ret (profun-reject)))
+                   (ret (case op ((and) (profun-accept)) ((or any) (profun-reject)))))
            (if (null? buf) ret
                (let* ((u (car buf))
                       (y (loop u)))
                  (lp2 (cdr buf) (composer ret y)))))))
+      ((profun-unbound-value? x) (loop (profun-value-name x)))
       (else
        (raisu 'uknown-value-format x))))))

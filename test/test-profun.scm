@@ -22,6 +22,7 @@
 %use (profun-op-sqrt) "./src/profun-op-sqrt.scm"
 %use (profun-op-true) "./src/profun-op-true.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
+%use (profun-op-value) "./src/profun-op-value.scm"
 %use (profun-create-database profun-eval-query profun-run-query) "./src/profun.scm"
 
 (define current-handler
@@ -66,6 +67,8 @@
   ;; TESTS ;;
   ;;;;;;;;;;;
 
+(define custom-its 'test-custom-its)
+
 (parameterize
     ((current-handler
       (profun-make-handler
@@ -79,6 +82,7 @@
        (< profun-op-less)
        (divisible profun-op-divisible)
        (equals profun-op-equals)
+       (value (profun-op-value custom-its '((M (< M 17))) '((X . 9) (Y . 16))))
 
        (apply profun-op-apply)
        (eval profun-op-eval)
@@ -338,6 +342,27 @@
            ((Y . 3) (X . 4))
            ((Y . 5) (X . 6))
            ))
+   )
+
+  (test-definitions
+   "value CASES"
+   '()
+
+   (test '((value X)) '(((X . 9))))
+   (test '((value Y)) '(((Y . 16))))
+   (test '((value (any X Y Z))) '(((X . 9))))
+   (test '((value (or X Y Z))) '(((Y . 16) (X . 9))))
+   (test '((value (and X Y Z))) '())
+   (test '((value (and X Y))) '(((Y . 16) (X . 9))))
+   (test '((value (and X (or Y Z)))) '(((Y . 16) (X . 9))))
+   (test '((value (and))) '(()))
+   (test '((value (or))) '())
+   (test '((value (any))) '())
+   (test '((value (or X X))) '(((X . 9))))
+   (test '((value (or X X X))) '(((X . 9))))
+   (test '((value M)) `(((,custom-its (< M 17)))))
+   (test '((value (or M M))) `(((,custom-its (< M 17)))))
+   (test '((value (or M X))) `(((X . 9) (,custom-its (< M 17)))))
    )
 
   (test-definitions
