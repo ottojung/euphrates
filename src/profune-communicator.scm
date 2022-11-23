@@ -44,7 +44,7 @@
   )
 
 (define (make-profune-communicator db0 custom-its)
-  "Makes communicator from database `db0' and custom-its-variable-name `custom-its'. If set, the value of `custom-its' will change the response of the communicator after `its' operation, replacing the default form `its (equals (<... bindings ...>))' by `its <value of custom-its var in the env>'."
+  "Makes communicator from database `db0' and custom-its-variable-name `custom-its'. If set, the value of `custom-its' will change the response of the communicator after `its' operation, replacing the default form `its (equals (<... bindings ...>))' by `its <values of custom-its var in the env...>'."
 
   (define db
     (if (profun-database? db0)
@@ -100,7 +100,16 @@
                         ((current-answer-iterator)))))
             (cond
              ((or (pair? r) (null? r))
-              (loop (+ 1 i) (cons r buf)))
+              (if custom-its-varname
+                  (let ((val (assq custom-its-varname r)))
+                    (if val
+                        (begin
+                          (collect-finish!)
+                          (if (list? val)
+                              (cons 'its val)
+                              (list 'its val)))
+                        (loop (+ 1 i) (cons r buf))))
+                  (loop (+ 1 i) (cons r buf))))
              ((equal? #f r)
               (collect-finish!)
               `(its (equals ,(reverse! buf))))

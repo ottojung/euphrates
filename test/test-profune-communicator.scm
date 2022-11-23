@@ -45,7 +45,7 @@
   (profun-create-database server-handler definitions1))
 
 (define (test-dialog sentences)
-  (define comm (make-profune-communicator db1))
+  (define comm (make-profune-communicator db1 #f))
 
   (unless (= 0 (remainder (length sentences) 2))
     (raisu 'must-be-even-number-of-sentences (length sentences)))
@@ -86,7 +86,7 @@
 
 (test-dialog
  '((whats (sqrt X Y))
-   (whats (value (or X Y)))
+   (whats (value (any X Y)))
    (its (= X 9))
    (its (equals (((Y . 3) (X . 9)))))
    ))
@@ -98,7 +98,7 @@
 
 (test-dialog
  '((whats (sqrt X Y))
-   (whats (value (or X Y)))
+   (whats (value (any X Y)))
    (whats (sqrt 9 Z))
    (its (equals (((Z . 3)))))
    (its (equals (((Y . 4)))))
@@ -107,9 +107,9 @@
 
 (test-dialog
  '((whats (sqrt X Y))
-   (whats (value (or X Y)))
+   (whats (value (any X Y)))
    (whats (sqrt W Z))
-   (whats (value (or W Z)))
+   (whats (value (any W Z)))
    (its (equals (((W . 16)))))
    (its (equals (((W . 16) (Z . 4)))))
    (its (= X 9))
@@ -125,7 +125,7 @@
 
 (test-dialog
  '((whats (= X 9) (sqrt Z Y))
-   (whats (value (or Z Y)))
+   (whats (value (any Z Y)))
    (whats (+ 1 M X))
    (its (equals (((X . 9) (M . 8)))))
    ))
@@ -187,9 +187,9 @@
 
 (test-dialog
  '((whats (sqrt X Y))
-   (whats (value (or X Y)))
+   (whats (value (any X Y)))
    (whats (sqrt W Z))
-   (whats (value (or W Z)))
+   (whats (value (any W Z)))
    (its (equals (((W . 16)))))
    (its (equals (((W . 16) (Z . 4)))))
    (nonexisting x y z)
