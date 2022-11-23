@@ -15,6 +15,7 @@
 %run guile
 
 %var profun-accept
+%var make-profun-accept
 %var profun-accept?
 %var profun-accept-alist
 %var profun-accept-ctx
@@ -35,6 +36,9 @@
 
 (define (profun-accept)
   (profun-accept-constructor '() #f #f))
+
+(define (make-profun-accept alist context context-changed?)
+  (profun-accept-constructor alist context context-changed?))
 
 (define (profun-accept? o)
   (profun-accept-obj? o))
