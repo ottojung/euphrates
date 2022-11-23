@@ -57,19 +57,46 @@
 ;;   B: its, false().
 ;;   A: bye.
 ;;
-;; Every communicator must know these words: "whats", "its", "listen", "more", "bye", "i-dont-recognize" and "error".
+;; Every communicator must know these words: "whats", "its", "equals", "listen", "more", "bye", "i-dont-recognize" and "error".
 ;;
 
+%use (list-singleton?) "./list-singleton-q.scm"
+%use (profune-communications-hook/p) "./profune-communications-hook-p.scm"
 %use (profune-communicator-handle) "./profune-communicator.scm"
 
 (define (profune-communications client-comm server-comm)
+  (define hook
+    (or (profune-communications-hook/p)
+        (lambda _ 0)))
+
+  (define (handle-result answer)
+    (let* ((not-null (pair? answer))
+           (op (and not-null (car answer)))
+           (args (and not-null (cdr answer))))
+      (cond
+       ((not (pair? answer)) answer)
+       ((null? args) answer)
+       ((and (list-singleton? args)
+             (pair? (car args))
+             (equal? 'equals (car (car args)))
+             (list-singleton? (cdr (car args))))
+        (cadr (cadr answer)))
+       (else answer))))
+
   (lambda (question)
     (let loop ((question question))
+      (define r1 (hook 'client question))
       (define answer
         (profune-communicator-handle server-comm question))
+      (define r2 (hook 'server answer))
       (define response
         (profune-communicator-handle client-comm answer))
 
-      (if (equal? response `(error did-not-ask-anything))
-          answer
-          (loop response)))))
+      (cond
+       ((not (pair? response)) response)
+       ((equal? 'error (car response))
+        (if (null? (cdr response)) response
+            (case (cadr response)
+              ((did-not-ask-anything) (handle-result answer))
+              (else response))))
+       (else (loop response))))))
