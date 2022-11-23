@@ -14,6 +14,7 @@
 
 %run guile
 
+%var profun-answer-join/any
 %var profun-answer-join/or
 %var profun-answer-join/and
 
@@ -33,6 +34,15 @@
          (new-ctx (if a-ctx-changed? a-ctx b-ctx))
          (new-ctx-changed? (or a-ctx-changed? b-ctx-changed?)))
     (make-profun-accept new-alist new-ctx new-ctx-changed?)))
+
+(define (profun-answer-join/any a b)
+  (cond
+   ((profun-accept? a) a)
+   ((profun-reject? a)
+    (unless (or (profun-accept? b) (profun-reject? b))
+      (raisu 'b-is-not-an-answer b))
+    b)
+   (else (raisu 'a-is-not-an-answer a))))
 
 (define (profun-answer-join/or a b)
   (cond
