@@ -122,4 +122,12 @@
                "result = (((Y . 4) (M . 16)))"
                )
 
+  (test-dialog '(whats (sqrt M Y) more (2))
+               "[client] whats (sqrt M Y) more (2)"
+               "[server] whats (value (any M Y))"
+               "[client] its (< M 17)"
+               "[server] its (equals (((Y . 4) (M . 16)) ((Y . 3) (M . 9)) ((Y . 2) (M . 4))))"
+               "result = (((Y . 4) (M . 16)) ((Y . 3) (M . 9)) ((Y . 2) (M . 4)))"
+               )
+
   )

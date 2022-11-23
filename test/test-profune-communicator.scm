@@ -131,6 +131,13 @@
    ))
 
 (test-dialog
+ '((whats (sqrt M Y) more (2))
+   (whats (value (any M Y)))
+   (its (< M 17))
+   (its (equals (((Y . 4) (M . 16)) ((Y . 3) (M . 9)) ((Y . 2) (M . 4)))))
+   ))
+
+(test-dialog
  '((whats (person X))
    (its (equals (((X . "bart")))))
    (more (2))

@@ -37,8 +37,9 @@
   )
 
 (define-type9 stage
-  (make-stage answer-iterator results-buffer rfc) stage?
+  (make-stage answer-iterator left results-buffer rfc) stage?
   (answer-iterator stage-answer-iterator set-stage-answer-iterator!)
+  (left stage-left set-stage-left!)
   (results-buffer stage-results-buffer set-stage-results-buffer!)
   (rfc stage-rfc set-stage-rfc!)
   )
@@ -65,6 +66,8 @@
 
   (define (current-answer-iterator)
     (stage-answer-iterator (stack-peek stages)))
+  (define (current-left)
+    (stage-left (stack-peek stages)))
   (define (current-results-buffer)
     (stage-results-buffer (stack-peek stages)))
   (define (current-RFC)
@@ -73,6 +76,8 @@
 
   (define (set-current-answer-iterator! new)
     (set-stage-answer-iterator! (stack-peek stages) new))
+  (define (set-current-left! new)
+    (set-stage-left! (stack-peek stages) new))
   (define (set-current-results-buffer! new)
     (set-stage-results-buffer! (stack-peek stages) new))
   (define (set-current-RFC! new)
@@ -89,14 +94,18 @@
           (values op args next))))
 
   (define (collect-finish!)
+    (set-current-left! 0)
     (set-current-results-buffer! '())
     (set-current-answer-iterator! #f))
 
-  (define (collect-n n)
+  (define (collect-n)
+    (define n (current-left))
     (define iter (current-answer-iterator))
     (let loop ((i 0) (buf (current-results-buffer)))
       (if (>= i n)
-          `(its (equals ,(reverse! buf)))
+          (begin
+            (set-current-left! 0)
+            `(its (equals ,(reverse! buf))))
           (let ((r (and iter (iter))))
             (cond
 
@@ -139,7 +148,7 @@
       (if (current-RFC)
           (profun-RFC-eval-inserted (current-RFC) args)
           (profun-run-query db args)))
-    (stack-push! stages (make-stage iterator '() #f))
+    (stack-push! stages (make-stage iterator 1 '() #f))
     (handle-query next))
 
   (define (handle-query next)
@@ -148,11 +157,13 @@
 
     (case next-op
       ((#f)
-       (collect-n 1))
+       (set-current-left! 1)
+       (collect-n))
       ((more)
        (if (null? next-next)
            (let ((n (get-more-s-arg next-args)))
-             (collect-n (+ 1 n)))
+             (set-current-left! (+ 1 n))
+             (collect-n))
            `(error operation-whats/its-must-be-last)))
       (else
        `(error unexpected-operation ,next-op))))
@@ -176,14 +187,16 @@
     (cond
      ((not (null? next)) `(error more-must-be-the-last-command))
      ((not (number? n)) n)
-     (else (collect-n n))))
+     (else
+      (set-current-left! n)
+      (collect-n))))
 
   (define (handle-its-cont op args next)
     (set-current-answer-iterator!
      (profun-RFC-continue-with-inserted (current-RFC) args))
     (set-current-RFC! #f)
 
-    (handle-query next))
+    (collect-n))
 
   (define (handle-its op args next)
     (cond
