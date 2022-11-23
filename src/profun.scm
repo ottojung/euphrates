@@ -28,6 +28,7 @@
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
+%use (profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-set-continuation profun-abort-what profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
@@ -503,13 +504,6 @@
 
   (define current-state #t)
 
-  (define (ret-this last-state)
-    (define copy current-state)
-    (set! current-state
-          (if (equal? #t last-state) #f
-              (backtrack-eval db env last-state)))
-    copy)
-
   (lambda _
     (define last-state current-state)
     (case current-state
@@ -529,10 +523,11 @@
      ((equal? #f current-state) #f)
 
      ((profun-abort? current-state)
-      (ret-this last-state))
-
-     ((profun-IDR? current-state)
-      (ret-this last-state))
+      (let ((copy current-state))
+        (set! current-state
+              (if (equal? #t last-state) #f
+                  (backtrack-eval db env last-state)))
+        copy))
 
      (else (raisu 'unknown-state-type-in-profun-run current-state)))))
 
@@ -554,5 +549,5 @@
        ((or (pair? r) (null? r)) (cons r (loop)))
        ((equal? #f r) '())
        ((profun-IDR? r) (loop))
-       ((profun-abort? r) (raisu 'profun-needs-more-info (profun-abort-what r)))
+       ((profun-RFC? r) (raisu 'profun-needs-more-info (profun-abort-what r)))
        (else (raisu 'unknown-result-type-in-profun-query r))))))

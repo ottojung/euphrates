@@ -24,16 +24,17 @@
 %var profun-IDR-name
 %var profun-IDR-arity
 
-%use (define-type9) "./define-type9.scm"
+%use (make-profun-abort profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
 
-(define-type9 profun-IDR-obj
-  (profun-IDR-constructor name arity) profun-IDR-obj?
-  (name profun-IDR-name)
-  (arity profun-IDR-arity)
-  )
+(define (make-profun-IDR key arity)
+  (make-profun-abort 'IDR (list key arity)))
 
 (define (profun-IDR? x)
-  (profun-IDR-obj? x))
+  (and (profun-abort? x)
+       (equal? 'IDR (profun-abort-type x))))
 
-(define (make-profun-IDR name arity)
-  (profun-IDR-constructor name arity))
+(define (profun-IDR-name x)
+  (car (profun-abort-what x)))
+
+(define (profun-IDR-arity x)
+  (cadr (profun-abort-what x)))
