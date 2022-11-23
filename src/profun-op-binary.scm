@@ -17,29 +17,33 @@
 %var profun-op-binary
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (debugs) "./debugs.scm"
 %use (make-profun-RFC) "./profun-RFC.scm"
-%use (profun-set) "./profun-accept.scm"
+%use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-reject) "./profun-reject.scm"
 %use (profun-bound-value?) "./profun-value.scm"
+%use (raisu) "./raisu.scm"
 
-(define (profun-op-binary action left-inverse right-inverse both-inverse)
+(define (profun-op-binary action left-inverse right-inverse both-inverse left-identity right-identity)
   (define (in-op-domain? x)
     (and (integer? x) (>= x 0)))
 
-  (define (g-op name x y z op)
-    (bool->profun-result
-     (and (in-op-domain? x)
-          (in-op-domain? y)
-          (let ((result (op x y)))
-            (and result
-                 (in-op-domain? result)
-                 (if (profun-bound-value? z)
-                     (= z result)
-                     (profun-set (name <- result))))))))
-
   (profun-op-lambda
    (ctx (x y z) (x-name y-name z-name))
+
+   (define (g-op c-name a b c op)
+     (bool->profun-result
+      (and (in-op-domain? a)
+           (in-op-domain? b)
+           (let ((result (op a b)))
+             (if (equal? result 'op-binary-rfc)
+                 (make-profun-RFC `((value ,c-name)))
+                 (and result
+                      (in-op-domain? result)
+                      (if (profun-bound-value? c)
+                          (= c result)
+                          (profun-set (c-name <- result)))))))))
+
    (cond
     ((and (profun-bound-value? x)
           (profun-bound-value? y))
@@ -51,9 +55,13 @@
           (profun-bound-value? z))
      (g-op x-name z y x right-inverse))
     ((profun-bound-value? x)
-     (make-profun-RFC `((value (any ,y-name ,z-name)))))
+     (if (equal? y z)
+         (g-op z-name x x z left-identity)
+         (make-profun-RFC `((value (any ,y-name ,z-name))))))
     ((profun-bound-value? y)
-     (make-profun-RFC `((value (any ,x-name ,z-name)))))
+     (if (equal? x z)
+         (g-op x-name y y z right-identity)
+         (make-profun-RFC `((value (any ,x-name ,z-name))))))
     ((profun-bound-value? z)
      (if (equal? x y)
          (g-op x-name z z x both-inverse)

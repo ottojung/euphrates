@@ -23,7 +23,14 @@
          (lambda (a b)
            (and (not (= 0 b)) (/ a b))))
         (safe-sqrt
-         (lambda (x y)
+         (lambda (x z)
            (let ((z (sqrt x)))
-             (and (integer? z) (inexact->exact z))))))
-    (profun-op-binary * safe-div safe-div safe-sqrt)))
+             (and (integer? z) (inexact->exact z)))))
+        (l/r-identity
+         (lambda (x z)
+           (case x
+            ((0) 0)
+            ((1) 'op-binary-rfc)
+            (else #f)))))
+
+    (profun-op-binary * safe-div safe-div safe-sqrt l/r-identity l/r-identity)))

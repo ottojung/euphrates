@@ -21,5 +21,10 @@
 (define profun-op+
   (let ((div2
          (lambda (x y)
-           (/ x 2))))
-    (profun-op-binary + - - div2)))
+           (/ x 2)))
+        (l/r-identity
+         (lambda (x y)
+           (case x
+             ((0) 'op-binary-rfc)
+             (else #f)))))
+    (profun-op-binary + - - div2 l/r-identity l/r-identity)))

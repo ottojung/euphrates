@@ -5,8 +5,9 @@
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
 %use (catchu-case) "./src/catchu-case.scm"
+%use (debug) "./src/debug.scm"
 %use (debugs) "./src/debugs.scm"
-%use (profun-RFC-continue-with-inserted profun-RFC?) "./src/profun-RFC.scm"
+%use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
@@ -50,6 +51,22 @@
     (debugs expected-result)
     (debugs result))
   (assert= expected-result result))
+
+(define-syntax test-rfc
+  (syntax-rules ()
+    ((_ query expected-what)
+     (let ((threw? #f)
+           (actual-what #f))
+       (catchu-case
+        (run-query query)
+        (('profun-needs-more-info rfc)
+         (set! actual-what (profun-RFC-what rfc))
+         (set! threw? #t)))
+       (assert threw?)
+       (unless (equal? expected-what actual-what)
+         (debug "expected: ~s" expected-what)
+         (debug "actual: ~s" actual-what))
+       (assert= expected-what actual-what)))))
 
 (define-syntax test-definitions
   (syntax-rules ()
@@ -257,6 +274,17 @@
    (test '((+ x 3 5)) '(((x . 2))))
 
    (test '((+ x x 16)) '(((x . 8))))
+   (test '((+ x x 7)) '())
+   (test '((+ x x 8)) '(((x . 4))))
+   (test '((+ x x 9)) '())
+
+   (test-rfc '((+ x 0 x)) '((value x)))
+   (test-rfc '((+ 0 y y)) '((value y)))
+   (test '((+ z 1 z)) '())
+   (test '((+ 2 z z)) '())
+   (test '((+ z 3 z)) '())
+   (test '((+ 4 z z)) '())
+
    )
 
   (test-definitions
@@ -277,6 +305,18 @@
    (test '((* x 3 6)) '(((x . 2))))
 
    (test '((* x x 16)) '(((x . 4))))
+   (test '((* x x 7)) '())
+   (test '((* x x 8)) '())
+   (test '((* x x 9)) '(((x . 3))))
+
+   (test-rfc '((* x 1 x)) '((value x)))
+   (test-rfc '((* 1 y y)) '((value y)))
+   (test '((* 2 z z)) '())
+   (test '((* z 3 z)) '())
+   (test '((* 4 z z)) '())
+   (test '((* 0 z z)) '(((z . 0))))
+   (test '((* z 0 z)) '(((z . 0))))
+
    )
 
   (test-definitions
@@ -486,15 +526,7 @@
      ((abc x) (= x 2))
      ((abc x) (= x 3)))
 
-   (define threw #f)
-
-   (catchu-case
-    (run-query '((= z w)))
-    (('profun-needs-more-info what)
-     (set! threw #t)))
-
-   (assert threw)
-
+   (test-rfc '((= z w)) '((value (any z w))))
    )
 
   (test-definitions
