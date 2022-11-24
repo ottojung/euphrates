@@ -19,14 +19,15 @@
 %use (make-profun-CR) "./profun-CR.scm"
 %use (profun-accept profun-set) "./profun-accept.scm"
 %use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./profun-answer-join.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-op-envlambda) "./profun-op-envlambda.scm"
 %use (profun-reject) "./profun-reject.scm"
 %use (profun-unbound-value? profun-value-name) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
 (define (profun-op-value custom-alist value-alist)
-  (profun-op-lambda
-   (ctx (x) (x-name))
+  (profun-op-envlambda
+   (ctx env (x-name))
+   (define x (env x-name))
    (let loop ((x x))
      (cond
       ((symbol? x)

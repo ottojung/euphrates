@@ -19,6 +19,7 @@
 %use (define-tuple) "./define-tuple.scm"
 %use (profun-op-envlambda/p) "./profun-op-envlambda-p.scm"
 %use (make-profun-op) "./profun-op.scm"
+%use (profun-value-unwrap) "./profun-value.scm"
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-envlambda
@@ -29,7 +30,8 @@
         (if (pair? qargs)
             (length qargs)
             profun-variable-arity-op-keyword))
-      (lambda (env ctx var-names)
+      (lambda (get-func ctx var-names)
         (define-tuple args-names var-names)
+        (define env (compose profun-value-unwrap get-func))
         (parameterize ((profun-op-envlambda/p env))
           (let () . bodies)))))))

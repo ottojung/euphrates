@@ -35,8 +35,8 @@
        (if (= 1 (length var-names))
            (car var-names)
            (raisu 'got-a-bad-number-of-vars var-names)))
-     (define input (profun-value-unwrap (get-func input-name)))
-     (define param (profun-value-unwrap (get-func param-name)))
+     (define input (get-func input-name))
+     (define param (get-func param-name))
 
      (if (profun-bound-value? input)
          (if (profun-bound-value? param)
