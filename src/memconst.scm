@@ -22,9 +22,10 @@
     ((_ x)
      (let ((memory #f)
            (evaled? #f))
-       (lambda argv
-         (unless evaled?
-           (set! evaled? #t)
-           (set! memory x))
-         memory)))))
+       (lambda _
+         (if evaled? memory
+             (let ((ret x))
+               (set! evaled? #t)
+               (set! memory ret)
+               ret)))))))
 
