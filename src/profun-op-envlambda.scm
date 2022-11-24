@@ -19,23 +19,17 @@
 %use (define-tuple) "./define-tuple.scm"
 %use (profun-op-envlambda/p) "./profun-op-envlambda-p.scm"
 %use (make-profun-op) "./profun-op.scm"
-%use (profun-value-name profun-value-unwrap) "./profun-value.scm"
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-envlambda
   (syntax-rules ()
-    ((_ (ctx args args-names) . bodies)
+    ((_ (ctx env args-names) . bodies)
      (make-profun-op
-      (let ((qargs (quote args)))
+      (let ((qargs (quote args-names)))
         (if (pair? qargs)
             (length qargs)
             profun-variable-arity-op-keyword))
-      (lambda (get-func ctx var-names)
-        (define vars
-          (map get-func var-names))
-        (define-tuple args
-          (map profun-value-unwrap vars))
-        (define-tuple args-names
-          (map profun-value-name vars))
-        (parameterize ((profun-op-envlambda/p get-func))
+      (lambda (env ctx var-names)
+        (define-tuple args-names var-names)
+        (parameterize ((profun-op-envlambda/p env))
           (let () . bodies)))))))

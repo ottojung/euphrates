@@ -109,7 +109,8 @@
   (make-profun-parameter))
 (define param1-printer
   (profun-op-envlambda
-   (ctx args args-names)
+   (ctx env args-names)
+   (assert (procedure? env))
    (printf "param1 = ~s\n" (param1))
    (profun-accept)))
 
