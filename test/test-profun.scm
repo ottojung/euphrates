@@ -7,18 +7,22 @@
 %use (catchu-case) "./src/catchu-case.scm"
 %use (debug) "./src/debug.scm"
 %use (debugs) "./src/debugs.scm"
+%use (printf) "./src/printf.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
+%use (profun-accept) "./src/profun-accept.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
 %use (profun-apply-fail! profun-apply-return! profun-op-apply) "./src/profun-op-apply.scm"
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
+%use (profun-op-envlambda) "./src/profun-op-envlambda.scm"
 %use (profun-op-equals) "./src/profun-op-equals.scm"
 %use (profun-eval-fail! profun-op-eval) "./src/profun-op-eval.scm"
 %use (profun-op-false) "./src/profun-op-false.scm"
 %use (profun-op-less) "./src/profun-op-less.scm"
 %use (profun-op-modulo) "./src/profun-op-modulo.scm"
 %use (profun-op*) "./src/profun-op-mult.scm"
+%use (instantiate-profun-parameter make-profun-parameter) "./src/profun-op-parameter.scm"
 %use (profun-op+) "./src/profun-op-plus.scm"
 %use (profun-op-separate) "./src/profun-op-separate.scm"
 %use (profun-op-sqrt) "./src/profun-op-sqrt.scm"
@@ -101,6 +105,14 @@
   ;; TESTS ;;
   ;;;;;;;;;;;
 
+(define param1
+  (make-profun-parameter))
+(define param1-printer
+  (profun-op-envlambda
+   (ctx args args-names)
+   (printf "param1 = ~s\n" (param1))
+   (profun-accept)))
+
 (parameterize
     ((current-handler
       (profun-make-handler
@@ -122,6 +134,10 @@
 
        (favorite (profun-make-set (list 777 2 9 3)))
        (favorite2 (profun-make-tuple-set (a b) '((777 2) (#t 9) (3 #f))))
+
+       (p1 (instantiate-profun-parameter param1))
+       (printp1 param1-printer)
+
        )))
 
   (test-definitions
@@ -638,6 +654,18 @@
    (assert (profun-RFC? (resume)))
    (assert= #f (resume))
    (assert= #f (resume))
+
+   )
+
+  (test-definitions
+   "PARAMETER CASES"
+   '()
+
+   (assert=
+    "param1 = 7\n"
+    (with-output-to-string
+      (lambda _
+        (test '((= X 7) (p1 X) (printp1 8)) '(((X . 7)))))))
 
    )
 
