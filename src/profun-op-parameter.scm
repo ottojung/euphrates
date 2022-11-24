@@ -25,7 +25,7 @@
 %use (make-profun-op) "./profun-op.scm"
 %use (profun-bound-value? profun-value-unwrap) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
-%use (usymbol) "./usymbol.scm"
+%use (make-usymbol) "./usymbol.scm"
 
 (define (profun-op-parameter param-name)
   (make-profun-op
@@ -48,7 +48,7 @@
              (make-profun-RFC `((value ,input-name))))))))
 
 (define (make-profun-parameter)
-  (define param-name (usymbol 'p (gensym)))
+  (define param-name (make-usymbol 'p (gensym)))
   (define op (profun-op-parameter param-name))
 
   (define (instantiate)

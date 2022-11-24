@@ -37,7 +37,7 @@
 %use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
-%use (usymbol usymbol?) "./usymbol.scm"
+%use (make-usymbol usymbol?) "./usymbol.scm"
 
 (define-type9 <database>
   (database-constructor table handler) profun-database?
@@ -190,7 +190,7 @@
             (instruction-context inst)))))))
 
 (define (make-unique-varname symb rule)
-  (usymbol symb rule))
+  (make-usymbol symb rule))
 
 ;; TODO: garbage-collect redundant variables?
 (define alpha-reduce
@@ -475,7 +475,7 @@
         (ret (reverse aret) (reverse bret-app))
         (let ((x (car buf)))
           (if (not (profun-varname? x))
-              (let ((u (usymbol name `(arg ,i))))
+              (let ((u (make-usymbol name `(arg ,i))))
                 (lp (cdr buf)
                     (+ i 1)
                     (cons u aret)
