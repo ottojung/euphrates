@@ -30,10 +30,9 @@
             (length qargs)
             profun-variable-arity-op-keyword))
       (lambda (get-func ctx var-names)
+        (define-tuple args-names var-names)
         (define vars
           (map get-func var-names))
         (define-tuple args
           (map profun-value-unwrap vars))
-        (define-tuple args-names
-          (map profun-value-name vars))
         (let () . bodies))))))
