@@ -2,10 +2,10 @@
 %run guile
 
 %use (dynamic-thread-spawn#p) "./dynamic-thread-spawn-p.scm"
-%use (dynamic-thread-spawn#p-default) "./dynamic-thread-spawn-p-default.scm"
+%use (raisu) "./raisu.scm"
 
 %var dynamic-thread-spawn
 
 (define (dynamic-thread-spawn thunk)
   ((or (dynamic-thread-spawn#p)
-       dynamic-thread-spawn#p-default) thunk))
+       (raisu 'threading-system-is-not-parameterized)) thunk))

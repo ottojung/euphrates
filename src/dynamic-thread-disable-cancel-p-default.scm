@@ -6,4 +6,4 @@
 %use (np-thread-global-disable-cancel) "./np-thread.scm"
 
 (define dynamic-thread-disable-cancel#p-default
-  np-thread-global-disable-cancel)
+  (lambda _ 0))

@@ -6,4 +6,4 @@
 %use (np-thread-global-critical-make) "./np-thread.scm"
 
 (define dynamic-thread-critical-make#p-default
-  np-thread-global-critical-make)
+  (lambda () (lambda (section) (section))))

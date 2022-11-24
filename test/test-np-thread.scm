@@ -84,60 +84,9 @@
    "zulul ended"
    ""))
 
-(define global-order
-  (list
-   "start"
-   "in kek"
-   "lol at 0"
-   "lol after 0"
-   "lol at 1"
-   "lol after 1"
-   "lol at 2"
-   "lol after 2"
-   "lol at 3"
-   "lol after 3"
-   "lol at 4"
-   "lol after 4"
-   "lol ended"
-   "zulul at 0"
-   "zulul after 0"
-   "zulul at 1"
-   "zulul after 1"
-   "zulul at 2"
-   "zulul after 2"
-   "zulul at 3"
-   "zulul after 3"
-   "zulul at 4"
-   "zulul after 4"
-   "zulul ended"
-   "end"
-   ""))
-
-(assert=
- (lines->string global-order)
- (with-output-to-string
-   test-body))
-
-(assert=
- (lines->string global-order)
- (with-output-to-string
-   test-body))
-
 (assert=
  (lines->string parameterized-order)
  (with-output-to-string
    (lambda ()
      (with-np-thread-env/non-interruptible
       (test-body)))))
-
-(assert=
- (lines->string parameterized-order)
- (with-output-to-string
-   (lambda ()
-     (dynamic-thread-spawn
-      test-body))))
-
-(assert=
- (lines->string global-order)
- (with-output-to-string
-   test-body))

@@ -6,4 +6,4 @@
 %use (np-thread-global-yield) "./np-thread.scm"
 
 (define dynamic-thread-yield#p-default
-  np-thread-global-yield)
+  (lambda _ 0))

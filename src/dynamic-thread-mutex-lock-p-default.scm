@@ -6,4 +6,4 @@
 %use (np-thread-global-mutex-lock!) "./np-thread.scm"
 
 (define dynamic-thread-mutex-lock!#p-default
-  np-thread-global-mutex-lock!)
+  (lambda _ 0))
