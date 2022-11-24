@@ -21,7 +21,7 @@
 %use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./profun-answer-join.scm"
 %use (profun-op-envlambda) "./profun-op-envlambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-unbound-value? profun-value-name) "./profun-value.scm"
+%use (profun-bound-value? profun-unbound-value? profun-value-name) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
 (define (profun-op-value custom-alist value-alist)
@@ -31,13 +31,16 @@
    (let loop ((x x))
      (cond
       ((symbol? x)
-       (let ((val/p (assq x value-alist)))
-         (if val/p
-             (profun-set (x <- (cdr val/p)))
-             (let ((val/p (assq x custom-alist)))
+       (let ((val (env x)))
+         (if (profun-bound-value? val)
+             (profun-accept)
+             (let ((val/p (assq x value-alist)))
                (if val/p
-                   (make-profun-CR (cdr val/p))
-                   (profun-reject))))))
+                   (profun-set (x <- (cdr val/p)))
+                   (let ((val/p (assq x custom-alist)))
+                     (if val/p
+                         (make-profun-CR (cdr val/p))
+                         (profun-reject))))))))
       ((and (pair? x)
             (list? (cdr x)))
        (let* ((op (car x))
@@ -53,6 +56,7 @@
                (let* ((u (car buf))
                       (y (loop u)))
                  (lp2 (cdr buf) (composer ret y)))))))
-      ((profun-unbound-value? x) (loop (profun-value-name x)))
+      ((profun-unbound-value? x)
+       (loop (profun-value-name x)))
       (else
-       (raisu 'uknown-value-format x))))))
+       (profun-accept))))))

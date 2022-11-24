@@ -490,6 +490,9 @@
    (test '((value (or X X))) '(((X . 9))))
    (test '((value (or X X X))) '(((X . 9))))
 
+   (test '((= X 7) (value X)) '(((X . 7))))
+   (test '((= X 7) (value (or X Y))) '(((Y . 16) (X . 7))))
+
    (test-cr '((value M)) `((< M 17)))
    (test-cr '((value (or M M))) `((< M 17)))
    (test-cr '((value (or M X))) `((< M 17)))
