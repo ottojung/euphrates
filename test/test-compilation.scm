@@ -69,6 +69,7 @@
 %use (define-type9 define-type9/nobind-descriptor type9-get-descriptor-by-name type9-get-record-descriptor) "./src/define-type9.scm"
 %use (descriptors-registry-get descriptors-registry-set! descritors-registry-decolisify-name) "./src/descriptors-registry.scm"
 %use (directory-files-depth-foreach) "./src/directory-files-depth-foreach.scm"
+%use (directory-files-depth-iter) "./src/directory-files-depth-iter.scm"
 %use (directory-files-rec/filter) "./src/directory-files-rec-filter.scm"
 %use (directory-files-rec) "./src/directory-files-rec.scm"
 %use (directory-files) "./src/directory-files.scm"
