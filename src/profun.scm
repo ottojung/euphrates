@@ -360,8 +360,8 @@
   (define func (profun-op-procedure handler))
   (define context (instruction-context instruction))
   (define args (instruction-args instruction))
-  (define argv (map (comp (env-get env)) args))
-  (define ret (func argv context))
+  (define get-func (comp (env-get env)))
+  (define ret (func get-func context args))
 
   (cond
    ((profun-reject? ret)

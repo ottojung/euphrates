@@ -29,7 +29,9 @@
         (if (pair? qargs)
             (length qargs)
             profun-variable-arity-op-keyword))
-      (lambda (vars ctx)
+      (lambda (get-func ctx var-names)
+        (define vars
+          (map get-func var-names))
         (define-tuple args
           (map profun-value-unwrap vars))
         (define-tuple args-names
