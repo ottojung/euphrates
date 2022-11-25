@@ -351,7 +351,7 @@
 %use (default-random-source make-random-source random-source-make-integers random-source-make-reals random-source-pseudo-randomize! random-source-randomize! random-source-state-ref random-source-state-set! random-source?) "./src/srfi-27-generic.scm"
 %use (:random-source-current-time :random-source-make :random-source-make-integers :random-source-make-reals :random-source-pseudo-randomize! :random-source-randomize! :random-source-state-ref :random-source-state-set! :random-source?) "./src/srfi-27-random-source-obj.scm"
 %use (set-stack-lst! stack-constructor stack-lst stack-predicate) "./src/stack-obj.scm"
-%use (stack->list stack-discard! stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload! stack?) "./src/stack.scm"
+%use (list->stack stack->list stack-discard! stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload! stack?) "./src/stack.scm"
 %use (string-drop-n) "./src/string-drop-n.scm"
 %use (string-null-or-whitespace?) "./src/string-null-or-whitespace-p.scm"
 %use (string-pad-L string-pad-R) "./src/string-pad.scm"

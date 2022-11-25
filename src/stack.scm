@@ -22,6 +22,7 @@
 %var stack-peek
 %var stack-discard!
 %var stack->list
+%var list->stack
 %var stack-unload!
 
 %use (raisu) "./raisu.scm"
@@ -68,6 +69,9 @@
 
 (define (stack->list S)
   (stack-lst S))
+
+(define (list->stack L)
+  (stack-constructor L))
 
 (define (stack-unload! S)
   (let ((lst (stack-lst S)))
