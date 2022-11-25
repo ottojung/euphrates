@@ -18,17 +18,17 @@
 
 %use (raisu) "./raisu.scm"
 
-(define list-map-first
-  (case-lambda
-   ((f lst)
-    (let loop ((lst lst))
-      (if (null? lst) (raisu 'no-first-element-to-satisfy-predicate f)
-          (let* ((x (car lst)))
-            (or (f x)
-                (loop (cdr lst)))))))
-   ((f default lst)
-    (let loop ((lst lst))
-      (if (null? lst) default
-          (let ((x (car lst)))
-            (or (f x)
-                (loop (cdr lst)))))))))
+(define-syntax list-map-first
+  (syntax-rules ()
+    ((_ f lst)
+     (let ((ff f))
+       (list-map-first ff
+                       (raisu 'no-first-element-to-satisfy-predicate ff)
+                       lst)))
+    ((_ f0 default lst0)
+     (let ((f f0))
+       (let loop ((lst lst0))
+         (if (null? lst) default
+             (let ((x (car lst)))
+               (or (f x)
+                   (loop (cdr lst))))))))))
