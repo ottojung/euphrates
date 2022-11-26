@@ -94,6 +94,7 @@
                                               (cdr out-names)
                                               ret)
                                         (profun-reject)))
+                                   ((profun-answer? r) r)
                                    (else
                                     (loop (cdr results)
                                           (cdr out-args)
