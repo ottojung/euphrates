@@ -18,6 +18,7 @@
 %use (profun-op-equals) "./src/profun-op-equals.scm"
 %use (profun-eval-fail! profun-op-eval) "./src/profun-op-eval.scm"
 %use (profun-op-false) "./src/profun-op-false.scm"
+%use (profun-op-function) "./src/profun-op-function.scm"
 %use (profun-op-less) "./src/profun-op-less.scm"
 %use (profun-op-modulo) "./src/profun-op-modulo.scm"
 %use (profun-op*) "./src/profun-op-mult.scm"
@@ -151,6 +152,16 @@
    (printf "param1 = ~s\n" (param1))
    (profun-accept)))
 
+(define functional-addition
+  (profun-op-function 2 +))
+
+(define functional-division
+  (profun-op-function
+   (2 2)
+   (lambda (x y)
+     (values (quotient x y)
+             (remainder x y)))))
+
 (parameterize
     ((current-handler
       (profun-make-handler
@@ -175,6 +186,9 @@
 
        (p1 (instantiate-profun-parameter param1))
        (printp1 param1-printer)
+
+       (fadd functional-addition)
+       (fdiv functional-division)
 
        )))
 
@@ -817,6 +831,28 @@
    (test-error '("this is not a list") '(bad-query:expr-not-a-list))
 
    (test '(("parent" X)) '())
+   )
+
+  (test-definitions
+   "PROFUN-OP-FUNCTION CASES"
+   '()
+
+   (test '((fadd 3 4 z)) '(((z . 7))))
+   (test '((fadd 3 4 7)) '(()))
+   (test '((fadd 3 4 8)) '())
+   (test-rfc '((fadd x 4 7)) '((value x)))
+   (test-rfc '((fadd 3 y 7)) '((value y)))
+
+   (test '((fdiv 777 23 q r)) '(((q . 33) (r . 18))))
+   (test '((fdiv 777 23 33 r)) '(((r . 18))))
+   (test '((fdiv 777 23 q 18)) '(((q . 33))))
+   (test '((fdiv 777 23 33 18)) '(()))
+   (test '((fdiv 777 23 22 18)) '())
+   (test '((fdiv 777 23 33 28)) '())
+   (test '((fdiv 777 23 22 28)) '())
+   (test '((fdiv 777 23 q 28)) '())
+   (test '((fdiv 777 23 22 r)) '())
+
    )
 
   )
