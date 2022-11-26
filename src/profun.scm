@@ -192,7 +192,6 @@
 (define (make-unique-varname symb rule)
   (make-usymbol symb rule))
 
-;; TODO: garbage-collect redundant variables?
 (define alpha-reduce
   (let ((counter 0))
     (lambda (rule args)
