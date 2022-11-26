@@ -25,6 +25,7 @@
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-eval-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
+%use (profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database? profun-run-query) "./profun.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
@@ -125,6 +126,10 @@
               (set-current-results-buffer! buf)
               (set-current-RFC! r)
               `(whats ,@(profun-RFC-what r)))
+
+             ((profun-error? r)
+              (collect-finish!)
+              `(error ,@(profun-error-args r)))
 
              (else
               (collect-finish!)
