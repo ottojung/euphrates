@@ -20,9 +20,10 @@
 %use (list-span-n) "./list-span-n.scm"
 %use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-accept profun-set) "./profun-accept.scm"
+%use (profun-answer?) "./profun-answer-huh.scm"
 %use (make-profun-error) "./profun-error.scm"
 %use (make-profun-op) "./profun-op.scm"
-%use (profun-reject profun-reject?) "./profun-reject.scm"
+%use (profun-reject) "./profun-reject.scm"
 %use (profun-bound-value? profun-unbound-value? profun-value-unwrap) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
@@ -72,8 +73,8 @@
 
                       (if (not (= out-arity (length results)))
                           (if (and (list-singleton? results)
-                                   (profun-reject? (car results)))
-                              (profun-reject)
+                                   (profun-answer? (car results)))
+                              (car results)
                               (make-profun-error
                                'bad-number-of-args-returned
                                (length results) out-arity))
@@ -93,7 +94,6 @@
                                               (cdr out-names)
                                               ret)
                                         (profun-reject)))
-                                   ((profun-reject? r) r)
                                    (else
                                     (loop (cdr results)
                                           (cdr out-args)
