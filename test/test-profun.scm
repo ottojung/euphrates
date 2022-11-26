@@ -6,7 +6,6 @@
 %use (assert) "./src/assert.scm"
 %use (catchu-case) "./src/catchu-case.scm"
 %use (debug) "./src/debug.scm"
-%use (debugs) "./src/debugs.scm"
 %use (printf) "./src/printf.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-accept) "./src/profun-accept.scm"
@@ -50,11 +49,27 @@
   (define db (get-db))
   (profun-eval-query db query))
 
+%for (COMPILER "guile")
+(use-modules (ice-9 pretty-print))
+%end
+(define (pretty x)
+%for (COMPILER "guile")
+(pretty-print x)
+(when #f
+%end
+(write x)
+%for (COMPILER "guile")
+)
+%end
+)
+
 (define (test query expected-result)
   (define result (run-query query))
   (unless (equal? expected-result result)
-    (debugs expected-result)
-    (debugs result))
+    (debug "expected:")
+    (pretty expected-result)
+    (debug "actual:")
+    (pretty result))
   (assert= expected-result result))
 
 (define-syntax test-rfc
@@ -69,8 +84,10 @@
          (set! threw? #t)))
        (assert threw?)
        (unless (equal? expected-what actual-what)
-         (debug "expected: ~s" expected-what)
-         (debug "actual: ~s" actual-what))
+         (debug "expected:")
+         (pretty expected-what)
+         (debug "actual:")
+         (pretty actual-what))
        (assert= expected-what actual-what)))))
 
 (define-syntax test-cr
@@ -85,8 +102,10 @@
          (set! threw? #t)))
        (assert threw?)
        (unless (equal? expected-what actual-what)
-         (debug "expected: ~s" expected-what)
-         (debug "actual: ~s" actual-what))
+         (debug "expected:")
+         (pretty expected-what)
+         (debug "actual:")
+         (pretty actual-what))
        (assert= expected-what actual-what)))))
 
 (define-syntax test-definitions
@@ -670,6 +689,93 @@
     (with-output-to-string
       (lambda _
         (test '((= X 7) (p1 X) (printp1 8)) '(((X . 7)))))))
+
+   )
+
+  (test-definitions
+   "UNDERSCORE CASES"
+   '(((parent "Homer" "Lisa"))
+     ((parent "Homer" "Bart"))
+     ((parent "Marge" "Lisa"))
+     ((parent "Marge" "Bart"))
+     ((parent "Abraham" "Homer"))
+     ((parent "Mona" "Homer"))
+     ((parent "Mr. Olsen" "Mona"))
+     ((parent "Mrs. Olsen" "Mona"))
+     ((parent "Bart" "Skippy"))
+     )
+
+   (test '((parent _P X) (parent _P Y) (!= X Y))
+         '(((Y . "Bart") (X . "Lisa"))
+           ((Y . "Lisa") (X . "Bart"))
+           ((Y . "Bart") (X . "Lisa"))
+           ((Y . "Lisa") (X . "Bart"))))
+
+   (test '((parent _ X) (parent _ Y) (!= X Y))
+         '(((Y . "Bart") (X . "Lisa"))
+           ((Y . "Bart") (X . "Lisa"))
+           ((Y . "Homer") (X . "Lisa"))
+           ((Y . "Homer") (X . "Lisa"))
+           ((Y . "Mona") (X . "Lisa"))
+           ((Y . "Mona") (X . "Lisa"))
+           ((Y . "Skippy") (X . "Lisa"))
+           ((Y . "Lisa") (X . "Bart"))
+           ((Y . "Lisa") (X . "Bart"))
+           ((Y . "Homer") (X . "Bart"))
+           ((Y . "Homer") (X . "Bart"))
+           ((Y . "Mona") (X . "Bart"))
+           ((Y . "Mona") (X . "Bart"))
+           ((Y . "Skippy") (X . "Bart"))
+           ((Y . "Bart") (X . "Lisa"))
+           ((Y . "Bart") (X . "Lisa"))
+           ((Y . "Homer") (X . "Lisa"))
+           ((Y . "Homer") (X . "Lisa"))
+           ((Y . "Mona") (X . "Lisa"))
+           ((Y . "Mona") (X . "Lisa"))
+           ((Y . "Skippy") (X . "Lisa"))
+           ((Y . "Lisa") (X . "Bart"))
+           ((Y . "Lisa") (X . "Bart"))
+           ((Y . "Homer") (X . "Bart"))
+           ((Y . "Homer") (X . "Bart"))
+           ((Y . "Mona") (X . "Bart"))
+           ((Y . "Mona") (X . "Bart"))
+           ((Y . "Skippy") (X . "Bart"))
+           ((Y . "Lisa") (X . "Homer"))
+           ((Y . "Bart") (X . "Homer"))
+           ((Y . "Lisa") (X . "Homer"))
+           ((Y . "Bart") (X . "Homer"))
+           ((Y . "Mona") (X . "Homer"))
+           ((Y . "Mona") (X . "Homer"))
+           ((Y . "Skippy") (X . "Homer"))
+           ((Y . "Lisa") (X . "Homer"))
+           ((Y . "Bart") (X . "Homer"))
+           ((Y . "Lisa") (X . "Homer"))
+           ((Y . "Bart") (X . "Homer"))
+           ((Y . "Mona") (X . "Homer"))
+           ((Y . "Mona") (X . "Homer"))
+           ((Y . "Skippy") (X . "Homer"))
+           ((Y . "Lisa") (X . "Mona"))
+           ((Y . "Bart") (X . "Mona"))
+           ((Y . "Lisa") (X . "Mona"))
+           ((Y . "Bart") (X . "Mona"))
+           ((Y . "Homer") (X . "Mona"))
+           ((Y . "Homer") (X . "Mona"))
+           ((Y . "Skippy") (X . "Mona"))
+           ((Y . "Lisa") (X . "Mona"))
+           ((Y . "Bart") (X . "Mona"))
+           ((Y . "Lisa") (X . "Mona"))
+           ((Y . "Bart") (X . "Mona"))
+           ((Y . "Homer") (X . "Mona"))
+           ((Y . "Homer") (X . "Mona"))
+           ((Y . "Skippy") (X . "Mona"))
+           ((Y . "Lisa") (X . "Skippy"))
+           ((Y . "Bart") (X . "Skippy"))
+           ((Y . "Lisa") (X . "Skippy"))
+           ((Y . "Bart") (X . "Skippy"))
+           ((Y . "Homer") (X . "Skippy"))
+           ((Y . "Homer") (X . "Skippy"))
+           ((Y . "Mona") (X . "Skippy"))
+           ((Y . "Mona") (X . "Skippy"))))
 
    )
 

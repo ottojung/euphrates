@@ -531,10 +531,27 @@
 
      (else (raisu 'unknown-state-type-in-profun-run current-state)))))
 
+(define (query-handle-underscores query)
+  (define (handle-elem x)
+    (if (symbol? x)
+        (let ((s (symbol->string x)))
+          (if (string-prefix? "_" s)
+              (if (= 1 (string-length s))
+                  (make-usymbol x (gensym))
+                  (make-usymbol x 'u))
+              x))
+        x))
+
+  (define (handle-expr expr)
+    (map handle-elem expr))
+
+  (map handle-expr query))
+
 ;; accepts database `db` and list of symbols `query`
 ;; returns an iterator
 (define (profun-run-query db query)
-  (define start-instruction (build-body query))
+  (define query/usymboled (query-handle-underscores query))
+  (define start-instruction (build-body query/usymboled))
   (define initial-state (make-state start-instruction))
   (define env (make-env))
   (profun-run db env initial-state))
