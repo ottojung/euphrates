@@ -108,6 +108,24 @@
          (pretty actual-what))
        (assert= expected-what actual-what)))))
 
+(define-syntax test-error
+  (syntax-rules ()
+    ((_ query expected-what)
+     (let ((threw? #f)
+           (actual-what #f))
+       (catchu-case
+        (run-query query)
+        (('profun-errored error)
+         (set! actual-what error)
+         (set! threw? #t)))
+       (assert threw?)
+       (unless (equal? expected-what actual-what)
+         (debug "expected:")
+         (pretty expected-what)
+         (debug "actual:")
+         (pretty actual-what))
+       (assert= expected-what actual-what)))))
+
 (define-syntax test-definitions
   (syntax-rules ()
     ((_ title definitions . body)
@@ -777,6 +795,28 @@
            ((Y . "Mona") (X . "Skippy"))
            ((Y . "Mona") (X . "Skippy"))))
 
+   )
+
+  (test-definitions
+   "PROFUN-ERROR CASES"
+   '(((parent "Homer" "Lisa"))
+     ((parent "Homer" "Bart"))
+     ((parent "Marge" "Lisa"))
+     ((parent "Marge" "Bart"))
+     ((parent "Abraham" "Homer"))
+     ((parent "Mona" "Homer"))
+     ((parent "Mr. Olsen" "Mona"))
+     ((parent "Mrs. Olsen" "Mona"))
+     ((parent "Bart" "Skippy"))
+     )
+
+   (test-error 'this-is-not-a-list '(bad-query:not-a-list))
+   (test-error "this is not a list" '(bad-query:not-a-list))
+
+   (test-error '(this is not a list) '(bad-query:expr-not-a-list))
+   (test-error '("this is not a list") '(bad-query:expr-not-a-list))
+
+   (test '(("parent" X)) '())
    )
 
   )

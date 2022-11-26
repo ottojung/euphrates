@@ -14,7 +14,7 @@
 
 %run guile
 
-%var make-profune-error
+%var make-profun-error
 %var profun-error?
 %var profun-error-args
 

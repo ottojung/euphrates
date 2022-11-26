@@ -26,18 +26,20 @@
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
 %use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
+%use (list-and-map) "./list-and-map.scm"
 %use (list-ref-or) "./list-ref-or.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-modify-continuation profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-set-continuation profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
+%use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
 %use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
-%use (make-usymbol usymbol?) "./usymbol.scm"
+%use (make-usymbol) "./usymbol.scm"
 
 (define-type9 <database>
   (database-constructor table handler) profun-database?
@@ -543,16 +545,30 @@
   (define (handle-expr expr)
     (map handle-elem expr))
 
-  (map handle-expr query))
+  (cond
+   ((not (list? query)) 'bad-query:not-a-list)
+   ((not (list-and-map list? query)) 'bad-query:expr-not-a-list)
+   (else (map handle-expr query))))
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns an iterator
 (define (profun-run-query db query)
   (define query/usymboled (query-handle-underscores query))
-  (define start-instruction (build-body query/usymboled))
-  (define initial-state (make-state start-instruction))
-  (define env (make-env))
-  (profun-run db env initial-state))
+  (cond
+   ((not (profun-database? db))
+    (make-profun-error 'not-a-database db))
+   ((symbol? query/usymboled)
+    (let ((first? #t))
+      (lambda _
+        (and first?
+             (begin
+               (set! first? #f)
+               (make-profun-error query/usymboled))))))
+   (else
+    (let* ((start-instruction (build-body query/usymboled))
+           (initial-state (make-state start-instruction))
+           (env (make-env)))
+      (profun-run db env initial-state)))))
 
 (define (profun-eval-from iterator start)
   (let loop ((buf start))
@@ -563,6 +579,8 @@
        ((profun-IDR? r) (loop buf))
        ((profun-CR? r)
         (raisu 'profun-returned-custom-value (profun-CR-what r)))
+       ((profun-error? r)
+        (raisu 'profun-errored (profun-error-args r)))
        ((profun-RFC? r)
         (let ((mod (profun-RFC-modify-continuation
                     r
