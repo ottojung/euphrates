@@ -517,7 +517,7 @@
      ((state? current-state)
       ;; TODO: optimize by using hashmap-foreach.
       (map (fn-cons identity profun-value-unwrap)
-           (filter (lambda (x) (not (usymbol? (car x))))
+           (filter (lambda (x) (symbol? (car x)))
                    (take-vars current-state))))
 
      ((equal? #f current-state) #f)
