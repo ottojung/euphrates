@@ -22,7 +22,7 @@
 %use (profun-accept profun-set) "./profun-accept.scm"
 %use (make-profun-error) "./profun-error.scm"
 %use (make-profun-op) "./profun-op.scm"
-%use (profun-reject) "./profun-reject.scm"
+%use (profun-reject profun-reject?) "./profun-reject.scm"
 %use (profun-bound-value? profun-unbound-value? profun-value-unwrap) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
@@ -71,9 +71,12 @@
                           list))
 
                       (if (not (= out-arity (length results)))
-                          (make-profun-error
-                           'bad-number-of-args-returned
-                           (length results) out-arity)
+                          (if (and (list-singleton? results)
+                                   (profun-reject? (car results)))
+                              (profun-reject)
+                              (make-profun-error
+                               'bad-number-of-args-returned
+                               (length results) out-arity))
                           (let loop ((results results)
                                      (out-args out-args)
                                      (out-names out-names)
@@ -82,19 +85,22 @@
                                 ret
                                 (let ((r (car results))
                                       (o (car out-args)))
-                                  (if (profun-bound-value? o)
-                                      (if (equal? o r)
-                                          (loop (cdr results)
-                                                (cdr out-args)
-                                                (cdr out-names)
-                                                ret)
-                                          (profun-reject))
-                                      (loop (cdr results)
-                                            (cdr out-args)
-                                            (cdr out-names)
-                                            (profun-set
-                                             ((car out-names) <- r)
-                                             ret)))))))))))))))
+                                  (cond
+                                   ((profun-bound-value? o)
+                                    (if (equal? o r)
+                                        (loop (cdr results)
+                                              (cdr out-args)
+                                              (cdr out-names)
+                                              ret)
+                                        (profun-reject)))
+                                   ((profun-reject? r) r)
+                                   (else
+                                    (loop (cdr results)
+                                          (cdr out-args)
+                                          (cdr out-names)
+                                          (profun-set
+                                           ((car out-names) <- r)
+                                           ret))))))))))))))))
 
     ((_ in-arity proc)
      (profun-op-function (in-arity 1) proc))))

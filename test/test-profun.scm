@@ -29,6 +29,7 @@
 %use (profun-op-true) "./src/profun-op-true.scm"
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-op-value) "./src/profun-op-value.scm"
+%use (profun-reject) "./src/profun-reject.scm"
 %use (profun-create-database profun-eval-query profun-run-query) "./src/profun.scm"
 
 (define current-handler
@@ -159,8 +160,10 @@
   (profun-op-function
    (2 2)
    (lambda (x y)
-     (values (quotient x y)
-             (remainder x y)))))
+     (if (= 0 y)
+         (profun-reject)
+         (values (quotient x y)
+                 (remainder x y))))))
 
 (parameterize
     ((current-handler
@@ -852,6 +855,8 @@
    (test '((fdiv 777 23 22 28)) '())
    (test '((fdiv 777 23 q 28)) '())
    (test '((fdiv 777 23 22 r)) '())
+
+   (test '((fdiv 777 0 q r)) '())
 
    )
 
