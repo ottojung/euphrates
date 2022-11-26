@@ -133,9 +133,6 @@
 
              (else
               (collect-finish!)
-              (parameterize ((current-output-port (current-error-port)))
-                (display "Unexpected result from profun iterator: ")
-                (write r))
               `(error unexpected-result-from-profun-iterator)))))))
 
   (define (handle-whats op args next)
