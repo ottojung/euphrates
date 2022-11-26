@@ -199,9 +199,7 @@
 
       (define (repl symb)
         (cond
-         ((pair? symb)
-          (cons (repl (car symb))
-                (repl (cdr symb))))
+         ((pair? symb) symb)
          ((not (profun-varname? symb)) symb)
          (else
           (let lp ((rbuf r-args)
