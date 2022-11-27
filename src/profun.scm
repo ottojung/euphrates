@@ -27,7 +27,6 @@
 %var profun-iterator-reset!
 
 %use (comp) "./comp.scm"
-%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
@@ -42,6 +41,7 @@
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
+%use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
 %use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
@@ -51,14 +51,6 @@
   (profun-database-constructor table handler) profun-database?
   (table profun-database-table)
   (handler profun-database-handler)
-  )
-
-(define-type9 <profun-rule>
-  (profun-rule-constructor name index args body) profun-rule?
-  (name profun-rule-name) ;; : symbol
-  (index profun-rule-index) ;; : number (together with "name" gives a unique index)
-  (args profun-rule-args) ;; : list of symbols
-  (body profun-rule-body) ;; : list of lists of symbols
   )
 
 (define-type9 <profun-instruction>
