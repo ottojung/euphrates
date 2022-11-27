@@ -26,7 +26,7 @@
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-continue-with-inserted profun-RFC-eval-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
-%use (profun-database-add-rule! profun-database-copy profun-database? profun-run-query) "./profun.scm"
+%use (profun-database-add-rule! profun-database-copy profun-database? profun-make-iterator profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
@@ -99,7 +99,7 @@
           (begin
             (set-current-left! 0)
             `(its (equals ,(reverse! buf))))
-          (let ((r (and iter (iter))))
+          (let ((r (and iter (profun-next iter))))
             (cond
 
              ((or (pair? r) (null? r))
@@ -139,7 +139,7 @@
     (define iterator
       (if (current-RFC)
           (profun-RFC-eval-inserted (current-RFC) args)
-          (profun-run-query db args)))
+          (profun-make-iterator db args)))
     (stack-push! stages (make-stage iterator 1 '() #f))
     (handle-query next))
 
