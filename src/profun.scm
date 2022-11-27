@@ -27,14 +27,14 @@
 %use (list-and-map) "./list-and-map.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
-%use (profun-RFC-modify-continuation profun-RFC?) "./profun-RFC.scm"
-%use (profun-abort-set-continuation profun-abort?) "./profun-abort.scm"
+%use (profun-RFC-modify-iter profun-RFC?) "./profun-RFC.scm"
+%use (profun-abort-set-iter profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (make-profun-database profun-database-add-rule! profun-database-get profun-database-handle profun-database?) "./profun-database.scm"
 %use (make-profun-env profun-env-get profun-env-set!) "./profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-instruction-args profun-instruction-arity profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
-%use (profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-insert! profun-iterator-query profun-iterator-reset! profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
+%use (profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-query profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
 %use (profun-rule-args profun-rule-body profun-rule-index profun-rule-name) "./profun-rule.scm"
@@ -302,16 +302,6 @@
         (make-profun-error query/usymboled)
         (profun-state-build query/usymboled)))
 
-  (define (continuation iter-c)
-    (lambda (continue? db-additions instruction-prefix)
-      (define new-iter (profun-iterator-copy iter-c))
-      (define new-db (profun-iterator-db new-iter))
-      (for-each (comp (profun-database-add-rule! new-db)) db-additions)
-      (if continue?
-          (profun-iterator-insert! new-iter instruction-prefix)
-          (profun-iterator-reset! new-iter instruction-prefix))
-      new-iter))
-
   (define (cont current-state new-state)
     (cond
      ((equal? 'backtracking-full-stop new-state)
@@ -336,7 +326,7 @@
         (define ret
           (let ((iter-copy (profun-iterator-copy iter)))
             (set-profun-iterator-state! iter-copy current-state)
-            (profun-abort-set-continuation
+            (profun-abort-set-iter
              new-state iter-copy)))
         (set-profun-iterator-state! iter new)
         ret))
@@ -407,7 +397,7 @@
        ((profun-error? r)
         (raisu 'profun-errored (profun-error-args r)))
        ((profun-RFC? r)
-        (let ((mod (profun-RFC-modify-continuation
+        (let ((mod (profun-RFC-modify-iter
                     r
                     (lambda (new-iter) (profun-eval-from new-iter buf)))))
           (raisu 'profun-needs-more-info mod)))

@@ -18,8 +18,8 @@
 %var profun-abort?
 %var profun-abort-type
 %var profun-abort-what
-%var profun-abort-set-continuation
-%var profun-abort-modify-continuation
+%var profun-abort-set-iter
+%var profun-abort-modify-iter
 
 %var profun-abort-add-info
 %var profun-abort-insert
@@ -31,9 +31,9 @@
 %use (profun-iterator-copy profun-iterator-db profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 
 (define-type9 <profun-abort>
-  (profun-abort-constructor type continuation what additional) profun-abort-obj?
+  (profun-abort-constructor type iter what additional) profun-abort-obj?
   (type profun-abort-type)
-  (continuation profun-abort-continuation)
+  (iter profun-abort-iter)
   (what profun-abort-what)
   (additional profun-abort-additional)
   )
@@ -43,36 +43,36 @@
 
 (define (make-profun-abort type what)
   (define additional '())
-  (define continuation #f)
-  (profun-abort-constructor type continuation what additional))
+  (define iter #f)
+  (profun-abort-constructor type iter what additional))
 
-(define (profun-abort-set-continuation self continuation)
+(define (profun-abort-set-iter self iter)
   (define type (profun-abort-type self))
   (define what (profun-abort-what self))
   (define additional (profun-abort-additional self))
-  (profun-abort-constructor type continuation what additional))
+  (profun-abort-constructor type iter what additional))
 
-(define (profun-abort-modify-continuation self modification)
+(define (profun-abort-modify-iter self modification)
   (define type (profun-abort-type self))
   (define what (profun-abort-what self))
   (define additional (profun-abort-additional self))
-  (define continuation
+  (define iter
     (lambda args
-      (modification (apply args continuation))))
-  (profun-abort-constructor type continuation what additional))
+      (modification (apply args iter))))
+  (profun-abort-constructor type iter what additional))
 
 (define (profun-abort-add-info self additional-rules)
   (define type (profun-abort-type self))
   (define what (profun-abort-what self))
-  (define continuation (profun-abort-continuation self))
+  (define iter (profun-abort-iter self))
   (define additional (profun-abort-additional self))
   (define new-additional (append additional additional-rules))
-  (profun-abort-constructor type continuation what new-additional))
+  (profun-abort-constructor type iter what new-additional))
 
 (define (profun-abort-insert self inserted)
   "Inserts `inserted' just before the instruction that throwed this abort, and continues evaluation."
 
-  (define iter (profun-abort-continuation self))
+  (define iter (profun-abort-iter self))
   (define new-iter (profun-iterator-copy iter))
   (define new-db (profun-iterator-db new-iter))
   (define additional (profun-abort-additional self))
@@ -83,7 +83,7 @@
 (define (profun-abort-reset self new-query)
   "Evaluates `new-query' starting from state before the abort was thrown. Any later computation is ignored."
 
-  (define iter (profun-abort-continuation self))
+  (define iter (profun-abort-iter self))
   (define new-iter (profun-iterator-copy iter))
   (define new-db (profun-iterator-db new-iter))
   (define additional (profun-abort-additional self))
