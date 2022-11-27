@@ -14,11 +14,6 @@
 
 %run guile
 
-;; Profun's Request For Clarification
-
-;; Returned by an agent that needs more info on one of its arguments in order to complete computation.
-;; For example, if agent receives query `(+ 1 x y)', he may return an abort for argument `x' to avoid returning infinitely many results.
-
 %var make-profun-abort
 %var profun-abort?
 %var profun-abort-type
