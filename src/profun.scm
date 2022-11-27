@@ -14,10 +14,7 @@
 
 %run guile
 
-%var profun-database?
 %var profun-create-database
-%var profun-database-add-rule!
-%var profun-database-copy
 %var profun-eval-query
 %var profun-make-iterator
 %var profun-next
@@ -38,6 +35,7 @@
 %use (profun-RFC-modify-continuation profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-set-continuation profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
+%use (make-profun-database profun-database-add! profun-database-add-rule! profun-database-copy profun-database-get profun-database-handle profun-database-handler profun-database-table profun-database?) "./profun-database.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-instruction-args profun-instruction-arity profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
@@ -48,12 +46,6 @@
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
 %use (make-usymbol) "./usymbol.scm"
-
-(define-type9 <profun-database>
-  (profun-database-constructor table handler) profun-database?
-  (table profun-database-table)
-  (handler profun-database-handler)
-  )
 
 (define-type9 <profun-iterator>
   (profun-iterator-constructor db env state query) profun-iterator?
@@ -114,14 +106,6 @@
   (define new-state (build-state new-query))
   (set-profun-iterator-state! iter new-state)
   (set-profun-iterator-query! iter new-query))
-
-(define (make-profun-database botom-handler)
-  (profun-database-constructor (make-hashmap) botom-handler))
-
-(define (profun-database-copy db)
-  (profun-database-constructor
-   (hashmap-copy (profun-database-table db))
-   (profun-database-handler db)))
 
 (define (profun-database-handle db key arity)
   (let ((function ((profun-database-handler db) key arity)))
@@ -457,34 +441,6 @@
 ;; and returns first instruction
 (define (build-body body)
   (build-body/next body #f))
-
-(define (profun-database-add-rule! db r)
-  (define first (car r))
-  (define name (car first))
-  (define args-init (cdr first))
-  (define body-init (cdr r))
-
-  (define (ret args body-app)
-    (let ((body (append body-app body-init)))
-      (profun-database-add! db name args body)))
-
-  (let lp ((buf args-init)
-           (i 0)
-           (aret (list))
-           (bret-app (list)))
-    (if (null? buf)
-        (ret (reverse aret) (reverse bret-app))
-        (let ((x (car buf)))
-          (if (not (profun-varname? x))
-              (let ((u (make-usymbol name `(arg ,i))))
-                (lp (cdr buf)
-                    (+ i 1)
-                    (cons u aret)
-                    (cons `(= ,u ,x) bret-app))) ;; NOTE: relies on =/2 to be provided by handler
-              (lp (cdr buf)
-                  (+ i 1)
-                  (cons x aret)
-                  bret-app))))))
 
 ;; accepts list of rules that looks like:
 ;; '(((abc x) (= x 2))
