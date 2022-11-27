@@ -27,8 +27,8 @@
 %var profun-abort-modify-continuation
 
 %var profun-abort-add-info
-%var profun-abort-continue-with-inserted
-%var profun-abort-eval-inserted
+%var profun-abort-insert
+%var profun-abort-reset
 
 %use (define-type9) "./define-type9.scm"
 
@@ -71,7 +71,7 @@
   (define new-additional (append additional additional-rules))
   (profun-abort-constructor type continuation what new-additional))
 
-(define (profun-abort-continue-with-inserted self inserted)
+(define (profun-abort-insert self inserted)
   "Inserts `inserted' just before the instruction that throwed this abort, and continues evaluation."
 
   (define continuation (profun-abort-continuation self))
@@ -79,7 +79,7 @@
   (define continue? #t)
   (continuation continue? additional inserted))
 
-(define (profun-abort-eval-inserted self inserted)
+(define (profun-abort-reset self inserted)
   "Evaluates `inserted' starting from state before the abort was thrown. Any later computation is ignored."
 
   (define continuation (profun-abort-continuation self))

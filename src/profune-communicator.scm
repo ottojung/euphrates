@@ -24,7 +24,7 @@
 %use (list-span-while) "./list-span-while.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
-%use (profun-RFC-continue-with-inserted profun-RFC-eval-inserted profun-RFC-what profun-RFC?) "./profun-RFC.scm"
+%use (profun-RFC-insert profun-RFC-reset profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database? profun-make-iterator profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
@@ -138,7 +138,7 @@
   (define (handle-whats op args next)
     (define iterator
       (if (current-RFC)
-          (profun-RFC-eval-inserted (current-RFC) args)
+          (profun-RFC-reset (current-RFC) args)
           (profun-make-iterator db args)))
     (stack-push! stages (make-stage iterator 1 '() #f))
     (handle-query next))
@@ -185,7 +185,7 @@
 
   (define (handle-its-cont op args next)
     (set-current-answer-iterator!
-     (profun-RFC-continue-with-inserted (current-RFC) args))
+     (profun-RFC-insert (current-RFC) args))
     (set-current-RFC! #f)
 
     (collect-n))

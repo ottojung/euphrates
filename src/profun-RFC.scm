@@ -26,10 +26,10 @@
 %var profun-RFC-modify-continuation
 
 %var profun-RFC-add-info
-%var profun-RFC-continue-with-inserted
-%var profun-RFC-eval-inserted
+%var profun-RFC-insert
+%var profun-RFC-reset
 
-%use (make-profun-abort profun-abort-add-info profun-abort-continue-with-inserted profun-abort-eval-inserted profun-abort-modify-continuation profun-abort-set-continuation profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
+%use (make-profun-abort profun-abort-add-info profun-abort-insert profun-abort-reset profun-abort-modify-continuation profun-abort-set-continuation profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
 
 (define (make-profun-RFC what)
   (make-profun-abort 'RFC what))
@@ -43,5 +43,5 @@
 (define profun-RFC-modify-continuation profun-abort-modify-continuation)
 
 (define profun-RFC-add-info profun-abort-add-info)
-(define profun-RFC-continue-with-inserted profun-abort-continue-with-inserted)
-(define profun-RFC-eval-inserted profun-abort-eval-inserted)
+(define profun-RFC-insert profun-abort-insert)
+(define profun-RFC-reset profun-abort-reset)

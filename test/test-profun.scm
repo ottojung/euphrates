@@ -7,7 +7,7 @@
 %use (catchu-case) "./src/catchu-case.scm"
 %use (debug) "./src/debug.scm"
 %use (printf) "./src/printf.scm"
-%use (profun-RFC-continue-with-inserted profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
+%use (profun-RFC-insert profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-accept) "./src/profun-accept.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
@@ -684,9 +684,9 @@
    (define second (profun-next x))
 
    (define resume-yes
-     (profun-RFC-continue-with-inserted first '((= z 3) (= w 3))))
+     (profun-RFC-insert first '((= z 3) (= w 3))))
    (define resume-no
-     (profun-RFC-continue-with-inserted first '((= z 3) (= w 4))))
+     (profun-RFC-insert first '((= z 3) (= w 4))))
 
    (assert= #f second)
 
@@ -708,7 +708,7 @@
    (define second (profun-next x))
 
    (define resume
-     (profun-RFC-continue-with-inserted first '((= z 3) (= w 3))))
+     (profun-RFC-insert first '((= z 3) (= w 3))))
 
    (assert= #f second)
 
