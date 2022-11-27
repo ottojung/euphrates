@@ -43,6 +43,7 @@
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
 %use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
+%use (profun-state-constructor profun-state-current profun-state-failstate profun-state-stack profun-state-undo profun-state?) "./profun-state.scm"
 %use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
@@ -52,14 +53,6 @@
   (profun-database-constructor table handler) profun-database?
   (table profun-database-table)
   (handler profun-database-handler)
-  )
-
-(define-type9 <profun-state>
-  (profun-state-constructor current stack failstate undo) profun-state?
-  (current profun-state-current) ;; current `profun-instruction`
-  (stack profun-state-stack) ;; list of `profun-instruction`s
-  (failstate profun-state-failstate) ;; `state` to go to if this `state` fails. Initially #f
-  (undo profun-state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
   )
 
 (define-type9 <profun-iterator>
