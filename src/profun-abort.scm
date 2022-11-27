@@ -18,6 +18,7 @@
 %var profun-abort?
 %var profun-abort-type
 %var profun-abort-what
+%var profun-abort-iter
 %var profun-abort-set-iter
 %var profun-abort-modify-iter
 
