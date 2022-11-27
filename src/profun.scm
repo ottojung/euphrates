@@ -21,6 +21,7 @@
 %var profun-eval-query
 %var profun-make-iterator
 %var profun-next
+%var profun-iterator-copy
 
 %use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
@@ -111,6 +112,15 @@
   (not (state-current s)))
 (define (state-finish s)
   (set-state-current s #f))
+
+(define (profun-iterator-copy iter)
+  (define db (profun-iterator-db iter))
+  (define env (profun-iterator-env iter))
+  (define new-db (profun-database-copy db))
+  (define new-env (env-copy env))
+  (define state (profun-iterator-state iter))
+  (define query (profun-iterator-query iter))
+  (profun-iterator-constructor new-db new-env state query))
 
 (define (make-database botom-handler)
   (database-constructor (make-hashmap) botom-handler))
