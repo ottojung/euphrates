@@ -30,7 +30,7 @@
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-op-value) "./src/profun-op-value.scm"
 %use (profun-reject) "./src/profun-reject.scm"
-%use (profun-create-database profun-eval-query profun-make-iterator profun-next) "./src/profun.scm"
+%use (profun-create-database profun-eval-query profun-iterate profun-next) "./src/profun.scm"
 
 (define current-handler
   (make-parameter #f))
@@ -45,7 +45,7 @@
 
 (define (get-iter query)
   (define db (get-db))
-  (profun-make-iterator db query))
+  (profun-iterate db query))
 
 (define (run-query query)
   (define db (get-db))

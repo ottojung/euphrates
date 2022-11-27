@@ -28,7 +28,7 @@
 %use (profun-database-add-rule! profun-database-copy profun-database?) "./profun-database.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-iterator-copy) "./profun-iterator.scm"
-%use (profun-make-iterator profun-next) "./profun.scm"
+%use (profun-iterate profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
@@ -147,7 +147,7 @@
        ((current-RFC)
         (profun-RFC-reset (current-RFC) args))
        (else
-        (profun-make-iterator db args))))
+        (profun-iterate db args))))
 
     (push-stage! iterator)
     (handle-query next))

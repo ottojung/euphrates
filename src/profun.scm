@@ -16,7 +16,7 @@
 
 %var profun-create-database
 %var profun-eval-query
-%var profun-make-iterator
+%var profun-iterate
 %var profun-next
 
 %use (comp) "./comp.scm"
@@ -362,7 +362,7 @@
    (else
     (eval-cont/goodstate last-state))))
 
-(define (profun-make-iterator/g db env state query)
+(define (profun-iterate/g db env state query)
   (profun-iterator-constructor db env state query))
 
 (define (query-handle-underscores query)
@@ -386,14 +386,14 @@
 
 ;; accepts profun-database `db` and list of symbols `query`
 ;; returns an iterator
-(define (profun-make-iterator db query)
+(define (profun-iterate db query)
   (cond
    ((not (profun-database? db))
     (make-profun-error 'not-a-profun-database db))
    (else
     (let ((env (make-profun-env))
           (state #f))
-      (profun-make-iterator/g db env state query)))))
+      (profun-iterate/g db env state query)))))
 
 (define (profun-eval-from iterator start)
   (let loop ((buf start))
@@ -416,5 +416,5 @@
 ;; accepts profun-database `db` and list of symbols `query`
 ;; returns a list of result alists
 (define (profun-eval-query db query)
-  (define iterator (profun-make-iterator db query))
+  (define iterator (profun-iterate db query))
   (profun-eval-from iterator '()))
