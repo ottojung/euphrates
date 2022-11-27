@@ -163,31 +163,31 @@
 
 (test-dialog
  '((nonexisting x y z)
-   (error operation-not-supported nonexisting)
+   (error (operation-not-supported nonexisting))
    ))
 
 (test-dialog
  '((whats (person X) nonexisting x y z)
-   (error unexpected-operation nonexisting)
+   (error (unexpected-operation nonexisting))
    ))
 
 (test-dialog
  '((its ok)
-   (error did-not-ask-anything)
+   (error (did-not-ask-anything))
    ))
 
 (test-dialog
  '((whats (= 0 1))
    (its (equals ()))
    (its ok)
-   (error did-not-ask-anything)
+   (error (did-not-ask-anything))
    ))
 
 (test-dialog
  '((whats (= 0 1))
    (its (equals ()))
    (its ok)
-   (error did-not-ask-anything)
+   (error (did-not-ask-anything))
    (whats (= X 3))
    (its (equals (((X . 3)))))
    ))
@@ -200,7 +200,7 @@
    (its (equals (((W . 16)))))
    (its (equals (((W . 16) (Z . 4)))))
    (nonexisting x y z)
-   (error operation-not-supported nonexisting)
+   (error (operation-not-supported nonexisting))
    (its (= X 9))
    (its (equals (((Y . 3) (X . 9)))))
    ))
