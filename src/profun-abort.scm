@@ -81,7 +81,7 @@
   new-iter)
 
 (define (profun-abort-reset self new-query)
-  "Evaluates `inserted' starting from state before the abort was thrown. Any later computation is ignored."
+  "Evaluates `new-query' starting from state before the abort was thrown. Any later computation is ignored."
 
   (define iter (profun-abort-continuation self))
   (define new-iter (profun-iterator-copy iter))
