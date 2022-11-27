@@ -19,15 +19,16 @@
 %var profune-communicator-handle
 
 %use (comp) "./comp.scm"
-%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-insert profun-RFC-reset profun-RFC-what profun-RFC?) "./profun-RFC.scm"
+%use (profun-database-add-rule! profun-database-copy profun-database?) "./profun-database.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
-%use (profun-database-add-rule! profun-database-copy profun-database? profun-iterator-copy profun-iterator-reset! profun-make-iterator profun-next) "./profun.scm"
+%use (profun-iterator-copy) "./profun-iterator.scm"
+%use (profun-make-iterator profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
