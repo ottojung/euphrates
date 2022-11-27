@@ -19,7 +19,8 @@
 %var profun-database-add-rule!
 %var profun-database-copy
 %var profun-eval-query
-%var profun-run-query
+%var profun-make-iterator
+%var profun-next
 
 %use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
@@ -72,6 +73,14 @@
   (undo state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
   )
 
+(define-type9 <profun-iterator>
+  (profun-iterator-constructor db env state query) profun-iterator?
+  (db profun-iterator-db)
+  (env profun-iterator-env)
+  (state profun-iterator-state set-profun-iterator-state!)
+  (query profun-iterator-query)
+  )
+
 (define-type9 <set-var-command>
   (make-set-var-command name value) set-var-command?
   (name set-var-command-name)
@@ -99,7 +108,7 @@
      ))))
 
 (define (state-final? s)
-  (not (and (state? s) (state-current s))))
+  (not (state-current s)))
 (define (state-finish s)
   (set-state-current s #f))
 
@@ -342,14 +351,17 @@
 (define (handle-abort db env s ret)
   (define continuation
     (lambda (continue? db-additions instruction-prefix)
+      ;; TODO: abstract copying of the iterator
       (define new-env (env-copy env))
       (define new-db (profun-database-copy db))
+      (define new-query
+        (if continue? #f instruction-prefix))
       (define new-s
         (if continue?
             (add-prefix-to-instruction new-db s instruction-prefix)
             (set-remaining-instructions s instruction-prefix)))
       (for-each (comp (profun-database-add-rule! new-db)) db-additions)
-      (profun-run new-db new-env new-s)))
+      (profun-make-iterator/g new-db new-env new-s new-query)))
 
   (profun-abort-set-continuation ret continuation))
 
@@ -363,10 +375,10 @@
   (define ret (func get-func context args))
 
   (cond
-   ((profun-reject? ret)
-    (backtrack db env s))
    ((profun-accept? ret)
     (handle-accept env s instruction args ret))
+   ((profun-reject? ret)
+    (backtrack db env s))
    ((profun-abort? ret)
     (handle-abort db env s ret))
    (else
@@ -417,7 +429,7 @@
 (define (backtrack db env initial-state)
   (run-undos env initial-state)
   (let lp ((s (state-failstate initial-state)))
-    (if (not s) #f
+    (if (not s) 'backtracking-full-stop
         (let ((alt (get-alternative-instruction db s)))
           (case alt
             ((#f)
@@ -426,12 +438,13 @@
             (else (set-state-current s alt)))))))
 
 (define (eval-state db env initial-state)
-  (define new-state
-    (apply-instruction db env initial-state))
+  (let loop ((initial-state initial-state))
+    (define new-state
+      (apply-instruction db env initial-state))
 
-  (if (state-final? new-state)
-      new-state
-      (eval-state db env new-state)))
+    (cond
+     ((or (not (state? new-state)) (state-final? new-state)) new-state)
+     (else (loop new-state)))))
 
 (define (build-body/next body next)
   (define rev (reverse body))
@@ -495,41 +508,73 @@
   (for-each (comp (profun-database-add-rule! db)) lst-of-rules)
   db)
 
-(define (profun-run db env initial-state)
+(define (profun-next iter)
+  (define db (profun-iterator-db iter))
+  (define env (profun-iterator-env iter))
+  (define query (profun-iterator-query iter))
+  (define last-state (profun-iterator-state iter))
+
   (define (backtrack-eval db env s)
     (let ((b (backtrack db env s)))
-      (and b (eval-state db env b))))
+      (if (equal? 'backtracking-full-stop b) b
+          (eval-state db env b))))
   (define (take-vars s)
     (hashmap->alist env))
 
-  (define current-state #t)
+  (define (initialize-state query)
+    (define query/usymboled (query-handle-underscores query))
+    (if (symbol? query/usymboled)
+        (make-profun-error query/usymboled)
+        (let ((start-instruction (build-body query/usymboled)))
+          (make-state start-instruction))))
 
-  (lambda _
-    (define last-state current-state)
-    (case current-state
-      ((#t)
-       (set! current-state (eval-state db env initial-state)))
-      ((#f) #f)
-      (else
-       (set! current-state (backtrack-eval db env current-state))))
-
+  (define (cont current-state new-state)
     (cond
-     ((state? current-state)
-      ;; TODO: optimize by using hashmap-foreach.
+     ((equal? 'backtracking-full-stop new-state)
+      (set-profun-iterator-state!
+       iter (state-finish current-state))
+      #f)
+     ((state? new-state)
+      (set-profun-iterator-state! iter new-state)
       (map (fn-cons identity profun-value-unwrap)
            (filter (lambda (x) (symbol? (car x)))
-                   (take-vars current-state))))
-
-     ((equal? #f current-state) #f)
-
-     ((profun-abort? current-state)
-      (let ((copy current-state))
-        (set! current-state
-              (if (equal? #t last-state) #f
-                  (backtrack-eval db env last-state)))
+                   (take-vars new-state))))
+     ((profun-abort? new-state)
+      (let ((copy new-state))
+        (define new0
+          (if (equal? #f last-state)
+              (state-finish current-state)
+              (backtrack-eval db env last-state)))
+        (define new
+          (if (equal? 'backtracking-full-stop new0)
+              (state-finish current-state)
+              new0))
+        (set-profun-iterator-state! iter new)
         copy))
 
-     (else (raisu 'unknown-state-type-in-profun-run current-state)))))
+     (else (raisu 'unknown-state-type-in-profun-run new-state))))
+
+  (define (eval-cont/goodstate current-state)
+    (define new (eval-state db env current-state))
+    (cont current-state new))
+
+  (define (eval-cont current-state)
+    (if (equal? 'backtracking-full-stop current-state) #f
+        (eval-cont/goodstate current-state)))
+
+  (cond
+   ((equal? #f last-state)
+    (let ((s0 (initialize-state query)))
+      (if (state? s0)
+          (eval-cont/goodstate s0)
+          s0)))
+   ((state-final? last-state)
+    (eval-cont (backtrack db env last-state)))
+   (else
+    (eval-cont/goodstate last-state))))
+
+(define (profun-make-iterator/g db env state query)
+  (profun-iterator-constructor db env state query))
 
 (define (query-handle-underscores query)
   (define (handle-elem x)
@@ -552,27 +597,18 @@
 
 ;; accepts database `db` and list of symbols `query`
 ;; returns an iterator
-(define (profun-run-query db query)
-  (define query/usymboled (query-handle-underscores query))
+(define (profun-make-iterator db query)
   (cond
    ((not (profun-database? db))
     (make-profun-error 'not-a-database db))
-   ((symbol? query/usymboled)
-    (let ((first? #t))
-      (lambda _
-        (and first?
-             (begin
-               (set! first? #f)
-               (make-profun-error query/usymboled))))))
    (else
-    (let* ((start-instruction (build-body query/usymboled))
-           (initial-state (make-state start-instruction))
-           (env (make-env)))
-      (profun-run db env initial-state)))))
+    (let ((env (make-env))
+          (state #f))
+      (profun-make-iterator/g db env state query)))))
 
 (define (profun-eval-from iterator start)
   (let loop ((buf start))
-    (let ((r (iterator)))
+    (let ((r (profun-next iterator)))
       (cond
        ((or (pair? r) (null? r)) (loop (cons r buf)))
        ((equal? #f r) (reverse! buf))
@@ -591,5 +627,5 @@
 ;; accepts database `db` and list of symbols `query`
 ;; returns a list of result alists
 (define (profun-eval-query db query)
-  (define iterator (profun-run-query db query))
+  (define iterator (profun-make-iterator db query))
   (profun-eval-from iterator '()))

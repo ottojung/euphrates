@@ -30,7 +30,7 @@
 %use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-op-value) "./src/profun-op-value.scm"
 %use (profun-reject) "./src/profun-reject.scm"
-%use (profun-create-database profun-eval-query profun-run-query) "./src/profun.scm"
+%use (profun-create-database profun-eval-query profun-make-iterator profun-next) "./src/profun.scm"
 
 (define current-handler
   (make-parameter #f))
@@ -45,7 +45,7 @@
 
 (define (get-iter query)
   (define db (get-db))
-  (profun-run-query db query))
+  (profun-make-iterator db query))
 
 (define (run-query query)
   (define db (get-db))
@@ -667,9 +667,9 @@
 
    (define x
      (get-iter '((= z w))))
-   (assert (profun-RFC? (x)))
-   (assert= #f (x))
-   (assert= #f (x))
+   (assert (profun-RFC? (profun-next x)))
+   (assert= #f (profun-next x))
+   (assert= #f (profun-next x))
 
    )
 
@@ -680,8 +680,8 @@
      ((abc x) (= x 3)))
 
    (define x (get-iter '((= z w))))
-   (define first (x))
-   (define second (x))
+   (define first (profun-next x))
+   (define second (profun-next x))
 
    (define resume-yes
      (profun-RFC-continue-with-inserted first '((= z 3) (= w 3))))
@@ -690,12 +690,12 @@
 
    (assert= #f second)
 
-   (assert= #f (resume-no))
-   (assert= #f (resume-no))
+   (assert= #f (profun-next resume-no))
+   (assert= #f (profun-next resume-no))
 
-   (assert= (resume-yes) '((z . 3) (w . 3)))
-   (assert= #f (resume-yes))
-   (assert= #f (resume-yes))
+   (assert= (profun-next resume-yes) '((z . 3) (w . 3)))
+   (assert= #f (profun-next resume-yes))
+   (assert= #f (profun-next resume-yes))
 
    )
 
@@ -704,14 +704,20 @@
    '(((abc x) (= 1 1) (= u k) (= 3 3)))
 
    (define x (get-iter '((abc 0))))
-   (define first (x))
+   (define first (profun-next x))
+   (define second (profun-next x))
+
    (define resume
      (profun-RFC-continue-with-inserted first '((= z 3) (= w 3))))
-   (assert= #f (x))
-   (assert= #f (x))
-   (assert (profun-RFC? (resume)))
-   (assert= #f (resume))
-   (assert= #f (resume))
+
+   (assert= #f second)
+
+   (assert= #f (profun-next x))
+   (assert= #f (profun-next x))
+
+   (assert (profun-RFC? (profun-next resume)))
+   (assert= #f (profun-next resume))
+   (assert= #f (profun-next resume))
 
    )
 
