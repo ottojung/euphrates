@@ -30,7 +30,10 @@
 %var profun-abort-insert
 %var profun-abort-reset
 
+%use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
+%use (profun-database-add-rule!) "./profun-database.scm"
+%use (profun-iterator-copy profun-iterator-db profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 
 (define-type9 <profun-abort>
   (profun-abort-constructor type continuation what additional) profun-abort-obj?
@@ -74,15 +77,21 @@
 (define (profun-abort-insert self inserted)
   "Inserts `inserted' just before the instruction that throwed this abort, and continues evaluation."
 
-  (define continuation (profun-abort-continuation self))
+  (define iter (profun-abort-continuation self))
+  (define new-iter (profun-iterator-copy iter))
+  (define new-db (profun-iterator-db new-iter))
   (define additional (profun-abort-additional self))
-  (define continue? #t)
-  (continuation continue? additional inserted))
+  (for-each (comp (profun-database-add-rule! new-db)) additional)
+  (profun-iterator-insert! new-iter inserted)
+  new-iter)
 
-(define (profun-abort-reset self inserted)
+(define (profun-abort-reset self new-query)
   "Evaluates `inserted' starting from state before the abort was thrown. Any later computation is ignored."
 
-  (define continuation (profun-abort-continuation self))
+  (define iter (profun-abort-continuation self))
+  (define new-iter (profun-iterator-copy iter))
+  (define new-db (profun-iterator-db new-iter))
   (define additional (profun-abort-additional self))
-  (define continue? #f)
-  (continuation continue? additional inserted))
+  (for-each (comp (profun-database-add-rule! new-db)) additional)
+  (profun-iterator-reset! new-iter new-query)
+  new-iter)

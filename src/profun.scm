@@ -334,10 +334,10 @@
               (profun-state-finish current-state)
               new0))
         (define ret
-          (let ((iter-c (profun-iterator-copy iter)))
-            (set-profun-iterator-state! iter-c current-state)
+          (let ((iter-copy (profun-iterator-copy iter)))
+            (set-profun-iterator-state! iter-copy current-state)
             (profun-abort-set-continuation
-             new-state (continuation iter-c))))
+             new-state iter-copy)))
         (set-profun-iterator-state! iter new)
         ret))
 
