@@ -215,8 +215,7 @@
 
   (define (handle commands)
     (cond
-     ((null? commands)
-      `(error expecting-more-commands-than-this))
+     ((null? commands) `(ok))
      ((not (list? commands))
       `(error commands-must-be-a-list))
      ((not (symbol? (car commands)))
