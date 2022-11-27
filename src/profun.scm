@@ -132,9 +132,8 @@
     (add-prefix-to-instruction db state instruction-prefix))
   (set-profun-iterator-state! iter new-state))
 
-(define (profun-iterator-reset! iter instruction-prefix)
-  (define new-state (set-remaining-instructions instruction-prefix))
-  (define new-query instruction-prefix)
+(define (profun-iterator-reset! iter new-query)
+  (define new-state (build-state new-query))
   (set-profun-iterator-state! iter new-state)
   (set-profun-iterator-query! iter new-query))
 
@@ -370,8 +369,8 @@
 
   (set-state-current s new-current))
 
-(define (set-remaining-instructions instruction-prefix)
-  (define new-current (build-body instruction-prefix))
+(define (build-state query)
+  (define new-current (build-body query))
   (make-state new-current))
 
 (define (handle-abort db env s ret)
@@ -537,8 +536,7 @@
     (define query/usymboled (query-handle-underscores query))
     (if (symbol? query/usymboled)
         (make-profun-error query/usymboled)
-        (let ((start-instruction (build-body query/usymboled)))
-          (make-state start-instruction))))
+        (build-state query/usymboled)))
 
   (define (continuation iter-c)
     (lambda (continue? db-additions instruction-prefix)
