@@ -96,7 +96,7 @@
        ((not (pair? response)) response)
        ((equal? 'error (car response))
         (if (null? (cdr response)) response
-            (case (cadr response)
-              ((did-not-ask-anything) (handle-result answer))
-              (else response))))
+            (if (equal? (cadr response) '(did-not-ask-anything))
+                (handle-result answer)
+                response)))
        (else (loop response))))))

@@ -129,11 +129,11 @@
 
              ((profun-error? r)
               (collect-finish!)
-              `(error ,@(profun-error-args r)))
+              `(error ,(profun-error-args r)))
 
              (else
               (collect-finish!)
-              `(error unexpected-result-from-profun-iterator)))))))
+              `(error (unexpected-result-from-profun-iterator))))))))
 
   (define (handle-whats op args next)
     (define iterator
@@ -156,9 +156,9 @@
            (let ((n (get-more-s-arg next-args)))
              (set-current-left! (+ 1 n))
              (collect-n))
-           `(error operation-whats/its-must-be-last)))
+           `(error (operation-whats/its-must-be-last))))
       (else
-       `(error unexpected-operation ,next-op))))
+       `(error (unexpected-operation ,next-op)))))
 
   (define (get-more-s-arg args)
     (cond
@@ -167,17 +167,17 @@
       (let ((nl (car args)))
         (cond
          ((not (list-singleton? nl))
-          `(error more-s-argument-must-be-a-singleton-list))
+          `(error (more-s-argument-must-be-a-singleton-list)))
          ((not (and (integer? (car nl)) (<= 0 (car nl))))
-          `(error more-s-argument-must-a-natural-number))
+          `(error (more-s-argument-must-a-natural-number)))
          (else (car nl)))))
      (else
-      `(error more-must-have-atmost-single-argument))))
+      `(error (more-must-have-atmost-single-argument)))))
 
   (define (handle-more op args next)
     (define n (get-more-s-arg args))
     (cond
-     ((not (null? next)) `(error more-must-be-the-last-command))
+     ((not (null? next)) `(error (more-must-be-the-last-command)))
      ((not (number? n)) n)
      (else
       (set-current-left! n)
@@ -193,13 +193,13 @@
   (define (handle-its op args next)
     (cond
      ((stack-empty? stages)
-      `(error did-not-ask-anything))
+      `(error (did-not-ask-anything)))
      ((current-RFC)
       (handle-its-cont op args next))
      (else
       (stack-pop! stages)
       (if (stack-empty? stages)
-          `(error did-not-ask-anything)
+          `(error (did-not-ask-anything))
           (handle-its-cont op args next)))))
 
   (define (handle-bye op args next)
@@ -207,7 +207,12 @@
     (set! stages #f)
     (if (and (null? args) (null? next))
         `(bye)
-        `(error bye-must-not-have-any-arguments)))
+        `(error (bye-must-not-have-any-arguments))))
+
+  (define (handle-ok op args next)
+    (if (null? next)
+        `(bye)
+        (handle next)))
 
   (define (handle-listen op args next)
     (for-each (comp (profun-database-add-rule! db)) args)
@@ -216,12 +221,13 @@
   (define (handle commands)
     (cond
      ((null? commands) `(ok))
+     ((null? commands) `(error (expected more)))
      ((not (list? commands))
-      `(error commands-must-be-a-list))
+      `(error (commands-must-be-a-list)))
      ((not (symbol? (car commands)))
-      `(error commands-must-start-from-an-operation))
+      `(error (commands-must-start-from-an-operation)))
      ((not db)
-      `(error 'already-said-bye-bye))
+      `(error (already-said-bye-bye)))
      (else
       (let ()
         (define-values (op args next)
@@ -231,7 +237,8 @@
           ((whats) (handle-whats op args next))
           ((its) (handle-its op args next))
           ((more) (handle-more op args next))
+          ((ok) (handle-ok op args next))
           ((bye) (handle-bye op args next))
-          (else `(error operation-not-supported ,op)))))))
+          (else `(error (operation-not-supported ,op))))))))
 
   (handle commands))
