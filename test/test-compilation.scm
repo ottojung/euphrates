@@ -316,7 +316,7 @@
 %use (profun-variable-arity-op) "./src/profun-variable-arity-op.scm"
 %use (profun-variable-equal?) "./src/profun-variable-equal-q.scm"
 %use (profun-varname?) "./src/profun-varname-q.scm"
-%use (profun-create-database profun-database-add-rule! profun-database-copy profun-database? profun-eval-query profun-iterator-copy profun-make-iterator profun-next) "./src/profun.scm"
+%use (profun-create-database profun-database-add-rule! profun-database-copy profun-database? profun-eval-query profun-iterator-copy profun-iterator-db profun-iterator-insert! profun-iterator-reset! profun-make-iterator profun-next) "./src/profun.scm"
 %use (profune-communications-hook/p) "./src/profune-communications-hook-p.scm"
 %use (profune-communications) "./src/profune-communications.scm"
 %use (make-profune-communicator profune-communicator-handle profune-communicator?) "./src/profune-communicator.scm"

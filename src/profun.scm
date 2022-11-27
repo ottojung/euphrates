@@ -22,6 +22,9 @@
 %var profun-make-iterator
 %var profun-next
 %var profun-iterator-copy
+%var profun-iterator-db
+%var profun-iterator-insert!
+%var profun-iterator-reset!
 
 %use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
@@ -121,10 +124,6 @@
   (define state (profun-iterator-state iter))
   (define query (profun-iterator-query iter))
   (profun-iterator-constructor new-db new-env state query))
-
-(define (profun-iterator-set-new! iter new-state new-query)
-  (set-profun-iterator-state! iter new-state)
-  (set-profun-iterator-query! iter new-query))
 
 (define (profun-iterator-insert! iter instruction-prefix)
   (define db (profun-iterator-db iter))
