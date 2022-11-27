@@ -18,10 +18,6 @@
 %var profun-eval-query
 %var profun-make-iterator
 %var profun-next
-%var profun-iterator-copy
-%var profun-iterator-db
-%var profun-iterator-insert!
-%var profun-iterator-reset!
 
 %use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
@@ -46,14 +42,6 @@
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
 %use (make-usymbol) "./usymbol.scm"
-
-(define-type9 <profun-iterator>
-  (profun-iterator-constructor db env state query) profun-iterator?
-  (db profun-iterator-db)
-  (env profun-iterator-env)
-  (state profun-iterator-state set-profun-iterator-state!)
-  (query profun-iterator-query set-profun-iterator-query!)
-  )
 
 (define-type9 <set-var-command>
   (make-set-var-command name value) set-var-command?
