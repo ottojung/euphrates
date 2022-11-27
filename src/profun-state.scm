@@ -21,7 +21,15 @@
 %var profun-state-failstate
 %var profun-state-undo
 
+%var profun-state-make
+%var profun-state-build
+
+%var set-profun-state-current
+%var profun-state-final?
+%var profun-state-finish
+
 %use (define-type9) "./define-type9.scm"
+%use (profun-instruction-build) "./profun-instruction.scm"
 
 (define-type9 <profun-state>
   (profun-state-constructor current stack failstate undo) profun-state?
@@ -30,3 +38,32 @@
   (failstate profun-state-failstate) ;; `state` to go to if this `state` fails. Initially #f
   (undo profun-state-undo) ;; commands to run when backtracking to `failstate'. Initially '()
   )
+
+(define (profun-state-make start-instruction)
+  (profun-state-constructor
+   start-instruction
+   (list) ;; stack
+   #f ;; failstate
+   '()
+   ))
+
+(define (profun-state-build query)
+  (define new-current (profun-instruction-build query))
+  (profun-state-make new-current))
+
+(define set-profun-state-current
+  (case-lambda
+   ((s instruction)
+    (set-profun-state-current s instruction (profun-state-stack s)))
+   ((s instruction stack)
+    (profun-state-constructor
+     instruction
+     stack
+     (profun-state-failstate s)
+     (profun-state-undo s)
+     ))))
+
+(define (profun-state-final? s)
+  (not (profun-state-current s)))
+(define (profun-state-finish s)
+  (set-profun-state-current s #f))

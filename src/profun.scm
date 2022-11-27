@@ -23,22 +23,23 @@
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
-%use (hashmap->alist hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
+%use (hashmap->alist) "./hashmap.scm"
 %use (list-and-map) "./list-and-map.scm"
-%use (list-ref-or) "./list-ref-or.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-modify-continuation profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-set-continuation profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
-%use (make-profun-database profun-database-add! profun-database-add-rule! profun-database-copy profun-database-get profun-database-handle profun-database-handler profun-database-table profun-database?) "./profun-database.scm"
+%use (make-profun-database profun-database-add-rule! profun-database-get profun-database-handle profun-database?) "./profun-database.scm"
+%use (make-profun-env profun-env-get profun-env-set!) "./profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
-%use (profun-instruction-args profun-instruction-arity profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
+%use (profun-instruction-args profun-instruction-arity profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
+%use (profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-insert! profun-iterator-query profun-iterator-reset! profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
-%use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
-%use (profun-state-constructor profun-state-current profun-state-failstate profun-state-stack profun-state-undo profun-state?) "./profun-state.scm"
-%use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-value-unwrap) "./profun-value.scm"
+%use (profun-rule-args profun-rule-body profun-rule-index profun-rule-name) "./profun-rule.scm"
+%use (profun-state-build profun-state-constructor profun-state-current profun-state-failstate profun-state-final? profun-state-finish profun-state-stack profun-state-undo profun-state? set-profun-state-current) "./profun-state.scm"
+%use (profun-bound-value? profun-make-var profun-value-unwrap) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
 %use (make-usymbol) "./usymbol.scm"
@@ -48,103 +49,6 @@
   (name set-var-command-name)
   (value set-var-command-value)
   )
-
-(define (make-state start-instruction)
-  (profun-state-constructor
-   start-instruction
-   (list) ;; stack
-   #f ;; failstate
-   '()
-   ))
-
-(define set-profun-state-current
-  (case-lambda
-   ((s instruction)
-    (set-profun-state-current s instruction (profun-state-stack s)))
-   ((s instruction stack)
-    (profun-state-constructor
-     instruction
-     stack
-     (profun-state-failstate s)
-     (profun-state-undo s)
-     ))))
-
-(define (profun-state-final? s)
-  (not (profun-state-current s)))
-(define (profun-state-finish s)
-  (set-profun-state-current s #f))
-
-(define (profun-iterator-copy iter)
-  (define db (profun-iterator-db iter))
-  (define env (profun-iterator-env iter))
-  (define new-db (profun-database-copy db))
-  (define new-env (env-copy env))
-  (define state (profun-iterator-state iter))
-  (define query (profun-iterator-query iter))
-  (profun-iterator-constructor new-db new-env state query))
-
-(define (profun-iterator-insert! iter instruction-prefix)
-  (define db (profun-iterator-db iter))
-  (define state (profun-iterator-state iter))
-  (define new-state
-    (add-prefix-to-instruction db state instruction-prefix))
-  (set-profun-iterator-state! iter new-state))
-
-(define (profun-iterator-reset! iter new-query)
-  (define new-state (build-state new-query))
-  (set-profun-iterator-state! iter new-state)
-  (set-profun-iterator-query! iter new-query))
-
-(define (profun-database-handle db key arity)
-  (let ((function ((profun-database-handler db) key arity)))
-    (and function (profun-rule-constructor key 0 (list) function))))
-
-(define (double-hashmap-ref H key1 key2)
-  (define h (hashmap-ref H key1 #f))
-  (and h (hashmap-ref h key2 #f)))
-
-(define (double-hashmap-set! H key1 key2 value)
-  (define h0 (hashmap-ref H key1 #f))
-  (define h
-    (or h0 (begin (let ((h (make-hashmap)))
-                    (hashmap-set! H key1 h) h))))
-  (hashmap-set! h key2 value))
-
-(define (profun-database-get db k arity)
-  (define (get db key index arity)
-    (let ((r (double-hashmap-ref (profun-database-table db) key arity)))
-      (and r (list-ref-or r index #f))))
-
-  (if (pair? k)
-      (get db (car k) (cdr k) arity)
-      (get db k 0 arity)))
-
-(define (profun-database-add! db name args body)
-  (let* ((arity (length args))
-         (table (profun-database-table db))
-         (existing (or (double-hashmap-ref table name arity) '()))
-         (index (length existing))
-         (value (profun-rule-constructor name index args body)))
-
-    (double-hashmap-set!
-     (profun-database-table db)
-     name arity
-     (append existing (list value)))))
-
-(define (make-env)
-  (make-hashmap))
-(define (env-get env key)
-  (if (profun-varname? key)
-      (hashmap-ref env key (profun-make-unbound-var key))
-      (profun-make-constant key)))
-(define (env-set! env key value)
-  (if (profun-bound-value? value)
-      (hashmap-set! env key value)
-      (hashmap-delete! env key)))
-(define (env-unset! env key)
-  (hashmap-delete! env key))
-(define (env-copy env)
-  (hashmap-copy env))
 
 ;; returns profun-instruction or #f
 (define (get-alternative-instruction db s)
@@ -210,7 +114,7 @@
 ;; uses alpha, then builds the alpha body,
 ;; and returns first instruction
 (define (beta-reduce rule args)
-  (build-body (alpha-reduce rule args)))
+  (profun-instruction-build (alpha-reduce rule args)))
 
 (define (enter-subroutine s ;; state
                           instruction
@@ -261,11 +165,11 @@
      (fn-pair
       (name value)
       (define wrapped (profun-make-var name value))
-      (define old (env-get env name))
+      (define old (profun-env-get env name))
       (define undo-command (make-set-var-command name old))
       (when (profun-bound-value? old)
         (raisu 'operation-rebinds-a-bound-variable name old))
-      (env-set! env name wrapped)
+      (profun-env-set! env name wrapped)
       undo-command)
      alist/vars))
 
@@ -283,46 +187,6 @@
       (continue s)
       (handle-accept-change s env instruction args ret)))
 
-(define (get-current-subroutine s)
-  (define stack (profun-state-stack s))
-  (if (null? stack)
-      (values #f #f)
-      (let ()
-        (define instruction (car stack))
-        (define key (profun-instruction-sign instruction))
-        (define arity (profun-instruction-arity instruction))
-        (values key arity))))
-
-(define (add-prefix-to-instruction db s instruction-prefix)
-  (define-values (key arity) (get-current-subroutine s))
-  (define current (profun-state-current s))
-  (define table (profun-database-table db))
-  (define rules (or (double-hashmap-ref table key arity) '()))
-  (define (add-to-rule rule)
-    ;; FIXME: add not at a begining of a rule,
-    ;;        but before current instruction.
-    (define body (profun-rule-body rule))
-    (define new-body (append instruction-prefix body))
-    (profun-rule-constructor
-     (profun-rule-name rule)
-     (profun-rule-index rule)
-     (profun-rule-args rule)
-     new-body))
-  (define new-rules
-    (if (list? rules)
-        (map add-to-rule rules)
-        (add-to-rule rules)))
-  (define new-current
-    (build-body/next instruction-prefix current))
-
-  (double-hashmap-set! table key arity new-rules)
-
-  (set-profun-state-current s new-current))
-
-(define (build-state query)
-  (define new-current (build-body query))
-  (make-state new-current))
-
 (define (handle-abort db env s ret)
   ret)
 
@@ -332,7 +196,7 @@
   (define func (profun-op-procedure handler))
   (define context (profun-instruction-context instruction))
   (define args (profun-instruction-args instruction))
-  (define get-func (comp (env-get env)))
+  (define get-func (comp (profun-env-get env)))
   (define ret (func get-func context args))
 
   (cond
@@ -380,9 +244,10 @@
    (lambda (undo-command)
      (cond
       ((set-var-command? undo-command)
-       (env-set! env
-                 (set-var-command-name undo-command)
-                 (set-var-command-value undo-command)))
+       (profun-env-set!
+        env
+        (set-var-command-name undo-command)
+        (set-var-command-value undo-command)))
       (else
        (raisu 'unknown-undo-command undo-command))))
    (profun-state-undo s)))
@@ -406,29 +271,6 @@
     (cond
      ((or (not (profun-state? new-state)) (profun-state-final? new-state)) new-state)
      (else (loop new-state)))))
-
-(define (build-body/next body next)
-  (define rev (reverse body))
-
-  (define (make-one block next)
-    (define sign (car block))
-    (define args (cdr block))
-    (profun-instruction-constructor
-     sign args (length args) next #f))
-
-  (define result
-    (let lp ((buf rev) (prev next))
-      (if (null? buf)
-          prev
-          (let ((current (make-one (car buf) prev)))
-            (lp (cdr buf) current)))))
-
-  result)
-
-;; accepts list of symbols "body"
-;; and returns first instruction
-(define (build-body body)
-  (build-body/next body #f))
 
 ;; accepts list of rules that looks like:
 ;; '(((abc x) (= x 2))
@@ -458,7 +300,7 @@
     (define query/usymboled (query-handle-underscores query))
     (if (symbol? query/usymboled)
         (make-profun-error query/usymboled)
-        (build-state query/usymboled)))
+        (profun-state-build query/usymboled)))
 
   (define (continuation iter-c)
     (lambda (continue? db-additions instruction-prefix)
@@ -549,7 +391,7 @@
    ((not (profun-database? db))
     (make-profun-error 'not-a-profun-database db))
    (else
-    (let ((env (make-env))
+    (let ((env (make-profun-env))
           (state #f))
       (profun-make-iterator/g db env state query)))))
 

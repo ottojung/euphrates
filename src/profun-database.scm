@@ -19,8 +19,10 @@
 %var profun-database-table
 %var profun-database-handler
 %var profun-database-handle
-%var profun-database-add!
+%var profun-database-get-all
+%var profun-database-set-all!
 %var profun-database-get
+%var profun-database-add!
 %var make-profun-database
 %var profun-database-add-rule!
 
@@ -87,6 +89,14 @@
     (or h0 (begin (let ((h (make-hashmap)))
                     (hashmap-set! H key1 h) h))))
   (hashmap-set! h key2 value))
+
+(define (profun-database-get-all db key arity)
+  (define table (profun-database-table db))
+  (double-hashmap-ref table key arity))
+
+(define (profun-database-set-all! db key arity new-rules)
+  (define table (profun-database-table db))
+  (double-hashmap-set! table key arity new-rules))
 
 (define (profun-database-get db k arity)
   (define (get db key index arity)
