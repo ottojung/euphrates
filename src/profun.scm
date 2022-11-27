@@ -39,6 +39,7 @@
 %use (profun-abort-set-continuation profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
+%use (profun-instruction-args profun-instruction-arity profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-reject?) "./profun-reject.scm"
 %use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
@@ -51,15 +52,6 @@
   (profun-database-constructor table handler) profun-database?
   (table profun-database-table)
   (handler profun-database-handler)
-  )
-
-(define-type9 <profun-instruction>
-  (profun-instruction-constructor sign args arity next context) profun-instruction?
-  (sign profun-instruction-sign) ;; operation signature, like name and version for alternative
-  (args profun-instruction-args) ;; arguments
-  (arity profun-instruction-arity) ;; arity
-  (next profun-instruction-next) ;; link to next `profun-instruction`, or #f is this is the last one
-  (context profun-instruction-context) ;; : #f | any
   )
 
 (define-type9 <profun-state>
