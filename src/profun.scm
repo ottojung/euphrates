@@ -79,7 +79,7 @@
   (db profun-iterator-db)
   (env profun-iterator-env)
   (state profun-iterator-state set-profun-iterator-state!)
-  (query profun-iterator-query)
+  (query profun-iterator-query set-profun-iterator-query!)
   )
 
 (define-type9 <set-var-command>
@@ -121,6 +121,23 @@
   (define state (profun-iterator-state iter))
   (define query (profun-iterator-query iter))
   (profun-iterator-constructor new-db new-env state query))
+
+(define (profun-iterator-set-new! iter new-state new-query)
+  (set-profun-iterator-state! iter new-state)
+  (set-profun-iterator-query! iter new-query))
+
+(define (profun-iterator-insert! iter instruction-prefix)
+  (define db (profun-iterator-db iter))
+  (define state (profun-iterator-state iter))
+  (define new-state
+    (add-prefix-to-instruction db state instruction-prefix))
+  (set-profun-iterator-state! iter new-state))
+
+(define (profun-iterator-reset! iter instruction-prefix)
+  (define new-state (set-remaining-instructions instruction-prefix))
+  (define new-query instruction-prefix)
+  (set-profun-iterator-state! iter new-state)
+  (set-profun-iterator-query! iter new-query))
 
 (define (make-database botom-handler)
   (database-constructor (make-hashmap) botom-handler))
@@ -354,28 +371,12 @@
 
   (set-state-current s new-current))
 
-(define (set-remaining-instructions s0 instruction-prefix)
+(define (set-remaining-instructions instruction-prefix)
   (define new-current (build-body instruction-prefix))
   (make-state new-current))
 
 (define (handle-abort db env s ret)
   ret)
-
-  ;; (define continuation
-  ;;   (lambda (continue? db-additions instruction-prefix)
-  ;;     ;; TODO: abstract copying of the iterator
-  ;;     (define new-env (env-copy env))
-  ;;     (define new-db (profun-database-copy db))
-  ;;     (define new-query
-  ;;       (if continue? #f instruction-prefix))
-  ;;     (define new-s
-  ;;       (if continue?
-  ;;           (add-prefix-to-instruction new-db s instruction-prefix)
-  ;;           (set-remaining-instructions s instruction-prefix)))
-  ;;     (for-each (comp (profun-database-add-rule! new-db)) db-additions)
-  ;;     (profun-make-iterator/g new-db new-env new-s new-query)))
-
-  ;; (profun-abort-set-continuation ret continuation))
 
 (define (enter-foreign db env s instruction)
   (define sign (instruction-sign instruction))
@@ -540,19 +541,15 @@
         (let ((start-instruction (build-body query/usymboled)))
           (make-state start-instruction))))
 
-  (define (continuation state)
+  (define (continuation iter-c)
     (lambda (continue? db-additions instruction-prefix)
-      ;; TODO: abstract copying of the iterator
-      (define new-env (env-copy env))
-      (define new-db (profun-database-copy db))
-      (define new-query
-        (if continue? query instruction-prefix))
-      (define new-s
-        (if continue?
-            (add-prefix-to-instruction new-db state instruction-prefix)
-            (set-remaining-instructions state instruction-prefix)))
+      (define new-iter (profun-iterator-copy iter-c))
+      (define new-db (profun-iterator-db new-iter))
       (for-each (comp (profun-database-add-rule! new-db)) db-additions)
-      (profun-make-iterator/g new-db new-env new-s new-query)))
+      (if continue?
+          (profun-iterator-insert! new-iter instruction-prefix)
+          (profun-iterator-reset! new-iter instruction-prefix))
+      new-iter))
 
   (define (cont current-state new-state)
     (cond
@@ -576,8 +573,10 @@
               (state-finish current-state)
               new0))
         (define ret
-          (profun-abort-set-continuation
-           new-state (continuation current-state)))
+          (let ((iter-c (profun-iterator-copy iter)))
+            (set-profun-iterator-state! iter-c current-state)
+            (profun-abort-set-continuation
+             new-state (continuation iter-c))))
         (set-profun-iterator-state! iter new)
         ret))
 
