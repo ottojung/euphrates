@@ -204,3 +204,12 @@
    (its (= X 9))
    (its (equals (((Y . 3) (X . 9)))))
    ))
+
+;; (test-dialog
+;;  '((whats (= X 4) (+ X X Y))
+;;    (its (equals (((Y . 8) (X . 4)))))
+;;    (inspect (+ X Y Z))
+;;    (ok)
+;;    (whats (+ X Y Z))
+;;    (its 0)
+;;    ))

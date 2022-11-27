@@ -27,6 +27,7 @@
 %var profun-iterator-reset!
 
 %use (comp) "./comp.scm"
+%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"

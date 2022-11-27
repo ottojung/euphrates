@@ -19,6 +19,7 @@
 %var profune-communicator-handle
 
 %use (comp) "./comp.scm"
+%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
@@ -26,7 +27,7 @@
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-insert profun-RFC-reset profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
-%use (profun-database-add-rule! profun-database-copy profun-database? profun-make-iterator profun-next) "./profun.scm"
+%use (profun-database-add-rule! profun-database-copy profun-database? profun-iterator-copy profun-iterator-reset! profun-make-iterator profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
 
@@ -58,7 +59,8 @@
   (define stages (profune-communicator-stages comm))
 
   (define (current-answer-iterator)
-    (stage-answer-iterator (stack-peek stages)))
+    (if (stack-empty? stages) #f
+        (stage-answer-iterator (stack-peek stages))))
   (define (current-left)
     (stage-left (stack-peek stages)))
   (define (current-results-buffer)
@@ -135,13 +137,28 @@
               (collect-finish!)
               `(error (unexpected-result-from-profun-iterator))))))))
 
+  (define (push-stage! iterator)
+    (stack-push! stages (make-stage iterator 1 '() #f)))
+
   (define (handle-whats op args next)
     (define iterator
-      (if (current-RFC)
-          (profun-RFC-reset (current-RFC) args)
-          (profun-make-iterator db args)))
-    (stack-push! stages (make-stage iterator 1 '() #f))
+      (cond
+       ((current-RFC)
+        (profun-RFC-reset (current-RFC) args))
+       (else
+        (profun-make-iterator db args))))
+
+    (push-stage! iterator)
     (handle-query next))
+
+  (define (handle-inspect op args next)
+    (if (current-answer-iterator)
+        (let* ((iter (current-answer-iterator))
+               (copy (profun-iterator-copy iter)))
+          (push-stage! #f)
+          ;; (set-current-RFC! r)
+          (handle next))
+        `(error (nothing-to-inspect use-a-whats-first))))
 
   (define (handle-query next)
     (define-values (next-op next-args next-next)
@@ -236,6 +253,7 @@
           ((listen) (handle-listen op args next))
           ((whats) (handle-whats op args next))
           ((its) (handle-its op args next))
+          ((inspect) (handle-inspect op args next))
           ((more) (handle-more op args next))
           ((ok) (handle-ok op args next))
           ((bye) (handle-bye op args next))
