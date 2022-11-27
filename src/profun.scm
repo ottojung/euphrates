@@ -359,21 +359,23 @@
   (make-state new-current))
 
 (define (handle-abort db env s ret)
-  (define continuation
-    (lambda (continue? db-additions instruction-prefix)
-      ;; TODO: abstract copying of the iterator
-      (define new-env (env-copy env))
-      (define new-db (profun-database-copy db))
-      (define new-query
-        (if continue? #f instruction-prefix))
-      (define new-s
-        (if continue?
-            (add-prefix-to-instruction new-db s instruction-prefix)
-            (set-remaining-instructions s instruction-prefix)))
-      (for-each (comp (profun-database-add-rule! new-db)) db-additions)
-      (profun-make-iterator/g new-db new-env new-s new-query)))
+  ret)
 
-  (profun-abort-set-continuation ret continuation))
+  ;; (define continuation
+  ;;   (lambda (continue? db-additions instruction-prefix)
+  ;;     ;; TODO: abstract copying of the iterator
+  ;;     (define new-env (env-copy env))
+  ;;     (define new-db (profun-database-copy db))
+  ;;     (define new-query
+  ;;       (if continue? #f instruction-prefix))
+  ;;     (define new-s
+  ;;       (if continue?
+  ;;           (add-prefix-to-instruction new-db s instruction-prefix)
+  ;;           (set-remaining-instructions s instruction-prefix)))
+  ;;     (for-each (comp (profun-database-add-rule! new-db)) db-additions)
+  ;;     (profun-make-iterator/g new-db new-env new-s new-query)))
+
+  ;; (profun-abort-set-continuation ret continuation))
 
 (define (enter-foreign db env s instruction)
   (define sign (instruction-sign instruction))
@@ -538,6 +540,20 @@
         (let ((start-instruction (build-body query/usymboled)))
           (make-state start-instruction))))
 
+  (define (continuation state)
+    (lambda (continue? db-additions instruction-prefix)
+      ;; TODO: abstract copying of the iterator
+      (define new-env (env-copy env))
+      (define new-db (profun-database-copy db))
+      (define new-query
+        (if continue? query instruction-prefix))
+      (define new-s
+        (if continue?
+            (add-prefix-to-instruction new-db state instruction-prefix)
+            (set-remaining-instructions state instruction-prefix)))
+      (for-each (comp (profun-database-add-rule! new-db)) db-additions)
+      (profun-make-iterator/g new-db new-env new-s new-query)))
+
   (define (cont current-state new-state)
     (cond
      ((equal? 'backtracking-full-stop new-state)
@@ -550,7 +566,7 @@
            (filter (lambda (x) (symbol? (car x)))
                    (take-vars new-state))))
      ((profun-abort? new-state)
-      (let ((copy new-state))
+      (let ()
         (define new0
           (if (equal? #f last-state)
               (state-finish current-state)
@@ -559,8 +575,11 @@
           (if (equal? 'backtracking-full-stop new0)
               (state-finish current-state)
               new0))
+        (define ret
+          (profun-abort-set-continuation
+           new-state (continuation current-state)))
         (set-profun-iterator-state! iter new)
-        copy))
+        ret))
 
      (else (raisu 'unknown-state-type-in-profun-run new-state))))
 
