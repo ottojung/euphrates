@@ -73,6 +73,11 @@
    ))
 
 (test-dialog
+ '((more)
+   (error (nothing-to-show use-a-whats-first))
+   ))
+
+(test-dialog
  '((whats (= X 9) (sqrt X Y) more (2))
    (its (equals (((Y . 3) (X . 9)))))
    ))
@@ -94,6 +99,13 @@
 (test-dialog
  '((whats (= X 10) (sqrt X Y))
    (its (equals ()))
+   ))
+
+(test-dialog
+ '((whats (= K 1) (sqrt X Y))
+   (whats (value (any X Y)))
+   (whats (= K I))
+   (whats (value (any K I)))
    ))
 
 (test-dialog
@@ -126,7 +138,7 @@
 (test-dialog
  '((whats (= X 9) (sqrt Z Y))
    (whats (value (any Z Y)))
-   (whats (+ 1 M X))
+   (inspect whats (+ 1 M X))
    (its (equals (((X . 9) (M . 8)))))
    ))
 
@@ -205,11 +217,72 @@
    (its (equals (((Y . 3) (X . 9)))))
    ))
 
-;; (test-dialog
-;;  '((whats (= X 4) (+ X X Y))
-;;    (its (equals (((Y . 8) (X . 4)))))
-;;    (inspect (+ X Y Z))
-;;    (ok)
-;;    (whats (+ X Y Z))
-;;    (its 0)
-;;    ))
+(test-dialog
+ '((whats (= X 4) (< Y X))
+   (its (equals (((Y . 3) (X . 4)))))
+   (more)
+   (its (equals (((Y . 2) (X . 4)))))
+   (inspect whats (+ X Y Z))
+   (its (equals (((Y . 2) (X . 4) (Z . 6)))))
+   ))
+
+(test-dialog
+ '((whats (= X 4) (+ X X Y))
+   (its (equals (((Y . 8) (X . 4)))))
+   (inspect whats (+ X Y Z))
+   (its (equals (((Y . 8) (X . 4) (Z . 12)))))
+   ))
+
+(test-dialog
+ '((whats (= X 4) (< Y X))
+   (its (equals (((Y . 3) (X . 4)))))
+   (more)
+   (its (equals (((Y . 2) (X . 4)))))
+   (inspect whats (< Z Y))
+   (its (equals (((Y . 2) (X . 4) (Z . 1)))))
+   (more)
+   (its (equals (((Y . 2) (X . 4) (Z . 0)))))
+   ))
+
+(test-dialog
+ '((whats (= X 9) (< Y X))
+   (its (equals (((Y . 8) (X . 9)))))
+   (more)
+   (its (equals (((Y . 7) (X . 9)))))
+   (inspect whats (< Z Y))
+   (its (equals (((Y . 7) (X . 9) (Z . 6)))))
+   (more)
+   (its (equals (((Y . 7) (X . 9) (Z . 5)))))
+   (return)
+   (ok)
+   ))
+
+(test-dialog
+ '((whats (= X 9) (< Y X))
+   (its (equals (((Y . 8) (X . 9)))))
+   (more)
+   (its (equals (((Y . 7) (X . 9)))))
+   (inspect whats (< Z Y))
+   (its (equals (((Y . 7) (X . 9) (Z . 6)))))
+   (more)
+   (its (equals (((Y . 7) (X . 9) (Z . 5)))))
+   (return)
+   (ok)
+   (more)
+   (its (equals (((Y . 6) (X . 9)))))
+   (more)
+   (its (equals (((Y . 5) (X . 9)))))
+   ))
+
+(test-dialog
+ '((whats (= X 9) (< Y X))
+   (its (equals (((Y . 8) (X . 9)))))
+   (inspect whats (< Z Y))
+   (its (equals (((Y . 8) (X . 9) (Z . 7)))))
+   (return)
+   (ok)
+   (return)
+   (ok)
+   (return)
+   (error (nowhere to return))
+   ))

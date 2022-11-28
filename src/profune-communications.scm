@@ -57,7 +57,7 @@
 ;;   B: its, false().
 ;;   A: bye.
 ;;
-;; Every communicator must know these words: "whats", "its", "equals", "listen", "more", "bye", "i-dont-recognize" and "error".
+;; Every communicator must know these words: "whats", "its", "equals", "listen", "more", "inspect", "return", "ok", "bye", "error" and "i-dont-recognize".
 ;;
 
 %use (list-singleton?) "./list-singleton-q.scm"
