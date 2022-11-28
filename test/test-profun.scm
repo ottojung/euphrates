@@ -725,6 +725,8 @@
    "PARAMETER CASES"
    '()
 
+   (test '((= X 7) (p1 X) (p1 Y)) '(((Y . 7) (X . 7))))
+
    (assert=
     "param1 = 7\n"
     (with-output-to-string

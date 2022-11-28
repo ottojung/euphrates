@@ -35,8 +35,8 @@
        (if (= 1 (length var-names))
            (car var-names)
            (raisu 'got-a-bad-number-of-vars var-names)))
-     (define input (get-func input-name))
-     (define param (get-func param-name))
+     (define input (profun-value-unwrap (get-func input-name)))
+     (define param (profun-value-unwrap (get-func param-name)))
 
      (if (profun-bound-value? input)
          (if (profun-bound-value? param)
@@ -51,15 +51,14 @@
   (define param-name (make-usymbol 'p (gensym)))
   (define op (profun-op-parameter param-name))
 
-  (define (instantiate)
-    op)
+  (define (instantiate) op)
 
   (define (get)
     (define get-func
       (or (profun-op-envlambda/p)
           (raisu 'could-not-get-environment "Make sure that you are using op-envlambda")))
 
-    (profun-value-unwrap (get-func param-name)))
+    (get-func param-name))
 
   (case-lambda
    (() (get))
