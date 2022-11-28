@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
+;;;; Copyright (C) 2022  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 %use (profun-database-copy profun-database-get-all profun-database-set-all!) "./profun-database.scm"
 %use (profun-env-copy) "./profun-env.scm"
 %use (profun-instruction-arity profun-instruction-build/next profun-instruction-sign) "./profun-instruction.scm"
+%use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
 %use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
 %use (profun-state-build profun-state-current profun-state-stack set-profun-state-current) "./profun-state.scm"
 
@@ -87,13 +88,17 @@
   (profun-iterator-constructor new-db new-env state query))
 
 (define (profun-iterator-insert! iter instruction-prefix)
+  (define usymboled-prefix
+    (profun-query-handle-underscores instruction-prefix))
   (define db (profun-iterator-db iter))
   (define state (profun-iterator-state iter))
   (define new-state
-    (add-prefix-to-instruction db state instruction-prefix))
+    (add-prefix-to-instruction db state usymboled-prefix))
   (set-profun-iterator-state! iter new-state))
 
 (define (profun-iterator-reset! iter new-query)
-  (define new-state (profun-state-build new-query))
+  (define usymboled-query
+    (profun-query-handle-underscores new-query))
+  (define new-state (profun-state-build usymboled-query))
   (set-profun-iterator-state! iter new-state)
-  (set-profun-iterator-query! iter new-query))
+  (set-profun-iterator-query! iter usymboled-query))

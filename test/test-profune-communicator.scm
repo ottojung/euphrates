@@ -286,3 +286,17 @@
    (return)
    (error (nowhere to return))
    ))
+
+(test-dialog
+ '((whats (= X 9) (< Y X))
+   (its (equals (((Y . 8) (X . 9)))))
+   (inspect whats (= Z X))
+   (its (equals (((Y . 8) (X . 9) (Z . 9)))))
+   ))
+
+(test-dialog
+ '((whats (= _X 9) (< Y _X))
+   (its (equals (((Y . 8)))))
+   (inspect whats (= Z _X))
+   (its (equals (((Y . 8) (Z . 9)))))
+   ))

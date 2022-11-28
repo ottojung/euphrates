@@ -24,7 +24,6 @@
 %use (fn-cons) "./fn-cons.scm"
 %use (fn-pair) "./fn-pair.scm"
 %use (hashmap->alist) "./hashmap.scm"
-%use (list-and-map) "./list-and-map.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (make-profun-IDR profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-modify-iter profun-RFC?) "./profun-RFC.scm"
@@ -36,6 +35,7 @@
 %use (profun-instruction-args profun-instruction-arity profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
 %use (profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-query profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
+%use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
 %use (profun-reject?) "./profun-reject.scm"
 %use (profun-rule-args profun-rule-body profun-rule-index profun-rule-name) "./profun-rule.scm"
 %use (profun-state-build profun-state-constructor profun-state-current profun-state-failstate profun-state-final? profun-state-finish profun-state-stack profun-state-undo profun-state? set-profun-state-current) "./profun-state.scm"
@@ -297,7 +297,7 @@
     (hashmap->alist env))
 
   (define (initialize-state query)
-    (define query/usymboled (query-handle-underscores query))
+    (define query/usymboled (profun-query-handle-underscores query))
     (if (symbol? query/usymboled)
         (make-profun-error query/usymboled)
         (profun-state-build query/usymboled)))
@@ -354,25 +354,6 @@
 
 (define (profun-iterate/g db env state query)
   (profun-iterator-constructor db env state query))
-
-(define (query-handle-underscores query)
-  (define (handle-elem x)
-    (if (symbol? x)
-        (let ((s (symbol->string x)))
-          (if (string-prefix? "_" s)
-              (if (= 1 (string-length s))
-                  (make-usymbol x (gensym))
-                  (make-usymbol x 'u))
-              x))
-        x))
-
-  (define (handle-expr expr)
-    (map handle-elem expr))
-
-  (cond
-   ((not (list? query)) 'bad-query:not-a-list)
-   ((not (list-and-map list? query)) 'bad-query:expr-not-a-list)
-   (else (map handle-expr query))))
 
 ;; accepts profun-database `db` and list of symbols `query`
 ;; returns an iterator
