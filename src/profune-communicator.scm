@@ -262,7 +262,6 @@
   (define (handle commands)
     (cond
      ((null? commands) `(ok))
-     ((null? commands) `(error (expected more)))
      ((not (list? commands))
       `(error (commands-must-be-a-list)))
      ((not (symbol? (car commands)))
