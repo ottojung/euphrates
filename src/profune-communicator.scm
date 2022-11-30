@@ -40,11 +40,12 @@
   )
 
 (define-type9 stage
-  (make-stage answer-iterator left results-buffer cont) stage?
+  (make-stage answer-iterator left results-buffer cont inspecting) stage?
   (answer-iterator stage-answer-iterator set-stage-answer-iterator!)
   (left stage-left set-stage-left!)
   (results-buffer stage-results-buffer set-stage-results-buffer!)
   (cont stage-cont set-stage-cont!)
+  (inspecting stage-inspecting set-stage-inspecting!)
   )
 
 (define (make-profune-communicator db0)
@@ -72,6 +73,9 @@
   (define (current-CONT)
     (if (stack-empty? stages) #f
         (stage-cont (stack-peek stages))))
+  (define (current-inspecting)
+    (if (stack-empty? stages) #f
+        (stage-inspecting (stack-peek stages))))
 
   (define (set-current-answer-iterator! new)
     (set-stage-answer-iterator! (stack-peek stages) new))
@@ -81,6 +85,8 @@
     (set-stage-results-buffer! (stack-peek stages) new))
   (define (set-current-CONT! new)
     (set-stage-cont! (stack-peek stages) new))
+  (define (set-current-inspecting! new)
+    (set-stage-inspecting! (stack-peek stages) new))
 
   (define (split-commands commands)
     (if (null? commands)
@@ -143,12 +149,10 @@
               `(error (unexpected-result-from-profun-iterator))))))))
 
   (define (push-stage! iterator)
-    (stack-push! stages (make-stage iterator 1 '() #f)))
-
-  (define inspect/p (make-parameter #f))
+    (stack-push! stages (make-stage iterator 1 '() #f #f)))
 
   (define (handle-whats op args next)
-    (define inspected (inspect/p))
+    (define inspected (current-inspecting))
 
     (define iter
       (cond
@@ -164,8 +168,8 @@
   (define (handle-inspect op args next)
     (define (cont iter)
       (define copy (profun-iterator-copy iter))
-      (parameterize ((inspect/p copy))
-        (handle next)))
+      (set-current-inspecting! copy)
+      (handle next))
 
     (cond
      ((not (null? args))
@@ -183,6 +187,8 @@
       `(error (nowhere to return)))
      (else
       (stack-pop! stages)
+      (unless (stack-empty? stages)
+        (set-current-inspecting! #f))
       (handle next))))
 
   (define (handle-query next)
