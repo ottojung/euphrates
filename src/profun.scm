@@ -355,9 +355,6 @@
    (else
     (eval-initial last-state))))
 
-(define (profun-iterate/g db env state query)
-  (profun-iterator-constructor db env state query))
-
 ;; accepts profun-database `db` and list of symbols `query`
 ;; returns an iterator
 (define (profun-iterate db query)
@@ -367,7 +364,7 @@
    (else
     (let ((env (make-profun-env))
           (state #f))
-      (profun-iterate/g db env state query)))))
+      (profun-iterator-constructor db env state query)))))
 
 (define (profun-eval-from iterator start)
   (let loop ((buf start))
