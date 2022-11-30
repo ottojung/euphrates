@@ -26,9 +26,15 @@
 %var profun-iterator-query
 %var set-profun-iterator-query!
 
+%var profun-abort-insert
+%var profun-abort-reset
+
+%use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
-%use (profun-database-copy profun-database-get-all profun-database-set-all!) "./profun-database.scm"
+%use (profun-abort-additional profun-abort-iter) "./profun-abort.scm"
+%use (profun-database-add-rule! profun-database-copy profun-database-get-all profun-database-set-all!) "./profun-database.scm"
 %use (profun-env-copy) "./profun-env.scm"
+%use (make-profun-error) "./profun-error.scm"
 %use (profun-instruction-arity profun-instruction-build/next profun-instruction-sign) "./profun-instruction.scm"
 %use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
 %use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
@@ -93,12 +99,39 @@
   (define db (profun-iterator-db iter))
   (define state (profun-iterator-state iter))
   (define new-state
-    (add-prefix-to-instruction db state usymboled-prefix))
+    (if (symbol? usymboled-prefix)
+        (make-profun-error usymboled-prefix)
+        (add-prefix-to-instruction db state usymboled-prefix)))
   (set-profun-iterator-state! iter new-state))
 
 (define (profun-iterator-reset! iter new-query)
   (define usymboled-query
     (profun-query-handle-underscores new-query))
-  (define new-state (profun-state-build usymboled-query))
+  (define new-state
+    (if (symbol? usymboled-query)
+        (make-profun-error usymboled-query)
+        (profun-state-build usymboled-query)))
   (set-profun-iterator-state! iter new-state)
   (set-profun-iterator-query! iter usymboled-query))
+
+(define (profun-abort-insert self inserted)
+  "Inserts `inserted' just before the instruction that throwed this abort, and continues evaluation."
+
+  (define iter (profun-abort-iter self))
+  (define new-iter (profun-iterator-copy iter))
+  (define new-db (profun-iterator-db new-iter))
+  (define additional (profun-abort-additional self))
+  (for-each (comp (profun-database-add-rule! new-db)) additional)
+  (profun-iterator-insert! new-iter inserted)
+  new-iter)
+
+(define (profun-abort-reset self new-query)
+  "Evaluates `new-query' starting from state before the abort was thrown. Any later computation is ignored."
+
+  (define iter (profun-abort-iter self))
+  (define new-iter (profun-iterator-copy iter))
+  (define new-db (profun-iterator-db new-iter))
+  (define additional (profun-abort-additional self))
+  (for-each (comp (profun-database-add-rule! new-db)) additional)
+  (profun-iterator-reset! new-iter new-query)
+  new-iter)

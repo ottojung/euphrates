@@ -9,6 +9,7 @@
 %use (printf) "./src/printf.scm"
 %use (profun-RFC-insert profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-accept) "./src/profun-accept.scm"
+%use (profun-error-args profun-error?) "./src/profun-error.scm"
 %use (profun-make-handler) "./src/profun-make-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
@@ -842,6 +843,28 @@
    (test-error '("this is not a list") '(bad-query:expr-not-a-list))
 
    (test '(("parent" X)) '())
+   )
+
+  (test-definitions
+   "PROFUN-ERROR CASES FOR RFC"
+   '()
+
+   (define x (get-iter '((= z w))))
+   (define first (profun-next x))
+   (define resume-not-a-list-in-list
+     (profun-RFC-insert first '(this is not a list)))
+   (define resume-not-a-list
+     (profun-RFC-insert first 'not-a-list-in-rfc))
+
+   (define e1 (profun-next resume-not-a-list))
+   (define e2 (profun-next resume-not-a-list-in-list))
+
+   (assert (profun-error? e1))
+   (assert= (profun-error-args e1) '(bad-query:not-a-list))
+
+   (assert (profun-error? e2))
+   (assert= (profun-error-args e2) '(bad-query:expr-not-a-list))
+
    )
 
   (test-definitions

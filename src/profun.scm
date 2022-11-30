@@ -337,6 +337,11 @@
     (define new (eval-state db env current-state))
     (cont current-state new))
 
+  (define (eval-initial current-state)
+    (if (profun-state? current-state)
+        (eval-cont/goodstate current-state)
+        current-state))
+
   (define (eval-cont current-state)
     (if (equal? 'backtracking-full-stop current-state) #f
         (eval-cont/goodstate current-state)))
@@ -344,13 +349,11 @@
   (cond
    ((equal? #f last-state)
     (let ((s0 (initialize-state query)))
-      (if (profun-state? s0)
-          (eval-cont/goodstate s0)
-          s0)))
+      (eval-initial s0)))
    ((profun-state-final? last-state)
     (eval-cont (backtrack db env last-state)))
    (else
-    (eval-cont/goodstate last-state))))
+    (eval-initial last-state))))
 
 (define (profun-iterate/g db env state query)
   (profun-iterator-constructor db env state query))

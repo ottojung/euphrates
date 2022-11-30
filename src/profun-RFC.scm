@@ -29,7 +29,8 @@
 %var profun-RFC-insert
 %var profun-RFC-reset
 
-%use (make-profun-abort profun-abort-add-info profun-abort-insert profun-abort-reset profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
+%use (make-profun-abort profun-abort-add-info profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
+%use (profun-abort-insert profun-abort-reset) "./profun-iterator.scm"
 
 (define (make-profun-RFC what)
   (make-profun-abort 'RFC what))
