@@ -148,11 +148,12 @@
               (collect-finish!)
               `(error (unexpected-result-from-profun-iterator))))))))
 
-  (define (push-stage! iterator)
-    (stack-push! stages (make-stage iterator 1 '() #f #f)))
+  (define (push-stage! iterator inspected)
+    (stack-push! stages (make-stage iterator 1 '() #f inspected)))
 
   (define (handle-whats op args next)
     (define inspected (current-inspecting))
+    (define copy (and inspected (profun-iterator-copy inspected)))
 
     (define iter
       (cond
@@ -162,7 +163,7 @@
        (else
         (profun-iterate db args))))
 
-    (push-stage! iter)
+    (push-stage! iter copy)
     (handle-query next))
 
   (define (handle-inspect op args next)
@@ -187,8 +188,6 @@
       `(error (nowhere to return)))
      (else
       (stack-pop! stages)
-      (unless (stack-empty? stages)
-        (set-current-inspecting! #f))
       (handle next))))
 
   (define (handle-query next)
