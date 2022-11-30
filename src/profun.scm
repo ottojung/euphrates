@@ -30,7 +30,7 @@
 %use (profun-abort-set-iter profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
 %use (make-profun-database profun-database-add-rule! profun-database-get profun-database-handle profun-database?) "./profun-database.scm"
-%use (make-profun-env profun-env-get profun-env-set!) "./profun-env.scm"
+%use (make-profun-env profun-env-get profun-env-set! profun-env-unset!) "./profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-instruction-args profun-instruction-arity profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
 %use (profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-query profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
@@ -44,10 +44,9 @@
 %use (raisu) "./raisu.scm"
 %use (make-usymbol) "./usymbol.scm"
 
-(define-type9 <set-var-command>
-  (make-set-var-command name value) set-var-command?
-  (name set-var-command-name)
-  (value set-var-command-value)
+(define-type9 <unset-command>
+  (make-unset-command name) unset-command?
+  (name unset-command-name)
   )
 
 ;; returns profun-instruction or #f
@@ -166,7 +165,7 @@
       (name value)
       (define wrapped (profun-make-var name value))
       (define old (profun-env-get env name))
-      (define undo-command (make-set-var-command name old))
+      (define undo-command (make-unset-command name))
       (when (profun-bound-value? old)
         (raisu 'operation-rebinds-a-bound-variable name old))
       (profun-env-set! env name wrapped)
@@ -243,11 +242,10 @@
   (for-each
    (lambda (undo-command)
      (cond
-      ((set-var-command? undo-command)
-       (profun-env-set!
+      ((unset-command? undo-command)
+       (profun-env-unset!
         env
-        (set-var-command-name undo-command)
-        (set-var-command-value undo-command)))
+        (unset-command-name undo-command)))
       (else
        (raisu 'unknown-undo-command undo-command))))
    (profun-state-undo s)))
