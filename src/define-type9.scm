@@ -20,7 +20,7 @@
 %var type9-get-descriptor-by-name
 
 %use (define-dumb-record) "./define-dumb-record.scm"
-%use (descriptors-registry-get descriptors-registry-set! descritors-registry-decolisify-name) "./descriptors-registry.scm"
+%use (descriptors-registry-add! descriptors-registry-decolisify-name descriptors-registry-get) "./descriptors-registry.scm"
 %use (raisu) "./raisu.scm"
 %use (range) "./range.scm"
 
@@ -322,16 +322,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (type9-register-descriptor! name constructor predicate mutable? fields)
-  (define descriptor
-    `((name . ,name)
-      (constructor . ,constructor)
+  (define descriptor-begining
+    `((constructor . ,constructor)
       (arity . ,(length fields))
       (predicate . ,predicate)
       (mutable? . ,mutable?)
       (fields . ,fields)
       (builtin . #f)
       ))
-  (descriptors-registry-set! name descriptor))
+  (descriptors-registry-add! name descriptor-begining))
 
 ;; Returns #f if record is not a type9 record.
 (define (type9-get-record-name record)
@@ -360,7 +359,7 @@
 
 (define (type9-define-things qq)
   (define name0 (list-ref qq 0))
-  (define name (descritors-registry-decolisify-name name0))
+  (define name (descriptors-registry-decolisify-name name0))
   (define constructor-group (list-ref qq 1))
   (define field-names (cdr constructor-group))
   (define field-specs (list-ref qq 3))

@@ -15,8 +15,8 @@
 %run guile
 
 %var descriptors-registry-get
-%var descriptors-registry-set!
-%var descritors-registry-decolisify-name
+%var descriptors-registry-add!
+%var descriptors-registry-decolisify-name
 
 %use (builtin-descriptors) "./builtin-descriptors.scm"
 %use (hashmap-count hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
@@ -34,21 +34,21 @@
 (define (descriptors-registry-get name)
   (hashmap-ref descriptors-registry name #f))
 
-(define (descriptors-registry-set! name descriptor)
+(define (descriptors-registry-add! name descriptor)
   (unless (and (list? descriptor)
                (list-and-map pair? descriptor))
     (raisu 'descriptor-must-be-an-association-list name descriptor))
   (unless (symbol? name)
     (raisu 'name-must-be-a-symbol name descriptor))
-  (when (equal? "quote" (symbol->string name))
-    (raisu 'name-cannot-be-equal-to-quote))
-  (unless (equal? (cons 'name name)
-                  (assoc 'name descriptor))
-    (raisu 'descriptor-must-have-a-name-field name descriptor))
+  (when (assoc 'name descriptor)
+    (raisu 'descriptor-begining-must-not-have-a-name-field descriptor))
 
-  (hashmap-set! descriptors-registry name descriptor))
+  (let ((name2 (descriptors-registry-decolisify-name name)))
+    (define descriptor2 (cons (cons 'name name2) descriptor))
+    (hashmap-set! descriptors-registry name2 descriptor2)
+    name2))
 
-(define (descritors-registry-decolisify-name name)
+(define (descriptors-registry-decolisify-name name)
   (define (combine name suffix)
     (if (= 0 suffix) name
         (string->symbol
