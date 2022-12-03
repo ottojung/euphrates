@@ -29,7 +29,7 @@
   (list
    (make-builtin-descriptor 'number number?)
    (make-builtin-descriptor 'string string?)
-   (make-builtin-descriptor 'symbol symbol?)
+   (make-builtin-descriptor 'quote symbol?)
    (make-builtin-descriptor 'char char?)
    (make-builtin-descriptor 'true (lambda (x) (equal? x #t)))
    (make-builtin-descriptor 'false (lambda (x) (equal? x #f)))
