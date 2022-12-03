@@ -22,8 +22,9 @@
 %use (type9-get-record-descriptor) "./define-type9.scm"
 %use (descriptors-registry-get) "./descriptors-registry.scm"
 %use (raisu) "./raisu.scm"
+%use (string-drop-n) "./string-drop-n.scm"
 
-(define (serialize/sexp/generic serialize-type9-fields procedure-serialization builtin-serialization)
+(define (serialize/sexp/generic serialize-type9 procedure-serialization builtin-serialization)
   (lambda (o)
     (let loop ((o o))
       (cond
@@ -34,24 +35,14 @@
        (else
         (let ((r9d (type9-get-record-descriptor o)))
           (if r9d
-              (cons (cdr (assoc 'name r9d))
-                    (serialize-type9-fields o r9d loop))
+              (serialize-type9 o r9d loop)
               (raisu 'unknown-type o))))))))
 
-(define (deserialize/sexp/generic deserialize-type9-fields procedure-serialization builtin-deserialization)
+(define (deserialize/sexp/generic deserialize-type9 procedure-serialization builtin-deserialization)
   (lambda (o)
     (let loop ((o o))
       (builtin-deserialization
        o loop
        (lambda _
          (or (procedure-serialization o)
-             (let ()
-               (when (or (not (list? o))
-                         (null? o))
-                 (raisu 'bad-format:expecting-list o))
-               (let ((name (car o)))
-                 (let ((r9d (or (descriptors-registry-get name)
-                                (raisu 'unkown-type-tag name))))
-                   (define constructor (assoc-or 'constructor r9d (raisu 'no-constructor-in-descriptor r9d)))
-                   (define args (deserialize-type9-fields o r9d loop))
-                   (apply constructor args))))))))))
+             (deserialize-type9 o loop)))))))

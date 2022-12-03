@@ -18,14 +18,17 @@
 %var deserialize/runnable
 
 %use (assoc-or) "./assoc-or.scm"
+%use (descriptors-registry-get) "./descriptors-registry.scm"
 %use (raisu) "./raisu.scm"
 %use (deserialize/sexp/natural serialize/sexp/natural) "./serialization-sexp-natural.scm"
 
-(define (serialize-type9-fields obj descriptor loop)
-  (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
+(define (serialize-type9-fields obj r9d loop)
+  (define fields (assoc-or 'fields r9d (raisu 'no-fields-in-r9d r9d obj)))
+  (define name (cdr (assoc 'name r9d)))
   (define accessors
     (map (lambda (field) (list-ref field 1)) fields))
-  (map (lambda (a) (loop (a obj))) accessors))
+  (cons name
+        (map (lambda (a) (loop (a obj))) accessors)))
 
 (define serialize/runnable
   (serialize/sexp/natural
@@ -33,12 +36,24 @@
    (lambda (o)
      (cons 'procedure o))))
 
-(define (deserialize-type9-fields obj descriptor loop)
+(define (deserialize-type9-fields/runnable obj descriptor loop)
   (map loop (cdr obj)))
+
+(define (deserialize-type9/runnable o loop)
+  (when (or (not (list? o))
+            (null? o))
+    (raisu 'bad-format:expecting-list o))
+
+  (let* ((name (car o)))
+    (define r9d (or (descriptors-registry-get name)
+                    (raisu 'unkown-type-tag name)))
+    (define constructor (assoc-or 'constructor r9d (raisu 'no-constructor-in-descriptor r9d)))
+    (define args (deserialize-type9-fields/runnable o r9d loop))
+    (apply constructor args)))
 
 (define deserialize/runnable
   (deserialize/sexp/natural
-   deserialize-type9-fields
+   deserialize-type9/runnable
    (lambda (o)
      (and (equal? 'procedure (car o))
           (cdr o)))))

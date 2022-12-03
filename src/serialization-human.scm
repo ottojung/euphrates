@@ -18,21 +18,24 @@
 %var deserialize/human
 
 %use (assoc-or) "./assoc-or.scm"
+%use (descriptors-registry-get) "./descriptors-registry.scm"
 %use (raisu) "./raisu.scm"
 %use (deserialize/sexp/natural serialize/sexp/natural) "./serialization-sexp-natural.scm"
 
-(define (serialize-type9-fields obj descriptor loop)
-  (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
-  (map (lambda (field)
-         (define name (list-ref field 0))
-         (define accessor (list-ref field 1))
-         (list name (loop (accessor obj)))) fields))
+(define (serialize-type9-fields obj r9d loop)
+  (define fields (assoc-or 'fields r9d (raisu 'no-fields-in-r9d r9d obj)))
+  (define name (cdr (assoc 'name r9d)))
+  (cons name
+        (map (lambda (field)
+               (define name (list-ref field 0))
+               (define accessor (list-ref field 1))
+               (list name (loop (accessor obj)))) fields)))
 
 (define serialize/human
   (serialize/sexp/natural
    serialize-type9-fields (const '(procedure ???))))
 
-(define (deserialize-type9-fields obj descriptor loop)
+(define (deserialize-type9-fields/human obj descriptor loop)
   (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
   (define n (length fields))
   (define se-fields (cdr obj))
@@ -46,9 +49,21 @@
      fields))
   (map loop args))
 
+(define (deserialize-type9/human o loop)
+  (when (or (not (list? o))
+            (null? o))
+    (raisu 'bad-format:expecting-list o))
+
+  (let* ((name (car o)))
+    (define r9d (or (descriptors-registry-get name)
+                    (raisu 'unkown-type-tag name)))
+    (define constructor (assoc-or 'constructor r9d (raisu 'no-constructor-in-descriptor r9d)))
+    (define args (deserialize-type9-fields/human o r9d loop))
+    (apply constructor args)))
+
 (define deserialize/human
   (deserialize/sexp/natural
-   deserialize-type9-fields
+   deserialize-type9/human
    (lambda (o)
      (and (equal? o '(procedure))
           (raisu 'cannot-deserialize-procedures o)))))

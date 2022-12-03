@@ -3,6 +3,7 @@
 
 %use (assert=) "./src/assert-equal.scm"
 %use (assert) "./src/assert.scm"
+%use (define-type9) "./src/define-type9.scm"
 %use (list->hashset) "./src/hashset.scm"
 %use (deserialize/short serialize/short) "./src/serialization-short.scm"
 
@@ -16,8 +17,7 @@
 (define d1
   (deserialize/short s1))
 
-(assert= s1 '('hello 'there "short"))
-(assert= s1 '((quote hello) 'there "short"))
+(assert= s1 '(hello there "short"))
 
 (assert (equal? d1 obj1))
 (assert (not (eq? d1 obj1)))
@@ -31,16 +31,30 @@
   (deserialize/short s2))
 
 (assert= s2
-         '('hello
-           'there
-           (hashset
-            (value (hash-table
+         '(hello
+           there
+           (@hashset
+            (value (@hash-table
                     ((1 . #t) (2 . #t) (3 . #t)))))
-           'how
-           'are
-           'you?))
+           how
+           are
+           you?))
 
 (assert (not (eq? d2 obj2)))
 
-(assert= '('hello 'quote "short")
+(assert= '(hello quote "short")
          (serialize/short `(hello quote "short")))
+
+(assert= '(hello (@quote @bye) "short")
+         (serialize/short `(hello @bye "short")))
+
+(define-type9 type1
+  (type1-constructor fielda filedb) type1?
+  (fileda type1-fielda)
+  (filedb type1-fieldb)
+  )
+
+(define inst (type1-constructor 1 2))
+
+(assert= `(hello (@type1 (fielda 1) (filedb 2)) "short")
+         (serialize/short `(hello ,inst "short")))
