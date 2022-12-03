@@ -16,7 +16,9 @@
 (define d1
   (deserialize/short s1))
 
-(assert= s1 '(list 'hello 'there "short"))
+(assert= s1 '('hello 'there "short"))
+(assert= s1 '((quote hello) 'there "short"))
+
 (assert (equal? d1 obj1))
 (assert (not (eq? d1 obj1)))
 
@@ -29,13 +31,16 @@
   (deserialize/short s2))
 
 (assert= s2
-         '(list 'hello
-                'there
-                (hashset
-                 (value (alist->hash-table
-                         (list (cons 1 #t) (cons 2 #t) (cons 3 #t)))))
-                'how
-                'are
-                'you?))
+         '('hello
+           'there
+           (hashset
+            (value (hash-table
+                    ((1 . #t) (2 . #t) (3 . #t)))))
+           'how
+           'are
+           'you?))
 
 (assert (not (eq? d2 obj2)))
+
+(assert= '('hello 'quote "short")
+         (serialize/short `(hello quote "short")))
