@@ -14,12 +14,12 @@
 
 %run guile
 
-%var serialize/human
-%var deserialize/human
+%var serialize/short
+%var deserialize/short
 
 %use (assoc-or) "./assoc-or.scm"
 %use (raisu) "./raisu.scm"
-%use (deserialize/sexp/natural serialize/sexp/natural) "./serialization-sexp-natural.scm"
+%use (deserialize/sexp/short serialize/sexp/short) "./serialization-sexp-short.scm"
 
 (define (serialize-type9-fields obj descriptor loop)
   (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
@@ -28,8 +28,8 @@
          (define accessor (list-ref field 1))
          (list name (loop (accessor obj)))) fields))
 
-(define serialize/human
-  (serialize/sexp/natural
+(define serialize/short
+  (serialize/sexp/short
    serialize-type9-fields (const '(procedure ???))))
 
 (define (deserialize-type9-fields obj descriptor loop)
@@ -46,8 +46,8 @@
      fields))
   (map loop args))
 
-(define deserialize/human
-  (deserialize/sexp/natural
+(define deserialize/short
+  (deserialize/sexp/short
    deserialize-type9-fields
    (lambda (o)
      (and (equal? o '(procedure))

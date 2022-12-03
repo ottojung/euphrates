@@ -19,7 +19,7 @@
 
 %use (assoc-or) "./assoc-or.scm"
 %use (raisu) "./raisu.scm"
-%use (deserialize/sexp/generic serialize/sexp/generic) "./serialization-sexp-generic.scm"
+%use (deserialize/sexp/natural serialize/sexp/natural) "./serialization-sexp-natural.scm"
 
 (define (serialize-type9-fields obj descriptor loop)
   (define fields (assoc-or 'fields descriptor (raisu 'no-fields-in-descriptor descriptor obj)))
@@ -28,7 +28,7 @@
   (map (lambda (a) (loop (a obj))) accessors))
 
 (define serialize/runnable
-  (serialize/sexp/generic
+  (serialize/sexp/natural
    serialize-type9-fields
    (lambda (o)
      (cons 'procedure o))))
@@ -37,7 +37,7 @@
   (map loop (cdr obj)))
 
 (define deserialize/runnable
-  (deserialize/sexp/generic
+  (deserialize/sexp/natural
    deserialize-type9-fields
    (lambda (o)
      (and (equal? 'procedure (car o))
