@@ -17,4 +17,5 @@
 
 (define (time-get-current-unixtime)
   (define-values (second nanosecond) (time-get-current-unixtime/values))
-  (+ second (nano->normal/unit nanosecond)))
+  (exact->inexact
+   (+ second (nano->normal/unit nanosecond))))
