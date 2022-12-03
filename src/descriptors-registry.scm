@@ -40,6 +40,8 @@
     (raisu 'descriptor-must-be-an-association-list name descriptor))
   (unless (symbol? name)
     (raisu 'name-must-be-a-symbol name descriptor))
+  (when (string-index (symbol->string name) #\@)
+    (raisu 'name-cannot-contain-@-character))
   (unless (equal? (cons 'name name)
                   (assoc 'name descriptor))
     (raisu 'descriptor-must-have-a-name-field name descriptor))
