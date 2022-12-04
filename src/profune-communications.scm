@@ -61,8 +61,9 @@
 ;;
 
 %use (list-singleton?) "./list-singleton-q.scm"
+%use (profun-eval-query) "./profun.scm"
 %use (profune-communications-hook/p) "./profune-communications-hook-p.scm"
-%use (profune-communicator-handle) "./profune-communicator.scm"
+%use (profune-communicator-db profune-communicator-handle) "./profune-communicator.scm"
 
 (define (profune-communications client-comm server-comm)
   (define hook
@@ -81,7 +82,10 @@
              (equal? 'equals (car (car args)))
              (list-singleton? (cdr (car args))))
         (cadr (cadr answer)))
-       (else answer))))
+       (else
+        (profun-eval-query
+         (profune-communicator-db client-comm)
+         (cdr answer))))))
 
   (lambda (question)
     (let loop ((question question))

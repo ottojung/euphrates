@@ -16,6 +16,7 @@
 
 %var make-profune-communicator
 %var profune-communicator?
+%var profune-communicator-db
 %var profune-communicator-handle
 
 %use (comp) "./comp.scm"

@@ -94,21 +94,21 @@
 
   (test-dialog '(whats (person X))
                "[client] whats (person X)"
-               "[server] its (equals (((X . bart))))"
+               "[server] its (= X bart)"
                "result = (((X . bart)))"
                )
 
   (test-dialog '(whats (person X))
                "[client] whats (person X)"
-               "[server] its (equals (((X . bart))))"
+               "[server] its (= X bart)"
                "result = (((X . bart)))"
                )
 
   (test-dialog '(whats (sqrt X Y))
                "[client] whats (sqrt X Y)"
                "[server] whats (value (any X Y))"
-               "[client] its (equals (((X . 9))))"
-               "[server] its (equals (((Y . 3) (X . 9))))"
+               "[client] its (= X 9)"
+               "[server] its (= Y 3) (= X 9)"
                "result = (((Y . 3) (X . 9)))"
                )
 
@@ -116,7 +116,7 @@
                "[client] whats (sqrt M Y)"
                "[server] whats (value (any M Y))"
                "[client] its (< M 17)"
-               "[server] its (equals (((Y . 4) (M . 16))))"
+               "[server] its (= Y 4) (= M 16)"
                "result = (((Y . 4) (M . 16)))"
                )
 
