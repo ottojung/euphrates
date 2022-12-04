@@ -103,6 +103,21 @@
     (set-current-results-buffer! '())
     (set-current-answer-iterator! #f))
 
+  (define (format-single-answer buf)
+    (cond
+     ((null? buf) '((false)))
+     ((null? (car buf)) '((true)))
+     (else
+      (map
+       (lambda (p)
+         `(= ,(car p) ,(cdr p)))
+       (car buf)))))
+
+  (define (collect-ret n buf)
+    (if (= n 1)
+        `(its ,@(format-single-answer buf))
+        `(its (equals ,(reverse! buf)))))
+
   (define (collect-n)
     (define n (current-left))
     (define iter (current-answer-iterator))
@@ -110,7 +125,7 @@
       (if (>= i n)
           (begin
             (set-current-left! 0)
-            `(its (equals ,(reverse! buf))))
+            (collect-ret n buf))
           (let ((r (and iter (profun-next iter))))
             (cond
 
@@ -119,7 +134,7 @@
 
              ((equal? #f r)
               (collect-finish!)
-              `(its (equals ,(reverse! buf))))
+              (collect-ret n buf))
 
              ((profun-IDR? r)
               (collect-finish!)
