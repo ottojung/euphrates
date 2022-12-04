@@ -17,8 +17,8 @@
 ;; pretty-prints a serialized version an object
 %var debugs
 
-%use (serialize/human) "./serialization-human.scm"
 %use (debug) "./debug.scm"
+%use (serialize/short) "./serialization-short.scm"
 
 %for (COMPILER "guile")
 
@@ -27,7 +27,7 @@
 (define-syntax debugs
   (syntax-rules ()
     ((_ x)
-     (let* ((y x) (sy (serialize/human y)))
+     (let* ((y x) (sy (serialize/short y)))
        (if (pair? sy)
            (debug "~a:\n~a" (quote x)
                   (with-output-to-string
