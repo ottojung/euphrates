@@ -326,7 +326,7 @@
 %use (profun-create-database profun-eval-query profun-iterate profun-next) "./src/profun.scm"
 %use (profune-communications-hook/p) "./src/profune-communications-hook-p.scm"
 %use (profune-communications) "./src/profune-communications.scm"
-%use (make-profune-communicator profune-communicator-handle profune-communicator?) "./src/profune-communicator.scm"
+%use (make-profune-communicator profune-communicator-db profune-communicator-handle profune-communicator?) "./src/profune-communicator.scm"
 %use (define-property) "./src/properties.scm"
 %use (queue-constructor queue-first queue-last queue-predicate queue-vector set-queue-first! set-queue-last! set-queue-vector!) "./src/queue-obj.scm"
 %use (list->queue make-queue queue->list queue-empty? queue-peek queue-peek-rotate! queue-pop! queue-push! queue-rotate! queue-unload! queue?) "./src/queue.scm"
