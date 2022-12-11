@@ -23,7 +23,7 @@
 
 (define-syntax profun-make-handler-helper
   (syntax-rules ()
-    ((_ kkk zzzz buf ())
+    ((_ buf ())
      (let ((H (multi-alist->hashmap buf)))
        (lambda (key ex-arity)
          (let ((ret (hashmap-ref H key '())))
@@ -35,13 +35,12 @@
             #f
             ret)))))
 
-    ((_ key ex-arity buf ((name op) . rest))
+    ((_ buf ((name op) . rest))
      (profun-make-handler-helper
-      key ex-arity
       (cons (cons (quote name) op) buf)
       rest))))
 
 (define-syntax profun-make-handler
   (syntax-rules ()
     ((_ . cases)
-     (profun-make-handler-helper 0 0 '() cases))))
+     (profun-make-handler-helper '() cases))))
