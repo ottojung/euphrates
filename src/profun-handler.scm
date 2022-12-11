@@ -16,8 +16,9 @@
 
 %var profun-make-handler
 %var profun-handler-get
+%var profun-handler-extend
 
-%use (hashmap-ref multi-alist->hashmap) "./hashmap.scm"
+%use (hashmap-merge hashmap-ref multi-alist->hashmap) "./hashmap.scm"
 %use (list-find-first) "./list-find-first.scm"
 %use (profun-op-arity) "./profun-op-obj.scm"
 %use (profun-variable-arity-op?) "./profun-variable-arity-op-huh.scm"
@@ -45,3 +46,9 @@
             ex-arity)))
    #f
    ret))
+
+(define-syntax profun-handler-extend
+  (syntax-rules ()
+    ((_ handler . cases)
+     (let ((additional (profun-make-handler . cases)))
+       (hashmap-merge handler additional)))))
