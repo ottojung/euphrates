@@ -15,6 +15,7 @@
 %run guile
 
 %var profun-make-handler
+%var profun-handler-get
 
 %use (hashmap-ref multi-alist->hashmap) "./hashmap.scm"
 %use (list-find-first) "./list-find-first.scm"
@@ -24,17 +25,7 @@
 (define-syntax profun-make-handler-helper
   (syntax-rules ()
     ((_ buf ())
-     (let ((H (multi-alist->hashmap buf)))
-       (lambda (key ex-arity)
-         (let ((ret (hashmap-ref H key '())))
-           (list-find-first
-            (lambda (handler)
-              (or (profun-variable-arity-op? handler)
-                  (= (profun-op-arity handler)
-                     ex-arity)))
-            #f
-            ret)))))
-
+     (multi-alist->hashmap buf))
     ((_ buf ((name op) . rest))
      (profun-make-handler-helper
       (cons (cons (quote name) op) buf)
@@ -44,3 +35,13 @@
   (syntax-rules ()
     ((_ . cases)
      (profun-make-handler-helper '() cases))))
+
+(define (profun-handler-get handler key ex-arity)
+  (define ret (hashmap-ref handler key '()))
+  (list-find-first
+   (lambda (handler)
+     (or (profun-variable-arity-op? handler)
+         (= (profun-op-arity handler)
+            ex-arity)))
+   #f
+   ret))

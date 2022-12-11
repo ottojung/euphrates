@@ -29,6 +29,7 @@
 %use (define-type9) "./define-type9.scm"
 %use (hashmap-copy hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 %use (list-ref-or) "./list-ref-or.scm"
+%use (profun-handler-get) "./profun-handler.scm"
 %use (profun-rule-constructor) "./profun-rule.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (make-usymbol) "./usymbol.scm"
@@ -76,8 +77,9 @@
                   bret-app))))))
 
 (define (profun-database-handle db key arity)
-  (let ((function ((profun-database-handler db) key arity)))
-    (and function (profun-rule-constructor key 0 (list) function))))
+  (define handler (profun-database-handler db))
+  (define function (profun-handler-get handler key arity))
+  (and function (profun-rule-constructor key 0 (list) function)))
 
 (define (double-hashmap-ref H key1 key2)
   (define h (hashmap-ref H key1 #f))
