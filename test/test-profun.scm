@@ -10,27 +10,17 @@
 %use (profun-RFC-insert profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-accept) "./src/profun-accept.scm"
 %use (profun-error-args profun-error?) "./src/profun-error.scm"
-%use (profun-make-handler) "./src/profun-handler.scm"
+%use (profun-handler-extend) "./src/profun-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
 %use (profun-apply-fail! profun-apply-return! profun-op-apply) "./src/profun-op-apply.scm"
-%use (profun-op-divisible) "./src/profun-op-divisible.scm"
 %use (profun-op-envlambda) "./src/profun-op-envlambda.scm"
-%use (profun-op-equals) "./src/profun-op-equals.scm"
 %use (profun-eval-fail! profun-op-eval) "./src/profun-op-eval.scm"
-%use (profun-op-false) "./src/profun-op-false.scm"
 %use (profun-op-function) "./src/profun-op-function.scm"
-%use (profun-op-less) "./src/profun-op-less.scm"
-%use (profun-op-modulo) "./src/profun-op-modulo.scm"
-%use (profun-op*) "./src/profun-op-mult.scm"
 %use (instantiate-profun-parameter make-profun-parameter) "./src/profun-op-parameter.scm"
-%use (profun-op+) "./src/profun-op-plus.scm"
-%use (profun-op-separate) "./src/profun-op-separate.scm"
-%use (profun-op-sqrt) "./src/profun-op-sqrt.scm"
-%use (profun-op-true) "./src/profun-op-true.scm"
-%use (profun-op-unify) "./src/profun-op-unify.scm"
 %use (profun-op-value) "./src/profun-op-value.scm"
 %use (profun-reject) "./src/profun-reject.scm"
+%use (profun-standard-handler) "./src/profun-standard-handler.scm"
 %use (profun-create-database profun-eval-query profun-iterate profun-next) "./src/profun.scm"
 
 (define current-handler
@@ -166,35 +156,26 @@
          (values (quotient x y)
                  (remainder x y))))))
 
-(parameterize
-    ((current-handler
-      (profun-make-handler
-       (= profun-op-unify)
-       (!= profun-op-separate)
-       (true profun-op-true)
-       (false profun-op-false)
-       (+ profun-op+)
-       (* profun-op*)
-       (modulo profun-op-modulo)
-       (sqrt profun-op-sqrt)
-       (< profun-op-less)
-       (divisible profun-op-divisible)
-       (equals profun-op-equals)
-       (value (profun-op-value '((M (< M 17))) '((X . 9) (Y . 16))))
+(define default-handler
+  (profun-handler-extend
+   profun-standard-handler
 
-       (apply profun-op-apply)
-       (eval profun-op-eval)
+   (value (profun-op-value '((M (< M 17))) '((X . 9) (Y . 16))))
 
-       (favorite (profun-make-set (list 777 2 9 3)))
-       (favorite2 (profun-make-tuple-set (a b) '((777 2) (#t 9) (3 #f))))
+   (apply profun-op-apply)
+   (eval profun-op-eval)
 
-       (p1 (instantiate-profun-parameter param1))
-       (printp1 param1-printer)
+   (favorite (profun-make-set (list 777 2 9 3)))
+   (favorite2 (profun-make-tuple-set (a b) '((777 2) (#t 9) (3 #f))))
 
-       (fadd functional-addition)
-       (fdiv functional-division)
+   (p1 (instantiate-profun-parameter param1))
+   (printp1 param1-printer)
 
-       )))
+   (fadd functional-addition)
+   (fdiv functional-division)
+   ))
+
+(parameterize ((current-handler default-handler))
 
   (test-definitions
    "SIMPLE REJECTING"
