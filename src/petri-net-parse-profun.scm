@@ -21,7 +21,7 @@
 %use (list-deduplicate) "./list-deduplicate.scm"
 %use (petri-net-make) "./petri-net-make.scm"
 %use (petri-push) "./petri.scm"
-%use (profun-make-handler) "./profun-make-handler.scm"
+%use (profun-make-handler) "./profun-handler.scm"
 %use (profun-op-apply) "./profun-op-apply.scm"
 %use (profun-op-divisible) "./profun-op-divisible.scm"
 %use (profun-op-eval) "./profun-op-eval.scm"

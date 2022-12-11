@@ -4,7 +4,7 @@
 %use (assert=) "./src/assert-equal.scm"
 %use (lines->string) "./src/lines-to-string.scm"
 %use (printf) "./src/printf.scm"
-%use (profun-make-handler) "./src/profun-make-handler.scm"
+%use (profun-make-handler) "./src/profun-handler.scm"
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
 %use (profun-op-equals) "./src/profun-op-equals.scm"
 %use (profun-op-false) "./src/profun-op-false.scm"

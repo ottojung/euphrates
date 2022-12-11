@@ -10,7 +10,7 @@
 %use (profun-RFC-insert profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (profun-accept) "./src/profun-accept.scm"
 %use (profun-error-args profun-error?) "./src/profun-error.scm"
-%use (profun-make-handler) "./src/profun-make-handler.scm"
+%use (profun-make-handler) "./src/profun-handler.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
 %use (profun-apply-fail! profun-apply-return! profun-op-apply) "./src/profun-op-apply.scm"
