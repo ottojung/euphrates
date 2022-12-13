@@ -20,6 +20,7 @@
 
 %use (append-posix-path) "./append-posix-path.scm"
 %use (catch-any) "./catch-any.scm"
+%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (path-normalize) "./path-normalize.scm"
 %use (make-queue queue-empty? queue-pop! queue-push!) "./queue.scm"
@@ -48,14 +49,14 @@
     (define full-name0 norm)
     (define file-name0 full-name0)
 
-    (define current-stack #f)
     (define current-prefix #f)
     (define current-depth #f)
     (define current-stream #f)
+    (define current-stack '())
 
     (define todo-dirs (make-queue))
 
-    (define (push-todo-dir! full-name file-name current-stack)
+    (define (push-todo-dir! full-name file-name)
       (define prev-prefix (if (null? current-stack) "" (car current-stack)))
       (define new-prefix (append-posix-path prev-prefix file-name))
       (define stack (cons new-prefix current-stack))
@@ -96,20 +97,21 @@
                               file-name
                               (string-append current-prefix "/" file-name)))
                (recurse? (< current-depth depth))
-               (dir? (and (or recurse? (not include-directories?))
-                          (let ((st (false-if-exception (stat full-name))))
-                            (and st (equal? 'directory (stat:type st)))))))
+               (dir-target
+                (and (or recurse? (not include-directories?))
+                     (let ((st (false-if-exception (stat full-name))))
+                       (and st (equal? 'directory (stat:type st)))))))
 
-          (when (and recurse? dir?)
-            (push-todo-dir! full-name file-name current-stack))
+          (when (and recurse? dir-target)
+            (push-todo-dir! full-name file-name))
 
           (if include-directories?
               (cons full-name (cons file-name current-stack))
-              (if dir?
+              (if dir-target
                   (next)
                   (cons full-name (cons file-name current-stack))))))))
 
-    (push-todo-dir! full-name0 file-name0 '())
+    (push-todo-dir! full-name0 file-name0)
 
     next
     )))
