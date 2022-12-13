@@ -16,7 +16,7 @@
            collect)
 
 (define iter/no-dirs
-  (directory-files-depth-iter #t 9 "test/filetests"))
+  (directory-files-depth-iter #f 9 "test/filetests"))
 
 (define collect/no-dirs
   (let loop ()

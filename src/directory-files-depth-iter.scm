@@ -42,8 +42,8 @@
 
 (define directory-files-depth-iter
   (case-lambda
-   ((depth directory) (directory-files-depth-iter #f depth directory))
-   ((skip-directories? depth directory)
+   ((depth directory) (directory-files-depth-iter #t depth directory))
+   ((include-directories? depth directory)
     (define norm (path-normalize directory))
     (define full-name0 norm)
     (define file-name0 full-name0)
@@ -96,16 +96,17 @@
                               file-name
                               (string-append current-prefix "/" file-name)))
                (recurse? (< current-depth depth))
-               (dir? (and (or skip-directories? recurse?)
+               (dir? (and (or include-directories? recurse?)
                           (let ((st (false-if-exception (stat full-name))))
                             (and st (equal? 'directory (stat:type st)))))))
 
           (when dir?
             (push-todo-dir! full-name file-name current-stack))
 
-          (if (and dir? skip-directories?)
-              (next)
-              (cons full-name (cons file-name current-stack)))))))
+          (if (or (not dir?)
+                  (and dir? include-directories?))
+              (cons full-name (cons file-name current-stack))
+              (next))))))
 
     (push-todo-dir! full-name0 file-name0 '())
 
