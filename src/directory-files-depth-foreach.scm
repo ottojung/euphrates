@@ -16,44 +16,24 @@
 
 %var directory-files-depth-foreach
 
-;; Calls `fn' ob objects like this:
+;; Calls `fun' ob objects like this:
 ;;   (fullname name dirname1 dirname2 dirname3...)
 ;;   (fullname name ....)
 ;;
 ;;  where dirname1 is the parent dir of the file
 
-%for (COMPILER "guile")
+%use (directory-files-depth-iter) "./directory-files-depth-iter.scm"
 
-(use-modules (ice-9 ftw))
+(define directory-files-depth-foreach
+  (case-lambda
+   ((depth fun directory)
+    (directory-files-depth-foreach #f depth fun directory))
+   ((include-directories? depth fun directory)
+    (define iter
+      (directory-files-depth-iter include-directories? depth directory))
 
-(define (directory-files-depth-foreach depth fn directory)
-  ;; Don't skip anything
-  (define current '())
-
-  (define (enter? name stat result)
-    (< (length current) depth))
-
-  (define (leaf name stat result)
-    (fn (cons* name (basename name) current))
-    result)
-
-  (define (down name stat result)
-    (set! current (cons name current))
-    result)
-  (define (up name stat result)
-    (set! current (cdr current))
-    result)
-
-  (define (skip name stat result) result)
-
-  ;; ignore errors
-  (define (error name stat errno result) result)
-
-  (file-system-fold enter? leaf down up skip error
-                    '()
-                    directory))
-
-%end
-
-;; TODO: Port racket version.
-;;       See `directory-files-rec.scm' for example.
+    (let loop ()
+      (define x (iter))
+      (if x
+          (begin (fun x) (loop))
+          (when #f #t))))))
