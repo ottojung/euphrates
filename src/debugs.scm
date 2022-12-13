@@ -27,12 +27,14 @@
 (define-syntax debugs
   (syntax-rules ()
     ((_ x)
-     (let* ((y x) (sy (serialize/short y)))
+     (let* ((y x)
+            (sy (serialize/short y)))
        (if (pair? sy)
            (debug "~a:\n~a" (quote x)
                   (with-output-to-string
                     (lambda _
                       (pretty-print sy))))
-           (debug "~a = ~s" (quote x) sy))))))
+           (debug "~a = ~s" (quote x) sy))
+       y))))
 
 %end
