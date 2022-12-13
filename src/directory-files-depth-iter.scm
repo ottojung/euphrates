@@ -96,17 +96,18 @@
                               file-name
                               (string-append current-prefix "/" file-name)))
                (recurse? (< current-depth depth))
-               (dir? (and (or include-directories? recurse?)
+               (dir? (and (or recurse? (not include-directories?))
                           (let ((st (false-if-exception (stat full-name))))
                             (and st (equal? 'directory (stat:type st)))))))
 
-          (when dir?
+          (when (and recurse? dir?)
             (push-todo-dir! full-name file-name current-stack))
 
-          (if (or (not dir?)
-                  (and dir? include-directories?))
+          (if include-directories?
               (cons full-name (cons file-name current-stack))
-              (next))))))
+              (if dir?
+                  (next)
+                  (cons full-name (cons file-name current-stack))))))))
 
     (push-todo-dir! full-name0 file-name0 '())
 
