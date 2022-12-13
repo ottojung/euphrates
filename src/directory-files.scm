@@ -8,7 +8,7 @@
 ;;    (fullname name)
 ;;     ....
 
-%use (path-normalize) "./path-normalize.scm"
+%use (directory-files-depth-iter) "./directory-files-depth-iter.scm"
 
 %for (COMPILER "guile")
 
@@ -16,33 +16,18 @@
 
 (define directory-files
   (case-lambda
-    ((directory0) (directory-files directory0 #f))
-    ((directory0 include-directories?)
-     (define directory
-       (path-normalize directory0))
+    ((directory) (directory-files directory #f))
+    ((directory include-directories?)
+     (define iter
+       (directory-files-depth-iter include-directories? 1 directory))
 
-     ;; Skip everything
-     (define (enter? name stat result)
-       (string=? directory (path-normalize name)))
-
-     (define (leaf name stat result)
-       (cons (list name (basename name)) result))
-
-     (define (down name stat result)
-       result)
-     (define (up name stat result)
-       result)
-     (define (skip name stat result)
-       (if include-directories?
-           (cons (list name (basename name)) result)
-           result))
-
-     ;; ignore errors
-     (define (error name stat errno result) result)
-
-     (file-system-fold enter? leaf down up skip error
-                       '()
-                       directory))))
+     (let loop ((buf '()))
+       (define x (iter))
+       (if x
+           (let ((full (car x))
+                 (name (cadr x)))
+             (loop (cons (list full name) buf)))
+           buf)))))
 
 %end
 
