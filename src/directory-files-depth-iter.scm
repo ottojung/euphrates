@@ -42,7 +42,7 @@
 
 (define directory-files-depth-iter
   (case-lambda
-   ((depth directory) (directory-files-depth-iter #t depth directory))
+   ((depth directory) (directory-files-depth-iter #f depth directory))
    ((include-directories? depth directory)
     (define norm (path-normalize directory))
     (define full-name0 norm)
