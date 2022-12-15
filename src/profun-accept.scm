@@ -26,9 +26,9 @@
 
 %use (assq-set-value) "./assq-set-value.scm"
 %use (define-type9) "./define-type9.scm"
+%use (profun-meta-key) "./profun-meta-key.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
-%use (make-usymbol) "./usymbol.scm"
 
 (define-type9 profun-accept-obj
   (profun-accept-constructor alist context context-changed?) profun-accept-obj?
@@ -59,7 +59,7 @@
     (profun-accept-constructor new-alist ctx ctx-changed?)))
 
 (define (profun-set-meta-fn variable variable-value current-return-value)
-  (define true-variable-name (make-usymbol variable 'meta))
+  (define true-variable-name (profun-meta-key variable))
   (profun-set-fn true-variable-name variable-value current-return-value))
 
 (define-syntax profun-set

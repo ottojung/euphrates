@@ -21,9 +21,9 @@
 %var profun-env-copy
 
 %use (hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
+%use (profun-meta-key) "./profun-meta-key.scm"
 %use (profun-bound-value? profun-make-constant profun-make-unbound-var) "./profun-value.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
-%use (make-usymbol) "./usymbol.scm"
 
 (define (make-profun-env)
   (make-hashmap))
@@ -41,5 +41,5 @@
   (hashmap-copy env))
 
 (define (profun-env-get-meta env key)
-  (define true-key (make-usymbol key 'meta))
+  (define true-key (profun-meta-key key))
   (profun-env-get env true-key))

@@ -286,6 +286,7 @@
 %use (profun-make-instantiation-check) "./src/profun-make-instantiation-test.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
 %use (profun-make-tuple-set) "./src/profun-make-tuple-set.scm"
+%use (profun-meta-key) "./src/profun-meta-key.scm"
 %use (profun-op-apply/result#p) "./src/profun-op-apply-result-p.scm"
 %use (profun-apply-fail! profun-apply-return! profun-op-apply) "./src/profun-op-apply.scm"
 %use (profun-op-binary) "./src/profun-op-binary.scm"
