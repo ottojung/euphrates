@@ -22,11 +22,13 @@
 %var profun-accept-ctx-changed?
 %var profun-set
 %var profun-ctx-set
+%var profun-set-meta
 
 %use (assq-set-value) "./assq-set-value.scm"
 %use (define-type9) "./define-type9.scm"
 %use (profun-varname?) "./profun-varname-q.scm"
 %use (raisu) "./raisu.scm"
+%use (make-usymbol) "./usymbol.scm"
 
 (define-type9 profun-accept-obj
   (profun-accept-constructor alist context context-changed?) profun-accept-obj?
@@ -56,6 +58,10 @@
          (new-alist (assq-set-value variable variable-value alist)))
     (profun-accept-constructor new-alist ctx ctx-changed?)))
 
+(define (profun-set-meta-fn variable variable-value current-return-value)
+  (define true-variable-name (make-usymbol variable 'meta))
+  (profun-set-fn true-variable-name variable-value current-return-value))
+
 (define-syntax profun-set
   (syntax-rules ()
     ((_ (variable <- variable-value))
@@ -72,3 +78,10 @@
 
     (let* ((alist (profun-accept-alist current-return-value)))
       (profun-accept-constructor alist new-context #t)))))
+
+(define-syntax profun-set-meta
+  (syntax-rules ()
+    ((_ (variable <- variable-value))
+     (profun-set-meta-fn variable variable-value (profun-accept)))
+    ((_ (variable <- variable-value) current-return-value)
+     (profun-set-meta-fn variable variable-value current-return-value))))
