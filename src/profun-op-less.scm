@@ -17,10 +17,10 @@
 %var profun-op-less
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-bound-value? profun-unbound-value?) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
@@ -29,7 +29,7 @@
    (ctx (x y) (x-name y-name))
 
    (if (profun-unbound-value? y)
-       (make-profun-RFC `((value ,y-name)))
+       (profun-request-value y-name)
        (begin
          (unless (number? y)
            (raisu 'non-number-in-less y))

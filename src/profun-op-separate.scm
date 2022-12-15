@@ -16,10 +16,10 @@
 
 %var profun-op-separate
 
-%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-accept) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-variable-equal?) "./profun-variable-equal-q.scm"
 
 (define profun-op-separate
@@ -28,6 +28,6 @@
    (case (profun-variable-equal? x y)
      ((#t) (profun-reject))
      ((#f) (profun-accept))
-     ((x-false) (make-profun-RFC `((value ,x-name))))
-     ((y-false) (make-profun-RFC `((value ,y-name))))
-     ((both-false) (make-profun-RFC `((value (or ,x-name ,y-name))))))))
+     ((x-false) (profun-request-value x-name))
+     ((y-false) (profun-request-value y-name))
+     ((both-false) (profun-request-value `(or ,x-name ,y-name))))))

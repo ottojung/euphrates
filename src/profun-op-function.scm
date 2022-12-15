@@ -18,12 +18,12 @@
 
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-n) "./list-span-n.scm"
-%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-accept profun-set) "./profun-accept.scm"
 %use (profun-answer?) "./profun-answer-huh.scm"
 %use (make-profun-error) "./profun-error.scm"
 %use (make-profun-op) "./profun-op.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-bound-value? profun-unbound-value? profun-value-unwrap) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
@@ -61,10 +61,10 @@
                         in-args in-names)))
 
                 (if (not (null? unbound-names))
-                    (make-profun-RFC
-                     `((value ,(if (list-singleton? unbound-names)
-                                   (car unbound-names)
-                                   (cons 'and unbound-names)))))
+                    (profun-request-value
+                     (if (list-singleton? unbound-names)
+                         (car unbound-names)
+                         (cons 'and unbound-names)))
                     (let ()
                       (define results
                         (call-with-values

@@ -17,9 +17,9 @@
 %var profun-op-divisible
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-bound-value? profun-unbound-value?) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
@@ -29,7 +29,7 @@
    (define last (or ctx 1))
 
    (if (profun-unbound-value? y)
-       (make-profun-RFC `((value ,y-name)))
+       (profun-request-value y-name)
        (and
         (or (number? y)
             (raisu 'non-number-in-divisible y-name y))

@@ -17,12 +17,10 @@
 %var profun-op-binary
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (make-profun-RFC) "./profun-RFC.scm"
-%use (profun-ctx-set profun-set) "./profun-accept.scm"
+%use (profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-reject) "./profun-reject.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-bound-value?) "./profun-value.scm"
-%use (raisu) "./raisu.scm"
 
 (define (profun-op-binary action left-inverse right-inverse both-inverse left-identity right-identity)
   (define (in-op-domain? x)
@@ -37,7 +35,7 @@
            (in-op-domain? b)
            (let ((result (op a b)))
              (if (equal? result 'op-binary-rfc)
-                 (make-profun-RFC `((value ,c-name)))
+                 (profun-request-value c-name)
                  (and result
                       (in-op-domain? result)
                       (if (profun-bound-value? c)
@@ -57,14 +55,14 @@
     ((profun-bound-value? x)
      (if (equal? y z)
          (g-op z-name x x z left-identity)
-         (make-profun-RFC `((value (any ,y-name ,z-name))))))
+         (profun-request-value `(any ,y-name ,z-name))))
     ((profun-bound-value? y)
      (if (equal? x z)
          (g-op x-name y y z right-identity)
-         (make-profun-RFC `((value (any ,x-name ,z-name))))))
+         (profun-request-value `(any ,x-name ,z-name))))
     ((profun-bound-value? z)
      (if (equal? x y)
          (g-op x-name z z x both-inverse)
-         (make-profun-RFC `((value (any ,x-name ,y-name))))))
+         (profun-request-value `(any ,x-name ,y-name))))
     (else
-     (make-profun-RFC `((value (any ,x-name ,y-name ,z-name))))))))
+     (profun-request-value `(any ,x-name ,y-name ,z-name))))))

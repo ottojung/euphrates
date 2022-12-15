@@ -17,9 +17,9 @@
 %var profun-op-unary
 
 %use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-bound-value?) "./profun-value.scm"
 
 (define (profun-op-unary action inverse)
@@ -44,4 +44,4 @@
     ((profun-bound-value? y)
      (g-op x-name y x inverse))
     (else
-     (make-profun-RFC `((value (any ,x-name ,y-name))))))))
+     (profun-request-value `(any ,x-name ,y-name))))))

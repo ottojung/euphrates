@@ -16,10 +16,10 @@
 
 %var profun-op-modulo
 
-%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-accept profun-accept? profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-bound-value? profun-unbound-value?) "./profun-value.scm"
 
 ;; Represents equation "y * q + r = x | q != 0 & x => y"
@@ -74,23 +74,23 @@
 
    (define (get-xy)
      (if (profun-unbound-value? q)
-         (make-profun-RFC `((value (any ,x-name ,q-name))))
+         (profun-request-value `(any ,x-name ,q-name))
          (case q
            ((0)
             (if (profun-bound-value? r)
                 (check-or-set x-name x r)
-                (make-profun-RFC `((value (any ,x-name ,r-name))))))
+                (profun-request-value `(any ,x-name ,r-name))))
            ((1)
             (cond
              ((profun-unbound-value? r)
-              (make-profun-RFC `((value (any ,x-name ,r-name)))))
+              (profun-request-value `(any ,x-name ,r-name)))
              ((equal? r 0)
-              (make-profun-RFC `((value ,x-name))))
+              (profun-request-value x-name))
              (else (profun-reject))))
            (else
             (cond
              ((profun-unbound-value? r)
-              (make-profun-RFC `((value (any ,x-name ,r-name)))))
+              (profun-request-value `(any ,x-name ,r-name)))
              ((equal? r 0)
               (check-or-set x-name x 0))
              (else (profun-reject)))))))
@@ -105,7 +105,7 @@
      (cond
       ((profun-bound-value? x) result)
       ((profun-accept? result)
-       (make-profun-RFC `((value ,x-name))))
+       (profun-request-value x-name))
       (else (profun-reject))))
 
    (define (get-xr)
@@ -120,23 +120,23 @@
          (if (and (profun-bound-value? x)
                   (profun-bound-value? r))
              (check-or-set y-name y (sqrt (- x r)))
-             (make-profun-RFC `((value ,y-name))))))
+             (profun-request-value y-name))))
 
    (define (get-yr)
      (if (and (profun-bound-value? x)
               (profun-bound-value? q))
          (check-or-set
           y-name y (/ x (+ q 1)))
-         (make-profun-RFC `((value ,y-name)))))
+         (profun-request-value y-name)))
 
    (define (eq-qr)
      (case x
        ((0)
         (if (profun-bound-value? q)
             (if (equal? q 0)
-                (make-profun-RFC `((value ,y-name)))
+                (profun-request-value y-name)
                 (profun-reject))
-            (make-profun-RFC `((value (any ,y-name ,q-name))))))
+            (profun-request-value `(any ,y-name ,q-name))))
        (else (profun-reject))))
 
    (check-all
@@ -164,4 +164,5 @@
            (equal? y r))
       (get-yr))
      ((equal? q r) (eq-qr))
-     (make-profun-RFC `((value (any ,x-name ,y-name ,q-name ,r-name))))))))
+     (else
+      (profun-request-value `(any ,x-name ,y-name ,q-name ,r-name)))))))
