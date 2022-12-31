@@ -411,3 +411,25 @@
    (inspect whats (= Z _X))
    (its (= Y 8) (= Z 9))
    ))
+
+(test-dialog
+ '((whats (= _X 9) (< Y _X))
+   (its (= Y 8))
+   (reset)
+   (ok)
+   (inspect whats (= Z _X))
+   (error (nothing-to-inspect use-a-whats-first))
+   ))
+
+(test-dialog
+ '((whats (= _X 9) (< Y _X))
+   (its (= Y 8))
+   (reset)
+   (ok)
+   (inspect whats (= Z _X))
+   (error (nothing-to-inspect use-a-whats-first))
+   (whats (= _X 9) (< Y _X))
+   (its (= Y 8))
+   (inspect whats (= Z _X))
+   (its (= Y 8) (= Z 9))
+   ))
