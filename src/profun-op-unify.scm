@@ -19,7 +19,7 @@
 %use (profun-accept profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (make-profun-RFC) "./profun-RFC.scm"
+%use (profun-request-value) "./profun-request-value.scm"
 %use (profun-variable-equal?) "./profun-variable-equal-q.scm"
 %use (raisu) "./raisu.scm"
 
@@ -32,5 +32,5 @@
      ((#f) (profun-reject))
      ((x-false) (profun-set (x-name <- y)))
      ((y-false) (profun-set (y-name <- x)))
-     ((both-false) (make-profun-RFC `(any ,x-name ,y-name)))
+     ((both-false) (profun-request-value `(any ,x-name ,y-name)))
      (else (raisu 'impossible-case-for-op-unify ret x y)))))
