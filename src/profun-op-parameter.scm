@@ -22,7 +22,7 @@
 %use (profun-set) "./profun-accept.scm"
 %use (profun-op-envlambda/p) "./profun-op-envlambda-p.scm"
 %use (make-profun-op) "./profun-op.scm"
-%use (profun-request-value) "./profun-request-value.scm"
+%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-bound-value? profun-value-unwrap) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 %use (make-usymbol) "./usymbol.scm"
@@ -45,7 +45,7 @@
              (profun-set (param-name <- input)))
          (if (profun-bound-value? param)
              (profun-set (input-name <- param))
-             (profun-request-value input-name))))))
+             (make-profun-RFC input-name))))))
 
 (define (make-profun-parameter)
   (define param-name (make-usymbol 'p (gensym)))

@@ -20,7 +20,7 @@
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-request-value) "./profun-request-value.scm"
+%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-bound-value? profun-unbound-value?) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
@@ -29,7 +29,7 @@
    (ctx (x y) (x-name y-name))
 
    (if (profun-unbound-value? y)
-       (profun-request-value y-name)
+       (make-profun-RFC y-name)
        (begin
          (unless (number? y)
            (raisu 'non-number-in-less y))

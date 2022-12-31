@@ -20,7 +20,7 @@
 %use (profun-ctx-set profun-set) "./profun-accept.scm"
 %use (profun-op-lambda) "./profun-op-lambda.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-request-value) "./profun-request-value.scm"
+%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-unbound-value?) "./profun-value.scm"
 
 (define (profun-op-equals-argument? lst)
@@ -54,7 +54,7 @@
    (cond
     (ctx (profun-op-equals-aux ctx))
     ((profun-unbound-value? lst)
-     (profun-request-value lst-name))
+     (make-profun-RFC lst-name))
     ((profun-op-equals-argument? lst)
      (let ((ctxx (or ctx lst)))
        (profun-op-equals-aux ctxx)))

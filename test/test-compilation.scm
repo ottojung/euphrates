@@ -316,7 +316,6 @@
 %use (profun-query-get-free-variables) "./src/profun-query-get-free-variables.scm"
 %use (profun-query-handle-underscores) "./src/profun-query-handle-underscores.scm"
 %use (profun-reject profun-reject?) "./src/profun-reject.scm"
-%use (profun-request-value) "./src/profun-request-value.scm"
 %use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name profun-rule?) "./src/profun-rule.scm"
 %use (profun-standard-handler) "./src/profun-standard-handler.scm"
 %use (profun-state-build profun-state-constructor profun-state-current profun-state-failstate profun-state-final? profun-state-finish profun-state-make profun-state-stack profun-state-undo profun-state? set-profun-state-current) "./src/profun-state.scm"

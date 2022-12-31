@@ -23,7 +23,7 @@
 %use (make-profun-error) "./profun-error.scm"
 %use (make-profun-op) "./profun-op.scm"
 %use (profun-reject) "./profun-reject.scm"
-%use (profun-request-value) "./profun-request-value.scm"
+%use (make-profun-RFC) "./profun-RFC.scm"
 %use (profun-bound-value? profun-unbound-value? profun-value-unwrap) "./profun-value.scm"
 %use (raisu) "./raisu.scm"
 
@@ -61,7 +61,7 @@
                         in-args in-names)))
 
                 (if (not (null? unbound-names))
-                    (profun-request-value
+                    (make-profun-RFC
                      (if (list-singleton? unbound-names)
                          (car unbound-names)
                          (cons 'and unbound-names)))
