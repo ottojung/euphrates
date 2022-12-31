@@ -274,7 +274,7 @@
 %use (make-profun-IDR profun-IDR-arity profun-IDR-name profun-IDR?) "./src/profun-IDR.scm"
 %use (make-profun-RFC profun-RFC-add-info profun-RFC-insert profun-RFC-modify-iter profun-RFC-reset profun-RFC-set-iter profun-RFC-what profun-RFC?) "./src/profun-RFC.scm"
 %use (make-profun-abort profun-abort-add-info profun-abort-additional profun-abort-iter profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?) "./src/profun-abort.scm"
-%use (make-profun-accept profun-accept profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept? profun-ctx-set profun-set profun-set-meta) "./src/profun-accept.scm"
+%use (make-profun-accept profun-accept profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept? profun-ctx-set profun-set profun-set-meta profun-set-parameter) "./src/profun-accept.scm"
 %use (profun-answer?) "./src/profun-answer-huh.scm"
 %use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./src/profun-answer-join.scm"
 %use (make-profun-database profun-database-add! profun-database-add-rule! profun-database-copy profun-database-get profun-database-get-all profun-database-handle profun-database-handler profun-database-set-all! profun-database-table profun-database?) "./src/profun-database.scm"
