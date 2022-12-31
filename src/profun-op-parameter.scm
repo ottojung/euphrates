@@ -60,11 +60,19 @@
 
     (get-func param-name))
 
+  (define (set new-value)
+    (define get-func
+      (or (profun-op-envlambda/p)
+          (raisu 'could-not-get-environment "Make sure that you are using op-envlambda")))
+
+    (profun-set (param-name <- new-value)))
+
   (case-lambda
    (() (get))
-   ((action)
+   ((action . args)
     (case action
       ((get) (get))
+      ((set) (set args))
       ((instantiate) (instantiate))
       (else (raisu 'uknown-parameter-action action))))))
 
