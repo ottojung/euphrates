@@ -60,12 +60,19 @@
 
     (get-func param-name))
 
-  (define (set new-value)
+  (define (set args)
     (define get-func
       (or (profun-op-envlambda/p)
           (raisu 'could-not-get-environment "Make sure that you are using op-envlambda")))
 
-    (profun-set (param-name <- new-value)))
+    (define _1
+      (unless (= 2 (length args))
+        (raisu 'type-error "Expected two arguments in set operation" args)))
+
+    (define val (car args))
+    (define next (cadr args))
+
+    (profun-set (param-name <- val) next))
 
   (case-lambda
    (() (get))

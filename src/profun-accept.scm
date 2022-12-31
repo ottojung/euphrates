@@ -23,6 +23,7 @@
 %var profun-set
 %var profun-ctx-set
 %var profun-set-meta
+%var profun-set-parameter
 
 %use (assq-set-value) "./assq-set-value.scm"
 %use (define-type9) "./define-type9.scm"
@@ -85,3 +86,13 @@
      (profun-set-meta-fn variable variable-value (profun-accept)))
     ((_ (variable <- variable-value) current-return-value)
      (profun-set-meta-fn variable variable-value current-return-value))))
+
+(define-syntax profun-set-parameter
+  (syntax-rules ()
+    ((_ (param <- variable-value))
+     (profun-set-parameter (param <- variable-value) (profun-accept)))
+    ((_ (param <- variable-value) current-return-value)
+     (let ()
+       (unless (procedure? param)
+         (raisu 'type-error "Expected a parameter, got something else" param))
+       (param 'set variable-value current-return-value)))))
