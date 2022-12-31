@@ -32,11 +32,12 @@
 %use (profun-iterator-copy profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 %use (profun-iterate profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
-%use (stack-empty? stack-make stack-peek stack-pop! stack-push!) "./stack.scm"
+%use (stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload!) "./stack.scm"
 
 (define-type9 profune-communicator
-  (profune-communicator-constructor db stages) profune-communicator?
-  (db profune-communicator-db)
+  (profune-communicator-constructor db0 db stages) profune-communicator?
+  (db0 profune-communicator-db0) ;; the original state of database
+  (db profune-communicator-db set-profune-communicator-db!) ;; the current state of database
   (stages profune-communicator-stages)
   )
 
@@ -49,14 +50,15 @@
   (inspecting stage-inspecting set-stage-inspecting!)
   )
 
-(define (make-profune-communicator db0)
-  (define db
-    (if (profun-database? db0)
-        (profun-database-copy db0)
-        (raisu 'expected-a-profun-database db0)))
-  (define stages (stack-make))
+(define (copy-db-for-profun-communicator db0)
+  (if (profun-database? db0)
+      (profun-database-copy db0)
+      (raisu 'expected-a-profun-database db0)))
 
-  (profune-communicator-constructor db stages))
+(define (make-profune-communicator db0)
+  (define db (copy-db-for-profun-communicator db0))
+  (define stages (stack-make))
+  (profune-communicator-constructor db0 db stages))
 
 (define (profune-communicator-handle comm commands)
   (define db (profune-communicator-db comm))
@@ -206,6 +208,19 @@
       (stack-pop! stages)
       (handle next))))
 
+  (define (handle-reset op args next)
+    (cond
+     ((not (null? args))
+      `(error (reset must have 0 arguments but it has ,(length args))))
+     ((stack-empty? stages)
+      `(error (nowhere to return)))
+     (else
+      (stack-unload! stages)
+      (set-profune-communicator-db!
+       comm (copy-db-for-profun-communicator
+             (profune-communicator-db0 comm)))
+      (handle next))))
+
   (define (handle-query next)
     (define-values (next-op next-args next-next)
       (split-commands next))
@@ -299,6 +314,7 @@
           ((its) (handle-its op args next))
           ((inspect) (handle-inspect op args next))
           ((return) (handle-return op args next))
+          ((reset) (handle-reset op args next))
           ((more) (handle-more op args next))
           ((ok) (handle-ok op args next))
           ((bye) (handle-bye op args next))
