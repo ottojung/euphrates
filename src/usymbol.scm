@@ -22,7 +22,7 @@
 %use (define-type9) "./define-type9.scm"
 
 (define-type9 <usymbol>
-  (make-usymbol a b) usymbol?
-  (a usymbol-name) ;; printable name - usually what was read
-  (b usymbol-qualifier) ;; unique qualifier
+  (make-usymbol name qualifier) usymbol?
+  (name usymbol-name) ;; printable name - usually what was read
+  (qualifier usymbol-qualifier) ;; unique qualifier
   )
