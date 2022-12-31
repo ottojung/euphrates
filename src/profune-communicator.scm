@@ -29,15 +29,14 @@
 %use (profun-abort-iter) "./profun-abort.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database?) "./profun-database.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
-%use (profun-iterator-copy profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
+%use (profun-iterator-copy profun-iterator-db profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 %use (profun-iterate profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload!) "./stack.scm"
 
 (define-type9 profune-communicator
-  (profune-communicator-constructor db0 db stages) profune-communicator?
-  (db0 profune-communicator-db0) ;; the original state of database
-  (db profune-communicator-db set-profune-communicator-db!) ;; the current state of database
+  (profune-communicator-constructor db0 stages) profune-communicator?
+  (db profune-communicator-db) ;; the initial state of the database
   (stages profune-communicator-stages)
   )
 
@@ -50,20 +49,16 @@
   (inspecting stage-inspecting set-stage-inspecting!)
   )
 
-(define (copy-db-for-profun-communicator db0)
-  (if (profun-database? db0)
-      (profun-database-copy db0)
-      (raisu 'expected-a-profun-database db0)))
-
 (define (make-profune-communicator db0)
-  (define db (copy-db-for-profun-communicator db0))
   (define stages (stack-make))
-  (profune-communicator-constructor db0 db stages))
+  (profune-communicator-constructor db0 stages))
 
 (define (profune-communicator-handle comm commands)
-  (define db (profune-communicator-db comm))
   (define stages (profune-communicator-stages comm))
 
+  (define (current-db)
+    (define iter (current-answer-iterator))
+    (and iter (profun-iterator-db iter)))
   (define (current-answer-iterator)
     (if (stack-empty? stages) #f
         (stage-answer-iterator (stack-peek stages))))
@@ -90,6 +85,12 @@
     (set-stage-cont! (stack-peek stages) new))
   (define (set-current-inspecting! new)
     (set-stage-inspecting! (stack-peek stages) new))
+
+  (define (new-db)
+    (define db0 (profune-communicator-db comm))
+    (if (profun-database? db0)
+        (profun-database-copy db0)
+        (raisu 'expected-a-profun-database db0)))
 
   (define (split-commands commands)
     (if (null? commands)
@@ -179,7 +180,7 @@
         (profun-iterator-reset! inspected args)
         inspected)
        (else
-        (profun-iterate db args))))
+        (profun-iterate (or (current-db) (new-db)) args))))
 
     (push-stage! iter copy)
     (handle-query next))
@@ -216,9 +217,14 @@
       `(error (nowhere to return)))
      (else
       (stack-unload! stages)
-      (set-profune-communicator-db!
-       comm (copy-db-for-profun-communicator
-             (profune-communicator-db0 comm)))
+      (handle next))))
+
+  (define (handle-push op args next)
+    (cond
+     ((not (null? args))
+      `(error (push must have 0 arguments but it has ,(length args))))
+     (else
+      (push-stage! #f #f)
       (handle next))))
 
   (define (handle-query next)
@@ -280,8 +286,7 @@
       (handle-its op args next))))
 
   (define (handle-bye op args next)
-    (set! db #f)
-    (set! stages #f)
+    (stack-unload! stages)
     (if (and (null? args) (null? next))
         `(bye)
         `(error (bye-must-not-have-any-arguments))))
@@ -292,6 +297,9 @@
         (handle next)))
 
   (define (handle-listen op args next)
+    (define db
+      (or (current-db)
+          (profune-communicator-db comm)))
     (for-each (comp (profun-database-add-rule! db)) args)
     (handle next))
 
@@ -302,8 +310,6 @@
       `(error (commands-must-be-a-list)))
      ((not (symbol? (car commands)))
       `(error (commands-must-start-from-an-operation)))
-     ((not db)
-      `(error (already-said-bye-bye)))
      (else
       (let ()
         (define-values (op args next)
@@ -315,6 +321,7 @@
           ((inspect) (handle-inspect op args next))
           ((return) (handle-return op args next))
           ((reset) (handle-reset op args next))
+          ((push) (handle-push op args next))
           ((more) (handle-more op args next))
           ((ok) (handle-ok op args next))
           ((bye) (handle-bye op args next))
