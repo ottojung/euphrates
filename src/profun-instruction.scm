@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
 
 %var profun-instruction-constructor
 %var profun-instruction?
-%var profun-instruction-sign
+%var profun-instruction-name
+%var profun-instruction-body
 %var profun-instruction-args
 %var profun-instruction-arity
 %var profun-instruction-next
@@ -28,8 +29,9 @@
 %use (define-type9) "./define-type9.scm"
 
 (define-type9 <profun-instruction>
-  (profun-instruction-constructor sign args arity next context) profun-instruction?
-  (sign profun-instruction-sign) ;; operation signature, like name and version for alternative
+  (profun-instruction-constructor name body args arity next context) profun-instruction?
+  (name profun-instruction-name)
+  (body profun-instruction-body)
   (args profun-instruction-args) ;; arguments
   (arity profun-instruction-arity) ;; arity
   (next profun-instruction-next) ;; link to next `profun-instruction`, or #f is this is the last one
@@ -43,7 +45,7 @@
     (define sign (car block))
     (define args (cdr block))
     (profun-instruction-constructor
-     sign args (length args) next #f))
+     sign #f args (length args) next #f))
 
   (define result
     (let lp ((buf rev) (prev next))

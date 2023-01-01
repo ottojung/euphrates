@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 %use (profun-database-add-rule! profun-database-copy profun-database-get-all profun-database-set-all!) "./profun-database.scm"
 %use (profun-env-copy) "./profun-env.scm"
 %use (make-profun-error) "./profun-error.scm"
-%use (profun-instruction-arity profun-instruction-build/next profun-instruction-sign) "./profun-instruction.scm"
+%use (profun-instruction-arity profun-instruction-build/next profun-instruction-name) "./profun-instruction.scm"
 %use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
 %use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
 %use (profun-state-build profun-state-current profun-state-stack set-profun-state-current) "./profun-state.scm"
@@ -54,7 +54,8 @@
       (values #f #f)
       (let ()
         (define instruction (car stack))
-        (define key (profun-instruction-sign instruction))
+        (define key (profun-instruction-name instruction))
+        ;; (define body (profun-instruction-body instruction))
         (define arity (profun-instruction-arity instruction))
         (values key arity))))
 

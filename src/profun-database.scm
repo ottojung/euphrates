@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -100,14 +100,12 @@
   (define table (profun-database-table db))
   (double-hashmap-set! table key arity new-rules))
 
-(define (profun-database-get db k arity)
+(define (profun-database-get db k v arity)
   (define (get db key index arity)
     (let ((r (double-hashmap-ref (profun-database-table db) key arity)))
       (and r (list-ref-or r index #f))))
 
-  (if (pair? k)
-      (get db (car k) (cdr k) arity)
-      (get db k 0 arity)))
+  (get db k (or v 0) arity))
 
 (define (profun-database-add! db name args body)
   (let* ((arity (length args))

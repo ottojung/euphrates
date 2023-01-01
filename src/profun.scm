@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 %use (make-profun-database profun-database-add-rule! profun-database-get profun-database-handle profun-database?) "./profun-database.scm"
 %use (make-profun-env profun-env-get profun-env-set! profun-env-unset!) "./profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
-%use (profun-instruction-args profun-instruction-arity profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign) "./profun-instruction.scm"
+%use (profun-instruction-args profun-instruction-arity profun-instruction-body profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-name profun-instruction-next) "./profun-instruction.scm"
 %use (profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-query profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
@@ -54,25 +54,19 @@
   (define inst (profun-state-current s))
   (cond
    ((profun-instruction-context inst) inst)
-   ((procedure? (profun-instruction-sign inst)) #f)
+   ;; ((procedure? (profun-instruction-sign inst)) #f)
+   ((procedure? (profun-instruction-name inst)) (raisu 'wtf11))
    (else
-    (let* ((sign (profun-instruction-sign inst))
+    (let* ((name (profun-instruction-name inst))
            (arity (profun-instruction-arity inst))
-           (get-from-pair (lambda (p a)
-                            (let* ((name (car p))
-                                   (ver  (cdr p))
-                                   (new  (cons name (+ ver 1)))
-                                   (get  (profun-database-get db new a)))
-                              get)))
+           (version (or (profun-instruction-body inst) 0))
            (rule
-            (cond
-             ((pair? sign) (get-from-pair sign arity))
-             (else (get-from-pair (cons sign 0) arity)))))
+            (profun-database-get db name (+ 1 version) arity)))
 
       (and rule
            (profun-instruction-constructor
-            (cons (profun-rule-name rule)
-                  (profun-rule-index rule))
+            (profun-rule-name rule)
+            (profun-rule-index rule)
             (profun-instruction-args inst)
             (profun-instruction-arity inst)
             (profun-instruction-next inst)
@@ -133,7 +127,8 @@
 
 (define (profun-instruction-set-ctx inst new-ctx)
   (profun-instruction-constructor
-   (profun-instruction-sign inst)
+   (profun-instruction-name inst)
+   (profun-instruction-body inst)
    (profun-instruction-args inst)
    (profun-instruction-arity inst)
    (profun-instruction-next inst)
@@ -141,7 +136,8 @@
 
 (define (init-foreign-instruction inst target-rule)
   (profun-instruction-constructor
-   (cons (profun-instruction-sign inst) (profun-rule-body target-rule)) ;; sign
+   (profun-instruction-name inst)
+   (profun-rule-body target-rule)
    (profun-instruction-args inst)
    (profun-instruction-arity inst)
    (profun-instruction-next inst)
@@ -190,8 +186,7 @@
   ret)
 
 (define (enter-foreign db env s instruction)
-  (define sign (profun-instruction-sign instruction))
-  (define handler (cdr sign))
+  (define handler (profun-instruction-body instruction))
   (define func (profun-op-procedure handler))
   (define context (profun-instruction-context instruction))
   (define args (profun-instruction-args instruction))
@@ -225,9 +220,10 @@
 
 (define (apply-instruction db env s)
   (define instruction (profun-state-current s))
-  (define key (profun-instruction-sign instruction))
+  (define key (profun-instruction-name instruction))
+  (define version (profun-instruction-body instruction))
   (define arity (profun-instruction-arity instruction))
-  (define target-rule (profun-database-get db key arity))
+  (define target-rule (profun-database-get db key version arity))
 
   (if target-rule
       (enter-subroutine s instruction target-rule)
