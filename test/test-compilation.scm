@@ -281,7 +281,7 @@
 %use (make-profun-env profun-env-copy profun-env-get profun-env-set! profun-env-unset!) "./src/profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./src/profun-error.scm"
 %use (profun-handler-extend profun-handler-get profun-make-handler) "./src/profun-handler.scm"
-%use (profun-instruction-args profun-instruction-arity profun-instruction-build profun-instruction-build/next profun-instruction-constructor profun-instruction-context profun-instruction-next profun-instruction-sign profun-instruction?) "./src/profun-instruction.scm"
+%use (profun-instruction-args profun-instruction-arity profun-instruction-body profun-instruction-build profun-instruction-build/next profun-instruction-constructor profun-instruction-context profun-instruction-name profun-instruction-next profun-instruction?) "./src/profun-instruction.scm"
 %use (profun-abort-insert profun-abort-reset profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-insert! profun-iterator-query profun-iterator-reset! profun-iterator-state set-profun-iterator-query! set-profun-iterator-state!) "./src/profun-iterator.scm"
 %use (profun-make-instantiation-check) "./src/profun-make-instantiation-test.scm"
 %use (profun-make-set) "./src/profun-make-set.scm"
