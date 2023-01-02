@@ -449,7 +449,7 @@
     ((fav2 X) (= X 7))
     whats
     (fav2 Y))
-   (error ("All rule clauses should be symbols, but some are not" (0) ((0 X) (= X 2))))
+   (error (rule-has-non-list-clauses "All rule clauses should be symbols, but some are not" (0) ((0 X) (= X 2))))
    ))
 
 (test-dialog
@@ -459,7 +459,7 @@
      ((fav3 X) (= X 7)))
     whats
     (fav3 Y))
-   (error ("All rule clauses should be symbols, but some are not" ((fav3 X) (fav3 X) (fav3 X)) (((fav3 X) (= X 2)) ((fav3 X) (= X 3)) ((fav3 X) (= X 7)))))
+   (error (rule-has-non-list-clauses "All rule clauses should be symbols, but some are not" ((fav3 X) (fav3 X) (fav3 X)) (((fav3 X) (= X 2)) ((fav3 X) (= X 3)) ((fav3 X) (= X 7)))))
    ))
 
 (test-dialog
@@ -468,5 +468,5 @@
     ((fav4 X) (= X 3))
     whats
     (= Y 2))
-   (error ("Rule uses names that are not present in the database, this is not allowed" ((fav4 . 1)) ((fav4 X) (fav4 X))))
+   (error (rule-uses-undefined-predicates "Rule uses names that are not present in the database, this is not allowed" ((fav4 . 1)) ((fav4 X) (fav4 X))))
    ))

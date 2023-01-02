@@ -337,12 +337,12 @@
 
     (cond
      ((not list-of-lists?)
-      `(error ("Rule has a bad type, it should be a list of lists, but is not" ,rule)))
+      `(error (rule-has-a-bad-type "It should be a list of lists, but is not" ,rule)))
      ((not names-are-symbols?)
-      `(error ("All rule clauses should be symbols, but some are not" ,not-symbol-names ,rule)))
+      `(error (rule-has-non-list-clauses "All rule clauses should be symbols, but some are not" ,not-symbol-names ,rule)))
      ((not (null? not-found-names))
       ;; NOTE: bans recursion
-      `(error ("Rule uses names that are not present in the database, this is not allowed" ,not-found-names ,rule)))
+      `(error (rule-uses-undefined-predicates "Rule uses names that are not present in the database, this is not allowed" ,not-found-names ,rule)))
      (else #f)))
 
   (define (validate-all-rules rules)
