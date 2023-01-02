@@ -316,13 +316,14 @@
                 rule)))
     (define db (or (current-db) (profune-communicator-db comm)))
     (define not-found-names
-      (filter
-       (lambda (p)
-         (define name (car p))
-         (define arity (cdr p))
-         (and (null? (profun-database-get-all db name arity))
-              name))
-       names+arities))
+      (and names+arities
+           (filter
+            (lambda (p)
+              (define name (car p))
+              (define arity (cdr p))
+              (and (null? (profun-database-get-all db name arity))
+                   name))
+            names+arities)))
 
     (cond
      ((not list-of-lists?)
