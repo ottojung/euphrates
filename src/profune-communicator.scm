@@ -330,6 +330,7 @@
      ((not names-are-symbols?)
       `(error ("All rule clauses should be symbols, but some are not" ,rule)))
      ((not (null? not-found-names))
+      ;; NOTE: bans recursion
       `(error ("Rule uses names that are not present in the database, this is not allowed" ,rule ,not-found-names)))
      (else #f)))
 
