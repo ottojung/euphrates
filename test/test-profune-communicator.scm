@@ -2,8 +2,6 @@
 %run guile
 
 %use (assert=) "./src/assert-equal.scm"
-%use (assert) "./src/assert.scm"
-%use (catchu-case) "./src/catchu-case.scm"
 %use (debugv) "./src/debugv.scm"
 %use (profun-make-handler) "./src/profun-handler.scm"
 %use (profun-op-divisible) "./src/profun-op-divisible.scm"
@@ -470,5 +468,5 @@
     ((fav4 X) (= X 3))
     whats
     (= Y 2))
-   (its (= Y 2))
+   (error ("Rule uses names that are not present in the database, this is not allowed" ((fav4 . 1)) ((fav4 X) (fav4 X))))
    ))

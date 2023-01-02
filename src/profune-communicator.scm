@@ -20,9 +20,10 @@
 %var profune-communicator-handle
 
 %use (comp) "./comp.scm"
-%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
 %use (list-and-map) "./list-and-map.scm"
+%use (list-deduplicate/reverse) "./list-deduplicate.scm"
+%use (list-length=<?) "./list-length-geq-q.scm"
 %use (list-map-first) "./list-map-first.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
@@ -30,7 +31,7 @@
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-iter) "./profun-abort.scm"
-%use (profun-database-add-rule! profun-database-copy profun-database-get-all profun-database?) "./profun-database.scm"
+%use (profun-database-add-rule! profun-database-copy profun-database-get-all profun-database-handle profun-database?) "./profun-database.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-iterator-copy profun-iterator-db profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 %use (profun-iterate profun-next) "./profun.scm"
@@ -303,7 +304,9 @@
     (define list-of-lists?
       (and (list? rule)
            (list-and-map
-            (lambda (clause) (and (pair? clause) (not (null? clause))))
+            (lambda (clause)
+              (and (list? clause)
+                   (list-length=<? 2 clause)))
             rule)))
     (define names
       (and list-of-lists? (map car rule)))
@@ -315,17 +318,22 @@
       (and names-are-symbols?
            (map (lambda (clause)
                   (cons (car clause) (length (cdr clause))))
-                rule)))
+                (cdr rule))))
     (define db (or (current-db) (profune-communicator-db comm)))
     (define not-found-names
-      (and names+arities
-           (filter
-            (lambda (p)
-              (define name (car p))
-              (define arity (cdr p))
-              (and (null? (profun-database-get-all db name arity))
-                   name))
-            names+arities)))
+      (and names-are-symbols?
+           (list-deduplicate/reverse
+            (filter
+             identity
+             (map
+              (lambda (p)
+                (define name (car p))
+                (define arity (cdr p))
+                (define exs
+                  (or (profun-database-get-all db name arity)
+                      (profun-database-handle db name arity)))
+                (if exs #f p))
+              names+arities)))))
 
     (cond
      ((not list-of-lists?)
