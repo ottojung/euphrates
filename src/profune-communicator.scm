@@ -307,8 +307,10 @@
             rule)))
     (define names
       (and list-of-lists? (map car rule)))
+    (define not-symbol-names
+      (and names (filter (negate symbol?) names)))
     (define names-are-symbols?
-      (and names (list-and-map symbol? names)))
+      (null? not-symbol-names))
     (define names+arities
       (and names-are-symbols?
            (map (lambda (clause)
@@ -329,10 +331,10 @@
      ((not list-of-lists?)
       `(error ("Rule has a bad type, it should be a list of lists, but is not" ,rule)))
      ((not names-are-symbols?)
-      `(error ("All rule clauses should be symbols, but some are not" ,rule)))
+      `(error ("All rule clauses should be symbols, but some are not" ,not-symbol-names ,rule)))
      ((not (null? not-found-names))
       ;; NOTE: bans recursion
-      `(error ("Rule uses names that are not present in the database, this is not allowed" ,rule ,not-found-names)))
+      `(error ("Rule uses names that are not present in the database, this is not allowed" ,not-found-names ,rule)))
      (else #f)))
 
   (define (validate-all-rules rules)

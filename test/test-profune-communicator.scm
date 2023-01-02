@@ -436,10 +436,39 @@
 
 (test-dialog
  '((listen
-    ((favorite X) (= X 2))
-    ((favorite X) (= X 3))
-    ((favorite X) (= X 7))
+    ((fav1 X) (= X 2))
+    ((fav1 X) (= X 3))
+    ((fav1 X) (= X 7))
     whats
-    (favorite Y))
+    (fav1 Y))
+   (its (= Y 2))
+   ))
+
+(test-dialog
+ '((listen
+    ((fav2 X) (= X 3))
+    ((0 X) (= X 2))
+    ((fav2 X) (= X 7))
+    whats
+    (fav2 Y))
+   (error ("All rule clauses should be symbols, but some are not" (0) ((0 X) (= X 2))))
+   ))
+
+(test-dialog
+ '((listen
+    (((fav3 X) (= X 2))
+     ((fav3 X) (= X 3))
+     ((fav3 X) (= X 7)))
+    whats
+    (fav3 Y))
+   (error ("All rule clauses should be symbols, but some are not" ((fav3 X) (fav3 X) (fav3 X)) (((fav3 X) (= X 2)) ((fav3 X) (= X 3)) ((fav3 X) (= X 7)))))
+   ))
+
+(test-dialog
+ '((listen
+    ((fav4 X) (fav4 X))
+    ((fav4 X) (= X 3))
+    whats
+    (= Y 2))
    (its (= Y 2))
    ))
