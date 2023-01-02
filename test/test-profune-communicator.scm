@@ -444,6 +444,15 @@
 
 (test-dialog
  '((listen
+    (1 2 3 4)
+    (5 6)
+    whats
+    (fav2 Y))
+   (error (rule-has-a-bad-type "It should be a list of lists, but is not" (1 2 3 4)))
+   ))
+
+(test-dialog
+ '((listen
     ((fav2 X) (= X 3))
     ((0 X) (= X 2))
     ((fav2 X) (= X 7))
@@ -460,6 +469,15 @@
     whats
     (fav3 Y))
    (error (rule-has-non-list-clauses "All rule clauses should be symbols, but some are not" ((fav3 X) (fav3 X) (fav3 X)) (((fav3 X) (= X 2)) ((fav3 X) (= X 3)) ((fav3 X) (= X 7)))))
+   ))
+
+(test-dialog
+ '((listen
+    ((fav4 X) (bad-name X K))
+    ((fav4 X) (= X 3))
+    whats
+    (= Y 2))
+   (error (rule-uses-undefined-predicates "Rule uses names that are not present in the database, this is not allowed" ((bad-name . 2)) ((fav4 X) (bad-name X K))))
    ))
 
 (test-dialog
