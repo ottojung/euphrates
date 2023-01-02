@@ -433,3 +433,13 @@
    (inspect whats (= Z _X))
    (its (= Y 8) (= Z 9))
    ))
+
+(test-dialog
+ '((listen
+    ((favorite X) (= X 2))
+    ((favorite X) (= X 3))
+    ((favorite X) (= X 7))
+    whats
+    (favorite Y))
+   (its (= Y 2))
+   ))
