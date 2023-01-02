@@ -20,14 +20,17 @@
 %var profune-communicator-handle
 
 %use (comp) "./comp.scm"
+%use (debugs) "./debugs.scm"
 %use (define-type9) "./define-type9.scm"
+%use (list-and-map) "./list-and-map.scm"
+%use (list-map-first) "./list-map-first.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
 %use (profun-CR-what profun-CR?) "./profun-CR.scm"
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-iter) "./profun-abort.scm"
-%use (profun-database-add-rule! profun-database-copy profun-database?) "./profun-database.scm"
+%use (profun-database-add-rule! profun-database-copy profun-database-get-all profun-database?) "./profun-database.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-iterator-copy profun-iterator-db profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 %use (profun-iterate profun-next) "./profun.scm"
@@ -296,12 +299,51 @@
         `(bye)
         (handle next)))
 
+  (define (validate-rule rule)
+    (define list-of-lists?
+      (and (list? rule)
+           (list-and-map
+            (lambda (clause) (and (pair? clause) (not (null? clause))))
+            rule)))
+    (define names
+      (and list-of-lists? (map car rule)))
+    (define names-are-symbols?
+      (and names (list-and-map symbol? names)))
+    (define names+arities
+      (and names-are-symbols?
+           (map (lambda (clause)
+                  (cons (car clause) (length (cdr clause))))
+                rule)))
+    (define db (or (current-db) (profune-communicator-db comm)))
+    (define not-found-names
+      (filter
+       (lambda (p)
+         (define name (car p))
+         (define arity (cdr p))
+         (and (null? (profun-database-get-all db name arity))
+              name))
+       names+arities))
+
+    (cond
+     ((not list-of-lists?)
+      `(error ("Rule has a bad type, it should be a list of lists, but is not" ,rule)))
+     ((not names-are-symbols?)
+      `(error ("All rule clauses should be symbols, but some are not" ,rule)))
+     ((not (null? not-found-names))
+      `(error ("Rule uses names that are not present in the database, this is not allowed" ,rule ,not-found-names)))
+     (else #f)))
+
+  (define (validate-all-rules rules)
+    (list-map-first validate-rule #f rules))
+
   (define (handle-listen op args next)
     (define db
       (or (current-db)
           (profune-communicator-db comm)))
-    (for-each (comp (profun-database-add-rule! db)) args)
-    (handle next))
+    (or (validate-all-rules args)
+        (begin
+          (for-each (comp (profun-database-add-rule! db)) args)
+          (handle next))))
 
   (define (handle commands)
     (cond
