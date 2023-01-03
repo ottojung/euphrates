@@ -61,23 +61,33 @@
 (define (profune-communicator-handle comm commands)
   (define stages (profune-communicator-stages comm))
 
-  (define (new-db)
-    (define db0 (profune-communicator-db comm))
-    (if (profun-database? db0)
-        (profun-database-copy db0)
-        (raisu 'expected-a-profun-database db0)))
-
-  (define (copy-db! stage)
-    (define new (new-db))
-    (set-stage-db! stage new)
-    new)
-
-  (define (set-db! stage)
+  (define (reset-db! stage)
     (define new (profune-communicator-db comm))
     (set-stage-db! stage new)
     new)
 
   (define (current-db/not-empty)
+    (define stage (stack-peek stages))
+    (define get0 (stage-db stage))
+    (or get0 (reset-db! stage)))
+
+  (define (current-db)
+    (if (stack-empty? stages)
+        (let ((stage (push-stage! #f #f)))
+          (reset-db! stage))
+        (current-db/not-empty)))
+
+  (define (copy-db db0)
+    (if (profun-database? db0)
+        (profun-database-copy db0)
+        (raisu 'expected-a-profun-database db0)))
+
+  (define (copy-db! stage)
+    (define new (copy-db (profune-communicator-db comm)))
+    (set-stage-db! stage new)
+    new)
+
+  (define (current-db/copy/not-empty)
     (define stage (stack-peek stages))
     (define get0 (stage-db stage))
     (or get0 (copy-db! stage)))
@@ -86,13 +96,7 @@
     (if (stack-empty? stages)
         (let ((stage (push-stage! #f #f)))
           (copy-db! stage))
-        (current-db/not-empty)))
-
-  (define (current-db)
-    (if (stack-empty? stages)
-        (let ((stage (push-stage! #f #f)))
-          (set-db! stage))
-        (current-db/not-empty)))
+        (current-db/copy/not-empty)))
 
   (define (current-answer-iterator)
     (if (stack-empty? stages)
