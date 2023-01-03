@@ -33,7 +33,7 @@
 %use (profun-abort-iter) "./profun-abort.scm"
 %use (profun-database-add-rule! profun-database-copy profun-database-get-all profun-database-handle profun-database?) "./profun-database.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
-%use (profun-iterator-copy profun-iterator-db profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
+%use (profun-iterator-copy profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 %use (profun-iterate profun-next) "./profun.scm"
 %use (raisu) "./raisu.scm"
 %use (stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload!) "./stack.scm"
@@ -72,15 +72,26 @@
     (set-stage-db! stage new)
     new)
 
+  (define (set-db! stage)
+    (define new (profune-communicator-db comm))
+    (set-stage-db! stage new)
+    new)
+
   (define (current-db/not-empty)
     (define stage (stack-peek stages))
     (define get0 (stage-db stage))
     (or get0 (copy-db! stage)))
 
-  (define (current-db)
+  (define (current-db/copy)
     (if (stack-empty? stages)
         (let ((stage (push-stage! #f #f)))
           (copy-db! stage))
+        (current-db/not-empty)))
+
+  (define (current-db)
+    (if (stack-empty? stages)
+        (let ((stage (push-stage! #f #f)))
+          (set-db! stage))
         (current-db/not-empty)))
 
   (define (current-answer-iterator)
@@ -374,7 +385,7 @@
     (list-map-first validate-rule #f rules))
 
   (define (handle-listen op args next)
-    (define db (current-db))
+    (define db (current-db/copy))
     (or (validate-all-rules args)
         (begin
           (for-each (comp (profun-database-add-rule! db)) args)
