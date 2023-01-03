@@ -137,7 +137,6 @@
   (define (collect-finish!)
     (set-current-left! 0)
     (set-current-results-buffer! '())
-    ;; (set-current-answer-iterator! #f))
     )
 
   (define (format-single-answer buf)
@@ -229,7 +228,6 @@
     (define (cont iter)
       (define copy (profun-iterator-copy iter))
       (push-stage! copy copy)
-      ;; (set-current-inspecting! copy)
       (handle next))
 
     (cond
