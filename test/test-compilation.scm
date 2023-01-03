@@ -20,6 +20,7 @@
 %use (assoc-set-default) "./src/assoc-set-default.scm"
 %use (assoc-set-value) "./src/assoc-set-value.scm"
 %use (assq-or) "./src/assq-or.scm"
+%use (assq-set-default) "./src/assq-set-default.scm"
 %use (assq-set-value) "./src/assq-set-value.scm"
 %use (atomic-box-compare-and-set! atomic-box-ref atomic-box-set! atomic-box? make-atomic-box) "./src/atomic-box.scm"
 %use (base64/alphabet/minusunderscore) "./src/base64-alphabet-minusunderscore.scm"
