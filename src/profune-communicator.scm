@@ -322,17 +322,6 @@
       (stack-pop! stages)
       (handle-its op args next))))
 
-  (define (handle-bye op args next)
-    (stack-unload! stages)
-    (if (and (null? args) (null? next))
-        `(bye)
-        `(error (bye-must-not-have-any-arguments))))
-
-  (define (handle-ok op args next)
-    (if (null? next)
-        `(bye)
-        (handle next)))
-
   (define (validate-rule rule)
     (define list-of-lists?
       (and (list? rule)
@@ -406,8 +395,6 @@
           ((reset) (handle-reset op args next))
           ((push) (handle-push op args next))
           ((more) (handle-more op args next))
-          ((ok) (handle-ok op args next))
-          ((bye) (handle-bye op args next))
           (else `(error (operation-not-supported ,op))))))))
 
   (define (handle-start commands)
