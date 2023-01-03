@@ -12,5 +12,4 @@
        (define key key/0)
        (define alist alist/0)
        (define got (assoc key alist))
-       (define current (and got (cdr got)))
-       (if current alist (assoc-set-value key value alist))))))
+       (if got alist (assoc-set-value key value alist))))))
