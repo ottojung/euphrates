@@ -360,8 +360,6 @@
   (define (handle commands)
     (cond
      ((null? commands) `(ok))
-     ((not (list? commands))
-      `(error (commands-must-be-a-list)))
      ((not (symbol? (car commands)))
       `(error (commands-must-start-from-an-operation)))
      (else
@@ -381,4 +379,11 @@
           ((bye) (handle-bye op args next))
           (else `(error (operation-not-supported ,op))))))))
 
-  (handle commands))
+  (define (handle-start commands)
+    (cond
+     ((not (list? commands))
+      `(error (commands-must-be-a-list)))
+     (else
+      (handle commands))))
+
+  (handle-start commands))
