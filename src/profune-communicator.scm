@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -67,19 +67,20 @@
         (profun-database-copy db0)
         (raisu 'expected-a-profun-database db0)))
 
+  (define (copy-db! stage)
+    (define new (new-db))
+    (set-stage-db! stage new)
+    new)
+
   (define (current-db/not-empty)
     (define stage (stack-peek stages))
     (define get0 (stage-db stage))
-    (or get0
-        (let ((new (new-db)))
-          (set-stage-db! stage new)
-          new)))
+    (or get0 (copy-db! stage)))
 
   (define (current-db)
     (if (stack-empty? stages)
-        (begin
-          (push-stage! #f #f)
-          (current-db/not-empty))
+        (let ((stage (push-stage! #f #f)))
+          (copy-db! stage))
         (current-db/not-empty)))
 
   (define (current-answer-iterator)
@@ -205,7 +206,9 @@
       (if (stack-empty? stages)
           #f
           (stage-db (stack-peek stages))))
-    (stack-push! stages (make-stage maybe-db iterator 1 '() #f inspected)))
+    (define stage (make-stage maybe-db iterator 1 '() #f inspected))
+    (stack-push! stages stage)
+    stage)
 
   (define (handle-whats op args next)
     (define inspected (current-inspecting))
