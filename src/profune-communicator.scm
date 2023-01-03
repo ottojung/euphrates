@@ -45,7 +45,8 @@
   )
 
 (define-type9 stage
-  (make-stage answer-iterator left results-buffer cont inspecting) stage?
+  (make-stage db answer-iterator left results-buffer cont inspecting) stage?
+  (db stage-db set-stage-db!)
   (answer-iterator stage-answer-iterator set-stage-answer-iterator!)
   (left stage-left set-stage-left!)
   (results-buffer stage-results-buffer set-stage-results-buffer!)
@@ -60,23 +61,56 @@
 (define (profune-communicator-handle comm commands)
   (define stages (profune-communicator-stages comm))
 
+  (define (new-db)
+    (define db0 (profune-communicator-db comm))
+    (if (profun-database? db0)
+        (profun-database-copy db0)
+        (raisu 'expected-a-profun-database db0)))
+
+  (define (current-db/not-empty)
+    (define stage (stack-peek stages))
+    (define get0 (stage-db stage))
+    (or get0
+        (let ((new (new-db)))
+          (set-stage-db! stage new)
+          new)))
+
   (define (current-db)
-    (define iter (current-answer-iterator))
-    (and iter (profun-iterator-db iter)))
+    (if (stack-empty? stages)
+        (begin
+          (push-stage! #f #f)
+          (current-db/not-empty))
+        (current-db/not-empty)))
+
   (define (current-answer-iterator)
-    (if (stack-empty? stages) #f
+    (if (stack-empty? stages)
+        (begin
+          (push-stage! #f #f)
+          #f)
         (stage-answer-iterator (stack-peek stages))))
   (define (current-left)
-    (if (stack-empty? stages) #f
+    (if (stack-empty? stages)
+        (begin
+          (push-stage! #f #f)
+          #f)
         (stage-left (stack-peek stages))))
   (define (current-results-buffer)
-    (if (stack-empty? stages) #f
+    (if (stack-empty? stages)
+        (begin
+          (push-stage! #f #f)
+          #f)
         (stage-results-buffer (stack-peek stages))))
   (define (current-CONT)
-    (if (stack-empty? stages) #f
+    (if (stack-empty? stages)
+        (begin
+          (push-stage! #f #f)
+          #f)
         (stage-cont (stack-peek stages))))
   (define (current-inspecting)
-    (if (stack-empty? stages) #f
+    (if (stack-empty? stages)
+        (begin
+          (push-stage! #f #f)
+          #f)
         (stage-inspecting (stack-peek stages))))
 
   (define (set-current-answer-iterator! new)
@@ -89,12 +123,6 @@
     (set-stage-cont! (stack-peek stages) new))
   (define (set-current-inspecting! new)
     (set-stage-inspecting! (stack-peek stages) new))
-
-  (define (new-db)
-    (define db0 (profune-communicator-db comm))
-    (if (profun-database? db0)
-        (profun-database-copy db0)
-        (raisu 'expected-a-profun-database db0)))
 
   (define (split-commands commands)
     (if (null? commands)
@@ -109,7 +137,8 @@
   (define (collect-finish!)
     (set-current-left! 0)
     (set-current-results-buffer! '())
-    (set-current-answer-iterator! #f))
+    ;; (set-current-answer-iterator! #f))
+    )
 
   (define (format-single-answer buf)
     (cond
@@ -161,6 +190,7 @@
               (set-current-results-buffer! buf)
               (let ((iter (profun-abort-iter r)))
                 (set-current-CONT! iter)
+                (push-stage! iter #f)
                 `(whats ,@(profun-RFC-what r))))
 
              ((profun-error? r)
@@ -172,7 +202,11 @@
               `(error (unexpected-result-from-profun-iterator))))))))
 
   (define (push-stage! iterator inspected)
-    (stack-push! stages (make-stage iterator 1 '() #f inspected)))
+    (define maybe-db
+      (if (stack-empty? stages)
+          #f
+          (stage-db (stack-peek stages))))
+    (stack-push! stages (make-stage maybe-db iterator 1 '() #f inspected)))
 
   (define (handle-whats op args next)
     (define inspected (current-inspecting))
@@ -184,15 +218,18 @@
         (profun-iterator-reset! inspected args)
         inspected)
        (else
-        (profun-iterate (or (current-db) (new-db)) args))))
+        (profun-iterate (current-db) args))))
 
-    (push-stage! iter copy)
+    (set-current-answer-iterator! iter)
+    (set-current-inspecting! copy)
+
     (handle-query next))
 
   (define (handle-inspect op args next)
     (define (cont iter)
       (define copy (profun-iterator-copy iter))
-      (set-current-inspecting! copy)
+      (push-stage! copy copy)
+      ;; (set-current-inspecting! copy)
       (handle next))
 
     (cond
@@ -217,8 +254,6 @@
     (cond
      ((not (null? args))
       `(error (reset must have 0 arguments but it has ,(length args))))
-     ((stack-empty? stages)
-      `(error (nowhere to return)))
      (else
       (stack-unload! stages)
       (handle next))))
@@ -265,7 +300,7 @@
   (define (handle-more op args next)
     (define n (get-more-s-arg args))
     (cond
-     ((stack-empty? stages) `(error (nothing-to-show use-a-whats-first)))
+     ((not (current-answer-iterator)) `(error (nothing-to-show use-a-whats-first)))
      ((not (null? next)) `(error (more-must-be-the-last-command)))
      ((not (number? n)) n)
      (else
@@ -319,7 +354,7 @@
            (map (lambda (clause)
                   (cons (car clause) (length (cdr clause))))
                 (cdr rule))))
-    (define db (or (current-db) (profune-communicator-db comm)))
+    (define db (current-db))
     (define not-found-names
       (and names-are-symbols?
            (list-deduplicate/reverse
@@ -349,9 +384,7 @@
     (list-map-first validate-rule #f rules))
 
   (define (handle-listen op args next)
-    (define db
-      (or (current-db)
-          (profune-communicator-db comm)))
+    (define db (current-db))
     (or (validate-all-rules args)
         (begin
           (for-each (comp (profun-database-add-rule! db)) args)
