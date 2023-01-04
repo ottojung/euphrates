@@ -128,6 +128,7 @@
 %use (file-or-directory-exists?) "./src/file-or-directory-exists-q.scm"
 %use (file-size) "./src/file-size.scm"
 %use (filter-monad) "./src/filter-monad.scm"
+%use (fn-alist) "./src/fn-alist.scm"
 %use (fn-cons) "./src/fn-cons.scm"
 %use (fn-pair) "./src/fn-pair.scm"
 %use (fn-tuple) "./src/fn-tuple.scm"
