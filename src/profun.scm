@@ -223,16 +223,16 @@
   (define key (profun-instruction-name instruction))
   (define version (profun-instruction-body instruction))
   (define arity (profun-instruction-arity instruction))
-  (define target-rule (profun-database-get db key version arity))
 
-  (if target-rule
-      (enter-subroutine s instruction target-rule)
-      (if (profun-instruction-context instruction)
-          (enter-foreign db env s instruction)
-          (let ((target-rule (profun-database-handle db key arity)))
-            (if target-rule
-                (enter-foreign db env s (init-foreign-instruction instruction target-rule))
-                (make-profun-IDR key arity))))))
+  (if (profun-instruction-context instruction)
+      (enter-foreign db env s instruction)
+      (let ((target-rule (profun-database-handle db key arity)))
+        (if target-rule
+            (enter-foreign db env s (init-foreign-instruction instruction target-rule))
+            (let ((target-rule (profun-database-get db key version arity)))
+              (if target-rule
+                  (enter-subroutine s instruction target-rule)
+                  (make-profun-IDR key arity)))))))
 
 (define (run-undos env s)
   (for-each
