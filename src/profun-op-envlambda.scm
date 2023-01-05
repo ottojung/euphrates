@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 %var profun-op-envlambda
 
 %use (define-tuple) "./define-tuple.scm"
-%use (profun-op-envlambda/p) "./profun-op-envlambda-p.scm"
+%use (profun-current-env/p) "./profun-current-env-p.scm"
 %use (make-profun-op) "./profun-op.scm"
 %use (profun-value-unwrap) "./profun-value.scm"
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
@@ -33,5 +33,5 @@
       (lambda (get-func ctx var-names)
         (define-tuple args-names var-names)
         (define env (compose profun-value-unwrap get-func))
-        (parameterize ((profun-op-envlambda/p env))
+        (parameterize ((profun-current-env/p env))
           (let () . bodies)))))))

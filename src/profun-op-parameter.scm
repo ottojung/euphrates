@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 ;; Make sure that `param-name' is unique.
 %use (bool->profun-result) "./bool-to-profun-result.scm"
 %use (profun-set) "./profun-accept.scm"
-%use (profun-op-envlambda/p) "./profun-op-envlambda-p.scm"
+%use (profun-current-env/p) "./profun-current-env-p.scm"
 %use (make-profun-op) "./profun-op.scm"
 %use (profun-request-value) "./profun-request-value.scm"
 %use (profun-bound-value? profun-value-unwrap) "./profun-value.scm"
@@ -55,14 +55,14 @@
 
   (define (get)
     (define get-func
-      (or (profun-op-envlambda/p)
+      (or (profun-current-env/p)
           (raisu 'could-not-get-environment "Make sure that you are using op-envlambda")))
 
     (get-func param-name))
 
   (define (set args)
     (define get-func
-      (or (profun-op-envlambda/p)
+      (or (profun-current-env/p)
           (raisu 'could-not-get-environment "Make sure that you are using op-envlambda")))
 
     (define _1
