@@ -23,20 +23,39 @@
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-lambda
-  (syntax-rules (:env)
-    ((_ (ctx :env env-name args args-names) . bodies)
-     (make-profun-op
-      (profun-op-lambda::get-argn args)
-      (lambda (get-func ctx var-names)
-        (define-tuple args-names var-names)
-        (define vars
-          (map get-func var-names))
-        (define-tuple args
-          (map profun-value-unwrap vars))
-        (define env-name (compose profun-value-unwrap get-func))
-        (parameterize ((profun-current-env/p env-name))
-          (let () . bodies)))))
+  (syntax-rules (:with-env)
     ((_ (ctx args args-names) . bodies)
+     (profun-op-lambda::without-env
+      (ctx args args-names) . bodies))
+
+    ((_ :with-env env-name (ctx args args-names) . bodies)
+     (profun-op-lambda::with-env
+      env (ctx args args-names) . bodies))
+
+    ((_ :with-env (ctx args args-names) . bodies)
+     (profun-op-lambda
+      :with-env env-name/temp
+      (meta-arg . meta-args) . bodies))))
+
+(define-syntax profun-op-lambda::with-env
+  (syntax-rules ()
+    ((_ env-name (ctx args args-names) . bodies)
+     (profun-op-lambda::generic
+      (ctx args args-names)
+      (let ((env-name (compose profun-value-unwrap get-func)))
+        (parameterize ((profun-current-env/p env-name))
+          (let () . bodies)))))))
+
+(define-syntax profun-op-lambda::without-env
+  (syntax-rules ()
+    ((_ (ctx args args-names) . bodies)
+     (profun-op-lambda::generic
+      (ctx args args-names)
+      (let () . bodies)))))
+
+(define-syntax profun-op-lambda::generic
+  (syntax-rules ()
+    ((_ (ctx args args-names) cont)
      (make-profun-op
       (profun-op-lambda::get-argn args)
       (lambda (get-func ctx var-names)
@@ -45,7 +64,7 @@
           (map get-func var-names))
         (define-tuple args
           (map profun-value-unwrap vars))
-        (let () . bodies))))))
+        cont)))))
 
 (define-syntax profun-op-lambda::get-argn
   (syntax-rules ()
