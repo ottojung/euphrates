@@ -25,7 +25,7 @@
         (let ((s (symbol->string x)))
           (if (string-prefix? "_" s)
               (if (= 1 (string-length s))
-                  (make-usymbol x (gensym))
+                  (make-usymbol x (cons 'u (gensym)))
                   (make-usymbol x 'u))
               x))
         x))
