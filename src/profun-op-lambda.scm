@@ -30,7 +30,7 @@
 
     ((_ :with-env env-name (ctx args args-names) . bodies)
      (profun-op-lambda::with-env
-      env (ctx args args-names) . bodies))
+      env-name (ctx args args-names) . bodies))
 
     ((_ :with-env (ctx args args-names) . bodies)
      (profun-op-lambda
