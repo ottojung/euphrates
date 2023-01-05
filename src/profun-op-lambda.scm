@@ -42,6 +42,7 @@
     ((_ env-name (ctx args args-names) . bodies)
      (profun-op-lambda::generic
       (ctx args args-names)
+      get-func
       (let ((env-name (compose profun-value-unwrap get-func)))
         (parameterize ((profun-current-env/p env-name))
           (let () . bodies)))))))
@@ -51,11 +52,12 @@
     ((_ (ctx args args-names) . bodies)
      (profun-op-lambda::generic
       (ctx args args-names)
+      get-func
       (let () . bodies)))))
 
 (define-syntax profun-op-lambda::generic
   (syntax-rules ()
-    ((_ (ctx args args-names) cont)
+    ((_ (ctx args args-names) get-func cont)
      (make-profun-op
       (profun-op-lambda::get-argn args)
       (lambda (get-func ctx var-names)
