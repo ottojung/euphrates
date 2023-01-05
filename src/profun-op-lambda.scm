@@ -35,7 +35,7 @@
     ((_ :with-env (ctx args args-names) . bodies)
      (profun-op-lambda
       :with-env env-name/temp
-      (meta-arg . meta-args) . bodies))))
+      (ctx args args-names) . bodies))))
 
 (define-syntax profun-op-lambda::with-env
   (syntax-rules ()
