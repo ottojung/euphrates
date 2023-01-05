@@ -23,8 +23,8 @@
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-lambda
-  (syntax-rules (:with-env)
-    ((_ (ctx args args-names) :with-env . bodies)
+  (syntax-rules (:env)
+    ((_ (ctx :env env-name args args-names) . bodies)
      (make-profun-op
       (profun-op-lambda::get-argn args)
       (lambda (get-func ctx var-names)
@@ -33,7 +33,7 @@
           (map get-func var-names))
         (define-tuple args
           (map profun-value-unwrap vars))
-        (define env (compose profun-value-unwrap get-func))
+        (define env-name (compose profun-value-unwrap get-func))
         (parameterize ((profun-current-env/p env))
           (let () . bodies)))))
     ((_ (ctx args args-names) . bodies)
