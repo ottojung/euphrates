@@ -34,7 +34,7 @@
         (define-tuple args
           (map profun-value-unwrap vars))
         (define env-name (compose profun-value-unwrap get-func))
-        (parameterize ((profun-current-env/p env))
+        (parameterize ((profun-current-env/p env-name))
           (let () . bodies)))))
     ((_ (ctx args args-names) . bodies)
      (make-profun-op
