@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2020, 2021, 2022  Otto Jung
+;;;; Copyright (C) 2020, 2021, 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software; you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -17,18 +17,28 @@
 %var profun-op-lambda
 
 %use (define-tuple) "./define-tuple.scm"
+%use (profun-current-env/p) "./profun-current-env-p.scm"
 %use (make-profun-op) "./profun-op.scm"
-%use (profun-value-name profun-value-unwrap) "./profun-value.scm"
+%use (profun-value-unwrap) "./profun-value.scm"
 %use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-lambda
-  (syntax-rules ()
+  (syntax-rules (:with-env)
+    ((_ (ctx args args-names) :with-env . bodies)
+     (make-profun-op
+      (profun-op-lambda::get-argn args)
+      (lambda (get-func ctx var-names)
+        (define-tuple args-names var-names)
+        (define vars
+          (map get-func var-names))
+        (define-tuple args
+          (map profun-value-unwrap vars))
+        (define env (compose profun-value-unwrap get-func))
+        (parameterize ((profun-current-env/p env))
+          (let () . bodies)))))
     ((_ (ctx args args-names) . bodies)
      (make-profun-op
-      (let ((qargs (quote args)))
-        (if (pair? qargs)
-            (length qargs)
-            profun-variable-arity-op-keyword))
+      (profun-op-lambda::get-argn args)
       (lambda (get-func ctx var-names)
         (define-tuple args-names var-names)
         (define vars
@@ -36,3 +46,11 @@
         (define-tuple args
           (map profun-value-unwrap vars))
         (let () . bodies))))))
+
+(define-syntax profun-op-lambda::get-argn
+  (syntax-rules ()
+    ((_ args)
+     (let ((qargs (quote args)))
+       (if (pair? qargs)
+           (length qargs)
+           profun-variable-arity-op-keyword)))))
