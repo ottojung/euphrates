@@ -28,14 +28,14 @@
      (profun-op-lambda::without-env
       (ctx args args-names) . bodies))
 
-    ((_ :with-env env-name (ctx args args-names) . bodies)
-     (profun-op-lambda::with-env
-      env-name (ctx args args-names) . bodies))
-
     ((_ :with-env (ctx args args-names) . bodies)
      (profun-op-lambda
       :with-env env-name/temp
-      (ctx args args-names) . bodies))))
+      (ctx args args-names) . bodies))
+
+    ((_ :with-env env-name (ctx args args-names) . bodies)
+     (profun-op-lambda::with-env
+      env-name (ctx args args-names) . bodies))))
 
 (define-syntax profun-op-lambda::with-env
   (syntax-rules ()
