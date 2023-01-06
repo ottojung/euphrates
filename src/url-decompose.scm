@@ -16,8 +16,8 @@
 
 %var url-decompose
 
-%use (string-split-3) "./string-split-3.scm"
 %use (list-find-first) "./list-find-first.scm"
+%use (string-split-3) "./string-split-3.scm"
 
 ;; Parse a URL into 5 components:
 ;;    <scheme>://<netloc>/<path>?<query>#<fragment>
@@ -33,33 +33,40 @@
 ;; The <netloc> is hostname+port
 
 (define (url-decompose str)
-  (define-values (protocol protocol-sep rest1)
+  (define-values (protocol0 protocol-sep rest0)
     (string-split-3 "://" str))
+  (define protocol
+    (if (string-null? protocol-sep) ""
+        protocol0))
+  (define rest1
+    (if (string-null? protocol-sep)
+        str
+        rest0))
 
-  (if (string-null? protocol-sep) #f
-      (let ()
-        (define-values (netloc netloc-sep rest2)
-          (string-split-3 "/" rest1))
+  (define-values (netloc netloc-sep rest2)
+    (if (string-null? protocol-sep)
+        (values "" "" rest1)
+        (string-split-3 "/" rest1)))
 
-        (define first-after-netloc
-          (list-find-first
-           (lambda (c) (case c ((#\? #\#) #t) (else #f))) #f
-           (string->list rest2)))
+  (define first-after-netloc
+    (list-find-first
+     (lambda (c) (case c ((#\? #\#) #t) (else #f))) #f
+     (string->list rest2)))
 
-        (define-values (path path-sep rest3)
-          (if first-after-netloc
-              (string-split-3 first-after-netloc rest2)
-              (values rest2 "" "")))
+  (define-values (path path-sep rest3)
+    (if first-after-netloc
+        (string-split-3 first-after-netloc rest2)
+        (values rest2 "" "")))
 
-        (define-values (query query-sep rest4)
-          (if (equal? #\? first-after-netloc)
-              (string-split-3 #\# rest3)
-              (values #f "" rest3)))
+  (define-values (query query-sep rest4)
+    (if (equal? #\? first-after-netloc)
+        (string-split-3 #\# rest3)
+        (values #f "" rest3)))
 
-        (define fragment
-          (if (or (equal? "#" query-sep)
-                  (equal? "#" path-sep))
-              rest4
-              #f))
+  (define fragment
+    (if (or (equal? "#" query-sep)
+            (equal? "#" path-sep))
+        rest4
+        #f))
 
-        (vector protocol netloc (string-append netloc-sep path) query fragment))))
+  (vector protocol netloc (string-append netloc-sep path) query fragment))

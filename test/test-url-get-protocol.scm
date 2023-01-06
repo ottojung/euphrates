@@ -6,7 +6,7 @@
 %use (url-get-protocol) "./src/url-get-protocol.scm"
 
 (let ()
-  (assert= #f (url-get-protocol "not-a-url"))
+  (assert= "" (url-get-protocol "not-a-url"))
   (assert= "https" (url-get-protocol "https://gnu.org"))
   (assert= "https" (url-get-protocol "https://gnu.org/fun/humor.en.html"))
   (assert= "blob:https" (url-get-protocol "blob:https://gnu.org/fun/humor.en.html"))

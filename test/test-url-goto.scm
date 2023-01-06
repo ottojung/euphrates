@@ -26,4 +26,8 @@
            (url-goto "https://gnu.org/fun/?a=1&b=2"
                      "//jokes/bug.war.html"))
 
+  (assert= "https://wikipedia.org/philosophy.html"
+           (url-goto "https://gnu.org/fun/humor.en.html"
+                     "https://wikipedia.org/philosophy.html"))
+
   )

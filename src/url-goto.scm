@@ -16,16 +16,11 @@
 
 %var url-goto
 
-%use (url-decompose) "./url-decompose.scm"
-%use (raisu) "./raisu.scm"
-%use (url-get-protocol) "./url-get-protocol.scm"
 %use (url-get-hostname-and-port) "./url-get-hostname-and-port.scm"
 %use (url-get-path) "./url-get-path.scm"
+%use (url-get-protocol) "./url-get-protocol.scm"
 
 (define (url-goto base relative)
-  (unless (url-decompose base)
-    (raisu 'base-is-not-a-url base))
-
   (cond
    ((string-prefix? "//" relative)
     (string-append (url-get-protocol base) ":" relative))
@@ -34,7 +29,7 @@
                    "://"
                    (url-get-hostname-and-port base)
                    relative))
-   ((url-decompose relative) relative)
+   ((not (string-null? (url-get-protocol relative))) relative)
    (else
     (let* ((path (url-get-path base)))
       (string-append (url-get-protocol base)
