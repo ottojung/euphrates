@@ -23,7 +23,6 @@
 %use (define-type9) "./define-type9.scm"
 %use (list-and-map) "./list-and-map.scm"
 %use (list-deduplicate/reverse) "./list-deduplicate.scm"
-%use (list-length=<?) "./list-length-geq-q.scm"
 %use (list-map-first) "./list-map-first.scm"
 %use (list-singleton?) "./list-singleton-q.scm"
 %use (list-span-while) "./list-span-while.scm"
@@ -346,7 +345,7 @@
            (list-and-map
             (lambda (clause)
               (and (list? clause)
-                   (list-length=<? 2 clause)))
+                   (not (null? clause))))
             rule)))
     (define names
       (and list-of-lists? (map car rule)))
