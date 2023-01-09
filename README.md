@@ -55,3 +55,4 @@ GPL-3
 - [ ] Add `(optional EXPR)` and `(required EXPR)` to `define-cli`
 - [ ] Add subparsers to `define-cli`
 - [ ] Change "<name...>" syntax to "<name*>" syntax in `define-cli`
+- [ ] Profun: return results by iterating free variables of the input query, instead of by iterating all env variables
