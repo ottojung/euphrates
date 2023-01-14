@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (alist-initialize) "./src/alist-initialize.scm"
+%use (alist-initialize alist-initialize:stop) "./src/alist-initialize.scm"
 %use (assert=) "./src/assert-equal.scm"
 
 (let ()
@@ -52,3 +52,42 @@
      ))
 
   (assert= inited `((X . 8) (Y . 16) (Z . 24))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (define inited
+    (alist-initialize
+     state
+
+     (X 8)
+     (Y (+ (X) (X)))
+     (Z (alist-initialize:stop))
+     ))
+
+  (assert= inited `((X . 8) (Y . 16))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (define inited
+    (alist-initialize
+     state
+
+     (X 8)
+     (Y (alist-initialize:stop))
+     (Z (+ (Y) (X)))
+     ))
+
+  (assert= inited `((X . 8) (Y . 4))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (define inited
+    (alist-initialize
+     state
+
+     (X 8)
+     (Z (+ (Y) (X)))
+     (Y (alist-initialize:stop))
+     ))
+
+  (assert= inited `((X . 8) (Y . 4))))
