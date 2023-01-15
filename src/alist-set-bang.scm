@@ -146,7 +146,8 @@
          (define pstruct
            (alist-set!:pstruct-ctr buf2rev))
          (parameterize ((alist-set!/p pstruct))
-           (alist-set!:run alist buf2rev)))))
+           (alist-set!:run alist buf2rev)
+           buf2rev))))
 
     ((_ alist
         callstack
