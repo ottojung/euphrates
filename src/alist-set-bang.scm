@@ -17,6 +17,7 @@
 %var alist-set!
 %var alist-set!:stop
 %var alist-set!:get-setters
+%var alist-set!:run
 
 %use (alist-set!/p) "./alist-set-bang-p.scm"
 %use (assq-set-value) "./assq-set-value.scm"
@@ -54,23 +55,28 @@
 
 (define-syntax alist-set!:run
   (syntax-rules ()
-    ((_ alist buf/0)
-     (let loop ((buf buf/0))
-       (if (null? buf) alist
-           (let ()
-             (define first (car buf))
-             (define name (car first))
-             (define setter (cdr first))
-             (define-values (val threw? value?)
-               (alist-set!:get-value setter))
-             (when value?
-               (set! alist (assq-set-value
-                            name val
-                            alist)))
+    ((_ alist setters/0)
+     (let ()
+       (define setters setters/0)
+       (define pstruct
+         (alist-set!:pstruct-ctr setters))
+       (parameterize ((alist-set!/p pstruct))
+         (let loop ((buf setters))
+           (if (null? buf) alist
+               (let ()
+                 (define first (car buf))
+                 (define name (car first))
+                 (define setter (cdr first))
+                 (define-values (val threw? value?)
+                   (alist-set!:get-value setter))
+                 (when value?
+                   (set! alist (assq-set-value
+                                name val
+                                alist)))
 
-             (if threw?
-                 alist
-                 (loop (cdr buf)))))))))
+                 (if threw?
+                     alist
+                     (loop (cdr buf)))))))))))
 
 (define-syntax alist-set!:makelet
   (syntax-rules ()
@@ -168,18 +174,9 @@
       '()
       . setters))))
 
-(define-syntax alist-set!:iterate
-  (syntax-rules ()
-    ((_ alist . args)
-     (let ()
-       (define buf2rev (alist-set!:get-setters alist . args))
-       (define pstruct
-         (alist-set!:pstruct-ctr buf2rev))
-       (parameterize ((alist-set!/p pstruct))
-         (alist-set!:run alist buf2rev))))))
-
 (define-syntax alist-set!
   (syntax-rules ()
     ((_ alist-name . setters)
-     (alist-set!:iterate
-      alist-name . setters))))
+     (let ()
+       (define buf2rev (alist-set!:get-setters alist-name . setters))
+       (alist-set!:run alist-name buf2rev)))))
