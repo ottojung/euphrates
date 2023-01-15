@@ -21,8 +21,7 @@
 %use (assq-set-value) "./assq-set-value.scm"
 %use (catchu-case) "./catchu-case.scm"
 %use (define-type9) "./define-type9.scm"
-%use (hashset-add! hashset-has? make-hashset) "./hashset.scm"
-%use (memconst) "./memconst.scm"
+%use (hashset-add! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
 %use (raisu) "./raisu.scm"
 
 (define-type9 <alist-initialize:pstruct>
@@ -75,18 +74,54 @@
 (define-syntax alist-initialize:makelet
   (syntax-rules ()
     ((_ initial-alist callstack setter . ())
-     (memconst
-      (let ((x (assq (quote setter) initial-alist)))
-        (unless x
-          (raisu 'argument-not-initialized))
-        (cdr x))))
+     (case-lambda
+      (()
+       (let ((x (assq (quote setter) initial-alist)))
+         (unless x
+           (raisu 'argument-not-initialized))
+         (cdr x)))
+      ((action . args)
+       (case action
+         ((or)
+          (let ((x (assq (quote setter) initial-alist)))
+            (if x (cdr x) (car args))))
+         (else (raisu 'unexpected-operation action))))))
+
     ((_ initial-alist callstack setter . its-bodies)
-     (memconst
-      (if (hashset-has? callstack (quote setter))
-          (raisu 'recursion!)
-          (begin
-            (hashset-add! callstack (quote setter))
-            (let () . its-bodies)))))))
+     (let ()
+       (define evaluated? #f)
+       (define value #f)
+       (define wrap
+         (lambda (ev rec)
+           (if evaluated? value
+               (if (hashset-has? callstack (quote setter))
+                   (rec)
+                   (ev)))))
+       (case-lambda
+        (() (wrap
+             (lambda _
+               (hashset-add! callstack (quote setter))
+               (let ((ret (let () . its-bodies)))
+                 (set! evaluated? #t)
+                 (set! value ret)
+                 ret))
+             (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
+        ((action . args)
+         (case action
+           ((or)
+            (wrap
+             (lambda _
+               (hashset-add! callstack (quote setter))
+               (catchu-case
+                (let ((ret (let () . its-bodies)))
+                  (set! evaluated? #t)
+                  (set! value ret)
+                  ret)
+                (('infinite-recursion-during-initialization-of name)
+                 (hashset-delete! callstack (quote setter))
+                 (car args))))
+             (lambda _ (car args))))
+           (else (raisu 'unexpected-operation action)))))))))
 
 (define-syntax alist-initialize:iterate
   (syntax-rules ()
