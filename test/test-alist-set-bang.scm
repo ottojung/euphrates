@@ -121,3 +121,52 @@
    )
 
   (assert= state `((X . 9) (Y . 18))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (alist-set!
+   state
+
+   (Y 9)
+   (X 7)
+   (* `((X . 1) (Y . 3)))
+   )
+
+  (assert= state `((X . 1) (Y . 3))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (alist-set!
+   state
+
+   (Y 9)
+   (X 7)
+   (* `((X . 1) (Y . 3) (Z . 5)))
+   )
+
+  (assert= state `((X . 1) (Y . 3) (Z . 5))))
+
+(let ()
+  (define state `((X . 3) (Y . 4) (M . 8)))
+  (alist-set!
+   state
+
+   (Y 9)
+   (X 7)
+   (* `((X . 1) (Y . 3) (Z . 5)))
+   )
+
+  (assert= state `((X . 1) (Y . 3) (M . 8) (Z . 5))))
+
+(let ()
+  (define state `((X . 3) (Y . 4) (M . 8)))
+  (alist-set!
+   state
+
+   (Y 9)
+   (X 7)
+   (* `((X . 1) (Y . 3) (Z . 5)))
+   (Z 9)
+   )
+
+  (assert= state `((X . 1) (Y . 3) (M . 8) (Z . 9))))

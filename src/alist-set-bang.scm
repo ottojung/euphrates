@@ -53,6 +53,20 @@
 
   (values ret threw? ret-value?))
 
+(define (alist-set!:multi-set alist val)
+  (unless (list? alist)
+    (raisu 'setters-named-*-must-return-lists))
+  (let loop ((val val) (alist alist))
+    (if (null? val) alist
+        (let* ((p (car val))
+               (name (car p))
+               (value (cdr p)))
+          (loop
+           (cdr val)
+           (assq-set-value
+            name value
+            alist))))))
+
 (define-syntax alist-set!:run
   (syntax-rules ()
     ((_ alist setters/0)
@@ -70,9 +84,12 @@
                  (define-values (val threw? value?)
                    (alist-set!:get-value setter))
                  (when value?
-                   (set! alist (assq-set-value
-                                name val
-                                alist)))
+                   (set! alist
+                         (if (equal? name '*)
+                             (alist-set!:multi-set alist val)
+                             (assq-set-value
+                              name val
+                              alist))))
 
                  (if threw?
                      alist
