@@ -16,6 +16,7 @@
 
 %var alist-set!
 %var alist-set!:stop
+%var alist-set!:get-setters
 
 %use (alist-set!/p) "./alist-set-bang-p.scm"
 %use (assq-set-value) "./assq-set-value.scm"
@@ -134,7 +135,7 @@
              (lambda _ (car args))))
            (else (raisu 'unexpected-operation action)))))))))
 
-(define-syntax alist-set!:iterate
+(define-syntax alist-set!:get-setters/aux
   (syntax-rules ()
     ((_ alist
         callstack
@@ -142,12 +143,7 @@
         buf2)
      (let ((callstack (make-hashset)))
        (letrec buf1
-         (define buf2rev (reverse buf2))
-         (define pstruct
-           (alist-set!:pstruct-ctr buf2rev))
-         (parameterize ((alist-set!/p pstruct))
-           (alist-set!:run alist buf2rev)
-           buf2rev))))
+         (reverse buf2))))
 
     ((_ alist
         callstack
@@ -155,19 +151,35 @@
         buf2
         (setter . its-bodies)
         . rest-setters)
-     (alist-set!:iterate
+     (alist-set!:get-setters/aux
       alist
       callstack
       ((setter (alist-set!:makelet alist callstack setter . its-bodies)) . buf1)
       (cons (cons (quote setter) setter) buf2)
       . rest-setters))))
 
-(define-syntax alist-set!
+(define-syntax alist-set!:get-setters
   (syntax-rules ()
     ((_ alist-name . setters)
-     (alist-set!:iterate
+     (alist-set!:get-setters/aux
       alist-name
       callstack
       ()
       '()
       . setters))))
+
+(define-syntax alist-set!:iterate
+  (syntax-rules ()
+    ((_ alist . args)
+     (let ()
+       (define buf2rev (alist-set!:get-setters alist . args))
+       (define pstruct
+         (alist-set!:pstruct-ctr buf2rev))
+       (parameterize ((alist-set!/p pstruct))
+         (alist-set!:run alist buf2rev))))))
+
+(define-syntax alist-set!
+  (syntax-rules ()
+    ((_ alist-name . setters)
+     (alist-set!:iterate
+      alist-name . setters))))
