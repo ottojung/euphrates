@@ -31,6 +31,13 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
+    (alist-initialize state))
+
+  (assert= inited `((X . 3) (Y . 4))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (define inited
     (alist-initialize
      state
 
