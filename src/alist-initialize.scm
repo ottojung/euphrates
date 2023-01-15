@@ -102,22 +102,19 @@
      (let ()
        (define evaluated? #f)
        (define value #f)
-       (define wrap
-         (lambda (ev rec)
-           (if evaluated? value
-               (if (hashset-has? callstack (quote setter))
-                   (rec)
-                   (ev)))))
+       (define (get)
+         (hashset-add! callstack (quote setter))
+         (let ((ret (let () . its-bodies)))
+           (set! evaluated? #t)
+           (set! value ret)
+           ret))
+       (define (wrap ev rec)
+         (if evaluated? value
+             (if (hashset-has? callstack (quote setter))
+                 (rec) (ev))))
 
        (case-lambda
-        (() (wrap
-             (lambda _
-               (hashset-add! callstack (quote setter))
-               (let ((ret (let () . its-bodies)))
-                 (set! evaluated? #t)
-                 (set! value ret)
-                 ret))
-             (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
+        (() (wrap get (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
         ((action . args)
          (case action
            ((current)
@@ -128,12 +125,8 @@
            ((or)
             (wrap
              (lambda _
-               (hashset-add! callstack (quote setter))
                (catchu-case
-                (let ((ret (let () . its-bodies)))
-                  (set! evaluated? #t)
-                  (set! value ret)
-                  ret)
+                (get)
                 (('infinite-recursion-during-initialization-of name)
                  (hashset-delete! callstack (quote setter))
                  (car args))))
