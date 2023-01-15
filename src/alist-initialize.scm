@@ -129,6 +129,7 @@
                 (get)
                 (('infinite-recursion-during-initialization-of name)
                  (hashset-delete! callstack (quote setter))
+                 (set! evaluated? #f)
                  (car args))))
              (lambda _ (car args))))
            (else (raisu 'unexpected-operation action)))))))))
