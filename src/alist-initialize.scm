@@ -74,18 +74,22 @@
 (define-syntax alist-initialize:makelet
   (syntax-rules ()
     ((_ alist callstack setter . ())
-     (case-lambda
-      (()
-       (let ((x (assq (quote setter) alist)))
-         (unless x
-           (raisu 'argument-not-initialized))
-         (cdr x)))
-      ((action . args)
-       (case action
-         ((or)
-          (let ((x (assq (quote setter) alist)))
-            (if x (cdr x) (car args))))
-         (else (raisu 'unexpected-operation action))))))
+     (let ()
+       (define self
+         (case-lambda
+          (()
+           (let ((x (assq (quote setter) alist)))
+             (if x
+                 (cdr x)
+                 (raisu 'argument-not-initialized))))
+          ((action . args)
+           (case action
+             ((current) (self))
+             ((or)
+              (let ((x (assq (quote setter) alist)))
+                (if x (cdr x) (car args))))
+             (else (raisu 'unexpected-operation action))))))
+       self))
 
     ((_ alist callstack setter . its-bodies)
      (let ()
@@ -108,6 +112,11 @@
              (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
         ((action . args)
          (case action
+           ((current)
+            (let ((x (assq (quote setter) alist)))
+              (if x
+                  (cdr x)
+                  (raisu 'argument-not-initialized))))
            ((or)
             (wrap
              (lambda _
