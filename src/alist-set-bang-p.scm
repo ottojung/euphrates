@@ -14,7 +14,7 @@
 
 %run guile
 
-%var alist-initialize/p
+%var alist-set!/p
 
-(define alist-initialize/p
+(define alist-set!/p
   (make-parameter #f))

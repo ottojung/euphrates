@@ -1,14 +1,14 @@
 
 %run guile
 
-%use (alist-initialize alist-initialize:stop) "./src/alist-initialize.scm"
+%use (alist-set! alist-set!:stop) "./src/alist-set-bang.scm"
 %use (assert=) "./src/assert-equal.scm"
 
 (let ()
   (define state `((X . 3) (Y . 4)))
 
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X 7)
@@ -19,7 +19,7 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (Y (+ (X) (X)))
@@ -31,14 +31,14 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize state))
+    (alist-set! state))
 
   (assert= inited `((X . 3) (Y . 4))))
 
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X)
@@ -50,7 +50,7 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X 8)
@@ -63,12 +63,12 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X 8)
      (Y (+ (X) (X)))
-     (Z (alist-initialize:stop))
+     (Z (alist-set!:stop))
      ))
 
   (assert= inited `((X . 8) (Y . 16))))
@@ -76,11 +76,11 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X 8)
-     (Y (alist-initialize:stop))
+     (Y (alist-set!:stop))
      (Z (+ (Y) (X)))
      ))
 
@@ -89,12 +89,12 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X 8)
      (Z (+ (Y) (X)))
-     (Y (alist-initialize:stop))
+     (Y (alist-set!:stop))
      ))
 
   (assert= inited `((X . 8) (Y . 4))))
@@ -102,7 +102,7 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X (+ (Y 'or 2) (Y 'or 7)))
@@ -114,7 +114,7 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (X (+ (Y 'or 2) (Y 'or 7)))
@@ -126,7 +126,7 @@
 (let ()
   (define state `((X . 3) (Y . 4)))
   (define inited
-    (alist-initialize
+    (alist-set!
      state
 
      (Y (+ (X) (X)))
