@@ -54,7 +54,7 @@
 (define-syntax alist-initialize:run
   (syntax-rules ()
     ((_ alist buf/0)
-     (let loop ((buf (reverse buf/0)))
+     (let loop ((buf buf/0))
        (if (null? buf) alist
            (let ()
              (define first (car buf))
@@ -142,10 +142,11 @@
         buf2)
      (let ((callstack (make-hashset)))
        (letrec buf1
+         (define buf2rev (reverse buf2))
          (define pstruct
-           (alist-initialize:pstruct-ctr buf2))
+           (alist-initialize:pstruct-ctr buf2rev))
          (parameterize ((alist-initialize/p pstruct))
-           (alist-initialize:run alist buf2)))))
+           (alist-initialize:run alist buf2rev)))))
 
     ((_ alist
         callstack
