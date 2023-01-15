@@ -21,6 +21,7 @@
 %use (assq-set-value) "./assq-set-value.scm"
 %use (catchu-case) "./catchu-case.scm"
 %use (define-type9) "./define-type9.scm"
+%use (hashset-add! hashset-has? make-hashset) "./hashset.scm"
 %use (memconst) "./memconst.scm"
 %use (raisu) "./raisu.scm"
 
@@ -73,34 +74,43 @@
 
 (define-syntax alist-initialize:makelet
   (syntax-rules ()
-    ((_ initial-alist setter . ())
+    ((_ initial-alist callstack setter . ())
      (memconst
       (let ((x (assq (quote setter) initial-alist)))
         (unless x
           (raisu 'argument-not-initialized))
         (cdr x))))
-    ((_ initial-alist setter . its-bodies)
-     (memconst (let () . its-bodies)))))
+    ((_ initial-alist callstack setter . its-bodies)
+     (memconst
+      (if (hashset-has? callstack (quote setter))
+          (raisu 'recursion!)
+          (begin
+            (hashset-add! callstack (quote setter))
+            (let () . its-bodies)))))))
 
 (define-syntax alist-initialize:iterate
   (syntax-rules ()
     ((_ initial-alist
+        callstack
         buf1
         buf2)
-     (letrec buf1
-       (define pstruct
-         (alist-initialize:pstruct-ctr buf2))
-       (parameterize ((alist-initialize/p pstruct))
-         (alist-initialize:run initial-alist buf2))))
+     (let ((callstack (make-hashset)))
+       (letrec buf1
+         (define pstruct
+           (alist-initialize:pstruct-ctr buf2))
+         (parameterize ((alist-initialize/p pstruct))
+           (alist-initialize:run initial-alist buf2)))))
 
     ((_ initial-alist
+        callstack
         buf1
         buf2
         (setter . its-bodies)
         . rest-setters)
      (alist-initialize:iterate
       initial-alist
-      ((setter (alist-initialize:makelet initial-alist setter . its-bodies)) . buf1)
+      callstack
+      ((setter (alist-initialize:makelet initial-alist callstack setter . its-bodies)) . buf1)
       (cons (cons (quote setter) setter) buf2)
       . rest-setters))))
 
@@ -110,6 +120,7 @@
      (let ((initial-alist initial-alist/0))
        (alist-initialize:iterate
         initial-alist
+        callstack
         ()
         '()
         . setters)))))

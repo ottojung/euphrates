@@ -91,3 +91,15 @@
      ))
 
   (assert= inited `((X . 8) (Y . 4))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (define inited
+    (alist-initialize
+     state
+
+     (X (+ (Y 'or 2) (Y 'or 7)))
+     (Y (+ (X 'or 3) (X 'or 5)))
+     ))
+
+  (assert= inited `((X . 8) (Y . 4))))
