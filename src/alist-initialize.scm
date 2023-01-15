@@ -51,43 +51,43 @@
 
   (values ret threw? ret-value?))
 
-(define (alist-initialize:run initial-alist/0 buf/0)
-  (let loop ((buf (reverse buf/0)) (initial-alist initial-alist/0))
-    (if (null? buf) initial-alist
-        (let ()
-          (define first (car buf))
-          (define name (car first))
-          (define setter (cdr first))
-          (define-values (val threw? value?)
-            (alist-initialize:get-value setter))
-          (define new-alist
-            (if value?
-                (assq-set-value
-                 name val
-                 initial-alist)
-                initial-alist))
+(define-syntax alist-initialize:run
+  (syntax-rules ()
+    ((_ alist buf/0)
+     (let loop ((buf (reverse buf/0)))
+       (if (null? buf) alist
+           (let ()
+             (define first (car buf))
+             (define name (car first))
+             (define setter (cdr first))
+             (define-values (val threw? value?)
+               (alist-initialize:get-value setter))
+             (when value?
+               (set! alist (assq-set-value
+                            name val
+                            alist)))
 
-          (if threw?
-              new-alist
-              (loop (cdr buf) new-alist))))))
+             (if threw?
+                 alist
+                 (loop (cdr buf)))))))))
 
 (define-syntax alist-initialize:makelet
   (syntax-rules ()
-    ((_ initial-alist callstack setter . ())
+    ((_ alist callstack setter . ())
      (case-lambda
       (()
-       (let ((x (assq (quote setter) initial-alist)))
+       (let ((x (assq (quote setter) alist)))
          (unless x
            (raisu 'argument-not-initialized))
          (cdr x)))
       ((action . args)
        (case action
          ((or)
-          (let ((x (assq (quote setter) initial-alist)))
+          (let ((x (assq (quote setter) alist)))
             (if x (cdr x) (car args))))
          (else (raisu 'unexpected-operation action))))))
 
-    ((_ initial-alist callstack setter . its-bodies)
+    ((_ alist callstack setter . its-bodies)
      (let ()
        (define evaluated? #f)
        (define value #f)
@@ -125,7 +125,7 @@
 
 (define-syntax alist-initialize:iterate
   (syntax-rules ()
-    ((_ initial-alist
+    ((_ alist
         callstack
         buf1
         buf2)
@@ -134,28 +134,27 @@
          (define pstruct
            (alist-initialize:pstruct-ctr buf2))
          (parameterize ((alist-initialize/p pstruct))
-           (alist-initialize:run initial-alist buf2)))))
+           (alist-initialize:run alist buf2)))))
 
-    ((_ initial-alist
+    ((_ alist
         callstack
         buf1
         buf2
         (setter . its-bodies)
         . rest-setters)
      (alist-initialize:iterate
-      initial-alist
+      alist
       callstack
-      ((setter (alist-initialize:makelet initial-alist callstack setter . its-bodies)) . buf1)
+      ((setter (alist-initialize:makelet alist callstack setter . its-bodies)) . buf1)
       (cons (cons (quote setter) setter) buf2)
       . rest-setters))))
 
 (define-syntax alist-initialize
   (syntax-rules ()
-    ((_ initial-alist/0 . setters)
-     (let ((initial-alist initial-alist/0))
-       (alist-initialize:iterate
-        initial-alist
-        callstack
-        ()
-        '()
-        . setters)))))
+    ((_ alist-name . setters)
+     (alist-initialize:iterate
+      alist-name
+      callstack
+      ()
+      '()
+      . setters))))
