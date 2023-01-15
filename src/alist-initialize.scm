@@ -75,21 +75,28 @@
   (syntax-rules ()
     ((_ alist callstack setter . ())
      (let ()
-       (define self
-         (case-lambda
-          (()
-           (let ((x (assq (quote setter) alist)))
-             (if x
-                 (cdr x)
-                 (raisu 'argument-not-initialized))))
-          ((action . args)
-           (case action
-             ((current) (self))
-             ((or)
-              (let ((x (assq (quote setter) alist)))
-                (if x (cdr x) (car args))))
-             (else (raisu 'unexpected-operation action))))))
-       self))
+       (define evaluated? #f)
+       (define value #f)
+       (define (get)
+         (let ((x (assq (quote setter) alist)))
+           (if x
+               (cdr x)
+               (raisu 'argument-not-initialized))))
+
+       (case-lambda
+        (()
+         (if evaluated? value
+             (let ((v (get)))
+               (set! evaluated? #t)
+               (set! value v)
+               v)))
+        ((action . args)
+         (case action
+           ((current) (get))
+           ((or)
+            (let ((x (assq (quote setter) alist)))
+              (if x (cdr x) (car args))))
+           (else (raisu 'unexpected-operation action)))))))
 
     ((_ alist callstack setter . its-bodies)
      (let ()
@@ -101,6 +108,7 @@
                (if (hashset-has? callstack (quote setter))
                    (rec)
                    (ev)))))
+
        (case-lambda
         (() (wrap
              (lambda _
