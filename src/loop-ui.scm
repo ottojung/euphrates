@@ -46,32 +46,36 @@
 
 (define-syntax loop-ui:finish
   (syntax-rules ()
-    ((_ alist-name bindings i-setters a-setters u-setters)
-     (let buf
-         (alist-set! alist-name . i-setters)
+    ((_ alist-name all bindings i-setters a-setters u-setters)
+     (let ((alist-name (map (lambda (name) (cons name #f)) (quote all))))
+       (let buf
+           (alist-set! alist-name . i-setters)
 
-       (let loop ()
-         (alist-set! alist-name . a-setters)
-         (unless (loop-ui:all-fields-initialized? alist-name)
-           (loop-ui:user-set! alist-name . u-setters)
-           (loop)))
+         (let loop ()
+           (alist-set! alist-name . a-setters)
+           (unless (loop-ui:all-fields-initialized? alist-name)
+             (loop-ui:user-set! alist-name . u-setters)
+             (loop)))
 
-       alist-name))))
+         alist-name)))))
 
 (define-syntax loop-ui:bind-field-names
   (syntax-rules ()
     ((_ alist-name
+        all
         buf
         ()
         i-setters a-setters u-setters)
-     (loop-ui:finish alist-name buf i-setters a-setters u-setters))
+     (loop-ui:finish alist-name all buf i-setters a-setters u-setters))
 
     ((_ alist-name
+        all
         buf
         (first-field-name . rest-of-the-fields-names)
         i-setters a-setters u-setters)
      (loop-ui:bind-field-names
       alist-name
+      all
       ((first-field-name (lambda _ (assq-or (quote first-field-name) alist-name #f))) . buf)
       rest-of-the-fields-names
       i-setters a-setters u-setters))))
@@ -82,9 +86,9 @@
         :init i-setters
         :auto a-setters
         :user u-setters)
-     (let ((alist-name '()))
-       (loop-ui:bind-field-names
-        alist-name
-        ()
-        (first-field-name . rest-of-the-fields-names)
-        i-setters a-setters u-setters)))))
+     (loop-ui:bind-field-names
+      alist-name
+      (first-field-name . rest-of-the-fields-names)
+      ()
+      (first-field-name . rest-of-the-fields-names)
+      i-setters a-setters u-setters))))
