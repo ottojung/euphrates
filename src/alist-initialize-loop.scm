@@ -14,14 +14,14 @@
 
 %run guile
 
-%var loop-ui
+%var alist-initialize-loop
 
 %use (alist-initialize! alist-initialize!:get-setters alist-initialize!:run alist-initialize!:stop) "./alist-initialize-bang.scm"
 %use (assq-or) "./assq-or.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (list-and-map) "./list-and-map.scm"
 
-(define-syntax loop-ui:user-set!
+(define-syntax alist-initialize-loop:user-set!
   (syntax-rules ()
     ((_ alist-name . u-setters)
      (let ()
@@ -41,10 +41,10 @@
 
        (alist-initialize!:run alist-name user-setters)))))
 
-(define (loop-ui:all-fields-initialized? alist)
+(define (alist-initialize-loop:all-fields-initialized? alist)
   (list-and-map (fn-cons (name val) val) alist))
 
-(define-syntax loop-ui:finish
+(define-syntax alist-initialize-loop:finish
   (syntax-rules ()
     ((_ alist-name all bindings i-setters a-setters u-setters)
      (let ((alist-name (map (lambda (name) (cons name #f)) (quote all))))
@@ -53,40 +53,40 @@
 
          (let loop ()
            (alist-initialize! alist-name . a-setters)
-           (unless (loop-ui:all-fields-initialized? alist-name)
-             (loop-ui:user-set! alist-name . u-setters)
+           (unless (alist-initialize-loop:all-fields-initialized? alist-name)
+             (alist-initialize-loop:user-set! alist-name . u-setters)
              (loop)))
 
          alist-name)))))
 
-(define-syntax loop-ui:bind-field-names
+(define-syntax alist-initialize-loop:bind-field-names
   (syntax-rules ()
     ((_ alist-name
         all
         buf
         ()
         i-setters a-setters u-setters)
-     (loop-ui:finish alist-name all buf i-setters a-setters u-setters))
+     (alist-initialize-loop:finish alist-name all buf i-setters a-setters u-setters))
 
     ((_ alist-name
         all
         buf
         (first-field-name . rest-of-the-fields-names)
         i-setters a-setters u-setters)
-     (loop-ui:bind-field-names
+     (alist-initialize-loop:bind-field-names
       alist-name
       all
       ((first-field-name (lambda _ (assq-or (quote first-field-name) alist-name #f))) . buf)
       rest-of-the-fields-names
       i-setters a-setters u-setters))))
 
-(define-syntax loop-ui
-  (syntax-rules (:init :auto :user)
+(define-syntax alist-initialize-loop
+  (syntax-rules (:initial :invariant :mutators)
     ((_ (first-field-name . rest-of-the-fields-names)
-        :init i-setters
-        :auto a-setters
-        :user u-setters)
-     (loop-ui:bind-field-names
+        :initial i-setters
+        :invariant a-setters
+        :mutators u-setters)
+     (alist-initialize-loop:bind-field-names
       alist-name
       (first-field-name . rest-of-the-fields-names)
       ()
