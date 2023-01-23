@@ -82,3 +82,15 @@
     :initial
     ((X 3)
      (Y 5)))))
+
+(let ()
+
+  (assert=
+   '((X . 3) (Y . 5) (Z . #f))
+
+   (alist-initialize-loop
+    (X Y Z)
+
+    :invariant
+    ((X 3)
+     (Y 5)))))

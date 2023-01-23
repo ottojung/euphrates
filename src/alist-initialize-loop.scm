@@ -129,4 +129,29 @@
       :invariant ()
       :default ()))
 
+    ((_ names
+        :invariant a-setters
+        :default u-setters)
+     (alist-initialize-loop
+      names
+      :initial ()
+      :invariant a-setters
+      :default u-setters))
+
+    ((_ names
+        :invariant a-setters)
+     (alist-initialize-loop
+      names
+      :initial ()
+      :invariant a-setters
+      :default ()))
+
+    ((_ names
+        :default u-setters)
+     (alist-initialize-loop
+      names
+      :initial ()
+      :invariant ()
+      :default u-setters))
+
     ))
