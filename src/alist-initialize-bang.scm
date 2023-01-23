@@ -118,6 +118,7 @@
         ((action . args)
          (case action
            ((current) (get))
+           ((recalculate) (get))
            ((or)
             (let ((x (assq (quote setter) alist)))
               (if x (cdr x) (car args))))
@@ -142,9 +143,11 @@
          (if evaluated? value
              (if (hashset-has? callstack (quote setter))
                  (rec) (ev))))
+       (define (default)
+         (wrap get (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
 
        (case-lambda
-        (() (wrap get (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
+        (() (default))
         ((action . args)
          (case action
            ((current)
@@ -152,6 +155,9 @@
               (if x
                   (cdr x)
                   (raisu 'argument-not-set!d))))
+           ((recalculate)
+            (set! evaluated? #f)
+            (default))
            ((or)
             (wrap
              (lambda _
