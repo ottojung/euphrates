@@ -170,3 +170,8 @@
    )
 
   (assert= state `((X . 1) (Y . 3) (M . 8) (Z . 9))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+  (alist-initialize! state)
+  (assert= state `((X . 3) (Y . 4))))

@@ -154,6 +154,12 @@
   (syntax-rules ()
     ((_ alist
         callstack
+        ()
+        buf2)
+     (reverse buf2))
+
+    ((_ alist
+        callstack
         buf1
         buf2)
      (let ((callstack (make-hashset)))
