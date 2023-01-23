@@ -101,4 +101,32 @@
       (first-field-name . rest-of-the-fields-names)
       ()
       (first-field-name . rest-of-the-fields-names)
-      i-setters a-setters u-setters))))
+      i-setters a-setters u-setters))
+
+    ((_ names
+        :initial i-setters
+        :invariant a-setters)
+     (alist-initialize-loop
+      names
+      :initial i-setters
+      :invariant a-setters
+      :default ()))
+
+    ((_ names
+        :initial i-setters
+        :default u-setters)
+     (alist-initialize-loop
+      names
+      :initial i-setters
+      :invariant ()
+      :default u-setters))
+
+    ((_ names
+        :initial i-setters)
+     (alist-initialize-loop
+      names
+      :initial i-setters
+      :invariant ()
+      :default ()))
+
+    ))

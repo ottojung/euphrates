@@ -54,9 +54,22 @@
      (Y 5))
 
     :invariant
-    ((Z (* (X) (Y))))
+    ((Z (* (X) (Y)))))))
 
-    :default ())))
+(let ()
+
+  (assert=
+   '((X . 3) (Y . 5) (Z . 15))
+
+   (alist-initialize-loop
+    (X Y Z)
+
+    :initial
+    ((X 3)
+     (Y 5))
+
+    :default
+    ((Z (* (X) (Y)))))))
 
 (let ()
 
@@ -68,8 +81,4 @@
 
     :initial
     ((X 3)
-     (Y 5))
-
-    :invariant ()
-
-    :default ())))
+     (Y 5)))))
