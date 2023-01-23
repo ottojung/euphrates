@@ -16,11 +16,10 @@
 
 %var alist-initialize-loop
 
-%use (alist-initialize! alist-initialize!:get-setters alist-initialize!:run alist-initialize!:stop) "./alist-initialize-bang.scm"
+%use (alist-initialize! alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:run alist-initialize!:stop) "./alist-initialize-bang.scm"
 %use (assq-or) "./assq-or.scm"
 %use (fn-pair) "./fn-pair.scm"
 %use (list-and-map) "./list-and-map.scm"
-%use (raisu) "./raisu.scm"
 
 (define-syntax alist-initialize-loop:user-set!
   (syntax-rules ()
@@ -77,16 +76,7 @@
       alist-name
       all
       ((first-field-name
-        (let ()
-          (define self
-            (case-lambda
-             (() (assq-or (quote first-field-name) alist-name #f))
-             ((action . args)
-              (case action
-                ((current) (self))
-                ((or) (or (self) (car args)))
-                (else (raisu 'unexpected-operation action))))))
-          self))
+        (alist-initialize!:makelet/static alist-name first-field-name))
        . buf)
       rest-of-the-fields-names
       i-setters a-setters u-setters))))

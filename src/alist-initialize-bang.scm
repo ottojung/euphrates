@@ -17,6 +17,7 @@
 %var alist-initialize!
 %var alist-initialize!:stop
 %var alist-initialize!:get-setters
+%var alist-initialize!:makelet/static
 %var alist-initialize!:run
 
 %use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
@@ -87,9 +88,9 @@
                      alist
                      (loop (cdr buf)))))))))))
 
-(define-syntax alist-initialize!:makelet
+(define-syntax alist-initialize!:makelet/static
   (syntax-rules ()
-    ((_ alist callstack setter . ())
+    ((_ alist setter)
      (let ()
        (define evaluated? #f)
        (define value #f)
@@ -112,7 +113,12 @@
            ((or)
             (let ((x (assq (quote setter) alist)))
               (if x (cdr x) (car args))))
-           (else (raisu 'unexpected-operation action)))))))
+           (else (raisu 'unexpected-operation action)))))))))
+
+(define-syntax alist-initialize!:makelet
+  (syntax-rules ()
+    ((_ alist callstack setter . ())
+     (alist-initialize!:makelet/static alist setter))
 
     ((_ alist callstack setter . its-bodies)
      (let ()
