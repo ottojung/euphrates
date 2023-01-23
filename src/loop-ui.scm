@@ -16,7 +16,7 @@
 
 %var loop-ui
 
-%use (alist-set! alist-set!:get-setters alist-set!:run alist-set!:stop) "./alist-set-bang.scm"
+%use (alist-initialize! alist-initialize!:get-setters alist-initialize!:run alist-initialize!:stop) "./alist-initialize-bang.scm"
 %use (assq-or) "./assq-or.scm"
 %use (fn-cons) "./fn-cons.scm"
 %use (list-and-map) "./list-and-map.scm"
@@ -26,7 +26,7 @@
     ((_ alist-name . u-setters)
      (let ()
        (define user-setters/0
-         (alist-set!:get-setters alist-name . u-setters))
+         (alist-initialize!:get-setters alist-name . u-setters))
        (define user-setters
          (map
           (fn-cons
@@ -36,10 +36,10 @@
                    (or (assq-or name alist-name #f)
                        (begin
                          (fun)
-                         (alist-set!:stop))))))
+                         (alist-initialize!:stop))))))
           user-setters/0))
 
-       (alist-set!:run alist-name user-setters)))))
+       (alist-initialize!:run alist-name user-setters)))))
 
 (define (loop-ui:all-fields-initialized? alist)
   (list-and-map (fn-cons (name val) val) alist))
@@ -49,10 +49,10 @@
     ((_ alist-name all bindings i-setters a-setters u-setters)
      (let ((alist-name (map (lambda (name) (cons name #f)) (quote all))))
        (let buf
-           (alist-set! alist-name . i-setters)
+           (alist-initialize! alist-name . i-setters)
 
          (let loop ()
-           (alist-set! alist-name . a-setters)
+           (alist-initialize! alist-name . a-setters)
            (unless (loop-ui:all-fields-initialized? alist-name)
              (loop-ui:user-set! alist-name . u-setters)
              (loop)))

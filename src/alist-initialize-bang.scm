@@ -14,31 +14,31 @@
 
 %run guile
 
-%var alist-set!
-%var alist-set!:stop
-%var alist-set!:get-setters
-%var alist-set!:run
+%var alist-initialize!
+%var alist-initialize!:stop
+%var alist-initialize!:get-setters
+%var alist-initialize!:run
 
-%use (alist-set!/p) "./alist-set-bang-p.scm"
+%use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
 %use (assq-set-value) "./assq-set-value.scm"
 %use (catchu-case) "./catchu-case.scm"
 %use (define-type9) "./define-type9.scm"
 %use (hashset-add! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
 %use (raisu) "./raisu.scm"
 
-(define-type9 <alist-set!:pstruct>
-  (alist-set!:pstruct-ctr setters) alist-set!:pstruct?
-  (setters alist-set!:pstruct-setters)
+(define-type9 <alist-initialize!:pstruct>
+  (alist-initialize!:pstruct-ctr setters) alist-initialize!:pstruct?
+  (setters alist-initialize!:pstruct-setters)
   )
 
-(define alist-set!:stop-signal (gensym))
+(define alist-initialize!:stop-signal (gensym))
 
-(define alist-set!:stop
+(define alist-initialize!:stop
   (case-lambda
-   (() (raisu alist-set!:stop-signal #f #f))
-   ((value) (raisu alist-set!:stop-signal #t value))))
+   (() (raisu alist-initialize!:stop-signal #f #f))
+   ((value) (raisu alist-initialize!:stop-signal #t value))))
 
-(define (alist-set!:get-value setter)
+(define (alist-initialize!:get-value setter)
   (define threw? #f)
   (define ret-value? #t)
 
@@ -46,14 +46,14 @@
     (catchu-case
      (setter)
 
-     ((alist-set!:stop-signal value? value)
+     ((alist-initialize!:stop-signal value? value)
       (set! threw? #t)
       (set! ret-value? value?)
       value)))
 
   (values ret threw? ret-value?))
 
-(define (alist-set!:multi-set alist val)
+(define (alist-initialize!:multi-set alist val)
   (unless (list? alist)
     (raisu 'setters-named-*-must-return-lists))
   (let loop ((val val) (alist alist))
@@ -67,14 +67,14 @@
             name value
             alist))))))
 
-(define-syntax alist-set!:run
+(define-syntax alist-initialize!:run
   (syntax-rules ()
     ((_ alist setters/0)
      (let ()
        (define setters setters/0)
        (define pstruct
-         (alist-set!:pstruct-ctr setters))
-       (parameterize ((alist-set!/p pstruct))
+         (alist-initialize!:pstruct-ctr setters))
+       (parameterize ((alist-initialize!/p pstruct))
          (let loop ((buf setters))
            (if (null? buf) alist
                (let ()
@@ -82,11 +82,11 @@
                  (define name (car first))
                  (define setter (cdr first))
                  (define-values (val threw? value?)
-                   (alist-set!:get-value setter))
+                   (alist-initialize!:get-value setter))
                  (when value?
                    (set! alist
                          (if (equal? name '*)
-                             (alist-set!:multi-set alist val)
+                             (alist-initialize!:multi-set alist val)
                              (assq-set-value
                               name val
                               alist))))
@@ -95,7 +95,7 @@
                      alist
                      (loop (cdr buf)))))))))))
 
-(define-syntax alist-set!:makelet
+(define-syntax alist-initialize!:makelet
   (syntax-rules ()
     ((_ alist callstack setter . ())
      (let ()
@@ -158,7 +158,7 @@
              (lambda _ (car args))))
            (else (raisu 'unexpected-operation action)))))))))
 
-(define-syntax alist-set!:get-setters/aux
+(define-syntax alist-initialize!:get-setters/aux
   (syntax-rules ()
     ((_ alist
         callstack
@@ -174,26 +174,26 @@
         buf2
         (setter . its-bodies)
         . rest-setters)
-     (alist-set!:get-setters/aux
+     (alist-initialize!:get-setters/aux
       alist
       callstack
-      ((setter (alist-set!:makelet alist callstack setter . its-bodies)) . buf1)
+      ((setter (alist-initialize!:makelet alist callstack setter . its-bodies)) . buf1)
       (cons (cons (quote setter) setter) buf2)
       . rest-setters))))
 
-(define-syntax alist-set!:get-setters
+(define-syntax alist-initialize!:get-setters
   (syntax-rules ()
     ((_ alist-name . setters)
-     (alist-set!:get-setters/aux
+     (alist-initialize!:get-setters/aux
       alist-name
       callstack
       ()
       '()
       . setters))))
 
-(define-syntax alist-set!
+(define-syntax alist-initialize!
   (syntax-rules ()
     ((_ alist-name . setters)
      (let ()
-       (define buf2rev (alist-set!:get-setters alist-name . setters))
-       (alist-set!:run alist-name buf2rev)))))
+       (define buf2rev (alist-initialize!:get-setters alist-name . setters))
+       (alist-initialize!:run alist-name buf2rev)))))
