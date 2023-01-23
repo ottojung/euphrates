@@ -23,6 +23,7 @@
 %var alist-initialize!:current-setters
 
 %use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
+%use (assq-or) "./assq-or.scm"
 %use (assq-set-value) "./assq-set-value.scm"
 %use (catchu-case) "./catchu-case.scm"
 %use (define-type9) "./define-type9.scm"
@@ -119,18 +120,25 @@
               (if x (cdr x) (car args))))
            (else (raisu 'unexpected-operation action)))))))))
 
+(define-syntax alist-initialize!:prepare-bodies
+  (syntax-rules (:yes :no)
+    ((_ alist :no setter its-bodies) (let () . its-bodies))
+    ((_ alist :yes setter its-bodies)
+     (let ((current (assq-or (quote setter) alist #f)))
+       (or current (let () . its-bodies))))))
+
 (define-syntax alist-initialize!:makelet
   (syntax-rules ()
-    ((_ alist callstack setter . ())
+    ((_ alist default? callstack setter . ())
      (alist-initialize!:makelet/static alist setter))
 
-    ((_ alist callstack setter . its-bodies)
+    ((_ alist default? callstack setter . its-bodies)
      (let ()
        (define evaluated? #f)
        (define value #f)
        (define (get)
          (hashset-add! callstack (quote setter))
-         (let ((ret (let () . its-bodies)))
+         (let ((ret (alist-initialize!:prepare-bodies alist default? setter its-bodies)))
            (set! evaluated? #t)
            (set! value ret)
            (set! alist
@@ -175,12 +183,14 @@
 (define-syntax alist-initialize!:get-setters/aux
   (syntax-rules ()
     ((_ alist
+        default?
         callstack
         ()
         buf2)
      (reverse buf2))
 
     ((_ alist
+        default?
         callstack
         buf1
         buf2)
@@ -189,6 +199,7 @@
          (reverse buf2))))
 
     ((_ alist
+        default?
         callstack
         buf1
         buf2
@@ -196,16 +207,27 @@
         . rest-setters)
      (alist-initialize!:get-setters/aux
       alist
+      default?
       callstack
-      ((setter (alist-initialize!:makelet alist callstack setter . its-bodies)) . buf1)
+      ((setter (alist-initialize!:makelet alist default? callstack setter . its-bodies)) . buf1)
       (cons (cons (quote setter) setter) buf2)
       . rest-setters))))
 
 (define-syntax alist-initialize!:get-setters
-  (syntax-rules ()
+  (syntax-rules (:default)
+    ((_ alist-name :default . setters)
+     (alist-initialize!:get-setters/aux
+      alist-name
+      :yes ;; default flag
+      callstack
+      ()
+      '()
+      . setters))
+
     ((_ alist-name . setters)
      (alist-initialize!:get-setters/aux
       alist-name
+      :no ;; default flag
       callstack
       ()
       '()

@@ -16,51 +16,10 @@
 
 %var alist-initialize-loop
 
-%use (alist-initialize! alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:run alist-initialize!:stop) "./alist-initialize-bang.scm"
-%use (assq-or) "./assq-or.scm"
+%use (alist-initialize! alist-initialize!:get-setters alist-initialize!:makelet/static) "./alist-initialize-bang.scm"
 %use (fn-pair) "./fn-pair.scm"
 %use (hashset-has? list->hashset) "./hashset.scm"
 %use (list-and-map) "./list-and-map.scm"
-
-(define-syntax alist-initialize-loop:defaulted-set!
-  (syntax-rules ()
-    ((_ alist-name setters/0 modifier/0)
-     (let ()
-       (define modifier modifier/0)
-       (define setters/1
-         (alist-initialize!:get-setters alist-name . setters/0))
-       (define setters
-         (map
-          (fn-pair
-           (name fun/0)
-           (define (fun . args)
-             (if (and (not (null? args))
-                      (equal? 'recalculate (car args)))
-                 (apply fun/0 args)
-                 (or (assq-or name alist-name #f)
-                     (modifier name fun/0 args))))
-
-           (cons name fun))
-          setters/1))
-
-       (alist-initialize!:run alist-name setters)))))
-
-(define-syntax alist-initialize-loop:initial-set!
-  (syntax-rules ()
-    ((_ alist-name . u-setters)
-     (alist-initialize-loop:defaulted-set!
-      alist-name u-setters
-      (lambda (name fun args)
-        (apply fun args))))))
-
-(define-syntax alist-initialize-loop:user-set!
-  (syntax-rules ()
-    ((_ alist-name . u-setters)
-     (alist-initialize-loop:defaulted-set!
-      alist-name u-setters
-      (lambda (name fun args)
-        (alist-initialize!:stop
-         (apply fun args)))))))
 
 (define (alist-initialize-loop:all-fields-initialized? names-restriction alist)
   (list-and-map
@@ -79,10 +38,10 @@
               (map car (alist-initialize!:get-setters alist-name . u-setters))))
 
          (let loop ()
-           (alist-initialize-loop:initial-set! alist-name . i-setters)
+           (alist-initialize! alist-name :default . i-setters)
            (alist-initialize! alist-name . a-setters)
            (unless (alist-initialize-loop:all-fields-initialized? default-names alist-name)
-             (alist-initialize-loop:user-set! alist-name . u-setters)
+             (alist-initialize! alist-name :default . u-setters)
              (loop)))
 
          alist-name)))))
