@@ -22,7 +22,7 @@
 %use (hashset-has? list->hashset) "./hashset.scm"
 %use (list-and-map) "./list-and-map.scm"
 
-(define-syntax alist-initialize-loop:modified-set!
+(define-syntax alist-initialize-loop:defaulted-set!
   (syntax-rules ()
     ((_ alist-name setters/0 modifier/0)
      (let ()
@@ -32,8 +32,15 @@
        (define setters
          (map
           (fn-pair
-           (name fun)
-           (cons name (modifier name fun)))
+           (name fun/0)
+           (define (fun . args)
+             (if (and (not (null? args))
+                      (equal? 'recalculate (car args)))
+                 (apply fun/0 args)
+                 (or (assq-or name alist-name #f)
+                     (modifier name fun/0 args))))
+
+           (cons name fun))
           setters/1))
 
        (alist-initialize!:run alist-name setters)))))
@@ -41,23 +48,19 @@
 (define-syntax alist-initialize-loop:initial-set!
   (syntax-rules ()
     ((_ alist-name . u-setters)
-     (alist-initialize-loop:modified-set!
+     (alist-initialize-loop:defaulted-set!
       alist-name u-setters
-      (lambda (name fun)
-        (lambda args
-          (or (assq-or name alist-name #f)
-              (apply fun args))))))))
+      (lambda (name fun args)
+        (apply fun args))))))
 
 (define-syntax alist-initialize-loop:user-set!
   (syntax-rules ()
     ((_ alist-name . u-setters)
-     (alist-initialize-loop:modified-set!
+     (alist-initialize-loop:defaulted-set!
       alist-name u-setters
-      (lambda (name fun)
-        (lambda args
-          (or (assq-or name alist-name #f)
-              (alist-initialize!:stop
-               (apply fun args)))))))))
+      (lambda (name fun args)
+        (alist-initialize!:stop
+         (apply fun args)))))))
 
 (define (alist-initialize-loop:all-fields-initialized? names-restriction alist)
   (list-and-map
