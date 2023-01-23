@@ -22,14 +22,8 @@
 %use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
 %use (assq-set-value) "./assq-set-value.scm"
 %use (catchu-case) "./catchu-case.scm"
-%use (define-type9) "./define-type9.scm"
 %use (hashset-add! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
 %use (raisu) "./raisu.scm"
-
-(define-type9 <alist-initialize!:pstruct>
-  (alist-initialize!:pstruct-ctr setters) alist-initialize!:pstruct?
-  (setters alist-initialize!:pstruct-setters)
-  )
 
 (define alist-initialize!:stop-signal (gensym))
 
@@ -72,9 +66,7 @@
     ((_ alist setters/0)
      (let ()
        (define setters setters/0)
-       (define pstruct
-         (alist-initialize!:pstruct-ctr setters))
-       (parameterize ((alist-initialize!/p pstruct))
+       (parameterize ((alist-initialize!/p setters))
          (let loop ((buf setters))
            (if (null? buf) alist
                (let ()
