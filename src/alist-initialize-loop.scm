@@ -19,6 +19,7 @@
 %use (alist-initialize! alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:run alist-initialize!:stop) "./alist-initialize-bang.scm"
 %use (assq-or) "./assq-or.scm"
 %use (fn-pair) "./fn-pair.scm"
+%use (hashset-has? list->hashset) "./hashset.scm"
 %use (list-and-map) "./list-and-map.scm"
 
 (define-syntax alist-initialize-loop:user-set!
@@ -40,8 +41,12 @@
 
        (alist-initialize!:run alist-name user-setters)))))
 
-(define (alist-initialize-loop:all-fields-initialized? alist)
-  (list-and-map (fn-pair (name val) val) alist))
+(define (alist-initialize-loop:all-fields-initialized? names-restriction alist)
+  (list-and-map
+   (fn-pair
+    (name val)
+    (or val (not (hashset-has? names-restriction name))))
+   alist))
 
 (define-syntax alist-initialize-loop:finish
   (syntax-rules ()
@@ -50,9 +55,13 @@
        (let bindings
            (alist-initialize! alist-name . i-setters)
 
+         (define default-names
+           (list->hashset
+            (map car (alist-initialize!:get-setters alist-name . u-setters))))
+
          (let loop ()
            (alist-initialize! alist-name . a-setters)
-           (unless (alist-initialize-loop:all-fields-initialized? alist-name)
+           (unless (alist-initialize-loop:all-fields-initialized? default-names alist-name)
              (alist-initialize-loop:user-set! alist-name . u-setters)
              (loop)))
 

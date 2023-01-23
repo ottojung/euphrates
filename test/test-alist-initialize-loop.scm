@@ -40,3 +40,36 @@
     :default
     ((X 7)
      (W 11)))))
+
+(let ()
+
+  (assert=
+   '((X . 3) (Y . 5) (Z . 15))
+
+   (alist-initialize-loop
+    (X Y Z)
+
+    :initial
+    ((X 3)
+     (Y 5))
+
+    :invariant
+    ((Z (* (X) (Y))))
+
+    :default ())))
+
+(let ()
+
+  (assert=
+   '((X . 3) (Y . 5) (Z . #f))
+
+   (alist-initialize-loop
+    (X Y Z)
+
+    :initial
+    ((X 3)
+     (Y 5))
+
+    :invariant ()
+
+    :default ())))
