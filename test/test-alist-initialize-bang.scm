@@ -1,7 +1,7 @@
 
 %run guile
 
-%use (alist-initialize! alist-initialize!:stop) "./src/alist-initialize-bang.scm"
+%use (alist-initialize! alist-initialize!:return-multiple alist-initialize!:stop) "./src/alist-initialize-bang.scm"
 %use (assert=) "./src/assert-equal.scm"
 
 (let ()
@@ -129,7 +129,7 @@
 
    (Y 9)
    (X 7)
-   (* `((X . 1) (Y . 3)))
+   (* (alist-initialize!:return-multiple `((X . 1) (Y . 3))))
    )
 
   (assert= state `((X . 1) (Y . 3))))
@@ -141,7 +141,7 @@
 
    (Y 9)
    (X 7)
-   (* `((X . 1) (Y . 3) (Z . 5)))
+   (* (alist-initialize!:return-multiple `((X . 1) (Y . 3) (Z . 5))))
    )
 
   (assert= state `((X . 1) (Y . 3) (Z . 5))))
@@ -153,7 +153,7 @@
 
    (Y 9)
    (X 7)
-   (* `((X . 1) (Y . 3) (Z . 5)))
+   (* (alist-initialize!:return-multiple `((X . 1) (Y . 3) (Z . 5))))
    )
 
   (assert= state `((X . 1) (Y . 3) (M . 8) (Z . 5))))
@@ -165,7 +165,7 @@
 
    (Y 9)
    (X 7)
-   (* `((X . 1) (Y . 3) (Z . 5)))
+   (* (alist-initialize!:return-multiple `((X . 1) (Y . 3) (Z . 5))))
    (Z 9)
    )
 

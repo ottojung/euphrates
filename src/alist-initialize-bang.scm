@@ -16,6 +16,7 @@
 
 %var alist-initialize!
 %var alist-initialize!:stop
+%var alist-initialize!:return-multiple
 %var alist-initialize!:get-setters
 %var alist-initialize!:makelet/static
 %var alist-initialize!:run
@@ -23,8 +24,14 @@
 %use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
 %use (assq-set-value) "./assq-set-value.scm"
 %use (catchu-case) "./catchu-case.scm"
+%use (define-type9) "./define-type9.scm"
 %use (hashset-add! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
 %use (raisu) "./raisu.scm"
+
+;; Container for multiple return values.
+(define-type9 <alist-initialize!:multiret>
+  (alist-initialize!:return-multiple vals) alist-initialize!:multiret?
+  (vals alist-initialize!:multiret-vals))
 
 (define alist-initialize!:stop-signal (gensym))
 
@@ -50,7 +57,7 @@
 
 (define (alist-initialize!:multi-set alist val)
   (unless (list? alist)
-    (raisu 'setters-named-*-must-return-lists))
+    (raisu 'multiple-return-values-mut-be-encoded-as-an-alist))
   (let loop ((val val) (alist alist))
     (if (null? val) alist
         (let* ((p (car val))
@@ -78,8 +85,9 @@
                    (alist-initialize!:get-value setter))
                  (when value?
                    (set! alist
-                         (if (equal? name '*)
-                             (alist-initialize!:multi-set alist val)
+                         (if (alist-initialize!:multiret? val)
+                             (alist-initialize!:multi-set
+                              alist (alist-initialize!:multiret-vals val))
                              (assq-set-value
                               name val
                               alist))))
