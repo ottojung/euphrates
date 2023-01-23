@@ -87,15 +87,6 @@
                  (define setter (cdr first))
                  (define-values (val threw? value?)
                    (alist-initialize!:get-value setter))
-                 (when value?
-                   (set! alist
-                         (if (alist-initialize!:multiret? val)
-                             (alist-initialize!:multi-set
-                              alist (alist-initialize!:multiret-vals val))
-                             (assq-set-value
-                              name val
-                              alist))))
-
                  (if threw?
                      alist
                      (loop (cdr buf)))))))))))
@@ -142,6 +133,13 @@
          (let ((ret (let () . its-bodies)))
            (set! evaluated? #t)
            (set! value ret)
+           (set! alist
+                 (if (alist-initialize!:multiret? value)
+                     (alist-initialize!:multi-set
+                      alist (alist-initialize!:multiret-vals value))
+                     (assq-set-value
+                      (quote setter) value
+                      alist)))
            ret))
        (define (wrap ev rec)
          (if evaluated? value
