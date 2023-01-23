@@ -22,24 +22,42 @@
 %use (hashset-has? list->hashset) "./hashset.scm"
 %use (list-and-map) "./list-and-map.scm"
 
-(define-syntax alist-initialize-loop:user-set!
+(define-syntax alist-initialize-loop:modified-set!
   (syntax-rules ()
-    ((_ alist-name . u-setters)
+    ((_ alist-name setters/0 modifier/0)
      (let ()
-       (define user-setters/0
-         (alist-initialize!:get-setters alist-name . u-setters))
-       (define user-setters
+       (define modifier modifier/0)
+       (define setters/1
+         (alist-initialize!:get-setters alist-name . setters/0))
+       (define setters
          (map
           (fn-pair
            (name fun)
-           (cons name
-                 (lambda args
-                   (or (assq-or name alist-name #f)
-                       (alist-initialize!:stop
-                        (apply fun args))))))
-          user-setters/0))
+           (cons name (modifier name fun)))
+          setters/1))
 
-       (alist-initialize!:run alist-name user-setters)))))
+       (alist-initialize!:run alist-name setters)))))
+
+(define-syntax alist-initialize-loop:initial-set!
+  (syntax-rules ()
+    ((_ alist-name . u-setters)
+     (alist-initialize-loop:modified-set!
+      alist-name u-setters
+      (lambda (name fun)
+        (lambda args
+          (or (assq-or name alist-name #f)
+              (apply fun args))))))))
+
+(define-syntax alist-initialize-loop:user-set!
+  (syntax-rules ()
+    ((_ alist-name . u-setters)
+     (alist-initialize-loop:modified-set!
+      alist-name u-setters
+      (lambda (name fun)
+        (lambda args
+          (or (assq-or name alist-name #f)
+              (alist-initialize!:stop
+               (apply fun args)))))))))
 
 (define (alist-initialize-loop:all-fields-initialized? names-restriction alist)
   (list-and-map
@@ -53,13 +71,12 @@
     ((_ alist-name all bindings i-setters a-setters u-setters)
      (let ((alist-name (map (lambda (name) (cons name #f)) (quote all))))
        (let bindings
-           (alist-initialize! alist-name . i-setters)
-
-         (define default-names
-           (list->hashset
-            (map car (alist-initialize!:get-setters alist-name . u-setters))))
+           (define default-names
+             (list->hashset
+              (map car (alist-initialize!:get-setters alist-name . u-setters))))
 
          (let loop ()
+           (alist-initialize-loop:initial-set! alist-name . i-setters)
            (alist-initialize! alist-name . a-setters)
            (unless (alist-initialize-loop:all-fields-initialized? default-names alist-name)
              (alist-initialize-loop:user-set! alist-name . u-setters)
