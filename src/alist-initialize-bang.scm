@@ -20,6 +20,7 @@
 %var alist-initialize!:get-setters
 %var alist-initialize!:makelet/static
 %var alist-initialize!:run
+%var alist-initialize!:current-setters
 
 %use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
 %use (assq-set-value) "./assq-set-value.scm"
@@ -27,6 +28,9 @@
 %use (define-type9) "./define-type9.scm"
 %use (hashset-add! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
 %use (raisu) "./raisu.scm"
+
+(define (alist-initialize!:current-setters)
+  (alist-initialize!/p))
 
 ;; Container for multiple return values.
 (define-type9 <alist-initialize!:multiret>
