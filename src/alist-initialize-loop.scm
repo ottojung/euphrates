@@ -41,7 +41,7 @@
            (alist-initialize! alist-name :default . i-setters)
            (alist-initialize! alist-name . a-setters)
            (unless (alist-initialize-loop:all-fields-initialized? default-names alist-name)
-             (alist-initialize! alist-name :default . u-setters)
+             (alist-initialize! alist-name :default :once . u-setters)
              (loop)))
 
          alist-name)))))

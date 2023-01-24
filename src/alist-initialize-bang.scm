@@ -89,7 +89,11 @@
                  (define-values (val threw? value?)
                    (alist-initialize!:get-value setter))
                  (if threw?
-                     alist
+                     (if value?
+                         (let ((ret (assq-set-value name val alist)))
+                           (set! alist ret)
+                           ret)
+                         alist)
                      (loop (cdr buf)))))))))))
 
 (define-syntax alist-initialize!:makelet/static
@@ -122,23 +126,28 @@
 
 (define-syntax alist-initialize!:prepare-bodies
   (syntax-rules (:yes :no)
-    ((_ alist :no setter its-bodies) (let () . its-bodies))
-    ((_ alist :yes setter its-bodies)
+    ((_ alist :no :yes setter its-bodies) (raisu 'once-without-default))
+    ((_ alist :no :no setter its-bodies) (let () . its-bodies))
+    ((_ alist :yes :no setter its-bodies)
      (let ((current (assq-or (quote setter) alist #f)))
-       (or current (let () . its-bodies))))))
+       (or current (let () . its-bodies))))
+    ((_ alist :yes :yes setter its-bodies)
+     (let ((current (assq-or (quote setter) alist #f)))
+       (or current
+           (alist-initialize!:stop (let () . its-bodies)))))))
 
 (define-syntax alist-initialize!:makelet
   (syntax-rules ()
-    ((_ alist default? callstack setter . ())
+    ((_ alist default? once? callstack setter . ())
      (alist-initialize!:makelet/static alist setter))
 
-    ((_ alist default? callstack setter . its-bodies)
+    ((_ alist default? once? callstack setter . its-bodies)
      (let ()
        (define evaluated? #f)
        (define value #f)
        (define (get)
          (hashset-add! callstack (quote setter))
-         (let ((ret (alist-initialize!:prepare-bodies alist default? setter its-bodies)))
+         (let ((ret (alist-initialize!:prepare-bodies alist default? once? setter its-bodies)))
            (set! evaluated? #t)
            (set! value ret)
            (set! alist
@@ -184,6 +193,7 @@
   (syntax-rules ()
     ((_ alist
         default?
+        once?
         callstack
         ()
         buf2)
@@ -191,6 +201,7 @@
 
     ((_ alist
         default?
+        once?
         callstack
         buf1
         buf2)
@@ -200,6 +211,7 @@
 
     ((_ alist
         default?
+        once?
         callstack
         buf1
         buf2
@@ -208,17 +220,29 @@
      (alist-initialize!:get-setters/aux
       alist
       default?
+      once?
       callstack
-      ((setter (alist-initialize!:makelet alist default? callstack setter . its-bodies)) . buf1)
+      ((setter (alist-initialize!:makelet alist default? once? callstack setter . its-bodies)) . buf1)
       (cons (cons (quote setter) setter) buf2)
       . rest-setters))))
 
 (define-syntax alist-initialize!:get-setters
-  (syntax-rules (:default)
+  (syntax-rules (:default :once)
+    ((_ alist-name :default :once . setters)
+     (alist-initialize!:get-setters/aux
+      alist-name
+      :yes ;; default flag
+      :yes ;; once flag
+      callstack
+      ()
+      '()
+      . setters))
+
     ((_ alist-name :default . setters)
      (alist-initialize!:get-setters/aux
       alist-name
       :yes ;; default flag
+      :no ;; once flag
       callstack
       ()
       '()
@@ -228,6 +252,7 @@
      (alist-initialize!:get-setters/aux
       alist-name
       :no ;; default flag
+      :no ;; once flag
       callstack
       ()
       '()
