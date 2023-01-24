@@ -128,13 +128,19 @@
   (syntax-rules (:yes :no)
     ((_ alist :no :yes setter its-bodies) (raisu 'once-without-default))
     ((_ alist :no :no setter its-bodies) (let () . its-bodies))
+
     ((_ alist :yes :no setter its-bodies)
      (let ((current (assq-or (quote setter) alist #f)))
        (or current (let () . its-bodies))))
     ((_ alist :yes :yes setter its-bodies)
      (let ((current (assq-or (quote setter) alist #f)))
        (or current
-           (alist-initialize!:stop (let () . its-bodies)))))))
+           (alist-initialize!:stop (let () . its-bodies)))))
+
+    ((_ alist mapper :no setter its-bodies)
+     (mapper (quote setter) alist (lambda _ . its-bodies)))
+    ((_ alist mapper :yes setter its-bodies)
+     (mapper (quote setter) alist (lambda _ (alist-initialize!:stop (let () . its-bodies)))))))
 
 (define-syntax alist-initialize!:makelet
   (syntax-rules ()
@@ -227,7 +233,7 @@
       . rest-setters))))
 
 (define-syntax alist-initialize!:get-setters
-  (syntax-rules (:default :once)
+  (syntax-rules (:default :once :map)
     ((_ alist-name :default :once . setters)
      (alist-initialize!:get-setters/aux
       alist-name
@@ -238,10 +244,30 @@
       '()
       . setters))
 
+    ((_ alist-name :map mapper :once . setters)
+     (alist-initialize!:get-setters/aux
+      alist-name
+      mapper ;; default flag
+      :yes ;; once flag
+      callstack
+      ()
+      '()
+      . setters))
+
     ((_ alist-name :default . setters)
      (alist-initialize!:get-setters/aux
       alist-name
       :yes ;; default flag
+      :no ;; once flag
+      callstack
+      ()
+      '()
+      . setters))
+
+    ((_ alist-name :map mapper . setters)
+     (alist-initialize!:get-setters/aux
+      alist-name
+      mapper ;; default flag
       :no ;; once flag
       callstack
       ()
