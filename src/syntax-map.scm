@@ -9,7 +9,7 @@
   (syntax-rules ()
     ((_ cont buf fn) (syntax-reverse cont buf))
     ((_ cont buf (fn ctxarg) x . xs) (syntax-map/buf cont ((fn ctxarg x) . buf) (fn ctxarg) . xs))
-    ((_ cont buf fn x . xs) (syntax-map/buf cont ((fn x) . buf) fn arg . xs))))
+    ((_ cont buf fn x . xs) (syntax-map/buf cont ((fn x) . buf) fn . xs))))
 
 (define-syntax syntax-map
   (syntax-rules ()
