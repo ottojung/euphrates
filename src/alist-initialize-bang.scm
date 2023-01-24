@@ -131,21 +131,20 @@
 
 (define-syntax alist-initialize!:prepare-bodies
   (syntax-rules (:yes :no)
-    ((_ alist :no :yes setter its-bodies) (raisu 'once-without-default))
-    ((_ alist :no :no setter its-bodies) (let () . its-bodies))
+    ((_ alist recalculate? :no :yes setter its-bodies) (raisu 'once-without-default))
+    ((_ alist recalculate? :no :no setter its-bodies) (let () . its-bodies))
 
-    ((_ alist :yes :no setter its-bodies)
-     (let ((current (assq-or (quote setter) alist #f)))
-       (or current (let () . its-bodies))))
-    ((_ alist :yes :yes setter its-bodies)
-     (let ((current (assq-or (quote setter) alist #f)))
-       (or current
-           (alist-initialize!:stop (let () . its-bodies)))))
+    ((_ alist recalculate? :yes :no setter its-bodies)
+     (or (and (not recalculate?) (assq-or (quote setter) alist #f))
+         (let () . its-bodies)))
+    ((_ alist recalculate? :yes :yes setter its-bodies)
+     (or (and (not recalculate?) (assq-or (quote setter) alist #f))
+         (alist-initialize!:stop (let () . its-bodies))))
 
-    ((_ alist mapper :no setter its-bodies)
+    ((_ alist recalculate? mapper :no setter its-bodies)
      (mapper (quote setter) alist (lambda _ . its-bodies)))
-    ((_ alist mapper :yes setter its-bodies)
-     (mapper (quote setter) alist (lambda _ (alist-initialize!:stop (let () . its-bodies)))))))
+    ((_ alist recalculate? mapper :yes setter its-bodies)
+     (mapper (quote setter) alist recalculate? (lambda _ (alist-initialize!:stop (let () . its-bodies)))))))
 
 (define-syntax alist-initialize!:makelet
   (syntax-rules ()
@@ -156,30 +155,32 @@
      (let ()
        (define evaluated? #f)
        (define value #f)
-       (define (get)
-         (hashset-add! callstack (quote setter))
-         (let ((ret
-                (parameterize ((alist-initialize!:current-setter/p (quote setter)))
-                  (alist-initialize!:prepare-bodies alist default? once? setter its-bodies))))
-           (set! evaluated? #t)
-           (set! value ret)
-           (set! alist
-                 (if (alist-initialize!:multiret? value)
-                     (alist-initialize!:multi-set
-                      alist (alist-initialize!:multiret-vals value))
-                     (assq-set-value
-                      (quote setter) value
-                      alist)))
-           ret))
+       (define (get recalculate?)
+         (lambda _
+           (hashset-add! callstack (quote setter))
+           (let ((ret
+                  (parameterize ((alist-initialize!:current-setter/p (quote setter)))
+                    (alist-initialize!:prepare-bodies alist recalculate? default? once? setter its-bodies))))
+             (set! evaluated? #t)
+             (set! value ret)
+             (set! alist
+                   (if (alist-initialize!:multiret? value)
+                       (alist-initialize!:multi-set
+                        alist (alist-initialize!:multiret-vals value))
+                       (assq-set-value
+                        (quote setter) value
+                        alist)))
+             ret)))
        (define (wrap ev rec)
          (if evaluated? value
              (if (hashset-has? callstack (quote setter))
                  (rec) (ev))))
-       (define (default)
-         (wrap get (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
+       (define (default recalculate?)
+         (wrap (get recalculate?)
+               (lambda _ (raisu 'infinite-recursion-during-initialization-of (quote setter)))))
 
        (case-lambda
-        (() (default))
+        (() (default #f))
         ((action . args)
          (case action
            ((current)
@@ -189,12 +190,12 @@
                   (raisu 'argument-not-set!d))))
            ((recalculate)
             (set! evaluated? #f)
-            (default))
+            (default #t))
            ((or)
             (wrap
              (lambda _
                (catchu-case
-                (get)
+                ((get #f))
                 (('infinite-recursion-during-initialization-of name)
                  (hashset-delete! callstack (quote setter))
                  (set! evaluated? #f)

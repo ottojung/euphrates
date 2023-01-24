@@ -33,10 +33,10 @@
    alist))
 
 (define (alist-initialize-loop:user-mapper useradvice)
-  (lambda (name alist thunk)
-    (or (assq-or name alist #f)
+  (lambda (name alist recalculate? thunk)
+    (or (and (not recalculate?) (assq-or name alist #f))
         (if useradvice
-            (useradvice name alist thunk)
+            (useradvice name alist recalculate? thunk)
             (thunk)))))
 
 (define-syntax alist-initialize-loop:finish
