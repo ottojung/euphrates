@@ -3,6 +3,9 @@
 
 
 %use (absolute-posix-path?) "./src/absolute-posix-path-q.scm"
+%use (alist-initialize!/p) "./src/alist-initialize-bang-p.scm"
+%use (alist-initialize! alist-initialize!:current-setters alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:return-multiple alist-initialize!:run alist-initialize!:stop) "./src/alist-initialize-bang.scm"
+%use (alist-initialize-loop) "./src/alist-initialize-loop.scm"
 %use (alpha/alphabet) "./src/alpha-alphabet.scm"
 %use (alpha-lowercase/alphabet) "./src/alpha-lowercase-alphabet.scm"
 %use (alphanum/alphabet alphanum/alphabet/index) "./src/alphanum-alphabet.scm"
@@ -391,6 +394,7 @@
 %use (syntax-append) "./src/syntax-append.scm"
 %use (syntax-flatten*) "./src/syntax-flatten-star.scm"
 %use (syntax-identity) "./src/syntax-identity.scm"
+%use (syntax-map/noeval) "./src/syntax-map-noeval.scm"
 %use (syntax-map) "./src/syntax-map.scm"
 %use (syntax-reverse) "./src/syntax-reverse.scm"
 %use (syntax-tree-foreach) "./src/syntax-tree-foreach.scm"
@@ -428,6 +432,7 @@
 %use (url-get-hostname-and-port) "./src/url-get-hostname-and-port.scm"
 %use (url-get-path) "./src/url-get-path.scm"
 %use (url-get-protocol) "./src/url-get-protocol.scm"
+%use (url-get-query) "./src/url-get-query.scm"
 %use (url-goto) "./src/url-goto.scm"
 %use (make-usymbol usymbol-name usymbol-qualifier usymbol?) "./src/usymbol.scm"
 %use (vector-random-shuffle!) "./src/vector-random-shuffle-bang.scm"
