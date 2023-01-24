@@ -148,11 +148,12 @@
 
 (define-syntax alist-initialize!:makelet
   (syntax-rules ()
-    ((_ alist default? once? callstack setter . ())
+    ((_ alist default? once? setter . ())
      (alist-initialize!:makelet/static alist setter))
 
-    ((_ alist default? once? callstack setter . its-bodies)
+    ((_ alist default? once? setter . its-bodies)
      (let ()
+       (define callstack (make-hashset))
        (define evaluated? #f)
        (define value #f)
        (define (get recalculate?)
@@ -208,7 +209,6 @@
     ((_ alist
         default?
         once?
-        callstack
         ()
         buf2)
      (reverse buf2))
@@ -216,17 +216,14 @@
     ((_ alist
         default?
         once?
-        callstack
         buf1
         buf2)
-     (let ((callstack (make-hashset)))
-       (letrec buf1
-         (reverse buf2))))
+     (letrec buf1
+       (reverse buf2)))
 
     ((_ alist
         default?
         once?
-        callstack
         buf1
         buf2
         (setter . its-bodies)
@@ -235,8 +232,7 @@
       alist
       default?
       once?
-      callstack
-      ((setter (alist-initialize!:makelet alist default? once? callstack setter . its-bodies)) . buf1)
+      ((setter (alist-initialize!:makelet alist default? once? setter . its-bodies)) . buf1)
       (cons (cons (quote setter) setter) buf2)
       . rest-setters))))
 
@@ -247,7 +243,6 @@
       alist-name
       :yes ;; default flag
       :yes ;; once flag
-      callstack
       ()
       '()
       . setters))
@@ -257,7 +252,6 @@
       alist-name
       mapper ;; default flag
       :yes ;; once flag
-      callstack
       ()
       '()
       . setters))
@@ -267,7 +261,6 @@
       alist-name
       :yes ;; default flag
       :no ;; once flag
-      callstack
       ()
       '()
       . setters))
@@ -277,7 +270,6 @@
       alist-name
       mapper ;; default flag
       :no ;; once flag
-      callstack
       ()
       '()
       . setters))
@@ -287,7 +279,6 @@
       alist-name
       :no ;; default flag
       :no ;; once flag
-      callstack
       ()
       '()
       . setters))))
