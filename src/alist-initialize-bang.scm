@@ -162,6 +162,7 @@
            (let ((ret
                   (parameterize ((alist-initialize!:current-setter/p (quote setter)))
                     (alist-initialize!:prepare-bodies alist recalculate? default? once? setter its-bodies))))
+             (hashset-clear! callstack)
              (set! evaluated? #t)
              (set! value ret)
              (set! alist
