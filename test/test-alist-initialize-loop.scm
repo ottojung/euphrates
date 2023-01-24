@@ -10,8 +10,6 @@
    '((X . 3) (Y . 5) (Z . 15))
 
    (alist-initialize-loop
-    :fields (X Y Z)
-
     :initial
     ((X 3)
      (Y 5))
@@ -28,8 +26,6 @@
    '((X . 3) (Y . 5) (Z . 15) (W . 11))
 
    (alist-initialize-loop
-    :fields (X Y Z W)
-
     :initial
     ((X 3)
      (Y 5))
@@ -47,8 +43,6 @@
    '((X . 3) (Y . 5) (Z . 15))
 
    (alist-initialize-loop
-    :fields (X Y Z)
-
     :initial
     ((X 3)
      (Y 5))
@@ -62,8 +56,6 @@
    '((X . 3) (Y . 5) (Z . 15))
 
    (alist-initialize-loop
-    :fields (X Y Z)
-
     :initial
     ((X 3)
      (Y 5))
@@ -74,11 +66,9 @@
 (let ()
 
   (assert=
-   '((X . 3) (Y . 5) (Z . #f))
+   '((X . 3) (Y . 5))
 
    (alist-initialize-loop
-    :fields (X Y Z)
-
     :initial
     ((X 3)
      (Y 5)))))
@@ -86,11 +76,25 @@
 (let ()
 
   (assert=
-   '((X . 3) (Y . 5) (Z . #f))
+   '((X . 3) (Y . 5))
 
    (alist-initialize-loop
-    :fields (X Y Z)
-
     :invariant
     ((X 3)
      (Y 5)))))
+
+(let ()
+
+  (assert=
+   '((X . 3) (Y . 5) (Z . 15))
+
+   (alist-initialize-loop
+    :initial
+    ((X 3)
+     (Y 5))
+
+    :invariant
+    ((Z (* (X) (Y))))
+
+    :user
+    ((X 7)))))
