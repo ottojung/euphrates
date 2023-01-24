@@ -28,7 +28,7 @@
 %use (assq-set-value) "./assq-set-value.scm"
 %use (catchu-case) "./catchu-case.scm"
 %use (define-type9) "./define-type9.scm"
-%use (hashset-add! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
+%use (hashset-add! hashset-clear! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
 %use (raisu) "./raisu.scm"
 
 (define (alist-initialize!:currently-evaluating)
