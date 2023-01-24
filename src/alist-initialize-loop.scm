@@ -141,6 +141,15 @@
       :useradvice #f
       :user u-setters))
 
+    ((_ :initial i-setters
+        :useradvice useradvice
+        :user u-setters)
+     (alist-initialize-loop
+      :initial i-setters
+      :invariant ()
+      :useradvice useradvice
+      :user u-setters))
+
     ((_ :initial i-setters)
      (alist-initialize-loop
       :initial i-setters
