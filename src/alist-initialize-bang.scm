@@ -22,6 +22,7 @@
 %var alist-initialize!:run
 %var alist-initialize!:current-setters
 
+%use (alist-initialize!:current-setter/p) "./alist-initialize-bang-current-setter-p.scm"
 %use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
 %use (assq-or) "./assq-or.scm"
 %use (assq-set-value) "./assq-set-value.scm"
@@ -29,6 +30,9 @@
 %use (define-type9) "./define-type9.scm"
 %use (hashset-add! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
 %use (raisu) "./raisu.scm"
+
+(define (alist-initialize!:currently-evaluating)
+  (alist-initialize!:current-setter/p))
 
 (define (alist-initialize!:current-setters)
   (alist-initialize!/p))
@@ -42,10 +46,12 @@
 
 (define alist-initialize!:stop
   (case-lambda
-   (() (raisu alist-initialize!:stop-signal #f #f))
-   ((value) (raisu alist-initialize!:stop-signal #t value))))
+   (() (raisu alist-initialize!:stop-signal (alist-initialize!:currently-evaluating) #f #f))
+   ((value) (raisu alist-initialize!:stop-signal (alist-initialize!:currently-evaluating) #t value))))
 
-(define (alist-initialize!:get-value setter)
+(define (alist-initialize!:get-value name+setter)
+  (define name (car name+setter))
+  (define setter (cdr name+setter))
   (define threw? #f)
   (define ret-value? #t)
 
@@ -53,12 +59,13 @@
     (catchu-case
      (setter)
 
-     ((alist-initialize!:stop-signal value? value)
+     ((alist-initialize!:stop-signal name* value? value)
       (set! threw? #t)
       (set! ret-value? value?)
+      (set! name name*)
       value)))
 
-  (values ret threw? ret-value?))
+  (values name ret threw? ret-value?))
 
 (define (alist-initialize!:multi-set alist val)
   (unless (list? alist)
@@ -84,10 +91,8 @@
            (if (null? buf) alist
                (let ()
                  (define first (car buf))
-                 (define name (car first))
-                 (define setter (cdr first))
-                 (define-values (val threw? value?)
-                   (alist-initialize!:get-value setter))
+                 (define-values (name val threw? value?)
+                   (alist-initialize!:get-value first))
                  (if threw?
                      (if value?
                          (let ((ret (assq-set-value name val alist)))
@@ -153,7 +158,9 @@
        (define value #f)
        (define (get)
          (hashset-add! callstack (quote setter))
-         (let ((ret (alist-initialize!:prepare-bodies alist default? once? setter its-bodies)))
+         (let ((ret
+                (parameterize ((alist-initialize!:current-setter/p (quote setter)))
+                  (alist-initialize!:prepare-bodies alist default? once? setter its-bodies))))
            (set! evaluated? #t)
            (set! value ret)
            (set! alist
