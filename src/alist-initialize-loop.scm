@@ -70,11 +70,11 @@
       i-setters a-setters u-setters))))
 
 (define-syntax alist-initialize-loop
-  (syntax-rules (:initial :invariant :default)
+  (syntax-rules (:initial :invariant :user)
     ((_ :fields (first-field-name . rest-of-the-fields-names)
         :initial i-setters
         :invariant a-setters
-        :default u-setters)
+        :user u-setters)
      (alist-initialize-loop:bind-field-names
       alist-name
       (first-field-name . rest-of-the-fields-names)
@@ -89,16 +89,16 @@
       :fields names
       :initial i-setters
       :invariant a-setters
-      :default ()))
+      :user ()))
 
     ((_ :fields names
         :initial i-setters
-        :default u-setters)
+        :user u-setters)
      (alist-initialize-loop
       :fields names
       :initial i-setters
       :invariant ()
-      :default u-setters))
+      :user u-setters))
 
     ((_ :fields names
         :initial i-setters)
@@ -106,16 +106,16 @@
       :fields names
       :initial i-setters
       :invariant ()
-      :default ()))
+      :user ()))
 
     ((_ :fields names
         :invariant a-setters
-        :default u-setters)
+        :user u-setters)
      (alist-initialize-loop
       :fields names
       :initial ()
       :invariant a-setters
-      :default u-setters))
+      :user u-setters))
 
     ((_ :fields names
         :invariant a-setters)
@@ -123,14 +123,14 @@
       :fields names
       :initial ()
       :invariant a-setters
-      :default ()))
+      :user ()))
 
     ((_ :fields names
-        :default u-setters)
+        :user u-setters)
      (alist-initialize-loop
       :fields names
       :initial ()
       :invariant ()
-      :default u-setters))
+      :user u-setters))
 
     ))

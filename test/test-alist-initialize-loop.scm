@@ -19,7 +19,7 @@
     :invariant
     ((Z (* (X) (Y))))
 
-    :default
+    :user
     ((X 7)))))
 
 (let ()
@@ -37,7 +37,7 @@
     :invariant
     ((Z (* (X) (Y))))
 
-    :default
+    :user
     ((X 7)
      (W 11)))))
 
@@ -68,7 +68,7 @@
     ((X 3)
      (Y 5))
 
-    :default
+    :user
     ((Z (* (X) (Y)))))))
 
 (let ()
