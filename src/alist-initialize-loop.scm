@@ -105,7 +105,8 @@
 
 (define-syntax alist-initialize-loop
   (syntax-rules (:initial :invariant :useradvice :user)
-    ((_ :initial i-setters
+    ((_ alist-name
+        :initial i-setters
         :invariant a-setters
         :useradvice useradvice
         :user u-setters)
@@ -116,81 +117,101 @@
         i-setters a-setters u-setters))
       i-setters a-setters u-setters))
 
-    ((_ :initial i-setters
+    ((_ alist-name
+        :initial i-setters
         :invariant a-setters
         :user u-setters)
      (alist-initialize-loop
+      alist-name
       :initial i-setters
       :invariant a-setters
       :useradvice #f
       :user u-setters))
 
-    ((_ :initial i-setters
+    ((_ alist-name
+        :initial i-setters
         :invariant a-setters)
      (alist-initialize-loop
+      alist-name
       :initial i-setters
       :invariant a-setters
       :useradvice #f
       :user ()))
 
-    ((_ :initial i-setters
+    ((_ alist-name
+        :initial i-setters
         :user u-setters)
      (alist-initialize-loop
+      alist-name
       :initial i-setters
       :invariant ()
       :useradvice #f
       :user u-setters))
 
-    ((_ :initial i-setters
+    ((_ alist-name
+        :initial i-setters
         :useradvice useradvice
         :user u-setters)
      (alist-initialize-loop
+      alist-name
       :initial i-setters
       :invariant ()
       :useradvice useradvice
       :user u-setters))
 
-    ((_ :initial i-setters)
+    ((_ alist-name
+        :initial i-setters)
      (alist-initialize-loop
+      alist-name
       :initial i-setters
       :invariant ()
       :useradvice #f
       :user ()))
 
-    ((_ :invariant a-setters
+    ((_ alist-name
+        :invariant a-setters
         :user u-setters)
      (alist-initialize-loop
+      alist-name
       :initial ()
       :invariant a-setters
       :useradvice #f
       :user u-setters))
 
-    ((_ :invariant a-setters
+    ((_ alist-name
+        :invariant a-setters
         :user u-setters
         :useradvice useradvice)
      (alist-initialize-loop
+      alist-name
       :initial ()
       :invariant a-setters
       :useradvice useradvice
       :user u-setters))
 
-    ((_ :invariant a-setters)
+    ((_ alist-name
+        :invariant a-setters)
      (alist-initialize-loop
+      alist-name
       :initial ()
       :invariant a-setters
       :useradvice #f
       :user ()))
 
-    ((_ :user u-setters)
+    ((_ alist-name
+        :user u-setters)
      (alist-initialize-loop
+      alist-name
       :initial ()
       :invariant ()
       :useradvice #f
       :user u-setters))
 
-    ((_ :user u-setters
+    ((_ alist-name
+        :user u-setters
         :useradvice useradvice)
      (alist-initialize-loop
+      alist-name
       :initial ()
       :invariant ()
       :useradvice useradvice
