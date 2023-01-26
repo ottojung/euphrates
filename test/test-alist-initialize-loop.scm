@@ -10,7 +10,7 @@
    '((X . 3) (Y . 5) (Z . 15))
 
    (alist-initialize-loop
-    alist-name
+    :current alist-name
     :initial
     ((X 3)
      (Y 5))
@@ -27,7 +27,7 @@
    '((X . 3) (Y . 5) (Z . 15) (W . 11))
 
    (alist-initialize-loop
-    alist-name
+    :current alist-name
     :initial
     ((X 3)
      (Y 5))
@@ -45,7 +45,7 @@
    '((X . 3) (Y . 5) (Z . 15))
 
    (alist-initialize-loop
-    alist-name
+    :current alist-name
     :initial
     ((X 3)
      (Y 5))
@@ -59,7 +59,7 @@
    '((X . 3) (Y . 5) (Z . 15))
 
    (alist-initialize-loop
-    alist-name
+    :current alist-name
     :initial
     ((X 3)
      (Y 5))
@@ -73,7 +73,7 @@
    '((X . 3) (Y . 5))
 
    (alist-initialize-loop
-    alist-name
+    :current alist-name
     :initial
     ((X 3)
      (Y 5)))))
@@ -84,7 +84,7 @@
    '((X . 3) (Y . 5))
 
    (alist-initialize-loop
-    alist-name
+    :current alist-name
     :invariant
     ((X 3)
      (Y 5)))))
@@ -95,7 +95,7 @@
    '((X . 3) (Y . 5) (Z . 15))
 
    (alist-initialize-loop
-    alist-name
+    :current alist-name
     :initial
     ((X 3)
      (Y 5))
