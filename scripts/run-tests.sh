@@ -14,7 +14,7 @@ do
 	printf '(%s/%s)' "$INDEX" "$TESTCOUNT"
 	printf ' %s ... ' "$SHORT"
 
-	if build/czempak run "$FILE" 2>&1
+	if guile -L "$PWD/src" -s "$FILE" 2>&1
 	then printf '✓'
 	else printf 'X'
 	fi | grep -v -e '^;;; '
