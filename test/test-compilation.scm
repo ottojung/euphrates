@@ -3,6 +3,7 @@
 
 
 %use (absolute-posix-path?) "./src/absolute-posix-path-q.scm"
+%use (alist-initialize!:current-setter/p) "./src/alist-initialize-bang-current-setter-p.scm"
 %use (alist-initialize!/p) "./src/alist-initialize-bang-p.scm"
 %use (alist-initialize! alist-initialize!:current-setters alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:return-multiple alist-initialize!:run alist-initialize!:stop) "./src/alist-initialize-bang.scm"
 %use (alist-initialize-loop) "./src/alist-initialize-loop.scm"
@@ -83,6 +84,7 @@
 %use (dprint#p) "./src/dprint-p.scm"
 %use (dprint) "./src/dprint.scm"
 %use (dprintln) "./src/dprintln.scm"
+%use (dynamic-load) "./src/dynamic-load.scm"
 %use (dynamic-thread-async-thunk) "./src/dynamic-thread-async-thunk.scm"
 %use (dynamic-thread-async) "./src/dynamic-thread-async.scm"
 %use (dynamic-thread-cancel#p) "./src/dynamic-thread-cancel-p.scm"
