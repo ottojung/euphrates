@@ -2,9 +2,9 @@
 %run guile
 
 ;; list->tree
-%use (assert=) "./src/assert-equal.scm"
-%use (list->tree) "./src/list-to-tree.scm"
-%use (string->words) "./src/string-to-words.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list->tree) "./euphrates/list-to-tree.scm"
+%use (string->words) "./euphrates/string-to-words.scm"
 
 (let ()
   (define ex

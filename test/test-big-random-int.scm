@@ -1,9 +1,9 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (big-random-int) "./src/big-random-int.scm"
-%use (with-randomizer-seed) "./src/with-randomizer-seed.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (big-random-int) "./euphrates/big-random-int.scm"
+%use (with-randomizer-seed) "./euphrates/with-randomizer-seed.scm"
 
 (let () ; big-random-int
   (define (cycle1)

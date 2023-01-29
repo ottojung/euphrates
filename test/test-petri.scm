@@ -2,12 +2,12 @@
 %run guile
 
 ;; petri
-%use (assert=) "./src/assert-equal.scm"
-%use (lines->string) "./src/lines-to-string.scm"
-%use (with-np-thread-env/non-interruptible) "./src/np-thread-parameterize.scm"
-%use (petri-profun-net) "./src/petri-net-parse-profun.scm"
-%use (petri-lambda-net) "./src/petri-net-parse.scm"
-%use (petri-push petri-run) "./src/petri.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (lines->string) "./euphrates/lines-to-string.scm"
+%use (with-np-thread-env/non-interruptible) "./euphrates/np-thread-parameterize.scm"
+%use (petri-profun-net) "./euphrates/petri-net-parse-profun.scm"
+%use (petri-lambda-net) "./euphrates/petri-net-parse.scm"
+%use (petri-push petri-run) "./euphrates/petri.scm"
 
 (define (handler type options)
   (case type

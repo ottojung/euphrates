@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (syntax-flatten*) "./src/syntax-flatten-star.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (syntax-flatten*) "./euphrates/syntax-flatten-star.scm"
 
 (let () ;; syntax-flatten-star
   (define-syntax cont

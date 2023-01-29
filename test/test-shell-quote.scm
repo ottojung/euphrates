@@ -2,8 +2,8 @@
 %run guile
 
 ;; shell-quote
-%use (assert=) "./src/assert-equal.scm"
-%use (shell-quote) "./src/shell-quote.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (shell-quote) "./euphrates/shell-quote.scm"
 
 (let ()
   (assert= "'$b'" (shell-quote "$b"))

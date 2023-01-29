@@ -2,19 +2,19 @@
 %run guile
 
 ;; monad basics
-%use (assert=) "./src/assert-equal.scm"
-%use (compose-under) "./src/compose-under.scm"
-%use (identity-monad) "./src/identity-monad.scm"
-%use (lines->string) "./src/lines-to-string.scm"
-%use (log-monad) "./src/log-monad.scm"
-%use (maybe-monad) "./src/maybe-monad.scm"
-%use (monad-apply) "./src/monad-apply.scm"
-%use (monad-make/no-cont) "./src/monad-make-no-cont.scm"
-%use (with-monad-left with-monad-right) "./src/monad-parameterize.scm"
-%use (monadic-id) "./src/monadic-id.scm"
-%use (monadic) "./src/monadic.scm"
-%use (monadstate-ret monadstate?) "./src/monadstate.scm"
-%use (raisu) "./src/raisu.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (compose-under) "./euphrates/compose-under.scm"
+%use (identity-monad) "./euphrates/identity-monad.scm"
+%use (lines->string) "./euphrates/lines-to-string.scm"
+%use (log-monad) "./euphrates/log-monad.scm"
+%use (maybe-monad) "./euphrates/maybe-monad.scm"
+%use (monad-apply) "./euphrates/monad-apply.scm"
+%use (monad-make/no-cont) "./euphrates/monad-make-no-cont.scm"
+%use (with-monad-left with-monad-right) "./euphrates/monad-parameterize.scm"
+%use (monadic-id) "./euphrates/monadic-id.scm"
+%use (monadic) "./euphrates/monadic.scm"
+%use (monadstate-ret monadstate?) "./euphrates/monadstate.scm"
+%use (raisu) "./euphrates/raisu.scm"
 
 (define log-monad/to-string
   (lambda _

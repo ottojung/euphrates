@@ -2,9 +2,9 @@
 %run guile
 
 ;; list-windows
-%use (assert=) "./src/assert-equal.scm"
-%use (comp) "./src/comp.scm"
-%use (list-windows) "./src/list-windows.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (comp) "./euphrates/comp.scm"
+%use (list-windows) "./euphrates/list-windows.scm"
 
 (let ()
 

@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-insert-at
-%use (assert=) "./src/assert-equal.scm"
-%use (list-insert-at) "./src/list-insert-at.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-insert-at) "./euphrates/list-insert-at.scm"
 
 (let ()
   (assert= '(a b c d)

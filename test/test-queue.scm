@@ -2,9 +2,9 @@
 %run guile
 
 ;; queue
-%use (assert=) "./src/assert-equal.scm"
-%use (assert) "./src/assert.scm"
-%use (make-queue queue->list queue-empty? queue-peek queue-pop! queue-push!) "./src/queue.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (make-queue queue->list queue-empty? queue-peek queue-pop! queue-push!) "./euphrates/queue.scm"
 
 (define q (make-queue 1))
 (assert= '() (queue->list q))

@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (string->seconds) "./src/string-to-seconds.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string->seconds) "./euphrates/string-to-seconds.scm"
 
 (let () ;; string->seconds
   (assert= 20 (string->seconds "20s"))

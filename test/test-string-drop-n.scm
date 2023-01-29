@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (string-drop-n) "./src/string-drop-n.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string-drop-n) "./euphrates/string-drop-n.scm"
 
 (let () ;; string-drop-n
   (assert= "hello" (string-drop-n 0 "hello"))

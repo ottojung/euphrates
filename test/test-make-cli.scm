@@ -2,9 +2,9 @@
 %run guile
 
 ;; make-cli
-%use (assert) "./src/assert.scm"
-%use (make-cli) "./src/define-cli.scm"
-%use (make-hashmap) "./src/hashmap.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (make-cli) "./euphrates/define-cli.scm"
+%use (make-hashmap) "./euphrates/hashmap.scm"
 
 (let ()
   (define M

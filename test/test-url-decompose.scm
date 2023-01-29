@@ -2,8 +2,8 @@
 %run guile
 
 ;; url-decompose
-%use (assert=) "./src/assert-equal.scm"
-%use (url-decompose) "./src/url-decompose.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (url-decompose) "./euphrates/url-decompose.scm"
 
 (let ()
   (assert=

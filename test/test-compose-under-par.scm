@@ -1,9 +1,9 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (compose-under-par) "./src/compose-under-par.scm"
-%use (range) "./src/range.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (compose-under-par) "./euphrates/compose-under-par.scm"
+%use (range) "./euphrates/range.scm"
 
 (let () ;; compose-under-par
   (assert= (list 5 5 -5)

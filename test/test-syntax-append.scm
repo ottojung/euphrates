@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (syntax-append) "./src/syntax-append.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (syntax-append) "./euphrates/syntax-append.scm"
 
 (let ()
   (define-syntax cont

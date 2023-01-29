@@ -2,9 +2,9 @@
 %run guile
 
 ;; string->words / words->string
-%use (assert=) "./src/assert-equal.scm"
-%use (string->words) "./src/string-to-words.scm"
-%use (words->string) "./src/words-to-string.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string->words) "./euphrates/string-to-words.scm"
+%use (words->string) "./euphrates/words-to-string.scm"
 
 (assert=
  (string->words "hello \t \t \n world!")

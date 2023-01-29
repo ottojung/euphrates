@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (string-plus-encode) "./src/string-plus-encode.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string-plus-encode) "./euphrates/string-plus-encode.scm"
 
 (let () ;; string-plus-encode
   (define (test1 a b)

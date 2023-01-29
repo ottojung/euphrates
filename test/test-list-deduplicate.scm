@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-deduplicate
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (list-deduplicate) "./src/list-deduplicate.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (list-deduplicate) "./euphrates/list-deduplicate.scm"
 
 (let ()
   (assert=HS '(a b c d)

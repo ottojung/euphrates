@@ -2,9 +2,9 @@
 %run guile
 
 ;; number-list
-%use (assert=) "./src/assert-equal.scm"
-%use (fp) "./src/fp.scm"
-%use (number->number-list number-list->number) "./src/number-list.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (fp) "./euphrates/fp.scm"
+%use (number->number-list number-list->number) "./euphrates/number-list.scm"
 
 (let ()
   (assert= 9 (number-list->number 2 '(1 0 0 1) '()))

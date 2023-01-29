@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-chunks
-%use (assert=) "./src/assert-equal.scm"
-%use (list-chunks) "./src/list-chunks.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-chunks) "./euphrates/list-chunks.scm"
 
 (let ()
 

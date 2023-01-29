@@ -2,8 +2,8 @@
 %run guile
 
 ;; prefixtree
-%use (assert=) "./src/assert-equal.scm"
-%use (make-prefixtree prefixtree->tree prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree-set!) "./src/prefixtree.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (make-prefixtree prefixtree->tree prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree-set!) "./euphrates/prefixtree.scm"
 
 (let ()
   (define root (make-prefixtree 'r))

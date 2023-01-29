@@ -1,22 +1,22 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (debugv) "./src/debugv.scm"
-%use (profun-make-handler) "./src/profun-handler.scm"
-%use (profun-op-divisible) "./src/profun-op-divisible.scm"
-%use (profun-op-equals) "./src/profun-op-equals.scm"
-%use (profun-op-false) "./src/profun-op-false.scm"
-%use (profun-op-less) "./src/profun-op-less.scm"
-%use (profun-op*) "./src/profun-op-mult.scm"
-%use (profun-op+) "./src/profun-op-plus.scm"
-%use (profun-op-separate) "./src/profun-op-separate.scm"
-%use (profun-op-sqrt) "./src/profun-op-sqrt.scm"
-%use (profun-op-true) "./src/profun-op-true.scm"
-%use (profun-op-unify) "./src/profun-op-unify.scm"
-%use (profun-create-database) "./src/profun.scm"
-%use (make-profune-communicator profune-communicator-handle) "./src/profune-communicator.scm"
-%use (raisu) "./src/raisu.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (debugv) "./euphrates/debugv.scm"
+%use (profun-make-handler) "./euphrates/profun-handler.scm"
+%use (profun-op-divisible) "./euphrates/profun-op-divisible.scm"
+%use (profun-op-equals) "./euphrates/profun-op-equals.scm"
+%use (profun-op-false) "./euphrates/profun-op-false.scm"
+%use (profun-op-less) "./euphrates/profun-op-less.scm"
+%use (profun-op*) "./euphrates/profun-op-mult.scm"
+%use (profun-op+) "./euphrates/profun-op-plus.scm"
+%use (profun-op-separate) "./euphrates/profun-op-separate.scm"
+%use (profun-op-sqrt) "./euphrates/profun-op-sqrt.scm"
+%use (profun-op-true) "./euphrates/profun-op-true.scm"
+%use (profun-op-unify) "./euphrates/profun-op-unify.scm"
+%use (profun-create-database) "./euphrates/profun.scm"
+%use (make-profune-communicator profune-communicator-handle) "./euphrates/profune-communicator.scm"
+%use (raisu) "./euphrates/raisu.scm"
 
 (define server-handler
   (profun-make-handler

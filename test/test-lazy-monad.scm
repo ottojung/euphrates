@@ -2,10 +2,10 @@
 %run guile
 
 ;; lazy-monad
-%use (assert=) "./src/assert-equal.scm"
-%use (lazy-monad) "./src/lazy-monad.scm"
-%use (monadic) "./src/monadic.scm"
-%use (with-np-thread-env/non-interruptible) "./src/np-thread-parameterize.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (lazy-monad) "./euphrates/lazy-monad.scm"
+%use (monadic) "./euphrates/monadic.scm"
+%use (with-np-thread-env/non-interruptible) "./euphrates/np-thread-parameterize.scm"
 
 (with-np-thread-env/non-interruptible
  (assert=

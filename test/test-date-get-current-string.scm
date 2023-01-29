@@ -1,9 +1,9 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (date-get-current-string) "./src/date-get-current-string.scm"
-%use (time-get-current-unixtime/values#p) "./src/time-get-current-unixtime-values-p.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (date-get-current-string) "./euphrates/date-get-current-string.scm"
+%use (time-get-current-unixtime/values#p) "./euphrates/time-get-current-unixtime-values-p.scm"
 
 (let () ;; date-get-current-string
   (parameterize ((time-get-current-unixtime/values#p (lambda () (values 567 1234))))

@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (random-variable-name) "./src/random-variable-name.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (random-variable-name) "./euphrates/random-variable-name.scm"
 
 (let () ;; random-variable-name
   (define n1 (random-variable-name 20))

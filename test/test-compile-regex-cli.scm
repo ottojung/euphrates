@@ -2,12 +2,12 @@
 %run guile
 
 ;; compile-regex-cli
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (assert=) "./src/assert-equal.scm"
-%use (assert) "./src/assert.scm"
-%use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./src/compile-regex-cli.scm"
-%use (hashmap->alist make-hashmap) "./src/hashmap.scm"
-%use (make-regex-machine*) "./src/regex-machine.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./euphrates/compile-regex-cli.scm"
+%use (hashmap->alist make-hashmap) "./euphrates/hashmap.scm"
+%use (make-regex-machine*) "./euphrates/regex-machine.scm"
 
 (let ()
   (let ()

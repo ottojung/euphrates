@@ -2,8 +2,8 @@
 %run guile
 
 ;; json-parse
-%use (assert=) "./src/assert-equal.scm"
-%use (json-parse) "./src/json-parse.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (json-parse) "./euphrates/json-parse.scm"
 
 (let ()
   (let ()

@@ -2,8 +2,8 @@
 %run guile
 
 ;; hashset-positive
-%use (assert) "./src/assert.scm"
-%use (hashset-equal? make-hashset) "./src/hashset.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (hashset-equal? make-hashset) "./euphrates/hashset.scm"
 
 (let ()
   (assert

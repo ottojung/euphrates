@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (string-take-n) "./src/string-take-n.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string-take-n) "./euphrates/string-take-n.scm"
 
 (let () ;; string-take-n
   (assert= "" (string-take-n 0 "hello"))

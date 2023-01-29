@@ -2,10 +2,10 @@
 %run guile
 
 ;; cfg-machine
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (assert) "./src/assert.scm"
-%use (make-cfg-machine) "./src/cfg-machine.scm"
-%use (immutable-hashmap->alist) "./src/immutable-hashmap.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (make-cfg-machine) "./euphrates/cfg-machine.scm"
+%use (immutable-hashmap->alist) "./euphrates/immutable-hashmap.scm"
 
 (let ()
   (let ()

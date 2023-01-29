@@ -2,9 +2,9 @@
 %run guile
 
 ;; list-intersperse
-%use (assert=) "./src/assert-equal.scm"
-%use (list-intersperse) "./src/list-intersperse.scm"
-%use (range) "./src/range.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-intersperse) "./euphrates/list-intersperse.scm"
+%use (range) "./euphrates/range.scm"
 
 (let ()
   (assert= (list 0 'x 1 'x 2)

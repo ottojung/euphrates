@@ -2,8 +2,8 @@
 %run guile
 
 ;; path-extensions
-%use (assert=) "./src/assert-equal.scm"
-%use (path-extensions) "./src/path-extensions.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (path-extensions) "./euphrates/path-extensions.scm"
 
 (let ()
   (assert= ".txt" (path-extensions "hello.txt"))

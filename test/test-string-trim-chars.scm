@@ -2,8 +2,8 @@
 %run guile
 
 ;; string-trim-chars
-%use (assert=) "./src/assert-equal.scm"
-%use (string-trim-chars) "./src/string-trim-chars.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string-trim-chars) "./euphrates/string-trim-chars.scm"
 
 (let* ((s "xxhellokh")
        (tt "hx"))

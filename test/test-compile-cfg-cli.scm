@@ -2,8 +2,8 @@
 %run guile
 
 ;; compile-cfg-cli
-%use (assert=) "./src/assert-equal.scm"
-%use (CFG-CLI->CFG-lang) "./src/compile-cfg-cli.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (CFG-CLI->CFG-lang) "./euphrates/compile-cfg-cli.scm"
 
 (let ()
   (define input

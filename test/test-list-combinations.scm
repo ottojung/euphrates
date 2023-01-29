@@ -3,8 +3,8 @@
 
 ;; list-combinations
 
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (list-combinations) "./src/list-combinations.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (list-combinations) "./euphrates/list-combinations.scm"
 
 (assert=HS '(() (1) (2) (1 2) (3) (1 3) (2 3) (1 2 3) (4) (1 4) (2 4) (1 2 4) (3 4) (1 3 4) (2 3 4) (1 2 3 4))
            (list-combinations (list 1 2 3 4)))

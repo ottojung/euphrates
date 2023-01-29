@@ -1,10 +1,10 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (raisu) "./src/raisu.scm"
-%use (string->words) "./src/string-to-words.scm"
-%use (with-ignore-errors!) "./src/with-ignore-errors.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (raisu) "./euphrates/raisu.scm"
+%use (string->words) "./euphrates/string-to-words.scm"
+%use (with-ignore-errors!) "./euphrates/with-ignore-errors.scm"
 
 (let () ;; with-ignore-errors
   (assert=

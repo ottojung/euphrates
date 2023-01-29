@@ -2,8 +2,8 @@
 %run guile
 
 ;; directory-files
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (directory-files) "./src/directory-files.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (directory-files) "./euphrates/directory-files.scm"
 
 (assert=HS '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
            (directory-files "test/filetests"))

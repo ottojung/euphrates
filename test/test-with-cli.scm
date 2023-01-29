@@ -2,11 +2,11 @@
 %run guile
 
 ;; with-cli
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (assert=) "./src/assert-equal.scm"
-%use (assert) "./src/assert.scm"
-%use (command-line-argumets/p) "./src/command-line-arguments-p.scm"
-%use (with-cli) "./src/define-cli.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (command-line-argumets/p) "./euphrates/command-line-arguments-p.scm"
+%use (with-cli) "./euphrates/define-cli.scm"
 
 (let ()
   (parameterize

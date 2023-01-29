@@ -1,9 +1,9 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (vector-random-shuffle!) "./src/vector-random-shuffle-bang.scm"
-%use (with-randomizer-seed) "./src/with-randomizer-seed.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (vector-random-shuffle!) "./euphrates/vector-random-shuffle-bang.scm"
+%use (with-randomizer-seed) "./euphrates/with-randomizer-seed.scm"
 
 (let () ;; vector-random-shuffle!
   (with-randomizer-seed

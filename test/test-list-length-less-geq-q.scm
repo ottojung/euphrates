@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-length-less-geq-q
-%use (assert) "./src/assert.scm"
-%use (list-length=<?) "./src/list-length-geq-q.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (list-length=<?) "./euphrates/list-length-geq-q.scm"
 
 (let ()
 

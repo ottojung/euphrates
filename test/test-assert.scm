@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert) "./src/assert.scm"
-%use (catch-any) "./src/catch-any.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (catch-any) "./euphrates/catch-any.scm"
 
 (let () ;; assert
   (catch-any

@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (fn-alist) "./src/fn-alist.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (fn-alist) "./euphrates/fn-alist.scm"
 
 (define mult
  (fn-alist (X Y) (+ X Y)))

@@ -2,8 +2,8 @@
 %run guile
 
 ;; url-get-protocol
-%use (assert=) "./src/assert-equal.scm"
-%use (url-get-protocol) "./src/url-get-protocol.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (url-get-protocol) "./euphrates/url-get-protocol.scm"
 
 (let ()
   (assert= "" (url-get-protocol "not-a-url"))

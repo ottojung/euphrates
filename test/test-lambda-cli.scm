@@ -2,8 +2,8 @@
 %run guile
 
 ;; lambda-cli
-%use (assert=) "./src/assert-equal.scm"
-%use (lambda-cli) "./src/define-cli.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (lambda-cli) "./euphrates/define-cli.scm"
 
 (let ()
 

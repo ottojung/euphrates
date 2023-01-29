@@ -2,8 +2,8 @@
 %run guile
 
 ;; url-goto
-%use (assert=) "./src/assert-equal.scm"
-%use (url-goto) "./src/url-goto.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (url-goto) "./euphrates/url-goto.scm"
 
 (let ()
   (assert= "https://gnu.org/philosophy/philosophy.html"

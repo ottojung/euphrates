@@ -1,9 +1,9 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (string->seconds/columned) "./src/string-to-seconds-columned.scm"
-%use (string->seconds) "./src/string-to-seconds.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string->seconds/columned) "./euphrates/string-to-seconds-columned.scm"
+%use (string->seconds) "./euphrates/string-to-seconds.scm"
 
 (let () ;; string-to-seconds-columned
   (assert= 20 (string->seconds "20s"))

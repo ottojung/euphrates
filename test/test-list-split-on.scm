@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-split-on
-%use (assert=) "./src/assert-equal.scm"
-%use (list-split-on) "./src/list-split-on.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-split-on) "./euphrates/list-split-on.scm"
 
 (let ()
   (assert= '((1) (3) (5) (7))

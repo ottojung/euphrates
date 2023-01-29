@@ -2,11 +2,11 @@
 %run guile
 
 ;; regex-machine
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (assert=) "./src/assert-equal.scm"
-%use (assert) "./src/assert.scm"
-%use (hashmap->alist hashmap-ref make-hashmap) "./src/hashmap.scm"
-%use (make-regex-machine*) "./src/regex-machine.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (hashmap->alist hashmap-ref make-hashmap) "./euphrates/hashmap.scm"
+%use (make-regex-machine*) "./euphrates/regex-machine.scm"
 
 (let ()
 

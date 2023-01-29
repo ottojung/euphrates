@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (directory-files-depth-iter) "./src/directory-files-depth-iter.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (directory-files-depth-iter) "./euphrates/directory-files-depth-iter.scm"
 
 (define iter
   (directory-files-depth-iter 9 "test/filetests"))

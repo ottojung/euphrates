@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (string->numstring) "./src/string-to-numstring.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string->numstring) "./euphrates/string-to-numstring.scm"
 
 (let () ;; string-to-numstring
   (assert= "+97-98-99-100" (string->numstring "abcd"))

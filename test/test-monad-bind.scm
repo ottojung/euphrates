@@ -2,14 +2,14 @@
 %run guile
 
 ;; monad-bind
-%use (assert=) "./src/assert-equal.scm"
-%use (identity-monad) "./src/identity-monad.scm"
-%use (lines->string) "./src/lines-to-string.scm"
-%use (log-monad) "./src/log-monad.scm"
-%use (maybe-monad) "./src/maybe-monad.scm"
-%use (monad-bind) "./src/monad-bind.scm"
-%use (monad-do) "./src/monad-do.scm"
-%use (with-monad) "./src/with-monad.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (identity-monad) "./euphrates/identity-monad.scm"
+%use (lines->string) "./euphrates/lines-to-string.scm"
+%use (log-monad) "./euphrates/log-monad.scm"
+%use (maybe-monad) "./euphrates/maybe-monad.scm"
+%use (monad-bind) "./euphrates/monad-bind.scm"
+%use (monad-do) "./euphrates/monad-do.scm"
+%use (with-monad) "./euphrates/with-monad.scm"
 
 (let ()
 

@@ -2,8 +2,8 @@
 %run guile
 
 ;; convert-number-base
-%use (assert=) "./src/assert-equal.scm"
-%use (convert-number-base) "./src/convert-number-base.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (convert-number-base) "./euphrates/convert-number-base.scm"
 
 (let ()
   (for-each

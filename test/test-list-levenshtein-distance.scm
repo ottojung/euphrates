@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-levenshtein-distance
-%use (assert=) "./src/assert-equal.scm"
-%use (list-levenshtein-distance) "./src/list-levenshtein-distance.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-levenshtein-distance) "./euphrates/list-levenshtein-distance.scm"
 
 (let ()
   (define (test n a b)

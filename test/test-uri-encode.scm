@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (uri-encode) "./src/uri-encode.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (uri-encode) "./euphrates/uri-encode.scm"
 
 (let () ;; uri-encode
   (define (test1 a b)

@@ -2,11 +2,11 @@
 %run guile
 
 ;; exception-monad
-%use (assert) "./src/assert.scm"
-%use (catch-any) "./src/catch-any.scm"
-%use (exception-monad) "./src/exception-monad.scm"
-%use (monadic) "./src/monadic.scm"
-%use (raisu) "./src/raisu.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (catch-any) "./euphrates/catch-any.scm"
+%use (exception-monad) "./euphrates/exception-monad.scm"
+%use (monadic) "./euphrates/monadic.scm"
+%use (raisu) "./euphrates/raisu.scm"
 
 (let ((ran-always #f)
       (throwed #t)

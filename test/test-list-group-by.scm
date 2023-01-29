@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=HS) "./src/assert-equal-hs.scm"
-%use (list-group-by) "./src/list-group-by.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
+%use (list-group-by) "./euphrates/list-group-by.scm"
 
 (let () ;; list-group-by
   (assert=HS '((#t 4 2) (#f 5 3 1))

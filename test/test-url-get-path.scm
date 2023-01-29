@@ -2,8 +2,8 @@
 %run guile
 
 ;; url-get-path
-%use (assert=) "./src/assert-equal.scm"
-%use (url-get-path) "./src/url-get-path.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (url-get-path) "./euphrates/url-get-path.scm"
 
 (let ()
   (assert= "/fun/humor.en.html" (url-get-path "https://gnu.org/fun/humor.en.html"))

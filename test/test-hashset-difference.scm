@@ -2,8 +2,8 @@
 %run guile
 
 ;; hashset-difference
-%use (assert) "./src/assert.scm"
-%use (hashset-difference hashset-equal? make-hashset) "./src/hashset.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (hashset-difference hashset-equal? make-hashset) "./euphrates/hashset.scm"
 
 (let ()
   (assert

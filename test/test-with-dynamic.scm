@@ -2,10 +2,10 @@
 %run guile
 
 ;; lazy-parameter, with-dynamic
-%use (assert=) "./src/assert-equal.scm"
-%use (lazy-parameter) "./src/lazy-parameter.scm"
-%use (~a) "./src/tilda-a.scm"
-%use (with-dynamic) "./src/with-dynamic.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (lazy-parameter) "./euphrates/lazy-parameter.scm"
+%use (~a) "./euphrates/tilda-a.scm"
+%use (with-dynamic) "./euphrates/with-dynamic.scm"
 
 (define test 1)
 (define x (lazy-parameter (begin (set! test 3) 2)

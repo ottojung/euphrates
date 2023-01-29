@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (list-zip-with) "./src/list-zip-with.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-zip-with) "./euphrates/list-zip-with.scm"
 
 (let () ;; list-zip-with
   (assert= '((1 a) (2 b) (3 c))

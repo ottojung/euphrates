@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-fold
-%use (assert=) "./src/assert-equal.scm"
-%use (list-fold) "./src/list-fold.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-fold) "./euphrates/list-fold.scm"
 
 (let ()
   (assert=

@@ -2,7 +2,7 @@
 %run guile
 
 ;; assert=HS
-%use (assert=HS) "./src/assert-equal-hs.scm"
+%use (assert=HS) "./euphrates/assert-equal-hs.scm"
 
 (let ()
   (assert=HS '(a b c d) '(a b c d))

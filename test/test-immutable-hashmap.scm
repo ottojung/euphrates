@@ -2,8 +2,8 @@
 %run guile
 
 ;; immutable-hashmap
-%use (assert=) "./src/assert-equal.scm"
-%use (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set) "./src/immutable-hashmap.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set) "./euphrates/immutable-hashmap.scm"
 
 (let ()
   (define H (make-immutable-hashmap))

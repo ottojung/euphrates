@@ -2,8 +2,8 @@
 %run guile
 
 ;; properties
-%use (assert=) "./src/assert-equal.scm"
-%use (define-property) "./src/properties.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (define-property) "./euphrates/properties.scm"
 
 (let ()
 

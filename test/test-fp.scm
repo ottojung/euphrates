@@ -1,10 +1,10 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (fp) "./src/fp.scm"
-%use (list-zip-with) "./src/list-zip-with.scm"
-%use (range) "./src/range.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (fp) "./euphrates/fp.scm"
+%use (list-zip-with) "./euphrates/list-zip-with.scm"
+%use (range) "./euphrates/range.scm"
 
 (let () ;; fp
   (assert= '((0 2) (2 3) (4 4))

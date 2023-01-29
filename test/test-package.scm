@@ -2,9 +2,9 @@
 %run guile
 
 ;; package
-%use (assert=) "./src/assert-equal.scm"
-%use (hashmap-ref) "./src/hashmap.scm"
-%use (make-package use-svars with-package with-svars) "./src/package.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (hashmap-ref) "./euphrates/hashmap.scm"
+%use (make-package use-svars with-package with-svars) "./euphrates/package.scm"
 
 (let ()
   (define already-defined 7)

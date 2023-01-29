@@ -2,8 +2,8 @@
 %run guile
 
 ;; letin
-%use (assert=) "./src/assert-equal.scm"
-%use (letin) "./src/letin.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (letin) "./euphrates/letin.scm"
 
 (let ()
   (letin

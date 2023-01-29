@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (path-normalize) "./src/path-normalize.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (path-normalize) "./euphrates/path-normalize.scm"
 
 (let () ;; path-normalize
   (assert= "../../some/to/a/dir"

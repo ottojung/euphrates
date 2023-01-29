@@ -2,8 +2,8 @@
 %run guile
 
 ;; url-get-hostname-and-port
-%use (assert=) "./src/assert-equal.scm"
-%use (url-get-hostname-and-port) "./src/url-get-hostname-and-port.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (url-get-hostname-and-port) "./euphrates/url-get-hostname-and-port.scm"
 
 (let ()
   (assert= "" (url-get-hostname-and-port "not-a-url"))

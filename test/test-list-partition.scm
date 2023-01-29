@@ -1,9 +1,9 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (list-partition) "./src/list-partition.scm"
-%use (range) "./src/range.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-partition) "./euphrates/list-partition.scm"
+%use (range) "./euphrates/range.scm"
 
 (let () ;; list-partition
   (assert= '((#t 8 6 4 2 0)

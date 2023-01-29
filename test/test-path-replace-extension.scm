@@ -2,8 +2,8 @@
 %run guile
 
 ;; path-replace-extension
-%use (assert=) "./src/assert-equal.scm"
-%use (path-replace-extension) "./src/path-replace-extension.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (path-replace-extension) "./euphrates/path-replace-extension.scm"
 
 (let ()
   (assert=

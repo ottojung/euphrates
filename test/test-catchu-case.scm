@@ -1,10 +1,10 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (catchu-case) "./src/catchu-case.scm"
-%use (dprintln) "./src/dprintln.scm"
-%use (raisu) "./src/raisu.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (catchu-case) "./euphrates/catchu-case.scm"
+%use (dprintln) "./euphrates/dprintln.scm"
+%use (raisu) "./euphrates/raisu.scm"
 
 (let () ;; catchu-case
 

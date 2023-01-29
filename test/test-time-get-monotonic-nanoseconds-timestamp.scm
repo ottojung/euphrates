@@ -2,8 +2,8 @@
 %run guile
 
 ;; time-get-monotonic-nanoseconds-timestamp
-%use (assert) "./src/assert.scm"
-%use (time-get-monotonic-nanoseconds-timestamp) "./src/time-get-monotonic-nanoseconds-timestamp.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (time-get-monotonic-nanoseconds-timestamp) "./euphrates/time-get-monotonic-nanoseconds-timestamp.scm"
 
 (let ()
   (let ((ret (time-get-monotonic-nanoseconds-timestamp)))

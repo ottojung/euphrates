@@ -1,11 +1,11 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (assert) "./src/assert.scm"
-%use (define-type9) "./src/define-type9.scm"
-%use (list->hashset) "./src/hashset.scm"
-%use (deserialize/short serialize/short) "./src/serialization-short.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (define-type9) "./euphrates/define-type9.scm"
+%use (list->hashset) "./euphrates/hashset.scm"
+%use (deserialize/short serialize/short) "./euphrates/serialization-short.scm"
 
 (use-modules (ice-9 pretty-print))
 

@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (alist-initialize-loop) "./src/alist-initialize-loop.scm"
-%use (assert=) "./src/assert-equal.scm"
+%use (alist-initialize-loop) "./euphrates/alist-initialize-loop.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
 
 (let ()
 

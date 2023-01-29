@@ -1,8 +1,8 @@
 
 %run guile
 
-%use (alist-initialize! alist-initialize!:return-multiple alist-initialize!:stop) "./src/alist-initialize-bang.scm"
-%use (assert=) "./src/assert-equal.scm"
+%use (alist-initialize! alist-initialize!:return-multiple alist-initialize!:stop) "./euphrates/alist-initialize-bang.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
 
 (let ()
   (define state `((X . 3) (Y . 4)))

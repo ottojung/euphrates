@@ -1,10 +1,10 @@
 
 %run guile
 
-%use (assert=) "./src/assert-equal.scm"
-%use (get-object-descriptor) "./src/get-object-descriptor.scm"
-%use (make-hashmap) "./src/hashmap.scm"
-%use (list->hashset) "./src/hashset.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (get-object-descriptor) "./euphrates/get-object-descriptor.scm"
+%use (make-hashmap) "./euphrates/hashmap.scm"
+%use (list->hashset) "./euphrates/hashset.scm"
 
 (define (test1 name obj)
   (assert=

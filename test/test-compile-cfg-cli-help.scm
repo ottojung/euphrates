@@ -1,10 +1,10 @@
 
 %run guile
 
-%use (assert) "./src/assert.scm"
-%use (CFG-AST->CFG-CLI-help) "./src/compile-cfg-cli-help.scm"
-%use (current-program-path/p) "./src/current-program-path-p.scm"
-%use (make-cli-with-handler) "./src/define-cli.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (CFG-AST->CFG-CLI-help) "./euphrates/compile-cfg-cli-help.scm"
+%use (current-program-path/p) "./euphrates/current-program-path-p.scm"
+%use (make-cli-with-handler) "./euphrates/define-cli.scm"
 
 (define MAX-BASE 90)
 (define DEFAULT-BASE 64)

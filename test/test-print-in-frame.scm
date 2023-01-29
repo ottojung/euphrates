@@ -2,10 +2,10 @@
 %run guile
 
 ;; print-in-frame
-%use (assert=) "./src/assert-equal.scm"
-%use (list-intersperse) "./src/list-intersperse.scm"
-%use (print-in-frame) "./src/print-in-frame.scm"
-%use (string->words) "./src/string-to-words.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-intersperse) "./euphrates/list-intersperse.scm"
+%use (print-in-frame) "./euphrates/print-in-frame.scm"
+%use (string->words) "./euphrates/string-to-words.scm"
 
 (let ()
 

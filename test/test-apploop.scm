@@ -2,8 +2,8 @@
 %run guile
 
 ;; apploop
-%use (apploop) "./src/apploop.scm"
-%use (assert=) "./src/assert-equal.scm"
+%use (apploop) "./euphrates/apploop.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
 
 (let ()
   (assert=

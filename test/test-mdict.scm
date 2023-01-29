@@ -2,9 +2,9 @@
 %run guile
 
 ;; mdict
-%use (assert=) "./src/assert-equal.scm"
-%use (assert) "./src/assert.scm"
-%use (mdict mdict-has? mdict-set!) "./src/mdict.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (mdict mdict-has? mdict-set!) "./euphrates/mdict.scm"
 
 (let ((zz (mdict 1 2
                  3 4)))

@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-break
-%use (assert=) "./src/assert-equal.scm"
-%use (list-break) "./src/list-break.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-break) "./euphrates/list-break.scm"
 
 (let ()
   (define-values (a1 a2)

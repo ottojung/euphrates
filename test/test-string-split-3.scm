@@ -2,8 +2,8 @@
 %run guile
 
 ;; string-split-3
-%use (assert=) "./src/assert-equal.scm"
-%use (string-split-3) "./src/string-split-3.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (string-split-3) "./euphrates/string-split-3.scm"
 
 (let ()
 

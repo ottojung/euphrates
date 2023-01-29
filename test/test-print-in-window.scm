@@ -2,10 +2,10 @@
 %run guile
 
 ;; print-in-window
-%use (assert=) "./src/assert-equal.scm"
-%use (list-intersperse) "./src/list-intersperse.scm"
-%use (print-in-window) "./src/print-in-window.scm"
-%use (string->words) "./src/string-to-words.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-intersperse) "./euphrates/list-intersperse.scm"
+%use (print-in-window) "./euphrates/print-in-window.scm"
+%use (string->words) "./euphrates/string-to-words.scm"
 
 (let ()
   (assert=

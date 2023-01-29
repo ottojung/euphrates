@@ -2,8 +2,8 @@
 %run guile
 
 ;; appcomp
-%use (assert=) "./src/assert-equal.scm"
-%use (appcomp comp) "./src/comp.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (appcomp comp) "./euphrates/comp.scm"
 
 (let ()
   (define f

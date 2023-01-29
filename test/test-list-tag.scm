@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-tag
-%use (assert=) "./src/assert-equal.scm"
-%use (list-tag list-untag) "./src/list-tag.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-tag list-untag) "./euphrates/list-tag.scm"
 
 (let ()
   (assert= '((2 (5 3 1) 7 9) (6 (9 7) 1 3))

@@ -2,9 +2,9 @@
 %run guile
 
 ;; list-traverse
-%use (assert=) "./src/assert-equal.scm"
-%use (list-traverse) "./src/list-traverse.scm"
-%use (range) "./src/range.scm"
+%use (assert=) "./euphrates/assert-equal.scm"
+%use (list-traverse) "./euphrates/list-traverse.scm"
+%use (range) "./euphrates/range.scm"
 
 (let ()
   (assert=

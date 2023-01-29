@@ -2,8 +2,8 @@
 %run guile
 
 ;; list-length=
-%use (assert) "./src/assert.scm"
-%use (list-length=) "./src/list-length-eq.scm"
+%use (assert) "./euphrates/assert.scm"
+%use (list-length=) "./euphrates/list-length-eq.scm"
 
 (let ()
 
