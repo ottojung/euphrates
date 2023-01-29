@@ -21,7 +21,6 @@
 %var profun-database-falsy?
 %var profun-database-handle
 %var profun-database-get-all
-%var profun-database-set-all!
 %var profun-database-get
 %var profun-database-add!
 %var make-profun-database
@@ -114,11 +113,6 @@
 (define (profun-database-get-all db key arity)
   (define table (profun-database-table db))
   (double-hashmap-ref table key arity))
-
-;; FIXME: dont export this
-(define (profun-database-set-all! db key arity new-rules)
-  (define table (profun-database-table db))
-  (double-hashmap-set! table key arity new-rules))
 
 (define (profun-database-get db k v arity)
   (define (get db key index arity)
