@@ -22,7 +22,6 @@
 %var profun-database-handle
 %var profun-database-get-all
 %var profun-database-get
-%var profun-database-add!
 %var make-profun-database
 %var make-falsy-profun-database
 %var profun-database-extend
