@@ -16,8 +16,10 @@
 
 %var profun-create-database
 %var profun-eval-query
+%var profun-eval-query/boolean
 %var profun-iterate
 %var profun-next
+%var profun-next/boolean
 
 %use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
@@ -284,7 +286,7 @@
   (for-each (comp (profun-database-add-rule! db)) lst-of-rules)
   db)
 
-(define (profun-next iter)
+(define (profun-next/generic boolean? iter)
   (define db (profun-iterator-db iter))
   (define env (profun-iterator-env iter))
   (define query (profun-iterator-query iter))
@@ -311,26 +313,28 @@
       #f)
      ((profun-state? new-state)
       (set-profun-iterator-state! iter new-state)
-      (map (fn-cons identity profun-value-unwrap)
-           (filter (lambda (x) (symbol? (car x)))
-                   (take-vars new-state))))
+      (if boolean? #t
+          (map (fn-cons identity profun-value-unwrap)
+               (filter (lambda (x) (symbol? (car x)))
+                       (take-vars new-state)))))
      ((profun-abort? new-state)
-      (let ()
-        (define new0
-          (if (equal? #f last-state)
-              (profun-state-finish current-state)
-              (backtrack-eval db env last-state)))
-        (define new
-          (if (equal? 'backtracking-full-stop new0)
-              (profun-state-finish current-state)
-              new0))
-        (define ret
-          (let ((iter-copy (profun-iterator-copy iter)))
-            (set-profun-iterator-state! iter-copy current-state)
-            (profun-abort-set-iter
-             new-state iter-copy)))
-        (set-profun-iterator-state! iter new)
-        ret))
+      (if boolean? #f
+          (let ()
+            (define new0
+              (if (equal? #f last-state)
+                  (profun-state-finish current-state)
+                  (backtrack-eval db env last-state)))
+            (define new
+              (if (equal? 'backtracking-full-stop new0)
+                  (profun-state-finish current-state)
+                  new0))
+            (define ret
+              (let ((iter-copy (profun-iterator-copy iter)))
+                (set-profun-iterator-state! iter-copy current-state)
+                (profun-abort-set-iter
+                 new-state iter-copy)))
+            (set-profun-iterator-state! iter new)
+            ret)))
 
      (else (raisu 'unknown-profun-state-type-in-profun-run new-state))))
 
@@ -355,6 +359,11 @@
     (eval-cont (backtrack db env last-state)))
    (else
     (eval-initial last-state))))
+
+(define (profun-next iter)
+  (profun-next/generic #f iter))
+(define (profun-next/boolean iter)
+  (profun-next/generic #t iter))
 
 ;; accepts profun-database `db` and list of symbols `query`
 ;; returns an iterator
@@ -391,3 +400,7 @@
 (define (profun-eval-query db query)
   (define iterator (profun-iterate db query))
   (profun-eval-from iterator '()))
+
+(define (profun-eval-query/boolean db query)
+  (define iterator (profun-iterate db query))
+  (profun-next/boolean iterator))
