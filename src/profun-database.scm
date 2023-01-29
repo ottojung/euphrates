@@ -115,6 +115,7 @@
   (define table (profun-database-table db))
   (double-hashmap-ref table key arity))
 
+;; FIXME: dont export this
 (define (profun-database-set-all! db key arity new-rules)
   (define table (profun-database-table db))
   (double-hashmap-set! table key arity new-rules))
