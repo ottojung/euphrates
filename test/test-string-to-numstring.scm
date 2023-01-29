@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-string-to-numstring)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates string-to-numstring) :select (string->numstring)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (string->numstring) "./euphrates/string-to-numstring.scm"
 
 (let () ;; string-to-numstring
   (assert= "+97-98-99-100" (string->numstring "abcd"))

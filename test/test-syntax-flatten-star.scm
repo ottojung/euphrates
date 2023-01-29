@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-syntax-flatten-star)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates syntax-flatten-star) :select (syntax-flatten*)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (syntax-flatten*) "./euphrates/syntax-flatten-star.scm"
 
 (let () ;; syntax-flatten-star
   (define-syntax cont

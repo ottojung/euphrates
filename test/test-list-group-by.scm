@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-group-by)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates list-group-by) :select (list-group-by)))))
 
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (list-group-by) "./euphrates/list-group-by.scm"
 
 (let () ;; list-group-by
   (assert=HS '((#t 4 2) (#f 5 3 1))

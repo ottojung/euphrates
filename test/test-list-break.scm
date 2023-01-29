@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-break)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-break) :select (list-break)))))
 
 ;; list-break
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-break) "./euphrates/list-break.scm"
 
 (let ()
   (define-values (a1 a2)

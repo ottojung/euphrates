@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-cfg-machine)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates cfg-machine) :select (make-cfg-machine))
+    :use-module ((euphrates immutable-hashmap) :select (immutable-hashmap->alist)))))
 
 ;; cfg-machine
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (make-cfg-machine) "./euphrates/cfg-machine.scm"
-%use (immutable-hashmap->alist) "./euphrates/immutable-hashmap.scm"
 
 (let ()
   (let ()

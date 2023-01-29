@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-print-in-frame)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-intersperse) :select (list-intersperse))
+    :use-module ((euphrates print-in-frame) :select (print-in-frame))
+    :use-module ((euphrates string-to-words) :select (string->words)))))
 
 ;; print-in-frame
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-intersperse) "./euphrates/list-intersperse.scm"
-%use (print-in-frame) "./euphrates/print-in-frame.scm"
-%use (string->words) "./euphrates/string-to-words.scm"
 
 (let ()
 
@@ -146,7 +148,7 @@
                          "the quick brown fox jumps over a lazy dog"))))))
 
   (assert=
-  "
+   "
   │the   │
   │quick │
   │brown │
@@ -167,7 +169,7 @@
                          "the quick brown fox jumps over a lazy dog"))))))
 
   (assert=
-  "
+   "
   │the   │
   │quick │
   │brown │

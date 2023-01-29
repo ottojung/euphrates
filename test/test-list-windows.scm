@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-windows)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates comp) :select (comp))
+    :use-module ((euphrates list-windows) :select (list-windows)))))
 
 ;; list-windows
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (comp) "./euphrates/comp.scm"
-%use (list-windows) "./euphrates/list-windows.scm"
 
 (let ()
 

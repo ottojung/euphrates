@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-string-to-seconds-columned)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates string-to-seconds-columned) :select (string->seconds/columned))
+    :use-module ((euphrates string-to-seconds) :select (string->seconds)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (string->seconds/columned) "./euphrates/string-to-seconds-columned.scm"
-%use (string->seconds) "./euphrates/string-to-seconds.scm"
 
 (let () ;; string-to-seconds-columned
   (assert= 20 (string->seconds "20s"))

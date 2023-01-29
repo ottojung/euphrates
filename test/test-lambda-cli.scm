@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-lambda-cli)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates define-cli) :select (lambda-cli)))))
 
 ;; lambda-cli
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (lambda-cli) "./euphrates/define-cli.scm"
 
 (let ()
 

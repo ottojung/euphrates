@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-uri-encode)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates uri-encode) :select (uri-encode)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (uri-encode) "./euphrates/uri-encode.scm"
 
 (let () ;; uri-encode
   (define (test1 a b)

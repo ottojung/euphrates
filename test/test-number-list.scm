@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-number-list)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates fp) :select (fp))
+    :use-module ((euphrates number-list) :select (number->number-list number-list->number)))))
 
 ;; number-list
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (fp) "./euphrates/fp.scm"
-%use (number->number-list number-list->number) "./euphrates/number-list.scm"
 
 (let ()
   (assert= 9 (number-list->number 2 '(1 0 0 1) '()))

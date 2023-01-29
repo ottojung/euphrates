@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-path-normalize)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates path-normalize) :select (path-normalize)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (path-normalize) "./euphrates/path-normalize.scm"
 
 (let () ;; path-normalize
   (assert= "../../some/to/a/dir"

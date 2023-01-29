@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-fn)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates fn) :select (fn)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (fn) "./euphrates/fn.scm"
 
 (let () ;; fn
   (assert= (list 1 2 3)

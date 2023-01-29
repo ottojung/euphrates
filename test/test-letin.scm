@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-letin)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates letin) :select (letin)))))
 
 ;; letin
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (letin) "./euphrates/letin.scm"
 
 (let ()
   (letin

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-directory-files)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates directory-files) :select (directory-files)))))
 
 ;; directory-files
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (directory-files) "./euphrates/directory-files.scm"
 
 (assert=HS '(("test/filetests/b" "b") ("test/filetests/a" "a") ("test/filetests/cdefg" "cdefg"))
            (directory-files "test/filetests"))

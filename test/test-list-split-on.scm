@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-split-on)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-split-on) :select (list-split-on)))))
 
 ;; list-split-on
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-split-on) "./euphrates/list-split-on.scm"
 
 (let ()
   (assert= '((1) (3) (5) (7))

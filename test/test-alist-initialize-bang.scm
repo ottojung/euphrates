@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-alist-initialize-bang)
+    :use-module ((euphrates alist-initialize-bang) :select (alist-initialize! alist-initialize!:return-multiple alist-initialize!:stop))
+    :use-module ((euphrates assert-equal) :select (assert=)))))
 
-%use (alist-initialize! alist-initialize!:return-multiple alist-initialize!:stop) "./euphrates/alist-initialize-bang.scm"
-%use (assert=) "./euphrates/assert-equal.scm"
 
 (let ()
   (define state `((X . 3) (Y . 4)))

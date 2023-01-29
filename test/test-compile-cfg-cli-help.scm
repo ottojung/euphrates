@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-compile-cfg-cli-help)
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates compile-cfg-cli-help) :select (CFG-AST->CFG-CLI-help))
+    :use-module ((euphrates current-program-path-p) :select (current-program-path/p))
+    :use-module ((euphrates define-cli) :select (make-cli-with-handler)))))
 
-%use (assert) "./euphrates/assert.scm"
-%use (CFG-AST->CFG-CLI-help) "./euphrates/compile-cfg-cli-help.scm"
-%use (current-program-path/p) "./euphrates/current-program-path-p.scm"
-%use (make-cli-with-handler) "./euphrates/define-cli.scm"
 
 (define MAX-BASE 90)
 (define DEFAULT-BASE 64)

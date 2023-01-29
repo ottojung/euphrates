@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-url-get-path)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates url-get-path) :select (url-get-path)))))
 
 ;; url-get-path
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (url-get-path) "./euphrates/url-get-path.scm"
 
 (let ()
   (assert= "/fun/humor.en.html" (url-get-path "https://gnu.org/fun/humor.en.html"))

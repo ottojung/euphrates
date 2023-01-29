@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-length=)
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates list-length-eq) :select (list-length=)))))
 
 ;; list-length=
-%use (assert) "./euphrates/assert.scm"
-%use (list-length=) "./euphrates/list-length-eq.scm"
 
 (let ()
 

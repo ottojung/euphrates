@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-partition)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-partition) :select (list-partition))
+    :use-module ((euphrates range) :select (range)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-partition) "./euphrates/list-partition.scm"
-%use (range) "./euphrates/range.scm"
 
 (let () ;; list-partition
   (assert= '((#t 8 6 4 2 0)

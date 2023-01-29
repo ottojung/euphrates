@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-random-shuffle)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-random-shuffle) :select (list-random-shuffle))
+    :use-module ((euphrates with-randomizer-seed) :select (with-randomizer-seed)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-random-shuffle) "./euphrates/list-random-shuffle.scm"
-%use (with-randomizer-seed) "./euphrates/with-randomizer-seed.scm"
 
 (let () ;; list-random-shuffle
   (with-randomizer-seed

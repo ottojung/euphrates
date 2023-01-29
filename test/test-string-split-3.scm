@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-string-split-3)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates string-split-3) :select (string-split-3)))))
 
 ;; string-split-3
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (string-split-3) "./euphrates/string-split-3.scm"
 
 (let ()
 

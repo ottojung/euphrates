@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-big-random-int)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates big-random-int) :select (big-random-int))
+    :use-module ((euphrates with-randomizer-seed) :select (with-randomizer-seed)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (big-random-int) "./euphrates/big-random-int.scm"
-%use (with-randomizer-seed) "./euphrates/with-randomizer-seed.scm"
 
 (let () ; big-random-int
   (define (cycle1)

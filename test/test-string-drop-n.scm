@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-string-drop-n)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates string-drop-n) :select (string-drop-n)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (string-drop-n) "./euphrates/string-drop-n.scm"
 
 (let () ;; string-drop-n
   (assert= "hello" (string-drop-n 0 "hello"))

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-path-extensions)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates path-extensions) :select (path-extensions)))))
 
 ;; path-extensions
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (path-extensions) "./euphrates/path-extensions.scm"
 
 (let ()
   (assert= ".txt" (path-extensions "hello.txt"))

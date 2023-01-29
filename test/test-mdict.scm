@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-mdict)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates mdict) :select (mdict mdict-has? mdict-set!)))))
 
 ;; mdict
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (mdict mdict-has? mdict-set!) "./euphrates/mdict.scm"
 
 (let ((zz (mdict 1 2
                  3 4)))

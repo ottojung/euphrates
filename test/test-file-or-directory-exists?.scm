@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-file-or-directory-exists?)
+    :use-module ((euphrates append-posix-path) :select (append-posix-path))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates file-or-directory-exists-q) :select (file-or-directory-exists?)))))
 
 ;; file-or-directory-exists?
-%use (append-posix-path) "./euphrates/append-posix-path.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (file-or-directory-exists?) "./euphrates/file-or-directory-exists-q.scm"
 
 (let ()
   (assert (file-or-directory-exists? "/"))

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-json-parse)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates json-parse) :select (json-parse)))))
 
 ;; json-parse
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (json-parse) "./euphrates/json-parse.scm"
 
 (let ()
   (let ()

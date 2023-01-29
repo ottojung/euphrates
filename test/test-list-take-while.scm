@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-take-while)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-take-while) :select (list-take-while)))))
 
 ;; list-take-while
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-take-while) "./euphrates/list-take-while.scm"
 
 (let ()
   (assert= '(2 4 6 8) (list-take-while even? '(2 4 6 8 9 3 1)))

@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-print-in-window)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-intersperse) :select (list-intersperse))
+    :use-module ((euphrates print-in-window) :select (print-in-window))
+    :use-module ((euphrates string-to-words) :select (string->words)))))
 
 ;; print-in-window
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-intersperse) "./euphrates/list-intersperse.scm"
-%use (print-in-window) "./euphrates/print-in-window.scm"
-%use (string->words) "./euphrates/string-to-words.scm"
 
 (let ()
   (assert=

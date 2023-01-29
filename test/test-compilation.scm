@@ -1,450 +1,452 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-compilation)
+    :use-module ((euphrates absolute-posix-path-q) :select (absolute-posix-path?))
+    :use-module ((euphrates alist-initialize-bang-current-setter-p) :select (alist-initialize!:current-setter/p))
+    :use-module ((euphrates alist-initialize-bang-p) :select (alist-initialize!/p))
+    :use-module ((euphrates alist-initialize-bang) :select (alist-initialize! alist-initialize!:current-setters alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:return-multiple alist-initialize!:run alist-initialize!:stop))
+    :use-module ((euphrates alist-initialize-loop) :select (alist-initialize-loop))
+    :use-module ((euphrates alpha-alphabet) :select (alpha/alphabet))
+    :use-module ((euphrates alpha-lowercase-alphabet) :select (alpha-lowercase/alphabet))
+    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet alphanum/alphabet/index))
+    :use-module ((euphrates alphanum-lowercase-alphabet) :select (alphanum-lowercase/alphabet))
+    :use-module ((euphrates append-posix-path) :select (append-posix-path))
+    :use-module ((euphrates append-string-file) :select (append-string-file))
+    :use-module ((euphrates apploop) :select (apploop))
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert-raw) :select (assert#raw))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates assoc-any) :select (assoc/any))
+    :use-module ((euphrates assoc-find) :select (assoc/find))
+    :use-module ((euphrates assoc-or) :select (assoc-or))
+    :use-module ((euphrates assoc-set-default) :select (assoc-set-default))
+    :use-module ((euphrates assoc-set-value) :select (assoc-set-value))
+    :use-module ((euphrates assq-or) :select (assq-or))
+    :use-module ((euphrates assq-set-default) :select (assq-set-default))
+    :use-module ((euphrates assq-set-value) :select (assq-set-value))
+    :use-module ((euphrates atomic-box) :select (atomic-box-compare-and-set! atomic-box-ref atomic-box-set! atomic-box? make-atomic-box))
+    :use-module ((euphrates base64-alphabet-minusunderscore) :select (base64/alphabet/minusunderscore))
+    :use-module ((euphrates base64-alphabet-pluscomma) :select (base64/alphabet/pluscomma))
+    :use-module ((euphrates base64-alphabet) :select (base64/alphabet))
+    :use-module ((euphrates big-random-int) :select (big-random-int))
+    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
+    :use-module ((euphrates box) :select (box-ref box-set! box? make-box))
+    :use-module ((euphrates builtin-descriptors) :select (builtin-descriptors))
+    :use-module ((euphrates builtin-type-huh) :select (builtin-type?))
+    :use-module ((euphrates call-with-finally) :select (call-with-finally))
+    :use-module ((euphrates cartesian-any-q) :select (cartesian-any?))
+    :use-module ((euphrates cartesian-each) :select (cartesian-each))
+    :use-module ((euphrates cartesian-map) :select (cartesian-map))
+    :use-module ((euphrates cartesian-product-g) :select (cartesian-product/g cartesian-product/g/reversed))
+    :use-module ((euphrates cartesian-product) :select (cartesian-product))
+    :use-module ((euphrates catch-any) :select (catch-any))
+    :use-module ((euphrates catchu-case) :select (catchu-case))
+    :use-module ((euphrates cfg-machine) :select (make-cfg-machine make-cfg-machine* make-cfg-machine/full))
+    :use-module ((euphrates command-line-arguments-p) :select (command-line-argumets/p))
+    :use-module ((euphrates comp) :select (appcomp comp))
+    :use-module ((euphrates compile-cfg-cli-help) :select (CFG-AST->CFG-CLI-help))
+    :use-module ((euphrates compile-cfg-cli) :select (CFG-AST->CFG-lang CFG-CLI->CFG-lang CFG-lang-modifier-char?))
+    :use-module ((euphrates compile-regex-cli) :select (compile-regex-cli:IR->Regex compile-regex-cli:make-IR))
+    :use-module ((euphrates compose-under-par) :select (compose-under-par))
+    :use-module ((euphrates compose-under) :select (compose-under))
+    :use-module ((euphrates comprocess-stderr) :select (comprocess-stderr))
+    :use-module ((euphrates comprocess-stdout) :select (comprocess-stdout))
+    :use-module ((euphrates comprocess) :select (comprocess comprocess-args comprocess-command comprocess-exited? comprocess-pid comprocess-pipe comprocess-status comprocess? set-comprocess-exited?! set-comprocess-pid! set-comprocess-pipe! set-comprocess-status!))
+    :use-module ((euphrates cons-bang) :select (cons!))
+    :use-module ((euphrates conss) :select (conss))
+    :use-module ((euphrates convert-number-base) :select (convert-number-base convert-number-base/generic convert-number-base:default-max-base))
+    :use-module ((euphrates current-directory-p) :select (current-directory/p))
+    :use-module ((euphrates current-program-path-p) :select (current-program-path/p))
+    :use-module ((euphrates current-random-source-p) :select (current-random-source/p))
+    :use-module ((euphrates current-source-info-to-string) :select (current-source-info->string))
+    :use-module ((euphrates curry-if) :select (curry-if))
+    :use-module ((euphrates date-get-current-string) :select (date-get-current-string))
+    :use-module ((euphrates date-get-current-time24h-string) :select (date-get-current-time24h-string))
+    :use-module ((euphrates debug) :select (debug))
+    :use-module ((euphrates debugs) :select (debugs))
+    :use-module ((euphrates debugv) :select (debugv))
+    :use-module ((euphrates define-cli) :select (define-cli:raisu/default-exit define-cli:raisu/p define-cli:show-help lambda-cli make-cli make-cli-with-handler make-cli/f make-cli/f/basic with-cli))
+    :use-module ((euphrates define-dumb-record) :select (define-dumb-record))
+    :use-module ((euphrates define-newtype) :select (define-newtype))
+    :use-module ((euphrates define-pair) :select (define-pair))
+    :use-module ((euphrates define-tuple) :select (define-tuple))
+    :use-module ((euphrates define-type9) :select (define-type9 define-type9/nobind-descriptor type9-get-descriptor-by-name type9-get-record-descriptor))
+    :use-module ((euphrates descriptors-registry) :select (descriptors-registry-add! descriptors-registry-decolisify-name descriptors-registry-get))
+    :use-module ((euphrates directory-files-depth-foreach) :select (directory-files-depth-foreach))
+    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter))
+    :use-module ((euphrates directory-files-rec) :select (directory-files-rec))
+    :use-module ((euphrates directory-files) :select (directory-files))
+    :use-module ((euphrates directory-mtime-state) :select (directory-mtime-state))
+    :use-module ((euphrates directory-tree) :select (directory-tree))
+    :use-module ((euphrates dprint-p-default) :select (dprint#p-default))
+    :use-module ((euphrates dprint-p) :select (dprint#p))
+    :use-module ((euphrates dprint) :select (dprint))
+    :use-module ((euphrates dprintln) :select (dprintln))
+    :use-module ((euphrates dynamic-load) :select (dynamic-load))
+    :use-module ((euphrates dynamic-thread-async-thunk) :select (dynamic-thread-async-thunk))
+    :use-module ((euphrates dynamic-thread-async) :select (dynamic-thread-async))
+    :use-module ((euphrates dynamic-thread-cancel-p) :select (dynamic-thread-cancel#p))
+    :use-module ((euphrates dynamic-thread-cancel-tag) :select (dynamic-thread-cancel-tag))
+    :use-module ((euphrates dynamic-thread-cancel) :select (dynamic-thread-cancel))
+    :use-module ((euphrates dynamic-thread-critical-make-p-default) :select (dynamic-thread-critical-make#p-default))
+    :use-module ((euphrates dynamic-thread-critical-make-p) :select (dynamic-thread-critical-make#p))
+    :use-module ((euphrates dynamic-thread-critical-make) :select (dynamic-thread-critical-make))
+    :use-module ((euphrates dynamic-thread-disable-cancel-p-default) :select (dynamic-thread-disable-cancel#p-default))
+    :use-module ((euphrates dynamic-thread-disable-cancel-p) :select (dynamic-thread-disable-cancel#p))
+    :use-module ((euphrates dynamic-thread-disable-cancel) :select (dynamic-thread-disable-cancel))
+    :use-module ((euphrates dynamic-thread-enable-cancel-p-default) :select (dynamic-thread-enable-cancel#p-default))
+    :use-module ((euphrates dynamic-thread-enable-cancel-p) :select (dynamic-thread-enable-cancel#p))
+    :use-module ((euphrates dynamic-thread-enable-cancel) :select (dynamic-thread-enable-cancel))
+    :use-module ((euphrates dynamic-thread-get-delay-procedure-p-default) :select (dynamic-thread-get-delay-procedure#p-default))
+    :use-module ((euphrates dynamic-thread-get-delay-procedure-p) :select (dynamic-thread-get-delay-procedure#p))
+    :use-module ((euphrates dynamic-thread-get-delay-procedure) :select (dynamic-thread-get-delay-procedure))
+    :use-module ((euphrates dynamic-thread-get-wait-delay) :select (dynamic-thread-get-wait-delay))
+    :use-module ((euphrates dynamic-thread-get-yield-procedure) :select (dynamic-thread-get-yield-procedure))
+    :use-module ((euphrates dynamic-thread-mutex-lock-p-default) :select (dynamic-thread-mutex-lock!#p-default))
+    :use-module ((euphrates dynamic-thread-mutex-lock-p) :select (dynamic-thread-mutex-lock!#p))
+    :use-module ((euphrates dynamic-thread-mutex-lock) :select (dynamic-thread-mutex-lock!))
+    :use-module ((euphrates dynamic-thread-mutex-make-p-default) :select (dynamic-thread-mutex-make#p-default))
+    :use-module ((euphrates dynamic-thread-mutex-make-p) :select (dynamic-thread-mutex-make#p))
+    :use-module ((euphrates dynamic-thread-mutex-make) :select (dynamic-thread-mutex-make))
+    :use-module ((euphrates dynamic-thread-mutex-unlock-p-default) :select (dynamic-thread-mutex-unlock!#p-default))
+    :use-module ((euphrates dynamic-thread-mutex-unlock-p) :select (dynamic-thread-mutex-unlock!#p))
+    :use-module ((euphrates dynamic-thread-mutex-unlock) :select (dynamic-thread-mutex-unlock!))
+    :use-module ((euphrates dynamic-thread-sleep-p-default) :select (dynamic-thread-sleep#p-default))
+    :use-module ((euphrates dynamic-thread-sleep-p) :select (dynamic-thread-sleep#p))
+    :use-module ((euphrates dynamic-thread-sleep) :select (dynamic-thread-sleep))
+    :use-module ((euphrates dynamic-thread-spawn-p) :select (dynamic-thread-spawn#p))
+    :use-module ((euphrates dynamic-thread-spawn) :select (dynamic-thread-spawn))
+    :use-module ((euphrates dynamic-thread-wait-delay-p-default) :select (dynamic-thread-wait-delay#us#p-default))
+    :use-module ((euphrates dynamic-thread-wait-delay-p) :select (dynamic-thread-wait-delay#us#p))
+    :use-module ((euphrates dynamic-thread-yield-p-default) :select (dynamic-thread-yield#p-default))
+    :use-module ((euphrates dynamic-thread-yield-p) :select (dynamic-thread-yield#p))
+    :use-module ((euphrates dynamic-thread-yield) :select (dynamic-thread-yield))
+    :use-module ((euphrates eval-in-current-namespace) :select (eval-in-current-namespace))
+    :use-module ((euphrates exception-monad) :select (exception-monad))
+    :use-module ((euphrates fast-parameterizeable-timestamp-p) :select (fast-parameterizeable-timestamp/p))
+    :use-module ((euphrates file-delete) :select (file-delete))
+    :use-module ((euphrates file-is-directory-q-no-readlink) :select (file-is-directory?/no-readlink))
+    :use-module ((euphrates file-is-regular-file-q-no-readlink) :select (file-is-regular-file?/no-readlink))
+    :use-module ((euphrates file-mtime) :select (file-mtime))
+    :use-module ((euphrates file-or-directory-exists-q) :select (file-or-directory-exists?))
+    :use-module ((euphrates file-size) :select (file-size))
+    :use-module ((euphrates filter-monad) :select (filter-monad))
+    :use-module ((euphrates fn-alist) :select (fn-alist))
+    :use-module ((euphrates fn-cons) :select (fn-cons))
+    :use-module ((euphrates fn-pair) :select (fn-pair))
+    :use-module ((euphrates fn-tuple) :select (fn-tuple))
+    :use-module ((euphrates fn) :select (fn))
+    :use-module ((euphrates fp) :select (fp))
+    :use-module ((euphrates get-command-line-arguments) :select (get-command-line-arguments))
+    :use-module ((euphrates get-current-directory) :select (get-current-directory))
+    :use-module ((euphrates get-current-program-path) :select (get-current-program-path))
+    :use-module ((euphrates get-current-random-source) :select (get-current-random-source))
+    :use-module ((euphrates get-current-source-file-path) :select (get-current-source-file-path))
+    :use-module ((euphrates get-current-source-info) :select (get-current-source-info))
+    :use-module ((euphrates get-directory-name) :select (get-directory-name))
+    :use-module ((euphrates get-object-descriptor) :select (get-object-descriptor))
+    :use-module ((euphrates global-debug-mode-filter) :select (global-debug-mode-filter))
+    :use-module ((euphrates group-by-sequential) :select (group-by/sequential group-by/sequential*))
+    :use-module ((euphrates hashmap-obj) :select (hashmap-constructor hashmap-predicate))
+    :use-module ((euphrates hashmap) :select (alist->hashmap hashmap->alist hashmap-clear! hashmap-copy hashmap-count hashmap-delete! hashmap-foreach hashmap-has? hashmap-map hashmap-merge hashmap-merge! hashmap-ref hashmap-set! hashmap? make-hashmap multi-alist->hashmap))
+    :use-module ((euphrates hashset-obj) :select (hashset-constructor hashset-predicate hashset-value))
+    :use-module ((euphrates hashset) :select (hashset->list hashset-add! hashset-clear! hashset-delete! hashset-difference hashset-equal? hashset-foreach hashset-has? hashset-intersection hashset-length hashset-map hashset-ref hashset-union list->hashset make-hashset vector->hashset))
+    :use-module ((euphrates identity-monad) :select (identity-monad))
+    :use-module ((euphrates identity-star) :select (identity*))
+    :use-module ((euphrates immutable-hashmap-obj) :select (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value))
+    :use-module ((euphrates immutable-hashmap) :select (alist->immutable-hashmap immutable-hashmap->alist immutable-hashmap-clear immutable-hashmap-copy immutable-hashmap-count immutable-hashmap-foreach immutable-hashmap-fromlist immutable-hashmap-map immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set immutable-hashmap? make-immutable-hashmap))
+    :use-module ((euphrates json-parse) :select (json-parse))
+    :use-module ((euphrates lazy-monad) :select (lazy-monad))
+    :use-module ((euphrates lazy-parameter) :select (lazy-parameter))
+    :use-module ((euphrates letin) :select (letin))
+    :use-module ((euphrates lexical-scope-obj) :select (lexical-scope-unwrap lexical-scope-wrap lexical-scope?))
+    :use-module ((euphrates lexical-scope) :select (lexical-scope-make lexical-scope-namespace lexical-scope-ref lexical-scope-set! lexical-scope-stage! lexical-scope-unstage!))
+    :use-module ((euphrates linear-interpolation) :select (linear-interpolate-1d linear-interpolate-2d))
+    :use-module ((euphrates lines-to-string) :select (lines->string))
+    :use-module ((euphrates linux-get-memory-stat) :select (linux-get-memory-free% linux-get-memory-stat))
+    :use-module ((euphrates list-and-map) :select (list-and-map))
+    :use-module ((euphrates list-break) :select (list-break))
+    :use-module ((euphrates list-chunks) :select (list-chunks))
+    :use-module ((euphrates list-combinations) :select (list-combinations))
+    :use-module ((euphrates list-deduplicate) :select (list-deduplicate list-deduplicate/reverse))
+    :use-module ((euphrates list-drop-n) :select (list-drop-n))
+    :use-module ((euphrates list-drop-while) :select (list-drop-while))
+    :use-module ((euphrates list-find-first) :select (list-find-first))
+    :use-module ((euphrates list-fold-star) :select (list-fold*))
+    :use-module ((euphrates list-fold) :select (list-fold))
+    :use-module ((euphrates list-group-by) :select (list-group-by))
+    :use-module ((euphrates list-init) :select (list-init))
+    :use-module ((euphrates list-insert-at) :select (list-insert-at))
+    :use-module ((euphrates list-intersperse) :select (list-intersperse))
+    :use-module ((euphrates list-last) :select (list-last))
+    :use-module ((euphrates list-length-eq) :select (list-length=))
+    :use-module ((euphrates list-length-geq-q) :select (list-length=<?))
+    :use-module ((euphrates list-levenshtein-distance) :select (list-levenshtein-distance))
+    :use-module ((euphrates list-map-first) :select (list-map-first))
+    :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
+    :use-module ((euphrates list-maximal-element-or) :select (list-maximal-element-or))
+    :use-module ((euphrates list-minimal-element-or) :select (list-minimal-element-or))
+    :use-module ((euphrates list-or-map) :select (list-or-map))
+    :use-module ((euphrates list-partition) :select (list-partition))
+    :use-module ((euphrates list-permutations) :select (list-permutations))
+    :use-module ((euphrates list-prefix-q) :select (list-prefix?))
+    :use-module ((euphrates list-random-element) :select (list-random-element))
+    :use-module ((euphrates list-random-shuffle) :select (list-random-shuffle))
+    :use-module ((euphrates list-ref-or) :select (list-ref-or))
+    :use-module ((euphrates list-remove-common-prefix) :select (list-remove-common-prefix))
+    :use-module ((euphrates list-replace-last) :select (list-replace-last-element))
+    :use-module ((euphrates list-singleton-q) :select (list-singleton?))
+    :use-module ((euphrates list-span-n) :select (list-span-n))
+    :use-module ((euphrates list-span-while) :select (list-span-while))
+    :use-module ((euphrates list-span) :select (list-span))
+    :use-module ((euphrates list-split-on) :select (list-split-on))
+    :use-module ((euphrates list-tag-next) :select (list-tag/next list-tag/next/rev list-untag/next))
+    :use-module ((euphrates list-tag-prev) :select (list-tag/prev list-tag/prev/rev))
+    :use-module ((euphrates list-tag) :select (list-tag list-untag))
+    :use-module ((euphrates list-take-n) :select (list-take-n))
+    :use-module ((euphrates list-take-while) :select (list-take-while))
+    :use-module ((euphrates list-to-tree) :select (list->tree))
+    :use-module ((euphrates list-traverse) :select (list-traverse))
+    :use-module ((euphrates list-windows) :select (list-windows))
+    :use-module ((euphrates list-zip-with) :select (list-zip-with))
+    :use-module ((euphrates list-zip) :select (list-zip))
+    :use-module ((euphrates log-monad) :select (log-monad))
+    :use-module ((euphrates make-directories) :select (make-directories))
+    :use-module ((euphrates make-temporary-filename) :select (make-temporary-filename))
+    :use-module ((euphrates make-temporary-fileport) :select (make-temporary-fileport))
+    :use-module ((euphrates make-unique) :select (make-unique))
+    :use-module ((euphrates maybe-monad) :select (maybe-monad))
+    :use-module ((euphrates mdict) :select (ahash->mdict hash->mdict mdict mdict->alist mdict-has? mdict-keys mdict-set!))
+    :use-module ((euphrates memconst) :select (memconst))
+    :use-module ((euphrates mimetype-extensions) :select (mimetype/extensions))
+    :use-module ((euphrates monad-apply) :select (monad-apply))
+    :use-module ((euphrates monad-ask) :select (monad-ask))
+    :use-module ((euphrates monad-bind) :select (monad-bind))
+    :use-module ((euphrates monad-compose) :select (monad-compose))
+    :use-module ((euphrates monad-current-p) :select (monad-current/p))
+    :use-module ((euphrates monad-do) :select (monad-do monad-do/generic))
+    :use-module ((euphrates monad-make-hook) :select (monad-make/hook))
+    :use-module ((euphrates monad-make-no-cont-no-fin) :select (monad-make/no-cont/no-fin))
+    :use-module ((euphrates monad-make-no-cont) :select (monad-make/no-cont))
+    :use-module ((euphrates monad-make-no-fin) :select (monad-make/no-fin))
+    :use-module ((euphrates monad-make) :select (monad-make))
+    :use-module ((euphrates monad-parameterize) :select (monad-parameterize with-monad-left with-monad-right))
+    :use-module ((euphrates monad-transformer-current-p) :select (monad-transformer-current/p))
+    :use-module ((euphrates monadfinobj) :select (monadfinobj monadfinobj-lval monadfinobj?))
+    :use-module ((euphrates monadic-id) :select (monadic-id))
+    :use-module ((euphrates monadic) :select (monadic monadic-bare))
+    :use-module ((euphrates monadobj) :select (monadobj-constructor monadobj-handles-fin? monadobj-procedure monadobj-uses-continuations? monadobj?))
+    :use-module ((euphrates monadstate-current-p) :select (monadstate-current/p))
+    :use-module ((euphrates monadstate) :select (monadstate-arg monadstate-args monadstate-cret monadstate-cret/thunk monadstate-handle-multiple monadstate-lval monadstate-make-empty monadstate-qtags monadstate-qval monadstate-qvar monadstate-replicate-multiple monadstate-ret monadstate-ret/thunk monadstate?))
+    :use-module ((euphrates monadstateobj) :select (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?))
+    :use-module ((euphrates multiset-obj) :select (multiset-constructor multiset-predicate multiset-value))
+    :use-module ((euphrates multiset) :select (list->multiset make-multiset multiset->list multiset-add! multiset-equal? multiset-filter multiset-ref multiset? vector->multiset))
+    :use-module ((euphrates node-directed-obj) :select (node/directed node/directed-children node/directed-label node/directed? set-node/directed-children! set-node/directed-label!))
+    :use-module ((euphrates node-directed) :select (make-node/directed))
+    :use-module ((euphrates np-thread-obj) :select (np-thread-obj np-thread-obj-cancel-enabled? np-thread-obj-cancel-scheduled? np-thread-obj-continuation np-thread-obj? set-np-thread-obj-cancel-scheduled?! set-np-thread-obj-continuation!))
+    :use-module ((euphrates np-thread-parameterize) :select (np-thread-parameterize-env with-np-thread-env/non-interruptible))
+    :use-module ((euphrates np-thread) :select (np-thread-global-cancel np-thread-global-critical-make np-thread-global-disable-cancel np-thread-global-enable-cancel np-thread-global-mutex-lock! np-thread-global-mutex-make np-thread-global-mutex-unlock! np-thread-global-sleep np-thread-global-spawn np-thread-global-yield np-thread-make-env))
+    :use-module ((euphrates number-list) :select (number->number-list number->number-list:precision/p number-list->number number-list->number-list))
+    :use-module ((euphrates open-cond-obj) :select (open-cond-constructor open-cond-predicate open-cond-value set-open-cond-value!))
+    :use-module ((euphrates open-cond) :select (define-open-cond define-open-cond-instance open-cond-lambda open-cond?))
+    :use-module ((euphrates open-file-port) :select (open-file-port))
+    :use-module ((euphrates package) :select (make-package make-static-package use-svars with-package with-svars))
+    :use-module ((euphrates parse-cfg-cli) :select (CFG-CLI->CFG-AST))
+    :use-module ((euphrates partial-apply) :select (partial-apply))
+    :use-module ((euphrates partial-apply1) :select (partial-apply1))
+    :use-module ((euphrates path-extension) :select (path-extension))
+    :use-module ((euphrates path-extensions) :select (path-extensions))
+    :use-module ((euphrates path-get-basename) :select (path-get-basename))
+    :use-module ((euphrates path-get-dirname) :select (path-get-dirname))
+    :use-module ((euphrates path-normalize) :select (path-normalize))
+    :use-module ((euphrates path-replace-extension) :select (path-replace-extension))
+    :use-module ((euphrates path-without-extension) :select (path-without-extension))
+    :use-module ((euphrates path-without-extensions) :select (path-without-extensions))
+    :use-module ((euphrates petri-error-handling) :select (patri-handle-make-callback petri-handle-get))
+    :use-module ((euphrates petri-net-make) :select (petri-net-make))
+    :use-module ((euphrates petri-net-obj) :select (petri-net-obj petri-net-obj-critical petri-net-obj-finished? petri-net-obj-queue petri-net-obj-transitions petri-net-obj? set-petri-net-obj-finished?!))
+    :use-module ((euphrates petri-net-parse-profun) :select (petri-profun-net))
+    :use-module ((euphrates petri-net-parse) :select (petri-lambda-net petri-net-parse))
+    :use-module ((euphrates petri) :select (petri-push petri-run))
+    :use-module ((euphrates prefixtree-obj) :select (prefixtree prefixtree-children prefixtree-value prefixtree? set-prefixtree-children! set-prefixtree-value!))
+    :use-module ((euphrates prefixtree) :select (make-prefixtree prefixtree->tree prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree-set!))
+    :use-module ((euphrates print-in-frame) :select (print-in-frame))
+    :use-module ((euphrates print-in-window) :select (print-in-window))
+    :use-module ((euphrates printable-alphabet) :select (printable/alphabet))
+    :use-module ((euphrates printable-stable-alphabet) :select (printable/stable/alphabet))
+    :use-module ((euphrates printf) :select (printf))
+    :use-module ((euphrates profun-CR) :select (make-profun-CR profun-CR-what profun-CR?))
+    :use-module ((euphrates profun-IDR) :select (make-profun-IDR profun-IDR-arity profun-IDR-name profun-IDR?))
+    :use-module ((euphrates profun-RFC) :select (make-profun-RFC profun-RFC-add-info profun-RFC-insert profun-RFC-modify-iter profun-RFC-reset profun-RFC-set-iter profun-RFC-what profun-RFC?))
+    :use-module ((euphrates profun-abort) :select (make-profun-abort profun-abort-add-info profun-abort-additional profun-abort-iter profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?))
+    :use-module ((euphrates profun-accept) :select (make-profun-accept profun-accept profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept? profun-ctx-set profun-set profun-set-meta profun-set-parameter))
+    :use-module ((euphrates profun-answer-huh) :select (profun-answer?))
+    :use-module ((euphrates profun-answer-join) :select (profun-answer-join/and profun-answer-join/any profun-answer-join/or))
+    :use-module ((euphrates profun-current-env-p) :select (profun-current-env/p))
+    :use-module ((euphrates profun-database) :select (make-falsy-profun-database make-profun-database profun-database-copy profun-database-extend profun-database-falsy? profun-database-get profun-database-get-all profun-database-handle profun-database-handler profun-database-rules profun-database?))
+    :use-module ((euphrates profun-default) :select (profun-default))
+    :use-module ((euphrates profun-env) :select (make-profun-env profun-env-copy profun-env-get profun-env-set! profun-env-unset!))
+    :use-module ((euphrates profun-error) :select (make-profun-error profun-error-args profun-error?))
+    :use-module ((euphrates profun-handler) :select (profun-handler-extend profun-handler-get profun-make-handler))
+    :use-module ((euphrates profun-instruction) :select (profun-instruction-args profun-instruction-arity profun-instruction-body profun-instruction-build profun-instruction-build/next profun-instruction-constructor profun-instruction-context profun-instruction-name profun-instruction-next profun-instruction?))
+    :use-module ((euphrates profun-iterator) :select (profun-abort-insert profun-abort-reset profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-insert! profun-iterator-query profun-iterator-reset! profun-iterator-state set-profun-iterator-query! set-profun-iterator-state!))
+    :use-module ((euphrates profun-make-instantiation-test) :select (profun-make-instantiation-check))
+    :use-module ((euphrates profun-make-set) :select (profun-make-set))
+    :use-module ((euphrates profun-make-tuple-set) :select (profun-make-tuple-set))
+    :use-module ((euphrates profun-meta-key) :select (profun-meta-key))
+    :use-module ((euphrates profun-op-apply-result-p) :select (profun-op-apply/result#p))
+    :use-module ((euphrates profun-op-apply) :select (profun-apply-fail! profun-apply-return! profun-op-apply))
+    :use-module ((euphrates profun-op-binary) :select (profun-op-binary))
+    :use-module ((euphrates profun-op-divisible) :select (profun-op-divisible))
+    :use-module ((euphrates profun-op-envlambda) :select (profun-op-envlambda))
+    :use-module ((euphrates profun-op-equals) :select (profun-op-equals))
+    :use-module ((euphrates profun-op-eval-result-p) :select (profun-op-eval/result#p))
+    :use-module ((euphrates profun-op-eval) :select (profun-eval-fail! profun-eval-return! profun-op-eval))
+    :use-module ((euphrates profun-op-false) :select (profun-op-false))
+    :use-module ((euphrates profun-op-function) :select (profun-op-function))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
+    :use-module ((euphrates profun-op-less) :select (profun-op-less))
+    :use-module ((euphrates profun-op-modulo) :select (profun-op-modulo))
+    :use-module ((euphrates profun-op-mult) :select (profun-op*))
+    :use-module ((euphrates profun-op-obj) :select (profun-op-arity profun-op-constructor profun-op-procedure profun-op?))
+    :use-module ((euphrates profun-op-parameter) :select (instantiate-profun-parameter make-profun-parameter))
+    :use-module ((euphrates profun-op-plus) :select (profun-op+))
+    :use-module ((euphrates profun-op-print) :select (profun-op-print))
+    :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
+    :use-module ((euphrates profun-op-sqrt) :select (profun-op-sqrt))
+    :use-module ((euphrates profun-op-true) :select (profun-op-true))
+    :use-module ((euphrates profun-op-unary) :select (profun-op-unary))
+    :use-module ((euphrates profun-op-unify) :select (profun-op-unify))
+    :use-module ((euphrates profun-op-value) :select (profun-op-value))
+    :use-module ((euphrates profun-op) :select (make-profun-op))
+    :use-module ((euphrates profun-query-get-free-variables) :select (profun-query-get-free-variables))
+    :use-module ((euphrates profun-query-handle-underscores) :select (profun-query-handle-underscores))
+    :use-module ((euphrates profun-reject) :select (profun-reject profun-reject?))
+    :use-module ((euphrates profun-request-value) :select (profun-request-value))
+    :use-module ((euphrates profun-rule) :select (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name profun-rule?))
+    :use-module ((euphrates profun-standard-handler) :select (profun-standard-handler))
+    :use-module ((euphrates profun-state) :select (profun-state-build profun-state-constructor profun-state-current profun-state-failstate profun-state-final? profun-state-finish profun-state-make profun-state-stack profun-state-undo profun-state? set-profun-state-current))
+    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-unbound-value? profun-value-name profun-value-unwrap profun-value?))
+    :use-module ((euphrates profun-variable-arity-op-huh) :select (profun-variable-arity-op?))
+    :use-module ((euphrates profun-variable-arity-op-keyword) :select (profun-variable-arity-op-keyword))
+    :use-module ((euphrates profun-variable-arity-op) :select (profun-variable-arity-op))
+    :use-module ((euphrates profun-variable-equal-q) :select (profun-variable-equal?))
+    :use-module ((euphrates profun-varname-q) :select (profun-varname?))
+    :use-module ((euphrates profun) :select (profun-create-database profun-create-falsy-database profun-eval-query profun-eval-query/boolean profun-iterate profun-next profun-next/boolean))
+    :use-module ((euphrates profune-communications-hook-p) :select (profune-communications-hook/p))
+    :use-module ((euphrates profune-communications) :select (profune-communications))
+    :use-module ((euphrates profune-communicator) :select (make-profune-communicator profune-communicator-db profune-communicator-handle profune-communicator?))
+    :use-module ((euphrates properties) :select (define-property))
+    :use-module ((euphrates queue-obj) :select (queue-constructor queue-first queue-last queue-predicate queue-vector set-queue-first! set-queue-last! set-queue-vector!))
+    :use-module ((euphrates queue) :select (list->queue make-queue queue->list queue-empty? queue-peek queue-peek-rotate! queue-pop! queue-push! queue-rotate! queue-unload! queue?))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates random-choice) :select (random-choice))
+    :use-module ((euphrates random-variable-name) :select (random-variable-name))
+    :use-module ((euphrates range) :select (range))
+    :use-module ((euphrates read-all-port) :select (read-all-port))
+    :use-module ((euphrates read-lines) :select (read/lines))
+    :use-module ((euphrates read-list) :select (read-list))
+    :use-module ((euphrates read-string-file) :select (read-string-file))
+    :use-module ((euphrates read-string-line) :select (read-string-line))
+    :use-module ((euphrates regex-machine) :select (make-regex-machine make-regex-machine* make-regex-machine/full))
+    :use-module ((euphrates remove-common-prefix) :select (remove-common-prefix))
+    :use-module ((euphrates replacement-monad) :select (replacement-monad))
+    :use-module ((euphrates replicate) :select (replicate))
+    :use-module ((euphrates reversed-args-f) :select (reversed-args-f))
+    :use-module ((euphrates reversed-args) :select (reversed-args))
+    :use-module ((euphrates rtree) :select (rtree rtree-children rtree-ref rtree-value rtree? set-rtree-children! set-rtree-ref!))
+    :use-module ((euphrates run-comprocess-p-default) :select (run-comprocess/p-default))
+    :use-module ((euphrates run-comprocess-p) :select (run-comprocess/p))
+    :use-module ((euphrates run-comprocess) :select (run-comprocess))
+    :use-module ((euphrates serialization-builtin-natural) :select (deserialize-builtin/natural serialize-builtin/natural))
+    :use-module ((euphrates serialization-builtin-short) :select (deserialize-builtin/short serialize-builtin/short))
+    :use-module ((euphrates serialization-human) :select (deserialize/human serialize/human))
+    :use-module ((euphrates serialization-runnable) :select (deserialize/runnable serialize/runnable))
+    :use-module ((euphrates serialization-sexp-generic) :select (deserialize/sexp/generic serialize/sexp/generic))
+    :use-module ((euphrates serialization-sexp-natural) :select (deserialize/sexp/natural serialize/sexp/natural))
+    :use-module ((euphrates serialization-sexp-short) :select (deserialize/sexp/short serialize/sexp/short))
+    :use-module ((euphrates serialization-short) :select (deserialize/short serialize/short))
+    :use-module ((euphrates shell-nondisrupt-alphabet) :select (shell-nondisrupt/alphabet shell-nondisrupt/alphabet/index))
+    :use-module ((euphrates shell-quote-permissive) :select (shell-quote/permissive))
+    :use-module ((euphrates shell-quote) :select (shell-quote shell-quote/always/list))
+    :use-module ((euphrates shell-safe-alphabet) :select (shell-safe/alphabet shell-safe/alphabet/index))
+    :use-module ((euphrates sleep-until) :select (sleep-until))
+    :use-module ((euphrates srfi-27-backbone-generator) :select (mrg32k3a-pack-state mrg32k3a-random-integer mrg32k3a-random-range mrg32k3a-random-real mrg32k3a-unpack-state))
+    :use-module ((euphrates srfi-27-generic) :select (default-random-source make-random-source random-source-make-integers random-source-make-reals random-source-pseudo-randomize! random-source-randomize! random-source-state-ref random-source-state-set! random-source?))
+    :use-module ((euphrates srfi-27-random-source-obj) :select (:random-source-current-time :random-source-make :random-source-make-integers :random-source-make-reals :random-source-pseudo-randomize! :random-source-randomize! :random-source-state-ref :random-source-state-set! :random-source?))
+    :use-module ((euphrates stack-obj) :select (set-stack-lst! stack-constructor stack-lst stack-predicate))
+    :use-module ((euphrates stack) :select (list->stack stack->list stack-discard! stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload! stack?))
+    :use-module ((euphrates string-drop-n) :select (string-drop-n))
+    :use-module ((euphrates string-null-or-whitespace-p) :select (string-null-or-whitespace?))
+    :use-module ((euphrates string-pad) :select (string-pad-L string-pad-R))
+    :use-module ((euphrates string-plus-encode) :select (string-plus-encode string-plus-encode/generic string-plus-encoding-make))
+    :use-module ((euphrates string-split-3) :select (string-split-3))
+    :use-module ((euphrates string-split-simple) :select (string-split/simple))
+    :use-module ((euphrates string-strip) :select (string-strip))
+    :use-module ((euphrates string-take-n) :select (string-take-n))
+    :use-module ((euphrates string-to-lines) :select (string->lines))
+    :use-module ((euphrates string-to-numstring) :select (string->numstring))
+    :use-module ((euphrates string-to-seconds-columned) :select (string->seconds/columned))
+    :use-module ((euphrates string-to-seconds) :select (string->seconds))
+    :use-module ((euphrates string-to-words) :select (string->words))
+    :use-module ((euphrates string-trim-chars) :select (string-trim-chars))
+    :use-module ((euphrates stringf) :select (stringf))
+    :use-module ((euphrates syntax-append) :select (syntax-append))
+    :use-module ((euphrates syntax-flatten-star) :select (syntax-flatten*))
+    :use-module ((euphrates syntax-identity) :select (syntax-identity))
+    :use-module ((euphrates syntax-map-noeval) :select (syntax-map/noeval))
+    :use-module ((euphrates syntax-map) :select (syntax-map))
+    :use-module ((euphrates syntax-reverse) :select (syntax-reverse))
+    :use-module ((euphrates syntax-tree-foreach) :select (syntax-tree-foreach))
+    :use-module ((euphrates sys-mutex-lock) :select (sys-mutex-lock!))
+    :use-module ((euphrates sys-mutex-make) :select (sys-mutex-make))
+    :use-module ((euphrates sys-mutex-unlock) :select (sys-mutex-unlock!))
+    :use-module ((euphrates sys-thread-current-p-default) :select (sys-thread-current#p-default))
+    :use-module ((euphrates sys-thread-current-p) :select (sys-thread-current#p))
+    :use-module ((euphrates sys-thread-obj) :select (set-sys-thread-obj-cancel-enabled?! set-sys-thread-obj-cancel-scheduled?! set-sys-thread-obj-handle! sys-thread-obj sys-thread-obj-cancel-enabled? sys-thread-obj-cancel-scheduled? sys-thread-obj-handle sys-thread-obj?))
+    :use-module ((euphrates sys-thread) :select (sys-thread-cancel sys-thread-current sys-thread-disable-cancel sys-thread-enable-cancel sys-thread-mutex-lock! sys-thread-mutex-make sys-thread-mutex-unlock! sys-thread-sleep sys-thread-spawn))
+    :use-module ((euphrates sys-usleep) :select (sys-usleep))
+    :use-module ((euphrates system-environment-get-all) :select (system-environment-get-all))
+    :use-module ((euphrates system-environment) :select (system-environment-get system-environment-set!))
+    :use-module ((euphrates system-fmt) :select (system-fmt))
+    :use-module ((euphrates system-re) :select (system-re))
+    :use-module ((euphrates system-star-exit-code) :select (system*/exit-code))
+    :use-module ((euphrates tilda-a) :select (~a))
+    :use-module ((euphrates tilda-s) :select (~s))
+    :use-module ((euphrates time-get-current-unixtime-values-p-default) :select (time-get-current-unixtime/values#p-default))
+    :use-module ((euphrates time-get-current-unixtime-values-p) :select (time-get-current-unixtime/values#p))
+    :use-module ((euphrates time-get-current-unixtime) :select (time-get-current-unixtime time-get-current-unixtime/values))
+    :use-module ((euphrates time-get-fast-parameterizeable-timestamp) :select (time-get-fast-parameterizeable-timestamp))
+    :use-module ((euphrates time-get-monotonic-nanoseconds-timestamp) :select (time-get-monotonic-nanoseconds-timestamp))
+    :use-module ((euphrates time-to-string) :select (seconds->H/M/s seconds->M/s seconds->time-string))
+    :use-module ((euphrates tree-map-leafs) :select (tree-map-leafs))
+    :use-module ((euphrates un-tilda-s) :select (un~s))
+    :use-module ((euphrates uni-critical) :select (uni-critical-make))
+    :use-module ((euphrates uni-spinlock) :select (make-uni-spinlock make-uni-spinlock-critical uni-spinlock-lock! uni-spinlock-unlock!))
+    :use-module ((euphrates unit-conversions) :select (centi->centi/unit centi->day/unit centi->deci/unit centi->deka/unit centi->gibi/unit centi->giga/unit centi->hecto/unit centi->hour/unit centi->kibi/unit centi->kilo/unit centi->mebi/unit centi->mega/unit centi->micro/unit centi->milli/unit centi->minute/unit centi->nano/unit centi->normal/unit centi->pebi/unit centi->peta/unit centi->pico/unit centi->week/unit day->centi/unit day->day/unit day->deci/unit day->deka/unit day->gibi/unit day->giga/unit day->hecto/unit day->hour/unit day->kibi/unit day->kilo/unit day->mebi/unit day->mega/unit day->micro/unit day->milli/unit day->minute/unit day->nano/unit day->normal/unit day->pebi/unit day->peta/unit day->pico/unit day->week/unit deci->centi/unit deci->day/unit deci->deci/unit deci->deka/unit deci->gibi/unit deci->giga/unit deci->hecto/unit deci->hour/unit deci->kibi/unit deci->kilo/unit deci->mebi/unit deci->mega/unit deci->micro/unit deci->milli/unit deci->minute/unit deci->nano/unit deci->normal/unit deci->pebi/unit deci->peta/unit deci->pico/unit deci->week/unit deka->centi/unit deka->day/unit deka->deci/unit deka->deka/unit deka->gibi/unit deka->giga/unit deka->hecto/unit deka->hour/unit deka->kibi/unit deka->kilo/unit deka->mebi/unit deka->mega/unit deka->micro/unit deka->milli/unit deka->minute/unit deka->nano/unit deka->normal/unit deka->pebi/unit deka->peta/unit deka->pico/unit deka->week/unit gibi->centi/unit gibi->day/unit gibi->deci/unit gibi->deka/unit gibi->gibi/unit gibi->giga/unit gibi->hecto/unit gibi->hour/unit gibi->kibi/unit gibi->kilo/unit gibi->mebi/unit gibi->mega/unit gibi->micro/unit gibi->milli/unit gibi->minute/unit gibi->nano/unit gibi->normal/unit gibi->pebi/unit gibi->peta/unit gibi->pico/unit gibi->week/unit giga->centi/unit giga->day/unit giga->deci/unit giga->deka/unit giga->gibi/unit giga->giga/unit giga->hecto/unit giga->hour/unit giga->kibi/unit giga->kilo/unit giga->mebi/unit giga->mega/unit giga->micro/unit giga->milli/unit giga->minute/unit giga->nano/unit giga->normal/unit giga->pebi/unit giga->peta/unit giga->pico/unit giga->week/unit hecto->centi/unit hecto->day/unit hecto->deci/unit hecto->deka/unit hecto->gibi/unit hecto->giga/unit hecto->hecto/unit hecto->hour/unit hecto->kibi/unit hecto->kilo/unit hecto->mebi/unit hecto->mega/unit hecto->micro/unit hecto->milli/unit hecto->minute/unit hecto->nano/unit hecto->normal/unit hecto->pebi/unit hecto->peta/unit hecto->pico/unit hecto->week/unit hour->centi/unit hour->day/unit hour->deci/unit hour->deka/unit hour->gibi/unit hour->giga/unit hour->hecto/unit hour->hour/unit hour->kibi/unit hour->kilo/unit hour->mebi/unit hour->mega/unit hour->micro/unit hour->milli/unit hour->minute/unit hour->nano/unit hour->normal/unit hour->pebi/unit hour->peta/unit hour->pico/unit hour->week/unit kibi->centi/unit kibi->day/unit kibi->deci/unit kibi->deka/unit kibi->gibi/unit kibi->giga/unit kibi->hecto/unit kibi->hour/unit kibi->kibi/unit kibi->kilo/unit kibi->mebi/unit kibi->mega/unit kibi->micro/unit kibi->milli/unit kibi->minute/unit kibi->nano/unit kibi->normal/unit kibi->pebi/unit kibi->peta/unit kibi->pico/unit kibi->week/unit kilo->centi/unit kilo->day/unit kilo->deci/unit kilo->deka/unit kilo->gibi/unit kilo->giga/unit kilo->hecto/unit kilo->hour/unit kilo->kibi/unit kilo->kilo/unit kilo->mebi/unit kilo->mega/unit kilo->micro/unit kilo->milli/unit kilo->minute/unit kilo->nano/unit kilo->normal/unit kilo->pebi/unit kilo->peta/unit kilo->pico/unit kilo->week/unit mebi->centi/unit mebi->day/unit mebi->deci/unit mebi->deka/unit mebi->gibi/unit mebi->giga/unit mebi->hecto/unit mebi->hour/unit mebi->kibi/unit mebi->kilo/unit mebi->mebi/unit mebi->mega/unit mebi->micro/unit mebi->milli/unit mebi->minute/unit mebi->nano/unit mebi->normal/unit mebi->pebi/unit mebi->peta/unit mebi->pico/unit mebi->week/unit mega->centi/unit mega->day/unit mega->deci/unit mega->deka/unit mega->gibi/unit mega->giga/unit mega->hecto/unit mega->hour/unit mega->kibi/unit mega->kilo/unit mega->mebi/unit mega->mega/unit mega->micro/unit mega->milli/unit mega->minute/unit mega->nano/unit mega->normal/unit mega->pebi/unit mega->peta/unit mega->pico/unit mega->week/unit micro->centi/unit micro->day/unit micro->deci/unit micro->deka/unit micro->gibi/unit micro->giga/unit micro->hecto/unit micro->hour/unit micro->kibi/unit micro->kilo/unit micro->mebi/unit micro->mega/unit micro->micro/unit micro->milli/unit micro->minute/unit micro->nano/unit micro->normal/unit micro->pebi/unit micro->peta/unit micro->pico/unit micro->week/unit milli->centi/unit milli->day/unit milli->deci/unit milli->deka/unit milli->gibi/unit milli->giga/unit milli->hecto/unit milli->hour/unit milli->kibi/unit milli->kilo/unit milli->mebi/unit milli->mega/unit milli->micro/unit milli->milli/unit milli->minute/unit milli->nano/unit milli->normal/unit milli->pebi/unit milli->peta/unit milli->pico/unit milli->week/unit minute->centi/unit minute->day/unit minute->deci/unit minute->deka/unit minute->gibi/unit minute->giga/unit minute->hecto/unit minute->hour/unit minute->kibi/unit minute->kilo/unit minute->mebi/unit minute->mega/unit minute->micro/unit minute->milli/unit minute->minute/unit minute->nano/unit minute->normal/unit minute->pebi/unit minute->peta/unit minute->pico/unit minute->week/unit nano->centi/unit nano->day/unit nano->deci/unit nano->deka/unit nano->gibi/unit nano->giga/unit nano->hecto/unit nano->hour/unit nano->kibi/unit nano->kilo/unit nano->mebi/unit nano->mega/unit nano->micro/unit nano->milli/unit nano->minute/unit nano->nano/unit nano->normal/unit nano->pebi/unit nano->peta/unit nano->pico/unit nano->week/unit normal->centi/unit normal->day/unit normal->deci/unit normal->deka/unit normal->gibi/unit normal->giga/unit normal->hecto/unit normal->hour/unit normal->kibi/unit normal->kilo/unit normal->mebi/unit normal->mega/unit normal->micro/unit normal->milli/unit normal->minute/unit normal->nano/unit normal->normal/unit normal->pebi/unit normal->peta/unit normal->pico/unit normal->week/unit pebi->centi/unit pebi->day/unit pebi->deci/unit pebi->deka/unit pebi->gibi/unit pebi->giga/unit pebi->hecto/unit pebi->hour/unit pebi->kibi/unit pebi->kilo/unit pebi->mebi/unit pebi->mega/unit pebi->micro/unit pebi->milli/unit pebi->minute/unit pebi->nano/unit pebi->normal/unit pebi->pebi/unit pebi->peta/unit pebi->pico/unit pebi->week/unit peta->centi/unit peta->day/unit peta->deci/unit peta->deka/unit peta->gibi/unit peta->giga/unit peta->hecto/unit peta->hour/unit peta->kibi/unit peta->kilo/unit peta->mebi/unit peta->mega/unit peta->micro/unit peta->milli/unit peta->minute/unit peta->nano/unit peta->normal/unit peta->pebi/unit peta->peta/unit peta->pico/unit peta->week/unit pico->centi/unit pico->day/unit pico->deci/unit pico->deka/unit pico->gibi/unit pico->giga/unit pico->hecto/unit pico->hour/unit pico->kibi/unit pico->kilo/unit pico->mebi/unit pico->mega/unit pico->micro/unit pico->milli/unit pico->minute/unit pico->nano/unit pico->normal/unit pico->pebi/unit pico->peta/unit pico->pico/unit pico->week/unit week->centi/unit week->day/unit week->deci/unit week->deka/unit week->gibi/unit week->giga/unit week->hecto/unit week->hour/unit week->kibi/unit week->kilo/unit week->mebi/unit week->mega/unit week->micro/unit week->milli/unit week->minute/unit week->nano/unit week->normal/unit week->pebi/unit week->peta/unit week->pico/unit week->week/unit))
+    :use-module ((euphrates universal-lockr-unlockr) :select (universal-lockr! universal-unlockr!))
+    :use-module ((euphrates universal-usleep) :select (universal-usleep))
+    :use-module ((euphrates uri-encode) :select (uri-encode))
+    :use-module ((euphrates uri-safe-alphabet) :select (uri-safe/alphabet uri-safe/alphabet/index))
+    :use-module ((euphrates url-decompose) :select (url-decompose))
+    :use-module ((euphrates url-get-hostname-and-port) :select (url-get-hostname-and-port))
+    :use-module ((euphrates url-get-path) :select (url-get-path))
+    :use-module ((euphrates url-get-protocol) :select (url-get-protocol))
+    :use-module ((euphrates url-get-query) :select (url-get-query))
+    :use-module ((euphrates url-goto) :select (url-goto))
+    :use-module ((euphrates usymbol) :select (make-usymbol usymbol-name usymbol-qualifier usymbol?))
+    :use-module ((euphrates vector-random-shuffle-bang) :select (vector-random-shuffle!))
+    :use-module ((euphrates with-critical) :select (with-critical))
+    :use-module ((euphrates with-dynamic-set) :select (with-dynamic-set!))
+    :use-module ((euphrates with-dynamic) :select (with-dynamic))
+    :use-module ((euphrates with-ignore-errors) :select (with-ignore-errors!))
+    :use-module ((euphrates with-monad) :select (with-monad))
+    :use-module ((euphrates with-randomizer-seed) :select (with-randomizer-seed))
+    :use-module ((euphrates words-to-string) :select (words->string))
+    :use-module ((euphrates write-string-file) :select (write-string-file)))))
 
 
-%use (absolute-posix-path?) "./euphrates/absolute-posix-path-q.scm"
-%use (alist-initialize!:current-setter/p) "./euphrates/alist-initialize-bang-current-setter-p.scm"
-%use (alist-initialize!/p) "./euphrates/alist-initialize-bang-p.scm"
-%use (alist-initialize! alist-initialize!:current-setters alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:return-multiple alist-initialize!:run alist-initialize!:stop) "./euphrates/alist-initialize-bang.scm"
-%use (alist-initialize-loop) "./euphrates/alist-initialize-loop.scm"
-%use (alpha/alphabet) "./euphrates/alpha-alphabet.scm"
-%use (alpha-lowercase/alphabet) "./euphrates/alpha-lowercase-alphabet.scm"
-%use (alphanum/alphabet alphanum/alphabet/index) "./euphrates/alphanum-alphabet.scm"
-%use (alphanum-lowercase/alphabet) "./euphrates/alphanum-lowercase-alphabet.scm"
-%use (append-posix-path) "./euphrates/append-posix-path.scm"
-%use (append-string-file) "./euphrates/append-string-file.scm"
-%use (apploop) "./euphrates/apploop.scm"
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert#raw) "./euphrates/assert-raw.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (assoc/any) "./euphrates/assoc-any.scm"
-%use (assoc/find) "./euphrates/assoc-find.scm"
-%use (assoc-or) "./euphrates/assoc-or.scm"
-%use (assoc-set-default) "./euphrates/assoc-set-default.scm"
-%use (assoc-set-value) "./euphrates/assoc-set-value.scm"
-%use (assq-or) "./euphrates/assq-or.scm"
-%use (assq-set-default) "./euphrates/assq-set-default.scm"
-%use (assq-set-value) "./euphrates/assq-set-value.scm"
-%use (atomic-box-compare-and-set! atomic-box-ref atomic-box-set! atomic-box? make-atomic-box) "./euphrates/atomic-box.scm"
-%use (base64/alphabet/minusunderscore) "./euphrates/base64-alphabet-minusunderscore.scm"
-%use (base64/alphabet/pluscomma) "./euphrates/base64-alphabet-pluscomma.scm"
-%use (base64/alphabet) "./euphrates/base64-alphabet.scm"
-%use (big-random-int) "./euphrates/big-random-int.scm"
-%use (bool->profun-result) "./euphrates/bool-to-profun-result.scm"
-%use (box-ref box-set! box? make-box) "./euphrates/box.scm"
-%use (builtin-descriptors) "./euphrates/builtin-descriptors.scm"
-%use (builtin-type?) "./euphrates/builtin-type-huh.scm"
-%use (call-with-finally) "./euphrates/call-with-finally.scm"
-%use (cartesian-any?) "./euphrates/cartesian-any-q.scm"
-%use (cartesian-each) "./euphrates/cartesian-each.scm"
-%use (cartesian-map) "./euphrates/cartesian-map.scm"
-%use (cartesian-product/g cartesian-product/g/reversed) "./euphrates/cartesian-product-g.scm"
-%use (cartesian-product) "./euphrates/cartesian-product.scm"
-%use (catch-any) "./euphrates/catch-any.scm"
-%use (catchu-case) "./euphrates/catchu-case.scm"
-%use (make-cfg-machine make-cfg-machine* make-cfg-machine/full) "./euphrates/cfg-machine.scm"
-%use (command-line-argumets/p) "./euphrates/command-line-arguments-p.scm"
-%use (appcomp comp) "./euphrates/comp.scm"
-%use (CFG-AST->CFG-CLI-help) "./euphrates/compile-cfg-cli-help.scm"
-%use (CFG-AST->CFG-lang CFG-CLI->CFG-lang CFG-lang-modifier-char?) "./euphrates/compile-cfg-cli.scm"
-%use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./euphrates/compile-regex-cli.scm"
-%use (compose-under-par) "./euphrates/compose-under-par.scm"
-%use (compose-under) "./euphrates/compose-under.scm"
-%use (comprocess-stderr) "./euphrates/comprocess-stderr.scm"
-%use (comprocess-stdout) "./euphrates/comprocess-stdout.scm"
-%use (comprocess comprocess-args comprocess-command comprocess-exited? comprocess-pid comprocess-pipe comprocess-status comprocess? set-comprocess-exited?! set-comprocess-pid! set-comprocess-pipe! set-comprocess-status!) "./euphrates/comprocess.scm"
-%use (cons!) "./euphrates/cons-bang.scm"
-%use (conss) "./euphrates/conss.scm"
-%use (convert-number-base convert-number-base/generic convert-number-base:default-max-base) "./euphrates/convert-number-base.scm"
-%use (current-directory/p) "./euphrates/current-directory-p.scm"
-%use (current-program-path/p) "./euphrates/current-program-path-p.scm"
-%use (current-random-source/p) "./euphrates/current-random-source-p.scm"
-%use (current-source-info->string) "./euphrates/current-source-info-to-string.scm"
-%use (curry-if) "./euphrates/curry-if.scm"
-%use (date-get-current-string) "./euphrates/date-get-current-string.scm"
-%use (date-get-current-time24h-string) "./euphrates/date-get-current-time24h-string.scm"
-%use (debug) "./euphrates/debug.scm"
-%use (debugs) "./euphrates/debugs.scm"
-%use (debugv) "./euphrates/debugv.scm"
-%use (define-cli:raisu/default-exit define-cli:raisu/p define-cli:show-help lambda-cli make-cli make-cli-with-handler make-cli/f make-cli/f/basic with-cli) "./euphrates/define-cli.scm"
-%use (define-dumb-record) "./euphrates/define-dumb-record.scm"
-%use (define-newtype) "./euphrates/define-newtype.scm"
-%use (define-pair) "./euphrates/define-pair.scm"
-%use (define-tuple) "./euphrates/define-tuple.scm"
-%use (define-type9 define-type9/nobind-descriptor type9-get-descriptor-by-name type9-get-record-descriptor) "./euphrates/define-type9.scm"
-%use (descriptors-registry-add! descriptors-registry-decolisify-name descriptors-registry-get) "./euphrates/descriptors-registry.scm"
-%use (directory-files-depth-foreach) "./euphrates/directory-files-depth-foreach.scm"
-%use (directory-files-depth-iter) "./euphrates/directory-files-depth-iter.scm"
-%use (directory-files-rec) "./euphrates/directory-files-rec.scm"
-%use (directory-files) "./euphrates/directory-files.scm"
-%use (directory-mtime-state) "./euphrates/directory-mtime-state.scm"
-%use (directory-tree) "./euphrates/directory-tree.scm"
-%use (dprint#p-default) "./euphrates/dprint-p-default.scm"
-%use (dprint#p) "./euphrates/dprint-p.scm"
-%use (dprint) "./euphrates/dprint.scm"
-%use (dprintln) "./euphrates/dprintln.scm"
-%use (dynamic-load) "./euphrates/dynamic-load.scm"
-%use (dynamic-thread-async-thunk) "./euphrates/dynamic-thread-async-thunk.scm"
-%use (dynamic-thread-async) "./euphrates/dynamic-thread-async.scm"
-%use (dynamic-thread-cancel#p) "./euphrates/dynamic-thread-cancel-p.scm"
-%use (dynamic-thread-cancel-tag) "./euphrates/dynamic-thread-cancel-tag.scm"
-%use (dynamic-thread-cancel) "./euphrates/dynamic-thread-cancel.scm"
-%use (dynamic-thread-critical-make#p-default) "./euphrates/dynamic-thread-critical-make-p-default.scm"
-%use (dynamic-thread-critical-make#p) "./euphrates/dynamic-thread-critical-make-p.scm"
-%use (dynamic-thread-critical-make) "./euphrates/dynamic-thread-critical-make.scm"
-%use (dynamic-thread-disable-cancel#p-default) "./euphrates/dynamic-thread-disable-cancel-p-default.scm"
-%use (dynamic-thread-disable-cancel#p) "./euphrates/dynamic-thread-disable-cancel-p.scm"
-%use (dynamic-thread-disable-cancel) "./euphrates/dynamic-thread-disable-cancel.scm"
-%use (dynamic-thread-enable-cancel#p-default) "./euphrates/dynamic-thread-enable-cancel-p-default.scm"
-%use (dynamic-thread-enable-cancel#p) "./euphrates/dynamic-thread-enable-cancel-p.scm"
-%use (dynamic-thread-enable-cancel) "./euphrates/dynamic-thread-enable-cancel.scm"
-%use (dynamic-thread-get-delay-procedure#p-default) "./euphrates/dynamic-thread-get-delay-procedure-p-default.scm"
-%use (dynamic-thread-get-delay-procedure#p) "./euphrates/dynamic-thread-get-delay-procedure-p.scm"
-%use (dynamic-thread-get-delay-procedure) "./euphrates/dynamic-thread-get-delay-procedure.scm"
-%use (dynamic-thread-get-wait-delay) "./euphrates/dynamic-thread-get-wait-delay.scm"
-%use (dynamic-thread-get-yield-procedure) "./euphrates/dynamic-thread-get-yield-procedure.scm"
-%use (dynamic-thread-mutex-lock!#p-default) "./euphrates/dynamic-thread-mutex-lock-p-default.scm"
-%use (dynamic-thread-mutex-lock!#p) "./euphrates/dynamic-thread-mutex-lock-p.scm"
-%use (dynamic-thread-mutex-lock!) "./euphrates/dynamic-thread-mutex-lock.scm"
-%use (dynamic-thread-mutex-make#p-default) "./euphrates/dynamic-thread-mutex-make-p-default.scm"
-%use (dynamic-thread-mutex-make#p) "./euphrates/dynamic-thread-mutex-make-p.scm"
-%use (dynamic-thread-mutex-make) "./euphrates/dynamic-thread-mutex-make.scm"
-%use (dynamic-thread-mutex-unlock!#p-default) "./euphrates/dynamic-thread-mutex-unlock-p-default.scm"
-%use (dynamic-thread-mutex-unlock!#p) "./euphrates/dynamic-thread-mutex-unlock-p.scm"
-%use (dynamic-thread-mutex-unlock!) "./euphrates/dynamic-thread-mutex-unlock.scm"
-%use (dynamic-thread-sleep#p-default) "./euphrates/dynamic-thread-sleep-p-default.scm"
-%use (dynamic-thread-sleep#p) "./euphrates/dynamic-thread-sleep-p.scm"
-%use (dynamic-thread-sleep) "./euphrates/dynamic-thread-sleep.scm"
-%use (dynamic-thread-spawn#p) "./euphrates/dynamic-thread-spawn-p.scm"
-%use (dynamic-thread-spawn) "./euphrates/dynamic-thread-spawn.scm"
-%use (dynamic-thread-wait-delay#us#p-default) "./euphrates/dynamic-thread-wait-delay-p-default.scm"
-%use (dynamic-thread-wait-delay#us#p) "./euphrates/dynamic-thread-wait-delay-p.scm"
-%use (dynamic-thread-yield#p-default) "./euphrates/dynamic-thread-yield-p-default.scm"
-%use (dynamic-thread-yield#p) "./euphrates/dynamic-thread-yield-p.scm"
-%use (dynamic-thread-yield) "./euphrates/dynamic-thread-yield.scm"
-%use (eval-in-current-namespace) "./euphrates/eval-in-current-namespace.scm"
-%use (exception-monad) "./euphrates/exception-monad.scm"
-%use (fast-parameterizeable-timestamp/p) "./euphrates/fast-parameterizeable-timestamp-p.scm"
-%use (file-delete) "./euphrates/file-delete.scm"
-%use (file-is-directory?/no-readlink) "./euphrates/file-is-directory-q-no-readlink.scm"
-%use (file-is-regular-file?/no-readlink) "./euphrates/file-is-regular-file-q-no-readlink.scm"
-%use (file-mtime) "./euphrates/file-mtime.scm"
-%use (file-or-directory-exists?) "./euphrates/file-or-directory-exists-q.scm"
-%use (file-size) "./euphrates/file-size.scm"
-%use (filter-monad) "./euphrates/filter-monad.scm"
-%use (fn-alist) "./euphrates/fn-alist.scm"
-%use (fn-cons) "./euphrates/fn-cons.scm"
-%use (fn-pair) "./euphrates/fn-pair.scm"
-%use (fn-tuple) "./euphrates/fn-tuple.scm"
-%use (fn) "./euphrates/fn.scm"
-%use (fp) "./euphrates/fp.scm"
-%use (get-command-line-arguments) "./euphrates/get-command-line-arguments.scm"
-%use (get-current-directory) "./euphrates/get-current-directory.scm"
-%use (get-current-program-path) "./euphrates/get-current-program-path.scm"
-%use (get-current-random-source) "./euphrates/get-current-random-source.scm"
-%use (get-current-source-file-path) "./euphrates/get-current-source-file-path.scm"
-%use (get-current-source-info) "./euphrates/get-current-source-info.scm"
-%use (get-directory-name) "./euphrates/get-directory-name.scm"
-%use (get-object-descriptor) "./euphrates/get-object-descriptor.scm"
-%use (global-debug-mode-filter) "./euphrates/global-debug-mode-filter.scm"
-%use (group-by/sequential group-by/sequential*) "./euphrates/group-by-sequential.scm"
-%use (hashmap-constructor hashmap-predicate) "./euphrates/hashmap-obj.scm"
-%use (alist->hashmap hashmap->alist hashmap-clear! hashmap-copy hashmap-count hashmap-delete! hashmap-foreach hashmap-has? hashmap-map hashmap-merge hashmap-merge! hashmap-ref hashmap-set! hashmap? make-hashmap multi-alist->hashmap) "./euphrates/hashmap.scm"
-%use (hashset-constructor hashset-predicate hashset-value) "./euphrates/hashset-obj.scm"
-%use (hashset->list hashset-add! hashset-clear! hashset-delete! hashset-difference hashset-equal? hashset-foreach hashset-has? hashset-intersection hashset-length hashset-map hashset-ref hashset-union list->hashset make-hashset vector->hashset) "./euphrates/hashset.scm"
-%use (identity-monad) "./euphrates/identity-monad.scm"
-%use (identity*) "./euphrates/identity-star.scm"
-%use (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value) "./euphrates/immutable-hashmap-obj.scm"
-%use (alist->immutable-hashmap immutable-hashmap->alist immutable-hashmap-clear immutable-hashmap-copy immutable-hashmap-count immutable-hashmap-foreach immutable-hashmap-fromlist immutable-hashmap-map immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set immutable-hashmap? make-immutable-hashmap) "./euphrates/immutable-hashmap.scm"
-%use (json-parse) "./euphrates/json-parse.scm"
-%use (lazy-monad) "./euphrates/lazy-monad.scm"
-%use (lazy-parameter) "./euphrates/lazy-parameter.scm"
-%use (letin) "./euphrates/letin.scm"
-%use (lexical-scope-unwrap lexical-scope-wrap lexical-scope?) "./euphrates/lexical-scope-obj.scm"
-%use (lexical-scope-make lexical-scope-namespace lexical-scope-ref lexical-scope-set! lexical-scope-stage! lexical-scope-unstage!) "./euphrates/lexical-scope.scm"
-%use (linear-interpolate-1d linear-interpolate-2d) "./euphrates/linear-interpolation.scm"
-%use (lines->string) "./euphrates/lines-to-string.scm"
-%use (linux-get-memory-free% linux-get-memory-stat) "./euphrates/linux-get-memory-stat.scm"
-%use (list-and-map) "./euphrates/list-and-map.scm"
-%use (list-break) "./euphrates/list-break.scm"
-%use (list-chunks) "./euphrates/list-chunks.scm"
-%use (list-combinations) "./euphrates/list-combinations.scm"
-%use (list-deduplicate list-deduplicate/reverse) "./euphrates/list-deduplicate.scm"
-%use (list-drop-n) "./euphrates/list-drop-n.scm"
-%use (list-drop-while) "./euphrates/list-drop-while.scm"
-%use (list-find-first) "./euphrates/list-find-first.scm"
-%use (list-fold*) "./euphrates/list-fold-star.scm"
-%use (list-fold) "./euphrates/list-fold.scm"
-%use (list-group-by) "./euphrates/list-group-by.scm"
-%use (list-init) "./euphrates/list-init.scm"
-%use (list-insert-at) "./euphrates/list-insert-at.scm"
-%use (list-intersperse) "./euphrates/list-intersperse.scm"
-%use (list-last) "./euphrates/list-last.scm"
-%use (list-length=) "./euphrates/list-length-eq.scm"
-%use (list-length=<?) "./euphrates/list-length-geq-q.scm"
-%use (list-levenshtein-distance) "./euphrates/list-levenshtein-distance.scm"
-%use (list-map-first) "./euphrates/list-map-first.scm"
-%use (list-map/flatten) "./euphrates/list-map-flatten.scm"
-%use (list-maximal-element-or) "./euphrates/list-maximal-element-or.scm"
-%use (list-minimal-element-or) "./euphrates/list-minimal-element-or.scm"
-%use (list-or-map) "./euphrates/list-or-map.scm"
-%use (list-partition) "./euphrates/list-partition.scm"
-%use (list-permutations) "./euphrates/list-permutations.scm"
-%use (list-prefix?) "./euphrates/list-prefix-q.scm"
-%use (list-random-element) "./euphrates/list-random-element.scm"
-%use (list-random-shuffle) "./euphrates/list-random-shuffle.scm"
-%use (list-ref-or) "./euphrates/list-ref-or.scm"
-%use (list-remove-common-prefix) "./euphrates/list-remove-common-prefix.scm"
-%use (list-replace-last-element) "./euphrates/list-replace-last.scm"
-%use (list-singleton?) "./euphrates/list-singleton-q.scm"
-%use (list-span-n) "./euphrates/list-span-n.scm"
-%use (list-span-while) "./euphrates/list-span-while.scm"
-%use (list-span) "./euphrates/list-span.scm"
-%use (list-split-on) "./euphrates/list-split-on.scm"
-%use (list-tag/next list-tag/next/rev list-untag/next) "./euphrates/list-tag-next.scm"
-%use (list-tag/prev list-tag/prev/rev) "./euphrates/list-tag-prev.scm"
-%use (list-tag list-untag) "./euphrates/list-tag.scm"
-%use (list-take-n) "./euphrates/list-take-n.scm"
-%use (list-take-while) "./euphrates/list-take-while.scm"
-%use (list->tree) "./euphrates/list-to-tree.scm"
-%use (list-traverse) "./euphrates/list-traverse.scm"
-%use (list-windows) "./euphrates/list-windows.scm"
-%use (list-zip-with) "./euphrates/list-zip-with.scm"
-%use (list-zip) "./euphrates/list-zip.scm"
-%use (log-monad) "./euphrates/log-monad.scm"
-%use (make-directories) "./euphrates/make-directories.scm"
-%use (make-temporary-filename) "./euphrates/make-temporary-filename.scm"
-%use (make-temporary-fileport) "./euphrates/make-temporary-fileport.scm"
-%use (make-unique) "./euphrates/make-unique.scm"
-%use (maybe-monad) "./euphrates/maybe-monad.scm"
-%use (ahash->mdict hash->mdict mdict mdict->alist mdict-has? mdict-keys mdict-set!) "./euphrates/mdict.scm"
-%use (memconst) "./euphrates/memconst.scm"
-%use (mimetype/extensions) "./euphrates/mimetype-extensions.scm"
-%use (monad-apply) "./euphrates/monad-apply.scm"
-%use (monad-ask) "./euphrates/monad-ask.scm"
-%use (monad-bind) "./euphrates/monad-bind.scm"
-%use (monad-compose) "./euphrates/monad-compose.scm"
-%use (monad-current/p) "./euphrates/monad-current-p.scm"
-%use (monad-do monad-do/generic) "./euphrates/monad-do.scm"
-%use (monad-make/hook) "./euphrates/monad-make-hook.scm"
-%use (monad-make/no-cont/no-fin) "./euphrates/monad-make-no-cont-no-fin.scm"
-%use (monad-make/no-cont) "./euphrates/monad-make-no-cont.scm"
-%use (monad-make/no-fin) "./euphrates/monad-make-no-fin.scm"
-%use (monad-make) "./euphrates/monad-make.scm"
-%use (monad-parameterize with-monad-left with-monad-right) "./euphrates/monad-parameterize.scm"
-%use (monad-transformer-current/p) "./euphrates/monad-transformer-current-p.scm"
-%use (monadfinobj monadfinobj-lval monadfinobj?) "./euphrates/monadfinobj.scm"
-%use (monadic-id) "./euphrates/monadic-id.scm"
-%use (monadic monadic-bare) "./euphrates/monadic.scm"
-%use (monadobj-constructor monadobj-handles-fin? monadobj-procedure monadobj-uses-continuations? monadobj?) "./euphrates/monadobj.scm"
-%use (monadstate-current/p) "./euphrates/monadstate-current-p.scm"
-%use (monadstate-arg monadstate-args monadstate-cret monadstate-cret/thunk monadstate-handle-multiple monadstate-lval monadstate-make-empty monadstate-qtags monadstate-qval monadstate-qvar monadstate-replicate-multiple monadstate-ret monadstate-ret/thunk monadstate?) "./euphrates/monadstate.scm"
-%use (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?) "./euphrates/monadstateobj.scm"
-%use (multiset-constructor multiset-predicate multiset-value) "./euphrates/multiset-obj.scm"
-%use (list->multiset make-multiset multiset->list multiset-add! multiset-equal? multiset-filter multiset-ref multiset? vector->multiset) "./euphrates/multiset.scm"
-%use (node/directed node/directed-children node/directed-label node/directed? set-node/directed-children! set-node/directed-label!) "./euphrates/node-directed-obj.scm"
-%use (make-node/directed) "./euphrates/node-directed.scm"
-%use (np-thread-obj np-thread-obj-cancel-enabled? np-thread-obj-cancel-scheduled? np-thread-obj-continuation np-thread-obj? set-np-thread-obj-cancel-scheduled?! set-np-thread-obj-continuation!) "./euphrates/np-thread-obj.scm"
-%use (np-thread-parameterize-env with-np-thread-env/non-interruptible) "./euphrates/np-thread-parameterize.scm"
-%use (np-thread-global-cancel np-thread-global-critical-make np-thread-global-disable-cancel np-thread-global-enable-cancel np-thread-global-mutex-lock! np-thread-global-mutex-make np-thread-global-mutex-unlock! np-thread-global-sleep np-thread-global-spawn np-thread-global-yield np-thread-make-env) "./euphrates/np-thread.scm"
-%use (number->number-list number->number-list:precision/p number-list->number number-list->number-list) "./euphrates/number-list.scm"
-%use (open-cond-constructor open-cond-predicate open-cond-value set-open-cond-value!) "./euphrates/open-cond-obj.scm"
-%use (define-open-cond define-open-cond-instance open-cond-lambda open-cond?) "./euphrates/open-cond.scm"
-%use (open-file-port) "./euphrates/open-file-port.scm"
-%use (make-package make-static-package use-svars with-package with-svars) "./euphrates/package.scm"
-%use (CFG-CLI->CFG-AST) "./euphrates/parse-cfg-cli.scm"
-%use (partial-apply) "./euphrates/partial-apply.scm"
-%use (partial-apply1) "./euphrates/partial-apply1.scm"
-%use (path-extension) "./euphrates/path-extension.scm"
-%use (path-extensions) "./euphrates/path-extensions.scm"
-%use (path-get-basename) "./euphrates/path-get-basename.scm"
-%use (path-get-dirname) "./euphrates/path-get-dirname.scm"
-%use (path-normalize) "./euphrates/path-normalize.scm"
-%use (path-replace-extension) "./euphrates/path-replace-extension.scm"
-%use (path-without-extension) "./euphrates/path-without-extension.scm"
-%use (path-without-extensions) "./euphrates/path-without-extensions.scm"
-%use (patri-handle-make-callback petri-handle-get) "./euphrates/petri-error-handling.scm"
-%use (petri-net-make) "./euphrates/petri-net-make.scm"
-%use (petri-net-obj petri-net-obj-critical petri-net-obj-finished? petri-net-obj-queue petri-net-obj-transitions petri-net-obj? set-petri-net-obj-finished?!) "./euphrates/petri-net-obj.scm"
-%use (petri-profun-net) "./euphrates/petri-net-parse-profun.scm"
-%use (petri-lambda-net petri-net-parse) "./euphrates/petri-net-parse.scm"
-%use (petri-push petri-run) "./euphrates/petri.scm"
-%use (prefixtree prefixtree-children prefixtree-value prefixtree? set-prefixtree-children! set-prefixtree-value!) "./euphrates/prefixtree-obj.scm"
-%use (make-prefixtree prefixtree->tree prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree-set!) "./euphrates/prefixtree.scm"
-%use (print-in-frame) "./euphrates/print-in-frame.scm"
-%use (print-in-window) "./euphrates/print-in-window.scm"
-%use (printable/alphabet) "./euphrates/printable-alphabet.scm"
-%use (printable/stable/alphabet) "./euphrates/printable-stable-alphabet.scm"
-%use (printf) "./euphrates/printf.scm"
-%use (make-profun-CR profun-CR-what profun-CR?) "./euphrates/profun-CR.scm"
-%use (make-profun-IDR profun-IDR-arity profun-IDR-name profun-IDR?) "./euphrates/profun-IDR.scm"
-%use (make-profun-RFC profun-RFC-add-info profun-RFC-insert profun-RFC-modify-iter profun-RFC-reset profun-RFC-set-iter profun-RFC-what profun-RFC?) "./euphrates/profun-RFC.scm"
-%use (make-profun-abort profun-abort-add-info profun-abort-additional profun-abort-iter profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?) "./euphrates/profun-abort.scm"
-%use (make-profun-accept profun-accept profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept? profun-ctx-set profun-set profun-set-meta profun-set-parameter) "./euphrates/profun-accept.scm"
-%use (profun-answer?) "./euphrates/profun-answer-huh.scm"
-%use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./euphrates/profun-answer-join.scm"
-%use (profun-current-env/p) "./euphrates/profun-current-env-p.scm"
-%use (make-falsy-profun-database make-profun-database profun-database-copy profun-database-extend profun-database-falsy? profun-database-get profun-database-get-all profun-database-handle profun-database-handler profun-database-rules profun-database?) "./euphrates/profun-database.scm"
-%use (profun-default) "./euphrates/profun-default.scm"
-%use (make-profun-env profun-env-copy profun-env-get profun-env-set! profun-env-unset!) "./euphrates/profun-env.scm"
-%use (make-profun-error profun-error-args profun-error?) "./euphrates/profun-error.scm"
-%use (profun-handler-extend profun-handler-get profun-make-handler) "./euphrates/profun-handler.scm"
-%use (profun-instruction-args profun-instruction-arity profun-instruction-body profun-instruction-build profun-instruction-build/next profun-instruction-constructor profun-instruction-context profun-instruction-name profun-instruction-next profun-instruction?) "./euphrates/profun-instruction.scm"
-%use (profun-abort-insert profun-abort-reset profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-insert! profun-iterator-query profun-iterator-reset! profun-iterator-state set-profun-iterator-query! set-profun-iterator-state!) "./euphrates/profun-iterator.scm"
-%use (profun-make-instantiation-check) "./euphrates/profun-make-instantiation-test.scm"
-%use (profun-make-set) "./euphrates/profun-make-set.scm"
-%use (profun-make-tuple-set) "./euphrates/profun-make-tuple-set.scm"
-%use (profun-meta-key) "./euphrates/profun-meta-key.scm"
-%use (profun-op-apply/result#p) "./euphrates/profun-op-apply-result-p.scm"
-%use (profun-apply-fail! profun-apply-return! profun-op-apply) "./euphrates/profun-op-apply.scm"
-%use (profun-op-binary) "./euphrates/profun-op-binary.scm"
-%use (profun-op-divisible) "./euphrates/profun-op-divisible.scm"
-%use (profun-op-envlambda) "./euphrates/profun-op-envlambda.scm"
-%use (profun-op-equals) "./euphrates/profun-op-equals.scm"
-%use (profun-op-eval/result#p) "./euphrates/profun-op-eval-result-p.scm"
-%use (profun-eval-fail! profun-eval-return! profun-op-eval) "./euphrates/profun-op-eval.scm"
-%use (profun-op-false) "./euphrates/profun-op-false.scm"
-%use (profun-op-function) "./euphrates/profun-op-function.scm"
-%use (profun-op-lambda) "./euphrates/profun-op-lambda.scm"
-%use (profun-op-less) "./euphrates/profun-op-less.scm"
-%use (profun-op-modulo) "./euphrates/profun-op-modulo.scm"
-%use (profun-op*) "./euphrates/profun-op-mult.scm"
-%use (profun-op-arity profun-op-constructor profun-op-procedure profun-op?) "./euphrates/profun-op-obj.scm"
-%use (instantiate-profun-parameter make-profun-parameter) "./euphrates/profun-op-parameter.scm"
-%use (profun-op+) "./euphrates/profun-op-plus.scm"
-%use (profun-op-print) "./euphrates/profun-op-print.scm"
-%use (profun-op-separate) "./euphrates/profun-op-separate.scm"
-%use (profun-op-sqrt) "./euphrates/profun-op-sqrt.scm"
-%use (profun-op-true) "./euphrates/profun-op-true.scm"
-%use (profun-op-unary) "./euphrates/profun-op-unary.scm"
-%use (profun-op-unify) "./euphrates/profun-op-unify.scm"
-%use (profun-op-value) "./euphrates/profun-op-value.scm"
-%use (make-profun-op) "./euphrates/profun-op.scm"
-%use (profun-query-get-free-variables) "./euphrates/profun-query-get-free-variables.scm"
-%use (profun-query-handle-underscores) "./euphrates/profun-query-handle-underscores.scm"
-%use (profun-reject profun-reject?) "./euphrates/profun-reject.scm"
-%use (profun-request-value) "./euphrates/profun-request-value.scm"
-%use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name profun-rule?) "./euphrates/profun-rule.scm"
-%use (profun-standard-handler) "./euphrates/profun-standard-handler.scm"
-%use (profun-state-build profun-state-constructor profun-state-current profun-state-failstate profun-state-final? profun-state-finish profun-state-make profun-state-stack profun-state-undo profun-state? set-profun-state-current) "./euphrates/profun-state.scm"
-%use (profun-bound-value? profun-make-constant profun-make-unbound-var profun-make-var profun-unbound-value? profun-value-name profun-value-unwrap profun-value?) "./euphrates/profun-value.scm"
-%use (profun-variable-arity-op?) "./euphrates/profun-variable-arity-op-huh.scm"
-%use (profun-variable-arity-op-keyword) "./euphrates/profun-variable-arity-op-keyword.scm"
-%use (profun-variable-arity-op) "./euphrates/profun-variable-arity-op.scm"
-%use (profun-variable-equal?) "./euphrates/profun-variable-equal-q.scm"
-%use (profun-varname?) "./euphrates/profun-varname-q.scm"
-%use (profun-create-database profun-create-falsy-database profun-eval-query profun-eval-query/boolean profun-iterate profun-next profun-next/boolean) "./euphrates/profun.scm"
-%use (profune-communications-hook/p) "./euphrates/profune-communications-hook-p.scm"
-%use (profune-communications) "./euphrates/profune-communications.scm"
-%use (make-profune-communicator profune-communicator-db profune-communicator-handle profune-communicator?) "./euphrates/profune-communicator.scm"
-%use (define-property) "./euphrates/properties.scm"
-%use (queue-constructor queue-first queue-last queue-predicate queue-vector set-queue-first! set-queue-last! set-queue-vector!) "./euphrates/queue-obj.scm"
-%use (list->queue make-queue queue->list queue-empty? queue-peek queue-peek-rotate! queue-pop! queue-push! queue-rotate! queue-unload! queue?) "./euphrates/queue.scm"
-%use (raisu) "./euphrates/raisu.scm"
-%use (random-choice) "./euphrates/random-choice.scm"
-%use (random-variable-name) "./euphrates/random-variable-name.scm"
-%use (range) "./euphrates/range.scm"
-%use (read-all-port) "./euphrates/read-all-port.scm"
-%use (read/lines) "./euphrates/read-lines.scm"
-%use (read-list) "./euphrates/read-list.scm"
-%use (read-string-file) "./euphrates/read-string-file.scm"
-%use (read-string-line) "./euphrates/read-string-line.scm"
-%use (make-regex-machine make-regex-machine* make-regex-machine/full) "./euphrates/regex-machine.scm"
-%use (remove-common-prefix) "./euphrates/remove-common-prefix.scm"
-%use (replacement-monad) "./euphrates/replacement-monad.scm"
-%use (replicate) "./euphrates/replicate.scm"
-%use (reversed-args-f) "./euphrates/reversed-args-f.scm"
-%use (reversed-args) "./euphrates/reversed-args.scm"
-%use (rtree rtree-children rtree-ref rtree-value rtree? set-rtree-children! set-rtree-ref!) "./euphrates/rtree.scm"
-%use (run-comprocess/p-default) "./euphrates/run-comprocess-p-default.scm"
-%use (run-comprocess/p) "./euphrates/run-comprocess-p.scm"
-%use (run-comprocess) "./euphrates/run-comprocess.scm"
-%use (deserialize-builtin/natural serialize-builtin/natural) "./euphrates/serialization-builtin-natural.scm"
-%use (deserialize-builtin/short serialize-builtin/short) "./euphrates/serialization-builtin-short.scm"
-%use (deserialize/human serialize/human) "./euphrates/serialization-human.scm"
-%use (deserialize/runnable serialize/runnable) "./euphrates/serialization-runnable.scm"
-%use (deserialize/sexp/generic serialize/sexp/generic) "./euphrates/serialization-sexp-generic.scm"
-%use (deserialize/sexp/natural serialize/sexp/natural) "./euphrates/serialization-sexp-natural.scm"
-%use (deserialize/sexp/short serialize/sexp/short) "./euphrates/serialization-sexp-short.scm"
-%use (deserialize/short serialize/short) "./euphrates/serialization-short.scm"
-%use (shell-nondisrupt/alphabet shell-nondisrupt/alphabet/index) "./euphrates/shell-nondisrupt-alphabet.scm"
-%use (shell-quote/permissive) "./euphrates/shell-quote-permissive.scm"
-%use (shell-quote shell-quote/always/list) "./euphrates/shell-quote.scm"
-%use (shell-safe/alphabet shell-safe/alphabet/index) "./euphrates/shell-safe-alphabet.scm"
-%use (sleep-until) "./euphrates/sleep-until.scm"
-%use (mrg32k3a-pack-state mrg32k3a-random-integer mrg32k3a-random-range mrg32k3a-random-real mrg32k3a-unpack-state) "./euphrates/srfi-27-backbone-generator.scm"
-%use (default-random-source make-random-source random-source-make-integers random-source-make-reals random-source-pseudo-randomize! random-source-randomize! random-source-state-ref random-source-state-set! random-source?) "./euphrates/srfi-27-generic.scm"
-%use (:random-source-current-time :random-source-make :random-source-make-integers :random-source-make-reals :random-source-pseudo-randomize! :random-source-randomize! :random-source-state-ref :random-source-state-set! :random-source?) "./euphrates/srfi-27-random-source-obj.scm"
-%use (set-stack-lst! stack-constructor stack-lst stack-predicate) "./euphrates/stack-obj.scm"
-%use (list->stack stack->list stack-discard! stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload! stack?) "./euphrates/stack.scm"
-%use (string-drop-n) "./euphrates/string-drop-n.scm"
-%use (string-null-or-whitespace?) "./euphrates/string-null-or-whitespace-p.scm"
-%use (string-pad-L string-pad-R) "./euphrates/string-pad.scm"
-%use (string-plus-encode string-plus-encode/generic string-plus-encoding-make) "./euphrates/string-plus-encode.scm"
-%use (string-split-3) "./euphrates/string-split-3.scm"
-%use (string-split/simple) "./euphrates/string-split-simple.scm"
-%use (string-strip) "./euphrates/string-strip.scm"
-%use (string-take-n) "./euphrates/string-take-n.scm"
-%use (string->lines) "./euphrates/string-to-lines.scm"
-%use (string->numstring) "./euphrates/string-to-numstring.scm"
-%use (string->seconds/columned) "./euphrates/string-to-seconds-columned.scm"
-%use (string->seconds) "./euphrates/string-to-seconds.scm"
-%use (string->words) "./euphrates/string-to-words.scm"
-%use (string-trim-chars) "./euphrates/string-trim-chars.scm"
-%use (stringf) "./euphrates/stringf.scm"
-%use (syntax-append) "./euphrates/syntax-append.scm"
-%use (syntax-flatten*) "./euphrates/syntax-flatten-star.scm"
-%use (syntax-identity) "./euphrates/syntax-identity.scm"
-%use (syntax-map/noeval) "./euphrates/syntax-map-noeval.scm"
-%use (syntax-map) "./euphrates/syntax-map.scm"
-%use (syntax-reverse) "./euphrates/syntax-reverse.scm"
-%use (syntax-tree-foreach) "./euphrates/syntax-tree-foreach.scm"
-%use (sys-mutex-lock!) "./euphrates/sys-mutex-lock.scm"
-%use (sys-mutex-make) "./euphrates/sys-mutex-make.scm"
-%use (sys-mutex-unlock!) "./euphrates/sys-mutex-unlock.scm"
-%use (sys-thread-current#p-default) "./euphrates/sys-thread-current-p-default.scm"
-%use (sys-thread-current#p) "./euphrates/sys-thread-current-p.scm"
-%use (set-sys-thread-obj-cancel-enabled?! set-sys-thread-obj-cancel-scheduled?! set-sys-thread-obj-handle! sys-thread-obj sys-thread-obj-cancel-enabled? sys-thread-obj-cancel-scheduled? sys-thread-obj-handle sys-thread-obj?) "./euphrates/sys-thread-obj.scm"
-%use (sys-thread-cancel sys-thread-current sys-thread-disable-cancel sys-thread-enable-cancel sys-thread-mutex-lock! sys-thread-mutex-make sys-thread-mutex-unlock! sys-thread-sleep sys-thread-spawn) "./euphrates/sys-thread.scm"
-%use (sys-usleep) "./euphrates/sys-usleep.scm"
-%use (system-environment-get-all) "./euphrates/system-environment-get-all.scm"
-%use (system-environment-get system-environment-set!) "./euphrates/system-environment.scm"
-%use (system-fmt) "./euphrates/system-fmt.scm"
-%use (system-re) "./euphrates/system-re.scm"
-%use (system*/exit-code) "./euphrates/system-star-exit-code.scm"
-%use (~a) "./euphrates/tilda-a.scm"
-%use (~s) "./euphrates/tilda-s.scm"
-%use (time-get-current-unixtime/values#p-default) "./euphrates/time-get-current-unixtime-values-p-default.scm"
-%use (time-get-current-unixtime/values#p) "./euphrates/time-get-current-unixtime-values-p.scm"
-%use (time-get-current-unixtime time-get-current-unixtime/values) "./euphrates/time-get-current-unixtime.scm"
-%use (time-get-fast-parameterizeable-timestamp) "./euphrates/time-get-fast-parameterizeable-timestamp.scm"
-%use (time-get-monotonic-nanoseconds-timestamp) "./euphrates/time-get-monotonic-nanoseconds-timestamp.scm"
-%use (seconds->H/M/s seconds->M/s seconds->time-string) "./euphrates/time-to-string.scm"
-%use (tree-map-leafs) "./euphrates/tree-map-leafs.scm"
-%use (un~s) "./euphrates/un-tilda-s.scm"
-%use (uni-critical-make) "./euphrates/uni-critical.scm"
-%use (make-uni-spinlock make-uni-spinlock-critical uni-spinlock-lock! uni-spinlock-unlock!) "./euphrates/uni-spinlock.scm"
-%use (centi->centi/unit centi->day/unit centi->deci/unit centi->deka/unit centi->gibi/unit centi->giga/unit centi->hecto/unit centi->hour/unit centi->kibi/unit centi->kilo/unit centi->mebi/unit centi->mega/unit centi->micro/unit centi->milli/unit centi->minute/unit centi->nano/unit centi->normal/unit centi->pebi/unit centi->peta/unit centi->pico/unit centi->week/unit day->centi/unit day->day/unit day->deci/unit day->deka/unit day->gibi/unit day->giga/unit day->hecto/unit day->hour/unit day->kibi/unit day->kilo/unit day->mebi/unit day->mega/unit day->micro/unit day->milli/unit day->minute/unit day->nano/unit day->normal/unit day->pebi/unit day->peta/unit day->pico/unit day->week/unit deci->centi/unit deci->day/unit deci->deci/unit deci->deka/unit deci->gibi/unit deci->giga/unit deci->hecto/unit deci->hour/unit deci->kibi/unit deci->kilo/unit deci->mebi/unit deci->mega/unit deci->micro/unit deci->milli/unit deci->minute/unit deci->nano/unit deci->normal/unit deci->pebi/unit deci->peta/unit deci->pico/unit deci->week/unit deka->centi/unit deka->day/unit deka->deci/unit deka->deka/unit deka->gibi/unit deka->giga/unit deka->hecto/unit deka->hour/unit deka->kibi/unit deka->kilo/unit deka->mebi/unit deka->mega/unit deka->micro/unit deka->milli/unit deka->minute/unit deka->nano/unit deka->normal/unit deka->pebi/unit deka->peta/unit deka->pico/unit deka->week/unit gibi->centi/unit gibi->day/unit gibi->deci/unit gibi->deka/unit gibi->gibi/unit gibi->giga/unit gibi->hecto/unit gibi->hour/unit gibi->kibi/unit gibi->kilo/unit gibi->mebi/unit gibi->mega/unit gibi->micro/unit gibi->milli/unit gibi->minute/unit gibi->nano/unit gibi->normal/unit gibi->pebi/unit gibi->peta/unit gibi->pico/unit gibi->week/unit giga->centi/unit giga->day/unit giga->deci/unit giga->deka/unit giga->gibi/unit giga->giga/unit giga->hecto/unit giga->hour/unit giga->kibi/unit giga->kilo/unit giga->mebi/unit giga->mega/unit giga->micro/unit giga->milli/unit giga->minute/unit giga->nano/unit giga->normal/unit giga->pebi/unit giga->peta/unit giga->pico/unit giga->week/unit hecto->centi/unit hecto->day/unit hecto->deci/unit hecto->deka/unit hecto->gibi/unit hecto->giga/unit hecto->hecto/unit hecto->hour/unit hecto->kibi/unit hecto->kilo/unit hecto->mebi/unit hecto->mega/unit hecto->micro/unit hecto->milli/unit hecto->minute/unit hecto->nano/unit hecto->normal/unit hecto->pebi/unit hecto->peta/unit hecto->pico/unit hecto->week/unit hour->centi/unit hour->day/unit hour->deci/unit hour->deka/unit hour->gibi/unit hour->giga/unit hour->hecto/unit hour->hour/unit hour->kibi/unit hour->kilo/unit hour->mebi/unit hour->mega/unit hour->micro/unit hour->milli/unit hour->minute/unit hour->nano/unit hour->normal/unit hour->pebi/unit hour->peta/unit hour->pico/unit hour->week/unit kibi->centi/unit kibi->day/unit kibi->deci/unit kibi->deka/unit kibi->gibi/unit kibi->giga/unit kibi->hecto/unit kibi->hour/unit kibi->kibi/unit kibi->kilo/unit kibi->mebi/unit kibi->mega/unit kibi->micro/unit kibi->milli/unit kibi->minute/unit kibi->nano/unit kibi->normal/unit kibi->pebi/unit kibi->peta/unit kibi->pico/unit kibi->week/unit kilo->centi/unit kilo->day/unit kilo->deci/unit kilo->deka/unit kilo->gibi/unit kilo->giga/unit kilo->hecto/unit kilo->hour/unit kilo->kibi/unit kilo->kilo/unit kilo->mebi/unit kilo->mega/unit kilo->micro/unit kilo->milli/unit kilo->minute/unit kilo->nano/unit kilo->normal/unit kilo->pebi/unit kilo->peta/unit kilo->pico/unit kilo->week/unit mebi->centi/unit mebi->day/unit mebi->deci/unit mebi->deka/unit mebi->gibi/unit mebi->giga/unit mebi->hecto/unit mebi->hour/unit mebi->kibi/unit mebi->kilo/unit mebi->mebi/unit mebi->mega/unit mebi->micro/unit mebi->milli/unit mebi->minute/unit mebi->nano/unit mebi->normal/unit mebi->pebi/unit mebi->peta/unit mebi->pico/unit mebi->week/unit mega->centi/unit mega->day/unit mega->deci/unit mega->deka/unit mega->gibi/unit mega->giga/unit mega->hecto/unit mega->hour/unit mega->kibi/unit mega->kilo/unit mega->mebi/unit mega->mega/unit mega->micro/unit mega->milli/unit mega->minute/unit mega->nano/unit mega->normal/unit mega->pebi/unit mega->peta/unit mega->pico/unit mega->week/unit micro->centi/unit micro->day/unit micro->deci/unit micro->deka/unit micro->gibi/unit micro->giga/unit micro->hecto/unit micro->hour/unit micro->kibi/unit micro->kilo/unit micro->mebi/unit micro->mega/unit micro->micro/unit micro->milli/unit micro->minute/unit micro->nano/unit micro->normal/unit micro->pebi/unit micro->peta/unit micro->pico/unit micro->week/unit milli->centi/unit milli->day/unit milli->deci/unit milli->deka/unit milli->gibi/unit milli->giga/unit milli->hecto/unit milli->hour/unit milli->kibi/unit milli->kilo/unit milli->mebi/unit milli->mega/unit milli->micro/unit milli->milli/unit milli->minute/unit milli->nano/unit milli->normal/unit milli->pebi/unit milli->peta/unit milli->pico/unit milli->week/unit minute->centi/unit minute->day/unit minute->deci/unit minute->deka/unit minute->gibi/unit minute->giga/unit minute->hecto/unit minute->hour/unit minute->kibi/unit minute->kilo/unit minute->mebi/unit minute->mega/unit minute->micro/unit minute->milli/unit minute->minute/unit minute->nano/unit minute->normal/unit minute->pebi/unit minute->peta/unit minute->pico/unit minute->week/unit nano->centi/unit nano->day/unit nano->deci/unit nano->deka/unit nano->gibi/unit nano->giga/unit nano->hecto/unit nano->hour/unit nano->kibi/unit nano->kilo/unit nano->mebi/unit nano->mega/unit nano->micro/unit nano->milli/unit nano->minute/unit nano->nano/unit nano->normal/unit nano->pebi/unit nano->peta/unit nano->pico/unit nano->week/unit normal->centi/unit normal->day/unit normal->deci/unit normal->deka/unit normal->gibi/unit normal->giga/unit normal->hecto/unit normal->hour/unit normal->kibi/unit normal->kilo/unit normal->mebi/unit normal->mega/unit normal->micro/unit normal->milli/unit normal->minute/unit normal->nano/unit normal->normal/unit normal->pebi/unit normal->peta/unit normal->pico/unit normal->week/unit pebi->centi/unit pebi->day/unit pebi->deci/unit pebi->deka/unit pebi->gibi/unit pebi->giga/unit pebi->hecto/unit pebi->hour/unit pebi->kibi/unit pebi->kilo/unit pebi->mebi/unit pebi->mega/unit pebi->micro/unit pebi->milli/unit pebi->minute/unit pebi->nano/unit pebi->normal/unit pebi->pebi/unit pebi->peta/unit pebi->pico/unit pebi->week/unit peta->centi/unit peta->day/unit peta->deci/unit peta->deka/unit peta->gibi/unit peta->giga/unit peta->hecto/unit peta->hour/unit peta->kibi/unit peta->kilo/unit peta->mebi/unit peta->mega/unit peta->micro/unit peta->milli/unit peta->minute/unit peta->nano/unit peta->normal/unit peta->pebi/unit peta->peta/unit peta->pico/unit peta->week/unit pico->centi/unit pico->day/unit pico->deci/unit pico->deka/unit pico->gibi/unit pico->giga/unit pico->hecto/unit pico->hour/unit pico->kibi/unit pico->kilo/unit pico->mebi/unit pico->mega/unit pico->micro/unit pico->milli/unit pico->minute/unit pico->nano/unit pico->normal/unit pico->pebi/unit pico->peta/unit pico->pico/unit pico->week/unit week->centi/unit week->day/unit week->deci/unit week->deka/unit week->gibi/unit week->giga/unit week->hecto/unit week->hour/unit week->kibi/unit week->kilo/unit week->mebi/unit week->mega/unit week->micro/unit week->milli/unit week->minute/unit week->nano/unit week->normal/unit week->pebi/unit week->peta/unit week->pico/unit week->week/unit) "./euphrates/unit-conversions.scm"
-%use (universal-lockr! universal-unlockr!) "./euphrates/universal-lockr-unlockr.scm"
-%use (universal-usleep) "./euphrates/universal-usleep.scm"
-%use (uri-encode) "./euphrates/uri-encode.scm"
-%use (uri-safe/alphabet uri-safe/alphabet/index) "./euphrates/uri-safe-alphabet.scm"
-%use (url-decompose) "./euphrates/url-decompose.scm"
-%use (url-get-hostname-and-port) "./euphrates/url-get-hostname-and-port.scm"
-%use (url-get-path) "./euphrates/url-get-path.scm"
-%use (url-get-protocol) "./euphrates/url-get-protocol.scm"
-%use (url-get-query) "./euphrates/url-get-query.scm"
-%use (url-goto) "./euphrates/url-goto.scm"
-%use (make-usymbol usymbol-name usymbol-qualifier usymbol?) "./euphrates/usymbol.scm"
-%use (vector-random-shuffle!) "./euphrates/vector-random-shuffle-bang.scm"
-%use (with-critical) "./euphrates/with-critical.scm"
-%use (with-dynamic-set!) "./euphrates/with-dynamic-set.scm"
-%use (with-dynamic) "./euphrates/with-dynamic.scm"
-%use (with-ignore-errors!) "./euphrates/with-ignore-errors.scm"
-%use (with-monad) "./euphrates/with-monad.scm"
-%use (with-randomizer-seed) "./euphrates/with-randomizer-seed.scm"
-%use (words->string) "./euphrates/words-to-string.scm"
-%use (write-string-file) "./euphrates/write-string-file.scm"
 
 (+ 2 2)

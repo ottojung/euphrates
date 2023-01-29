@@ -1,27 +1,29 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-profun)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates catchu-case) :select (catchu-case))
+    :use-module ((euphrates debug) :select (debug))
+    :use-module ((euphrates printf) :select (printf))
+    :use-module ((euphrates profun-RFC) :select (profun-RFC-insert profun-RFC-what profun-RFC?))
+    :use-module ((euphrates profun-accept) :select (profun-accept))
+    :use-module ((euphrates profun-error) :select (profun-error-args profun-error?))
+    :use-module ((euphrates profun-handler) :select (profun-handler-extend))
+    :use-module ((euphrates profun-make-set) :select (profun-make-set))
+    :use-module ((euphrates profun-make-tuple-set) :select (profun-make-tuple-set))
+    :use-module ((euphrates profun-op-apply) :select (profun-apply-fail! profun-apply-return! profun-op-apply))
+    :use-module ((euphrates profun-op-envlambda) :select (profun-op-envlambda))
+    :use-module ((euphrates profun-op-eval) :select (profun-eval-fail! profun-op-eval))
+    :use-module ((euphrates profun-op-function) :select (profun-op-function))
+    :use-module ((euphrates profun-op-parameter) :select (instantiate-profun-parameter make-profun-parameter))
+    :use-module ((euphrates profun-op-value) :select (profun-op-value))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-standard-handler) :select (profun-standard-handler))
+    :use-module ((euphrates profun) :select (profun-create-database profun-eval-query profun-iterate profun-next)))))
 
 ;; profun
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (catchu-case) "./euphrates/catchu-case.scm"
-%use (debug) "./euphrates/debug.scm"
-%use (printf) "./euphrates/printf.scm"
-%use (profun-RFC-insert profun-RFC-what profun-RFC?) "./euphrates/profun-RFC.scm"
-%use (profun-accept) "./euphrates/profun-accept.scm"
-%use (profun-error-args profun-error?) "./euphrates/profun-error.scm"
-%use (profun-handler-extend) "./euphrates/profun-handler.scm"
-%use (profun-make-set) "./euphrates/profun-make-set.scm"
-%use (profun-make-tuple-set) "./euphrates/profun-make-tuple-set.scm"
-%use (profun-apply-fail! profun-apply-return! profun-op-apply) "./euphrates/profun-op-apply.scm"
-%use (profun-op-envlambda) "./euphrates/profun-op-envlambda.scm"
-%use (profun-eval-fail! profun-op-eval) "./euphrates/profun-op-eval.scm"
-%use (profun-op-function) "./euphrates/profun-op-function.scm"
-%use (instantiate-profun-parameter make-profun-parameter) "./euphrates/profun-op-parameter.scm"
-%use (profun-op-value) "./euphrates/profun-op-value.scm"
-%use (profun-reject) "./euphrates/profun-reject.scm"
-%use (profun-standard-handler) "./euphrates/profun-standard-handler.scm"
-%use (profun-create-database profun-eval-query profun-iterate profun-next) "./euphrates/profun.scm"
 
 (define current-handler
   (make-parameter #f))
@@ -42,19 +44,13 @@
   (define db (get-db))
   (profun-eval-query db query))
 
-%for (COMPILER "guile")
-(use-modules (ice-9 pretty-print))
-%end
 (define (pretty x)
-%for (COMPILER "guile")
-(pretty-print x)
-(when #f
-%end
-(write x)
-%for (COMPILER "guile")
-)
-%end
-)
+  (cond-expand
+   (guile
+    (use-modules (ice-9 pretty-print))
+    (pretty-print x))
+   (else
+    (write x))))
 
 (define (test query expected-result)
   (define result (run-query query))
@@ -132,7 +128,7 @@
        (let () . body)))))
 
   ;;;;;;;;;;;
-  ;; TESTS ;;
+;; TESTS ;;
   ;;;;;;;;;;;
 
 (define param1

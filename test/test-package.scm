@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-package)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates hashmap) :select (hashmap-ref))
+    :use-module ((euphrates package) :select (make-package use-svars with-package with-svars)))))
 
 ;; package
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (hashmap-ref) "./euphrates/hashmap.scm"
-%use (make-package use-svars with-package with-svars) "./euphrates/package.scm"
 
 (let ()
   (define already-defined 7)

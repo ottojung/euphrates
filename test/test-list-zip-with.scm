@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-zip-with)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-zip-with) :select (list-zip-with)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-zip-with) "./euphrates/list-zip-with.scm"
 
 (let () ;; list-zip-with
   (assert= '((1 a) (2 b) (3 c))

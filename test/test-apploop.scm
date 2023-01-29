@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-apploop)
+    :use-module ((euphrates apploop) :select (apploop))
+    :use-module ((euphrates assert-equal) :select (assert=)))))
 
 ;; apploop
-%use (apploop) "./euphrates/apploop.scm"
-%use (assert=) "./euphrates/assert-equal.scm"
 
 (let ()
   (assert=

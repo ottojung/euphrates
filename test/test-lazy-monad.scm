@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-lazy-monad)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates lazy-monad) :select (lazy-monad))
+    :use-module ((euphrates monadic) :select (monadic))
+    :use-module ((euphrates np-thread-parameterize) :select (with-np-thread-env/non-interruptible)))))
 
 ;; lazy-monad
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (lazy-monad) "./euphrates/lazy-monad.scm"
-%use (monadic) "./euphrates/monadic.scm"
-%use (with-np-thread-env/non-interruptible) "./euphrates/np-thread-parameterize.scm"
 
 (with-np-thread-env/non-interruptible
  (assert=

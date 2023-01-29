@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-system-re)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates system-re) :select (system-re)))))
 
 ;; system-re
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (system-re) "./euphrates/system-re.scm"
 
 (let ()
   (assert= (cons "hello\n" 0) (system-re "echo hello"))

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-url-get-hostname-and-port)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates url-get-hostname-and-port) :select (url-get-hostname-and-port)))))
 
 ;; url-get-hostname-and-port
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (url-get-hostname-and-port) "./euphrates/url-get-hostname-and-port.scm"
 
 (let ()
   (assert= "" (url-get-hostname-and-port "not-a-url"))

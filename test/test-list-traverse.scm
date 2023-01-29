@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-traverse)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-traverse) :select (list-traverse))
+    :use-module ((euphrates range) :select (range)))))
 
 ;; list-traverse
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-traverse) "./euphrates/list-traverse.scm"
-%use (range) "./euphrates/range.scm"
 
 (let ()
   (assert=

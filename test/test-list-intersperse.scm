@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-intersperse)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-intersperse) :select (list-intersperse))
+    :use-module ((euphrates range) :select (range)))))
 
 ;; list-intersperse
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-intersperse) "./euphrates/list-intersperse.scm"
-%use (range) "./euphrates/range.scm"
 
 (let ()
   (assert= (list 0 'x 1 'x 2)

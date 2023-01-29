@@ -1,22 +1,24 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-profune-communicator)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates debugv) :select (debugv))
+    :use-module ((euphrates profun-handler) :select (profun-make-handler))
+    :use-module ((euphrates profun-op-divisible) :select (profun-op-divisible))
+    :use-module ((euphrates profun-op-equals) :select (profun-op-equals))
+    :use-module ((euphrates profun-op-false) :select (profun-op-false))
+    :use-module ((euphrates profun-op-less) :select (profun-op-less))
+    :use-module ((euphrates profun-op-mult) :select (profun-op*))
+    :use-module ((euphrates profun-op-plus) :select (profun-op+))
+    :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
+    :use-module ((euphrates profun-op-sqrt) :select (profun-op-sqrt))
+    :use-module ((euphrates profun-op-true) :select (profun-op-true))
+    :use-module ((euphrates profun-op-unify) :select (profun-op-unify))
+    :use-module ((euphrates profun) :select (profun-create-database))
+    :use-module ((euphrates profune-communicator) :select (make-profune-communicator profune-communicator-handle))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (debugv) "./euphrates/debugv.scm"
-%use (profun-make-handler) "./euphrates/profun-handler.scm"
-%use (profun-op-divisible) "./euphrates/profun-op-divisible.scm"
-%use (profun-op-equals) "./euphrates/profun-op-equals.scm"
-%use (profun-op-false) "./euphrates/profun-op-false.scm"
-%use (profun-op-less) "./euphrates/profun-op-less.scm"
-%use (profun-op*) "./euphrates/profun-op-mult.scm"
-%use (profun-op+) "./euphrates/profun-op-plus.scm"
-%use (profun-op-separate) "./euphrates/profun-op-separate.scm"
-%use (profun-op-sqrt) "./euphrates/profun-op-sqrt.scm"
-%use (profun-op-true) "./euphrates/profun-op-true.scm"
-%use (profun-op-unify) "./euphrates/profun-op-unify.scm"
-%use (profun-create-database) "./euphrates/profun.scm"
-%use (make-profune-communicator profune-communicator-handle) "./euphrates/profune-communicator.scm"
-%use (raisu) "./euphrates/raisu.scm"
 
 (define server-handler
   (profun-make-handler

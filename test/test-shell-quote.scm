@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-shell-quote)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates shell-quote) :select (shell-quote)))))
 
 ;; shell-quote
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (shell-quote) "./euphrates/shell-quote.scm"
 
 (let ()
   (assert= "'$b'" (shell-quote "$b"))

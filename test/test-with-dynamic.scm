@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-with-dynamic)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates lazy-parameter) :select (lazy-parameter))
+    :use-module ((euphrates tilda-a) :select (~a))
+    :use-module ((euphrates with-dynamic) :select (with-dynamic)))))
 
 ;; lazy-parameter, with-dynamic
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (lazy-parameter) "./euphrates/lazy-parameter.scm"
-%use (~a) "./euphrates/tilda-a.scm"
-%use (with-dynamic) "./euphrates/with-dynamic.scm"
 
 (define test 1)
 (define x (lazy-parameter (begin (set! test 3) 2)

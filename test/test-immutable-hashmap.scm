@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-immutable-hashmap)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates immutable-hashmap) :select (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set)))))
 
 ;; immutable-hashmap
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set) "./euphrates/immutable-hashmap.scm"
 
 (let ()
   (define H (make-immutable-hashmap))

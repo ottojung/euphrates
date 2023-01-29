@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-levenshtein-distance)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-levenshtein-distance) :select (list-levenshtein-distance)))))
 
 ;; list-levenshtein-distance
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-levenshtein-distance) "./euphrates/list-levenshtein-distance.scm"
 
 (let ()
   (define (test n a b)

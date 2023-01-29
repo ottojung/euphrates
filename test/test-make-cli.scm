@@ -1,20 +1,22 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-make-cli)
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates define-cli) :select (make-cli))
+    :use-module ((euphrates hashmap) :select (make-hashmap)))))
 
 ;; make-cli
-%use (assert) "./euphrates/assert.scm"
-%use (make-cli) "./euphrates/define-cli.scm"
-%use (make-hashmap) "./euphrates/hashmap.scm"
 
 (let ()
   (define M
     (make-cli
      (run OPTS* DATE <end-statement>
           OPTS   : --opts <opts...>*
-                 / --param1 <arg1>
-                 / --flag1
+          / --param1 <arg1>
+          / --flag1
           DATE   : may  <nth> MAY-OPTS?
-                 / june <nth> JUNE-OPTS*
+          / june <nth> JUNE-OPTS*
           MAY-OPTS    : -p <x>
           JUNE-OPTS   : -f3 / -f4)
      :synonym (run let go)))

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-url-goto)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates url-goto) :select (url-goto)))))
 
 ;; url-goto
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (url-goto) "./euphrates/url-goto.scm"
 
 (let ()
   (assert= "https://gnu.org/philosophy/philosophy.html"

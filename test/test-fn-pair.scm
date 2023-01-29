@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-fn-pair)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates fn-pair) :select (fn-pair))
+    :use-module ((euphrates list-zip-with) :select (list-zip-with))
+    :use-module ((euphrates range) :select (range)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (fn-pair) "./euphrates/fn-pair.scm"
-%use (list-zip-with) "./euphrates/list-zip-with.scm"
-%use (range) "./euphrates/range.scm"
 
 (assert= '((0 . 2) (2 . 3) (4 . 4))
          (map (fn-pair (a b) (cons (* a 2) (+ b 2)))

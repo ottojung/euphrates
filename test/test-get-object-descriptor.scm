@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-get-object-descriptor)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates get-object-descriptor) :select (get-object-descriptor))
+    :use-module ((euphrates hashmap) :select (make-hashmap))
+    :use-module ((euphrates hashset) :select (list->hashset)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (get-object-descriptor) "./euphrates/get-object-descriptor.scm"
-%use (make-hashmap) "./euphrates/hashmap.scm"
-%use (list->hashset) "./euphrates/hashset.scm"
 
 (define (test1 name obj)
   (assert=

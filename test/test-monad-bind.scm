@@ -1,15 +1,17 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-monad-bind)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates identity-monad) :select (identity-monad))
+    :use-module ((euphrates lines-to-string) :select (lines->string))
+    :use-module ((euphrates log-monad) :select (log-monad))
+    :use-module ((euphrates maybe-monad) :select (maybe-monad))
+    :use-module ((euphrates monad-bind) :select (monad-bind))
+    :use-module ((euphrates monad-do) :select (monad-do))
+    :use-module ((euphrates with-monad) :select (with-monad)))))
 
 ;; monad-bind
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (identity-monad) "./euphrates/identity-monad.scm"
-%use (lines->string) "./euphrates/lines-to-string.scm"
-%use (log-monad) "./euphrates/log-monad.scm"
-%use (maybe-monad) "./euphrates/maybe-monad.scm"
-%use (monad-bind) "./euphrates/monad-bind.scm"
-%use (monad-do) "./euphrates/monad-do.scm"
-%use (with-monad) "./euphrates/with-monad.scm"
 
 (let ()
 

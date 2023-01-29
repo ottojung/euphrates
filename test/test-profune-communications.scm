@@ -1,27 +1,29 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-profune-communications)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates lines-to-string) :select (lines->string))
+    :use-module ((euphrates printf) :select (printf))
+    :use-module ((euphrates profun-handler) :select (profun-make-handler))
+    :use-module ((euphrates profun-op-divisible) :select (profun-op-divisible))
+    :use-module ((euphrates profun-op-equals) :select (profun-op-equals))
+    :use-module ((euphrates profun-op-false) :select (profun-op-false))
+    :use-module ((euphrates profun-op-less) :select (profun-op-less))
+    :use-module ((euphrates profun-op-mult) :select (profun-op*))
+    :use-module ((euphrates profun-op-plus) :select (profun-op+))
+    :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
+    :use-module ((euphrates profun-op-sqrt) :select (profun-op-sqrt))
+    :use-module ((euphrates profun-op-true) :select (profun-op-true))
+    :use-module ((euphrates profun-op-unify) :select (profun-op-unify))
+    :use-module ((euphrates profun-op-value) :select (profun-op-value))
+    :use-module ((euphrates profun) :select (profun-create-database))
+    :use-module ((euphrates profune-communications-hook-p) :select (profune-communications-hook/p))
+    :use-module ((euphrates profune-communications) :select (profune-communications))
+    :use-module ((euphrates profune-communicator) :select (make-profune-communicator))
+    :use-module ((euphrates tilda-a) :select (~a))
+    :use-module ((euphrates words-to-string) :select (words->string)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (lines->string) "./euphrates/lines-to-string.scm"
-%use (printf) "./euphrates/printf.scm"
-%use (profun-make-handler) "./euphrates/profun-handler.scm"
-%use (profun-op-divisible) "./euphrates/profun-op-divisible.scm"
-%use (profun-op-equals) "./euphrates/profun-op-equals.scm"
-%use (profun-op-false) "./euphrates/profun-op-false.scm"
-%use (profun-op-less) "./euphrates/profun-op-less.scm"
-%use (profun-op*) "./euphrates/profun-op-mult.scm"
-%use (profun-op+) "./euphrates/profun-op-plus.scm"
-%use (profun-op-separate) "./euphrates/profun-op-separate.scm"
-%use (profun-op-sqrt) "./euphrates/profun-op-sqrt.scm"
-%use (profun-op-true) "./euphrates/profun-op-true.scm"
-%use (profun-op-unify) "./euphrates/profun-op-unify.scm"
-%use (profun-op-value) "./euphrates/profun-op-value.scm"
-%use (profun-create-database) "./euphrates/profun.scm"
-%use (profune-communications-hook/p) "./euphrates/profune-communications-hook-p.scm"
-%use (profune-communications) "./euphrates/profune-communications.scm"
-%use (make-profune-communicator) "./euphrates/profune-communicator.scm"
-%use (~a) "./euphrates/tilda-a.scm"
-%use (words->string) "./euphrates/words-to-string.scm"
 
 (define server-handler
   (profun-make-handler

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-hashset-positive)
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates hashset) :select (hashset-equal? make-hashset)))))
 
 ;; hashset-positive
-%use (assert) "./euphrates/assert.scm"
-%use (hashset-equal? make-hashset) "./euphrates/hashset.scm"
 
 (let ()
   (assert

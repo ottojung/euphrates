@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-cartesian-product)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates cartesian-product) :select (cartesian-product)))))
 
 ;; cartesian-product
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (cartesian-product) "./euphrates/cartesian-product.scm"
 
 (let ()
   (assert=HS '((1 . a) (1 . b) (1 . c) (2 . a) (2 . b) (2 . c) (3 . a) (3 . b) (3 . c))

@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-directory-files-depth-iter)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter)))))
 
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (directory-files-depth-iter) "./euphrates/directory-files-depth-iter.scm"
 
 (define iter
   (directory-files-depth-iter 9 "test/filetests"))

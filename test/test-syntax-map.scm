@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-syntax-map)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates syntax-map) :select (syntax-map)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (syntax-map) "./euphrates/syntax-map.scm"
 
 (let () ;; syntax-map
   (define-syntax cont

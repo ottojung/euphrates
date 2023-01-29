@@ -1,16 +1,18 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-np-thread)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates dynamic-thread-cancel) :select (dynamic-thread-cancel))
+    :use-module ((euphrates dynamic-thread-spawn) :select (dynamic-thread-spawn))
+    :use-module ((euphrates dynamic-thread-yield) :select (dynamic-thread-yield))
+    :use-module ((euphrates lines-to-string) :select (lines->string))
+    :use-module ((euphrates np-thread-parameterize) :select (with-np-thread-env/non-interruptible))
+    :use-module ((euphrates petri-net-parse-profun) :select (petri-profun-net))
+    :use-module ((euphrates petri-net-parse) :select (petri-lambda-net))
+    :use-module ((euphrates petri) :select (petri-push petri-run)))))
 
 ;; np-thread
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (dynamic-thread-cancel) "./euphrates/dynamic-thread-cancel.scm"
-%use (dynamic-thread-spawn) "./euphrates/dynamic-thread-spawn.scm"
-%use (dynamic-thread-yield) "./euphrates/dynamic-thread-yield.scm"
-%use (lines->string) "./euphrates/lines-to-string.scm"
-%use (with-np-thread-env/non-interruptible) "./euphrates/np-thread-parameterize.scm"
-%use (petri-profun-net) "./euphrates/petri-net-parse-profun.scm"
-%use (petri-lambda-net) "./euphrates/petri-net-parse.scm"
-%use (petri-push petri-run) "./euphrates/petri.scm"
 
 (define println
   (case-lambda

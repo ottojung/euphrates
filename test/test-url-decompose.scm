@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-url-decompose)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates url-decompose) :select (url-decompose)))))
 
 ;; url-decompose
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (url-decompose) "./euphrates/url-decompose.scm"
 
 (let ()
   (assert=

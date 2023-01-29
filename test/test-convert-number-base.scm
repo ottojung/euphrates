@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-convert-number-base)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates convert-number-base) :select (convert-number-base)))))
 
 ;; convert-number-base
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (convert-number-base) "./euphrates/convert-number-base.scm"
 
 (let ()
   (for-each

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-define-type9)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates define-type9) :select (define-type9 type9-get-record-descriptor)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (define-type9 type9-get-record-descriptor) "./euphrates/define-type9.scm"
 
 (define-type9 mybox0
   (make-mybox0) mybox0?

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-string-trim-chars)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates string-trim-chars) :select (string-trim-chars)))))
 
 ;; string-trim-chars
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (string-trim-chars) "./euphrates/string-trim-chars.scm"
 
 (let* ((s "xxhellokh")
        (tt "hx"))

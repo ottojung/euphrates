@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-with-ignore-errors)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates string-to-words) :select (string->words))
+    :use-module ((euphrates with-ignore-errors) :select (with-ignore-errors!)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (raisu) "./euphrates/raisu.scm"
-%use (string->words) "./euphrates/string-to-words.scm"
-%use (with-ignore-errors!) "./euphrates/with-ignore-errors.scm"
 
 (let () ;; with-ignore-errors
   (assert=

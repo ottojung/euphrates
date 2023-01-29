@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-string-take-n)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates string-take-n) :select (string-take-n)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (string-take-n) "./euphrates/string-take-n.scm"
 
 (let () ;; string-take-n
   (assert= "" (string-take-n 0 "hello"))

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-chunks)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-chunks) :select (list-chunks)))))
 
 ;; list-chunks
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-chunks) "./euphrates/list-chunks.scm"
 
 (let ()
 

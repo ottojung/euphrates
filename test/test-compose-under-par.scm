@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-compose-under-par)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates compose-under-par) :select (compose-under-par))
+    :use-module ((euphrates range) :select (range)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (compose-under-par) "./euphrates/compose-under-par.scm"
-%use (range) "./euphrates/range.scm"
 
 (let () ;; compose-under-par
   (assert= (list 5 5 -5)

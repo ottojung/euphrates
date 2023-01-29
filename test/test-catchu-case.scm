@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-catchu-case)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates catchu-case) :select (catchu-case))
+    :use-module ((euphrates dprintln) :select (dprintln))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (catchu-case) "./euphrates/catchu-case.scm"
-%use (dprintln) "./euphrates/dprintln.scm"
-%use (raisu) "./euphrates/raisu.scm"
 
 (let () ;; catchu-case
 

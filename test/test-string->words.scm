@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-string->words)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates string-to-words) :select (string->words))
+    :use-module ((euphrates words-to-string) :select (words->string)))))
 
 ;; string->words / words->string
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (string->words) "./euphrates/string-to-words.scm"
-%use (words->string) "./euphrates/words-to-string.scm"
 
 (assert=
  (string->words "hello \t \t \n world!")

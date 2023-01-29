@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-serialization-short)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates define-type9) :select (define-type9))
+    :use-module ((euphrates hashset) :select (list->hashset))
+    :use-module ((euphrates serialization-short) :select (deserialize/short serialize/short)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (define-type9) "./euphrates/define-type9.scm"
-%use (list->hashset) "./euphrates/hashset.scm"
-%use (deserialize/short serialize/short) "./euphrates/serialization-short.scm"
 
 (use-modules (ice-9 pretty-print))
 

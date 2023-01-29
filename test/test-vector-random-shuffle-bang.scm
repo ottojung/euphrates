@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-vector-random-shuffle-bang)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates vector-random-shuffle-bang) :select (vector-random-shuffle!))
+    :use-module ((euphrates with-randomizer-seed) :select (with-randomizer-seed)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (vector-random-shuffle!) "./euphrates/vector-random-shuffle-bang.scm"
-%use (with-randomizer-seed) "./euphrates/with-randomizer-seed.scm"
 
 (let () ;; vector-random-shuffle!
   (with-randomizer-seed

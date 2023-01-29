@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-tag-next)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-tag-next) :select (list-tag/next list-untag/next)))))
 
 ;; list-tag/next
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-tag/next list-untag/next) "./euphrates/list-tag-next.scm"
 
 (let ()
   (assert= '((#f 1 3 5) (2 7 9) (6 1 3))

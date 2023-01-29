@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-serialization-human)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates hashset) :select (list->hashset))
+    :use-module ((euphrates serialization-human) :select (deserialize/human serialize/human)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (list->hashset) "./euphrates/hashset.scm"
-%use (deserialize/human serialize/human) "./euphrates/serialization-human.scm"
 
 (use-modules (ice-9 pretty-print))
 

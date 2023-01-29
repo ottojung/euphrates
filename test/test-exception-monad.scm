@@ -1,12 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-exception-monad)
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates catch-any) :select (catch-any))
+    :use-module ((euphrates exception-monad) :select (exception-monad))
+    :use-module ((euphrates monadic) :select (monadic))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; exception-monad
-%use (assert) "./euphrates/assert.scm"
-%use (catch-any) "./euphrates/catch-any.scm"
-%use (exception-monad) "./euphrates/exception-monad.scm"
-%use (monadic) "./euphrates/monadic.scm"
-%use (raisu) "./euphrates/raisu.scm"
 
 (let ((ran-always #f)
       (throwed #t)

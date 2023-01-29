@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-random-variable-name)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates random-variable-name) :select (random-variable-name)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (random-variable-name) "./euphrates/random-variable-name.scm"
 
 (let () ;; random-variable-name
   (define n1 (random-variable-name 20))

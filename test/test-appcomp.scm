@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-appcomp)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates comp) :select (appcomp comp)))))
 
 ;; appcomp
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (appcomp comp) "./euphrates/comp.scm"
 
 (let ()
   (define f

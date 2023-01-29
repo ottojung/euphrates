@@ -1,12 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-with-cli)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates command-line-arguments-p) :select (command-line-argumets/p))
+    :use-module ((euphrates define-cli) :select (with-cli)))))
 
 ;; with-cli
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (command-line-argumets/p) "./euphrates/command-line-arguments-p.scm"
-%use (with-cli) "./euphrates/define-cli.scm"
 
 (let ()
   (parameterize

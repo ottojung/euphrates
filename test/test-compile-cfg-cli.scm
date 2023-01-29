@@ -1,18 +1,20 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-compile-cfg-cli)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates compile-cfg-cli) :select (CFG-CLI->CFG-lang)))))
 
 ;; compile-cfg-cli
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (CFG-CLI->CFG-lang) "./euphrates/compile-cfg-cli.scm"
 
 (let ()
   (define input
     '(run OPTS* DATE <end-statement>
           OPTS    : --opts <opts...>*
-                  / --param1 <arg1>
-                  / --flag1
+          / --param1 <arg1>
+          / --flag1
           DATE    : may  <nth> MAY-OPTS?
-                  / june <nth> JUNE-OPTS*
+          / june <nth> JUNE-OPTS*
           MAY-OPTS     : -p <x>
           JUNE-OPTS    : -f3 / -f4))
 
@@ -28,8 +30,8 @@
                                           (call DATE)
                                           (any "<end-statement>")))
              (OPTS (or (and (= "--opts" "--opts") (* (any* "<opts...>*")))
-                        (and (= "--param1" "--param1") (any "<arg1>"))
-                        (and (= "--flag1" "--flag1"))))
+                       (and (= "--param1" "--param1") (any "<arg1>"))
+                       (and (= "--flag1" "--flag1"))))
              (DATE (or (and (= "may" "may")
                             (any "<nth>")
                             (? (call MAY-OPTS)))

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-path-replace-extension)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates path-replace-extension) :select (path-replace-extension)))))
 
 ;; path-replace-extension
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (path-replace-extension) "./euphrates/path-replace-extension.scm"
 
 (let ()
   (assert=

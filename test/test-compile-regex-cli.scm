@@ -1,13 +1,15 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-compile-regex-cli)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates compile-regex-cli) :select (compile-regex-cli:IR->Regex compile-regex-cli:make-IR))
+    :use-module ((euphrates hashmap) :select (hashmap->alist make-hashmap))
+    :use-module ((euphrates regex-machine) :select (make-regex-machine*)))))
 
 ;; compile-regex-cli
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (compile-regex-cli:IR->Regex compile-regex-cli:make-IR) "./euphrates/compile-regex-cli.scm"
-%use (hashmap->alist make-hashmap) "./euphrates/hashmap.scm"
-%use (make-regex-machine*) "./euphrates/regex-machine.scm"
 
 (let ()
   (let ()

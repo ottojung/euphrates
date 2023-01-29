@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list-insert-at)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-insert-at) :select (list-insert-at)))))
 
 ;; list-insert-at
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list-insert-at) "./euphrates/list-insert-at.scm"
 
 (let ()
   (assert= '(a b c d)

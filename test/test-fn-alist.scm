@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-fn-alist)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates fn-alist) :select (fn-alist)))))
 
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (fn-alist) "./euphrates/fn-alist.scm"
 
 (define mult
- (fn-alist (X Y) (+ X Y)))
+  (fn-alist (X Y) (+ X Y)))
 
 (assert= 6 (mult `((X . 2) (Y . 4))))
 (assert= 7 (mult `((Z . 5) (X . 3) (Y . 4))))

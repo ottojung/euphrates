@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-queue)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates queue) :select (make-queue queue->list queue-empty? queue-peek queue-pop! queue-push!)))))
 
 ;; queue
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (assert) "./euphrates/assert.scm"
-%use (make-queue queue->list queue-empty? queue-peek queue-pop! queue-push!) "./euphrates/queue.scm"
 
 (define q (make-queue 1))
 (assert= '() (queue->list q))

@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-assert=HS)
+    :use-module ((euphrates assert-equal-hs) :select (assert=HS)))))
 
 ;; assert=HS
-%use (assert=HS) "./euphrates/assert-equal-hs.scm"
 
 (let ()
   (assert=HS '(a b c d) '(a b c d))

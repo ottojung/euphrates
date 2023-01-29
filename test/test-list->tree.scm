@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-list->tree)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates list-to-tree) :select (list->tree))
+    :use-module ((euphrates string-to-words) :select (string->words)))))
 
 ;; list->tree
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (list->tree) "./euphrates/list-to-tree.scm"
-%use (string->words) "./euphrates/string-to-words.scm"
 
 (let ()
   (define ex

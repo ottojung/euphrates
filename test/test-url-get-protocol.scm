@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-url-get-protocol)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates url-get-protocol) :select (url-get-protocol)))))
 
 ;; url-get-protocol
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (url-get-protocol) "./euphrates/url-get-protocol.scm"
 
 (let ()
   (assert= "" (url-get-protocol "not-a-url"))

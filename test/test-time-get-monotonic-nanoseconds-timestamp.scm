@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-time-get-monotonic-nanoseconds-timestamp)
+    :use-module ((euphrates assert) :select (assert))
+    :use-module ((euphrates time-get-monotonic-nanoseconds-timestamp) :select (time-get-monotonic-nanoseconds-timestamp)))))
 
 ;; time-get-monotonic-nanoseconds-timestamp
-%use (assert) "./euphrates/assert.scm"
-%use (time-get-monotonic-nanoseconds-timestamp) "./euphrates/time-get-monotonic-nanoseconds-timestamp.scm"
 
 (let ()
   (let ((ret (time-get-monotonic-nanoseconds-timestamp)))

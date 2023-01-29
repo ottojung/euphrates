@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (test-properties)
+    :use-module ((euphrates assert-equal) :select (assert=))
+    :use-module ((euphrates properties) :select (define-property)))))
 
 ;; properties
-%use (assert=) "./euphrates/assert-equal.scm"
-%use (define-property) "./euphrates/properties.scm"
 
 (let ()
 
