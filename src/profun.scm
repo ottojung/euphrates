@@ -33,7 +33,7 @@
 %use (make-profun-env profun-env-get profun-env-set! profun-env-unset!) "./profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-instruction-args profun-instruction-arity profun-instruction-body profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-name profun-instruction-next) "./profun-instruction.scm"
-%use (profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-query profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
+%use (profun-abort-insert profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-query profun-iterator-state set-profun-iterator-state!) "./profun-iterator.scm"
 %use (profun-op-procedure) "./profun-op-obj.scm"
 %use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
 %use (profun-reject?) "./profun-reject.scm"
@@ -366,7 +366,8 @@
       (cond
        ((or (pair? r) (null? r)) (loop (cons r buf)))
        ((equal? #f r) (reverse! buf))
-       ((profun-IDR? r) (loop buf))
+       ((profun-IDR? r)
+        (profun-eval-from (profun-abort-insert r '((= 0 1))) buf))
        ((profun-CR? r)
         (raisu 'profun-returned-custom-value (profun-CR-what r)))
        ((profun-error? r)
