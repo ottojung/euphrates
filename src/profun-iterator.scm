@@ -29,15 +29,13 @@
 %var profun-abort-insert
 %var profun-abort-reset
 
-%use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
 %use (profun-abort-additional profun-abort-iter) "./profun-abort.scm"
-%use (profun-database-copy profun-database-extend profun-database-get-all profun-database-set-all!) "./profun-database.scm"
+%use (profun-database-copy profun-database-extend) "./profun-database.scm"
 %use (profun-env-copy) "./profun-env.scm"
 %use (make-profun-error) "./profun-error.scm"
 %use (profun-instruction-arity profun-instruction-build/next profun-instruction-name) "./profun-instruction.scm"
 %use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
-%use (profun-rule-args profun-rule-body profun-rule-constructor profun-rule-index profun-rule-name) "./profun-rule.scm"
 %use (profun-state-build profun-state-current profun-state-stack set-profun-state-current) "./profun-state.scm"
 
 (define-type9 <profun-iterator>
@@ -60,28 +58,10 @@
         (values key arity))))
 
 (define (add-prefix-to-instruction db s instruction-prefix)
-  (define-values (key arity) (get-current-subroutine s))
   (define current (profun-state-current s))
-  (define rules (or (profun-database-get-all db key arity) '()))
-  (define (add-to-rule rule)
-    ;; FIXME: add not at a begining of a rule,
-    ;;        but before current instruction.
-    (define body (profun-rule-body rule))
-    (define new-body (append instruction-prefix body))
-    (profun-rule-constructor
-     (profun-rule-name rule)
-     (profun-rule-index rule)
-     (profun-rule-args rule)
-     new-body))
-  (define new-rules
-    (if (list? rules)
-        (map add-to-rule rules)
-        (add-to-rule rules)))
   (define new-current
     (profun-instruction-build/next
      instruction-prefix current))
-
-  (profun-database-set-all! db key arity new-rules)
 
   (set-profun-state-current s new-current))
 
