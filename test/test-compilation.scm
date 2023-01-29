@@ -285,7 +285,7 @@
 %use (profun-answer?) "./src/profun-answer-huh.scm"
 %use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./src/profun-answer-join.scm"
 %use (profun-current-env/p) "./src/profun-current-env-p.scm"
-%use (make-falsy-profun-database make-profun-database profun-database-add! profun-database-add-rule! profun-database-copy profun-database-falsy? profun-database-get profun-database-get-all profun-database-handle profun-database-handler profun-database-set-all! profun-database-table profun-database?) "./src/profun-database.scm"
+%use (make-falsy-profun-database make-profun-database profun-database-add! profun-database-copy profun-database-extend profun-database-falsy? profun-database-get profun-database-get-all profun-database-handle profun-database-handler profun-database-set-all! profun-database?) "./src/profun-database.scm"
 %use (profun-default) "./src/profun-default.scm"
 %use (make-profun-env profun-env-copy profun-env-get profun-env-set! profun-env-unset!) "./src/profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./src/profun-error.scm"

@@ -32,7 +32,7 @@
 %use (profun-RFC-modify-iter profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-set-iter profun-abort?) "./profun-abort.scm"
 %use (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?) "./profun-accept.scm"
-%use (make-falsy-profun-database make-profun-database profun-database-add-rule! profun-database-falsy? profun-database-get profun-database-handle profun-database?) "./profun-database.scm"
+%use (make-falsy-profun-database make-profun-database profun-database-falsy? profun-database-get profun-database-handle profun-database?) "./profun-database.scm"
 %use (make-profun-env profun-env-get profun-env-set! profun-env-unset!) "./profun-env.scm"
 %use (make-profun-error profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-instruction-args profun-instruction-arity profun-instruction-body profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-name profun-instruction-next) "./profun-instruction.scm"
@@ -278,14 +278,10 @@
 ;;   )
 ;; returns profun-database
 (define (profun-create-database botom-handler lst-of-rules)
-  (define db (make-profun-database botom-handler))
-  (for-each (comp (profun-database-add-rule! db)) lst-of-rules)
-  db)
+  (make-profun-database botom-handler lst-of-rules))
 
 (define (profun-create-falsy-database botom-handler lst-of-rules)
-  (define db (make-falsy-profun-database botom-handler))
-  (for-each (comp (profun-database-add-rule! db)) lst-of-rules)
-  db)
+  (make-falsy-profun-database botom-handler lst-of-rules))
 
 (define (profun-next/generic boolean? iter)
   (define db (profun-iterator-db iter))

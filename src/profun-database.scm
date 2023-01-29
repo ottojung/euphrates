@@ -16,7 +16,6 @@
 
 %var profun-database-copy
 %var profun-database?
-%var profun-database-table
 %var profun-database-handler
 %var profun-database-falsy?
 %var profun-database-handle
@@ -26,7 +25,7 @@
 %var profun-database-add!
 %var make-profun-database
 %var make-falsy-profun-database
-%var profun-database-add-rule!
+%var profun-database-extend
 
 %use (define-type9) "./define-type9.scm"
 %use (hashmap-copy hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
@@ -43,17 +42,27 @@
   (falsy? profun-database-falsy?) ;; if true, predicates not mentioned in table or handler will be represented by relations, instead of returning an IDR.
   )
 
-(define (make-profun-database botom-handler)
-  (profun-database-constructor (make-hashmap) botom-handler #f))
+(define (make-profun-database/generic falsy? botom-handler lst-of-rules)
+  (define ret (profun-database-constructor (make-hashmap) botom-handler falsy?))
+  (for-each (lambda (rule) (profun-database-add-rule! ret rule)) lst-of-rules)
+  ret)
 
-(define (make-falsy-profun-database botom-handler)
-  (profun-database-constructor (make-hashmap) botom-handler #t))
+(define (make-profun-database botom-handler lst-of-rules)
+  (make-profun-database/generic #f botom-handler lst-of-rules))
+
+(define (make-falsy-profun-database botom-handler lst-of-rules)
+  (make-profun-database/generic #t botom-handler lst-of-rules))
 
 (define (profun-database-copy db)
   (profun-database-constructor
    (hashmap-copy (profun-database-table db))
    (profun-database-handler db)
    (profun-database-falsy? db)))
+
+(define (profun-database-extend db0 rules)
+  (define db (profun-database-copy db0))
+  (for-each (lambda (rule) (profun-database-add-rule! db rule)) rules)
+  db)
 
 (define (profun-database-add-rule! db r)
   (define first (car r))

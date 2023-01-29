@@ -19,7 +19,6 @@
 %var profune-communicator-db
 %var profune-communicator-handle
 
-%use (comp) "./comp.scm"
 %use (define-type9) "./define-type9.scm"
 %use (list-and-map) "./list-and-map.scm"
 %use (list-deduplicate/reverse) "./list-deduplicate.scm"
@@ -30,7 +29,7 @@
 %use (profun-IDR-arity profun-IDR-name profun-IDR?) "./profun-IDR.scm"
 %use (profun-RFC-what profun-RFC?) "./profun-RFC.scm"
 %use (profun-abort-iter) "./profun-abort.scm"
-%use (profun-database-add-rule! profun-database-copy profun-database-get-all profun-database-handle profun-database?) "./profun-database.scm"
+%use (profun-database-copy profun-database-extend profun-database-get-all profun-database-handle profun-database?) "./profun-database.scm"
 %use (profun-error-args profun-error?) "./profun-error.scm"
 %use (profun-iterator-copy profun-iterator-insert! profun-iterator-reset!) "./profun-iterator.scm"
 %use (profun-iterate profun-next) "./profun.scm"
@@ -138,6 +137,8 @@
     (set-stage-cont! (stack-peek stages) new))
   (define (set-current-inspecting! new)
     (set-stage-inspecting! (stack-peek stages) new))
+  (define (set-current-db! new)
+    (set-stage-db! (stack-peek stages) new))
 
   (define (split-commands commands)
     (if (null? commands)
@@ -388,10 +389,11 @@
     (list-map-first validate-rule #f rules))
 
   (define (handle-listen op args next)
-    (define db (current-db/copy))
     (or (validate-all-rules args)
-        (begin
-          (for-each (comp (profun-database-add-rule! db)) args)
+        (let ()
+          (define current (current-db/copy))
+          (define new (profun-database-extend current args))
+          (set-current-db! new)
           (handle next))))
 
   (define (handle commands)
