@@ -16,6 +16,7 @@
 
 %var profun-database-copy
 %var profun-database?
+%var profun-database-rules
 %var profun-database-handler
 %var profun-database-falsy?
 %var profun-database-handle
@@ -36,14 +37,15 @@
 %use (make-usymbol) "./usymbol.scm"
 
 (define-type9 <profun-database>
-  (profun-database-constructor table handler falsy?) profun-database?
-  (table profun-database-table)
+  (profun-database-constructor rules handler table falsy?) profun-database?
+  (rules profun-database-rules)
   (handler profun-database-handler)
+  (table profun-database-table) ;; hashed version of `rules`
   (falsy? profun-database-falsy?) ;; if true, predicates not mentioned in table or handler will be represented by relations, instead of returning an IDR.
   )
 
 (define (make-profun-database/generic falsy? botom-handler lst-of-rules)
-  (define ret (profun-database-constructor (make-hashmap) botom-handler falsy?))
+  (define ret (profun-database-constructor lst-of-rules botom-handler (make-hashmap) falsy?))
   (for-each (lambda (rule) (profun-database-add-rule! ret rule)) lst-of-rules)
   ret)
 
@@ -55,8 +57,9 @@
 
 (define (profun-database-copy db)
   (profun-database-constructor
-   (hashmap-copy (profun-database-table db))
+   (profun-database-rules db)
    (profun-database-handler db)
+   (hashmap-copy (profun-database-table db))
    (profun-database-falsy? db)))
 
 (define (profun-database-extend db0 rules)
