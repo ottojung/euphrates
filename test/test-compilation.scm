@@ -334,7 +334,7 @@
 %use (profun-variable-arity-op) "./src/profun-variable-arity-op.scm"
 %use (profun-variable-equal?) "./src/profun-variable-equal-q.scm"
 %use (profun-varname?) "./src/profun-varname-q.scm"
-%use (profun-create-database profun-eval-query profun-eval-query/boolean profun-iterate profun-next profun-next/boolean) "./src/profun.scm"
+%use (profun-create-database profun-create-falsy-database profun-eval-query profun-eval-query/boolean profun-iterate profun-next profun-next/boolean) "./src/profun.scm"
 %use (profune-communications-hook/p) "./src/profune-communications-hook-p.scm"
 %use (profune-communications) "./src/profune-communications.scm"
 %use (make-profune-communicator profune-communicator-db profune-communicator-handle profune-communicator?) "./src/profune-communicator.scm"

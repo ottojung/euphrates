@@ -15,6 +15,7 @@
 %run guile
 
 %var profun-create-database
+%var profun-create-falsy-database
 %var profun-eval-query
 %var profun-eval-query/boolean
 %var profun-iterate
