@@ -32,9 +32,8 @@
               (loop (cons (list full name) buf)))
             buf)))))
 
-  ))
+  )
 
-(cond-expand
  (racket
 
   (define directory-files

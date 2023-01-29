@@ -10,8 +10,8 @@
 
   (define string-split/simple string-split)
 
-  ))
-(cond-expand
+  )
+
  (racket
 
   (define [string-split/simple str delim]

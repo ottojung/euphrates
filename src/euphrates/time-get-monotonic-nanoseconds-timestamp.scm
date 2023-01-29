@@ -21,8 +21,8 @@
     (time-to-nanoseconds
      ((@ (srfi srfi-19) current-time) time-monotonic)))))
 
-  ))
-(cond-expand
+  )
+
  (racket
 
   (define [time-get-monotonic-nanoseconds-timestamp]

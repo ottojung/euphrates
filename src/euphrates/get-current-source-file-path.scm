@@ -14,9 +14,8 @@
       'filename
       (current-source-location))))
 
-  ))
+  )
 
-(cond-expand
  (racket
 
   (define-macro (get-current-source-file-path)

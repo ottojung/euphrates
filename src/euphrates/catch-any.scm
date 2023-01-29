@@ -13,7 +13,3 @@
        (lambda err (handler err))))
 
   ))
-(cond-expand
- (racket
-  ;; TODO
-  ))

@@ -16,8 +16,7 @@
   (cond-expand
    (guile
     (define mk-single-dir mkdir)
-    ))
-  (cond-expand
+    )
    (racket
     (define mk-single-dir make-directory)
     ))

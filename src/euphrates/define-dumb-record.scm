@@ -29,8 +29,8 @@
     (syntax-rules ()
       ((_ . args) (define-record-type . args))))
 
-  ))
-(cond-expand
+  )
+
  (racket
 
   (require srfi/9)

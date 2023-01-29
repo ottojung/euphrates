@@ -26,8 +26,7 @@
     (let ((cmd (command-line)))
       (if (null? cmd) #f
           (car (command-line)))))
-  ))
-(cond-expand
+  )
  (racket
   (define (get-default-current-program-path)
     (find-system-path 'run-file))

@@ -64,20 +64,16 @@
       (set-sys-thread-obj-handle!
        th
        (call-with-new-thread thunk))
-      th))
+      th)))
 
-  ))
-(cond-expand
  (racket
 
   (define (sys-thread-spawn thunk)
-    (let ((th (sys-thread #f #f #t)))
-      (set-sys-thread-handle!
+    (let ((th (sys-thread-obj #f #f #t)))
+      (set-sys-thread-obj-handle!
        th
        (thread thunk))
-      th))
-
-  ))
+      th))))
 
 (define (sys-thread-yield)
   (let ((me (sys-thread-current)))

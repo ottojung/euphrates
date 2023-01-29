@@ -20,8 +20,8 @@
           ((#\newline #\space #\tab) #t)
           (else #f))))))
 
-  ))
-(cond-expand
+  )
+
  (racket
 
   (define (string->words str)

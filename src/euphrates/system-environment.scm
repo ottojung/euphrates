@@ -27,8 +27,8 @@
   (define (system-environment-set! s v)
     (setenv s v))
 
-  ))
-(cond-expand
+  )
+
  (racket
 
   (define (system-environment-get s)

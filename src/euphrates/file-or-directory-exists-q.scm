@@ -10,9 +10,8 @@
 
   (define file-or-directory-exists? file-exists?)
 
-  ))
+  )
 
-(cond-expand
  (racket
 
   (define [file-or-directory-exists? path]

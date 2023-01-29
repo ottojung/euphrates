@@ -12,9 +12,8 @@
 
   (define get-process-global-current-directory getcwd)
 
-  ))
+  )
 
-(cond-expand
  (racket
 
   (define (get-process-global-current-directory)

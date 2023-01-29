@@ -4,7 +4,6 @@
   (define-module (euphrates atomic-box)
     :export (make-atomic-box atomic-box? atomic-box-ref atomic-box-set! atomic-box-compare-and-set!))))
 
-
 (cond-expand
  (guile
 
@@ -19,9 +18,8 @@
     (let ((ret (atomic-box-compare-and-swap! box expected desired)))
       (eq? ret expected)))
 
-  ))
+  )
 
-(cond-expand
  (racket
 
   (define make-atomic-box box)
@@ -31,5 +29,3 @@
   (define atomic-box-compare-and-set! box-cas!)
 
   ))
-
-

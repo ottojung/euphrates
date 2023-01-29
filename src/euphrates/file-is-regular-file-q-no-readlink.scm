@@ -25,9 +25,8 @@
     (define s (stat path #f))
     (and s (equal? 'regular (stat:type s))))
 
-  ))
+  )
 
-(cond-expand
  (racket
 
   (define (file-is-regular-file?/no-readlink path)

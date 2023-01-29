@@ -4,17 +4,8 @@
   (define-module (euphrates conss)
     :export (conss))))
 
-
 (cond-expand
  (guile
-
-  (define conss cons*)
-
-  ))
-
-(cond-expand
+  (define conss cons*))
  (racket
-
-  (define conss list*)
-
-  ))
+  (define conss list*)))

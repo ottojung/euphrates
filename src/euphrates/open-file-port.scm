@@ -22,8 +22,8 @@
        ["ab" (open-file path mode)]
        [other (raisu 'open-file-mode-not-supported `(args: ,path ,mode))]))
 
-  ))
-(cond-expand
+  )
+
  (racket
 
   (define (open-file-port path mode)

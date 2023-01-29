@@ -10,21 +10,16 @@
 (define get-command-line-arguments
   (let ((default
           (lambda _
-
-        (cond-expand
-         (guile
+            (cond-expand
+             (guile
               (let ((ret (command-line)))
-        (if (< (length ret) 2)
+                (if (< (length ret) 2)
                     '()
                     (cdr ret))))
-         ))
-      (cond-expand
-       (racket
-            (vector->list
-             (current-command-line-arguments)))
-       ))
-        ))
+             (racket
+              (vector->list
+               (current-command-line-arguments)))))))
 
-  (lambda _
-    (or (command-line-argumets/p)
-        (default)))))
+    (lambda _
+      (or (command-line-argumets/p)
+          (default)))))

@@ -10,8 +10,7 @@
 
   (define system*/exit-code system*)
 
-  ))
-(cond-expand
+  )
  (racket
 
   (define system*/exit-code system*/exit-code)

@@ -15,8 +15,7 @@
   (define box-ref (@ (srfi srfi-111) unbox))
   (define box-set! (@ (srfi srfi-111) set-box!))
 
-  ))
-(cond-expand
+  )
  (racket
 
   (define make-box box)

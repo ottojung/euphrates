@@ -29,9 +29,8 @@
             (loop (cons x buf))
             buf)))))
 
-  ))
+  )
 
-(cond-expand
  (racket
 
   (define [directory-files-rec directory]
