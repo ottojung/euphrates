@@ -1,10 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-pad)
+    :export (string-pad-L string-pad-R)
+    :use-module ((euphrates replicate) :select (replicate)))))
 
-%var string-pad-L
-%var string-pad-R
 
-%use (replicate) "./replicate.scm"
 
 (define (string-pad-L str size pad-char)
   (let* ((len (string-length str)))

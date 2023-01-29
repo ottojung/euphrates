@@ -12,15 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates with-randomizer-seed)
+    :export (with-randomizer-seed)
+    :use-module ((euphrates current-random-source-p) :select (current-random-source/p))
+    :use-module ((euphrates fast-parameterizeable-timestamp-p) :select (fast-parameterizeable-timestamp/p))
+    :use-module ((euphrates time-get-fast-parameterizeable-timestamp) :select (time-get-fast-parameterizeable-timestamp))
+    :use-module ((euphrates srfi-27-generic) :select (make-random-source random-source-randomize!))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var with-randomizer-seed
 
-%use (current-random-source/p) "./current-random-source-p.scm"
-%use (fast-parameterizeable-timestamp/p) "./fast-parameterizeable-timestamp-p.scm"
-%use (time-get-fast-parameterizeable-timestamp) "./time-get-fast-parameterizeable-timestamp.scm"
-%use (make-random-source random-source-randomize!) "./srfi-27-generic.scm"
-%use (raisu) "./raisu.scm"
 
 (define-syntax with-randomizer-seed
   (syntax-rules (:random)

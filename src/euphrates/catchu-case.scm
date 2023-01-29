@@ -12,32 +12,35 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates catchu-case)
+    :export (catchu-case))))
 
 ;; Use together with `raisu'.
 ;; Note that there is no "else" case (because that does not seem to be very portable).
 
-%var catchu-case
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define-syntax catchu-case-single
-  (syntax-rules ()
-    ((_ invokebody ((symbolic-error-key . args) . bodies))
-     (catch
-      symbolic-error-key
-      (lambda _ invokebody)
-      (lambda args-all
-        (apply (lambda args . bodies)
-               (cdr args-all)))))))
+  (define-syntax catchu-case-single
+    (syntax-rules ()
+      ((_ invokebody ((symbolic-error-key . args) . bodies))
+       (catch
+    symbolic-error-key
+    (lambda _ invokebody)
+    (lambda args-all
+          (apply (lambda args . bodies)
+         (cdr args-all)))))))
 
-(define-syntax catchu-case
-  (syntax-rules ()
-    ((_ invokebody case1)
-     (catchu-case-single invokebody case1))
-    ((_ invokebody case1 . cases-rest)
-     (catchu-case-single
-      (catchu-case invokebody . cases-rest)
-      case1))))
+  (define-syntax catchu-case
+    (syntax-rules ()
+      ((_ invokebody case1)
+       (catchu-case-single invokebody case1))
+      ((_ invokebody case1 . cases-rest)
+       (catchu-case-single
+    (catchu-case invokebody . cases-rest)
+    case1))))
 
-%end
+  ))

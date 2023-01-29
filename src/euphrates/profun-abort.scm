@@ -12,20 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-abort)
+    :export (make-profun-abort profun-abort? profun-abort-type profun-abort-iter profun-abort-what profun-abort-additional profun-abort-set-iter profun-abort-modify-iter profun-abort-add-info)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var make-profun-abort
-%var profun-abort?
-%var profun-abort-type
-%var profun-abort-iter
-%var profun-abort-what
-%var profun-abort-additional
-%var profun-abort-set-iter
-%var profun-abort-modify-iter
 
-%var profun-abort-add-info
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <profun-abort>
   (profun-abort-constructor type iter what additional) profun-abort-obj?

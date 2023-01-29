@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates time-get-current-unixtime-values-p)
+    :export (#{time-get-current-unixtime/values#p}#))))
 
-%var time-get-current-unixtime/values#p
 
 (define time-get-current-unixtime/values#p
   (make-parameter #f))

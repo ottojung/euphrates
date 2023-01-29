@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dynamic-thread-mutex-unlock)
+    :export (dynamic-thread-mutex-unlock!)
+    :use-module ((euphrates dynamic-thread-mutex-unlock-p) :select (dynamic-thread-mutex-unlock!#p))
+    :use-module ((euphrates dynamic-thread-mutex-unlock-p-default) :select (dynamic-thread-mutex-unlock!#p-default)))))
 
-%var dynamic-thread-mutex-unlock!
 
-%use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock-p.scm"
-%use (dynamic-thread-mutex-unlock!#p-default) "./dynamic-thread-mutex-unlock-p-default.scm"
 
 (define (dynamic-thread-mutex-unlock! mut)
   ((or (dynamic-thread-mutex-unlock!#p)

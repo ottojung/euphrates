@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates cartesian-each)
+    :export (cartesian-each))))
 
-%var cartesian-each
 
 (define (cartesian-each function a b)
   (let lp ((ai a))

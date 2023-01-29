@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-make-no-fin)
+    :export (monad-make/no-fin)
+    :use-module ((euphrates monadfinobj) :select (monadfinobj?))
+    :use-module ((euphrates monadobj) :select (monadobj-constructor)))))
 
-%var monad-make/no-fin
 
-%use (monadfinobj?) "./monadfinobj.scm"
-%use (monadobj-constructor) "./monadobj.scm"
 
 (define (monad-make/no-fin proc)
   (define uses-continuations? #t)

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assoc-find)
+    :export (assoc/find)
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var assoc/find
 
-%use (raisu) "./raisu.scm"
 
 (define-syntax assoc/find
   (syntax-rules ()

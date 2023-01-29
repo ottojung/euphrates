@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates lazy-monad)
+    :export (lazy-monad)
+    :use-module ((euphrates dynamic-thread-async) :select (dynamic-thread-async))
+    :use-module ((euphrates monad-make-no-cont-no-fin) :select (monad-make/no-cont/no-fin))
+    :use-module ((euphrates monadstate) :select (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret/thunk)))))
 
-%var lazy-monad
 
-%use (dynamic-thread-async) "./dynamic-thread-async.scm"
-%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
-%use (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret/thunk) "./monadstate.scm"
 
 ;; Provides lazy evaluation, with "async" feature
 (define lazy-monad

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-intersperse)
+    :export (list-intersperse)
+    :use-module ((euphrates conss) :select (conss)))))
 
-%use (conss) "./conss.scm"
 
-%var list-intersperse
 
 (define (list-intersperse element lst)
   (let lp ((buf lst))

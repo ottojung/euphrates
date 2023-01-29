@@ -1,19 +1,23 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates file-or-directory-exists-q)
+    :export (file-or-directory-exists?))))
 
-%var file-or-directory-exists?
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define file-or-directory-exists? file-exists?)
+  (define file-or-directory-exists? file-exists?)
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define [file-or-directory-exists? path]
-  (or (file-exists? path)
-      (directory-exists? path)))
+  (define [file-or-directory-exists? path]
+    (or (file-exists? path)
+    (directory-exists? path)))
 
-%end
+  ))
 

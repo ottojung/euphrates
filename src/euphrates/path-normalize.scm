@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates path-normalize)
+    :export (path-normalize)
+    :use-module ((euphrates string-split-simple) :select (string-split/simple))
+    :use-module ((euphrates list-drop-while) :select (list-drop-while)))))
 
-%var path-normalize
 
-%use (string-split/simple) "./string-split-simple.scm"
-%use (list-drop-while) "./list-drop-while.scm"
 
 (define (path-normalize path)
   (define parts (string-split/simple path #\/))

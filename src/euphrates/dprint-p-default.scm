@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dprint-p-default)
+    :export (#{dprint#p-default}#)
+    :use-module ((euphrates printf) :select (printf)))))
 
-%use (printf) "./printf.scm"
 
-%var dprint#p-default
 (define dprint#p-default printf)
 

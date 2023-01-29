@@ -1,13 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates package)
+    :export (use-svars with-svars with-package make-package make-static-package)
+    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set!)))))
 
-%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
 
-%var use-svars
-%var with-svars
-%var with-package
-%var make-package
-%var make-static-package
 
 ;; This is for ad hoc polymorphism
 ;; Faster than gfunc, but also more limited

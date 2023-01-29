@@ -1,12 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates directory-mtime-state)
+    :export (directory-mtime-state)
+    :use-module ((euphrates directory-files-rec) :select (directory-files-rec))
+    :use-module ((euphrates file-mtime) :select (file-mtime))
+    :use-module ((euphrates hashset) :select (list->hashset))
+    :use-module ((euphrates with-ignore-errors) :select (with-ignore-errors!)))))
 
-%var directory-mtime-state
 
-%use (directory-files-rec) "./directory-files-rec.scm"
-%use (file-mtime) "./file-mtime.scm"
-%use (list->hashset) "./hashset.scm"
-%use (with-ignore-errors!) "./with-ignore-errors.scm"
 
 ;; returns set of all files from the directory and their modification times
 

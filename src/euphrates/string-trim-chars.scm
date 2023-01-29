@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-trim-chars)
+    :export (string-trim-chars))))
 
-%var string-trim-chars
 
 (define (string-trim-chars str chars-arg direction)
   (define chars (if (string? chars-arg)

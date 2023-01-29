@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates curry-if)
+    :export (curry-if))))
 
-%var curry-if
 
 (define curry-if
   (case-lambda

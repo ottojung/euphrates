@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates fn-alist)
+    :export (fn-alist)
+    :use-module ((euphrates assq-or) :select (assq-or))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var fn-alist
 
-%use (assq-or) "./assq-or.scm"
-%use (raisu) "./raisu.scm"
 
 (define-syntax fn-alist
   (syntax-rules ()

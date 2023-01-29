@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates fn)
+    :export (fn)
+    :use-module ((euphrates syntax-map) :select (syntax-map))
+    :use-module ((euphrates syntax-identity) :select (syntax-identity)))))
 
-%var fn
 
-%use (syntax-map) "./syntax-map.scm"
-%use (syntax-identity) "./syntax-identity.scm"
 
 (define-syntax fn%-replace1
   (syntax-rules (%)

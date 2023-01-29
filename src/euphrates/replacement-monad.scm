@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates replacement-monad)
+    :export (replacement-monad)
+    :use-module ((euphrates monad-make-no-cont) :select (monad-make/no-cont))
+    :use-module ((euphrates monadstate) :select (monadstate-lval monadstate-qtags monadstate-ret/thunk)))))
 
-%var replacement-monad
 
-%use (monad-make/no-cont) "./monad-make-no-cont.scm"
-%use (monadstate-lval monadstate-qtags monadstate-ret/thunk) "./monadstate.scm"
 
 ;; Replaces expressions by different ones based on associted tags
 ;; Can be used for deriving many less general monads, like lazy-monad or filter-monad

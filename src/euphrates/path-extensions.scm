@@ -1,14 +1,16 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates path-extensions)
+    :export (path-extensions)
+    :use-module ((euphrates path-get-basename) :select (path-get-basename))
+    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet/index))
+    :use-module ((euphrates list-and-map) :select (list-and-map))
+    :use-module ((euphrates string-split-simple) :select (string-split/simple)))))
 
 ;; Returns leftmost extension with a dot or ""
 ;; Only returns "meaningful" extensions
-%var path-extensions
 
-%use (path-get-basename) "./path-get-basename.scm"
-%use (alphanum/alphabet/index) "./alphanum-alphabet.scm"
-%use (list-and-map) "./list-and-map.scm"
-%use (string-split/simple) "./string-split-simple.scm"
 
 (define (path-extensions str)
   (define parts

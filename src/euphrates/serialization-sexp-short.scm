@@ -12,13 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates serialization-sexp-short)
+    :export (serialize/sexp/short deserialize/sexp/short)
+    :use-module ((euphrates serialization-builtin-short) :select (deserialize-builtin/short serialize-builtin/short))
+    :use-module ((euphrates serialization-sexp-generic) :select (deserialize/sexp/generic serialize/sexp/generic)))))
 
-%var serialize/sexp/short
-%var deserialize/sexp/short
 
-%use (deserialize-builtin/short serialize-builtin/short) "./serialization-builtin-short.scm"
-%use (deserialize/sexp/generic serialize/sexp/generic) "./serialization-sexp-generic.scm"
 
 (define (serialize/sexp/short serialize-type9-fields procedure-serialization)
   (serialize/sexp/generic serialize-type9-fields procedure-serialization serialize-builtin/short))

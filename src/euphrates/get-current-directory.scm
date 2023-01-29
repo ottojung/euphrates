@@ -1,22 +1,26 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates get-current-directory)
+    :export (get-current-directory)
+    :use-module ((euphrates current-directory-p) :select (current-directory/p)))))
 
-%var get-current-directory
 
-%use (current-directory/p) "./current-directory-p.scm"
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define get-process-global-current-directory getcwd)
+  (define get-process-global-current-directory getcwd)
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define (get-process-global-current-directory)
-  (path->string (current-directory)))
+  (define (get-process-global-current-directory)
+    (path->string (current-directory)))
 
-%end
+  ))
 
 (define (get-current-directory)
   (or (current-directory/p)

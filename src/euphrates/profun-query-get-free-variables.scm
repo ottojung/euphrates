@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-query-get-free-variables)
+    :export (profun-query-get-free-variables)
+    :use-module ((euphrates profun-varname-q) :select (profun-varname?)))))
 
-%var profun-query-get-free-variables
 
-%use (profun-varname?) "./profun-varname-q.scm"
 
 (define (profun-query-get-free-variables q)
   (filter profun-varname? (apply append (map cdr q))))

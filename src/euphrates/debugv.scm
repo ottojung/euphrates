@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates debugv)
+    :export (debugv)
+    :use-module ((euphrates debug) :select (debug))
+    :use-module ((euphrates range) :select (range))
+    :use-module ((euphrates list-intersperse) :select (list-intersperse)))))
 
-%use (debug) "./debug.scm"
-%use (range) "./range.scm"
-%use (list-intersperse) "./list-intersperse.scm"
 
-%var debugv
 
 (define (debug-vars->string vars/symbols)
   (define count (length vars/symbols))

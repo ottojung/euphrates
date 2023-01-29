@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates command-line-arguments-p)
+    :export (command-line-argumets/p))))
 
-%var command-line-argumets/p
 
 ;; access with (get-command-line-arguments)
 (define command-line-argumets/p

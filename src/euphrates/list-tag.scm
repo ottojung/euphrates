@@ -1,10 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-tag)
+    :export (list-tag list-untag)
+    :use-module ((euphrates list-tag-prev) :select (list-tag/prev/rev)))))
 
-%use (list-tag/prev/rev) "./list-tag-prev.scm"
 
-%var list-tag
-%var list-untag
 
 ;; returns a list in following shape:
 ;; (cons ,tag (cons ,prev ,next))

@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates alpha-lowercase-alphabet)
+    :export (alpha-lowercase/alphabet))))
 
-%var alpha-lowercase/alphabet
 
 ;; starts off like base64 table
 (define alpha-lowercase/alphabet

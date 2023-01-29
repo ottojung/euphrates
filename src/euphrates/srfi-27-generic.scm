@@ -14,21 +14,15 @@
 
 ;; Originally taken from: https://github.com/scheme-requests-for-implementation/srfi-27/blob/master/reference/mrg32k3a-a.scm
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates srfi-27-generic)
+    :export (default-random-source make-random-source random-source? random-source-state-ref random-source-state-set! random-source-randomize! random-source-pseudo-randomize! random-source-make-integers random-source-make-reals)
+    :use-module ((euphrates srfi-27-random-source-obj) :select (:random-source-make :random-source? :random-source-state-ref :random-source-state-set! :random-source-randomize! :random-source-pseudo-randomize! :random-source-make-integers :random-source-make-reals :random-source-current-time))
+    :use-module ((euphrates srfi-27-backbone-generator) :select (mrg32k3a-pack-state mrg32k3a-unpack-state mrg32k3a-random-range mrg32k3a-random-integer mrg32k3a-random-real))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var default-random-source
-%var make-random-source
-%var random-source?
-%var random-source-state-ref
-%var random-source-state-set!
-%var random-source-randomize!
-%var random-source-pseudo-randomize!
-%var random-source-make-integers
-%var random-source-make-reals
 
-%use (:random-source-make :random-source? :random-source-state-ref :random-source-state-set! :random-source-randomize! :random-source-pseudo-randomize! :random-source-make-integers :random-source-make-reals :random-source-current-time) "./srfi-27-random-source-obj.scm"
-%use (mrg32k3a-pack-state mrg32k3a-unpack-state mrg32k3a-random-range mrg32k3a-random-integer mrg32k3a-random-real) "./srfi-27-backbone-generator.scm"
-%use (raisu) "./raisu.scm"
 
 ;; GENERIC PART OF MRG32k3a-GENERATOR FOR SRFI-27
 ;; ==============================================
@@ -324,7 +318,7 @@
     '#(     0 1403580 4294156359
             1       0          0
             0       1          0
-       527612       0 4293573854
+        527612       0 4293573854
             1       0          0
             0       1          0))
 

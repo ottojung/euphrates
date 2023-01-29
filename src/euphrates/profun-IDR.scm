@@ -12,19 +12,18 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-IDR)
+    :export (make-profun-IDR profun-IDR? profun-IDR-name profun-IDR-arity)
+    :use-module ((euphrates profun-abort) :select (make-profun-abort profun-abort-type profun-abort-what profun-abort?)))))
 
 ;; Profun's I Don't Recognize
 
 ;; Returned by an agent that does not know what to do with a symbol.
 ;; For example, if agent does not know how to do addition, he will return IDR encountering symbol `+'.
 
-%var make-profun-IDR
-%var profun-IDR?
-%var profun-IDR-name
-%var profun-IDR-arity
 
-%use (make-profun-abort profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
 
 (define (make-profun-IDR key arity)
   (make-profun-abort 'IDR (list key arity)))

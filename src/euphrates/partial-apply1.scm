@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates partial-apply1)
+    :export (partial-apply1)
+    :use-module ((euphrates reversed-args-f) :select (reversed-args-f)))))
 
-%use (reversed-args-f) "./reversed-args-f.scm"
 
-%var partial-apply1
 
 (define-syntax partial-apply1-helper
   (syntax-rules ()

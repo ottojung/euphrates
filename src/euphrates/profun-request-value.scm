@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-request-value)
+    :export (profun-request-value)
+    :use-module ((euphrates profun-RFC) :select (make-profun-RFC)))))
 
-%var profun-request-value
 
-%use (make-profun-RFC) "./profun-RFC.scm"
 
 (define (profun-request-value val)
   (make-profun-RFC `((value ,val))))

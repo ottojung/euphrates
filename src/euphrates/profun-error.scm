@@ -12,13 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-error)
+    :export (make-profun-error profun-error? profun-error-args)
+    :use-module ((euphrates profun-abort) :select (make-profun-abort profun-abort-type profun-abort-what profun-abort?)))))
 
-%var make-profun-error
-%var profun-error?
-%var profun-error-args
 
-%use (make-profun-abort profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
 
 (define (make-profun-error . args)
   (make-profun-abort 'error args))

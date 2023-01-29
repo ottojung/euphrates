@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-traverse)
+    :export (list-traverse))))
 
-%var list-traverse
 
 (define list-traverse
   (case-lambda

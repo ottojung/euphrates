@@ -12,21 +12,21 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-apply)
+    :export (profun-op-apply profun-apply-return! profun-apply-fail!)
+    :use-module ((euphrates box) :select (box-ref box-set! box? make-box))
+    :use-module ((euphrates profun-accept) :select (profun-ctx-set profun-set))
+    :use-module ((euphrates profun-op-apply-result-p) :select (profun-op-apply/result#p))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-value) :select (profun-bound-value?))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; In order to return result during apply evaluation, call `profun-apply-return!';
 ;; in order to fail, call `profun-apply-fail!'.
-%var profun-op-apply
-%var profun-apply-return!
-%var profun-apply-fail!
 
-%use (box-ref box-set! box? make-box) "./box.scm"
-%use (profun-ctx-set profun-set) "./profun-accept.scm"
-%use (profun-op-apply/result#p) "./profun-op-apply-result-p.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-reject) "./profun-reject.scm"
-%use (profun-bound-value?) "./profun-value.scm"
-%use (raisu) "./raisu.scm"
 
 (define profun-op-apply
   (profun-op-lambda

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-find-first)
+    :export (list-find-first)
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var list-find-first
 
-%use (raisu) "./raisu.scm"
 
 (define-syntax list-find-first
   (syntax-rules ()

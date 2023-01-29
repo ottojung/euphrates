@@ -1,20 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates queue)
+    :export (make-queue queue? queue-empty? queue-peek queue-push! queue-pop! list->queue queue->list queue-unload! queue-rotate! queue-peek-rotate!)
+    :use-module ((euphrates queue-obj) :select (queue-constructor queue-first queue-last queue-predicate queue-vector set-queue-first! set-queue-last! set-queue-vector!))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var make-queue
-%var queue?
-%var queue-empty?
-%var queue-peek
-%var queue-push!
-%var queue-pop!
-%var list->queue
-%var queue->list
-%var queue-unload!
-%var queue-rotate!
-%var queue-peek-rotate!
 
-%use (queue-constructor queue-first queue-last queue-predicate queue-vector set-queue-first! set-queue-last! set-queue-vector!) "./queue-obj.scm"
-%use (raisu) "./raisu.scm"
 
 (define queue? queue-predicate)
 
@@ -48,13 +40,13 @@
          (need-realloc? (= new-last first))
          (new-size (* 2 size))
          (v (if (not need-realloc?) v
-                    (let ((ret (make-vector new-size)))
-                      (let loop ((i 0) (j first))
-                        (when (< i size)
-                          (vector-set! ret i (vector-ref v j))
-                          (loop (+ 1 i) (if (< (+ 1 j) size) (+ 1 j) 0))))
-                      (set-queue-vector! q ret)
-                      ret))))
+                (let ((ret (make-vector new-size)))
+                  (let loop ((i 0) (j first))
+                    (when (< i size)
+                      (vector-set! ret i (vector-ref v j))
+                      (loop (+ 1 i) (if (< (+ 1 j) size) (+ 1 j) 0))))
+                  (set-queue-vector! q ret)
+                  ret))))
     (if need-realloc?
         (begin
           (set-queue-first! q 0)

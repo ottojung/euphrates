@@ -1,12 +1,15 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates sys-mutex-unlock)
+    :export (sys-mutex-unlock!))))
 
-%var sys-mutex-unlock!
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(use-modules (srfi srfi-18))
+  (use-modules (srfi srfi-18))
 
-(define sys-mutex-unlock! mutex-unlock!)
+  (define sys-mutex-unlock! mutex-unlock!)
 
-%end
+  ))

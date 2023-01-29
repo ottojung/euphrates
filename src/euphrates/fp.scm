@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates fp)
+    :export (fp))))
 
-%var fp
 
 ;; creates a Function on Pairs
 (define-syntax fp

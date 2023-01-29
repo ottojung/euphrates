@@ -12,30 +12,19 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monadstate)
+    :export (monadstate? monadstate-cret monadstate-cret/thunk monadstate-ret monadstate-ret/thunk monadstate-make-empty monadstate-qvar monadstate-qval monadstate-qtags monadstate-lval monadstate-arg monadstate-args monadstate-replicate-multiple monadstate-handle-multiple)
+    :use-module ((euphrates identity-star) :select (identity*))
+    :use-module ((euphrates memconst) :select (memconst))
+    :use-module ((euphrates monadfinobj) :select (monadfinobj monadfinobj-lval monadfinobj?))
+    :use-module ((euphrates monadstate-current-p) :select (monadstate-current/p))
+    :use-module ((euphrates monadstateobj) :select (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates replicate) :select (replicate)))))
 
-%var monadstate?
-%var monadstate-cret
-%var monadstate-cret/thunk
-%var monadstate-ret
-%var monadstate-ret/thunk
-%var monadstate-make-empty
-%var monadstate-qvar
-%var monadstate-qval
-%var monadstate-qtags
-%var monadstate-lval
-%var monadstate-arg
-%var monadstate-args
-%var monadstate-replicate-multiple
-%var monadstate-handle-multiple
 
-%use (identity*) "./identity-star.scm"
-%use (memconst) "./memconst.scm"
-%use (monadfinobj monadfinobj-lval monadfinobj?) "./monadfinobj.scm"
-%use (monadstate-current/p) "./monadstate-current-p.scm"
-%use (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?) "./monadstateobj.scm"
-%use (raisu) "./raisu.scm"
-%use (replicate) "./replicate.scm"
 
 (define monadstate? monadstateobj?)
 

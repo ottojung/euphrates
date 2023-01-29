@@ -12,16 +12,16 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-handler)
+    :export (profun-make-handler profun-handler-get profun-handler-extend)
+    :use-module ((euphrates hashmap) :select (hashmap-merge hashmap-ref multi-alist->hashmap))
+    :use-module ((euphrates list-find-first) :select (list-find-first))
+    :use-module ((euphrates profun-op-obj) :select (profun-op-arity))
+    :use-module ((euphrates profun-variable-arity-op-huh) :select (profun-variable-arity-op?)))))
 
-%var profun-make-handler
-%var profun-handler-get
-%var profun-handler-extend
 
-%use (hashmap-merge hashmap-ref multi-alist->hashmap) "./hashmap.scm"
-%use (list-find-first) "./list-find-first.scm"
-%use (profun-op-arity) "./profun-op-obj.scm"
-%use (profun-variable-arity-op?) "./profun-variable-arity-op-huh.scm"
 
 (define-syntax profun-make-handler-helper
   (syntax-rules ()

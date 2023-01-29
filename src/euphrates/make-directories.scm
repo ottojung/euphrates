@@ -1,22 +1,26 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates make-directories)
+    :export (make-directories)
+    :use-module ((euphrates string-split-simple) :select (string-split/simple))
+    :use-module ((euphrates list-fold) :select (list-fold))
+    :use-module ((euphrates file-or-directory-exists-q) :select (file-or-directory-exists?))
+    :use-module ((euphrates append-posix-path) :select (append-posix-path))
+    :use-module ((euphrates string-null-or-whitespace-p) :select (string-null-or-whitespace?)))))
 
-%use (string-split/simple) "./string-split-simple.scm"
-%use (list-fold) "./list-fold.scm"
-%use (file-or-directory-exists?) "./file-or-directory-exists-q.scm"
-%use (append-posix-path) "./append-posix-path.scm"
-%use (string-null-or-whitespace?) "./string-null-or-whitespace-p.scm"
 
-%var make-directories
 
 (define (make-directories path)
 
-%for (COMPILER "guile")
-  (define mk-single-dir mkdir)
-%end
-%for (COMPILER "racket")
-  (define mk-single-dir make-directory)
-%end
+  (cond-expand
+   (guile
+    (define mk-single-dir mkdir)
+    ))
+  (cond-expand
+   (racket
+    (define mk-single-dir make-directory)
+    ))
 
   (define parts (string-split/simple path #\/))
   (list-fold

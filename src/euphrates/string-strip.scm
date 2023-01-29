@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-strip)
+    :export (string-strip)
+    :use-module ((euphrates string-trim-chars) :select (string-trim-chars)))))
 
-%var string-strip
 
-%use (string-trim-chars) "./string-trim-chars.scm"
 
 (define string-strip
   (case-lambda

@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op)
+    :export (make-profun-op)
+    :use-module ((euphrates profun-op-obj) :select (profun-op-constructor)))))
 
-%var make-profun-op
 
-%use (profun-op-constructor) "./profun-op-obj.scm"
 
 (define (make-profun-op arity handler-procedure)
   (profun-op-constructor

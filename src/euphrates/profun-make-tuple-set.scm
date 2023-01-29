@@ -12,16 +12,18 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-make-tuple-set)
+    :export (profun-make-tuple-set)
+    :use-module ((euphrates profun-accept) :select (profun-accept profun-ctx-set profun-set))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-value) :select (profun-unbound-value?)))))
 
 ;; Used in bottom-handler to return just some predefined multi-values.
 ;; Really this creates a hypergraph.
-%var profun-make-tuple-set
 
-%use (profun-accept profun-ctx-set profun-set) "./profun-accept.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-reject) "./profun-reject.scm"
-%use (profun-unbound-value?) "./profun-value.scm"
 
 (define (try-assign-multi args names lst)
   (let loop ((i 0)

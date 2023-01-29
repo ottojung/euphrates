@@ -12,36 +12,28 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates np-thread)
+    :export (np-thread-make-env np-thread-global-spawn np-thread-global-cancel np-thread-global-disable-cancel np-thread-global-enable-cancel np-thread-global-yield np-thread-global-sleep np-thread-global-mutex-make np-thread-global-mutex-lock! np-thread-global-mutex-unlock! np-thread-global-critical-make)
+    :use-module ((euphrates make-unique) :select (make-unique))
+    :use-module ((euphrates with-critical) :select (with-critical))
+    :use-module ((euphrates queue) :select (make-queue queue-empty? queue-peek queue-push! queue-pop!))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates dynamic-thread-cancel-tag) :select (dynamic-thread-cancel-tag))
+    :use-module ((euphrates dynamic-thread-get-wait-delay) :select (dynamic-thread-get-wait-delay))
+    :use-module ((euphrates sys-usleep) :select (sys-usleep))
+    :use-module ((euphrates box) :select (make-box box-ref box-set!))
+    :use-module ((euphrates unit-conversions) :select (nano->micro/unit micro->nano/unit))
+    :use-module ((euphrates time-get-monotonic-nanoseconds-timestamp) :select (time-get-monotonic-nanoseconds-timestamp))
+    :use-module ((euphrates np-thread-obj) :select (np-thread-obj np-thread-obj? np-thread-obj-continuation set-np-thread-obj-continuation! np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?! np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!)))))
 
 ;; NOTE: do not use np-thread-make-env,
 ;;       use np-thread-parameterize-env instead.
-%var np-thread-make-env
 
 ;; Do not export run ;; %var np-thread-global-run!
-%var np-thread-global-spawn
-%var np-thread-global-cancel
-%var np-thread-global-disable-cancel
-%var np-thread-global-enable-cancel
-%var np-thread-global-yield
-%var np-thread-global-sleep
-%var np-thread-global-mutex-make
-%var np-thread-global-mutex-lock!
-%var np-thread-global-mutex-unlock!
-%var np-thread-global-critical-make
 
-%use (make-unique) "./make-unique.scm"
-%use (with-critical) "./with-critical.scm"
-%use (make-queue queue-empty? queue-peek queue-push! queue-pop!) "./queue.scm"
-%use (raisu) "./raisu.scm"
-%use (dynamic-thread-cancel-tag) "./dynamic-thread-cancel-tag.scm"
-%use (dynamic-thread-get-wait-delay) "./dynamic-thread-get-wait-delay.scm"
-%use (sys-usleep) "./sys-usleep.scm"
-%use (make-box box-ref box-set!) "./box.scm"
-%use (nano->micro/unit micro->nano/unit) "./unit-conversions.scm"
-%use (time-get-monotonic-nanoseconds-timestamp) "./time-get-monotonic-nanoseconds-timestamp.scm"
 
-%use (np-thread-obj np-thread-obj? np-thread-obj-continuation set-np-thread-obj-continuation! np-thread-obj-cancel-scheduled? set-np-thread-obj-cancel-scheduled?! np-thread-obj-cancel-enabled? set-np-thread-obj-cancel-enabled?!) "./np-thread-obj.scm"
 
 ;; Disables critical zones because in non-interruptible mode
 ;; user can assure atomicity by just not calling yield during its evalution.

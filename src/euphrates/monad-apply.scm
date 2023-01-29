@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-apply)
+    :export (monad-apply)
+    :use-module ((euphrates monadobj) :select (monadobj-procedure)))))
 
-%var monad-apply
 
-%use (monadobj-procedure) "./monadobj.scm"
 
 (define (monad-apply m monad-input)
   ((monadobj-procedure m) monad-input))

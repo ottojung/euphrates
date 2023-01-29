@@ -12,34 +12,36 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates compile-cfg-cli-help)
+    :export (CFG-AST->CFG-CLI-help)
+    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet/index))
+    :use-module ((euphrates compile-cfg-cli) :select (CFG-lang-modifier-char?))
+    :use-module ((euphrates get-current-program-path) :select (get-current-program-path))
+    :use-module ((euphrates hashmap) :select (make-hashmap hashmap->alist hashmap-ref hashmap-set!))
+    :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
+    :use-module ((euphrates list-drop-while) :select (list-drop-while))
+    :use-module ((euphrates list-fold) :select (list-fold))
+    :use-module ((euphrates list-intersperse) :select (list-intersperse))
+    :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
+    :use-module ((euphrates parse-cfg-cli) :select (CFG-CLI->CFG-AST))
+    :use-module ((euphrates path-get-basename) :select (path-get-basename))
+    :use-module ((euphrates print-in-window) :select (print-in-window))
+    :use-module ((euphrates replicate) :select (replicate))
+    :use-module ((euphrates string-pad) :select (string-pad-R))
+    :use-module ((euphrates string-to-words) :select (string->words))
+    :use-module ((euphrates system-environment) :select (system-environment-get))
+    :use-module ((euphrates tilda-a) :select (~a))
+    :use-module ((euphrates tilda-s) :select (~s))
+    :use-module ((euphrates words-to-string) :select (words->string)))))
 
 ;;
 ;; In this file we translate CFG-CLI definitions
 ;; into human readable help message.
 ;;
 
-%var CFG-AST->CFG-CLI-help
 
-%use (alphanum/alphabet/index) "./alphanum-alphabet.scm"
-%use (CFG-lang-modifier-char?) "./compile-cfg-cli.scm"
-%use (get-current-program-path) "./get-current-program-path.scm"
-%use (make-hashmap hashmap->alist hashmap-ref hashmap-set!) "./hashmap.scm"
-%use (list-deduplicate) "./list-deduplicate.scm"
-%use (list-drop-while) "./list-drop-while.scm"
-%use (list-fold) "./list-fold.scm"
-%use (list-intersperse) "./list-intersperse.scm"
-%use (list-map/flatten) "./list-map-flatten.scm"
-%use (CFG-CLI->CFG-AST) "./parse-cfg-cli.scm"
-%use (path-get-basename) "./path-get-basename.scm"
-%use (print-in-window) "./print-in-window.scm"
-%use (replicate) "./replicate.scm"
-%use (string-pad-R) "./string-pad.scm"
-%use (string->words) "./string-to-words.scm"
-%use (system-environment-get) "./system-environment.scm"
-%use (~a) "./tilda-a.scm"
-%use (~s) "./tilda-s.scm"
-%use (words->string) "./words-to-string.scm"
 
 (define (CFG-AST->CFG-CLI-help helps types defaults)
   (define arg-helps (filter list? helps))

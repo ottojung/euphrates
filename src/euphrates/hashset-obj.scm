@@ -1,11 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates hashset-obj)
+    :export (hashset-constructor hashset-predicate hashset-value)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var hashset-constructor
-%var hashset-predicate
-%var hashset-value
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 hashset
   (hashset-constructor value) hashset-predicate

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates define-pair)
+    :export (define-pair))))
 
-%var define-pair
 
 (define-syntax define-pair
   (syntax-rules ()

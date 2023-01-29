@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-sqrt)
+    :export (profun-op-sqrt)
+    :use-module ((euphrates profun-op-unary) :select (profun-op-unary)))))
 
-%var profun-op-sqrt
 
-%use (profun-op-unary) "./profun-op-unary.scm"
 
 (define profun-op-sqrt
   (profun-op-unary sqrt (lambda (x) (* x x))))

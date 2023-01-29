@@ -12,27 +12,19 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-database)
+    :export (profun-database-copy profun-database? profun-database-rules profun-database-handler profun-database-falsy? profun-database-handle profun-database-get-all profun-database-get make-profun-database make-falsy-profun-database profun-database-extend)
+    :use-module ((euphrates define-type9) :select (define-type9))
+    :use-module ((euphrates hashmap) :select (hashmap-copy hashmap-ref hashmap-set! make-hashmap))
+    :use-module ((euphrates list-ref-or) :select (list-ref-or))
+    :use-module ((euphrates profun-handler) :select (profun-handler-get))
+    :use-module ((euphrates profun-rule) :select (profun-rule-constructor))
+    :use-module ((euphrates profun-varname-q) :select (profun-varname?))
+    :use-module ((euphrates usymbol) :select (make-usymbol)))))
 
-%var profun-database-copy
-%var profun-database?
-%var profun-database-rules
-%var profun-database-handler
-%var profun-database-falsy?
-%var profun-database-handle
-%var profun-database-get-all
-%var profun-database-get
-%var make-profun-database
-%var make-falsy-profun-database
-%var profun-database-extend
 
-%use (define-type9) "./define-type9.scm"
-%use (hashmap-copy hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
-%use (list-ref-or) "./list-ref-or.scm"
-%use (profun-handler-get) "./profun-handler.scm"
-%use (profun-rule-constructor) "./profun-rule.scm"
-%use (profun-varname?) "./profun-varname-q.scm"
-%use (make-usymbol) "./usymbol.scm"
 
 (define-type9 <profun-database>
   (profun-database-constructor rules handler table falsy?) profun-database?

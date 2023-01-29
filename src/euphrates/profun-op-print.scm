@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-print)
+    :export (profun-op-print)
+    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
+    :use-module ((euphrates dprintln) :select (dprintln))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda)))))
 
-%var profun-op-print
 
-%use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (dprintln) "./dprintln.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
 
 (define profun-op-print
   (profun-op-lambda

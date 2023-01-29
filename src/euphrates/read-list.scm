@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates read-list)
+    :export (read-list))))
 
-%var read-list
 
 (define read-list
   (case-lambda

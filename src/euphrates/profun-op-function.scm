@@ -12,20 +12,22 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-function)
+    :export (profun-op-function)
+    :use-module ((euphrates list-singleton-q) :select (list-singleton?))
+    :use-module ((euphrates list-span-n) :select (list-span-n))
+    :use-module ((euphrates profun-accept) :select (profun-accept profun-set))
+    :use-module ((euphrates profun-answer-huh) :select (profun-answer?))
+    :use-module ((euphrates profun-error) :select (make-profun-error))
+    :use-module ((euphrates profun-op) :select (make-profun-op))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-request-value) :select (profun-request-value))
+    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-unbound-value? profun-value-unwrap))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var profun-op-function
 
-%use (list-singleton?) "./list-singleton-q.scm"
-%use (list-span-n) "./list-span-n.scm"
-%use (profun-accept profun-set) "./profun-accept.scm"
-%use (profun-answer?) "./profun-answer-huh.scm"
-%use (make-profun-error) "./profun-error.scm"
-%use (make-profun-op) "./profun-op.scm"
-%use (profun-reject) "./profun-reject.scm"
-%use (profun-request-value) "./profun-request-value.scm"
-%use (profun-bound-value? profun-unbound-value? profun-value-unwrap) "./profun-value.scm"
-%use (raisu) "./raisu.scm"
 
 (define-syntax profun-op-function
   (syntax-rules ()

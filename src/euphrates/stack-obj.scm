@@ -12,14 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates stack-obj)
+    :export (stack-constructor stack-predicate stack-lst set-stack-lst!)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var stack-constructor
-%var stack-predicate
-%var stack-lst
-%var set-stack-lst!
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 stack
   (stack-constructor lst) stack-predicate

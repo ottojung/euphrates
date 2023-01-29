@@ -1,13 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates universal-lockr-unlockr)
+    :export (universal-lockr! universal-unlockr!)
+    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set! hashmap-delete!))
+    :use-module ((euphrates dynamic-thread-get-delay-procedure) :select (dynamic-thread-get-delay-procedure))
+    :use-module ((euphrates with-critical) :select (with-critical))
+    :use-module ((euphrates uni-spinlock) :select (make-uni-spinlock-critical)))))
 
-%var universal-lockr!
-%var universal-unlockr!
 
-%use (make-hashmap hashmap-ref hashmap-set! hashmap-delete!) "./hashmap.scm"
-%use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
-%use (with-critical) "./with-critical.scm"
-%use (make-uni-spinlock-critical) "./uni-spinlock.scm"
 
 ;; Like uni-spinlock but use arbitary variables as lock target
 ;; and do sleep when wait

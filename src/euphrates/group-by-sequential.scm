@@ -1,8 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates group-by-sequential)
+    :export (group-by/sequential* group-by/sequential))))
 
-%var group-by/sequential*
-%var group-by/sequential
 
 ;; Splits `lst' into groups that
 ;;  are closed under (predicate x[n] x[n+1:])

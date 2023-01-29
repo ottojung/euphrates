@@ -12,7 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates system-fmt)
+    :export (system-fmt)
+    :use-module ((euphrates system-star-exit-code) :select (system*/exit-code))
+    :use-module ((euphrates stringf) :select (stringf))
+    :use-module ((euphrates shell-quote-permissive) :select (shell-quote/permissive))
+    :use-module ((euphrates tilda-a) :select (~a)))))
 
 ;; Escapes all args, so variable substitution won't work!
 ;; i.e. (system-re "cat ~a" "$HOME/.bashrc") => will invoke `cat '$HOME/.bashrc'` and will not work :(
@@ -22,12 +29,7 @@
 ;;      (system-re "cat ~a" (string-append (getenv "HOME") "/.bashrc") => will invoke `cat '/home/user/.bashrc'` :)
 ;;
 ;; Returns exit code, which is a number.
-%var system-fmt
 
-%use (system*/exit-code) "./system-star-exit-code.scm"
-%use (stringf) "./stringf.scm"
-%use (shell-quote/permissive) "./shell-quote-permissive.scm"
-%use (~a) "./tilda-a.scm"
 
 (define (system-fmt fmt . args)
   (let* ((command (apply stringf (cons fmt (map (compose shell-quote/permissive ~a) args)))))

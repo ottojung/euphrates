@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-default)
+    :export (profun-default)
+    :use-module ((euphrates profun-value) :select (profun-unbound-value?)))))
 
-%var profun-default
 
-%use (profun-unbound-value?) "./profun-value.scm"
 
 (define-syntax profun-default
   (syntax-rules ()

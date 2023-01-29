@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates fn-cons)
+    :export (fn-cons))))
 
-%var fn-cons
 
 (define fn-cons
   (case-lambda

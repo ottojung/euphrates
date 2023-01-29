@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-fold-star)
+    :export (list-fold*))))
 
-%var list-fold*
 
 (define-syntax-rule (list-fold* (acc-name acc-value)
                                 (x-name xs-name i-value)

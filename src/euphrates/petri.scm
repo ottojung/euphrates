@@ -12,30 +12,31 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates petri)
+    :export (petri-push petri-run)
+    :use-module ((euphrates cartesian-product-g) :select (cartesian-product/g))
+    :use-module ((euphrates catch-any) :select (catch-any))
+    :use-module ((euphrates curry-if) :select (curry-if))
+    :use-module ((euphrates dynamic-thread-async) :select (dynamic-thread-async))
+    :use-module ((euphrates dynamic-thread-critical-make) :select (dynamic-thread-critical-make))
+    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-clear! hashmap-ref hashmap-set! make-hashmap))
+    :use-module ((euphrates hashset) :select (hashset-add! hashset-clear! hashset-has? make-hashset))
+    :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
+    :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
+    :use-module ((euphrates list-or-map) :select (list-or-map))
+    :use-module ((euphrates petri-error-handling) :select (patri-handle-make-callback))
+    :use-module ((euphrates petri-net-obj) :select (petri-net-obj-critical petri-net-obj-finished? petri-net-obj-queue petri-net-obj-transitions petri-net-obj? set-petri-net-obj-finished?!))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates range) :select (range))
+    :use-module ((euphrates stack) :select (stack-make stack-pop! stack-push! stack-unload!))
+    :use-module ((euphrates with-critical) :select (with-critical)))))
 
 ;; Inspired from guile-petri library of Julien Lepiller:
 ;; https://tyreunom.frama.io/guile-petri/documentation/The-Echo-Server.html
 
-%var petri-push
-%var petri-run
 
-%use (cartesian-product/g) "./cartesian-product-g.scm"
-%use (catch-any) "./catch-any.scm"
-%use (curry-if) "./curry-if.scm"
-%use (dynamic-thread-async) "./dynamic-thread-async.scm"
-%use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
-%use (hashmap->alist hashmap-clear! hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
-%use (hashset-add! hashset-clear! hashset-has? make-hashset) "./hashset.scm"
-%use (list-deduplicate) "./list-deduplicate.scm"
-%use (list-map/flatten) "./list-map-flatten.scm"
-%use (list-or-map) "./list-or-map.scm"
-%use (patri-handle-make-callback) "./petri-error-handling.scm"
-%use (petri-net-obj-critical petri-net-obj-finished? petri-net-obj-queue petri-net-obj-transitions petri-net-obj? set-petri-net-obj-finished?!) "./petri-net-obj.scm"
-%use (raisu) "./raisu.scm"
-%use (range) "./range.scm"
-%use (stack-make stack-pop! stack-push! stack-unload!) "./stack.scm"
-%use (with-critical) "./with-critical.scm"
 
 (define petri-push/p
   (make-parameter #f))

@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-current-env-p)
+    :export (profun-current-env/p))))
 
-%var profun-current-env/p
 
 (define profun-current-env/p
   (make-parameter #f))

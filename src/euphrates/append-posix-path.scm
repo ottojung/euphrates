@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates append-posix-path)
+    :export (append-posix-path)
+    :use-module ((euphrates absolute-posix-path-q) :select (absolute-posix-path?))
+    :use-module ((euphrates remove-common-prefix) :select (remove-common-prefix))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (absolute-posix-path?) "./absolute-posix-path-q.scm"
-%use (remove-common-prefix) "./remove-common-prefix.scm"
-%use (raisu) "./raisu.scm"
 
-%var append-posix-path
 
 (define [append-posix-path2 a b]
   (if (= (string-length a) 0)

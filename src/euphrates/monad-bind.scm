@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-bind)
+    :export (monad-bind)
+    :use-module ((euphrates monad-do) :select (monad-do/generic)))))
 
-%var monad-bind
 
-%use (monad-do/generic) "./monad-do.scm"
 
 (define-syntax monad-bind
   (syntax-rules ()

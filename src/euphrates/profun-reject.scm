@@ -12,12 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-reject)
+    :export (profun-reject profun-reject?)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var profun-reject
-%var profun-reject?
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 profun-reject-obj
   (profun-reject-constructor) profun-reject-obj?)

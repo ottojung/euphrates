@@ -1,35 +1,31 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates mdict)
+    :export (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys)
+    :use-module ((euphrates make-unique) :select (make-unique))
+    :use-module ((euphrates hashmap) :select (make-hashmap hashmap->alist alist->hashmap hashmap-foreach))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (make-unique) "./make-unique.scm"
-%use (make-hashmap hashmap->alist alist->hashmap hashmap-foreach) "./hashmap.scm"
-%use (raisu) "./raisu.scm"
 
-%var hash->mdict
-%var ahash->mdict
-%var mdict
-%var mdict-has?
-%var mdict-set!
-%var mdict->alist
-%var mdict-keys
 
 (define [hash->mdict h]
   (let [[unique (make-unique)]]
     (case-lambda
-      [[] h]
-      [[key]
-       (let [[g (hash-ref h key unique)]]
-         (if (unique g)
-             (raisu 'mdict-key-not-found key h)
-             g))]
-      [[key value]
-       (let* [[new (make-hashmap)]]
-         (hashmap-foreach
-          (lambda (key value)
-            (hash-set! new key value))
-          h)
-         (hash-set! new key value)
-         (hash->mdict new))])))
+     [[] h]
+     [[key]
+      (let [[g (hash-ref h key unique)]]
+        (if (unique g)
+            (raisu 'mdict-key-not-found key h)
+            g))]
+     [[key value]
+      (let* [[new (make-hashmap)]]
+        (hashmap-foreach
+         (lambda (key value)
+           (hash-set! new key value))
+         h)
+        (hash-set! new key value)
+        (hash->mdict new))])))
 
 (define [alist->mdict alist]
   (hash->mdict (alist->hashmap alist)))

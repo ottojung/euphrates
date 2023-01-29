@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates make-temporary-filename)
+    :export (make-temporary-filename)
+    :use-module ((euphrates random-choice) :select (random-choice))
+    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet)))))
 
-%use (random-choice) "./random-choice.scm"
-%use (alphanum/alphabet) "./alphanum-alphabet.scm"
 
-%var make-temporary-filename
 
 (define (make-temporary-filename)
   (let* ((s (list->string (random-choice 10 alphanum/alphabet))))

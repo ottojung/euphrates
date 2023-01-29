@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates url-get-hostname-and-port)
+    :export (url-get-hostname-and-port)
+    :use-module ((euphrates url-decompose) :select (url-decompose)))))
 
-%var url-get-hostname-and-port
 
-%use (url-decompose) "./url-decompose.scm"
 
 (define (url-get-hostname-and-port url)
   (let ((decomp (url-decompose url)))

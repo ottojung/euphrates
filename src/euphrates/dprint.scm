@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dprint)
+    :export (dprint)
+    :use-module ((euphrates dprint-p) :select (dprint#p)))))
 
-%use (dprint#p) "./dprint-p.scm"
 
-%var dprint
 
 (define dprint
   (lambda args

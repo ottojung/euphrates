@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates syntax-tree-foreach)
+    :export (syntax-tree-foreach))))
 
-%var syntax-tree-foreach
 
 (define-syntax syntax-tree-foreach
   (syntax-rules ()

@@ -1,5 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates sleep-until)
+    :export (sleep-until)
+    :use-module ((euphrates dynamic-thread-get-delay-procedure) :select (dynamic-thread-get-delay-procedure))
+    :use-module ((euphrates dynamic-thread-yield) :select (dynamic-thread-yield))
+    :use-module ((euphrates time-get-monotonic-nanoseconds-timestamp) :select (time-get-monotonic-nanoseconds-timestamp))
+    :use-module ((euphrates unit-conversions) :select (milli->nano/unit)))))
 
 ;; Sleeps until condition evaluates to true or until timeout is reached.
 ;; Uses `dynamic-thread-get-delay-procedure' for sleeping.
@@ -7,12 +14,7 @@
 ;;
 ;; @returns condition if it evaluated to a truthy value.
 ;; @returns #f if it timeouted.
-%var sleep-until
 
-%use (dynamic-thread-get-delay-procedure) "./dynamic-thread-get-delay-procedure.scm"
-%use (dynamic-thread-yield) "./dynamic-thread-yield.scm"
-%use (time-get-monotonic-nanoseconds-timestamp) "./time-get-monotonic-nanoseconds-timestamp.scm"
-%use (milli->nano/unit) "./unit-conversions.scm"
 
 (define-syntax sleep-until
   (syntax-rules ()

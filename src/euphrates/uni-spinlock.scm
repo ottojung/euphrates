@@ -1,15 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates uni-spinlock)
+    :export (make-uni-spinlock uni-spinlock-lock! uni-spinlock-unlock! make-uni-spinlock-critical)
+    :use-module ((euphrates atomic-box) :select (make-atomic-box atomic-box-compare-and-set! atomic-box-set!))
+    :use-module ((euphrates dynamic-thread-enable-cancel) :select (dynamic-thread-enable-cancel))
+    :use-module ((euphrates dynamic-thread-disable-cancel) :select (dynamic-thread-disable-cancel))
+    :use-module ((euphrates dynamic-thread-get-yield-procedure) :select (dynamic-thread-get-yield-procedure)))))
 
-%use (make-atomic-box atomic-box-compare-and-set! atomic-box-set!) "./atomic-box.scm"
-%use (dynamic-thread-enable-cancel) "./dynamic-thread-enable-cancel.scm"
-%use (dynamic-thread-disable-cancel) "./dynamic-thread-disable-cancel.scm"
-%use (dynamic-thread-get-yield-procedure) "./dynamic-thread-get-yield-procedure.scm"
 
-%var make-uni-spinlock
-%var uni-spinlock-lock!
-%var uni-spinlock-unlock!
-%var make-uni-spinlock-critical
 
 ;; Universal spinlock
 ;; Works for any thread model

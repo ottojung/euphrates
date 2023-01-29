@@ -1,16 +1,20 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates sys-usleep)
+    :export (sys-usleep))))
 
-%var sys-usleep
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define sys-usleep usleep)
+  (define sys-usleep usleep)
 
-%end
-%for (COMPILER "racket")
+  ))
+(cond-expand
+ (racket
 
-(define (sys-usleep microsecond)
-  (sleep (/ microsecond 1000000)))
+  (define (sys-usleep microsecond)
+    (sleep (/ microsecond 1000000)))
 
-%end
+  ))

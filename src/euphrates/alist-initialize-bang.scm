@@ -12,24 +12,20 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates alist-initialize-bang)
+    :export (alist-initialize! alist-initialize!:stop alist-initialize!:return-multiple alist-initialize!:get-setters alist-initialize!:makelet/static alist-initialize!:run alist-initialize!:current-setters)
+    :use-module ((euphrates alist-initialize-bang-current-setter-p) :select (alist-initialize!:current-setter/p))
+    :use-module ((euphrates alist-initialize-bang-p) :select (alist-initialize!/p))
+    :use-module ((euphrates assq-or) :select (assq-or))
+    :use-module ((euphrates assq-set-value) :select (assq-set-value))
+    :use-module ((euphrates catchu-case) :select (catchu-case))
+    :use-module ((euphrates define-type9) :select (define-type9))
+    :use-module ((euphrates hashset) :select (hashset-add! hashset-clear! hashset-delete! hashset-has? make-hashset))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var alist-initialize!
-%var alist-initialize!:stop
-%var alist-initialize!:return-multiple
-%var alist-initialize!:get-setters
-%var alist-initialize!:makelet/static
-%var alist-initialize!:run
-%var alist-initialize!:current-setters
 
-%use (alist-initialize!:current-setter/p) "./alist-initialize-bang-current-setter-p.scm"
-%use (alist-initialize!/p) "./alist-initialize-bang-p.scm"
-%use (assq-or) "./assq-or.scm"
-%use (assq-set-value) "./assq-set-value.scm"
-%use (catchu-case) "./catchu-case.scm"
-%use (define-type9) "./define-type9.scm"
-%use (hashset-add! hashset-clear! hashset-delete! hashset-has? make-hashset) "./hashset.scm"
-%use (raisu) "./raisu.scm"
 
 (define (alist-initialize!:currently-evaluating)
   (alist-initialize!:current-setter/p))

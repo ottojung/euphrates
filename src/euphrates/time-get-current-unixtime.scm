@@ -1,15 +1,16 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates time-get-current-unixtime)
+    :export (time-get-current-unixtime time-get-current-unixtime/values)
+    :use-module ((euphrates time-get-current-unixtime-values-p) :select (time-get-current-unixtime/values#p))
+    :use-module ((euphrates time-get-current-unixtime-values-p-default) :select (time-get-current-unixtime/values#p-default))
+    :use-module ((euphrates unit-conversions) :select (nano->normal/unit)))))
 
 ;; Calculates current unixtime UTC
 ;;
 ;; @returns Fraction, where integer part is seconds
-%var time-get-current-unixtime
-%var time-get-current-unixtime/values
 
-%use (time-get-current-unixtime/values#p) "./time-get-current-unixtime-values-p.scm"
-%use (time-get-current-unixtime/values#p-default) "./time-get-current-unixtime-values-p-default.scm"
-%use (nano->normal/unit) "./unit-conversions.scm"
 
 (define (time-get-current-unixtime/values)
   ((or (time-get-current-unixtime/values#p)

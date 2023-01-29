@@ -12,20 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates lexical-scope)
+    :export (lexical-scope-make lexical-scope-set! lexical-scope-ref lexical-scope-stage! lexical-scope-unstage! lexical-scope-namespace)
+    :use-module ((euphrates lexical-scope-obj) :select (lexical-scope-wrap lexical-scope-unwrap))
+    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set!))
+    :use-module ((euphrates stack) :select (stack-make stack-peek stack->list stack-push! stack-discard!))
+    :use-module ((euphrates make-unique) :select (make-unique))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var lexical-scope-make
-%var lexical-scope-set!
-%var lexical-scope-ref
-%var lexical-scope-stage!
-%var lexical-scope-unstage!
-%var lexical-scope-namespace
 
-%use (lexical-scope-wrap lexical-scope-unwrap) "./lexical-scope-obj.scm"
-%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
-%use (stack-make stack-peek stack->list stack-push! stack-discard!) "./stack.scm"
-%use (make-unique) "./make-unique.scm"
-%use (raisu) "./raisu.scm"
 
 (define lexical-scope-make
   (case-lambda

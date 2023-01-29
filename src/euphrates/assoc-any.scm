@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assoc-any)
+    :export (assoc/any))))
 
-%var assoc/any
 
 (define (assoc/any keys alist)
   (let loop ((alist alist))

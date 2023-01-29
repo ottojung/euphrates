@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates mimetype-extensions)
+    :export (mimetype/extensions))))
 
-%var mimetype/extensions
 
 ;; Taken from:
 ;; https://github.com/broofa/mime/tree/master/types

@@ -12,15 +12,18 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates file-size)
+    :export (file-size))))
 
-%var file-size
 
 ;; Returns the size of a regular file in bytes.
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define (file-size filepath)
-  (stat:size (stat filepath)))
+  (define (file-size filepath)
+    (stat:size (stat filepath)))
 
-%end
+  ))

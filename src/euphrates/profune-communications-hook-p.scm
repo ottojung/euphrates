@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profune-communications-hook-p)
+    :export (profune-communications-hook/p))))
 
-%var profune-communications-hook/p
 
 (define profune-communications-hook/p
   (make-parameter #f))

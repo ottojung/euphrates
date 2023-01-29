@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates filter-monad)
+    :export (filter-monad)
+    :use-module ((euphrates replacement-monad) :select (replacement-monad))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var filter-monad
 
-%use (replacement-monad) "./replacement-monad.scm"
-%use (raisu) "./raisu.scm"
 
 ;; Skips evaluation based on given predicate
 ;; NOTE: don't use on multiple-values!

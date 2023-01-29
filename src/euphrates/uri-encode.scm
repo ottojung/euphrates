@@ -12,29 +12,32 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates uri-encode)
+    :export (uri-encode)
+    :use-module ((euphrates uri-safe-alphabet) :select (uri-safe/alphabet/index)))))
 
-%var uri-encode
 
 ;; NOTE: taken from Guile compiler from "module/web/uri.scm"
 
 ;; According to RFC 3986
 
-%use (uri-safe/alphabet/index) "./uri-safe-alphabet.scm"
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(use-modules
- ((ice-9 iconv)
-  #:select (bytevector->string
-            string->bytevector)))
+  (use-modules
+   ((ice-9 iconv)
+    #:select (bytevector->string
+              string->bytevector)))
 
-(use-modules
- ((rnrs bytevectors)
-  #:select (bytevector-length
-            bytevector-u8-ref)))
+  (use-modules
+   ((rnrs bytevectors)
+    #:select (bytevector-length
+              bytevector-u8-ref)))
 
-%end
+  ))
 
 (define uri-encode
   (case-lambda

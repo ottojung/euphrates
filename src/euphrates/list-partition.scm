@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-partition)
+    :export (list-partition)
+    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-ref hashmap-set! make-hashmap)))))
 
-%var list-partition
 
-%use (hashmap->alist hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
 
 (define (list-partition distriminator L)
   (define H (make-hashmap))

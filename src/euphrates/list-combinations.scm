@@ -1,18 +1,21 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-combinations)
+    :export (list-combinations)
+    :use-module ((euphrates list-fold) :select (list-fold)))))
 
-%var list-combinations
 
-%use (list-fold) "./list-fold.scm"
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-;; bitwise operations
-(use-modules (srfi srfi-60))
+  ;; bitwise operations
+  (use-modules (srfi srfi-60))
 
-(define (bitwise-bit-set? x i) (bit-set? i x))
+  (define (bitwise-bit-set? x i) (bit-set? i x))
 
-%end
+  ))
 
 (define (with-repetitions/fixed alphabet-lst size)
   (define v (make-vector size))
@@ -103,11 +106,11 @@
 
 (define range-to
   (case-lambda
-    ((start to incr)
-     (if (= to start) '()
-         (cons start (range-to (+ incr start) to incr))))
-    ((to)
-     (range-to 0 to 1))))
+   ((start to incr)
+    (if (= to start) '()
+        (cons start (range-to (+ incr start) to incr))))
+   ((to)
+    (range-to 0 to 1))))
 
 ;; adopted from: https://github.com/racket/racket/blob/master/racket/collects/racket/list.rkt
 ;; license: MIT

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates printable-alphabet)
+    :export (printable/alphabet))))
 
-%var printable/alphabet
 
 ;; Starts off like base64 table
 (define printable/alphabet

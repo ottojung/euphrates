@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monadic-id)
+    :export (monadic-id)
+    :use-module ((euphrates monadic) :select (monadic))
+    :use-module ((euphrates identity-monad) :select (identity-monad)))))
 
-%var monadic-id
 
-%use (monadic) "./monadic.scm"
-%use (identity-monad) "./identity-monad.scm"
 
 (define-syntax monadic-id
   (syntax-rules ()

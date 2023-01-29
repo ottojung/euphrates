@@ -12,20 +12,21 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-parameter)
+    :export (make-profun-parameter instantiate-profun-parameter)
+    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
+    :use-module ((euphrates profun-accept) :select (profun-set))
+    :use-module ((euphrates profun-current-env-p) :select (profun-current-env/p))
+    :use-module ((euphrates profun-op) :select (make-profun-op))
+    :use-module ((euphrates profun-request-value) :select (profun-request-value))
+    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-value-unwrap))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates usymbol) :select (make-usymbol)))))
 
-%var make-profun-parameter
-%var instantiate-profun-parameter
 
 ;; Make sure that `param-name' is unique.
-%use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (profun-set) "./profun-accept.scm"
-%use (profun-current-env/p) "./profun-current-env-p.scm"
-%use (make-profun-op) "./profun-op.scm"
-%use (profun-request-value) "./profun-request-value.scm"
-%use (profun-bound-value? profun-value-unwrap) "./profun-value.scm"
-%use (raisu) "./raisu.scm"
-%use (make-usymbol) "./usymbol.scm"
 
 (define (profun-op-parameter param-name)
   (make-profun-op

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-last)
+    :export (list-last))))
 
-%var list-last
 
 (define (list-last L)
   (let loop ((L L))

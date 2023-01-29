@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates compose-under)
+    :export (compose-under)
+    :use-module ((euphrates syntax-reverse) :select (syntax-reverse)))))
 
-%var compose-under
 
-%use (syntax-reverse) "./syntax-reverse.scm"
 
 (define-syntax compose-under-cont
   (syntax-rules ()

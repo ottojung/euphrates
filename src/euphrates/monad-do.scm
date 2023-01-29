@@ -12,18 +12,19 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-do)
+    :export (monad-do monad-do/generic)
+    :use-module ((euphrates memconst) :select (memconst))
+    :use-module ((euphrates monad-apply) :select (monad-apply))
+    :use-module ((euphrates monad-current-p) :select (monad-current/p))
+    :use-module ((euphrates monadobj) :select (monadobj?))
+    :use-module ((euphrates monadstateobj) :select (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qvar))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates range) :select (range)))))
 
-%var monad-do
-%var monad-do/generic
 
-%use (memconst) "./memconst.scm"
-%use (monad-apply) "./monad-apply.scm"
-%use (monad-current/p) "./monad-current-p.scm"
-%use (monadobj?) "./monadobj.scm"
-%use (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qvar) "./monadstateobj.scm"
-%use (raisu) "./raisu.scm"
-%use (range) "./range.scm"
 
 (define (monad-do/rethunkify m)
   (define thunk (monadstateobj-lval m))

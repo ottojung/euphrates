@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates petri-net-make)
+    :export (petri-net-make)
+    :use-module ((euphrates petri-net-obj) :select (petri-net-obj))
+    :use-module ((euphrates stack) :select (stack-make))
+    :use-module ((euphrates dynamic-thread-critical-make) :select (dynamic-thread-critical-make)))))
 
-%var petri-net-make
 
-%use (petri-net-obj) "./petri-net-obj.scm"
-%use (stack-make) "./stack.scm"
-%use (dynamic-thread-critical-make) "./dynamic-thread-critical-make.scm"
 
 (define (petri-net-make transitions-hashmap)
   (petri-net-obj

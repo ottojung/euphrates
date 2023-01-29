@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates get-current-random-source)
+    :export (get-current-random-source)
+    :use-module ((euphrates current-random-source-p) :select (current-random-source/p))
+    :use-module ((euphrates srfi-27-generic) :select (default-random-source)))))
 
-%var get-current-random-source
 
-%use (current-random-source/p) "./current-random-source-p.scm"
-%use (default-random-source) "./srfi-27-generic.scm"
 
 (define (get-current-random-source)
   (or (current-random-source/p)

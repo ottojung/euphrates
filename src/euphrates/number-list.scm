@@ -1,10 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates number-list)
+    :export (number-list->number number->number-list number->number-list:precision/p number-list->number-list))))
 
-%var number-list->number
-%var number->number-list
-%var number->number-list:precision/p
-%var number-list->number-list
 
 ;; `number-list` is `base-q expansion` of a number.
 ;; It does not support repeated fractions yet.

@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-mult)
+    :export (profun-op*)
+    :use-module ((euphrates profun-op-binary) :select (profun-op-binary)))))
 
-%var profun-op*
 
-%use (profun-op-binary) "./profun-op-binary.scm"
 
 (define profun-op*
   (let ((safe-div
@@ -29,8 +31,8 @@
         (l/r-identity
          (lambda (x z)
            (case x
-            ((0) 0)
-            ((1) 'op-binary-rfc)
-            (else #f)))))
+             ((0) 0)
+             ((1) 'op-binary-rfc)
+             (else #f)))))
 
     (profun-op-binary * safe-div safe-div safe-sqrt l/r-identity l/r-identity)))

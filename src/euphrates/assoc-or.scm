@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assoc-or)
+    :export (assoc-or))))
 
-%var assoc-or
 
 (define-syntax assoc-or
   (syntax-rules ()

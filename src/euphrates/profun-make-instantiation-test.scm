@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-make-instantiation-test)
+    :export (profun-make-instantiation-check)
+    :use-module ((euphrates profun-query-get-free-variables) :select (profun-query-get-free-variables))
+    :use-module ((euphrates list-and-map) :select (list-and-map)))))
 
-%var profun-make-instantiation-check
 
-%use (profun-query-get-free-variables) "./profun-query-get-free-variables.scm"
-%use (list-and-map) "./list-and-map.scm"
 
 ;; takes result alist and returns #t or #f
 (define (profun-make-instantiation-check query)

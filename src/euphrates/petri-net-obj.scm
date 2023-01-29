@@ -12,17 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates petri-net-obj)
+    :export (petri-net-obj petri-net-obj? petri-net-obj-transitions petri-net-obj-queue petri-net-obj-critical petri-net-obj-finished? set-petri-net-obj-finished?!)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var petri-net-obj
-%var petri-net-obj?
-%var petri-net-obj-transitions
-%var petri-net-obj-queue
-%var petri-net-obj-critical
-%var petri-net-obj-finished?
-%var set-petri-net-obj-finished?!
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <petri-net-obj>
   (petri-net-obj transitions queue critical finished?) petri-net-obj?

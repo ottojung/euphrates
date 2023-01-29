@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-null-or-whitespace-p)
+    :export (string-null-or-whitespace?))))
 
-%var string-null-or-whitespace?
 
 (define (string-null-or-whitespace? str)
   (let loop ((i (- (string-length str) 1)))

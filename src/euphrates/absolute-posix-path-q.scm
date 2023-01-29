@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates absolute-posix-path-q)
+    :export (absolute-posix-path?))))
 
-%var absolute-posix-path?
 
 (define (absolute-posix-path? path)
   (and (string? path)

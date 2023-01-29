@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates tilda-s)
+    :export (~s))))
 
-%var ~s
 
 (define (~s x)
   (with-output-to-string

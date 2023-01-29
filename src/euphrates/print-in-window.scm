@@ -12,7 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates print-in-window)
+    :export (print-in-window)
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates replicate) :select (replicate))
+    :use-module ((euphrates list-span-n) :select (list-span-n))
+    :use-module ((euphrates string-to-lines) :select (string->lines)))))
 
 ;;
 ;; This prints words to a limited `start-x'-`end-x' window.
@@ -29,12 +36,7 @@
 ;; `fill-character' is what space is made of. By default should be #\space.
 ;;
 
-%var print-in-window
 
-%use (raisu) "./raisu.scm"
-%use (replicate) "./replicate.scm"
-%use (list-span-n) "./list-span-n.scm"
-%use (string->lines) "./string-to-lines.scm"
 
 (define (print-in-window start-x end-x initial-x fill-character parts-or-string)
   (define (fill-space amount)

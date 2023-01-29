@@ -1,12 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assert)
+    :export (assert)
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates reversed-args-f) :select (reversed-args-f))
+    :use-module ((euphrates assert-raw) :select (assert#raw))
+    :use-module ((euphrates stringf) :select (stringf)))))
 
-%use (raisu) "./raisu.scm"
-%use (reversed-args-f) "./reversed-args-f.scm"
-%use (assert#raw) "./assert-raw.scm"
-%use (stringf) "./stringf.scm"
 
-%var assert
 
 (define-syntax assert-buf
   (syntax-rules ()

@@ -12,10 +12,12 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-transformer-current-p)
+    :export (monad-transformer-current/p))))
 
 ;; NOTE: use `monad-parameterize' to change the value.
-%var monad-transformer-current/p
 
 (define monad-transformer-current/p
   (make-parameter #f))

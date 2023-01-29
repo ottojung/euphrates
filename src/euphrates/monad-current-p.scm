@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-current-p)
+    :export (monad-current/p))))
 
-%var monad-current/p
 
 (define monad-current/p
   (make-parameter #f))

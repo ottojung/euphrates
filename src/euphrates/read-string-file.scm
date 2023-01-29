@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates read-string-file)
+    :export (read-string-file)
+    :use-module ((euphrates read-all-port) :select (read-all-port))
+    :use-module ((euphrates open-file-port) :select (open-file-port)))))
 
-%var read-string-file
 
-%use (read-all-port) "./read-all-port.scm"
-%use (open-file-port) "./open-file-port.scm"
 
 (define [read-string-file path]
   (let* [[in (open-file-port path "r")]

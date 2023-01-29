@@ -12,16 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates serialization-short)
+    :export (serialize/short deserialize/short)
+    :use-module ((euphrates assoc-or) :select (assoc-or))
+    :use-module ((euphrates descriptors-registry) :select (descriptors-registry-get))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates serialization-sexp-short) :select (deserialize/sexp/short serialize/sexp/short))
+    :use-module ((euphrates string-drop-n) :select (string-drop-n)))))
 
-%var serialize/short
-%var deserialize/short
 
-%use (assoc-or) "./assoc-or.scm"
-%use (descriptors-registry-get) "./descriptors-registry.scm"
-%use (raisu) "./raisu.scm"
-%use (deserialize/sexp/short serialize/sexp/short) "./serialization-sexp-short.scm"
-%use (string-drop-n) "./string-drop-n.scm"
 
 (define (serialize-type9/short obj r9d loop)
   (define fields (assoc-or 'fields r9d (raisu 'no-fields-in-r9d r9d obj)))

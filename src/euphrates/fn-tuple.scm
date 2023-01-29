@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates fn-tuple)
+    :export (fn-tuple)
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var fn-tuple
 
-%use (raisu) "./raisu.scm"
 
 (define (fn-tuple . funcs)
   (if (null? funcs)

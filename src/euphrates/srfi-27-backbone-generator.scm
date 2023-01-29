@@ -14,13 +14,11 @@
 
 ;; Originally taken from: https://github.com/scheme-requests-for-implementation/srfi-27/blob/master/reference/mrg32k3a-a.scm
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates srfi-27-backbone-generator)
+    :export (mrg32k3a-pack-state mrg32k3a-unpack-state mrg32k3a-random-range mrg32k3a-random-integer mrg32k3a-random-real))))
 
-%var mrg32k3a-pack-state
-%var mrg32k3a-unpack-state
-%var mrg32k3a-random-range
-%var mrg32k3a-random-integer
-%var mrg32k3a-random-real
 
 ;;
 ;; 54-BIT INTEGER IMPLEMENTATION OF THE "MRG32K3A"-GENERATOR

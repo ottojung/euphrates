@@ -1,16 +1,16 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates convert-number-base)
+    :export (convert-number-base convert-number-base/generic convert-number-base:default-max-base)
+    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet alphanum/alphabet/index))
+    :use-module ((euphrates fp) :select (fp))
+    :use-module ((euphrates list-span-while) :select (list-span-while))
+    :use-module ((euphrates number-list) :select (number->number-list number-list->number))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (alphanum/alphabet alphanum/alphabet/index) "./alphanum-alphabet.scm"
-%use (fp) "./fp.scm"
-%use (list-span-while) "./list-span-while.scm"
-%use (number->number-list number-list->number) "./number-list.scm"
-%use (raisu) "./raisu.scm"
 
 ;; NOTE: input is a list of characters or a string!
-%var convert-number-base
-%var convert-number-base/generic
-%var convert-number-base:default-max-base
 
 (define convert-number-base:default-max-base
   (vector-length alphanum/alphabet))

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates syntax-reverse)
+    :export (syntax-reverse))))
 
-%var syntax-reverse
 
 (define-syntax syntax-reverse-buf
   (syntax-rules ()

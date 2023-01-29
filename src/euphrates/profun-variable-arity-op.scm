@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-variable-arity-op)
+    :export (profun-variable-arity-op)
+    :use-module ((euphrates profun-op) :select (make-profun-op))
+    :use-module ((euphrates profun-variable-arity-op-keyword) :select (profun-variable-arity-op-keyword)))))
 
-%var profun-variable-arity-op
 
-%use (make-profun-op) "./profun-op.scm"
-%use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define (profun-variable-arity-op proc)
   (make-profun-op profun-variable-arity-op-keyword proc))

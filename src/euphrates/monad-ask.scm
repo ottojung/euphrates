@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-ask)
+    :export (monad-ask)
+    :use-module ((euphrates catchu-case) :select (catchu-case))
+    :use-module ((euphrates monad-do) :select (monad-do/generic))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var monad-ask
 
-%use (catchu-case) "./catchu-case.scm"
-%use (monad-do/generic) "./monad-do.scm"
-%use (raisu) "./raisu.scm"
 
 (define-syntax monad-ask/helper
   (syntax-rules ()

@@ -1,15 +1,19 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates system-star-exit-code)
+    :export (system*/exit-code))))
 
-%var system*/exit-code
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define system*/exit-code system*)
+  (define system*/exit-code system*)
 
-%end
-%for (COMPILER "racket")
+  ))
+(cond-expand
+ (racket
 
-(define system*/exit-code system*/exit-code)
+  (define system*/exit-code system*/exit-code)
 
-%end
+  ))

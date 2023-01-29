@@ -1,15 +1,18 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates hashmap-obj)
+    :export (hashmap-constructor hashmap-predicate))))
 
-%var hashmap-constructor
-%var hashmap-predicate
 
-%for (COMPILER "guile")
-(define hashmap-constructor make-hash-table)
-(define hashmap-predicate hash-table?)
-%end
+(cond-expand
+ (guile
+  (define hashmap-constructor make-hash-table)
+  (define hashmap-predicate hash-table?)
+  ))
 
-%for (COMPILER "racket")
-(define hashmap-constructor make-hash)
-(define hashmap-predicate hash?)
-%end
+(cond-expand
+ (racket
+  (define hashmap-constructor make-hash)
+  (define hashmap-predicate hash?)
+  ))

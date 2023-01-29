@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates lazy-parameter)
+    :export (lazy-parameter)
+    :use-module ((euphrates memconst) :select (memconst)))))
 
-%use (memconst) "./memconst.scm"
 
 ;; Does not evaluate its arguments until requested.
 ;; To be used with `with-dynamic' and `with-dynamic-set!'.
-%var lazy-parameter
 
 (define-syntax lazy-parameter
   (syntax-rules ()

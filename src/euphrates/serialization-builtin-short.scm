@@ -12,25 +12,27 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates serialization-builtin-short)
+    :export (serialize-builtin/short deserialize-builtin/short)
+    :use-module ((euphrates atomic-box) :select (atomic-box-ref atomic-box? make-atomic-box))
+    :use-module ((euphrates box) :select (box-ref box? make-box))
+    :use-module ((euphrates builtin-type-huh) :select (builtin-type?))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; NOTE: does not handle `procedure's!
 
-%var serialize-builtin/short
-%var deserialize-builtin/short
 
-%use (atomic-box-ref atomic-box? make-atomic-box) "./atomic-box.scm"
-%use (box-ref box? make-box) "./box.scm"
-%use (builtin-type?) "./builtin-type-huh.scm"
-%use (raisu) "./raisu.scm"
 
-%for (COMPILER "guile")
-(use-modules (ice-9 hash-table))
+(cond-expand
+ (guile
+  (use-modules (ice-9 hash-table))
 
-(define (serialize/short-hashtable? o) (hash-table? o))
-(define (serialize/short-hashtable o) (hash-map->list cons o))
-(define (deserialize/short-hashtable o) (alist->hash-table o))
-%end
+  (define (serialize/short-hashtable? o) (hash-table? o))
+  (define (serialize/short-hashtable o) (hash-map->list cons o))
+  (define (deserialize/short-hashtable o) (alist->hash-table o))
+  ))
 
 (define serialize-builtin/short
   (case-lambda

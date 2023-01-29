@@ -12,35 +12,30 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates sys-thread)
+    :export (sys-thread-cancel sys-thread-current sys-thread-disable-cancel sys-thread-enable-cancel sys-thread-mutex-make sys-thread-mutex-lock! sys-thread-mutex-unlock! sys-thread-spawn sys-thread-sleep)
+    :use-module ((euphrates sys-thread-obj) :select (sys-thread-obj sys-thread-obj? sys-thread-obj-handle set-sys-thread-obj-handle! sys-thread-obj-cancel-scheduled? set-sys-thread-obj-cancel-scheduled?! sys-thread-obj-cancel-enabled? set-sys-thread-obj-cancel-enabled?!))
+    :use-module ((euphrates sys-usleep) :select (sys-usleep))
+    :use-module ((euphrates sys-mutex-make) :select (sys-mutex-make))
+    :use-module ((euphrates sys-mutex-lock) :select (sys-mutex-lock!))
+    :use-module ((euphrates sys-mutex-unlock) :select (sys-mutex-unlock!))
+    :use-module ((euphrates sys-thread-current-p) :select (sys-thread-current#p))
+    :use-module ((euphrates sys-thread-current-p-default) :select (sys-thread-current#p-default))
+    :use-module ((euphrates dynamic-thread-cancel-tag) :select (dynamic-thread-cancel-tag))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; TODO: add sys-thread-parameterize-env
 
-%var sys-thread-cancel
-%var sys-thread-current
-%var sys-thread-disable-cancel
-%var sys-thread-enable-cancel
 
-%var sys-thread-mutex-make
-%var sys-thread-mutex-lock!
-%var sys-thread-mutex-unlock!
 
-%var sys-thread-spawn
-%var sys-thread-sleep
 
-%use (sys-thread-obj sys-thread-obj? sys-thread-obj-handle set-sys-thread-obj-handle! sys-thread-obj-cancel-scheduled? set-sys-thread-obj-cancel-scheduled?! sys-thread-obj-cancel-enabled? set-sys-thread-obj-cancel-enabled?!) "./sys-thread-obj.scm"
-%use (sys-usleep) "./sys-usleep.scm"
-%use (sys-mutex-make) "./sys-mutex-make.scm"
-%use (sys-mutex-lock!) "./sys-mutex-lock.scm"
-%use (sys-mutex-unlock!) "./sys-mutex-unlock.scm"
-%use (sys-thread-current#p) "./sys-thread-current-p.scm"
-%use (sys-thread-current#p-default) "./sys-thread-current-p-default.scm"
-%use (dynamic-thread-cancel-tag) "./dynamic-thread-cancel-tag.scm"
-%use (raisu) "./raisu.scm"
 
-%for (COMPILER "guile")
-(use-modules (ice-9 threads))
-%end
+(cond-expand
+ (guile
+  (use-modules (ice-9 threads))
+  ))
 
 (define (sys-thread-cancel th)
   (set-sys-thread-obj-cancel-scheduled?! th #t))
@@ -61,26 +56,28 @@
   (sys-usleep microseconds)
   (sys-thread-yield))
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define (sys-thread-spawn thunk)
-  (let ((th (sys-thread-obj #f #f #t)))
-    (set-sys-thread-obj-handle!
-     th
-     (call-with-new-thread thunk))
-    th))
+  (define (sys-thread-spawn thunk)
+    (let ((th (sys-thread-obj #f #f #t)))
+      (set-sys-thread-obj-handle!
+       th
+       (call-with-new-thread thunk))
+      th))
 
-%end
-%for (COMPILER "racket")
+  ))
+(cond-expand
+ (racket
 
-(define (sys-thread-spawn thunk)
-  (let ((th (sys-thread #f #f #t)))
-    (set-sys-thread-handle!
-     th
-     (thread thunk))
-    th))
+  (define (sys-thread-spawn thunk)
+    (let ((th (sys-thread #f #f #t)))
+      (set-sys-thread-handle!
+       th
+       (thread thunk))
+      th))
 
-%end
+  ))
 
 (define (sys-thread-yield)
   (let ((me (sys-thread-current)))

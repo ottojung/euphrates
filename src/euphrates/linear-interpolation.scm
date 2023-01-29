@@ -1,10 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates linear-interpolation)
+    :export (linear-interpolate-1d linear-interpolate-2d)
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var linear-interpolate-1d
-%var linear-interpolate-2d
 
-%use (raisu) "./raisu.scm"
 
 (define (linear-interpolate-1d start end t)
   (unless (and (number? t) (<= 0 t) (<= t 1))

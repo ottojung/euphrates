@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-query-handle-underscores)
+    :export (profun-query-handle-underscores)
+    :use-module ((euphrates list-and-map) :select (list-and-map))
+    :use-module ((euphrates usymbol) :select (make-usymbol)))))
 
-%var profun-query-handle-underscores
 
-%use (list-and-map) "./list-and-map.scm"
-%use (make-usymbol) "./usymbol.scm"
 
 (define (profun-query-handle-underscores query)
   (define (handle-elem x)

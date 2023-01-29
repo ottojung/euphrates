@@ -12,24 +12,26 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-standard-handler)
+    :export (profun-standard-handler)
+    :use-module ((euphrates profun-handler) :select (profun-make-handler))
+    :use-module ((euphrates profun-op-divisible) :select (profun-op-divisible))
+    :use-module ((euphrates profun-op-equals) :select (profun-op-equals))
+    :use-module ((euphrates profun-op-false) :select (profun-op-false))
+    :use-module ((euphrates profun-op-less) :select (profun-op-less))
+    :use-module ((euphrates profun-op-modulo) :select (profun-op-modulo))
+    :use-module ((euphrates profun-op-mult) :select (profun-op*))
+    :use-module ((euphrates profun-op-plus) :select (profun-op+))
+    :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
+    :use-module ((euphrates profun-op-sqrt) :select (profun-op-sqrt))
+    :use-module ((euphrates profun-op-true) :select (profun-op-true))
+    :use-module ((euphrates profun-op-unify) :select (profun-op-unify)))))
 
-%var profun-standard-handler
 
 ;; A handler that only contains operations that are safe, portable and pure.
 
-%use (profun-make-handler) "./profun-handler.scm"
-%use (profun-op-divisible) "./profun-op-divisible.scm"
-%use (profun-op-equals) "./profun-op-equals.scm"
-%use (profun-op-false) "./profun-op-false.scm"
-%use (profun-op-less) "./profun-op-less.scm"
-%use (profun-op-modulo) "./profun-op-modulo.scm"
-%use (profun-op*) "./profun-op-mult.scm"
-%use (profun-op+) "./profun-op-plus.scm"
-%use (profun-op-separate) "./profun-op-separate.scm"
-%use (profun-op-sqrt) "./profun-op-sqrt.scm"
-%use (profun-op-true) "./profun-op-true.scm"
-%use (profun-op-unify) "./profun-op-unify.scm"
 
 (define profun-standard-handler
   (profun-make-handler

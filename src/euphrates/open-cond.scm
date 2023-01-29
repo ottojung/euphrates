@@ -1,12 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates open-cond)
+    :export (define-open-cond open-cond? define-open-cond-instance open-cond-lambda)
+    :use-module ((euphrates open-cond-obj) :select (open-cond-constructor open-cond-predicate open-cond-value set-open-cond-value!)))))
 
-%use (open-cond-constructor open-cond-predicate open-cond-value set-open-cond-value!) "./open-cond-obj.scm"
 
-%var define-open-cond
-%var open-cond?
-%var define-open-cond-instance
-%var open-cond-lambda
 
 (define open-cond? open-cond-predicate)
 

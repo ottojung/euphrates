@@ -1,13 +1,16 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates letin)
+    :export (letin))))
 
-%var letin
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(use-modules (srfi srfi-11))
+  (use-modules (srfi srfi-11))
 
-%end
+  ))
 
 (define-syntax letin
   (syntax-rules ()

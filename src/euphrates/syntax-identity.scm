@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates syntax-identity)
+    :export (syntax-identity))))
 
-%var syntax-identity
 
 (define-syntax syntax-identity
   (syntax-rules ()

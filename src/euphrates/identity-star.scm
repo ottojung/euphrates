@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates identity-star)
+    :export (identity*))))
 
-%var identity*
 
 (define (identity* . args)
   (apply values args))

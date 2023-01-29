@@ -1,10 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates comp)
+    :export (comp appcomp)
+    :use-module ((euphrates partial-apply1) :select (partial-apply1)))))
 
-%use (partial-apply1) "./partial-apply1.scm"
 
-%var comp
-%var appcomp
 
 ;; `comp` operator from clojure
 (define-syntax %comp-helper

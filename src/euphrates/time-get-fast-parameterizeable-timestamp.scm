@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates time-get-fast-parameterizeable-timestamp)
+    :export (time-get-fast-parameterizeable-timestamp)
+    :use-module ((euphrates fast-parameterizeable-timestamp-p) :select (fast-parameterizeable-timestamp/p))
+    :use-module ((euphrates time-get-monotonic-nanoseconds-timestamp) :select (time-get-monotonic-nanoseconds-timestamp)))))
 
-%var time-get-fast-parameterizeable-timestamp
 
-%use (fast-parameterizeable-timestamp/p) "./fast-parameterizeable-timestamp-p.scm"
-%use (time-get-monotonic-nanoseconds-timestamp) "./time-get-monotonic-nanoseconds-timestamp.scm"
 
 (define (time-get-fast-parameterizeable-timestamp)
   (or (fast-parameterizeable-timestamp/p)

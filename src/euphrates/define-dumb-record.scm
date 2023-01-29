@@ -12,27 +12,31 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates define-dumb-record)
+    :export (define-dumb-record))))
 
 ;; The srfi-9 define-record-type.
 ;; Look into srfi-99 if your system does not implement srfi-9.
-%var define-dumb-record
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(use-modules (srfi srfi-9))
+  (use-modules (srfi srfi-9))
 
-(define-syntax define-dumb-record
-  (syntax-rules ()
-    ((_ . args) (define-record-type . args))))
+  (define-syntax define-dumb-record
+    (syntax-rules ()
+      ((_ . args) (define-record-type . args))))
 
-%end
-%for (COMPILER "racket")
+  ))
+(cond-expand
+ (racket
 
-(require srfi/9)
+  (require srfi/9)
 
-(define-syntax define-dumb-record
-  (syntax-rules ()
-    ((_ . args) (define-record-type . args))))
+  (define-syntax define-dumb-record
+    (syntax-rules ()
+      ((_ . args) (define-record-type . args))))
 
-%end
+  ))

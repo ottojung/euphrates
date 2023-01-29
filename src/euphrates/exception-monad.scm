@@ -12,16 +12,18 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates exception-monad)
+    :export (exception-monad)
+    :use-module ((euphrates catch-any) :select (catch-any))
+    :use-module ((euphrates cons-bang) :select (cons!))
+    :use-module ((euphrates monad-make-no-cont) :select (monad-make/no-cont))
+    :use-module ((euphrates monadfinobj) :select (monadfinobj?))
+    :use-module ((euphrates monadstate) :select (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret monadstate-ret/thunk))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var exception-monad
 
-%use (catch-any) "./catch-any.scm"
-%use (cons!) "./cons-bang.scm"
-%use (monad-make/no-cont) "./monad-make-no-cont.scm"
-%use (monadfinobj?) "./monadfinobj.scm"
-%use (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret monadstate-ret/thunk) "./monadstate.scm"
-%use (raisu) "./raisu.scm"
 
 (define (exception-monad)
   (let ((exceptions '()))

@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-varname-q)
+    :export (profun-varname?)
+    :use-module ((euphrates usymbol) :select (usymbol?)))))
 
-%var profun-varname?
 
-%use (usymbol?) "./usymbol.scm"
 
 (define (profun-varname? obj)
   (or (symbol? obj)

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-windows)
+    :export (list-windows)
+    :use-module ((euphrates list-span) :select (list-span)))))
 
-%var list-windows
 
-%use (list-span) "./list-span.scm"
 
 ;; Returns list of views of a "sliding window"
 ;; `(length lst)` must be larger than `window-size!`

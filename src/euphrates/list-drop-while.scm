@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-drop-while)
+    :export (list-drop-while))))
 
-%var list-drop-while
 
 (define (list-drop-while pred lst)
   (let loop ((lst lst))

@@ -12,17 +12,19 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-value)
+    :export (profun-op-value)
+    :use-module ((euphrates profun-CR) :select (make-profun-CR))
+    :use-module ((euphrates profun-accept) :select (profun-accept profun-set))
+    :use-module ((euphrates profun-answer-join) :select (profun-answer-join/and profun-answer-join/any profun-answer-join/or))
+    :use-module ((euphrates profun-op-envlambda) :select (profun-op-envlambda))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-unbound-value? profun-value-name))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var profun-op-value
 
-%use (make-profun-CR) "./profun-CR.scm"
-%use (profun-accept profun-set) "./profun-accept.scm"
-%use (profun-answer-join/and profun-answer-join/any profun-answer-join/or) "./profun-answer-join.scm"
-%use (profun-op-envlambda) "./profun-op-envlambda.scm"
-%use (profun-reject) "./profun-reject.scm"
-%use (profun-bound-value? profun-unbound-value? profun-value-name) "./profun-value.scm"
-%use (raisu) "./raisu.scm"
 
 (define (profun-op-value custom-alist value-alist)
   (profun-op-envlambda

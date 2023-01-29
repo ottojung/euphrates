@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assoc-set-default)
+    :export (assoc-set-default)
+    :use-module ((euphrates assoc-set-value) :select (assoc-set-value)))))
 
-%var assoc-set-default
 
-%use (assoc-set-value) "./assoc-set-value.scm"
 
 (define-syntax assoc-set-default
   (syntax-rules ()

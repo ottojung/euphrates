@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates comprocess-stderr)
+    :export (comprocess-stderr))))
 
-%var comprocess-stderr
 
 (define comprocess-stderr
   (make-parameter #f))

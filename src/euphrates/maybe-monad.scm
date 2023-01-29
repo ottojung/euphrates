@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates maybe-monad)
+    :export (maybe-monad)
+    :use-module ((euphrates identity-star) :select (identity*))
+    :use-module ((euphrates monad-make) :select (monad-make))
+    :use-module ((euphrates monadstate) :select (monadstate-args monadstate-cret monadstate-ret)))))
 
-%var maybe-monad
 
-%use (identity*) "./identity-star.scm"
-%use (monad-make) "./monad-make.scm"
-%use (monadstate-args monadstate-cret monadstate-ret) "./monadstate.scm"
 
 (define (maybe-monad predicate)
   (monad-make

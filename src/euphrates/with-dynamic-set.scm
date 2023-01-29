@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates with-dynamic-set)
+    :export (with-dynamic-set!))))
 
-%var with-dynamic-set!
 
 (define-syntax with-dynamic-set!
   (syntax-rules ()

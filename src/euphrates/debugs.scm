@@ -12,29 +12,32 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates debugs)
+    :export (debugs)
+    :use-module ((euphrates debug) :select (debug))
+    :use-module ((euphrates serialization-short) :select (serialize/short)))))
 
 ;; pretty-prints a serialized version an object
-%var debugs
 
-%use (debug) "./debug.scm"
-%use (serialize/short) "./serialization-short.scm"
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(use-modules (ice-9 pretty-print))
+  (use-modules (ice-9 pretty-print))
 
-(define-syntax debugs
-  (syntax-rules ()
-    ((_ x)
-     (let* ((y x)
-            (sy (serialize/short y)))
-       (if (pair? sy)
-           (debug "~a:\n~a" (quote x)
-                  (with-output-to-string
-                    (lambda _
-                      (pretty-print sy))))
-           (debug "~a = ~s" (quote x) sy))
-       y))))
+  (define-syntax debugs
+    (syntax-rules ()
+      ((_ x)
+       (let* ((y x)
+              (sy (serialize/short y)))
+     (if (pair? sy)
+             (debug "~a:\n~a" (quote x)
+                    (with-output-to-string
+                      (lambda _
+            (pretty-print sy))))
+             (debug "~a = ~s" (quote x) sy))
+     y))))
 
-%end
+  ))

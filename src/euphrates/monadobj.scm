@@ -12,15 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monadobj)
+    :export (monadobj-constructor monadobj? monadobj-procedure monadobj-uses-continuations? monadobj-handles-fin?)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var monadobj-constructor
-%var monadobj?
-%var monadobj-procedure
-%var monadobj-uses-continuations?
-%var monadobj-handles-fin?
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <monadobj>
   (monadobj-constructor procedure uses-continuations? handles-fin?) monadobj?

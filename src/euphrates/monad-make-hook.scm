@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-make-hook)
+    :export (monad-make/hook)
+    :use-module ((euphrates monad-make-no-cont-no-fin) :select (monad-make/no-cont/no-fin))
+    :use-module ((euphrates monadstate-current-p) :select (monadstate-current/p))
+    :use-module ((euphrates monadstate) :select (monadstate-args monadstate-qtags monadstate-ret)))))
 
-%var monad-make/hook
 
-%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
-%use (monadstate-current/p) "./monadstate-current-p.scm"
-%use (monadstate-args monadstate-qtags monadstate-ret) "./monadstate.scm"
 
 (define (monad-make/hook proc)
   (monad-make/no-cont/no-fin

@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-random-element)
+    :export (list-random-element)
+    :use-module ((euphrates big-random-int) :select (big-random-int))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var list-random-element
 
-%use (big-random-int) "./big-random-int.scm"
-%use (raisu) "./raisu.scm"
 
 (define (list-random-element L)
   (when (null? L)

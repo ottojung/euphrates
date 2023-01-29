@@ -1,12 +1,15 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates file-mtime)
+    :export (file-mtime))))
 
-%var file-mtime
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define [file-mtime filepath]
-  (stat:mtime (stat filepath)))
+  (define [file-mtime filepath]
+    (stat:mtime (stat filepath)))
 
-%end
+  ))
 

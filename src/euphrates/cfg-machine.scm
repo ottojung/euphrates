@@ -12,22 +12,22 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates cfg-machine)
+    :export (make-cfg-machine/full make-cfg-machine make-cfg-machine*)
+    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set!))
+    :use-module ((euphrates immutable-hashmap) :select (make-immutable-hashmap immutable-hashmap-foreach))
+    :use-module ((euphrates tilda-s) :select (~s))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates regex-machine) :select (make-regex-machine/full)))))
 
-%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
-%use (make-immutable-hashmap immutable-hashmap-foreach) "./immutable-hashmap.scm"
-%use (~s) "./tilda-s.scm"
-%use (raisu) "./raisu.scm"
-%use (make-regex-machine/full) "./regex-machine.scm"
 
 ;; Context Free Grammar Machine.
 ;; Similar to Regex Machine from ./regex-machine.scm
 ;; It parses arbitrary lists and returns bindings.
 ;; Algorithm is the naive and predictable one,
 ;; so beware the complexity.
-%var make-cfg-machine/full
-%var make-cfg-machine
-%var make-cfg-machine*
 
 ;; Injects functions to call regexes in place of (call "name")
 ;; and returns (values new-grammar main)

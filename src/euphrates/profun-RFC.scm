@@ -12,25 +12,20 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-RFC)
+    :export (make-profun-RFC profun-RFC? profun-RFC-what profun-RFC-set-iter profun-RFC-modify-iter profun-RFC-add-info profun-RFC-insert profun-RFC-reset)
+    :use-module ((euphrates profun-abort) :select (make-profun-abort profun-abort-add-info profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?))
+    :use-module ((euphrates profun-iterator) :select (profun-abort-insert profun-abort-reset)))))
 
 ;; Profun's Request For Clarification
 
 ;; Returned by an agent that needs more info on one of its arguments in order to complete computation.
 ;; For example, if agent receives query `(+ 1 x y)', he may return an RFC for argument `x' to avoid returning infinitely many results.
 
-%var make-profun-RFC
-%var profun-RFC?
-%var profun-RFC-what
-%var profun-RFC-set-iter
-%var profun-RFC-modify-iter
 
-%var profun-RFC-add-info
-%var profun-RFC-insert
-%var profun-RFC-reset
 
-%use (make-profun-abort profun-abort-add-info profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?) "./profun-abort.scm"
-%use (profun-abort-insert profun-abort-reset) "./profun-iterator.scm"
 
 (define (make-profun-RFC what)
   (make-profun-abort 'RFC what))

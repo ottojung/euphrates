@@ -12,24 +12,16 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-state)
+    :export (profun-state-constructor profun-state? profun-state-current profun-state-stack profun-state-failstate profun-state-undo profun-state-make profun-state-build set-profun-state-current profun-state-final? profun-state-finish)
+    :use-module ((euphrates define-type9) :select (define-type9))
+    :use-module ((euphrates profun-instruction) :select (profun-instruction-build)))))
 
-%var profun-state-constructor
-%var profun-state?
-%var profun-state-current
-%var profun-state-stack
-%var profun-state-failstate
-%var profun-state-undo
 
-%var profun-state-make
-%var profun-state-build
 
-%var set-profun-state-current
-%var profun-state-final?
-%var profun-state-finish
 
-%use (define-type9) "./define-type9.scm"
-%use (profun-instruction-build) "./profun-instruction.scm"
 
 (define-type9 <profun-state>
   (profun-state-constructor current stack failstate undo) profun-state?

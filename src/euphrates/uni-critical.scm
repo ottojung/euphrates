@@ -12,15 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates uni-critical)
+    :export (uni-critical-make)
+    :use-module ((euphrates dynamic-thread-mutex-make) :select (dynamic-thread-mutex-make))
+    :use-module ((euphrates dynamic-thread-mutex-lock-p) :select (dynamic-thread-mutex-lock!#p))
+    :use-module ((euphrates dynamic-thread-mutex-unlock-p) :select (dynamic-thread-mutex-unlock!#p))
+    :use-module ((euphrates dynamic-thread-disable-cancel-p) :select (dynamic-thread-disable-cancel#p))
+    :use-module ((euphrates dynamic-thread-enable-cancel-p) :select (dynamic-thread-enable-cancel#p)))))
 
-%var uni-critical-make
 
-%use (dynamic-thread-mutex-make) "./dynamic-thread-mutex-make.scm"
-%use (dynamic-thread-mutex-lock!#p) "./dynamic-thread-mutex-lock-p.scm"
-%use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock-p.scm"
-%use (dynamic-thread-disable-cancel#p) "./dynamic-thread-disable-cancel-p.scm"
-%use (dynamic-thread-enable-cancel#p) "./dynamic-thread-enable-cancel-p.scm"
 
 (define (uni-critical-make)
   (let* ((mut (dynamic-thread-mutex-make))

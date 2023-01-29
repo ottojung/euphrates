@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates syntax-append)
+    :export (syntax-append)
+    :use-module ((euphrates syntax-reverse) :select (syntax-reverse)))))
 
-%var syntax-append
 
-%use (syntax-reverse) "./syntax-reverse.scm"
 
 (define-syntax syntax-append/buf
   (syntax-rules ()

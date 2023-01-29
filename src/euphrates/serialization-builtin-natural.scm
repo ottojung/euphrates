@@ -12,24 +12,26 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates serialization-builtin-natural)
+    :export (serialize-builtin/natural deserialize-builtin/natural)
+    :use-module ((euphrates atomic-box) :select (atomic-box-ref atomic-box? make-atomic-box))
+    :use-module ((euphrates box) :select (box-ref box? make-box))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; NOTE: does not handle `procedure's!
 
-%var serialize-builtin/natural
-%var deserialize-builtin/natural
 
-%use (atomic-box-ref atomic-box? make-atomic-box) "./atomic-box.scm"
-%use (box-ref box? make-box) "./box.scm"
-%use (raisu) "./raisu.scm"
 
-%for (COMPILER "guile")
-(use-modules (ice-9 hash-table))
+(cond-expand
+ (guile
+  (use-modules (ice-9 hash-table))
 
-(define (serialize/human-hashtable? o) (hash-table? o))
-(define (serialize/human-hashtable o) (hash-map->list cons o))
-(define (deserialize/human-hashtable o) (alist->hash-table o))
-%end
+  (define (serialize/human-hashtable? o) (hash-table? o))
+  (define (serialize/human-hashtable o) (hash-map->list cons o))
+  (define (deserialize/human-hashtable o) (alist->hash-table o))
+  ))
 
 (define serialize-builtin/natural
   (case-lambda

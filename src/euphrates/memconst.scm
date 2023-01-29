@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates memconst)
+    :export (memconst))))
 
-%var memconst
 
 ;; memoized constant function
 (define-syntax memconst

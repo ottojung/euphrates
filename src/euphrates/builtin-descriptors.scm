@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates builtin-descriptors)
+    :export (builtin-descriptors)
+    :use-module ((euphrates atomic-box) :select (atomic-box?))
+    :use-module ((euphrates box) :select (box?)))))
 
-%var builtin-descriptors
 
-%use (atomic-box?) "./atomic-box.scm"
-%use (box?) "./box.scm"
 
 (define (make-builtin-descriptor name predicate)
   `((name . ,name)
@@ -40,9 +42,10 @@
    (make-builtin-descriptor 'unspecified (lambda (x) (equal? x (when #f #f))))
    (make-builtin-descriptor 'eof eof-object?)
 
-%for (COMPILER "guile")
-   (make-builtin-descriptor 'hash-table hash-table?)
-%end
+   (cond-expand
+    (guile
+     (make-builtin-descriptor 'hash-table hash-table?)
+     ))
 
    (make-builtin-descriptor 'box box?)
    (make-builtin-descriptor 'atomic-box atomic-box?)

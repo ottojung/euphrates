@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-span-n)
+    :export (list-span-n))))
 
-%var list-span-n
 
 ;; equivalent to (list-take-n n lst, list-drop-n n lst)
 ;; list may be shorter than n

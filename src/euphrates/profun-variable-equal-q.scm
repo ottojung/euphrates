@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-variable-equal-q)
+    :export (profun-variable-equal?)
+    :use-module ((euphrates profun-value) :select (profun-unbound-value?)))))
 
-%var profun-variable-equal?
 
-%use (profun-unbound-value?) "./profun-value.scm"
 
 (define (profun-variable-equal? x y)
   (if (profun-unbound-value? x)

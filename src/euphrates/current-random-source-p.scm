@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates current-random-source-p)
+    :export (current-random-source/p))))
 
-%var current-random-source/p
 
 (define current-random-source/p
   (make-parameter #f))

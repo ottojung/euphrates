@@ -1,13 +1,16 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-to-tree)
+    :export (list->tree))))
 
-%var list->tree
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(use-modules (srfi srfi-11))
+  (use-modules (srfi srfi-11))
 
-%end
+  ))
 
 (define (list->tree lst divider)
   (define (recur tag rest)

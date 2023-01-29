@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates call-with-finally)
+    :export (call-with-finally)
+    :use-module ((euphrates catch-any) :select (catch-any))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (catch-any) "./catch-any.scm"
-%use (raisu) "./raisu.scm"
 
-%var call-with-finally
 
 ;; Runs finally even if exception was thrown (even on thread cancel)
 ;; expr ::= (-> Any)

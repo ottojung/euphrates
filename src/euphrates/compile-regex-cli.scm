@@ -12,16 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates compile-regex-cli)
+    :export (compile-regex-cli:make-IR compile-regex-cli:IR->Regex)
+    :use-module ((euphrates group-by-sequential) :select (group-by/sequential group-by/sequential*))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates list-init) :select (list-init)))))
 
 ;; Deprecated in favor of CFG-machine based DSL
 
-%var compile-regex-cli:make-IR
-%var compile-regex-cli:IR->Regex
 
-%use (group-by/sequential group-by/sequential*) "./group-by-sequential.scm"
-%use (raisu) "./raisu.scm"
-%use (list-init) "./list-init.scm"
 
 (define (compile-regex-cli:make-IR body)
   (define (type-cli body)

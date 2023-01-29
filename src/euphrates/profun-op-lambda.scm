@@ -12,15 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-lambda)
+    :export (profun-op-lambda)
+    :use-module ((euphrates define-tuple) :select (define-tuple))
+    :use-module ((euphrates profun-current-env-p) :select (profun-current-env/p))
+    :use-module ((euphrates profun-op) :select (make-profun-op))
+    :use-module ((euphrates profun-value) :select (profun-value-unwrap))
+    :use-module ((euphrates profun-variable-arity-op-keyword) :select (profun-variable-arity-op-keyword)))))
 
-%var profun-op-lambda
 
-%use (define-tuple) "./define-tuple.scm"
-%use (profun-current-env/p) "./profun-current-env-p.scm"
-%use (make-profun-op) "./profun-op.scm"
-%use (profun-value-unwrap) "./profun-value.scm"
-%use (profun-variable-arity-op-keyword) "./profun-variable-arity-op-keyword.scm"
 
 (define-syntax profun-op-lambda
   (syntax-rules (:with-env)

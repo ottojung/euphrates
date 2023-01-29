@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dynamic-thread-disable-cancel)
+    :export (dynamic-thread-disable-cancel)
+    :use-module ((euphrates dynamic-thread-disable-cancel-p) :select (dynamic-thread-disable-cancel#p))
+    :use-module ((euphrates dynamic-thread-disable-cancel-p-default) :select (dynamic-thread-disable-cancel#p-default)))))
 
-%use (dynamic-thread-disable-cancel#p) "./dynamic-thread-disable-cancel-p.scm"
-%use (dynamic-thread-disable-cancel#p-default) "./dynamic-thread-disable-cancel-p-default.scm"
 
-%var dynamic-thread-disable-cancel
 
 (define (dynamic-thread-disable-cancel)
   ((or (dynamic-thread-disable-cancel#p)

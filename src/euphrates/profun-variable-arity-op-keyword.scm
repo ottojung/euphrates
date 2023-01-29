@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-variable-arity-op-keyword)
+    :export (profun-variable-arity-op-keyword))))
 
-%var profun-variable-arity-op-keyword
 
 (define profun-variable-arity-op-keyword
   'variable-arity)

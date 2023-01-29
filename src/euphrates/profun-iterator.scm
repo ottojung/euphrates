@@ -12,31 +12,22 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-iterator)
+    :export (profun-iterator-copy profun-iterator-insert! profun-iterator-reset! profun-iterator-constructor profun-iterator-db profun-iterator-env profun-iterator-state set-profun-iterator-state! profun-iterator-query set-profun-iterator-query! profun-abort-insert profun-abort-reset)
+    :use-module ((euphrates define-type9) :select (define-type9))
+    :use-module ((euphrates profun-abort) :select (profun-abort-additional profun-abort-iter))
+    :use-module ((euphrates profun-database) :select (profun-database-copy profun-database-extend))
+    :use-module ((euphrates profun-env) :select (profun-env-copy))
+    :use-module ((euphrates profun-error) :select (make-profun-error))
+    :use-module ((euphrates profun-instruction) :select (profun-instruction-arity profun-instruction-build/next profun-instruction-name))
+    :use-module ((euphrates profun-query-handle-underscores) :select (profun-query-handle-underscores))
+    :use-module ((euphrates profun-state) :select (profun-state-build profun-state-current profun-state-stack set-profun-state-current)))))
 
-%var profun-iterator-copy
-%var profun-iterator-insert!
-%var profun-iterator-reset!
 
-%var profun-iterator-constructor
-%var profun-iterator-db
-%var profun-iterator-env
-%var profun-iterator-state
-%var set-profun-iterator-state!
-%var profun-iterator-query
-%var set-profun-iterator-query!
 
-%var profun-abort-insert
-%var profun-abort-reset
 
-%use (define-type9) "./define-type9.scm"
-%use (profun-abort-additional profun-abort-iter) "./profun-abort.scm"
-%use (profun-database-copy profun-database-extend) "./profun-database.scm"
-%use (profun-env-copy) "./profun-env.scm"
-%use (make-profun-error) "./profun-error.scm"
-%use (profun-instruction-arity profun-instruction-build/next profun-instruction-name) "./profun-instruction.scm"
-%use (profun-query-handle-underscores) "./profun-query-handle-underscores.scm"
-%use (profun-state-build profun-state-current profun-state-stack set-profun-state-current) "./profun-state.scm"
 
 (define-type9 <profun-iterator>
   (profun-iterator-constructor db env state query) profun-iterator?

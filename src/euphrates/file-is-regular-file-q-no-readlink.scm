@@ -12,21 +12,25 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates file-is-regular-file-q-no-readlink)
+    :export (file-is-regular-file?/no-readlink))))
 
-%var file-is-regular-file?/no-readlink
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define (file-is-regular-file?/no-readlink path)
-  (define s (stat path #f))
-  (and s (equal? 'regular (stat:type s))))
+  (define (file-is-regular-file?/no-readlink path)
+    (define s (stat path #f))
+    (and s (equal? 'regular (stat:type s))))
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define (file-is-regular-file?/no-readlink path)
-  (file-exists? path))
+  (define (file-is-regular-file?/no-readlink path)
+    (file-exists? path))
 
-%end
+  ))

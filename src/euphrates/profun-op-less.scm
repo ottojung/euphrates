@@ -12,17 +12,19 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-less)
+    :export (profun-op-less)
+    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
+    :use-module ((euphrates profun-accept) :select (profun-ctx-set profun-set))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-request-value) :select (profun-request-value))
+    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-unbound-value?))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var profun-op-less
 
-%use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (profun-ctx-set profun-set) "./profun-accept.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-reject) "./profun-reject.scm"
-%use (profun-request-value) "./profun-request-value.scm"
-%use (profun-bound-value? profun-unbound-value?) "./profun-value.scm"
-%use (raisu) "./raisu.scm"
 
 (define profun-op-less
   (profun-op-lambda

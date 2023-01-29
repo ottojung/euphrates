@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-zip)
+    :export (list-zip))))
 
-%var list-zip
 
 (define (list-zip a b)
   (let loop ((a a) (b b) (buf '()))

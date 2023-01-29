@@ -1,10 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-deduplicate)
+    :export (list-deduplicate/reverse list-deduplicate)
+    :use-module ((euphrates hashset) :select (hashset-add! hashset-has? make-hashset)))))
 
-%var list-deduplicate/reverse
-%var list-deduplicate
 
-%use (hashset-add! hashset-has? make-hashset) "./hashset.scm"
 
 ;; faster!
 (define list-deduplicate/reverse

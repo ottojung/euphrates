@@ -1,27 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates hashset)
+    :export (make-hashset list->hashset vector->hashset hashset-length hashset->list hashset-equal? hashset-has? hashset-ref hashset-add! hashset-difference hashset-intersection hashset-union hashset-foreach hashset-map hashset-clear! hashset-delete!)
+    :use-module ((euphrates fn) :select (fn))
+    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set! make-hashmap))
+    :use-module ((euphrates hashset-obj) :select (hashset-constructor hashset-predicate hashset-value))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (fn) "./fn.scm"
-%use (hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set! make-hashmap) "./hashmap.scm"
-%use (hashset-constructor hashset-predicate hashset-value) "./hashset-obj.scm"
-%use (raisu) "./raisu.scm"
 
-%var make-hashset
-%var list->hashset
-%var vector->hashset
-%var hashset-length
-%var hashset->list
-%var hashset-equal?
-%var hashset-has?
-%var hashset-ref
-%var hashset-add!
-%var hashset-difference
-%var hashset-intersection
-%var hashset-union
-%var hashset-foreach
-%var hashset-map
-%var hashset-clear!
-%var hashset-delete!
 
 (define hashset? hashset-predicate)
 

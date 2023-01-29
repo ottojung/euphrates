@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates cartesian-map)
+    :export (cartesian-map))))
 
-%var cartesian-map
 
 (define (cartesian-map function a b)
   (let lp1 ((ai a))

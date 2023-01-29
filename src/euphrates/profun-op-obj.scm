@@ -12,14 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-obj)
+    :export (profun-op-constructor profun-op? profun-op-arity profun-op-procedure)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var profun-op-constructor
-%var profun-op?
-%var profun-op-arity
-%var profun-op-procedure
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 profun-op-obj
   (profun-op-constructor arity procedure) profun-op?

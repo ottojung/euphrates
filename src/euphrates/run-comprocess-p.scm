@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates run-comprocess-p)
+    :export (run-comprocess/p)
+    :use-module ((euphrates run-comprocess-p-default) :select (run-comprocess/p-default)))))
 
-%var run-comprocess/p
 
-%use (run-comprocess/p-default) "./run-comprocess-p-default.scm"
 
 (define run-comprocess/p
   (make-parameter run-comprocess/p-default))

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assoc-set-value)
+    :export (assoc-set-value))))
 
-%var assoc-set-value
 
 (define (assoc-set-value key value alist0)
   (let loop ((alist alist0))

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-length-geq-q)
+    :export (list-length=<?))))
 
-%var list-length=<?
 
 (define (list-length=<? target-length lst)
   (let loop ((target-length target-length) (lst lst))

@@ -1,19 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates multiset)
+    :export (make-multiset multiset? list->multiset vector->multiset multiset->list multiset-equal? multiset-ref multiset-add! multiset-filter)
+    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-count hashmap-foreach hashmap-ref hashmap-set! make-hashmap))
+    :use-module ((euphrates multiset-obj) :select (multiset-constructor multiset-predicate multiset-value))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (hashmap->alist hashmap-count hashmap-foreach hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
-%use (multiset-constructor multiset-predicate multiset-value) "./multiset-obj.scm"
-%use (raisu) "./raisu.scm"
 
-%var make-multiset
-%var multiset?
-%var list->multiset
-%var vector->multiset
-%var multiset->list
-%var multiset-equal?
-%var multiset-ref
-%var multiset-add!
-%var multiset-filter
 
 (define multiset? multiset-predicate)
 

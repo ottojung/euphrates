@@ -12,31 +12,34 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates system-environment)
+    :export (system-environment-get system-environment-set!))))
 
-%var system-environment-get
-%var system-environment-set!
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define (system-environment-get s)
-  (getenv s))
+  (define (system-environment-get s)
+    (getenv s))
 
-(define (system-environment-set! s v)
-  (setenv s v))
+  (define (system-environment-set! s v)
+    (setenv s v))
 
-%end
-%for (COMPILER "racket")
+  ))
+(cond-expand
+ (racket
 
-(define (system-environment-get s)
-  (getenv s))
+  (define (system-environment-get s)
+    (getenv s))
 
-(define (system-environment-set! s v)
-  (if v
-      (putenv s v) ;; Guile's procedure is called `setenv', except that it accepts #f
-      (environment-variables-set!
-       (current-environment-variables)
-       (string->bytes/locale s (char->integer #\?))
-       #f)))
+  (define (system-environment-set! s v)
+    (if v
+    (putenv s v) ;; Guile's procedure is called `setenv', except that it accepts #f
+    (environment-variables-set!
+     (current-environment-variables)
+     (string->bytes/locale s (char->integer #\?))
+     #f)))
 
-%end
+  ))

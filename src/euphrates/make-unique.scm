@@ -1,13 +1,15 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates make-unique)
+    :export (make-unique))))
 
-%var make-unique
 
 ;; Returns procedure that returns #t if applied to itself, #f otherwise
 ;; But it is probably faster too do (eq? (make-unique) other)
 (define (make-unique)
   (let ((euphrates-unique #f))
     (set! euphrates-unique (lambda (other)
-               (eq? other euphrates-unique)))
+                 (eq? other euphrates-unique)))
     euphrates-unique))
 

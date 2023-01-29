@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates reversed-args)
+    :export (reversed-args))))
 
-%var reversed-args
 
 (define-syntax reversed-args-buf
   (syntax-rules ()

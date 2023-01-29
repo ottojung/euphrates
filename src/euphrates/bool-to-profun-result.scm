@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates bool-to-profun-result)
+    :export (bool->profun-result)
+    :use-module ((euphrates profun-accept) :select (profun-accept))
+    :use-module ((euphrates profun-reject) :select (profun-reject)))))
 
-%var bool->profun-result
 
-%use (profun-accept) "./profun-accept.scm"
-%use (profun-reject) "./profun-reject.scm"
 
 (define (bool->profun-result b)
   (cond

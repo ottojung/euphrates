@@ -12,10 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates shell-safe-alphabet)
+    :export (shell-safe/alphabet shell-safe/alphabet/index))))
 
-%var shell-safe/alphabet
-%var shell-safe/alphabet/index
 
 ;; Does not starts off like base64 table!
 (define shell-safe/alphabet

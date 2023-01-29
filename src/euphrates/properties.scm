@@ -1,12 +1,14 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates properties)
+    :export (define-property)
+    :use-module ((euphrates hashmap) :select (hashmap-ref hashmap-set! make-hashmap))
+    :use-module ((euphrates make-unique) :select (make-unique))
+    :use-module ((euphrates memconst) :select (memconst))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var define-property
 
-%use (hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
-%use (make-unique) "./make-unique.scm"
-%use (memconst) "./memconst.scm"
-%use (raisu) "./raisu.scm"
 
 ;; NOTE:
 ;; this leaks memory. Only use it for scripts.

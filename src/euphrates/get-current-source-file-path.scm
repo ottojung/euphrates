@@ -1,25 +1,29 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates get-current-source-file-path)
+    :export (get-current-source-file-path))))
 
-%var get-current-source-file-path
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define-syntax-rule [get-current-source-file-path]
-  (cdr
-   (assq
-    'filename
-    (current-source-location))))
+  (define-syntax-rule [get-current-source-file-path]
+    (cdr
+     (assq
+      'filename
+      (current-source-location))))
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define-macro (get-current-source-file-path)
-  '(path->string
-    (build-path
-     (this-expression-source-directory)
-     (this-expression-file-name))))
+  (define-macro (get-current-source-file-path)
+    '(path->string
+      (build-path
+       (this-expression-source-directory)
+       (this-expression-file-name))))
 
-%end
+  ))
 

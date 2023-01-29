@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dynamic-thread-critical-make-p-default)
+    :export (#{dynamic-thread-critical-make#p-default}#)
+    :use-module ((euphrates np-thread) :select (np-thread-global-critical-make)))))
 
-%var dynamic-thread-critical-make#p-default
 
-%use (np-thread-global-critical-make) "./np-thread.scm"
 
 (define dynamic-thread-critical-make#p-default
   (lambda () (lambda (section) (section))))

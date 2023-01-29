@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates current-program-path-p)
+    :export (current-program-path/p))))
 
-%var current-program-path/p
 
 (define current-program-path/p
   (make-parameter #f))

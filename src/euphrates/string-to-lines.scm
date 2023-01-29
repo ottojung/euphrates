@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-to-lines)
+    :export (string->lines)
+    :use-module ((euphrates string-split-simple) :select (string-split/simple)))))
 
-%use (string-split/simple) "./string-split-simple.scm"
 
-%var string->lines
 
 (define (string->lines str)
   (string-split/simple str #\newline))

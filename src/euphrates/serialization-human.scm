@@ -12,15 +12,16 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates serialization-human)
+    :export (serialize/human deserialize/human)
+    :use-module ((euphrates assoc-or) :select (assoc-or))
+    :use-module ((euphrates descriptors-registry) :select (descriptors-registry-get))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates serialization-sexp-natural) :select (deserialize/sexp/natural serialize/sexp/natural)))))
 
-%var serialize/human
-%var deserialize/human
 
-%use (assoc-or) "./assoc-or.scm"
-%use (descriptors-registry-get) "./descriptors-registry.scm"
-%use (raisu) "./raisu.scm"
-%use (deserialize/sexp/natural serialize/sexp/natural) "./serialization-sexp-natural.scm"
 
 (define (serialize-type9-fields obj r9d loop)
   (define fields (assoc-or 'fields r9d (raisu 'no-fields-in-r9d r9d obj)))

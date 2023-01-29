@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-or-map)
+    :export (list-or-map))))
 
-%var list-or-map
 
 (define (list-or-map f lst)
   (let loop ((buf lst))

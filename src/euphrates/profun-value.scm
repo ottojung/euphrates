@@ -12,18 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-value)
+    :export (profun-unbound-value? profun-bound-value? profun-value-unwrap profun-value-name profun-value? profun-make-var profun-make-constant profun-make-unbound-var)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var profun-unbound-value?
-%var profun-bound-value?
-%var profun-value-unwrap
-%var profun-value-name
-%var profun-value?
-%var profun-make-var
-%var profun-make-constant
-%var profun-make-unbound-var
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <profun-value>
   (profun-value-constructor value empty? name) profun-value?

@@ -12,15 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-modulo)
+    :export (profun-op-modulo)
+    :use-module ((euphrates profun-accept) :select (profun-accept profun-accept? profun-set))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-request-value) :select (profun-request-value))
+    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-unbound-value?)))))
 
-%var profun-op-modulo
 
-%use (profun-accept profun-accept? profun-set) "./profun-accept.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-reject) "./profun-reject.scm"
-%use (profun-request-value) "./profun-request-value.scm"
-%use (profun-bound-value? profun-unbound-value?) "./profun-value.scm"
 
 ;; Represents equation "y * q + r = x | q != 0 & x => y"
 (define profun-op-modulo

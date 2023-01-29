@@ -12,22 +12,26 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates get-current-program-path)
+    :export (get-current-program-path)
+    :use-module ((euphrates current-program-path-p) :select (current-program-path/p)))))
 
-%var get-current-program-path
 
-%use (current-program-path/p) "./current-program-path-p.scm"
 
-%for (COMPILER "guile")
-(define (get-default-current-program-path)
-  (let ((cmd (command-line)))
-    (if (null? cmd) #f
-        (car (command-line)))))
-%end
-%for (COMPILER "racket")
-(define (get-default-current-program-path)
-  (find-system-path 'run-file))
-%end
+(cond-expand
+ (guile
+  (define (get-default-current-program-path)
+    (let ((cmd (command-line)))
+      (if (null? cmd) #f
+          (car (command-line)))))
+  ))
+(cond-expand
+ (racket
+  (define (get-default-current-program-path)
+    (find-system-path 'run-file))
+  ))
 
 (define (get-current-program-path)
   (or (current-program-path/p)

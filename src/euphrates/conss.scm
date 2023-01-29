@@ -1,16 +1,20 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates conss)
+    :export (conss))))
 
-%var conss
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define conss cons*)
+  (define conss cons*)
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define conss list*)
+  (define conss list*)
 
-%end
+  ))

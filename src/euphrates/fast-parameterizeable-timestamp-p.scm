@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates fast-parameterizeable-timestamp-p)
+    :export (fast-parameterizeable-timestamp/p))))
 
-%var fast-parameterizeable-timestamp/p
 
 (define fast-parameterizeable-timestamp/p
   (make-parameter #f))

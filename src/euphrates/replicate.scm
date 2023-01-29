@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates replicate)
+    :export (replicate))))
 
-%var replicate
 
 (define (replicate n x)
   (if (>= 0 n)

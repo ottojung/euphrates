@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-minimal-element-or)
+    :export (list-minimal-element-or))))
 
-%var list-minimal-element-or
 
 (define (list-minimal-element-or default projection lst)
   (let loop ((lst lst) (min #f) (min-elem #f))

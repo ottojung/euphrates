@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates stringf)
+    :export (stringf)
+    :use-module ((euphrates printf) :select (printf)))))
 
-%use (printf) "./printf.scm"
 
-%var stringf
 
 (define (stringf fmt . args)
   (with-output-to-string

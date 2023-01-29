@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-insert-at)
+    :export (list-insert-at))))
 
-%var list-insert-at
 
 (define (list-insert-at L at element)
   (let loop ((L L) (i 0))

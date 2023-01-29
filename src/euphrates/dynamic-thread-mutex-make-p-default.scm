@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dynamic-thread-mutex-make-p-default)
+    :export (#{dynamic-thread-mutex-make#p-default}#)
+    :use-module ((euphrates np-thread) :select (np-thread-global-mutex-make)))))
 
-%var dynamic-thread-mutex-make#p-default
 
-%use (np-thread-global-mutex-make) "./np-thread.scm"
 
 (define dynamic-thread-mutex-make#p-default
   (lambda _ 0))

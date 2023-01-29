@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assert-raw)
+    :export (#{assert#raw}#)
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (raisu) "./raisu.scm"
 
-%var assert#raw
 
 (define-syntax assert#raw
   (syntax-rules ()

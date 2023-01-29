@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-maximal-element-or)
+    :export (list-maximal-element-or))))
 
-%var list-maximal-element-or
 
 (define (list-maximal-element-or default projection lst)
   (let loop ((lst lst) (max #f) (max-elem #f))

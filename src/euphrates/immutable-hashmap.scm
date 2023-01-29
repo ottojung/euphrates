@@ -12,25 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates immutable-hashmap)
+    :export (make-immutable-hashmap immutable-hashmap? immutable-hashmap-fromlist immutable-hashmap->alist immutable-hashmap-copy immutable-hashmap-foreach immutable-hashmap-map alist->immutable-hashmap immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set immutable-hashmap-clear immutable-hashmap-count)
+    :use-module ((euphrates assoc-any) :select (assoc/any))
+    :use-module ((euphrates fn) :select (fn))
+    :use-module ((euphrates immutable-hashmap-obj) :select (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value)))))
 
-%var make-immutable-hashmap
-%var immutable-hashmap?
-%var immutable-hashmap-fromlist
-%var immutable-hashmap->alist
-%var immutable-hashmap-copy
-%var immutable-hashmap-foreach
-%var immutable-hashmap-map
-%var alist->immutable-hashmap
-%var immutable-hashmap-ref
-%var immutable-hashmap-ref/first
-%var immutable-hashmap-set
-%var immutable-hashmap-clear
-%var immutable-hashmap-count
 
-%use (assoc/any) "./assoc-any.scm"
-%use (fn) "./fn.scm"
-%use (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value) "./immutable-hashmap-obj.scm"
 
 (define immutable-hashmap? immutable-hashmap-predicate)
 

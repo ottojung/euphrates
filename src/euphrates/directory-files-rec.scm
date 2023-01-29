@@ -1,7 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates directory-files-rec)
+    :export (directory-files-rec)
+    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter)))))
 
-%var directory-files-rec
 
 ;; Returns object like this:
 ;;    ((fullname name dirname1 dirname2 dirname3...
@@ -9,39 +12,40 @@
 ;;
 ;;  where dirname1 is the parent dir of the file
 
-%use (directory-files-depth-iter) "./directory-files-depth-iter.scm"
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define directory-files-rec
-  (case-lambda
-   ((directory) (directory-files-rec #f directory))
-   ((include-directories? directory)
-    (define iter
-      (directory-files-depth-iter include-directories? +inf.0 directory))
+  (define directory-files-rec
+    (case-lambda
+     ((directory) (directory-files-rec #f directory))
+     ((include-directories? directory)
+      (define iter
+    (directory-files-depth-iter include-directories? +inf.0 directory))
 
-    (let loop ((buf '()))
-      (define x (iter))
-      (if x
-          (loop (cons x buf))
-          buf)))))
+      (let loop ((buf '()))
+    (define x (iter))
+    (if x
+            (loop (cons x buf))
+            buf)))))
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define [directory-files-rec directory]
-  (define (tostring path)
-    (case path
-      ((same) directory)
-      (else (path->string path))))
+  (define [directory-files-rec directory]
+    (define (tostring path)
+      (case path
+    ((same) directory)
+    (else (path->string path))))
 
-  (fold-files
-   (lambda [f type ctx]
-     (cons (map tostring
-                (cons f (reverse (explode-path f))))
-           ctx))
-   '()
-   directory))
+    (fold-files
+     (lambda [f type ctx]
+       (cons (map tostring
+                  (cons f (reverse (explode-path f))))
+             ctx))
+     '()
+     directory))
 
-%end
+  ))

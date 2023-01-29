@@ -12,29 +12,23 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates define-cli)
+    :export (make-cli/f/basic make-cli/f make-cli make-cli-with-handler lambda-cli with-cli define-cli:raisu/p define-cli:raisu/default-exit define-cli:show-help)
+    :use-module ((euphrates compile-cfg-cli) :select (CFG-CLI->CFG-lang))
+    :use-module ((euphrates get-command-line-arguments) :select (get-command-line-arguments))
+    :use-module ((euphrates cfg-machine) :select (make-cfg-machine))
+    :use-module ((euphrates syntax-flatten-star) :select (syntax-flatten*))
+    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set!))
+    :use-module ((euphrates tilda-a) :select (~a))
+    :use-module ((euphrates list-init) :select (list-init))
+    :use-module ((euphrates list-last) :select (list-last))
+    :use-module ((euphrates compile-cfg-cli-help) :select (CFG-AST->CFG-CLI-help))
+    :use-module ((euphrates immutable-hashmap) :select (alist->immutable-hashmap immutable-hashmap-ref/first immutable-hashmap-foreach))
+    :use-module ((euphrates define-pair) :select (define-pair)))))
 
-%use (CFG-CLI->CFG-lang) "./compile-cfg-cli.scm"
-%use (get-command-line-arguments) "./get-command-line-arguments.scm"
-%use (make-cfg-machine) "./cfg-machine.scm"
-%use (syntax-flatten*) "./syntax-flatten-star.scm"
-%use (make-hashmap hashmap-ref hashmap-set!) "./hashmap.scm"
-%use (~a) "./tilda-a.scm"
-%use (list-init) "./list-init.scm"
-%use (list-last) "./list-last.scm"
-%use (CFG-AST->CFG-CLI-help) "./compile-cfg-cli-help.scm"
-%use (alist->immutable-hashmap immutable-hashmap-ref/first immutable-hashmap-foreach) "./immutable-hashmap.scm"
-%use (define-pair) "./define-pair.scm"
 
-%var make-cli/f/basic
-%var make-cli/f
-%var make-cli
-%var make-cli-with-handler
-%var lambda-cli
-%var with-cli
-%var define-cli:raisu/p
-%var define-cli:raisu/default-exit
-%var define-cli:show-help
 
 (define (tostring x)
   (cond

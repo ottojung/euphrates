@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates big-random-int)
+    :export (big-random-int)
+    :use-module ((euphrates get-current-random-source) :select (get-current-random-source))
+    :use-module ((euphrates srfi-27-generic) :select (random-source-make-integers)))))
 
-%var big-random-int
 
-%use (get-current-random-source) "./get-current-random-source.scm"
-%use (random-source-make-integers) "./srfi-27-generic.scm"
 
 (define big-random-int
   (lambda (max)

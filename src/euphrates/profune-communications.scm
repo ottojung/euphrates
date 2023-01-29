@@ -12,9 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profune-communications)
+    :export (profune-communications)
+    :use-module ((euphrates list-singleton-q) :select (list-singleton?))
+    :use-module ((euphrates profun) :select (profun-eval-query))
+    :use-module ((euphrates profune-communications-hook-p) :select (profune-communications-hook/p))
+    :use-module ((euphrates profune-communicator) :select (profune-communicator-db profune-communicator-handle)))))
 
-%var profune-communications
 
 ;;
 ;; Communications between a client A and a server B.
@@ -60,10 +66,6 @@
 ;; Every communicator must know these words: "whats", "its", "equals", "listen", "more", "inspect", "return", "ok", "bye", "error" and "i-dont-recognize".
 ;;
 
-%use (list-singleton?) "./list-singleton-q.scm"
-%use (profun-eval-query) "./profun.scm"
-%use (profune-communications-hook/p) "./profune-communications-hook-p.scm"
-%use (profune-communicator-db profune-communicator-handle) "./profune-communicator.scm"
 
 (define (profune-communications client-comm server-comm)
   (define hook

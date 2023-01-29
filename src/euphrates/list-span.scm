@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-span)
+    :export (list-span)
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var list-span
 
-%use (raisu) "./raisu.scm"
 
 ;; equivalent to (take n lst, drop n lst)
 ;; list must be of length at least n

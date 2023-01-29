@@ -12,15 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates with-monad)
+    :export (with-monad)
+    :use-module ((euphrates monad-apply) :select (monad-apply))
+    :use-module ((euphrates monad-current-p) :select (monad-current/p))
+    :use-module ((euphrates monad-transformer-current-p) :select (monad-transformer-current/p))
+    :use-module ((euphrates monadfinobj) :select (monadfinobj))
+    :use-module ((euphrates monadstate) :select (monadstate-arg)))))
 
-%var with-monad
 
-%use (monad-apply) "./monad-apply.scm"
-%use (monad-current/p) "./monad-current-p.scm"
-%use (monad-transformer-current/p) "./monad-transformer-current-p.scm"
-%use (monadfinobj) "./monadfinobj.scm"
-%use (monadstate-arg) "./monadstate.scm"
 
 (define-syntax with-monad
   (syntax-rules ()

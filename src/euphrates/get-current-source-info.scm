@@ -1,12 +1,15 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates get-current-source-info)
+    :export (get-current-source-info))))
 
-%var get-current-source-info
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define-syntax-rule [get-current-source-info]
-  (current-source-location))
+  (define-syntax-rule [get-current-source-info]
+    (current-source-location))
 
-%end
+  ))
 

@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates url-get-protocol)
+    :export (url-get-protocol)
+    :use-module ((euphrates url-decompose) :select (url-decompose)))))
 
-%var url-get-protocol
 
-%use (url-decompose) "./url-decompose.scm"
 
 (define (url-get-protocol url)
   (let ((decomp (url-decompose url)))

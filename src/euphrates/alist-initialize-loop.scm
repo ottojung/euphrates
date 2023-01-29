@@ -12,18 +12,20 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates alist-initialize-loop)
+    :export (alist-initialize-loop)
+    :use-module ((euphrates alist-initialize-bang) :select (alist-initialize! alist-initialize!:get-setters alist-initialize!:makelet/static))
+    :use-module ((euphrates assq-or) :select (assq-or))
+    :use-module ((euphrates fn-pair) :select (fn-pair))
+    :use-module ((euphrates hashset) :select (hashset-has? list->hashset))
+    :use-module ((euphrates list-and-map) :select (list-and-map))
+    :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
+    :use-module ((euphrates syntax-append) :select (syntax-append))
+    :use-module ((euphrates syntax-map) :select (syntax-map)))))
 
-%var alist-initialize-loop
 
-%use (alist-initialize! alist-initialize!:get-setters alist-initialize!:makelet/static) "./alist-initialize-bang.scm"
-%use (assq-or) "./assq-or.scm"
-%use (fn-pair) "./fn-pair.scm"
-%use (hashset-has? list->hashset) "./hashset.scm"
-%use (list-and-map) "./list-and-map.scm"
-%use (list-deduplicate) "./list-deduplicate.scm"
-%use (syntax-append) "./syntax-append.scm"
-%use (syntax-map) "./syntax-map.scm"
 
 (define (alist-initialize-loop:all-fields-initialized? names-restriction alist)
   (list-and-map

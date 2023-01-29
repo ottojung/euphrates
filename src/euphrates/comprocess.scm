@@ -1,20 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates comprocess)
+    :export (comprocess comprocess? comprocess-command comprocess-args comprocess-pipe set-comprocess-pipe! comprocess-pid set-comprocess-pid! comprocess-status set-comprocess-status! comprocess-exited? set-comprocess-exited?!)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var comprocess
-%var comprocess?
-%var comprocess-command
-%var comprocess-args
-%var comprocess-pipe
-%var set-comprocess-pipe!
-%var comprocess-pid
-%var set-comprocess-pid!
-%var comprocess-status
-%var set-comprocess-status!
-%var comprocess-exited?
-%var set-comprocess-exited?!
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <comprocess>
   (comprocess command args pipe pid status exited?) comprocess?

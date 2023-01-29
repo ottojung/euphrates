@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates identity-monad)
+    :export (identity-monad)
+    :use-module ((euphrates monad-make-no-cont-no-fin) :select (monad-make/no-cont/no-fin)))))
 
-%var identity-monad
 
-%use (monad-make/no-cont/no-fin) "./monad-make-no-cont-no-fin.scm"
 
 (define identity-monad
   (monad-make/no-cont/no-fin identity))

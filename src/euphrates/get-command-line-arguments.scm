@@ -1,26 +1,30 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates get-command-line-arguments)
+    :export (get-command-line-arguments)
+    :use-module ((euphrates command-line-arguments-p) :select (command-line-argumets/p)))))
 
-%use (command-line-argumets/p) "./command-line-arguments-p.scm"
 
-%var get-command-line-arguments
 
 (define get-command-line-arguments
   (let ((default
           (lambda _
 
-%for (COMPILER "guile")
-            (let ((ret (command-line)))
-              (if (< (length ret) 2)
-                  '()
-                  (cdr ret))))
-%end
-%for (COMPILER "racket")
-                  (vector->list
-                   (current-command-line-arguments)))
-%end
-          ))
+        (cond-expand
+         (guile
+              (let ((ret (command-line)))
+        (if (< (length ret) 2)
+                    '()
+                    (cdr ret))))
+         ))
+      (cond-expand
+       (racket
+            (vector->list
+             (current-command-line-arguments)))
+       ))
+        ))
 
-    (lambda _
-      (or (command-line-argumets/p)
-          (default)))))
+  (lambda _
+    (or (command-line-argumets/p)
+        (default)))))

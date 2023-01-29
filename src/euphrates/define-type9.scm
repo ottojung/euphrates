@@ -12,17 +12,16 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates define-type9)
+    :export (define-type9 define-type9/nobind-descriptor type9-get-record-descriptor type9-get-descriptor-by-name)
+    :use-module ((euphrates define-dumb-record) :select (define-dumb-record))
+    :use-module ((euphrates descriptors-registry) :select (descriptors-registry-add! descriptors-registry-decolisify-name descriptors-registry-get))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates range) :select (range)))))
 
-%var define-type9
-%var define-type9/nobind-descriptor
-%var type9-get-record-descriptor
-%var type9-get-descriptor-by-name
 
-%use (define-dumb-record) "./define-dumb-record.scm"
-%use (descriptors-registry-add! descriptors-registry-decolisify-name descriptors-registry-get) "./descriptors-registry.scm"
-%use (raisu) "./raisu.scm"
-%use (range) "./range.scm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Begin auto-generated content ;;
@@ -218,42 +217,42 @@
 
 (define type9-immutable-accessors
   (vector
-    (vector)
-    (vector r1-a-field-accessor)
-    (vector r2-a-field-accessor r2-b-field-accessor)
-    (vector r3-a-field-accessor r3-b-field-accessor r3-c-field-accessor)
-    (vector r4-a-field-accessor r4-b-field-accessor r4-c-field-accessor r4-d-field-accessor)
-    (vector r5-a-field-accessor r5-b-field-accessor r5-c-field-accessor r5-d-field-accessor r5-e-field-accessor)
-    (vector r6-a-field-accessor r6-b-field-accessor r6-c-field-accessor r6-d-field-accessor r6-e-field-accessor r6-f-field-accessor)
-    (vector r7-a-field-accessor r7-b-field-accessor r7-c-field-accessor r7-d-field-accessor r7-e-field-accessor r7-f-field-accessor r7-g-field-accessor)
-    (vector r8-a-field-accessor r8-b-field-accessor r8-c-field-accessor r8-d-field-accessor r8-e-field-accessor r8-f-field-accessor r8-g-field-accessor r8-h-field-accessor)
-    (vector r9-a-field-accessor r9-b-field-accessor r9-c-field-accessor r9-d-field-accessor r9-e-field-accessor r9-f-field-accessor r9-g-field-accessor r9-h-field-accessor r9-i-field-accessor)))
+   (vector)
+   (vector r1-a-field-accessor)
+   (vector r2-a-field-accessor r2-b-field-accessor)
+   (vector r3-a-field-accessor r3-b-field-accessor r3-c-field-accessor)
+   (vector r4-a-field-accessor r4-b-field-accessor r4-c-field-accessor r4-d-field-accessor)
+   (vector r5-a-field-accessor r5-b-field-accessor r5-c-field-accessor r5-d-field-accessor r5-e-field-accessor)
+   (vector r6-a-field-accessor r6-b-field-accessor r6-c-field-accessor r6-d-field-accessor r6-e-field-accessor r6-f-field-accessor)
+   (vector r7-a-field-accessor r7-b-field-accessor r7-c-field-accessor r7-d-field-accessor r7-e-field-accessor r7-f-field-accessor r7-g-field-accessor)
+   (vector r8-a-field-accessor r8-b-field-accessor r8-c-field-accessor r8-d-field-accessor r8-e-field-accessor r8-f-field-accessor r8-g-field-accessor r8-h-field-accessor)
+   (vector r9-a-field-accessor r9-b-field-accessor r9-c-field-accessor r9-d-field-accessor r9-e-field-accessor r9-f-field-accessor r9-g-field-accessor r9-h-field-accessor r9-i-field-accessor)))
 
 (define type9-mutable-accessors
   (vector
-    (vector)
-    (vector r1m-a-field-accessor)
-    (vector r2m-a-field-accessor r2m-b-field-accessor)
-    (vector r3m-a-field-accessor r3m-b-field-accessor r3m-c-field-accessor)
-    (vector r4m-a-field-accessor r4m-b-field-accessor r4m-c-field-accessor r4m-d-field-accessor)
-    (vector r5m-a-field-accessor r5m-b-field-accessor r5m-c-field-accessor r5m-d-field-accessor r5m-e-field-accessor)
-    (vector r6m-a-field-accessor r6m-b-field-accessor r6m-c-field-accessor r6m-d-field-accessor r6m-e-field-accessor r6m-f-field-accessor)
-    (vector r7m-a-field-accessor r7m-b-field-accessor r7m-c-field-accessor r7m-d-field-accessor r7m-e-field-accessor r7m-f-field-accessor r7m-g-field-accessor)
-    (vector r8m-a-field-accessor r8m-b-field-accessor r8m-c-field-accessor r8m-d-field-accessor r8m-e-field-accessor r8m-f-field-accessor r8m-g-field-accessor r8m-h-field-accessor)
-    (vector r9m-a-field-accessor r9m-b-field-accessor r9m-c-field-accessor r9m-d-field-accessor r9m-e-field-accessor r9m-f-field-accessor r9m-g-field-accessor r9m-h-field-accessor r9m-i-field-accessor)))
+   (vector)
+   (vector r1m-a-field-accessor)
+   (vector r2m-a-field-accessor r2m-b-field-accessor)
+   (vector r3m-a-field-accessor r3m-b-field-accessor r3m-c-field-accessor)
+   (vector r4m-a-field-accessor r4m-b-field-accessor r4m-c-field-accessor r4m-d-field-accessor)
+   (vector r5m-a-field-accessor r5m-b-field-accessor r5m-c-field-accessor r5m-d-field-accessor r5m-e-field-accessor)
+   (vector r6m-a-field-accessor r6m-b-field-accessor r6m-c-field-accessor r6m-d-field-accessor r6m-e-field-accessor r6m-f-field-accessor)
+   (vector r7m-a-field-accessor r7m-b-field-accessor r7m-c-field-accessor r7m-d-field-accessor r7m-e-field-accessor r7m-f-field-accessor r7m-g-field-accessor)
+   (vector r8m-a-field-accessor r8m-b-field-accessor r8m-c-field-accessor r8m-d-field-accessor r8m-e-field-accessor r8m-f-field-accessor r8m-g-field-accessor r8m-h-field-accessor)
+   (vector r9m-a-field-accessor r9m-b-field-accessor r9m-c-field-accessor r9m-d-field-accessor r9m-e-field-accessor r9m-f-field-accessor r9m-g-field-accessor r9m-h-field-accessor r9m-i-field-accessor)))
 
 (define type9-mutable-setters
   (vector
-    (vector)
-    (vector r1m-a-field-setter)
-    (vector r2m-a-field-setter r2m-b-field-setter)
-    (vector r3m-a-field-setter r3m-b-field-setter r3m-c-field-setter)
-    (vector r4m-a-field-setter r4m-b-field-setter r4m-c-field-setter r4m-d-field-setter)
-    (vector r5m-a-field-setter r5m-b-field-setter r5m-c-field-setter r5m-d-field-setter r5m-e-field-setter)
-    (vector r6m-a-field-setter r6m-b-field-setter r6m-c-field-setter r6m-d-field-setter r6m-e-field-setter r6m-f-field-setter)
-    (vector r7m-a-field-setter r7m-b-field-setter r7m-c-field-setter r7m-d-field-setter r7m-e-field-setter r7m-f-field-setter r7m-g-field-setter)
-    (vector r8m-a-field-setter r8m-b-field-setter r8m-c-field-setter r8m-d-field-setter r8m-e-field-setter r8m-f-field-setter r8m-g-field-setter r8m-h-field-setter)
-    (vector r9m-a-field-setter r9m-b-field-setter r9m-c-field-setter r9m-d-field-setter r9m-e-field-setter r9m-f-field-setter r9m-g-field-setter r9m-h-field-setter r9m-i-field-setter)))
+   (vector)
+   (vector r1m-a-field-setter)
+   (vector r2m-a-field-setter r2m-b-field-setter)
+   (vector r3m-a-field-setter r3m-b-field-setter r3m-c-field-setter)
+   (vector r4m-a-field-setter r4m-b-field-setter r4m-c-field-setter r4m-d-field-setter)
+   (vector r5m-a-field-setter r5m-b-field-setter r5m-c-field-setter r5m-d-field-setter r5m-e-field-setter)
+   (vector r6m-a-field-setter r6m-b-field-setter r6m-c-field-setter r6m-d-field-setter r6m-e-field-setter r6m-f-field-setter)
+   (vector r7m-a-field-setter r7m-b-field-setter r7m-c-field-setter r7m-d-field-setter r7m-e-field-setter r7m-f-field-setter r7m-g-field-setter)
+   (vector r8m-a-field-setter r8m-b-field-setter r8m-c-field-setter r8m-d-field-setter r8m-e-field-setter r8m-f-field-setter r8m-g-field-setter r8m-h-field-setter)
+   (vector r9m-a-field-setter r9m-b-field-setter r9m-c-field-setter r9m-d-field-setter r9m-e-field-setter r9m-f-field-setter r9m-g-field-setter r9m-h-field-setter r9m-i-field-setter)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; End of auto-generated content ;;

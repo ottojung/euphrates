@@ -12,14 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-plus-encode)
+    :export (string-plus-encode string-plus-encode/generic string-plus-encoding-make)
+    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet alphanum/alphabet/index))
+    :use-module ((euphrates convert-number-base) :select (convert-number-base/generic)))))
 
-%var string-plus-encode
-%var string-plus-encode/generic
-%var string-plus-encoding-make
 
-%use (alphanum/alphabet alphanum/alphabet/index) "./alphanum-alphabet.scm"
-%use (convert-number-base/generic) "./convert-number-base.scm"
 
 ;; NOTE: this is like the uri-encoding, but compresses better.
 (define-values (string-plus-encode/generic string-plus-encode string-plus-encoding-make)

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates cons-bang)
+    :export (cons!))))
 
-%var cons!
 
 (define-syntax cons!
   (syntax-rules ()

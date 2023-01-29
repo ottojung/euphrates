@@ -12,15 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-unary)
+    :export (profun-op-unary)
+    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
+    :use-module ((euphrates profun-accept) :select (profun-set))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
+    :use-module ((euphrates profun-request-value) :select (profun-request-value))
+    :use-module ((euphrates profun-value) :select (profun-bound-value?)))))
 
-%var profun-op-unary
 
-%use (bool->profun-result) "./bool-to-profun-result.scm"
-%use (profun-set) "./profun-accept.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-request-value) "./profun-request-value.scm"
-%use (profun-bound-value?) "./profun-value.scm"
 
 (define (profun-op-unary action inverse)
   (define (in-op-domain? u)

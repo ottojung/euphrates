@@ -12,16 +12,16 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates descriptors-registry)
+    :export (descriptors-registry-get descriptors-registry-add! descriptors-registry-decolisify-name)
+    :use-module ((euphrates builtin-descriptors) :select (builtin-descriptors))
+    :use-module ((euphrates hashmap) :select (hashmap-count hashmap-ref hashmap-set! make-hashmap))
+    :use-module ((euphrates list-and-map) :select (list-and-map))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var descriptors-registry-get
-%var descriptors-registry-add!
-%var descriptors-registry-decolisify-name
 
-%use (builtin-descriptors) "./builtin-descriptors.scm"
-%use (hashmap-count hashmap-ref hashmap-set! make-hashmap) "./hashmap.scm"
-%use (list-and-map) "./list-and-map.scm"
-%use (raisu) "./raisu.scm"
 
 (define descriptors-registry
   (let ((ret (make-hashmap)))

@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates append-string-file)
+    :export (append-string-file)
+    :use-module ((euphrates open-file-port) :select (open-file-port)))))
 
-%var append-string-file
 
-%use (open-file-port) "./open-file-port.scm"
 
 (define [append-string-file path data]
   (let* [[out (open-file-port path "a")]

@@ -15,11 +15,13 @@
 ;;;; Original sources were published here: https://github.com/aconchillo/guile-json/blob/master/json/parser.scm
 ;;;;
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates json-parse)
+    :export (json-parse)
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var json-parse
 
-%use (raisu) "./raisu.scm"
 
 ;;
 ;; Miscellaneuos helpers
@@ -274,9 +276,9 @@
 
 (define (json-read-unicode-value port)
   (+ (* 4096 (json-read-hex-digit->integer port))
-      (* 256 (json-read-hex-digit->integer port))
-      (* 16 (json-read-hex-digit->integer port))
-      (json-read-hex-digit->integer port)))
+     (* 256 (json-read-hex-digit->integer port))
+     (* 16 (json-read-hex-digit->integer port))
+     (json-read-hex-digit->integer port)))
 
 ;; Unicode codepoint with surrogates is:
 ;;   10000 + (high - D800) + (low - DC00)

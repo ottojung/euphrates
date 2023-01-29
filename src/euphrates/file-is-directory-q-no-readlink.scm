@@ -12,21 +12,25 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates file-is-directory-q-no-readlink)
+    :export (file-is-directory?/no-readlink))))
 
-%var file-is-directory?/no-readlink
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define (file-is-directory?/no-readlink path)
-  (define s (stat path #f))
-  (and s (equal? 'directory (stat:type s))))
+  (define (file-is-directory?/no-readlink path)
+    (define s (stat path #f))
+    (and s (equal? 'directory (stat:type s))))
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define (file-is-directory?/no-readlink path)
-  (directory-exists? path))
+  (define (file-is-directory?/no-readlink path)
+    (directory-exists? path))
 
-%end
+  ))

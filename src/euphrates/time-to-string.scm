@@ -1,11 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates time-to-string)
+    :export (seconds->M/s seconds->H/M/s seconds->time-string)
+    :use-module ((euphrates string-pad) :select (string-pad-L)))))
 
-%var seconds->M/s
-%var seconds->H/M/s
-%var seconds->time-string
 
-%use (string-pad-L) "./string-pad.scm"
 
 (define (seconds->M/s seconds0)
   (define seconds (remainder seconds0 60))

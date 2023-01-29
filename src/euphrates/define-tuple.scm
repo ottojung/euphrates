@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates define-tuple)
+    :export (define-tuple))))
 
-%var define-tuple
 
 (define-syntax define-tuple
   (syntax-rules ()

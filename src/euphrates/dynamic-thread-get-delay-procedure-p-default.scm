@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dynamic-thread-get-delay-procedure-p-default)
+    :export (#{dynamic-thread-get-delay-procedure#p-default}#)
+    :use-module ((euphrates dynamic-thread-sleep-p) :select (dynamic-thread-sleep#p))
+    :use-module ((euphrates dynamic-thread-sleep) :select (dynamic-thread-sleep))
+    :use-module ((euphrates dynamic-thread-get-wait-delay) :select (dynamic-thread-get-wait-delay)))))
 
-%use (dynamic-thread-sleep#p) "./dynamic-thread-sleep-p.scm"
-%use (dynamic-thread-sleep) "./dynamic-thread-sleep.scm"
-%use (dynamic-thread-get-wait-delay) "./dynamic-thread-get-wait-delay.scm"
 
-%var dynamic-thread-get-delay-procedure#p-default
 
 (define (dynamic-thread-get-delay-procedure#p-default)
   (let ((timeout (dynamic-thread-get-wait-delay))

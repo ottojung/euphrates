@@ -1,59 +1,47 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates hashmap)
+    :export (make-hashmap hashmap? hashmap->alist hashmap-copy hashmap-foreach hashmap-map alist->hashmap multi-alist->hashmap hashmap-has? hashmap-ref hashmap-set! hashmap-clear! hashmap-count hashmap-delete! hashmap-merge! hashmap-merge)
+    :use-module ((euphrates fn) :select (fn))
+    :use-module ((euphrates hashmap-obj) :select (hashmap-constructor hashmap-predicate))
+    :use-module ((euphrates make-unique) :select (make-unique))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var make-hashmap
-%var hashmap?
-%var hashmap->alist
-%var hashmap-copy
-%var hashmap-foreach
-%var hashmap-map
-%var alist->hashmap
-%var multi-alist->hashmap
-%var hashmap-has?
-%var hashmap-ref
-%var hashmap-set!
-%var hashmap-clear!
-%var hashmap-count
-%var hashmap-delete!
-%var hashmap-merge!
-%var hashmap-merge
 
-%use (fn) "./fn.scm"
-%use (hashmap-constructor hashmap-predicate) "./hashmap-obj.scm"
-%use (make-unique) "./make-unique.scm"
-%use (raisu) "./raisu.scm"
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(use-modules (ice-9 hash-table))
+  (use-modules (ice-9 hash-table))
 
-(define hashmap? hashmap-predicate)
-(define make-hashmap hashmap-constructor)
-(define hashmap-true-ref hash-ref)
-(define hashmap-set! hash-set!)
-(define hashmap-clear! hash-clear!)
+  (define hashmap? hashmap-predicate)
+  (define make-hashmap hashmap-constructor)
+  (define hashmap-true-ref hash-ref)
+  (define hashmap-set! hash-set!)
+  (define hashmap-clear! hash-clear!)
 
-(define alist->hashmap alist->hash-table)
+  (define alist->hashmap alist->hash-table)
 
-(define (hashmap->alist h)
-  (hash-map->list cons h))
+  (define (hashmap->alist h)
+    (hash-map->list cons h))
 
-(define (hashmap-copy h)
-  (let [[ret (make-hashmap)]]
-    (hash-for-each
-     (lambda (key value)
-       (hash-set! ret key value))
-     h)
-    ret))
+  (define (hashmap-copy h)
+    (let [[ret (make-hashmap)]]
+      (hash-for-each
+       (lambda (key value)
+     (hash-set! ret key value))
+       h)
+      ret))
 
-(define hashmap-foreach hash-for-each)
+  (define hashmap-foreach hash-for-each)
 
-(define (hashmap-count H) (hash-count (const #t) H))
+  (define (hashmap-count H) (hash-count (const #t) H))
 
-(define (hashmap-delete! H key)
-  (hash-remove! H key))
+  (define (hashmap-delete! H key)
+    (hash-remove! H key))
 
-%end
+  ))
 
 (define hashmap-ref-default-value
   (make-unique))

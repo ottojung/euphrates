@@ -1,18 +1,22 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates eval-in-current-namespace)
+    :export (eval-in-current-namespace))))
 
-%var eval-in-current-namespace
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define (eval-in-current-namespace body)
-  (eval body (interaction-environment)))
+  (define (eval-in-current-namespace body)
+    (eval body (interaction-environment)))
 
-%end
+  ))
 
-%for (COMPILER "racket")
+(cond-expand
+ (racket
 
-(define (eval-in-current-namespace body)
-  (eval body))
+  (define (eval-in-current-namespace body)
+    (eval body))
 
-%end
+  ))

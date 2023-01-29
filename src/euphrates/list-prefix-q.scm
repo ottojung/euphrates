@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-prefix-q)
+    :export (list-prefix?))))
 
-%var list-prefix?
 
 (define (list-prefix? prefix-lst target-lst)
   (let loop ((prefix-lst prefix-lst)

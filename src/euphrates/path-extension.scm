@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates path-extension)
+    :export (path-extension))))
 
 ;; Returns extension with a dot or ""
-%var path-extension
 
 (define (path-extension str)
   (let ((index (string-index-right str #\.)))

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assq-set-value)
+    :export (assq-set-value))))
 
-%var assq-set-value
 
 (define (assq-set-value key value alist0)
   (let loop ((alist alist0))

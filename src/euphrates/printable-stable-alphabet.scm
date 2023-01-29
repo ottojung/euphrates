@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates printable-stable-alphabet)
+    :export (printable/stable/alphabet))))
 
-%var printable/stable/alphabet
 
 ;; Starts off like shell-nondisrupt/alphabet
 (define printable/stable/alphabet

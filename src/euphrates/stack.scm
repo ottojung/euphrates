@@ -12,21 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates stack)
+    :export (stack-make stack? stack-empty? stack-push! stack-pop! stack-peek stack-discard! stack->list list->stack stack-unload!)
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates stack-obj) :select (set-stack-lst! stack-constructor stack-lst stack-predicate)))))
 
-%var stack-make
-%var stack?
-%var stack-empty?
-%var stack-push!
-%var stack-pop!
-%var stack-peek
-%var stack-discard!
-%var stack->list
-%var list->stack
-%var stack-unload!
 
-%use (raisu) "./raisu.scm"
-%use (set-stack-lst! stack-constructor stack-lst stack-predicate) "./stack-obj.scm"
 
 (define stack? stack-predicate)
 

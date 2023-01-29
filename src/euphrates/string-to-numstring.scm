@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-to-numstring)
+    :export (string->numstring)
+    :use-module ((euphrates list-intersperse) :select (list-intersperse)))))
 
-%var string->numstring
 
-%use (list-intersperse) "./list-intersperse.scm"
 
 (define (string->numstring s)
   (apply

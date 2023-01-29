@@ -12,16 +12,18 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-equals)
+    :export (profun-op-equals)
+    :use-module ((euphrates list-and-map) :select (list-and-map))
+    :use-module ((euphrates profun-accept) :select (profun-ctx-set profun-set))
+    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
+    :use-module ((euphrates profun-reject) :select (profun-reject))
+    :use-module ((euphrates profun-request-value) :select (profun-request-value))
+    :use-module ((euphrates profun-value) :select (profun-unbound-value?)))))
 
-%var profun-op-equals
 
-%use (list-and-map) "./list-and-map.scm"
-%use (profun-ctx-set profun-set) "./profun-accept.scm"
-%use (profun-op-lambda) "./profun-op-lambda.scm"
-%use (profun-reject) "./profun-reject.scm"
-%use (profun-request-value) "./profun-request-value.scm"
-%use (profun-unbound-value?) "./profun-value.scm"
 
 (define (profun-op-equals-argument? lst)
   (define (pairs? elem)

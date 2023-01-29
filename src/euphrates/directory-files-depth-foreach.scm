@@ -12,9 +12,12 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates directory-files-depth-foreach)
+    :export (directory-files-depth-foreach)
+    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter)))))
 
-%var directory-files-depth-foreach
 
 ;; Calls `fun' ob objects like this:
 ;;   (fullname name dirname1 dirname2 dirname3...)
@@ -22,7 +25,6 @@
 ;;
 ;;  where dirname1 is the parent dir of the file
 
-%use (directory-files-depth-iter) "./directory-files-depth-iter.scm"
 
 (define directory-files-depth-foreach
   (case-lambda

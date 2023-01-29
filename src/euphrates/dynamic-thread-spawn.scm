@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dynamic-thread-spawn)
+    :export (dynamic-thread-spawn)
+    :use-module ((euphrates dynamic-thread-spawn-p) :select (dynamic-thread-spawn#p))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%use (dynamic-thread-spawn#p) "./dynamic-thread-spawn-p.scm"
-%use (raisu) "./raisu.scm"
 
-%var dynamic-thread-spawn
 
 (define (dynamic-thread-spawn thunk)
   ((or (dynamic-thread-spawn#p)

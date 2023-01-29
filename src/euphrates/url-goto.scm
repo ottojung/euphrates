@@ -12,13 +12,15 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates url-goto)
+    :export (url-goto)
+    :use-module ((euphrates url-get-hostname-and-port) :select (url-get-hostname-and-port))
+    :use-module ((euphrates url-get-path) :select (url-get-path))
+    :use-module ((euphrates url-get-protocol) :select (url-get-protocol)))))
 
-%var url-goto
 
-%use (url-get-hostname-and-port) "./url-get-hostname-and-port.scm"
-%use (url-get-path) "./url-get-path.scm"
-%use (url-get-protocol) "./url-get-protocol.scm"
 
 (define (url-goto base relative)
   (cond

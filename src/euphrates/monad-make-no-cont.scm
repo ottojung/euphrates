@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monad-make-no-cont)
+    :export (monad-make/no-cont)
+    :use-module ((euphrates monadobj) :select (monadobj-constructor)))))
 
-%var monad-make/no-cont
 
-%use (monadobj-constructor) "./monadobj.scm"
 
 (define (monad-make/no-cont proc)
   (define uses-continuations? #f)

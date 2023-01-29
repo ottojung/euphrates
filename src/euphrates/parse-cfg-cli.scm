@@ -12,18 +12,20 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates parse-cfg-cli)
+    :export (CFG-CLI->CFG-AST)
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates list-split-on) :select (list-split-on))
+    :use-module ((euphrates tilda-a) :select (~a)))))
 
 ;;
 ;; In this file we translate CFG-CLI definitions
 ;; into CFG-AST language.
 ;;
 
-%var CFG-CLI->CFG-AST
 
-%use (raisu) "./raisu.scm"
-%use (list-split-on) "./list-split-on.scm"
-%use (~a) "./tilda-a.scm"
 
 (define (CFG-CLI->CFG-AST body)
   ;; Example body:

@@ -1,9 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-tag-next)
+    :export (list-tag/next list-tag/next/rev list-untag/next))))
 
-%var list-tag/next
-%var list-tag/next/rev
-%var list-untag/next
 
 (define (list-tag/next/rev first-tag predicate L)
   (let loop ((rest L) (buf '()) (next '()) (cur first-tag))

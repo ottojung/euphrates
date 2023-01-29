@@ -12,16 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates prefixtree-obj)
+    :export (prefixtree prefixtree? prefixtree-value set-prefixtree-value! prefixtree-children set-prefixtree-children!)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var prefixtree
-%var prefixtree?
-%var prefixtree-value
-%var set-prefixtree-value!
-%var prefixtree-children
-%var set-prefixtree-children!
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <prefixtree>
   (prefixtree value children) prefixtree?

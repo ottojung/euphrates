@@ -1,10 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates get-directory-name)
+    :export (get-directory-name))))
 
-%var get-directory-name
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define get-directory-name dirname)
+  (define get-directory-name dirname)
 
-%end
+  ))

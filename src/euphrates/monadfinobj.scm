@@ -12,13 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monadfinobj)
+    :export (monadfinobj monadfinobj? monadfinobj-lval)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var monadfinobj
-%var monadfinobj?
-%var monadfinobj-lval
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <monadfinobj>
   (monadfinobj lval) monadfinobj?

@@ -12,15 +12,16 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates petri-net-parse)
+    :export (petri-net-parse petri-lambda-net)
+    :use-module ((euphrates petri-net-make) :select (petri-net-make))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates list-and-map) :select (list-and-map))
+    :use-module ((euphrates hashmap) :select (multi-alist->hashmap hashmap-foreach hashmap-map)))))
 
-%var petri-net-parse
-%var petri-lambda-net
 
-%use (petri-net-make) "./petri-net-make.scm"
-%use (raisu) "./raisu.scm"
-%use (list-and-map) "./list-and-map.scm"
-%use (multi-alist->hashmap hashmap-foreach hashmap-map) "./hashmap.scm"
 
 (define (petri-net-parse-verify-types list-of-transitions)
 

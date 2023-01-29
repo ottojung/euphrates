@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates url-decompose)
+    :export (url-decompose)
+    :use-module ((euphrates list-find-first) :select (list-find-first))
+    :use-module ((euphrates string-split-3) :select (string-split-3)))))
 
-%var url-decompose
 
-%use (list-find-first) "./list-find-first.scm"
-%use (string-split-3) "./string-split-3.scm"
 
 ;; Parse a URL into 5 components:
 ;;    <scheme>://<netloc>/<path>?<query>#<fragment>

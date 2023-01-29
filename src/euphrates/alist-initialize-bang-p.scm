@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates alist-initialize-bang-p)
+    :export (alist-initialize!/p))))
 
-%var alist-initialize!/p
 
 (define alist-initialize!/p
   (make-parameter #f))

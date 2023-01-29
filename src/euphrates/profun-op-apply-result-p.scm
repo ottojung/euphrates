@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-op-apply-result-p)
+    :export (#{profun-op-apply/result#p}#))))
 
-%var profun-op-apply/result#p
 
 (define profun-op-apply/result#p
   (make-parameter #f))

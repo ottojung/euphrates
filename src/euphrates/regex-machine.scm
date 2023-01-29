@@ -12,10 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates regex-machine)
+    :export (make-regex-machine/full make-regex-machine make-regex-machine*)
+    :use-module ((euphrates immutable-hashmap) :select (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach))
+    :use-module ((euphrates hashmap) :select (hashmap-set!)))))
 
-%use (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set immutable-hashmap-foreach) "./immutable-hashmap.scm"
-%use (hashmap-set!) "./hashmap.scm"
 
 ;;
 ;; Regex Machine.
@@ -43,9 +46,6 @@
 ;;   (? expr)
 ;;   (and* expr)
 
-%var make-regex-machine/full
-%var make-regex-machine
-%var make-regex-machine*
 
 (define (match-kleene-star pattern hash buf cont)
   (define expr (car pattern))

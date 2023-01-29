@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates string-split-3)
+    :export (string-split-3)
+    :use-module ((euphrates list-prefix-q) :select (list-prefix?))
+    :use-module ((euphrates list-drop-n) :select (list-drop-n))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var string-split-3
 
-%use (list-prefix?) "./list-prefix-q.scm"
-%use (list-drop-n) "./list-drop-n.scm"
-%use (raisu) "./raisu.scm"
 
 (define (string-split-3 delimiter str)
   (define (string-split-first/lambda predicate str)

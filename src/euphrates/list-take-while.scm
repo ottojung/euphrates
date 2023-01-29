@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-take-while)
+    :export (list-take-while))))
 
-%var list-take-while
 
 (define (list-take-while pred lst)
   (let loop ((lst lst))

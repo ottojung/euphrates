@@ -12,10 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates shell-nondisrupt-alphabet)
+    :export (shell-nondisrupt/alphabet shell-nondisrupt/alphabet/index))))
 
-%var shell-nondisrupt/alphabet
-%var shell-nondisrupt/alphabet/index
 
 ;; Characters that will not make shell words split.
 

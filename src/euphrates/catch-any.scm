@@ -1,15 +1,19 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates catch-any)
+    :export (catch-any))))
 
-%var catch-any
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define [catch-any body handler]
-  (catch #t body
-    (lambda err (handler err))))
+  (define [catch-any body handler]
+    (catch #t body
+       (lambda err (handler err))))
 
-%end
-%for (COMPILER "racket")
-;; TODO
-%end
+  ))
+(cond-expand
+ (racket
+  ;; TODO
+  ))

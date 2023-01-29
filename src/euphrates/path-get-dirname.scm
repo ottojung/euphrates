@@ -12,12 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates path-get-dirname)
+    :export (path-get-dirname)
+    :use-module ((euphrates string-split-simple) :select (string-split/simple))
+    :use-module ((euphrates list-init) :select (list-init)))))
 
-%var path-get-dirname
 
-%use (string-split/simple) "./string-split-simple.scm"
-%use (list-init) "./list-init.scm"
 
 (define (path-get-dirname path)
   (string-join

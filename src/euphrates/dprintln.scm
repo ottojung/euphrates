@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dprintln)
+    :export (dprintln)
+    :use-module ((euphrates dprint) :select (dprint))
+    :use-module ((euphrates conss) :select (conss)))))
 
-%use (dprint) "./dprint.scm"
-%use (conss) "./conss.scm"
 
-%var dprintln
 
 (define [dprintln fmt . args]
   (apply dprint (conss (string-append fmt "\n") args)))

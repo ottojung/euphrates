@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dynamic-thread-sleep)
+    :export (dynamic-thread-sleep)
+    :use-module ((euphrates dynamic-thread-sleep-p) :select (dynamic-thread-sleep#p))
+    :use-module ((euphrates dynamic-thread-sleep-p-default) :select (dynamic-thread-sleep#p-default)))))
 
-%use (dynamic-thread-sleep#p) "./dynamic-thread-sleep-p.scm"
-%use (dynamic-thread-sleep#p-default) "./dynamic-thread-sleep-p-default.scm"
 
-%var dynamic-thread-sleep
 
 (define (dynamic-thread-sleep us)
   ((or (dynamic-thread-sleep#p)

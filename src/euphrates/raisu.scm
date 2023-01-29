@@ -1,19 +1,23 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates raisu)
+    :export (raisu))))
 
-%var raisu
 
 ;; One-way exceptions (non-recoverable / not continuable)
 
-%for (COMPILER "guile")
+(cond-expand
+ (guile
 
-(define (raisu x . xs)
-  (apply throw (cons x xs)))
+  (define (raisu x . xs)
+    (apply throw (cons x xs)))
 
-%end
-%for (COMPILER "racket")
+  ))
+(cond-expand
+ (racket
 
-(define (raisu x . xs)
-  (raise (cons x xs)))
+  (define (raisu x . xs)
+    (raise (cons x xs)))
 
-%end
+  ))

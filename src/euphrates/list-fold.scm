@@ -1,8 +1,10 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-fold)
+    :export (list-fold))))
 
 ;; Almost like racket's `for/list'
-%var list-fold
 
 (define-syntax list-fold
   (syntax-rules ()

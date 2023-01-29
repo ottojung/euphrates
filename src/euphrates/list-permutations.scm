@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-permutations)
+    :export (list-permutations))))
 
-%var list-permutations
 
 ;; adopted from: https://github.com/racket/racket/blob/master/racket/collects/racket/list.rkt#L691
 ;; license: MIT
@@ -39,8 +41,8 @@
     [(2) (let ([a (car l)] [b (cadr l)] [c (caddr l)] [d (cadddr l)]
                [l (cddddr l)])
            (case i [(0)  `(,c ,b ,d ,a ,@l)]
-                   [(1)  `(,c ,d ,a ,b ,@l)]
-                   [else `(,d ,b ,a ,c ,@l)]))]
+                 [(1)  `(,c ,d ,a ,b ,@l)]
+                 [else `(,d ,b ,a ,c ,@l)]))]
     [else (let loop ([n i] [l1 '()] [r1 l])
             (if (> n 0) (loop (- n 1) (cons (car r1) l1) (cdr r1))
                 (let loop ([n (- j i)] [l2 '()] [r2 (cdr r1)])

@@ -12,23 +12,24 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates np-thread-parameterize)
+    :export (np-thread-parameterize-env with-np-thread-env/non-interruptible)
+    :use-module ((euphrates dynamic-thread-spawn-p) :select (dynamic-thread-spawn#p))
+    :use-module ((euphrates dynamic-thread-cancel-p) :select (dynamic-thread-cancel#p))
+    :use-module ((euphrates dynamic-thread-disable-cancel-p) :select (dynamic-thread-disable-cancel#p))
+    :use-module ((euphrates dynamic-thread-enable-cancel-p) :select (dynamic-thread-enable-cancel#p))
+    :use-module ((euphrates dynamic-thread-yield-p) :select (dynamic-thread-yield#p))
+    :use-module ((euphrates dynamic-thread-sleep-p) :select (dynamic-thread-sleep#p))
+    :use-module ((euphrates dynamic-thread-mutex-make-p) :select (dynamic-thread-mutex-make#p))
+    :use-module ((euphrates dynamic-thread-mutex-lock-p) :select (dynamic-thread-mutex-lock!#p))
+    :use-module ((euphrates dynamic-thread-mutex-unlock-p) :select (dynamic-thread-mutex-unlock!#p))
+    :use-module ((euphrates dynamic-thread-critical-make-p) :select (dynamic-thread-critical-make#p))
+    :use-module ((euphrates np-thread) :select (np-thread-make-env)))))
 
-%var np-thread-parameterize-env
-%var with-np-thread-env/non-interruptible
 
-%use (dynamic-thread-spawn#p) "./dynamic-thread-spawn-p.scm"
-%use (dynamic-thread-cancel#p) "./dynamic-thread-cancel-p.scm"
-%use (dynamic-thread-disable-cancel#p) "./dynamic-thread-disable-cancel-p.scm"
-%use (dynamic-thread-enable-cancel#p) "./dynamic-thread-enable-cancel-p.scm"
-%use (dynamic-thread-yield#p) "./dynamic-thread-yield-p.scm"
-%use (dynamic-thread-sleep#p) "./dynamic-thread-sleep-p.scm"
-%use (dynamic-thread-mutex-make#p) "./dynamic-thread-mutex-make-p.scm"
-%use (dynamic-thread-mutex-lock!#p) "./dynamic-thread-mutex-lock-p.scm"
-%use (dynamic-thread-mutex-unlock!#p) "./dynamic-thread-mutex-unlock-p.scm"
-%use (dynamic-thread-critical-make#p) "./dynamic-thread-critical-make-p.scm"
 
-%use (np-thread-make-env) "./np-thread.scm"
 
 ;; Disables critical zones because in non-interruptible mode
 ;; user can assure atomicity by just not calling yield during its evalution.

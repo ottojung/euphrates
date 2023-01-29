@@ -12,17 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates monadstateobj)
+    :export (monadstateobj monadstateobj? monadstateobj-lval monadstateobj-cont monadstateobj-qvar monadstateobj-qval monadstateobj-qtags)
+    :use-module ((euphrates define-type9) :select (define-type9)))))
 
-%var monadstateobj
-%var monadstateobj?
-%var monadstateobj-lval
-%var monadstateobj-cont
-%var monadstateobj-qvar
-%var monadstateobj-qval
-%var monadstateobj-qtags
 
-%use (define-type9) "./define-type9.scm"
 
 (define-type9 <monadstateobj>
   (monadstateobj lval cont qvar qval qtags) monadstateobj?

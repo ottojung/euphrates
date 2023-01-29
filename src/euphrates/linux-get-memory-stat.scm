@@ -12,16 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates linux-get-memory-stat)
+    :export (linux-get-memory-stat linux-get-memory-free%)
+    :use-module ((euphrates read-lines) :select (read/lines))
+    :use-module ((euphrates string-to-words) :select (string->words))
+    :use-module ((euphrates comp) :select (comp))
+    :use-module ((euphrates list-last) :select (list-last))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var linux-get-memory-stat
-%var linux-get-memory-free%
 
-%use (read/lines) "./read-lines.scm"
-%use (string->words) "./string-to-words.scm"
-%use (comp) "./comp.scm"
-%use (list-last) "./list-last.scm"
-%use (raisu) "./raisu.scm"
 
 (define linux-memory-file "/proc/meminfo")
 (define linux-memory-total-prefix "MemTotal:")

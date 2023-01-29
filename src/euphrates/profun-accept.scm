@@ -12,24 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates profun-accept)
+    :export (profun-accept make-profun-accept profun-accept? profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-set profun-ctx-set profun-set-meta profun-set-parameter)
+    :use-module ((euphrates assq-set-value) :select (assq-set-value))
+    :use-module ((euphrates define-type9) :select (define-type9))
+    :use-module ((euphrates profun-meta-key) :select (profun-meta-key))
+    :use-module ((euphrates profun-varname-q) :select (profun-varname?))
+    :use-module ((euphrates raisu) :select (raisu)))))
 
-%var profun-accept
-%var make-profun-accept
-%var profun-accept?
-%var profun-accept-alist
-%var profun-accept-ctx
-%var profun-accept-ctx-changed?
-%var profun-set
-%var profun-ctx-set
-%var profun-set-meta
-%var profun-set-parameter
 
-%use (assq-set-value) "./assq-set-value.scm"
-%use (define-type9) "./define-type9.scm"
-%use (profun-meta-key) "./profun-meta-key.scm"
-%use (profun-varname?) "./profun-varname-q.scm"
-%use (raisu) "./raisu.scm"
 
 (define-type9 profun-accept-obj
   (profun-accept-constructor alist context context-changed?) profun-accept-obj?

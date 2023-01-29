@@ -12,12 +12,12 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates lexical-scope-obj)
+    :export (lexical-scope-wrap lexical-scope? lexical-scope-unwrap)
+    :use-module ((euphrates define-newtype) :select (define-newtype)))))
 
-%var lexical-scope-wrap
-%var lexical-scope?
-%var lexical-scope-unwrap
 
-%use (define-newtype) "./define-newtype.scm"
 
 (define-newtype lexical-scope-wrap lexical-scope? lexical-scope-unwrap)

@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates assq-or)
+    :export (assq-or))))
 
-%var assq-or
 
 (define-syntax assq-or
   (syntax-rules ()

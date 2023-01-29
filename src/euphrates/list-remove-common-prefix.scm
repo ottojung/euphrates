@@ -12,9 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-remove-common-prefix)
+    :export (list-remove-common-prefix))))
 
-%var list-remove-common-prefix
 
 (define (list-remove-common-prefix as bs)
   (let loop ((as as) (bs bs))

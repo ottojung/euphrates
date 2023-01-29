@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates random-choice)
+    :export (random-choice)
+    :use-module ((euphrates big-random-int) :select (big-random-int)))))
 
-%use (big-random-int) "./big-random-int.scm"
 
-%var random-choice
 
 (define (random-choice len alphabet#vector)
   (let ((size (vector-length alphabet#vector)))

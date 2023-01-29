@@ -12,11 +12,13 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates vector-random-shuffle-bang)
+    :export (vector-random-shuffle!)
+    :use-module ((euphrates big-random-int) :select (big-random-int)))))
 
-%var vector-random-shuffle!
 
-%use (big-random-int) "./big-random-int.scm"
 
 (define (vector-random-shuffle! v)
   (let ((n (- (vector-length v) 1)))

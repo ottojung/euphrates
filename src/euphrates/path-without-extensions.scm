@@ -1,7 +1,9 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates path-without-extensions)
+    :export (path-without-extensions))))
 
-%var path-without-extensions
 
 (define (path-without-extensions str)
   (let ((index (string-index str #\.)))

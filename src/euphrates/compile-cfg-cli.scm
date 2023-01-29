@@ -12,7 +12,14 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates compile-cfg-cli)
+    :export (CFG-AST->CFG-lang CFG-CLI->CFG-lang CFG-lang-modifier-char?)
+    :use-module ((euphrates hashset) :select (hashset-has? make-hashset))
+    :use-module ((euphrates parse-cfg-cli) :select (CFG-CLI->CFG-AST))
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates tilda-a) :select (~a)))))
 
 ;;
 ;; In this file we translate CFG-CLI definitions
@@ -30,14 +37,7 @@
 ;;     JUNE-OPTS* : -f3 / -f4)
 ;;
 
-%var CFG-AST->CFG-lang
-%var CFG-CLI->CFG-lang
-%var CFG-lang-modifier-char?
 
-%use (hashset-has? make-hashset) "./hashset.scm"
-%use (CFG-CLI->CFG-AST) "./parse-cfg-cli.scm"
-%use (raisu) "./raisu.scm"
-%use (~a) "./tilda-a.scm"
 
 (define (CFG-lang-modifier-char->CFG-function c)
   (case c

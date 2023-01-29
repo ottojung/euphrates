@@ -1,9 +1,11 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates dprint-p)
+    :export (#{dprint#p}#)
+    :use-module ((euphrates dprint-p-default) :select (dprint#p-default)))))
 
-%use (dprint#p-default) "./dprint-p-default.scm"
 
-%var dprint#p
 
 (define dprint#p
   (make-parameter dprint#p-default))

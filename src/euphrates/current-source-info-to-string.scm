@@ -1,11 +1,13 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates current-source-info-to-string)
+    :export (current-source-info->string)
+    :use-module ((euphrates remove-common-prefix) :select (remove-common-prefix))
+    :use-module ((euphrates get-current-directory) :select (get-current-directory))
+    :use-module ((euphrates tilda-a) :select (~a)))))
 
-%use (remove-common-prefix) "./remove-common-prefix.scm"
-%use (get-current-directory) "./get-current-directory.scm"
-%use (~a) "./tilda-a.scm"
 
-%var current-source-info->string
 
 (define (current-source-info->string info)
   (let* ((linei (assq 'line info))

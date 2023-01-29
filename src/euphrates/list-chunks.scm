@@ -1,10 +1,12 @@
 
-%run guile
+(cond-expand
+ (guile
+  (define-module (euphrates list-chunks)
+    :export (list-chunks)
+    :use-module ((euphrates raisu) :select (raisu))
+    :use-module ((euphrates list-span-n) :select (list-span-n)))))
 
-%var list-chunks
 
-%use (raisu) "./raisu.scm"
-%use (list-span-n) "./list-span-n.scm"
 
 (define (list-chunks block-size lst)
   (let loop ((lst lst) (ret '()))
