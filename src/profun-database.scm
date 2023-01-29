@@ -18,12 +18,14 @@
 %var profun-database?
 %var profun-database-table
 %var profun-database-handler
+%var profun-database-falsy?
 %var profun-database-handle
 %var profun-database-get-all
 %var profun-database-set-all!
 %var profun-database-get
 %var profun-database-add!
 %var make-profun-database
+%var make-falsy-profun-database
 %var profun-database-add-rule!
 
 %use (define-type9) "./define-type9.scm"
@@ -35,18 +37,23 @@
 %use (make-usymbol) "./usymbol.scm"
 
 (define-type9 <profun-database>
-  (profun-database-constructor table handler) profun-database?
+  (profun-database-constructor table handler falsy?) profun-database?
   (table profun-database-table)
   (handler profun-database-handler)
+  (falsy? profun-database-falsy?) ;; if true, predicates not mentioned in table or handler will be represented by relations, instead of returning an IDR.
   )
 
 (define (make-profun-database botom-handler)
-  (profun-database-constructor (make-hashmap) botom-handler))
+  (profun-database-constructor (make-hashmap) botom-handler #f))
+
+(define (make-falsy-profun-database botom-handler)
+  (profun-database-constructor (make-hashmap) botom-handler #t))
 
 (define (profun-database-copy db)
   (profun-database-constructor
    (hashmap-copy (profun-database-table db))
-   (profun-database-handler db)))
+   (profun-database-handler db)
+   (profun-database-falsy? db)))
 
 (define (profun-database-add-rule! db r)
   (define first (car r))
