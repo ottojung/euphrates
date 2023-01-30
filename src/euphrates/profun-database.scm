@@ -91,15 +91,10 @@
   (and function (profun-rule-constructor key 0 (list) function)))
 
 (define (double-hashmap-ref H key1 key2)
-  (define h (hashmap-ref H key1 #f))
-  (and h (hashmap-ref h key2 #f)))
+  (hashmap-ref H (cons key1 key2) #f))
 
 (define (double-hashmap-set! H key1 key2 value)
-  (define h0 (hashmap-ref H key1 #f))
-  (define h
-    (or h0 (begin (let ((h (make-hashmap)))
-                    (hashmap-set! H key1 h) h))))
-  (hashmap-set! h key2 value))
+  (hashmap-set! H (cons key1 key2) value))
 
 (define (profun-database-get-all db key arity)
   (define table (profun-database-table db))

@@ -26,7 +26,7 @@
     :use-module ((euphrates profun-IDR) :select (profun-IDR-arity profun-IDR-name profun-IDR?))
     :use-module ((euphrates profun-RFC) :select (profun-RFC-what profun-RFC?))
     :use-module ((euphrates profun-abort) :select (profun-abort-iter))
-    :use-module ((euphrates profun-database) :select (profun-database-copy profun-database-extend profun-database-get-all profun-database-handle profun-database?))
+    :use-module ((euphrates profun-database) :select (profun-database-copy profun-database-extend profun-database-get profun-database-handle profun-database?))
     :use-module ((euphrates profun-error) :select (profun-error-args profun-error?))
     :use-module ((euphrates profun-iterator) :select (profun-iterator-copy profun-iterator-insert! profun-iterator-reset!))
     :use-module ((euphrates profun) :select (profun-iterate profun-next))
@@ -369,7 +369,7 @@
                 (define name (car p))
                 (define arity (cdr p))
                 (define exs
-                  (or (profun-database-get-all db name arity)
+                  (or (profun-database-get db name 0 arity)
                       (profun-database-handle db name arity)))
                 (if exs #f p))
               names+arities)))))
