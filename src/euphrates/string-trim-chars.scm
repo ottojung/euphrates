@@ -10,7 +10,7 @@
                     (string->list chars-arg)
                     chars-arg))
   (define (pred c)
-    (memq c chars))
+    (memv c chars))
   (case direction
     ((left) (string-trim str pred))
     ((right) (string-trim-right str pred))
