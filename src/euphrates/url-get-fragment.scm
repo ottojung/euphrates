@@ -21,5 +21,6 @@
 
 
 (define (url-get-fragment url)
-  (define v (url-decompose url))
-  (vector-ref v 4))
+  (define-values (protocol netloc path query fragment)
+    (url-decompose url))
+  fragment)

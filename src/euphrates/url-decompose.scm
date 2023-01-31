@@ -24,15 +24,15 @@
 ;; Parse a URL into 5 components:
 ;;    <scheme>://<netloc>/<path>?<query>#<fragment>
 ;;
-;; Returns a vector of those 5 values, or #f if the argument is not an URL
+;; Returns those 5 values.
 ;;
 ;; Inspired from:
 ;; https://github.com/python/cpython/blob/259dd71c32a42708a2800c72898e2664a33fda9c/Lib/urllib/parse.py#L365
 ;; this function is the `urlsplit` from the above source code
 ;; except that we don't care about the encoding
 ;;
-;; The <scheme> is also called "protocol"
-;; The <netloc> is hostname+port
+;; The <scheme> is also called "protocol".
+;; The <netloc> is hostname+port.
 
 (define (url-decompose str)
   (define-values (protocol0 protocol-sep rest0)
@@ -71,4 +71,4 @@
         rest4
         #f))
 
-  (vector protocol netloc (string-append netloc-sep path) query fragment))
+  (values protocol netloc (string-append netloc-sep path) query fragment))

@@ -7,52 +7,58 @@
 
 ;; url-decompose
 
-(let ()
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" "some-fragment")
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2#some-fragment"))
+(define (testv url correct-vector)
+  (define-values (protocol netloc path query fragment)
+    (url-decompose url))
 
   (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "some-fragment?a=1&b=2")
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here#some-fragment?a=1&b=2"))
+   correct-vector
+   (vector protocol netloc path query fragment)))
 
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" #f)
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2#some-fragment"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" "some-fragment"))
 
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" "")
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2#"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here#some-fragment?a=1&b=2"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "some-fragment?a=1&b=2"))
 
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "" "some-fragment")
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?#some-fragment"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" #f))
 
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "some-fragment")
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here#some-fragment"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here?a=1&b=2#"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "a=1&b=2" ""))
 
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "")
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here#"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here?#some-fragment"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "" "some-fragment"))
 
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "" "")
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here?#"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here#some-fragment"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f "some-fragment"))
 
-  (assert=
-   #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f #f)
-   (url-decompose "http://gnu.org:80/fun/humor.en.html;some-params-here"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here#"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f ""))
 
-  (assert=
-   #("http" "gnu.org:80" "/" "a=1&b=c" #f)
-   (url-decompose "http://gnu.org:80/?a=1&b=c"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here?#"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" "" ""))
 
-  (assert=
-   #("http" "gnu.org:80?a=1&b=c" "" #f #f)
-   (url-decompose "http://gnu.org:80?a=1&b=c"))
+(testv
+ "http://gnu.org:80/fun/humor.en.html;some-params-here"
+ #("http" "gnu.org:80" "/fun/humor.en.html;some-params-here" #f #f))
 
-  (assert=
-   #("http" "gnu.org:80" "/" #f #f)
-   (url-decompose "http://gnu.org:80/"))
-  )
+(testv
+ "http://gnu.org:80/?a=1&b=c"
+ #("http" "gnu.org:80" "/" "a=1&b=c" #f))
+
+(testv
+ "http://gnu.org:80?a=1&b=c"
+ #("http" "gnu.org:80?a=1&b=c" "" #f #f))
+
+(testv
+ "http://gnu.org:80/"
+ #("http" "gnu.org:80" "/" #f #f))

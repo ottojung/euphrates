@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -21,5 +21,6 @@
 
 
 (define (url-get-protocol url)
-  (let ((decomp (url-decompose url)))
-    (and decomp (vector-ref decomp 0))))
+  (define-values (protocol netloc path query fragment)
+    (url-decompose url))
+  protocol)
