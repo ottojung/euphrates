@@ -16,7 +16,7 @@ Personal all-in-one library for schemes.
 - Dynamic threading environment `src/dynamic-thread-*.scm`
   - with an implementaion of non-preemptive portable threads `src/np-thread.scm`
 - Number conversions `src/convert-number-base.scm` and `src/number-list.scm`
-- Simple subprocesses `src/run-comprocess.scm`
+- Simple subprocesses `src/run-asyncproc.scm`
 - Various alphabets `src/*-alphabet.scm`
 - Lots of list functions `src/list-*.scm`
 

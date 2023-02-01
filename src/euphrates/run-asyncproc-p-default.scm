@@ -1,14 +1,14 @@
 
 (cond-expand
  (guile
-  (define-module (euphrates run-comprocess-p-default)
-    :export (run-comprocess/p-default)
-    :use-module ((euphrates comprocess) :select (comprocess comprocess? comprocess-command comprocess-args comprocess-pipe set-comprocess-pipe! comprocess-pid set-comprocess-pid! comprocess-status set-comprocess-status! comprocess-exited? set-comprocess-exited?!))
+  (define-module (euphrates run-asyncproc-p-default)
+    :export (run-asyncproc/p-default)
+    :use-module ((euphrates asyncproc) :select (asyncproc asyncproc? asyncproc-command asyncproc-args asyncproc-pipe set-asyncproc-pipe! asyncproc-pid set-asyncproc-pid! asyncproc-status set-asyncproc-status! asyncproc-exited? set-asyncproc-exited?!))
     :use-module ((euphrates make-temporary-fileport) :select (make-temporary-fileport))
     :use-module ((euphrates catch-any) :select (catch-any))
     :use-module ((euphrates call-with-finally) :select (call-with-finally))
-    :use-module ((euphrates comprocess-stdout) :select (comprocess-stdout))
-    :use-module ((euphrates comprocess-stderr) :select (comprocess-stderr))
+    :use-module ((euphrates asyncproc-stdout) :select (asyncproc-stdout))
+    :use-module ((euphrates asyncproc-stderr) :select (asyncproc-stderr))
     :use-module ((euphrates dynamic-thread-spawn) :select (dynamic-thread-spawn))
     :use-module ((euphrates dynamic-thread-get-delay-procedure) :select (dynamic-thread-get-delay-procedure))
     :use-module ((euphrates read-string-file) :select (read-string-file))
@@ -30,14 +30,14 @@
     (lambda errors 0)))))
 
   ;; Run process in background
-  ;; Input port is represented by `comprocess-pipe'
-  (define [run-comprocess/p-default command . args]
-    (define p-stdout0 (or (comprocess-stdout) (current-output-port)))
+  ;; Input port is represented by `asyncproc-pipe'
+  (define [run-asyncproc/p-default command . args]
+    (define p-stdout0 (or (asyncproc-stdout) (current-output-port)))
     (define-values (p-stdout p-stdout-file)
       (if (file-port? p-stdout0)
           (values p-stdout0 #f)
           (make-temporary-fileport)))
-    (define p-stderr0 (or (comprocess-stderr) (current-error-port)))
+    (define p-stderr0 (or (asyncproc-stderr) (current-error-port)))
     (define-values (p-stderr p-stderr-file)
       (if (file-port? p-stderr0)
           (values p-stderr0 #f)
@@ -69,7 +69,7 @@
      'not-available)))
 
     (let [[p
-           (comprocess
+           (asyncproc
             command
             args
             #f
@@ -81,12 +81,12 @@
                      [current-error-port p-stderr]]
     (let* [[pipe (apply open-pipe*
                             (conss OPEN_WRITE
-                                   (comprocess-command p)
-                                   (comprocess-args p)))]
+                                   (asyncproc-command p)
+                                   (asyncproc-args p)))]
                [pid (hashq-ref port/pid-table pipe)]
                [re-status #f]]
-          (set-comprocess-pipe! p pipe)
-          (set-comprocess-pid! p pid)
+          (set-asyncproc-pipe! p pipe)
+          (set-asyncproc-pid! p pid)
 
           (dynamic-thread-spawn
            (lambda _
@@ -103,8 +103,8 @@
              (set! re-status status))))))
         (lambda _
                   (cleanup)
-                  (set-comprocess-status! p re-status)
-                  (set-comprocess-exited?! p #t)
+                  (set-asyncproc-status! p re-status)
+                  (set-asyncproc-exited?! p #t)
                   (with-ignore-errors!* (close-pipe pipe)))))))))
 
       p))
