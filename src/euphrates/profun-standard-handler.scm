@@ -36,13 +36,18 @@
 (define profun-standard-handler
   (profun-make-handler
    (= profun-op-unify)
+   (eq profun-op-unify)
    (!= profun-op-separate)
+   (neq profun-op-unify)
    (true profun-op-true)
    (false profun-op-false)
    (+ profun-op+)
+   (plus profun-op+)
    (* profun-op*)
+   (times profun-op+)
    (modulo profun-op-modulo)
    (sqrt profun-op-sqrt)
    (< profun-op-less)
+   (less profun-op-less)
    (divisible profun-op-divisible)
    (equals profun-op-equals)))
