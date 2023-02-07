@@ -27,7 +27,8 @@
     :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
     :use-module ((euphrates profun-op-sqrt) :select (profun-op-sqrt))
     :use-module ((euphrates profun-op-true) :select (profun-op-true))
-    :use-module ((euphrates profun-op-unify) :select (profun-op-unify)))))
+    :use-module ((euphrates profun-op-unify) :select (profun-op-unify))
+    )))
 
 
 ;; A handler that only contains operations that are safe, portable and pure.
@@ -38,13 +39,13 @@
    (= profun-op-unify)
    (eq profun-op-unify)
    (!= profun-op-separate)
-   (neq profun-op-unify)
+   (neq profun-op-separate)
    (true profun-op-true)
    (false profun-op-false)
    (+ profun-op+)
    (plus profun-op+)
    (* profun-op*)
-   (times profun-op+)
+   (times profun-op*)
    (modulo profun-op-modulo)
    (sqrt profun-op-sqrt)
    (< profun-op-less)
