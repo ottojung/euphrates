@@ -16,10 +16,11 @@
  (guile
   (define-module (euphrates run-syncproc)
     :export (run-syncproc)
-    :use-module ((euphrates run-asyncproc) :select (run-asyncproc))
-    :use-module ((euphrates with-singlethread-env) :select (with-singlethread-env))
+    :use-module ((euphrates asyncproc) :select (asyncproc-status))
+    :use-module ((euphrates run-syncproc-star) :select (run-syncproc*))
     )))
 
 (define (run-syncproc command . args)
-  (with-singlethread-env
-   (apply run-asyncproc (cons command args))))
+  (define p
+    (apply run-syncproc* (cons command args)))
+  (asyncproc-status p))

@@ -14,19 +14,12 @@
 
 (cond-expand
  (guile
-  (define-module (euphrates run-syncproc-re)
-    :export (run-syncproc/re)
-    :use-module ((euphrates asyncproc) :select (asyncproc-status))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates run-syncproc-star) :select (run-syncproc*))
+  (define-module (euphrates run-syncproc-star)
+    :export (run-syncproc*)
+    :use-module ((euphrates run-asyncproc) :select (run-asyncproc))
+    :use-module ((euphrates with-singlethread-env) :select (with-singlethread-env))
     )))
 
-(define (run-syncproc/re command . args)
-  (with-output-to-string
-    (lambda _
-      (define p
-        (apply run-syncproc* (cons command args)))
-      (unless (= 0 (asyncproc-status p))
-        (raisu 'child-process-failed
-               (cons command args)
-               (asyncproc-status p))))))
+(define (run-syncproc* command . args)
+  (with-singlethread-env
+   (apply run-asyncproc (cons command args))))

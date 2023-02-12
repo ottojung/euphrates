@@ -17,7 +17,7 @@
   (define-module (euphrates run-syncproc-re-star)
     :export (run-syncproc/re*)
     :use-module ((euphrates asyncproc) :select (asyncproc-status))
-    :use-module ((euphrates run-syncproc) :select (run-syncproc))
+    :use-module ((euphrates run-syncproc-star) :select (run-syncproc*))
     )))
 
 (define (run-syncproc/re* command . args)
@@ -26,6 +26,6 @@
     (with-output-to-string
       (lambda _
         (define p
-          (apply run-syncproc (cons command args)))
+          (apply run-syncproc* (cons command args)))
         (set! status (asyncproc-status p)))))
   (values text status))
