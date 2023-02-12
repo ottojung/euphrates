@@ -1,5 +1,5 @@
 #! /bin/sh
 
-my-czempak-fix-imports \
+exec my-fix-imports \
 	--import-everything \
 	"test/test-compilation.scm"

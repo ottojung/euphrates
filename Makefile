@@ -6,7 +6,7 @@ all: compile
 	sh scripts/run-tests.sh
 
 compile:
-	sh scripts/make-test-compilation.sh || true
+	sh scripts/make-test-compilation.sh
 	$(MAKE) one TARGET=test/test-compilation.scm
 
 one:
