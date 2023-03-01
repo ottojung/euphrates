@@ -44,10 +44,13 @@
   (define db (get-db))
   (profun-eval-query db query))
 
+(cond-expand
+ (guile
+  (use-modules (ice-9 pretty-print))))
+
 (define (pretty x)
   (cond-expand
    (guile
-    (use-modules (ice-9 pretty-print))
     (pretty-print x))
    (else
     (write x))))
@@ -325,6 +328,15 @@
    '()
 
    (test '((false)) '())
+   )
+
+  (test-definitions
+   "EMPTY QUERY"
+   '(((start k u) (abc k u))
+     ((abc 8 y) (= y 10))
+     ((abc x y) (= 1 1)))
+
+   (test '() '(()))
    )
 
   (test-definitions

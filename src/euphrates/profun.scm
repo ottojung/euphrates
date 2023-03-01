@@ -39,7 +39,8 @@
     :use-module ((euphrates profun-value) :select (profun-bound-value? profun-make-var profun-value-unwrap))
     :use-module ((euphrates profun-varname-q) :select (profun-varname?))
     :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates usymbol) :select (make-usymbol)))))
+    :use-module ((euphrates usymbol) :select (make-usymbol))
+    )))
 
 
 
@@ -347,7 +348,11 @@
   (cond
    ((equal? #f last-state)
     (let ((s0 (initialize-state query)))
-      (eval-initial s0)))
+      (if (profun-state-final? s0)
+          (begin
+            (set-profun-iterator-state! iter s0)
+            (if boolean? #t '()))
+          (eval-initial s0))))
    ((profun-state-final? last-state)
     (eval-cont (backtrack db env last-state)))
    (else
