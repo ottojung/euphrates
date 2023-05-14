@@ -219,6 +219,7 @@
     :use-module ((euphrates make-temporary-fileport) :select (make-temporary-fileport))
     :use-module ((euphrates make-unique) :select (make-unique))
     :use-module ((euphrates maybe-monad) :select (maybe-monad))
+    :use-module ((euphrates md5) :select (md5-digest))
     :use-module ((euphrates mdict) :select (ahash->mdict hash->mdict mdict mdict->alist mdict-has? mdict-keys mdict-set!))
     :use-module ((euphrates memconst) :select (memconst))
     :use-module ((euphrates mimetype-extensions) :select (mimetype/extensions))
