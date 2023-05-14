@@ -18,9 +18,10 @@
     :export (with-randomizer-seed)
     :use-module ((euphrates current-random-source-p) :select (current-random-source/p))
     :use-module ((euphrates fast-parameterizeable-timestamp-p) :select (fast-parameterizeable-timestamp/p))
-    :use-module ((euphrates time-get-fast-parameterizeable-timestamp) :select (time-get-fast-parameterizeable-timestamp))
+    :use-module ((euphrates raisu) :select (raisu))
     :use-module ((euphrates srfi-27-generic) :select (make-random-source random-source-randomize!))
-    :use-module ((euphrates raisu) :select (raisu)))))
+    :use-module ((euphrates time-get-fast-parameterizeable-timestamp) :select (time-get-fast-parameterizeable-timestamp))
+    )))
 
 
 
@@ -32,12 +33,16 @@
       . bodies))
     ((_ seed-expr . bodies)
      (let ((seed seed-expr))
-       (unless (integer? seed)
-         (raisu 'seed-must-be-an-integer seed))
-       (let ((src (make-random-source))
-             (time (let ((x (+ 100000 (inexact->exact seed))))
-                     (if (< x 0) (- 0 x) x))))
-         (parameterize ((current-random-source/p src))
-           (parameterize ((fast-parameterizeable-timestamp/p time))
-             (random-source-randomize! src))
-           (let () . bodies)))))))
+       (cond
+        ((equal? 'random seed)
+         (with-randomizer-seed :random . bodies))
+        ((integer? seed)
+         (let ((src (make-random-source))
+               (time (let ((x (+ 100000 (inexact->exact seed))))
+                       (if (< x 0) (- 0 x) x))))
+           (parameterize ((current-random-source/p src))
+             (parameterize ((fast-parameterizeable-timestamp/p time))
+               (random-source-randomize! src))
+             (let () . bodies))))
+        (else
+         (raisu 'seed-must-be-an-integer seed)))))))
