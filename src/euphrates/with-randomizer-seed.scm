@@ -24,25 +24,28 @@
     )))
 
 
+(define-syntax with-randomizer-seed/norec
+  (syntax-rules ()
+    ((_ seed-expr . bodies)
+     (let ((seed seed-expr))
+       (unless (integer? seed)
+         (raisu 'seed-must-be-an-integer seed))
+       (let ((src (make-random-source))
+             (time (let ((x (+ 100000 (inexact->exact seed))))
+                     (if (< x 0) (- 0 x) x))))
+         (parameterize ((current-random-source/p src))
+           (parameterize ((fast-parameterizeable-timestamp/p time))
+             (random-source-randomize! src))
+           (let () . bodies)))))))
 
 (define-syntax with-randomizer-seed
   (syntax-rules (:random)
     ((_ :random . bodies)
-     (with-randomizer-seed
+     (with-randomizer-seed/norec
       (time-get-fast-parameterizeable-timestamp)
       . bodies))
     ((_ seed-expr . bodies)
      (let ((seed seed-expr))
-       (cond
-        ((equal? 'random seed)
-         (with-randomizer-seed :random . bodies))
-        ((integer? seed)
-         (let ((src (make-random-source))
-               (time (let ((x (+ 100000 (inexact->exact seed))))
-                       (if (< x 0) (- 0 x) x))))
-           (parameterize ((current-random-source/p src))
-             (parameterize ((fast-parameterizeable-timestamp/p time))
-               (random-source-randomize! src))
-             (let () . bodies))))
-        (else
-         (raisu 'seed-must-be-an-integer seed)))))))
+       (if (equal? seed 'random)
+           (with-randomizer-seed :random . bodies)
+           (with-randomizer-seed/norec seed . bodies))))))
