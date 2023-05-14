@@ -6,7 +6,8 @@
     :use-module ((euphrates fn) :select (fn))
     :use-module ((euphrates hashmap-obj) :select (hashmap-constructor hashmap-predicate))
     :use-module ((euphrates make-unique) :select (make-unique))
-    :use-module ((euphrates raisu) :select (raisu)))))
+    :use-module ((euphrates raisu) :select (raisu))
+    )))
 
 
 
@@ -49,7 +50,7 @@
 (define (hashmap-has? H key)
   (define get
     (hashmap-true-ref H key hashmap-ref-default-value))
-  (eq? get hashmap-ref-default-value))
+  (not (eq? get hashmap-ref-default-value)))
 
 (define-syntax hashmap-ref
   (syntax-rules ()
