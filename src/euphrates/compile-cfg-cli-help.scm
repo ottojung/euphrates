@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021, 2022  Otto Jung
+;;;; Copyright (C) 2021, 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -17,11 +17,10 @@
   (define-module (euphrates compile-cfg-cli-help)
     :export (CFG-AST->CFG-CLI-help)
     :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet/index))
-    :use-module ((euphrates compile-cfg-cli) :select (CFG-lang-modifier-char?))
+    :use-module ((euphrates cfg-strip-modifiers) :select (CFG-strip-modifiers))
     :use-module ((euphrates get-current-program-path) :select (get-current-program-path))
-    :use-module ((euphrates hashmap) :select (make-hashmap hashmap->alist hashmap-ref hashmap-set!))
+    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-ref hashmap-set! make-hashmap))
     :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
-    :use-module ((euphrates list-drop-while) :select (list-drop-while))
     :use-module ((euphrates list-fold) :select (list-fold))
     :use-module ((euphrates list-intersperse) :select (list-intersperse))
     :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
@@ -34,7 +33,8 @@
     :use-module ((euphrates system-environment) :select (system-environment-get))
     :use-module ((euphrates tilda-a) :select (~a))
     :use-module ((euphrates tilda-s) :select (~s))
-    :use-module ((euphrates words-to-string) :select (words->string)))))
+    :use-module ((euphrates words-to-string) :select (words->string))
+    )))
 
 ;;
 ;; In this file we translate CFG-CLI definitions
@@ -46,9 +46,6 @@
 (define (CFG-AST->CFG-CLI-help helps types defaults)
   (define arg-helps (filter list? helps))
   (define single-helps (filter (negate list?) helps))
-
-  (define (strip-modifiers name)
-    (list->string (reverse (list-drop-while CFG-lang-modifier-char? (reverse (string->list name))))))
 
   (define header1 #f)
   (define header2 #f)
@@ -123,7 +120,7 @@
       (list-fold
        (acc 3)
        (name (map car (cdr AST)))
-       (max acc (string-length (strip-modifiers (~a name))))))
+       (max acc (string-length (CFG-strip-modifiers (~a name))))))
 
     (define production-start-x (+ 3 maximum-production-size))
 
@@ -147,7 +144,7 @@
                (newline))
              (let* ((name (car s))
                     (props (cdr s)))
-               (display (pad-option 2 (strip-modifiers name)))
+               (display (pad-option 2 (CFG-strip-modifiers name)))
 
                (let ((description (assoc/false #f props)))
                  (when description
@@ -178,7 +175,7 @@
 
     (define (show-regex-elem elem)
       (define selem (~a elem))
-      (define stripped (strip-modifiers selem))
+      (define stripped (CFG-strip-modifiers selem))
 
       (cond
        ((string-suffix? "?" selem)
@@ -194,7 +191,7 @@
       (words->string (map show-regex-elem regex)))
 
     (define (show-production prod)
-      (define name (strip-modifiers (~a (car prod))))
+      (define name (CFG-strip-modifiers (~a (car prod))))
       (define regexes (cdr prod))
       (display (pad-production 2 name))
       (display "= ")
