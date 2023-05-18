@@ -14,13 +14,17 @@
 
 (cond-expand
  (guile
-  (define-module (euphrates cfg-strip-modifiers)
-    :export (CFG-strip-modifiers)
-    :use-module ((euphrates cfg-parse-modifiers) :select (CFG-parse-modifiers))
+  (define-module (euphrates cfg-parse-modifiers)
+    :export (CFG-parse-modifiers)
+    :use-module ((euphrates compile-cfg-cli) :select (CFG-lang-modifier-char?))
+    :use-module ((euphrates list-span-while) :select (list-span-while))
+    :use-module ((euphrates tilda-a) :select (~a))
     )))
 
-(define (CFG-strip-modifiers name)
+(define (CFG-parse-modifiers name)
   (define-values (actual-name modifier-string)
-    (CFG-parse-modifiers name))
+    (list-span-while (negate CFG-lang-modifier-char?)
+                     (string->list (~a name))))
 
-  actual-name)
+  (values (list->string actual-name)
+          (list->string modifier-string)))
