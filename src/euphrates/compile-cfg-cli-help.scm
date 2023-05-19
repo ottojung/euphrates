@@ -29,6 +29,7 @@
     :use-module ((euphrates parse-cfg-cli) :select (CFG-CLI->CFG-AST))
     :use-module ((euphrates path-get-basename) :select (path-get-basename))
     :use-module ((euphrates print-in-window) :select (print-in-window))
+    :use-module ((euphrates range) :select (range))
     :use-module ((euphrates replicate) :select (replicate))
     :use-module ((euphrates string-pad) :select (string-pad-R))
     :use-module ((euphrates string-to-words) :select (string->words))
@@ -215,12 +216,26 @@
         (for-each show-production (cdr AST))
         (newline)))
 
-    (define (display-cli-decl)
-      (display "Usage: ")
+    (define (display-main-alternative i alternative)
+      (unless (equal? 0 i)
+        (display "       "))
+
       (display (path-get-basename (get-current-program-path)))
       (display " ")
-      (display (show-regex (cadr (car AST))))
+      (display (show-regex alternative))
       (newline))
+
+    (define (display-cli-decl)
+      (define main-production (car AST))
+      (define main-name (car main-production))
+      (define main-regex (cdr main-production))
+
+      (display      "Usage: ")
+
+      (for-each
+       display-main-alternative
+       (range (length main-regex))
+       main-regex))
 
     (with-output-to-string
       (lambda _
