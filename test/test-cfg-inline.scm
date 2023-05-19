@@ -58,3 +58,22 @@
      (RUN (run now))
      (BREAK (--))
      (OPT (--trace) (--no-trace)))))
+
+(let ()
+  (define parsed
+    `((ROOT (MAIN))
+      (MAIN (RUN? OPT* BREAK? <filename>))
+      (RUN (run))
+      (BREAK (--))
+      (OPT (--trace) (--no-trace))))
+
+  (define i1
+    (CFG-inline parsed))
+
+  (assert=
+   i1
+   `((ROOT (RUN? OPT* BREAK? <filename>))
+     (MAIN (run? OPT* --? <filename>))
+     (RUN (run))
+     (BREAK (--))
+     (OPT (--trace) (--no-trace)))))
