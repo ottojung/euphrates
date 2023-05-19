@@ -20,8 +20,6 @@
   FLAG   = --soft
          | --hard
 
-Options:
-
 "
      (let ()
        (with-cli

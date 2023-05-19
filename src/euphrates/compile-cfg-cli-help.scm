@@ -137,7 +137,8 @@
           (list (~a T))))
 
     (define (display-options)
-      (display "Options:") (newline) (newline)
+      (unless (null? fH-alist)
+        (display "Options:") (newline) (newline))
       (for-each
        (lambda (s)
          (if (string? s)
