@@ -24,13 +24,34 @@
      (let ()
        (with-cli
         (run FLAG OPTION* <filename>
-         OPTION : --in <input-type>
-         /        --finite
-         FLAG   : --soft
-         /        --hard
-         )
+             OPTION : --in <input-type>
+             /        --finite
+             FLAG   : --soft
+             /        --hard
+             )
 
-        (define-cli:show-help))))))
+        (define-cli:show-help))))
+
+    (assert=
+     "Usage: test [RUN] [OPT...] [BREAK] <filename>
+
+  RUN   = run
+  BREAK = --
+  OPT   = --trace
+        | --no-trace
+
+"
+     (let ()
+       (with-cli
+        (MAIN
+         MAIN : RUN? OPT* BREAK? <filename>
+         RUN : run
+         BREAK : --
+         OPT : --trace / --no-trace)
+
+        (define-cli:show-help))))
+
+    ))
 
 ;; BELOW IS A BIGGER EXAMPLE, JUST TO SEE IF IT COMPILES
 (define MAX-BASE 90)
