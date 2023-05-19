@@ -2,12 +2,39 @@
 (cond-expand
  (guile
   (define-module (test-compile-cfg-cli-help)
+    :use-module ((euphrates assert-equal) :select (assert=))
     :use-module ((euphrates assert) :select (assert))
     :use-module ((euphrates compile-cfg-cli-help) :select (CFG-AST->CFG-CLI-help))
     :use-module ((euphrates current-program-path-p) :select (current-program-path/p))
-    :use-module ((euphrates define-cli) :select (make-cli-with-handler)))))
+    :use-module ((euphrates define-cli) :select (define-cli:raisu/p define-cli:show-help make-cli-with-handler with-cli))
+    )))
 
 
+(parameterize ((current-program-path/p "test"))
+  (parameterize ((define-cli:raisu/p (lambda (err text) text)))
+    (assert=
+     "Usage: test run FLAG [OPTION...] <filename>
+
+  OPTION = --in <input-type>
+         | --finite
+  FLAG   = --soft
+         | --hard
+
+Options:
+
+"
+     (let ()
+       (with-cli
+        (run FLAG OPTION* <filename>
+         OPTION : --in <input-type>
+         /        --finite
+         FLAG   : --soft
+         /        --hard
+         )
+
+        (define-cli:show-help))))))
+
+;; BELOW IS A BIGGER EXAMPLE, JUST TO SEE IF IT COMPILES
 (define MAX-BASE 90)
 (define DEFAULT-BASE 64)
 (define ALPHANUM-BASE 62)

@@ -17,6 +17,8 @@
   (define-module (euphrates compile-cfg-cli-help)
     :export (CFG-AST->CFG-CLI-help)
     :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet/index))
+    :use-module ((euphrates cfg-inline) :select (CFG-inline))
+    :use-module ((euphrates cfg-remove-dead-code) :select (CFG-remove-dead-code))
     :use-module ((euphrates cfg-strip-modifiers) :select (CFG-strip-modifiers))
     :use-module ((euphrates get-current-program-path) :select (get-current-program-path))
     :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-ref hashmap-set! make-hashmap))
@@ -57,7 +59,8 @@
         (list T)))
 
   (lambda (cli-decl)
-    (define AST (CFG-CLI->CFG-AST cli-decl))
+    (define AST/0 (CFG-CLI->CFG-AST cli-decl))
+    (define AST (CFG-remove-dead-code (CFG-inline AST/0)))
     (define window-width
       (let* ((w (system-environment-get "COLUMNS"))
              (n (and w (string->number w))))
