@@ -84,4 +84,5 @@
   (assert=
    i1
    `((MAIN (A B C))
-     (B (D E F)))))
+     (B (D E F))
+     (E (G H K)))))

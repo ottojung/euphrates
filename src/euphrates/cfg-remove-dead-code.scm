@@ -17,7 +17,7 @@
   (define-module (euphrates cfg-remove-dead-code)
     :export (CFG-remove-dead-code)
     :use-module ((euphrates cfg-strip-modifiers) :select (CFG-strip-modifiers))
-    :use-module ((euphrates hashmap) :select (alist->hashmap))
+    :use-module ((euphrates hashmap) :select (alist->hashmap hashmap-ref))
     :use-module ((euphrates hashset) :select (hashset-add! hashset-has? make-hashset))
     )))
 
@@ -41,7 +41,10 @@
                 (define name-pure
                   (string->symbol
                    (CFG-strip-modifiers atom)))
-                (hashset-add! reachable name-pure))
+                (define target-regex
+                  (hashmap-ref hashed name-pure #f))
+                (when target-regex
+                  (loop (cons name-pure target-regex))))
               alternative))
            regex))
 
