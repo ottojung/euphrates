@@ -49,6 +49,8 @@
     :use-module ((euphrates catchu-case) :select (catchu-case))
     :use-module ((euphrates cfg-inline) :select (CFG-inline))
     :use-module ((euphrates cfg-machine) :select (make-cfg-machine make-cfg-machine* make-cfg-machine/full))
+    :use-module ((euphrates cfg-parse-modifiers) :select (CFG-parse-modifiers))
+    :use-module ((euphrates cfg-remove-dead-code) :select (CFG-remove-dead-code))
     :use-module ((euphrates cfg-strip-modifiers) :select (CFG-strip-modifiers))
     :use-module ((euphrates command-line-arguments-p) :select (command-line-argumets/p))
     :use-module ((euphrates comp) :select (appcomp comp))
