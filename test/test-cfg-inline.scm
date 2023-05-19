@@ -92,7 +92,8 @@
 
   (assert=
    i1
-   `((ROOT (MAIN))
+   `((ROOT (run? OPT* --? <filename>)
+           (debug <filename>))
      (MAIN (run? OPT* --? <filename>)
            (debug <filename>))
      (RUN (run))

@@ -50,11 +50,8 @@
         (define-cli:show-help))))
 
     (assert=
-     "Usage: test MAIN
-
-  MAIN = run <filename>
-       | debug <filename>
-
+"Usage: test run <filename>
+       test debug <filename>
 "
      (let ()
        (with-cli

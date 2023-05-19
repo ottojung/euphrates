@@ -73,11 +73,26 @@
                     (car regex)))
               (else #f)))))
 
+    (define (inline-regex regex)
+      (define (default)
+        (map (comp (list-map/flatten inline/flat)) regex))
+
+      (if (and (list-singleton? regex)
+               (list-singleton? (car regex)))
+          (let ()
+            (define name (car (car regex)))
+            (define-values (name/pure/s modifiers/s)
+              (CFG-parse-modifiers name))
+            (define name/pure (string->symbol name/pure/s))
+            (define target (hashmap-ref hashed name/pure #f))
+            (or target (default)))
+          (default)))
+
     (map
      (lambda (production)
        (define name (car production))
        (define regex (cdr production))
-       (cons name (map (comp (list-map/flatten inline/flat)) regex)))
+       (cons name (inline-regex regex)))
      CFG))
 
   (let loop ((CFG CFG))
