@@ -49,6 +49,21 @@
 
         (define-cli:show-help))))
 
+    (assert=
+     "Usage: test MAIN
+
+  MAIN = run <filename>
+       | debug <filename>
+
+"
+     (let ()
+       (with-cli
+        (MAIN
+         MAIN : run <filename>
+         /      debug <filename>)
+
+        (define-cli:show-help))))
+
     ))
 
 ;; BELOW IS A BIGGER EXAMPLE, JUST TO SEE IF IT COMPILES
