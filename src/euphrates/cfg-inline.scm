@@ -25,9 +25,6 @@
 
 
 (define (CFG-inline CFG)
-  (define hashed
-    (alist->hashmap CFG))
-
   (define (noalternative? production)
     (define name (car production))
     (define regex (cdr production))
@@ -40,40 +37,42 @@
            (let ((first-choice (car regex)))
              (list-singleton? first-choice)))))
 
-  (define (do-inline name)
-    (define-values (name/pure/s modifiers/s)
-      (CFG-parse-modifiers name))
-    (define name/pure (string->symbol name/pure/s))
-    (define regex (hashmap-ref hashed name/pure #f))
-    (and regex
-         (let ((production (cons name regex)))
-           (cond
-            ((constant? production)
-             (let ()
-               (define c (car (car regex)))
-               (define-values (c-pure c-modifiers)
-                 (CFG-parse-modifiers c))
-
-               (and (string-null? c-modifiers)
-                    (list
-                     (string->symbol
-                      (string-append c-pure modifiers/s))))))
-            ((noalternative? production)
-             (and (string-null? modifiers/s)
-                  (car regex)))
-            (else #f)))))
-
   (define inlined? #t)
 
-  (define (inline/flat name)
-    (define inlined (do-inline name))
-    (if inlined
-        (begin
-          (set! inlined? #t)
-          inlined)
-        (list name)))
-
   (define (inline/cfg CFG)
+    (define hashed (alist->hashmap CFG))
+
+    (define (inline/flat name)
+      (define inlined (do-inline name))
+      (if inlined
+          (begin
+            (set! inlined? #t)
+            inlined)
+          (list name)))
+
+    (define (do-inline name)
+      (define-values (name/pure/s modifiers/s)
+        (CFG-parse-modifiers name))
+      (define name/pure (string->symbol name/pure/s))
+      (define regex (hashmap-ref hashed name/pure #f))
+      (and regex
+           (let ((production (cons name regex)))
+             (cond
+              ((constant? production)
+               (let ()
+                 (define c (car (car regex)))
+                 (define-values (c-pure c-modifiers)
+                   (CFG-parse-modifiers c))
+
+                 (and (string-null? c-modifiers)
+                      (list
+                       (string->symbol
+                        (string-append c-pure modifiers/s))))))
+              ((noalternative? production)
+               (and (string-null? modifiers/s)
+                    (car regex)))
+              (else #f)))))
+
     (map
      (lambda (production)
        (define name (car production))
@@ -85,5 +84,8 @@
     (if inlined?
         (begin
           (set! inlined? #f)
-          (loop (inline/cfg CFG)))
+          (let ((new (inline/cfg CFG)))
+            (if (equal? new CFG)
+                CFG
+                (loop new))))
         CFG)))

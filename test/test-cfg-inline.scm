@@ -77,3 +77,16 @@
      (RUN (run))
      (BREAK (--))
      (OPT (--trace) (--no-trace)))))
+
+(let ()
+  (define parsed
+    `((ROOT (MAIN))
+      (MAIN (ROOT))))
+
+  (define i1
+    (CFG-inline parsed))
+
+  (assert=
+   i1
+   `((ROOT (ROOT))
+     (MAIN (MAIN)))))
