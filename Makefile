@@ -2,7 +2,9 @@
 TARGET = test/main.scm
 GUILE = guile -L $(PWD)/src -s
 
-all: compile
+all: test
+
+test: compile
 	sh scripts/run-tests.sh
 
 compile:
@@ -17,3 +19,5 @@ cleanrun: | clean one
 clean:
 	git submodule foreach --recursive 'git clean -dfx'
 	git clean -dfx
+
+.PHONY: all test compile one cleanrun clean
