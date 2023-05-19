@@ -72,7 +72,7 @@
 
   (assert=
    i1
-   `((ROOT (RUN? OPT* BREAK? <filename>))
+   `((ROOT (run? OPT* --? <filename>))
      (MAIN (run? OPT* --? <filename>))
      (RUN (run))
      (BREAK (--))

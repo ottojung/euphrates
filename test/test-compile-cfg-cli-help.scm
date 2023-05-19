@@ -33,12 +33,10 @@
         (define-cli:show-help))))
 
     (assert=
-     "Usage: test [RUN] [OPT...] [BREAK] <filename>
+     "Usage: test [run] [OPT...] [--] <filename>
 
-  RUN   = run
-  BREAK = --
-  OPT   = --trace
-        | --no-trace
+  OPT = --trace
+      | --no-trace
 
 "
      (let ()

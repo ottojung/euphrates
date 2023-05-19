@@ -63,10 +63,17 @@
                   (car regex)))
             (else #f)))))
 
-  (define (inline/flat name)
-    (or (do-inline name) (list name)))
+  (define inlined? #t)
 
-  (define inlined
+  (define (inline/flat name)
+    (define inlined (do-inline name))
+    (if inlined
+        (begin
+          (set! inlined? #t)
+          inlined)
+        (list name)))
+
+  (define (inline/cfg CFG)
     (map
      (lambda (production)
        (define name (car production))
@@ -74,5 +81,9 @@
        (cons name (map (comp (list-map/flatten inline/flat)) regex)))
      CFG))
 
-  inlined)
-
+  (let loop ((CFG CFG))
+    (if inlined?
+        (begin
+          (set! inlined? #f)
+          (loop (inline/cfg CFG)))
+        CFG)))
