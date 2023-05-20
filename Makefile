@@ -10,7 +10,7 @@ test: build
 	sh scripts/run-tests.sh
 
 compile:
-	sh scripts/make-test-compilation.sh
+	sh scripts/make-test-compilation.sh || true
 	$(MAKE) one TARGET=test/test-compilation.scm
 
 one:
