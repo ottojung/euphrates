@@ -86,3 +86,19 @@
    `((MAIN (A B C))
      (B (D E F))
      (E (G H K)))))
+
+(let ()
+  (define parsed
+    `((MAIN (A B C))
+      (B (D E F MAIN))
+      (E (G H K))
+      (U (Z W M))))
+
+  (define i1
+    (CFG-remove-dead-code parsed))
+
+  (assert=
+   i1
+   `((MAIN (A B C))
+     (B (D E F MAIN))
+     (E (G H K)))))
