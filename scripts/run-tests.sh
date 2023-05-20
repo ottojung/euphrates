@@ -14,8 +14,11 @@ do
 	printf '(%s/%s)' "$INDEX" "$TESTCOUNT"
 	printf ' %s ... ' "$SHORT"
 
-	if guile -L "$PWD/src" -s "$FILE" 2>&1
+	R=$(if guile -L "$PWD/src" -s "$FILE" 2>&1
 	then printf '✓'
 	else printf 'X'
-	fi | grep -v -e '^;;; '
+	fi)
+
+	printf '%s' "$R" | grep -v -e '^;;; ' || true
+	printf '%s' "$R" | grep -q -e '✓'
 done
