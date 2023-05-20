@@ -32,21 +32,22 @@
           (define name (car current))
           (define regex (cdr current))
 
-          (hashset-add! reachable name)
 
-          (for-each
-           (lambda (alternative)
-             (for-each
-              (lambda (atom)
-                (define name-pure
-                  (string->symbol
-                   (CFG-strip-modifiers atom)))
-                (define target-regex
-                  (hashmap-ref hashed name-pure #f))
-                (when target-regex
-                  (loop (cons name-pure target-regex))))
-              alternative))
-           regex))
+          (unless (hashset-has? reachable name)
+            (hashset-add! reachable name)
+            (for-each
+             (lambda (alternative)
+               (for-each
+                (lambda (atom)
+                  (define name-pure
+                    (string->symbol
+                     (CFG-strip-modifiers atom)))
+                  (define target-regex
+                    (hashmap-ref hashed name-pure #f))
+                  (when target-regex
+                    (loop (cons name-pure target-regex))))
+                alternative))
+             regex)))
 
         (filter
          (lambda (production)
