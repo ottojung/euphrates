@@ -19,6 +19,7 @@
     :use-module ((euphrates cfg-parse-modifiers) :select (CFG-parse-modifiers))
     :use-module ((euphrates comp) :select (comp))
     :use-module ((euphrates hashmap) :select (alist->hashmap hashmap-ref))
+    :use-module ((euphrates list-and-map) :select (list-and-map))
     :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
     :use-module ((euphrates list-singleton-q) :select (list-singleton?))
     )))
@@ -65,6 +66,7 @@
                    (CFG-parse-modifiers c))
 
                  (and (string-null? c-modifiers)
+                      (list-and-map (comp (equal? #\?)) (string->list modifiers/s))
                       (list
                        (string->symbol
                         (string-append c-pure modifiers/s))))))
