@@ -4,7 +4,9 @@ GUILE = guile -L $(PWD)/src -s
 
 all: test
 
-test: compile
+build: compile
+
+test: build
 	sh scripts/run-tests.sh
 
 compile:
