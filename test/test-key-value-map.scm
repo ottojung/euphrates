@@ -1,7 +1,7 @@
 
 (cond-expand
  (guile
-  (define-module (test-parse-table)
+  (define-module (test-key-value-map)
     :use-module ((euphrates assert-equal) :select (assert=))
     :use-module ((euphrates key-value-map) :select (key-value-map/list))
     )))
