@@ -163,6 +163,7 @@
     :use-module ((euphrates immutable-hashmap-obj) :select (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value))
     :use-module ((euphrates immutable-hashmap) :select (alist->immutable-hashmap immutable-hashmap->alist immutable-hashmap-clear immutable-hashmap-copy immutable-hashmap-count immutable-hashmap-foreach immutable-hashmap-fromlist immutable-hashmap-map immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set immutable-hashmap? make-immutable-hashmap))
     :use-module ((euphrates json-parse) :select (json-parse))
+    :use-module ((euphrates key-value-map) :select (key-value-map key-value-map/list))
     :use-module ((euphrates lazy-monad) :select (lazy-monad))
     :use-module ((euphrates lazy-parameter) :select (lazy-parameter))
     :use-module ((euphrates letin) :select (letin))
