@@ -144,6 +144,7 @@
     :use-module ((euphrates fn-tuple) :select (fn-tuple))
     :use-module ((euphrates fn) :select (fn))
     :use-module ((euphrates fp) :select (fp))
+    :use-module ((euphrates general-table) :select (general-table))
     :use-module ((euphrates get-command-line-arguments) :select (get-command-line-arguments))
     :use-module ((euphrates get-current-directory) :select (get-current-directory))
     :use-module ((euphrates get-current-program-path) :select (get-current-program-path))
