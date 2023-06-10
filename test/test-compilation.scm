@@ -171,6 +171,7 @@
     :use-module ((euphrates lexical-scope-obj) :select (lexical-scope-unwrap lexical-scope-wrap lexical-scope?))
     :use-module ((euphrates lexical-scope) :select (lexical-scope-make lexical-scope-namespace lexical-scope-ref lexical-scope-set! lexical-scope-stage! lexical-scope-unstage!))
     :use-module ((euphrates linear-interpolation) :select (linear-interpolate-1d linear-interpolate-2d))
+    :use-module ((euphrates linear-regression) :select (linear-regression))
     :use-module ((euphrates lines-to-string) :select (lines->string))
     :use-module ((euphrates linux-get-memory-stat) :select (linux-get-memory-free% linux-get-memory-stat))
     :use-module ((euphrates list-and-map) :select (list-and-map))
