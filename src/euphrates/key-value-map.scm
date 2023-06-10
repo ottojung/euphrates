@@ -31,5 +31,5 @@
   (syntax-rules (! +)
     ((_ . args)
      (alist->hashmap
-      (parse-key-value-map/list . args)))))
+      (key-value-map/list . args)))))
 
