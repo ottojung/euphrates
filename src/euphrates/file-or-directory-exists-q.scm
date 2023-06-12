@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates file-or-directory-exists-q)
-    :export (file-or-directory-exists?))))
 
 
 (cond-expand

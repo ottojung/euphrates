@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates make-temporary-filename)
-    :export (make-temporary-filename)
-    :use-module ((euphrates random-choice) :select (random-choice))
-    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet)))))
 
 
 

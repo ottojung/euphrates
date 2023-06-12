@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates random-variable-name)
-    :export (random-variable-name)
-    :use-module ((euphrates random-choice) :select (random-choice))
-    :use-module ((euphrates alphanum-lowercase-alphabet) :select (alphanum-lowercase/alphabet))
-    :use-module ((euphrates alpha-lowercase-alphabet) :select (alpha-lowercase/alphabet))
-    :use-module ((euphrates big-random-int) :select (big-random-int))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

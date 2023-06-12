@@ -12,18 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-op-parameter)
-    :export (make-profun-parameter instantiate-profun-parameter)
-    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
-    :use-module ((euphrates profun-accept) :select (profun-set))
-    :use-module ((euphrates profun-current-env-p) :select (profun-current-env/p))
-    :use-module ((euphrates profun-op) :select (make-profun-op))
-    :use-module ((euphrates profun-request-value) :select (profun-request-value))
-    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-value-unwrap))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates usymbol) :select (make-usymbol)))))
 
 
 ;; Make sure that `param-name' is unique.
@@ -48,8 +36,14 @@
              (profun-set (input-name <- param))
              (profun-request-value input-name))))))
 
+(define unique-counter
+  (let ((count 0))
+    (lambda _
+      (set! count (+ 1 count))
+      count)))
+
 (define (make-profun-parameter)
-  (define param-name (make-usymbol 'p (gensym)))
+  (define param-name (make-usymbol 'p (unique-counter)))
   (define op (profun-op-parameter param-name))
 
   (define (instantiate) op)

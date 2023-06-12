@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates srfi-27-random-source-obj)
-    :export (:random-source-make :random-source? :random-source-state-ref :random-source-state-set! :random-source-randomize! :random-source-pseudo-randomize! :random-source-make-integers :random-source-make-reals :random-source-current-time)
-    :use-module ((euphrates time-get-fast-parameterizeable-timestamp) :select (time-get-fast-parameterizeable-timestamp)))))
 
 ;; For the use exclusively in srfi-27-base-generator.scm
 

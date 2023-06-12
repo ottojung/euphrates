@@ -12,21 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates define-cli)
-    :export (make-cli/f/basic make-cli/f make-cli make-cli-with-handler lambda-cli with-cli define-cli:raisu/p define-cli:raisu/default-exit define-cli:show-help)
-    :use-module ((euphrates compile-cfg-cli) :select (CFG-CLI->CFG-lang))
-    :use-module ((euphrates get-command-line-arguments) :select (get-command-line-arguments))
-    :use-module ((euphrates cfg-machine) :select (make-cfg-machine))
-    :use-module ((euphrates syntax-flatten-star) :select (syntax-flatten*))
-    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set!))
-    :use-module ((euphrates tilda-a) :select (~a))
-    :use-module ((euphrates list-init) :select (list-init))
-    :use-module ((euphrates list-last) :select (list-last))
-    :use-module ((euphrates compile-cfg-cli-help) :select (CFG-AST->CFG-CLI-help))
-    :use-module ((euphrates immutable-hashmap) :select (alist->immutable-hashmap immutable-hashmap-ref/first immutable-hashmap-foreach))
-    :use-module ((euphrates define-pair) :select (define-pair)))))
 
 
 
@@ -193,23 +178,31 @@
       (list . defaults) (list . examples) (list . helps)
       (list . types) (list . exclusives) (list . synonyms)
       bodies))))
-(define-syntax-rule (make-cli-with-handler f cli-decl . args)
-  (make-cli-with-handler-helper f cli-decl () () () () () () args))
+
+(define-syntax make-cli-with-handler
+  (syntax-rules ()
+    ((_ f cli-decl . args)
+     (make-cli-with-handler-helper f cli-decl () () () () () () args))))
 
 (define-syntax make-cli/f/wrapper
   (syntax-rules ()
     ((_ cli-decl defaults examples helps types exclusives synonyms ())
      (make-cli/f (quote cli-decl) defaults examples helps types exclusives synonyms))))
-(define-syntax-rule (make-cli cli-decl . args)
-  (make-cli-with-handler make-cli/f/wrapper cli-decl . args))
+
+(define-syntax make-cli
+  (syntax-rules ()
+    ((_ cli-decl . args)
+     (make-cli-with-handler make-cli/f/wrapper cli-decl . args))))
 
 (define define-cli:current-hashmap
   (make-parameter #f))
 (define (define-cli:lookup H x)
   (hashmap-ref H (~a x) #f))
 
-(define-syntax-rule (define-cli:let1 H x)
-  (define-cli:lookup H (quote x)))
+(define-syntax define-cli:let1
+  (syntax-rules ()
+    ((_ H x)
+     (define-cli:lookup H (quote x)))))
 
 (define-syntax define-cli:let-list
   (syntax-rules (/ :)
@@ -224,8 +217,10 @@
     ((_ (H bodies) args)
      (define-cli:let-list define-cli:let1 H bodies args))))
 
-(define-syntax-rule (define-cli:let-tree H T . bodies)
-  (syntax-flatten* (define-cli:let-list-wrapper (H bodies)) T))
+(define-syntax define-cli:let-tree
+  (syntax-rules ()
+    ((_ H T . bodies)
+     (syntax-flatten* (define-cli:let-list-wrapper (H bodies)) T))))
 
 (define (define-cli:show-help)
   (define cli-decl (list-ref (define-cli:current-values/p) 0))
@@ -248,9 +243,13 @@
                  (define-cli:show-help)
                  (let () . bodies)))))))))
 
-(define-syntax-rule (lambda-cli cli-decl . args)
-  (make-cli-with-handler make-cli/lambda-cli/wrapper cli-decl . args))
+(define-syntax lambda-cli
+  (syntax-rules ()
+    ((_ cli-decl . args)
+     (make-cli-with-handler make-cli/lambda-cli/wrapper cli-decl . args))))
 
-(define-syntax-rule (with-cli cli-decl . args)
-  ((lambda-cli cli-decl . args)
-   (get-command-line-arguments)))
+(define-syntax with-cli
+  (syntax-rules ()
+    ((_ cli-decl . args)
+     ((lambda-cli cli-decl . args)
+      (get-command-line-arguments)))))

@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates shell-quote)
-    :export (shell-quote shell-quote/always/list)
-    :use-module ((euphrates shell-safe-alphabet) :select (shell-safe/alphabet/index)))))
 
 ;; Uses single quotes, and puts single quotes into double quotes,
 ;; so the string $'b is quoted as '$'"'"'b'

@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates shell-quote-permissive)
-    :export (shell-quote/permissive)
-    :use-module ((euphrates shell-quote) :select (shell-quote/always/list))
-    :use-module ((euphrates shell-nondisrupt-alphabet) :select (shell-nondisrupt/alphabet/index)))))
 
 ;; Like shell-quote but more permissive
 

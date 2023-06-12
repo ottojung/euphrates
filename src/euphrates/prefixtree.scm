@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates prefixtree)
-    :export (make-prefixtree prefixtree-set! prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree->tree)
-    :use-module ((euphrates prefixtree-obj) :select (prefixtree prefixtree? prefixtree-value set-prefixtree-value! prefixtree-children set-prefixtree-children!))
-    :use-module ((euphrates list-find-first) :select (list-find-first)))))
 
 
 

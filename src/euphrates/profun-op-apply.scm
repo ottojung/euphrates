@@ -12,17 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-op-apply)
-    :export (profun-op-apply profun-apply-return! profun-apply-fail!)
-    :use-module ((euphrates box) :select (box-ref box-set! box? make-box))
-    :use-module ((euphrates profun-accept) :select (profun-ctx-set profun-set))
-    :use-module ((euphrates profun-op-apply-result-p) :select (profun-op-apply/result#p))
-    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
-    :use-module ((euphrates profun-reject) :select (profun-reject))
-    :use-module ((euphrates profun-value) :select (profun-bound-value?))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; In order to return result during apply evaluation, call `profun-apply-return!';
 ;; in order to fail, call `profun-apply-fail!'.

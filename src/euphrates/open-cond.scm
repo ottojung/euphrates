@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates open-cond)
-    :export (define-open-cond open-cond? define-open-cond-instance open-cond-lambda)
-    :use-module ((euphrates open-cond-obj) :select (open-cond-constructor open-cond-predicate open-cond-value set-open-cond-value!)))))
 
 
 

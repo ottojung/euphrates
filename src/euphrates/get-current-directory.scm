@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates get-current-directory)
-    :export (get-current-directory)
-    :use-module ((euphrates current-directory-p) :select (current-directory/p)))))
 
 
 

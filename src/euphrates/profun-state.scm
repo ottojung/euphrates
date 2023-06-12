@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-state)
-    :export (profun-state-constructor profun-state? profun-state-current profun-state-stack profun-state-failstate profun-state-undo profun-state-make profun-state-build set-profun-state-current profun-state-final? profun-state-finish)
-    :use-module ((euphrates define-type9) :select (define-type9))
-    :use-module ((euphrates profun-instruction) :select (profun-instruction-build)))))
 
 
 

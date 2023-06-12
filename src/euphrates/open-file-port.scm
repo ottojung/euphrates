@@ -1,26 +1,14 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates open-file-port)
-    :export (open-file-port)
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 
 (cond-expand
  (guile
-
-  (use-modules (ice-9 match))
 
   (define (open-file-port path mode)
-    (match mode
-       ["r" (open-file path mode)]
-       ["w" (open-file path mode)]
-       ["a" (open-file path mode)]
-       ["rb" (open-file path mode)]
-       ["wb" (open-file path mode)]
-       ["ab" (open-file path mode)]
-       [other (raisu 'open-file-mode-not-supported `(args: ,path ,mode))]))
+    (if (member mode '("r" "w" "a" "rb" "wb" "ab"))
+        (open-file path mode)
+        (raisu 'open-file-mode-not-supported `(args: ,path ,mode))))
 
   )
 

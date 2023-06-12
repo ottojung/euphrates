@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates fn-cons)
-    :export (fn-cons))))
 
 
 (define fn-cons

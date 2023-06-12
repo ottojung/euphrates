@@ -12,20 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; original code source:
-;; https://github.com/theschemer/hashing/blob/master/md5.scm
-
-(cond-expand
- (guile
-  (define-module (euphrates md5)
-    :export (md5-digest)
-    :use-module ((euphrates define-type9) :select (define-type9))
-    )
-  (use-modules (srfi srfi-43))
-  (use-modules (rnrs bytevectors))
-  (use-modules (rnrs arithmetic bitwise))
-  (use-modules (rnrs arithmetic fixnums))
-  ))
 
 (define initial-hash
   '(#x67452301 #xEFCDAB89 #x98BADCFE #x10325476))

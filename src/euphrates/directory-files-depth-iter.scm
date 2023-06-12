@@ -12,16 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates directory-files-depth-iter)
-    :export (directory-files-depth-iter)
-    :use-module ((euphrates append-posix-path) :select (append-posix-path))
-    :use-module ((euphrates catch-any) :select (catch-any))
-    :use-module ((euphrates debugs) :select (debugs))
-    :use-module ((euphrates define-type9) :select (define-type9))
-    :use-module ((euphrates path-normalize) :select (path-normalize))
-    :use-module ((euphrates queue) :select (make-queue queue-empty? queue-pop! queue-push!)))))
 
 
 (cond-expand
@@ -32,10 +22,12 @@
   ;; Normally returns a list that looks like this: (fullname name dirname1 dirname2 dirname3...)
   ;; NOTE: does not check for recursion!
 
-  (define-syntax-rule (false-if-exception expr)
-    (catch-any
-     (lambda _ expr)
-     (lambda args #f)))
+  (define-syntax false-if-exception
+    (syntax-rules ()
+      ((_ expr)
+       (catch-any
+        (lambda _ expr)
+        (lambda args #f)))))
 
   (define-type9 <dirlevel>
     (make-dirlevel full-name file-name stack) dirlevel?

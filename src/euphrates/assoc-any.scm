@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assoc-any)
-    :export (assoc/any))))
 
 
 (define (assoc/any keys alist)

@@ -1,28 +1,8 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates run-asyncproc-p-default)
-    :export (run-asyncproc/p-default)
-    :use-module ((euphrates asyncproc-input-text-p) :select (asyncproc-input-text/p))
-    :use-module ((euphrates asyncproc-stderr) :select (asyncproc-stderr))
-    :use-module ((euphrates asyncproc-stdout) :select (asyncproc-stdout))
-    :use-module ((euphrates asyncproc) :select (asyncproc asyncproc-args asyncproc-command set-asyncproc-exited?! set-asyncproc-pid! set-asyncproc-pipe! set-asyncproc-status!))
-    :use-module ((euphrates call-with-finally) :select (call-with-finally))
-    :use-module ((euphrates catch-any) :select (catch-any))
-    :use-module ((euphrates conss) :select (conss))
-    :use-module ((euphrates dynamic-thread-get-delay-procedure) :select (dynamic-thread-get-delay-procedure))
-    :use-module ((euphrates dynamic-thread-spawn) :select (dynamic-thread-spawn))
-    :use-module ((euphrates file-delete) :select (file-delete))
-    :use-module ((euphrates make-temporary-fileport) :select (make-temporary-fileport))
-    :use-module ((euphrates read-string-file) :select (read-string-file))
-    )))
 
 
 (cond-expand
  (guile
-
-
-  (use-modules (ice-9 popen))
 
   (define-syntax with-ignore-errors!*
     (syntax-rules ()
@@ -78,7 +58,7 @@
                           (conss OPEN_WRITE
                                  (asyncproc-command p)
                                  (asyncproc-args p)))]
-             [pid (hashq-ref port/pid-table pipe)]
+             [pid (hashv-ref port/pid-table pipe)]
              [re-status #f]]
         (set-asyncproc-pipe! p pipe)
         (set-asyncproc-pid! p pid)

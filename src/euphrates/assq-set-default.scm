@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates assq-set-default)
-    :export (assq-set-default)
-    :use-module ((euphrates assq-set-value) :select (assq-set-value)))))
 
 
 

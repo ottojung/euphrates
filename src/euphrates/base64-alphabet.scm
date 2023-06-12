@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates base64-alphabet)
-    :export (base64/alphabet))))
 
 
 ;; Specified by RFC 1421, 2045, 2152, 4648 $4, 4880

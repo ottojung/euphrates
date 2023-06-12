@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates mimetype-extensions)
-    :export (mimetype/extensions))))
 
 
 ;; Taken from:

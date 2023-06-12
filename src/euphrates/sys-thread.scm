@@ -12,30 +12,10 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates sys-thread)
-    :export (sys-thread-cancel sys-thread-current sys-thread-disable-cancel sys-thread-enable-cancel sys-thread-mutex-make sys-thread-mutex-lock! sys-thread-mutex-unlock! sys-thread-spawn sys-thread-sleep)
-    :use-module ((euphrates sys-thread-obj) :select (sys-thread-obj sys-thread-obj? sys-thread-obj-handle set-sys-thread-obj-handle! sys-thread-obj-cancel-scheduled? set-sys-thread-obj-cancel-scheduled?! sys-thread-obj-cancel-enabled? set-sys-thread-obj-cancel-enabled?!))
-    :use-module ((euphrates sys-usleep) :select (sys-usleep))
-    :use-module ((euphrates sys-mutex-make) :select (sys-mutex-make))
-    :use-module ((euphrates sys-mutex-lock) :select (sys-mutex-lock!))
-    :use-module ((euphrates sys-mutex-unlock) :select (sys-mutex-unlock!))
-    :use-module ((euphrates sys-thread-current-p) :select (sys-thread-current#p))
-    :use-module ((euphrates sys-thread-current-p-default) :select (sys-thread-current#p-default))
-    :use-module ((euphrates dynamic-thread-cancel-tag) :select (dynamic-thread-cancel-tag))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; TODO: add sys-thread-parameterize-env
 
 
-
-
-
-(cond-expand
- (guile
-  (use-modules (ice-9 threads))
-  ))
 
 (define (sys-thread-cancel th)
   (set-sys-thread-obj-cancel-scheduled?! th #t))

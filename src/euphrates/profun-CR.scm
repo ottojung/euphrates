@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-CR)
-    :export (make-profun-CR profun-CR? profun-CR-what)
-    :use-module ((euphrates profun-abort) :select (make-profun-abort profun-abort-type profun-abort-what profun-abort?)))))
 
 ;; Profun's Custom Results
 

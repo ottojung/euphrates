@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates multiset)
-    :export (make-multiset multiset? list->multiset vector->multiset multiset->list multiset-equal? multiset-ref multiset-add! multiset-filter)
-    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-count hashmap-foreach hashmap-ref hashmap-set! make-hashmap))
-    :use-module ((euphrates multiset-obj) :select (multiset-constructor multiset-predicate multiset-value))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 
@@ -48,7 +41,7 @@
       (hashmap-foreach
        (lambda (key value)
          (when ret
-           (unless (eqv? value (hash-ref B key 0))
+           (unless (eqv? value (hashmap-ref B key 0))
              (set! ret #f))))
        A)
       ret))
@@ -60,7 +53,7 @@
          (each-is-equal? A B))))
 
 (define (multiset-ref H key)
-  (hash-ref (multiset-value H) key #f))
+  (hashmap-ref (multiset-value H) key #f))
 (define (multiset-add! H key)
   (hashmap-set! (multiset-value H)
                 key

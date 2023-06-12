@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-make-set)
-    :export (profun-make-set)
-    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
-    :use-module ((euphrates profun-accept) :select (profun-ctx-set profun-set))
-    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
-    :use-module ((euphrates profun-reject) :select (profun-reject))
-    :use-module ((euphrates profun-value) :select (profun-bound-value?)))))
 
 ;; Used in bottom-handler to return just some predefined values
 

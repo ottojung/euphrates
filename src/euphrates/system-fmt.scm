@@ -12,14 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates system-fmt)
-    :export (system-fmt)
-    :use-module ((euphrates system-star-exit-code) :select (system*/exit-code))
-    :use-module ((euphrates stringf) :select (stringf))
-    :use-module ((euphrates shell-quote-permissive) :select (shell-quote/permissive))
-    :use-module ((euphrates tilda-a) :select (~a)))))
 
 ;; Escapes all args, so variable substitution won't work!
 ;; i.e. (system-re "cat ~a" "$HOME/.bashrc") => will invoke `cat '$HOME/.bashrc'` and will not work :(

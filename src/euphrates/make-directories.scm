@@ -1,13 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates make-directories)
-    :export (make-directories)
-    :use-module ((euphrates string-split-simple) :select (string-split/simple))
-    :use-module ((euphrates list-fold) :select (list-fold))
-    :use-module ((euphrates file-or-directory-exists-q) :select (file-or-directory-exists?))
-    :use-module ((euphrates append-posix-path) :select (append-posix-path))
-    :use-module ((euphrates string-null-or-whitespace-p) :select (string-null-or-whitespace?)))))
 
 
 

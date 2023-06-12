@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates vector-random-shuffle-bang)
-    :export (vector-random-shuffle!)
-    :use-module ((euphrates big-random-int) :select (big-random-int)))))
 
 
 

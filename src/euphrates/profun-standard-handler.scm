@@ -12,23 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-standard-handler)
-    :export (profun-standard-handler)
-    :use-module ((euphrates profun-handler) :select (profun-make-handler))
-    :use-module ((euphrates profun-op-divisible) :select (profun-op-divisible))
-    :use-module ((euphrates profun-op-equals) :select (profun-op-equals))
-    :use-module ((euphrates profun-op-false) :select (profun-op-false))
-    :use-module ((euphrates profun-op-less) :select (profun-op-less))
-    :use-module ((euphrates profun-op-modulo) :select (profun-op-modulo))
-    :use-module ((euphrates profun-op-mult) :select (profun-op*))
-    :use-module ((euphrates profun-op-plus) :select (profun-op+))
-    :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
-    :use-module ((euphrates profun-op-sqrt) :select (profun-op-sqrt))
-    :use-module ((euphrates profun-op-true) :select (profun-op-true))
-    :use-module ((euphrates profun-op-unify) :select (profun-op-unify))
-    )))
 
 
 ;; A handler that only contains operations that are safe, portable and pure.

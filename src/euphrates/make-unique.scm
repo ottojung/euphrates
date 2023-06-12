@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates make-unique)
-    :export (make-unique))))
 
 
 ;; Returns procedure that returns #t if applied to itself, #f otherwise

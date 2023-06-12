@@ -14,12 +14,8 @@
 
 (cond-expand
  (guile
-  (define-module (euphrates builtin-descriptors)
-    :export (builtin-descriptors)
-    :use-module ((euphrates atomic-box) :select (atomic-box?))
-    :use-module ((euphrates box) :select (box?)))))
-
-
+  (define is-parameter? parameter?)
+  (define is-hash-table? hash-table?)))
 
 (define (make-builtin-descriptor name predicate)
   `((name . ,name)
@@ -38,14 +34,11 @@
    (make-builtin-descriptor 'list list?)
    (make-builtin-descriptor 'cons pair?)
    (make-builtin-descriptor 'vector vector?)
-   (make-builtin-descriptor 'parameter parameter?)
+   (make-builtin-descriptor 'parameter is-parameter?)
    (make-builtin-descriptor 'unspecified (lambda (x) (equal? x (when #f #f))))
    (make-builtin-descriptor 'eof eof-object?)
 
-   (cond-expand
-    (guile
-     (make-builtin-descriptor 'hash-table hash-table?)
-     ))
+   (make-builtin-descriptor 'hash-table is-hash-table?)
 
    (make-builtin-descriptor 'box box?)
    (make-builtin-descriptor 'atomic-box atomic-box?)

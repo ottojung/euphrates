@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assoc-set-value)
-    :export (assoc-set-value))))
 
 
 (define (assoc-set-value key value alist0)

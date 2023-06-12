@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-tag-next)
-    :export (list-tag/next list-tag/next/rev list-untag/next))))
 
 
 (define (list-tag/next/rev first-tag predicate L)

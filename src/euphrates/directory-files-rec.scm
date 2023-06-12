@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates directory-files-rec)
-    :export (directory-files-rec)
-    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter)))))
 
 
 ;; Returns object like this:

@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-init)
-    :export (list-init))))
 
 
 (define (list-init lst)

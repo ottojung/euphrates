@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates un-tilda-s)
-    :export (un~s))))
 
 
 (cond-expand

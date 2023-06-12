@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-abort)
-    :export (make-profun-abort profun-abort? profun-abort-type profun-abort-iter profun-abort-what profun-abort-additional profun-abort-set-iter profun-abort-modify-iter profun-abort-add-info)
-    :use-module ((euphrates define-type9) :select (define-type9)))))
 
 
 

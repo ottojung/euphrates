@@ -12,14 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates cfg-remove-dead-code)
-    :export (CFG-remove-dead-code)
-    :use-module ((euphrates cfg-strip-modifiers) :select (CFG-strip-modifiers))
-    :use-module ((euphrates hashmap) :select (alist->hashmap hashmap-ref))
-    :use-module ((euphrates hashset) :select (hashset-add! hashset-has? make-hashset))
-    )))
 
 (define (CFG-remove-dead-code CFG)
   (if (null? CFG) CFG

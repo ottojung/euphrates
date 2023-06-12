@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates prefixtree-obj)
-    :export (prefixtree prefixtree? prefixtree-value set-prefixtree-value! prefixtree-children set-prefixtree-children!)
-    :use-module ((euphrates define-type9) :select (define-type9)))))
 
 
 

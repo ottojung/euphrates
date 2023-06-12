@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-intersperse)
-    :export (list-intersperse)
-    :use-module ((euphrates conss) :select (conss)))))
 
 
 

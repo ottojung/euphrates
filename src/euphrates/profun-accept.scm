@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-accept)
-    :export (profun-accept make-profun-accept profun-accept? profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-set profun-ctx-set profun-set-meta profun-set-parameter)
-    :use-module ((euphrates assq-set-value) :select (assq-set-value))
-    :use-module ((euphrates define-type9) :select (define-type9))
-    :use-module ((euphrates profun-meta-key) :select (profun-meta-key))
-    :use-module ((euphrates profun-varname-q) :select (profun-varname?))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

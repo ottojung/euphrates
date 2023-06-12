@@ -12,17 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates monad-do)
-    :export (monad-do monad-do/generic)
-    :use-module ((euphrates memconst) :select (memconst))
-    :use-module ((euphrates monad-apply) :select (monad-apply))
-    :use-module ((euphrates monad-current-p) :select (monad-current/p))
-    :use-module ((euphrates monadobj) :select (monadobj?))
-    :use-module ((euphrates monadstateobj) :select (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qvar))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates range) :select (range)))))
 
 
 

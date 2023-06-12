@@ -12,26 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates petri)
-    :export (petri-push petri-run)
-    :use-module ((euphrates cartesian-product-g) :select (cartesian-product/g))
-    :use-module ((euphrates catch-any) :select (catch-any))
-    :use-module ((euphrates curry-if) :select (curry-if))
-    :use-module ((euphrates dynamic-thread-async) :select (dynamic-thread-async))
-    :use-module ((euphrates dynamic-thread-critical-make) :select (dynamic-thread-critical-make))
-    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-clear! hashmap-ref hashmap-set! make-hashmap))
-    :use-module ((euphrates hashset) :select (hashset-add! hashset-clear! hashset-has? make-hashset))
-    :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
-    :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
-    :use-module ((euphrates list-or-map) :select (list-or-map))
-    :use-module ((euphrates petri-error-handling) :select (patri-handle-make-callback))
-    :use-module ((euphrates petri-net-obj) :select (petri-net-obj-critical petri-net-obj-finished? petri-net-obj-queue petri-net-obj-transitions petri-net-obj? set-petri-net-obj-finished?!))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates range) :select (range))
-    :use-module ((euphrates stack) :select (stack-make stack-pop! stack-push! stack-unload!))
-    :use-module ((euphrates with-critical) :select (with-critical)))))
 
 ;; Inspired from guile-petri library of Julien Lepiller:
 ;; https://tyreunom.frama.io/guile-petri/documentation/The-Echo-Server.html

@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates remove-common-prefix)
-    :export (remove-common-prefix)
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates list-remove-common-prefix) :select (list-remove-common-prefix)))))
 
 
 

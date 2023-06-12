@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates call-with-finally)
-    :export (call-with-finally)
-    :use-module ((euphrates catch-any) :select (catch-any))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

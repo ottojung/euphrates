@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates define-tuple)
-    :export (define-tuple))))
 
 
 (define-syntax define-tuple

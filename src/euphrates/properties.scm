@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates properties)
-    :export (define-property)
-    :use-module ((euphrates hashmap) :select (hashmap-ref hashmap-set! make-hashmap))
-    :use-module ((euphrates make-unique) :select (make-unique))
-    :use-module ((euphrates memconst) :select (memconst))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

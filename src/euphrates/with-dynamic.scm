@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates with-dynamic)
-    :export (with-dynamic))))
-
-
 (define-syntax %with-dynamic-helper1
   (syntax-rules ()
     ((_ arg value . bodies)

@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates base64-alphabet-pluscomma)
-    :export (base64/alphabet/pluscomma))))
 
 
 ;; Specified by RFC 3501: Base64 encoding for IMAP mailbox names

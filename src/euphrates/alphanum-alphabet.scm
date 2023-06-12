@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates alphanum-alphabet)
-    :export (alphanum/alphabet alphanum/alphabet/index))))
 
 
 (define alphanum/alphabet

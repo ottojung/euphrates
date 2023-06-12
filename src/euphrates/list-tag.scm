@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-tag)
-    :export (list-tag list-untag)
-    :use-module ((euphrates list-tag-prev) :select (list-tag/prev/rev)))))
 
 
 

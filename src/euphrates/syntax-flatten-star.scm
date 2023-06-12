@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates syntax-flatten-star)
-    :export (syntax-flatten*)
-    :use-module ((euphrates syntax-reverse) :select (syntax-reverse)))))
 
 ;;; Fully flattens syntax tree, so that ((a b (c (g h) d) (h) e)) becomes (a b c g h d h e)
 

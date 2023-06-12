@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates monad-compose)
-    :export (monad-compose)
-    :use-module ((euphrates monadobj) :select (monadobj-constructor monadobj-handles-fin? monadobj-procedure monadobj-uses-continuations? monadobj?))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

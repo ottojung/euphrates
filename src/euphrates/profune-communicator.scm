@@ -12,26 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profune-communicator)
-    :export (make-profune-communicator profune-communicator? profune-communicator-db profune-communicator-handle)
-    :use-module ((euphrates define-type9) :select (define-type9))
-    :use-module ((euphrates list-and-map) :select (list-and-map))
-    :use-module ((euphrates list-deduplicate) :select (list-deduplicate/reverse))
-    :use-module ((euphrates list-map-first) :select (list-map-first))
-    :use-module ((euphrates list-singleton-q) :select (list-singleton?))
-    :use-module ((euphrates list-span-while) :select (list-span-while))
-    :use-module ((euphrates profun-CR) :select (profun-CR-what profun-CR?))
-    :use-module ((euphrates profun-IDR) :select (profun-IDR-arity profun-IDR-name profun-IDR?))
-    :use-module ((euphrates profun-RFC) :select (profun-RFC-what profun-RFC?))
-    :use-module ((euphrates profun-abort) :select (profun-abort-iter))
-    :use-module ((euphrates profun-database) :select (profun-database-copy profun-database-extend profun-database-get profun-database-handle profun-database?))
-    :use-module ((euphrates profun-error) :select (profun-error-args profun-error?))
-    :use-module ((euphrates profun-iterator) :select (profun-iterator-copy profun-iterator-insert! profun-iterator-reset!))
-    :use-module ((euphrates profun) :select (profun-iterate profun-next))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates stack) :select (stack-empty? stack-make stack-peek stack-pop! stack-push! stack-unload!)))))
 
 
 

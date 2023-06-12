@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates file-delete)
-    :export (file-delete)
-    :use-module ((euphrates catch-any) :select (catch-any)))))
 
 ;;
 ;; @returns #f on success, #t on failure

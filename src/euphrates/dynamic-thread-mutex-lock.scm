@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates dynamic-thread-mutex-lock)
-    :export (dynamic-thread-mutex-lock!)
-    :use-module ((euphrates dynamic-thread-mutex-lock-p) :select (dynamic-thread-mutex-lock!#p))
-    :use-module ((euphrates dynamic-thread-mutex-lock-p-default) :select (dynamic-thread-mutex-lock!#p-default)))))
 
 
 

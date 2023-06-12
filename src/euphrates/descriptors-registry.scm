@@ -12,14 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates descriptors-registry)
-    :export (descriptors-registry-get descriptors-registry-add! descriptors-registry-decolisify-name)
-    :use-module ((euphrates builtin-descriptors) :select (builtin-descriptors))
-    :use-module ((euphrates hashmap) :select (hashmap-count hashmap-ref hashmap-set! make-hashmap))
-    :use-module ((euphrates list-and-map) :select (list-and-map))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

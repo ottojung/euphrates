@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates builtin-type-huh)
-    :export (builtin-type?)
-    :use-module ((euphrates builtin-descriptors) :select (builtin-descriptors))
-    :use-module ((euphrates list-or-map) :select (list-or-map)))))
 
 
 

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates syntax-map)
-    :export (syntax-map)
-    :use-module ((euphrates syntax-reverse) :select (syntax-reverse)))))
 
 
 

@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-op-mult)
-    :export (profun-op*)
-    :use-module ((euphrates profun-op-binary) :select (profun-op-binary)))))
 
 
 

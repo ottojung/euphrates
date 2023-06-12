@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assoc-or)
-    :export (assoc-or))))
 
 
 (define-syntax assoc-or

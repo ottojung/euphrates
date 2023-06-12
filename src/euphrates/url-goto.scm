@@ -12,16 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates url-goto)
-    :export (url-goto)
-    :use-module ((euphrates url-get-hostname-and-port) :select (url-get-hostname-and-port))
-    :use-module ((euphrates url-get-path) :select (url-get-path))
-    :use-module ((euphrates url-get-protocol) :select (url-get-protocol)))))
-
-
-
 (define (url-goto base relative)
   (cond
    ((string-prefix? "//" relative)
@@ -39,5 +29,5 @@
                      (url-get-hostname-and-port base)
                      (if (string-suffix? "/" path)
                          path
-                         (string-append (dirname path) "/"))
+                         (string-append (path-get-dirname path) "/"))
                      relative)))))

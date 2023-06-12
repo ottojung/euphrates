@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-fold)
-    :export (list-fold))))
 
 ;; Almost like racket's `for/list'
 

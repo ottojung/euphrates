@@ -12,35 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun)
-    :export (profun-create-database profun-create-falsy-database profun-eval-query profun-eval-query/boolean profun-iterate profun-next profun-next/boolean)
-    :use-module ((euphrates comp) :select (comp))
-    :use-module ((euphrates define-type9) :select (define-type9))
-    :use-module ((euphrates fn-cons) :select (fn-cons))
-    :use-module ((euphrates fn-pair) :select (fn-pair))
-    :use-module ((euphrates hashmap) :select (hashmap->alist))
-    :use-module ((euphrates profun-CR) :select (profun-CR-what profun-CR?))
-    :use-module ((euphrates profun-IDR) :select (make-profun-IDR profun-IDR?))
-    :use-module ((euphrates profun-RFC) :select (profun-RFC-modify-iter profun-RFC?))
-    :use-module ((euphrates profun-abort) :select (profun-abort-set-iter profun-abort?))
-    :use-module ((euphrates profun-accept) :select (profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?))
-    :use-module ((euphrates profun-database) :select (make-falsy-profun-database make-profun-database profun-database-falsy? profun-database-get profun-database-handle profun-database?))
-    :use-module ((euphrates profun-env) :select (make-profun-env profun-env-get profun-env-set! profun-env-unset!))
-    :use-module ((euphrates profun-error) :select (make-profun-error profun-error-args profun-error?))
-    :use-module ((euphrates profun-instruction) :select (profun-instruction-args profun-instruction-arity profun-instruction-body profun-instruction-build profun-instruction-constructor profun-instruction-context profun-instruction-name profun-instruction-next))
-    :use-module ((euphrates profun-iterator) :select (profun-abort-insert profun-iterator-constructor profun-iterator-copy profun-iterator-db profun-iterator-env profun-iterator-query profun-iterator-state set-profun-iterator-state!))
-    :use-module ((euphrates profun-op-obj) :select (profun-op-procedure))
-    :use-module ((euphrates profun-query-handle-underscores) :select (profun-query-handle-underscores))
-    :use-module ((euphrates profun-reject) :select (profun-reject?))
-    :use-module ((euphrates profun-rule) :select (profun-rule-args profun-rule-body profun-rule-index profun-rule-name))
-    :use-module ((euphrates profun-state) :select (profun-state-build profun-state-constructor profun-state-current profun-state-failstate profun-state-final? profun-state-finish profun-state-stack profun-state-undo profun-state? set-profun-state-current))
-    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-make-var profun-value-unwrap))
-    :use-module ((euphrates profun-varname-q) :select (profun-varname?))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates usymbol) :select (make-usymbol))
-    )))
 
 
 

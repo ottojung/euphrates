@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-drop-n)
-    :export (list-drop-n))))
 
 
 (define (list-drop-n n lst)

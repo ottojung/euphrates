@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates curry-if)
-    :export (curry-if))))
 
 
 (define curry-if

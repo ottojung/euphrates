@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; Originally taken from: https://github.com/scheme-requests-for-implementation/srfi-27/blob/master/reference/mrg32k3a-a.scm
-
-(cond-expand
- (guile
-  (define-module (euphrates srfi-27-backbone-generator)
-    :export (mrg32k3a-pack-state mrg32k3a-unpack-state mrg32k3a-random-range mrg32k3a-random-integer mrg32k3a-random-real))))
 
 
 ;;

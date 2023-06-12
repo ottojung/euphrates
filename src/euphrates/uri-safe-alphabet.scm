@@ -12,10 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates uri-safe-alphabet)
-    :export (uri-safe/alphabet uri-safe/alphabet/index))))
 
 
 ;; RFC 3986 section 2.3 Unreserved Characters

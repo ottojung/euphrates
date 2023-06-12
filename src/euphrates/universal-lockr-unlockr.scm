@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates universal-lockr-unlockr)
-    :export (universal-lockr! universal-unlockr!)
-    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set! hashmap-delete!))
-    :use-module ((euphrates dynamic-thread-get-delay-procedure) :select (dynamic-thread-get-delay-procedure))
-    :use-module ((euphrates with-critical) :select (with-critical))
-    :use-module ((euphrates uni-spinlock) :select (make-uni-spinlock-critical)))))
 
 
 

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates directory-files)
-    :export (directory-files)
-    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter)))))
 
 
 ;; Returns object like this:
@@ -14,8 +9,6 @@
 
 (cond-expand
  (guile
-
-  (use-modules (ice-9 ftw))
 
   (define directory-files
     (case-lambda

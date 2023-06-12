@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates serialization-sexp-short)
-    :export (serialize/sexp/short deserialize/sexp/short)
-    :use-module ((euphrates serialization-builtin-short) :select (deserialize-builtin/short serialize-builtin/short))
-    :use-module ((euphrates serialization-sexp-generic) :select (deserialize/sexp/generic serialize/sexp/generic)))))
 
 
 

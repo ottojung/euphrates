@@ -1,21 +1,5 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-combinations)
-    :export (list-combinations)
-    :use-module ((euphrates list-fold) :select (list-fold)))))
-
-
-
-(cond-expand
- (guile
-
-  ;; bitwise operations
-  (use-modules (srfi srfi-60))
-
-  (define (bitwise-bit-set? x i) (bit-set? i x))
-
-  ))
+(define (bitwise-bit-set? x i) (bit-set? i x))
 
 (define (with-repetitions/fixed alphabet-lst size)
   (define v (make-vector size))

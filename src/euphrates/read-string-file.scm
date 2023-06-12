@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates read-string-file)
-    :export (read-string-file)
-    :use-module ((euphrates read-all-port) :select (read-all-port))
-    :use-module ((euphrates open-file-port) :select (open-file-port)))))
 
 
 

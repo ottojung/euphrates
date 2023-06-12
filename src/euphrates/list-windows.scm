@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-windows)
-    :export (list-windows)
-    :use-module ((euphrates list-span) :select (list-span)))))
 
 
 

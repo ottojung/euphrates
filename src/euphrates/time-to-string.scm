@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates time-to-string)
-    :export (seconds->M/s seconds->H/M/s seconds->time-string)
-    :use-module ((euphrates string-pad) :select (string-pad-L)))))
 
 
 

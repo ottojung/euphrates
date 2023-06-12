@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates mdict)
-    :export (hash->mdict ahash->mdict mdict mdict-has? mdict-set! mdict->alist mdict-keys)
-    :use-module ((euphrates make-unique) :select (make-unique))
-    :use-module ((euphrates hashmap) :select (make-hashmap hashmap->alist alist->hashmap hashmap-foreach))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 
@@ -14,7 +7,7 @@
     (case-lambda
      [[] h]
      [[key]
-      (let [[g (hash-ref h key unique)]]
+      (let [[g (hashmap-ref h key unique)]]
         (if (unique g)
             (raisu 'mdict-key-not-found key h)
             g))]
@@ -22,9 +15,9 @@
       (let* [[new (make-hashmap)]]
         (hashmap-foreach
          (lambda (key value)
-           (hash-set! new key value))
+           (hashmap-set! new key value))
          h)
-        (hash-set! new key value)
+        (hashmap-set! new key value)
         (hash->mdict new))])))
 
 (define [alist->mdict alist]
@@ -36,16 +29,18 @@
     [(mdict-c carry key value . rest)
      (mdict-c (cons (cons key value) carry) . rest)]))
 
-(define-syntax-rule [mdict . entries]
-  (mdict-c '() . entries))
+(define-syntax mdict
+  (syntax-rules ()
+    ((_ . entries)
+     (mdict-c '() . entries))))
 
 (define [mdict-has? h-func key]
   (let [[h (h-func)]]
-    (hash-get-handle h key)))
+    (hashmap-has? h key)))
 
 (define [mdict-set! h-func key value]
   (let [[h (h-func)]]
-    (hash-set! h key value)))
+    (hashmap-set! h key value)))
 
 (define [mdict->alist h-func]
   (let [[h (h-func)]]

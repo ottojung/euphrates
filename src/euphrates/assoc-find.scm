@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assoc-find)
-    :export (assoc/find)
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

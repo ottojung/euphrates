@@ -1,14 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates debugv)
-    :export (debugv)
-    :use-module ((euphrates debug) :select (debug))
-    :use-module ((euphrates range) :select (range))
-    :use-module ((euphrates list-intersperse) :select (list-intersperse)))))
-
-
-
 (define (debug-vars->string vars/symbols)
   (define count (length vars/symbols))
   (define mapped (map (const "~s = ~s") (range count)))
@@ -21,5 +11,7 @@
     ((_ vars buf (x . xs))
      (debug-vars-helper vars ((quote x) x . buf) xs))))
 
-(define-syntax-rule (debugv . vars)
-  (debug-vars-helper vars () vars))
+(define-syntax debugv
+  (syntax-rules ()
+    ((_ . vars)
+     (debug-vars-helper vars () vars))))

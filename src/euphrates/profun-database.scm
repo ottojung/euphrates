@@ -12,17 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-database)
-    :export (profun-database-copy profun-database? profun-database-rules profun-database-handler profun-database-falsy? profun-database-handle profun-database-get-all profun-database-get make-profun-database make-falsy-profun-database profun-database-extend)
-    :use-module ((euphrates define-type9) :select (define-type9))
-    :use-module ((euphrates hashmap) :select (hashmap-copy hashmap-ref hashmap-set! make-hashmap))
-    :use-module ((euphrates list-ref-or) :select (list-ref-or))
-    :use-module ((euphrates profun-handler) :select (profun-handler-get))
-    :use-module ((euphrates profun-rule) :select (profun-rule-constructor))
-    :use-module ((euphrates profun-varname-q) :select (profun-varname?))
-    :use-module ((euphrates usymbol) :select (make-usymbol)))))
 
 
 

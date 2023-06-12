@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates file-mtime)
-    :export (file-mtime))))
 
 
 (cond-expand

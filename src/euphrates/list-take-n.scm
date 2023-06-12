@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-take-n)
-    :export (list-take-n))))
 
 
 (define (list-take-n n lst)

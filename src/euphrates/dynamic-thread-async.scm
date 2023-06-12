@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates dynamic-thread-async)
-    :export (dynamic-thread-async)
-    :use-module ((euphrates dynamic-thread-async-thunk) :select (dynamic-thread-async-thunk)))))
 
 
 

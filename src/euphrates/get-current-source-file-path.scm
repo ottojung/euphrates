@@ -1,18 +1,14 @@
 
 (cond-expand
  (guile
-  (define-module (euphrates get-current-source-file-path)
-    :export (get-current-source-file-path))))
 
-
-(cond-expand
- (guile
-
-  (define-syntax-rule [get-current-source-file-path]
-    (cdr
-     (assq
-      'filename
-      (current-source-location))))
+  (define-syntax get-current-source-file-path
+    (syntax-rules ()
+      ((_ . args)
+       (cdr
+        (assq
+         'filename
+         (current-source-location))))))
 
   )
 

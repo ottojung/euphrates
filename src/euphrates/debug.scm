@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates debug)
-    :export (debug)
-    :use-module ((euphrates global-debug-mode-filter) :select (global-debug-mode-filter))
-    :use-module ((euphrates printf) :select (printf))
-    :use-module ((euphrates conss) :select (conss)))))
 
 
 

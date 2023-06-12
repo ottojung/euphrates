@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates current-source-info-to-string)
-    :export (current-source-info->string)
-    :use-module ((euphrates remove-common-prefix) :select (remove-common-prefix))
-    :use-module ((euphrates get-current-directory) :select (get-current-directory))
-    :use-module ((euphrates tilda-a) :select (~a)))))
 
 
 

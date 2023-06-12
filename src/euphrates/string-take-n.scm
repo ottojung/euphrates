@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates string-take-n)
-    :export (string-take-n))))
 
 
 (define (string-take-n n str)

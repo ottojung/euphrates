@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-length-geq-q)
-    :export (list-length=<?))))
 
 
 (define (list-length=<? target-length lst)

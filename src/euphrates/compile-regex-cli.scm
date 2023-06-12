@@ -12,13 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates compile-regex-cli)
-    :export (compile-regex-cli:make-IR compile-regex-cli:IR->Regex)
-    :use-module ((euphrates group-by-sequential) :select (group-by/sequential group-by/sequential*))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates list-init) :select (list-init)))))
 
 ;; Deprecated in favor of CFG-machine based DSL
 

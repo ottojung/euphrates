@@ -13,11 +13,6 @@
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(cond-expand
- (guile
-  (define-module (euphrates linear-regression)
-    :export (linear-regression))))
-
 (define (linear-regression X Y)
   (let* ((n (length X))
          (sum-x (apply + X))

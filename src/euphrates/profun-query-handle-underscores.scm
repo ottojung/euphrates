@@ -12,14 +12,11 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-query-handle-underscores)
-    :export (profun-query-handle-underscores)
-    :use-module ((euphrates list-and-map) :select (list-and-map))
-    :use-module ((euphrates usymbol) :select (make-usymbol)))))
-
-
+(define unique-counter
+  (let ((count 0))
+    (lambda _
+      (set! count (+ 1 count))
+      count)))
 
 (define (profun-query-handle-underscores query)
   (define (handle-elem x)
@@ -27,7 +24,7 @@
         (let ((s (symbol->string x)))
           (if (string-prefix? "_" s)
               (if (= 1 (string-length s))
-                  (make-usymbol x (cons 'u (gensym)))
+                  (make-usymbol x (cons 'u (unique-counter)))
                   (make-usymbol x 'u))
               x))
         x))

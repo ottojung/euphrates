@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates dynamic-thread-spawn)
-    :export (dynamic-thread-spawn)
-    :use-module ((euphrates dynamic-thread-spawn-p) :select (dynamic-thread-spawn#p))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

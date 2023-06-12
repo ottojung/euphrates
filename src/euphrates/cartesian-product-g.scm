@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates cartesian-product-g)
-    :export (cartesian-product/g/reversed cartesian-product/g)
-    :use-module ((euphrates cartesian-product) :select (cartesian-product))
-    :use-module ((euphrates cartesian-map) :select (cartesian-map)))))
 
 
 

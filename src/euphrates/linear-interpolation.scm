@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates linear-interpolation)
-    :export (linear-interpolate-1d linear-interpolate-2d)
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

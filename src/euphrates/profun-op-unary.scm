@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-op-unary)
-    :export (profun-op-unary)
-    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
-    :use-module ((euphrates profun-accept) :select (profun-set))
-    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
-    :use-module ((euphrates profun-request-value) :select (profun-request-value))
-    :use-module ((euphrates profun-value) :select (profun-bound-value?)))))
 
 
 

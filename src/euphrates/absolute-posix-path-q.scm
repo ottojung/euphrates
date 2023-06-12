@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates absolute-posix-path-q)
-    :export (absolute-posix-path?))))
 
 
 (define (absolute-posix-path? path)

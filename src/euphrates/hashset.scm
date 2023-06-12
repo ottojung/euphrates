@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates hashset)
-    :export (make-hashset list->hashset vector->hashset hashset-length hashset->list hashset-equal? hashset-has? hashset-ref hashset-add! hashset-difference hashset-intersection hashset-union hashset-foreach hashset-map hashset-clear! hashset-delete!)
-    :use-module ((euphrates fn) :select (fn))
-    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-clear! hashmap-count hashmap-delete! hashmap-foreach hashmap-map hashmap-set! make-hashmap))
-    :use-module ((euphrates hashset-obj) :select (hashset-constructor hashset-predicate hashset-value))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 
@@ -54,7 +46,7 @@
       (hashmap-foreach
        (lambda (key value)
          (when ret
-           (unless (hash-ref B key #f)
+           (unless (hashmap-ref B key #f)
              (set! ret #f))))
        A)
       ret))
@@ -66,7 +58,7 @@
          (each-is-equal? A B))))
 
 (define (hashset-has? H key)
-  (hash-ref (hashset-value H) key #f))
+  (hashmap-ref (hashset-value H) key #f))
 
 (define-syntax hashset-ref
   (syntax-rules ()
@@ -76,11 +68,11 @@
         H key
         (raisu 'hashset-key-not-found key))))
     ((_ H key default)
-     (let ((get (hash-ref (hashset-value H) key #f)))
+     (let ((get (hashmap-ref (hashset-value H) key #f)))
        (or get default)))))
 
 (define (hashset-add! H key)
-  (hash-set! (hashset-value H) key #t))
+  (hashmap-set! (hashset-value H) key #t))
 
 (define (hashset-difference a b)
   (define H (make-hashmap))
@@ -89,7 +81,7 @@
         (B (hashset-value b)))
     (hashmap-foreach
      (lambda (key value)
-       (unless (hash-ref B key #f)
+       (unless (hashmap-ref B key #f)
          (hashmap-set! H key #t)))
      A))
 
@@ -102,7 +94,7 @@
         (B (hashset-value b)))
     (hashmap-foreach
      (lambda (key value)
-       (when (hash-ref B key #f)
+       (when (hashmap-ref B key #f)
          (hashmap-set! H key #t)))
      A))
 

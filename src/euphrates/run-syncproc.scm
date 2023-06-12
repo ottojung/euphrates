@@ -12,13 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates run-syncproc)
-    :export (run-syncproc)
-    :use-module ((euphrates asyncproc) :select (asyncproc-status))
-    :use-module ((euphrates run-syncproc-star) :select (run-syncproc*))
-    )))
 
 (define (run-syncproc command . args)
   (define p

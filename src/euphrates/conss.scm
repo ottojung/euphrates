@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates conss)
-    :export (conss))))
 
 (cond-expand
  (guile

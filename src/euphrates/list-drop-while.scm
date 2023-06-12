@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-drop-while)
-    :export (list-drop-while))))
 
 
 (define (list-drop-while pred lst)

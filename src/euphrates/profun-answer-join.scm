@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-answer-join)
-    :export (profun-answer-join/any profun-answer-join/or profun-answer-join/and)
-    :use-module ((euphrates hashmap) :select (alist->hashmap hashmap->alist))
-    :use-module ((euphrates profun-abort) :select (profun-abort?))
-    :use-module ((euphrates profun-accept) :select (make-profun-accept profun-accept-alist profun-accept-ctx profun-accept-ctx-changed? profun-accept?))
-    :use-module ((euphrates profun-reject) :select (profun-reject?))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

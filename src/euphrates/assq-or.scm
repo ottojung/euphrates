@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assq-or)
-    :export (assq-or))))
 
 
 (define-syntax assq-or

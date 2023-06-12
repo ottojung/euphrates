@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates syntax-reverse)
-    :export (syntax-reverse))))
 
 
 (define-syntax syntax-reverse-buf

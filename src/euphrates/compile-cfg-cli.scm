@@ -12,14 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates compile-cfg-cli)
-    :export (CFG-AST->CFG-lang CFG-CLI->CFG-lang CFG-lang-modifier-char?)
-    :use-module ((euphrates hashset) :select (hashset-has? make-hashset))
-    :use-module ((euphrates parse-cfg-cli) :select (CFG-CLI->CFG-AST))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates tilda-a) :select (~a)))))
 
 ;;
 ;; In this file we translate CFG-CLI definitions

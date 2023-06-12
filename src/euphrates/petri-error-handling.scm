@@ -12,10 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates petri-error-handling)
-    :export (patri-handle-make-callback petri-handle-get))))
 
 
 (define (patri-handle-make-callback error-handler)

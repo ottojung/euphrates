@@ -12,17 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates monadstate)
-    :export (monadstate? monadstate-cret monadstate-cret/thunk monadstate-ret monadstate-ret/thunk monadstate-make-empty monadstate-qvar monadstate-qval monadstate-qtags monadstate-lval monadstate-arg monadstate-args monadstate-replicate-multiple monadstate-handle-multiple)
-    :use-module ((euphrates identity-star) :select (identity*))
-    :use-module ((euphrates memconst) :select (memconst))
-    :use-module ((euphrates monadfinobj) :select (monadfinobj monadfinobj-lval monadfinobj?))
-    :use-module ((euphrates monadstate-current-p) :select (monadstate-current/p))
-    :use-module ((euphrates monadstateobj) :select (monadstateobj monadstateobj-cont monadstateobj-lval monadstateobj-qtags monadstateobj-qval monadstateobj-qvar monadstateobj?))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates replicate) :select (replicate)))))
 
 
 

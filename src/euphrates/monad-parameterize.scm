@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates monad-parameterize)
-    :export (monad-parameterize with-monad-left with-monad-right)
-    :use-module ((euphrates monad-compose) :select (monad-compose))
-    :use-module ((euphrates monad-transformer-current-p) :select (monad-transformer-current/p)))))
 
 
 

@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-traverse)
-    :export (list-traverse))))
 
 
 (define list-traverse

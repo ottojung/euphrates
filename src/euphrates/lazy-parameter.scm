@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates lazy-parameter)
-    :export (lazy-parameter)
-    :use-module ((euphrates memconst) :select (memconst)))))
 
 
 ;; Does not evaluate its arguments until requested.

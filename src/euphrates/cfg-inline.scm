@@ -12,17 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates cfg-inline)
-    :export (CFG-inline)
-    :use-module ((euphrates cfg-parse-modifiers) :select (CFG-parse-modifiers))
-    :use-module ((euphrates comp) :select (comp))
-    :use-module ((euphrates hashmap) :select (alist->hashmap hashmap-ref))
-    :use-module ((euphrates list-and-map) :select (list-and-map))
-    :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
-    :use-module ((euphrates list-singleton-q) :select (list-singleton?))
-    )))
 
 
 (define (CFG-inline CFG)

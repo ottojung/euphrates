@@ -12,13 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates parse-cfg-cli)
-    :export (CFG-CLI->CFG-AST)
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates list-split-on) :select (list-split-on))
-    :use-module ((euphrates tilda-a) :select (~a)))))
 
 ;;
 ;; In this file we translate CFG-CLI definitions

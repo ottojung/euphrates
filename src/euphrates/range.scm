@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates range)
-    :export (range))))
 
 
 (define range

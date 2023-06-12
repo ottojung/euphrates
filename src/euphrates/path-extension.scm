@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates path-extension)
-    :export (path-extension))))
 
 ;; Returns extension with a dot or ""
 

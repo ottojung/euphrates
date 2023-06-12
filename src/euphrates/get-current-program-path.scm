@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates get-current-program-path)
-    :export (get-current-program-path)
-    :use-module ((euphrates current-program-path-p) :select (current-program-path/p)))))
 
 
 

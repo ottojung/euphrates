@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates serialization-short)
-    :export (serialize/short deserialize/short)
-    :use-module ((euphrates assoc-or) :select (assoc-or))
-    :use-module ((euphrates descriptors-registry) :select (descriptors-registry-get))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates serialization-sexp-short) :select (deserialize/sexp/short serialize/sexp/short))
-    :use-module ((euphrates string-drop-n) :select (string-drop-n)))))
 
 
 

@@ -13,11 +13,6 @@
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(cond-expand
- (guile
-  (define-module (euphrates key-value-map)
-    :export (key-value-map key-value-map/list))))
-
 
 (define-syntax key-value-map/list
   (syntax-rules (! +)

@@ -1,16 +1,9 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates date-get-current-string)
-    :export (date-get-current-string)
-    :use-module ((euphrates time-get-current-unixtime) :select (time-get-current-unixtime/values)))))
 
 
 
 (cond-expand
  (guile
-
-  (use-modules (srfi srfi-19))
 
   (define (date-get-current-string format-string)
     ;; (define time (current-time))

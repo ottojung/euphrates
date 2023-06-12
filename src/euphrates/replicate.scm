@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates replicate)
-    :export (replicate))))
 
 
 (define (replicate n x)

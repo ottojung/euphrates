@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates get-command-line-arguments)
-    :export (get-command-line-arguments)
-    :use-module ((euphrates command-line-arguments-p) :select (command-line-argumets/p)))))
 
 
 

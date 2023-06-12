@@ -12,13 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates maybe-monad)
-    :export (maybe-monad)
-    :use-module ((euphrates identity-star) :select (identity*))
-    :use-module ((euphrates monad-make) :select (monad-make))
-    :use-module ((euphrates monadstate) :select (monadstate-args monadstate-cret monadstate-ret)))))
 
 
 

@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-query-get-free-variables)
-    :export (profun-query-get-free-variables)
-    :use-module ((euphrates profun-varname-q) :select (profun-varname?)))))
 
 
 

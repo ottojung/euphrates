@@ -1,17 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-to-tree)
-    :export (list->tree))))
-
-
-(cond-expand
- (guile
-
-  (use-modules (srfi srfi-11))
-
-  ))
-
 (define (list->tree lst divider)
   (define (recur tag rest)
     (define droped '())

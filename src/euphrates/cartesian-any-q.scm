@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates cartesian-any-q)
-    :export (cartesian-any?))))
 
 
 (define (cartesian-any? predicate a b)

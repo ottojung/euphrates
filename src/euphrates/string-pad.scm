@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates string-pad)
-    :export (string-pad-L string-pad-R)
-    :use-module ((euphrates replicate) :select (replicate)))))
 
 
 

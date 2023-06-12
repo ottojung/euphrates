@@ -12,17 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-op-value)
-    :export (profun-op-value)
-    :use-module ((euphrates profun-CR) :select (make-profun-CR))
-    :use-module ((euphrates profun-accept) :select (profun-accept profun-set))
-    :use-module ((euphrates profun-answer-join) :select (profun-answer-join/and profun-answer-join/any profun-answer-join/or))
-    :use-module ((euphrates profun-op-envlambda) :select (profun-op-envlambda))
-    :use-module ((euphrates profun-reject) :select (profun-reject))
-    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-unbound-value? profun-value-name))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

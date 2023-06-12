@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-span-while)
-    :export (list-span-while))))
 
 
 ;; equivalent to (takeWhile predicate lst, dropWhile predicate lst)

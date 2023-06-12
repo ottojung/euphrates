@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates append-string-file)
-    :export (append-string-file)
-    :use-module ((euphrates open-file-port) :select (open-file-port)))))
 
 
 

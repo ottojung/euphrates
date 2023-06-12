@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates base64-alphabet-minusunderscore)
-    :export (base64/alphabet/minusunderscore))))
 
 
 ;; Specified by RFC 4648

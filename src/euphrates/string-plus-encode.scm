@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates string-plus-encode)
-    :export (string-plus-encode string-plus-encode/generic string-plus-encoding-make)
-    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet alphanum/alphabet/index))
-    :use-module ((euphrates convert-number-base) :select (convert-number-base/generic)))))
 
 
 

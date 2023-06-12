@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-span)
-    :export (list-span)
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

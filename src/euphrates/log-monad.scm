@@ -12,16 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates log-monad)
-    :export (log-monad)
-    :use-module ((euphrates dprint) :select (dprint))
-    :use-module ((euphrates monad-make-no-cont) :select (monad-make/no-cont))
-    :use-module ((euphrates monadfinobj) :select (monadfinobj?))
-    :use-module ((euphrates monadstate) :select (monadstate-args monadstate-qval monadstate-qvar))
-    :use-module ((euphrates tilda-a) :select (~a))
-    :use-module ((euphrates words-to-string) :select (words->string)))))
 
 
 

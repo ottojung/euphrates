@@ -1,13 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates universal-usleep)
-    :export (universal-usleep)
-    :use-module ((euphrates unit-conversions) :select (micro->nano/unit nano->micro/unit))
-    :use-module ((euphrates time-get-monotonic-nanoseconds-timestamp) :select (time-get-monotonic-nanoseconds-timestamp))
-    :use-module ((euphrates dynamic-thread-get-wait-delay) :select (dynamic-thread-get-wait-delay))
-    :use-module ((euphrates dynamic-thread-get-yield-procedure) :select (dynamic-thread-get-yield-procedure))
-    :use-module ((euphrates sys-usleep) :select (sys-usleep)))))
 
 
 

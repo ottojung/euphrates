@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates path-get-basename)
-    :export (path-get-basename)
-    :use-module ((euphrates string-split-simple) :select (string-split/simple))
-    :use-module ((euphrates list-last) :select (list-last)))))
 
 
 

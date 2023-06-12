@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates string-to-seconds-columned)
-    :export (string->seconds/columned)
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates range) :select (range))
-    :use-module ((euphrates string-split-simple) :select (string-split/simple)))))
 
 ;; accepts format like "2:30" or "30:2" or "2:20:3" or "2:20:3.22"
 

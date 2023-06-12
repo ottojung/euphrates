@@ -12,13 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates immutable-hashmap)
-    :export (make-immutable-hashmap immutable-hashmap? immutable-hashmap-fromlist immutable-hashmap->alist immutable-hashmap-copy immutable-hashmap-foreach immutable-hashmap-map alist->immutable-hashmap immutable-hashmap-ref immutable-hashmap-ref/first immutable-hashmap-set immutable-hashmap-clear immutable-hashmap-count)
-    :use-module ((euphrates assoc-any) :select (assoc/any))
-    :use-module ((euphrates fn) :select (fn))
-    :use-module ((euphrates immutable-hashmap-obj) :select (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value)))))
 
 
 

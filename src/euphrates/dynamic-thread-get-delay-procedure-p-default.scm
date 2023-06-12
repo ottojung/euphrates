@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates dynamic-thread-get-delay-procedure-p-default)
-    :export (#{dynamic-thread-get-delay-procedure#p-default}#)
-    :use-module ((euphrates dynamic-thread-sleep-p) :select (dynamic-thread-sleep#p))
-    :use-module ((euphrates dynamic-thread-sleep) :select (dynamic-thread-sleep))
-    :use-module ((euphrates dynamic-thread-get-wait-delay) :select (dynamic-thread-get-wait-delay)))))
 
 
 

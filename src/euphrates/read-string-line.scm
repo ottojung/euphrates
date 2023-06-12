@@ -1,14 +1,8 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates read-string-line)
-    :export (read-string-line))))
 
 
 (cond-expand
  (guile
-
-  (use-modules (ice-9 textual-ports))
 
   (define read-string-line
     (case-lambda

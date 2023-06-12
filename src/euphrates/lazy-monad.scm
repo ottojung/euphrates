@@ -12,13 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates lazy-monad)
-    :export (lazy-monad)
-    :use-module ((euphrates dynamic-thread-async) :select (dynamic-thread-async))
-    :use-module ((euphrates monad-make-no-cont-no-fin) :select (monad-make/no-cont/no-fin))
-    :use-module ((euphrates monadstate) :select (monadstate-arg monadstate-lval monadstate-qtags monadstate-ret/thunk)))))
 
 
 

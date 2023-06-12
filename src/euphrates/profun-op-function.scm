@@ -12,20 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-op-function)
-    :export (profun-op-function)
-    :use-module ((euphrates list-singleton-q) :select (list-singleton?))
-    :use-module ((euphrates list-span-n) :select (list-span-n))
-    :use-module ((euphrates profun-accept) :select (profun-accept profun-set))
-    :use-module ((euphrates profun-answer-huh) :select (profun-answer?))
-    :use-module ((euphrates profun-error) :select (make-profun-error))
-    :use-module ((euphrates profun-op) :select (make-profun-op))
-    :use-module ((euphrates profun-reject) :select (profun-reject))
-    :use-module ((euphrates profun-request-value) :select (profun-request-value))
-    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-unbound-value? profun-value-unwrap))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

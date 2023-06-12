@@ -1,6 +1,6 @@
 
 TARGET = test/main.scm
-GUILE = guile -L $(PWD)/src -s
+GUILE = guile --r7rs -L $(PWD)/src -s
 
 all: test
 

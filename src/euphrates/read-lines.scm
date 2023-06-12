@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates read-lines)
-    :export (read/lines))))
 
 
 ;; if `(map-fn line i)` returns #f then `line` is skipped
@@ -10,8 +6,6 @@
 
 (cond-expand
  (guile
-
-  (use-modules (ice-9 rdelim))
 
   (define read/lines
     (case-lambda

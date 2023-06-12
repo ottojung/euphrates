@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-find-first)
-    :export (list-find-first)
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

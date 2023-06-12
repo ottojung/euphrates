@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates raisu)
-    :export (raisu))))
 
 ;; One-way exceptions (non-recoverable / not continuable)
 

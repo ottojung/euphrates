@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates syntax-tree-foreach)
-    :export (syntax-tree-foreach))))
-
-
 (define-syntax syntax-tree-foreach
   (syntax-rules ()
     [(_ f ((xs ...) ys ...))
@@ -17,7 +11,8 @@
      (begin)]))
 
 ;; Example:
-;; (define-syntax-rule (defn m)
-;;   (define m #f))
+;; (define-syntax defn
+;;   (syntax-rules ()
+;;     ((_ m)
+;;      (define m #f))))
 ;; (syntax-tree-foreach defn (a (b (c d)) e)) ;; declares all identifiers
-

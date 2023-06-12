@@ -12,14 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates define-type9)
-    :export (define-type9 define-type9/nobind-descriptor type9-get-record-descriptor type9-get-descriptor-by-name)
-    :use-module ((euphrates define-dumb-record) :select (define-dumb-record))
-    :use-module ((euphrates descriptors-registry) :select (descriptors-registry-add! descriptors-registry-decolisify-name descriptors-registry-get))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates range) :select (range)))))
 
 
 

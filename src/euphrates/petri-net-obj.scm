@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates petri-net-obj)
-    :export (petri-net-obj petri-net-obj? petri-net-obj-transitions petri-net-obj-queue petri-net-obj-critical petri-net-obj-finished? set-petri-net-obj-finished?!)
-    :use-module ((euphrates define-type9) :select (define-type9)))))
 
 
 

@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-zip)
-    :export (list-zip))))
 
 
 (define (list-zip a b)

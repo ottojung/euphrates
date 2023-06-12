@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates fp)
-    :export (fp))))
 
 
 ;; creates a Function on Pairs

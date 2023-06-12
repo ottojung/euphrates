@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-insert-at)
-    :export (list-insert-at))))
 
 
 (define (list-insert-at L at element)

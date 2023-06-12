@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-op-envlambda)
-    :export (profun-op-envlambda)
-    :use-module ((euphrates define-tuple) :select (define-tuple))
-    :use-module ((euphrates profun-current-env-p) :select (profun-current-env/p))
-    :use-module ((euphrates profun-op) :select (make-profun-op))
-    :use-module ((euphrates profun-value) :select (profun-value-unwrap))
-    :use-module ((euphrates profun-variable-arity-op-keyword) :select (profun-variable-arity-op-keyword)))))
 
 
 

@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-permutations)
-    :export (list-permutations))))
 
 
 ;; adopted from: https://github.com/racket/racket/blob/master/racket/collects/racket/list.rkt#L691

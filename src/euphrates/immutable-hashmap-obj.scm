@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates immutable-hashmap-obj)
-    :export (immutable-hashmap-constructor immutable-hashmap-predicate immutable-hashmap-value)
-    :use-module ((euphrates define-type9) :select (define-type9)))))
 
 ;; This is a hashmap that is optimized for read and copy
 ;; It makes a new copy on each write

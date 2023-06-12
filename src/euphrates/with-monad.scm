@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates with-monad)
-    :export (with-monad)
-    :use-module ((euphrates monad-apply) :select (monad-apply))
-    :use-module ((euphrates monad-current-p) :select (monad-current/p))
-    :use-module ((euphrates monad-transformer-current-p) :select (monad-transformer-current/p))
-    :use-module ((euphrates monadfinobj) :select (monadfinobj))
-    :use-module ((euphrates monadstate) :select (monadstate-arg)))))
 
 
 

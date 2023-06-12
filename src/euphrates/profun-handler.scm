@@ -12,14 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-handler)
-    :export (profun-make-handler profun-handler-get profun-handler-extend)
-    :use-module ((euphrates hashmap) :select (hashmap-merge hashmap-ref multi-alist->hashmap))
-    :use-module ((euphrates list-find-first) :select (list-find-first))
-    :use-module ((euphrates profun-op-obj) :select (profun-op-arity))
-    :use-module ((euphrates profun-variable-arity-op-huh) :select (profun-variable-arity-op?)))))
 
 
 

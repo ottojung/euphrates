@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-partition)
-    :export (list-partition)
-    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-ref hashmap-set! make-hashmap)))))
 
 
 

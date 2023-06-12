@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates dprintln)
-    :export (dprintln)
-    :use-module ((euphrates dprint) :select (dprint))
-    :use-module ((euphrates conss) :select (conss)))))
 
 
 

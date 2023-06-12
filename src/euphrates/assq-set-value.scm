@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assq-set-value)
-    :export (assq-set-value))))
 
 
 (define (assq-set-value key value alist0)

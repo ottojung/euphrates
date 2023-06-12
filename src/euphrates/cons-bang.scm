@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates cons-bang)
-    :export (cons!))))
 
 
 (define-syntax cons!

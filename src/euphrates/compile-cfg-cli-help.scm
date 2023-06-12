@@ -12,32 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates compile-cfg-cli-help)
-    :export (CFG-AST->CFG-CLI-help)
-    :use-module ((euphrates alphanum-alphabet) :select (alphanum/alphabet/index))
-    :use-module ((euphrates cfg-inline) :select (CFG-inline))
-    :use-module ((euphrates cfg-remove-dead-code) :select (CFG-remove-dead-code))
-    :use-module ((euphrates cfg-strip-modifiers) :select (CFG-strip-modifiers))
-    :use-module ((euphrates get-current-program-path) :select (get-current-program-path))
-    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-ref hashmap-set! make-hashmap))
-    :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
-    :use-module ((euphrates list-fold) :select (list-fold))
-    :use-module ((euphrates list-intersperse) :select (list-intersperse))
-    :use-module ((euphrates list-map-flatten) :select (list-map/flatten))
-    :use-module ((euphrates parse-cfg-cli) :select (CFG-CLI->CFG-AST))
-    :use-module ((euphrates path-get-basename) :select (path-get-basename))
-    :use-module ((euphrates print-in-window) :select (print-in-window))
-    :use-module ((euphrates range) :select (range))
-    :use-module ((euphrates replicate) :select (replicate))
-    :use-module ((euphrates string-pad) :select (string-pad-R))
-    :use-module ((euphrates string-to-words) :select (string->words))
-    :use-module ((euphrates system-environment) :select (system-environment-get))
-    :use-module ((euphrates tilda-a) :select (~a))
-    :use-module ((euphrates tilda-s) :select (~s))
-    :use-module ((euphrates words-to-string) :select (words->string))
-    )))
 
 ;;
 ;; In this file we translate CFG-CLI definitions
@@ -98,10 +72,11 @@
        (filter alphanum/alphabet/index (string->list s))))
 
     (define fH-alist
-      (sort (hashmap->alist fH)
-            (lambda (a b)
-              (string<? (string-filter-non-alpha (car a))
-                        (string-filter-non-alpha (car b))))))
+      (euphrates:list-sort
+       (hashmap->alist fH)
+       (lambda (a b)
+         (string<? (string-filter-non-alpha (car a))
+                   (string-filter-non-alpha (car b))))))
 
     (define maximum-option-size
       (list-fold
@@ -238,12 +213,11 @@
        main-regex))
 
     (with-output-to-string
-      (lambda _
-        (display-cli-decl)
-        (display (or header1 ""))
-        (display-productions)
-        (display (or header2 ""))
-        (display-options)
-        (display (or footer ""))))))
+      (display-cli-decl)
+      (display (or header1 ""))
+      (display-productions)
+      (display (or header2 ""))
+      (display-options)
+      (display (or footer "")))))
 
 

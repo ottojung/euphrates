@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates list-group-by)
-    :export (list-group-by)
-    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set! hashmap->alist)))))
 
 
 

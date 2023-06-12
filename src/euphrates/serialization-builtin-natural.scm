@@ -12,13 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates serialization-builtin-natural)
-    :export (serialize-builtin/natural deserialize-builtin/natural)
-    :use-module ((euphrates atomic-box) :select (atomic-box-ref atomic-box? make-atomic-box))
-    :use-module ((euphrates box) :select (box-ref box? make-box))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; NOTE: does not handle `procedure's!
 
@@ -26,11 +19,10 @@
 
 (cond-expand
  (guile
-  (use-modules (ice-9 hash-table))
-
   (define (serialize/human-hashtable? o) (hash-table? o))
   (define (serialize/human-hashtable o) (hash-map->list cons o))
   (define (deserialize/human-hashtable o) (alist->hash-table o))
+  (define (is-parameter? o) (parameter? o))
   ))
 
 (define serialize-builtin/natural
@@ -51,7 +43,7 @@
      ((list? o) `(list ,@(map loop o)))
      ((pair? o) `(cons ,(loop (car o)) ,(loop (cdr o))))
      ((vector? o) `(vector ,@(map loop o)))
-     ((parameter? o) `(make-parameter ,@(loop (o))))
+     ((is-parameter? o) `(make-parameter ,@(loop (o))))
      ((equal? (when #f #f) o) o)
      ((eof-object? o) o)
      ((serialize/human-hashtable? o) `(alist->hash-table ,(loop (serialize/human-hashtable o))))

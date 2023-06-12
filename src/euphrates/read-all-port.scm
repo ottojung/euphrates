@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates read-all-port)
-    :export (read-all-port))))
 
 
 ;; `readf' is usually `read-char' or `read-byte'

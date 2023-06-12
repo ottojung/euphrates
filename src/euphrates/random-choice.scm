@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates random-choice)
-    :export (random-choice)
-    :use-module ((euphrates big-random-int) :select (big-random-int)))))
 
 
 

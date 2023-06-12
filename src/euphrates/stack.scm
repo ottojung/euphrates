@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates stack)
-    :export (stack-make stack? stack-empty? stack-push! stack-pop! stack-peek stack-discard! stack->list list->stack stack-unload!)
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates stack-obj) :select (set-stack-lst! stack-constructor stack-lst stack-predicate)))))
 
 
 

@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-RFC)
-    :export (make-profun-RFC profun-RFC? profun-RFC-what profun-RFC-set-iter profun-RFC-modify-iter profun-RFC-add-info profun-RFC-insert profun-RFC-reset)
-    :use-module ((euphrates profun-abort) :select (make-profun-abort profun-abort-add-info profun-abort-modify-iter profun-abort-set-iter profun-abort-type profun-abort-what profun-abort?))
-    :use-module ((euphrates profun-iterator) :select (profun-abort-insert profun-abort-reset)))))
 
 ;; Profun's Request For Clarification
 

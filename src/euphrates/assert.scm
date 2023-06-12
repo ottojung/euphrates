@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assert)
-    :export (assert)
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates reversed-args-f) :select (reversed-args-f))
-    :use-module ((euphrates assert-raw) :select (assert#raw))
-    :use-module ((euphrates stringf) :select (stringf)))))
 
 
 
@@ -35,4 +27,4 @@
     ((_ (x . xs) . printf-args)
      (assert-buf (x . xs) () x xs . printf-args))
     ((_ test . printf-args)
-     (assert#raw test . printf-args))))
+     (assert/raw test . printf-args))))

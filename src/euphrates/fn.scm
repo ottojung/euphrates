@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates fn)
-    :export (fn)
-    :use-module ((euphrates syntax-map) :select (syntax-map))
-    :use-module ((euphrates syntax-identity) :select (syntax-identity)))))
 
 
 

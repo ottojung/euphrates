@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates run-asyncproc)
-    :export (run-asyncproc)
-    :use-module ((euphrates run-asyncproc-p) :select (run-asyncproc/p)))))
 
 
 

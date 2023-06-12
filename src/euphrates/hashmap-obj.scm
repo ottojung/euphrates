@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates hashmap-obj)
-    :export (hashmap-constructor hashmap-predicate))))
 
 (cond-expand
  (guile

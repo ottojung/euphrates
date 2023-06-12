@@ -12,28 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates petri-net-parse-profun)
-    :export (petri-profun-net)
-    :use-module ((euphrates bool-to-profun-result) :select (bool->profun-result))
-    :use-module ((euphrates hashmap) :select (multi-alist->hashmap))
-    :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
-    :use-module ((euphrates petri-net-make) :select (petri-net-make))
-    :use-module ((euphrates petri) :select (petri-push))
-    :use-module ((euphrates profun-handler) :select (profun-make-handler))
-    :use-module ((euphrates profun-op-apply) :select (profun-op-apply))
-    :use-module ((euphrates profun-op-divisible) :select (profun-op-divisible))
-    :use-module ((euphrates profun-op-eval) :select (profun-op-eval))
-    :use-module ((euphrates profun-op-lambda) :select (profun-op-lambda))
-    :use-module ((euphrates profun-op-less) :select (profun-op-less))
-    :use-module ((euphrates profun-op-mult) :select (profun-op*))
-    :use-module ((euphrates profun-op-plus) :select (profun-op+))
-    :use-module ((euphrates profun-op-print) :select (profun-op-print))
-    :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
-    :use-module ((euphrates profun-op-unify) :select (profun-op-unify))
-    :use-module ((euphrates profun) :select (profun-create-database profun-eval-query))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

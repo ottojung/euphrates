@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates alpha-alphabet)
-    :export (alpha/alphabet))))
 
 
 ;; starts off like base64 table

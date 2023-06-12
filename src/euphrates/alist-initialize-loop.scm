@@ -12,18 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates alist-initialize-loop)
-    :export (alist-initialize-loop)
-    :use-module ((euphrates alist-initialize-bang) :select (alist-initialize! alist-initialize!:get-setters alist-initialize!:makelet/static))
-    :use-module ((euphrates assq-or) :select (assq-or))
-    :use-module ((euphrates fn-pair) :select (fn-pair))
-    :use-module ((euphrates hashset) :select (hashset-has? list->hashset))
-    :use-module ((euphrates list-and-map) :select (list-and-map))
-    :use-module ((euphrates list-deduplicate) :select (list-deduplicate))
-    :use-module ((euphrates syntax-append) :select (syntax-append))
-    :use-module ((euphrates syntax-map) :select (syntax-map)))))
 
 
 

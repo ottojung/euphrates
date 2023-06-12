@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates directory-mtime-state)
-    :export (directory-mtime-state)
-    :use-module ((euphrates directory-files-rec) :select (directory-files-rec))
-    :use-module ((euphrates file-mtime) :select (file-mtime))
-    :use-module ((euphrates hashset) :select (list->hashset))
-    :use-module ((euphrates with-ignore-errors) :select (with-ignore-errors!)))))
 
 
 

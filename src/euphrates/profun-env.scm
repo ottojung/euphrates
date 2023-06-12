@@ -12,14 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-env)
-    :export (make-profun-env profun-env-get profun-env-set! profun-env-unset! profun-env-copy)
-    :use-module ((euphrates hashmap) :select (hashmap-copy hashmap-delete! hashmap-ref hashmap-set! make-hashmap))
-    :use-module ((euphrates profun-meta-key) :select (profun-meta-key))
-    :use-module ((euphrates profun-value) :select (profun-bound-value? profun-make-constant profun-make-unbound-var))
-    :use-module ((euphrates profun-varname-q) :select (profun-varname?)))))
 
 
 

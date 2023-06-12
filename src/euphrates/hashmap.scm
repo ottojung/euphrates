@@ -1,20 +1,9 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates hashmap)
-    :export (make-hashmap hashmap? hashmap->alist hashmap-copy hashmap-foreach hashmap-map alist->hashmap multi-alist->hashmap hashmap-has? hashmap-ref hashmap-set! hashmap-clear! hashmap-count hashmap-delete! hashmap-merge! hashmap-merge)
-    :use-module ((euphrates fn) :select (fn))
-    :use-module ((euphrates hashmap-obj) :select (hashmap-constructor hashmap-predicate))
-    :use-module ((euphrates make-unique) :select (make-unique))
-    :use-module ((euphrates raisu) :select (raisu))
-    )))
 
 
 
 (cond-expand
  (guile
-
-  (use-modules (ice-9 hash-table))
 
   (define hashmap? hashmap-predicate)
   (define make-hashmap hashmap-constructor)
@@ -37,7 +26,7 @@
 
   (define hashmap-foreach hash-for-each)
 
-  (define (hashmap-count H) (hash-count (const #t) H))
+  (define (hashmap-count H) (hash-count (lambda _ #t) H))
 
   (define (hashmap-delete! H key)
     (hash-remove! H key))

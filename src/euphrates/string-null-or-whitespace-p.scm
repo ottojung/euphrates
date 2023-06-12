@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates string-null-or-whitespace-p)
-    :export (string-null-or-whitespace?))))
 
 
 (define (string-null-or-whitespace? str)

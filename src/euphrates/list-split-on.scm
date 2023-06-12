@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-split-on)
-    :export (list-split-on))))
 
 
 (define (list-split-on predicate lst)

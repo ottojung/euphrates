@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates append-posix-path)
-    :export (append-posix-path)
-    :use-module ((euphrates absolute-posix-path-q) :select (absolute-posix-path?))
-    :use-module ((euphrates remove-common-prefix) :select (remove-common-prefix))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 
@@ -19,7 +12,7 @@
                        (raisu 'append-posix-path-disjoint `(args: ,a ,b))
                        cl))
                  b)))
-        (if (char=? #\/ (string-ref a (1- (string-length a))))
+        (if (char=? #\/ (string-ref a (- (string-length a) 1)))
             (string-append a b)
             (string-append a "/" b)))))
 

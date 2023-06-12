@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-variable-arity-op-huh)
-    :export (profun-variable-arity-op?)
-    :use-module ((euphrates profun-op-obj) :select (profun-op-arity))
-    :use-module ((euphrates profun-variable-arity-op-keyword) :select (profun-variable-arity-op-keyword)))))
 
 
 

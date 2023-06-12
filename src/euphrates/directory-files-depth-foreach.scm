@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates directory-files-depth-foreach)
-    :export (directory-files-depth-foreach)
-    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter)))))
 
 
 ;; Calls `fun' ob objects like this:

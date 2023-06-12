@@ -14,7 +14,7 @@ do
 	printf '(%s/%s)' "$INDEX" "$TESTCOUNT"
 	printf ' %s ... ' "$SHORT"
 
-	R=$(if guile -L "$PWD/src" -s "$FILE" 2>&1
+	R=$(if guile --r7rs -L "$PWD/src" -s "$FILE" 2>&1
 	then printf '✓'
 	else printf 'X'
 	fi)

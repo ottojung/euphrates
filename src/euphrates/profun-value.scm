@@ -12,11 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates profun-value)
-    :export (profun-unbound-value? profun-bound-value? profun-value-unwrap profun-value-name profun-value? profun-make-var profun-make-constant profun-make-unbound-var)
-    :use-module ((euphrates define-type9) :select (define-type9)))))
 
 
 

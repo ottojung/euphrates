@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates queue-obj)
-    :export (queue-constructor queue-predicate queue-vector queue-first queue-last set-queue-vector! set-queue-first! set-queue-last!)
-    :use-module ((euphrates define-type9) :select (define-type9)))))
 
 
 

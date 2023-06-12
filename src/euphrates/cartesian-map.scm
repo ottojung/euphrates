@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates cartesian-map)
-    :export (cartesian-map))))
 
 
 (define (cartesian-map function a b)

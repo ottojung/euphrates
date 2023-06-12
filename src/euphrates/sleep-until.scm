@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates sleep-until)
-    :export (sleep-until)
-    :use-module ((euphrates dynamic-thread-get-delay-procedure) :select (dynamic-thread-get-delay-procedure))
-    :use-module ((euphrates dynamic-thread-yield) :select (dynamic-thread-yield))
-    :use-module ((euphrates time-get-monotonic-nanoseconds-timestamp) :select (time-get-monotonic-nanoseconds-timestamp))
-    :use-module ((euphrates unit-conversions) :select (milli->nano/unit)))))
 
 ;; Sleeps until condition evaluates to true or until timeout is reached.
 ;; Uses `dynamic-thread-get-delay-procedure' for sleeping.

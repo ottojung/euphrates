@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates system-star-exit-code)
-    :export (system*/exit-code))))
 
 
 (cond-expand

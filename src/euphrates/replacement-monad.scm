@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates replacement-monad)
-    :export (replacement-monad)
-    :use-module ((euphrates monad-make-no-cont) :select (monad-make/no-cont))
-    :use-module ((euphrates monadstate) :select (monadstate-lval monadstate-qtags monadstate-ret/thunk)))))
 
 
 

@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates tree-map-leafs)
-    :export (tree-map-leafs))))
 
 
 (define (tree-map-leafs fn T)

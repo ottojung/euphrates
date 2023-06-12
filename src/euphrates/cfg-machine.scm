@@ -12,15 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates cfg-machine)
-    :export (make-cfg-machine/full make-cfg-machine make-cfg-machine*)
-    :use-module ((euphrates hashmap) :select (make-hashmap hashmap-ref hashmap-set!))
-    :use-module ((euphrates immutable-hashmap) :select (make-immutable-hashmap immutable-hashmap-foreach))
-    :use-module ((euphrates tilda-s) :select (~s))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates regex-machine) :select (make-regex-machine/full)))))
 
 
 ;; Context Free Grammar Machine.

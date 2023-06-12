@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates string-trim-chars)
-    :export (string-trim-chars))))
 
 
 (define (string-trim-chars str chars-arg direction)

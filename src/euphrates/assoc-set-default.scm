@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates assoc-set-default)
-    :export (assoc-set-default)
-    :use-module ((euphrates assoc-set-value) :select (assoc-set-value)))))
 
 
 

@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates sys-usleep)
-    :export (sys-usleep))))
 
 (cond-expand
  (guile

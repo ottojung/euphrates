@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-break)
-    :export (list-break))))
 
 
 ;; equivalent to (takeWhile (negate predicate) lst, dropWhile (negate predicate) lst)

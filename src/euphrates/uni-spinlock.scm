@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates uni-spinlock)
-    :export (make-uni-spinlock uni-spinlock-lock! uni-spinlock-unlock! make-uni-spinlock-critical)
-    :use-module ((euphrates atomic-box) :select (make-atomic-box atomic-box-compare-and-set! atomic-box-set!))
-    :use-module ((euphrates dynamic-thread-enable-cancel) :select (dynamic-thread-enable-cancel))
-    :use-module ((euphrates dynamic-thread-disable-cancel) :select (dynamic-thread-disable-cancel))
-    :use-module ((euphrates dynamic-thread-get-yield-procedure) :select (dynamic-thread-get-yield-procedure)))))
 
 
 

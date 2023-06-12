@@ -12,12 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates monadic-id)
-    :export (monadic-id)
-    :use-module ((euphrates monadic) :select (monadic))
-    :use-module ((euphrates identity-monad) :select (identity-monad)))))
 
 
 

@@ -1,14 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates dynamic-thread-async-thunk)
-    :export (dynamic-thread-async-thunk)
-    :use-module ((euphrates dynamic-thread-spawn) :select (dynamic-thread-spawn))
-    :use-module ((euphrates catch-any) :select (catch-any))
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates dynamic-thread-mutex-make) :select (dynamic-thread-mutex-make))
-    :use-module ((euphrates dynamic-thread-mutex-lock) :select (dynamic-thread-mutex-lock!))
-    :use-module ((euphrates dynamic-thread-mutex-unlock) :select (dynamic-thread-mutex-unlock!)))))
 
 
 ;; This is like futures.

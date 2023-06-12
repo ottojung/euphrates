@@ -12,10 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(cond-expand
- (guile
-  (define-module (euphrates file-is-directory-q-no-readlink)
-    :export (file-is-directory?/no-readlink))))
 
 
 (cond-expand

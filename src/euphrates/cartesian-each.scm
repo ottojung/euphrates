@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates cartesian-each)
-    :export (cartesian-each))))
 
 
 (define (cartesian-each function a b)

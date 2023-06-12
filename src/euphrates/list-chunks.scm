@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-chunks)
-    :export (list-chunks)
-    :use-module ((euphrates raisu) :select (raisu))
-    :use-module ((euphrates list-span-n) :select (list-span-n)))))
 
 
 

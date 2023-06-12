@@ -1,17 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates letin)
-    :export (letin))))
-
-
-(cond-expand
- (guile
-
-  (use-modules (srfi srfi-11))
-
-  ))
-
 (define-syntax letin
   (syntax-rules ()
     [(letin ((a . as) b) . ())
@@ -23,5 +10,3 @@
      (let [[a b]] a)]
     [(letin (a b) . bodies)
      (let [[a b]] (letin . bodies))]))
-
-

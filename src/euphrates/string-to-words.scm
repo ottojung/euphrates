@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates string-to-words)
-    :export (string->words))))
 
 
 ;; TODO: make single for guile + racket
@@ -11,14 +7,7 @@
  (guile
 
   (define (string->words str)
-    (filter
-     (compose not string-null?)
-     (string-split
-      str
-      (lambda (c)
-    (case c
-          ((#\newline #\space #\tab) #t)
-          (else #f))))))
+    (string-tokenize str))
 
   )
 

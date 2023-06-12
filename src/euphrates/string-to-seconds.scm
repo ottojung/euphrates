@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates string-to-seconds)
-    :export (string->seconds)
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; accepts format like "2h30m" or "30m2h" or "2h20s3m" or "2.5h20s3m"
 

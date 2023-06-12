@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates list-deduplicate)
-    :export (list-deduplicate/reverse list-deduplicate)
-    :use-module ((euphrates hashset) :select (hashset-add! hashset-has? make-hashset)))))
 
 
 

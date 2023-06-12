@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates queue)
-    :export (make-queue queue? queue-empty? queue-peek queue-push! queue-pop! list->queue queue->list queue-unload! queue-rotate! queue-peek-rotate!)
-    :use-module ((euphrates queue-obj) :select (queue-constructor queue-first queue-last queue-predicate queue-vector set-queue-first! set-queue-last! set-queue-vector!))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 

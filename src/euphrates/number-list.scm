@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (euphrates number-list)
-    :export (number-list->number number->number-list number->number-list:precision/p number-list->number-list))))
 
 
 ;; `number-list` is `base-q expansion` of a number.
