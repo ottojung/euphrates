@@ -4,6 +4,7 @@ set -e
 
 TESTCOUNT=$(ls test/test-*.sld | wc -l)
 INDEX=0
+FAILED=0
 
 for FILE in test/test-*.sld
 do
@@ -20,5 +21,9 @@ do
 	fi)
 
 	printf '%s' "$R" | grep -v -e '^;;; ' || true
-	printf '%s' "$R" | grep -q -e '✓'
+	printf '%s' "$R" | grep -q -e '✓' || FAILED=1
 done
+
+if test "$FAILED" = 1
+then exit 1
+fi
