@@ -2,16 +2,18 @@
 TARGET = test/test-compilation.sld
 GUILE = guile --r7rs -L $(PWD)/src -L $(PWD)/test -s
 
-all: test
+all: build
 
 build: compile
 
-test: build
+test: compilation-test
 	sh scripts/run-tests.sh
 
-compile:
-	sh scripts/make-test-compilation.sh || true
+compile: compilation-test
 	$(MAKE) one TARGET=test/test-compilation.sld
+
+compilation-test:
+	sh scripts/make-test-compilation.sh || true
 
 one:
 	$(GUILE) $(TARGET)
@@ -22,4 +24,4 @@ clean:
 	git submodule foreach --recursive 'git clean -dfx'
 	git clean -dfx
 
-.PHONY: all test compile one cleanrun clean
+.PHONY: all test compile compilation-test one cleanrun clean
