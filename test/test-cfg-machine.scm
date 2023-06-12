@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-cfg-machine)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates cfg-machine) :select (make-cfg-machine))
-    :use-module ((euphrates immutable-hashmap) :select (immutable-hashmap->alist)))))
 
 ;; cfg-machine
 

@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-traverse)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-traverse) :select (list-traverse))
-    :use-module ((euphrates range) :select (range)))))
 
 ;; list-traverse
 

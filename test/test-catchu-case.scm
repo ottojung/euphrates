@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-catchu-case)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates catchu-case) :select (catchu-case))
-    :use-module ((euphrates dprintln) :select (dprintln))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 
 (let () ;; catchu-case
@@ -16,7 +9,7 @@
        (assert=
         "OK: x y z\n"
         (with-output-to-string
-          (lambda _ body))))))
+          body)))))
 
   (assert=
    10

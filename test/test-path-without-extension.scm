@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-path-without-extension)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates path-without-extension) :select (path-without-extension)))))
 
 ;; path-without-extension
 

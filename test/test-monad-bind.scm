@@ -1,15 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-monad-bind)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates identity-monad) :select (identity-monad))
-    :use-module ((euphrates lines-to-string) :select (lines->string))
-    :use-module ((euphrates log-monad) :select (log-monad))
-    :use-module ((euphrates maybe-monad) :select (maybe-monad))
-    :use-module ((euphrates monad-bind) :select (monad-bind))
-    :use-module ((euphrates monad-do) :select (monad-do))
-    :use-module ((euphrates with-monad) :select (with-monad)))))
 
 ;; monad-bind
 
@@ -24,20 +13,18 @@
      "(return 16)"
      ""))
    (with-output-to-string
-     (lambda _
+     (with-monad
+      log-monad
 
-       (with-monad
-        log-monad
+      (monad-do (+ 3 5) 'hello)
 
-        (monad-do (+ 3 5) 'hello)
+      (display "This is not inside of a monad")
+      (newline)
 
-        (display "This is not inside of a monad")
-        (newline)
+      (monad-do (* 8 2) 'bye)
 
-        (monad-do (* 8 2) 'bye)
-
-        16
-        ))))
+      16
+      )))
 
   (assert=
    (lines->string
@@ -49,25 +36,23 @@
      "(return 16)"
      ""))
    (with-output-to-string
-     (lambda _
+     (with-monad
+      log-monad
 
-       (with-monad
-        log-monad
+      (monad-bind x (+ 3 5) 'kek)
 
-        (monad-bind x (+ 3 5) 'kek)
+      (define _pp
+        (begin
+          (display "This is not inside of a monad")
+          (newline)
+          (display "The value of x is ")
+          (write (x))
+          (newline)))
 
-        (define _pp
-          (begin
-            (display "This is not inside of a monad")
-            (newline)
-            (display "The value of x is ")
-            (write (x))
-            (newline)))
+      (monad-bind y (* 8 2) 'bye)
 
-        (monad-bind y (* 8 2) 'bye)
-
-        (y)
-        ))))
+      (y)
+      )))
 
   (assert=
    '(10 40)

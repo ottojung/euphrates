@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-hashset-difference)
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates hashset) :select (hashset-difference hashset-equal? make-hashset)))))
 
 ;; hashset-difference
 

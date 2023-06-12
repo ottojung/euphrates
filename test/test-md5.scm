@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-md5)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates md5) :select (md5-digest))
-    )))
 
 (assert=
  (md5-digest "hello")

@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-big-random-int)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates big-random-int) :select (big-random-int))
-    :use-module ((euphrates with-randomizer-seed) :select (with-randomizer-seed)))))
 
 
 (let () ; big-random-int

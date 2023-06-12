@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-mdict)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates mdict) :select (mdict mdict-has? mdict-set!)))))
 
 ;; mdict
 

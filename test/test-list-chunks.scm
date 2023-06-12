@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-chunks)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-chunks) :select (list-chunks)))))
 
 ;; list-chunks
 

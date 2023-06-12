@@ -2,10 +2,10 @@
 
 set -e
 
-TESTCOUNT=$(ls test/test-*.scm | wc -l)
+TESTCOUNT=$(ls test/test-*.sld | wc -l)
 INDEX=0
 
-for FILE in test/test-*.scm
+for FILE in test/test-*.sld
 do
 	INDEX=$((INDEX + 1))
 	SHORT="$(basename "$FILE")"
@@ -14,7 +14,7 @@ do
 	printf '(%s/%s)' "$INDEX" "$TESTCOUNT"
 	printf ' %s ... ' "$SHORT"
 
-	R=$(if guile --r7rs -L "$PWD/src" -s "$FILE" 2>&1
+	R=$(if guile --r7rs -L "$PWD/src" -L "$PWD/test" -s "$FILE" 2>&1
 	then printf '✓'
 	else printf 'X'
 	fi)

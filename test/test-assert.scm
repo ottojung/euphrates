@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-assert)
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates catch-any) :select (catch-any)))))
 
 
 (let () ;; assert

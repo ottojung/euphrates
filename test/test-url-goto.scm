@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-url-goto)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates url-goto) :select (url-goto)))))
 
 ;; url-goto
 

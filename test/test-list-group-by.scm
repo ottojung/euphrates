@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-group-by)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates list-group-by) :select (list-group-by)))))
 
 
 (let () ;; list-group-by

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-zip-with)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-zip-with) :select (list-zip-with)))))
 
 
 (let () ;; list-zip-with

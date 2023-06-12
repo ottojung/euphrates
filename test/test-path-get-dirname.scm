@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-path-get-dirname)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates path-get-dirname) :select (path-get-dirname))
-    )))
 
 (let ()
   (assert=

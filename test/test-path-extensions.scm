@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-path-extensions)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates path-extensions) :select (path-extensions)))))
 
 ;; path-extensions
 

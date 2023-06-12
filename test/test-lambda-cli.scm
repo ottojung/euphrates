@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-lambda-cli)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates define-cli) :select (lambda-cli)))))
 
 ;; lambda-cli
 

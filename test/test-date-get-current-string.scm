@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-date-get-current-string)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates date-get-current-string) :select (date-get-current-string))
-    :use-module ((euphrates time-get-current-unixtime-values-p) :select (time-get-current-unixtime/values#p)))))
 
 
 ;; NOTE: guile timezones are broken

@@ -1,14 +1,5 @@
 
-(cond-expand
- (guile
-  (define-module (test-serialization-runnable)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates hashset) :select (list->hashset))
-    :use-module ((euphrates serialization-runnable) :select (deserialize/runnable serialize/runnable)))))
 
-
-(use-modules (ice-9 pretty-print))
 
 (define obj1
   `(hello there "runnable"))

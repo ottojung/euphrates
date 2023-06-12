@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string-take-n)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-take-n) :select (string-take-n)))))
 
 
 (let () ;; string-take-n

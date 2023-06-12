@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-immutable-hashmap)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates immutable-hashmap) :select (make-immutable-hashmap immutable-hashmap-ref immutable-hashmap-set)))))
 
 ;; immutable-hashmap
 

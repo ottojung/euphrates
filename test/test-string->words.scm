@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string->words)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-to-words) :select (string->words))
-    :use-module ((euphrates words-to-string) :select (words->string)))))
 
 ;; string->words / words->string
 

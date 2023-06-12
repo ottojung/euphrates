@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-fp)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates fp) :select (fp))
-    :use-module ((euphrates list-zip-with) :select (list-zip-with))
-    :use-module ((euphrates range) :select (range)))))
 
 
 (let () ;; fp

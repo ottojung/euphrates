@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-insert-at)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-insert-at) :select (list-insert-at)))))
 
 ;; list-insert-at
 

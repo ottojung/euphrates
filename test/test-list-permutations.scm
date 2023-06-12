@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-permutations)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates list-permutations) :select (list-permutations)))))
 
 
 (let () ;; list-permutations

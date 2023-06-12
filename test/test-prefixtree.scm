@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-prefixtree)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates prefixtree) :select (make-prefixtree prefixtree->tree prefixtree-ref prefixtree-ref-closest prefixtree-ref-furthest prefixtree-set!)))))
 
 ;; prefixtree
 

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-hashset-negative)
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates hashset) :select (hashset-equal? make-hashset)))))
 
 ;; hashset-negative
 

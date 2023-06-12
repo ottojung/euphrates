@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-fn)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates fn) :select (fn)))))
 
 
 (let () ;; fn

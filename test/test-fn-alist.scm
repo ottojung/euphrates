@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-fn-alist)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates fn-alist) :select (fn-alist)))))
 
 
 (define mult

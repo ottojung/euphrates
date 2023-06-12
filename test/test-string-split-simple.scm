@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string-split-simple)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-split-simple) :select (string-split/simple))
-    )))
 
 ;; string-split/simple
 

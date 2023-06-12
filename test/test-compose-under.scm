@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-compose-under)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates compose-under) :select (compose-under))
-    :use-module ((euphrates range) :select (range)))))
 
 
 (let () ;; compose-under

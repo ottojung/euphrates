@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string-to-numstring)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-to-numstring) :select (string->numstring)))))
 
 
 (let () ;; string-to-numstring

@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-print-in-frame)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-intersperse) :select (list-intersperse))
-    :use-module ((euphrates print-in-frame) :select (print-in-frame))
-    :use-module ((euphrates string-to-words) :select (string->words)))))
 
 ;; print-in-frame
 
@@ -23,9 +16,8 @@
   │y dog │
   └──────┘"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #t #t 2 10 0 #\space "the quick brown fox jumps over a lazy dog"))))
+     (newline)
+     (print-in-frame #t #t 2 10 0 #\space "the quick brown fox jumps over a lazy dog")))
 
   (assert=
    "
@@ -38,9 +30,8 @@
   │ a laz│
   │y dog │"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #t #f 2 10 0 #\space "the quick brown fox jumps over a lazy dog"))))
+     (newline)
+     (print-in-frame #t #f 2 10 0 #\space "the quick brown fox jumps over a lazy dog")))
 
   (assert=
    "
@@ -53,9 +44,8 @@
   │y dog │
   └──────┘"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #f #t 2 10 0 #\space "the quick brown fox jumps over a lazy dog"))))
+     (newline)
+     (print-in-frame #f #t 2 10 0 #\space "the quick brown fox jumps over a lazy dog")))
 
   (assert=
    "
@@ -70,14 +60,13 @@
   │dog   │
   └──────┘"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #t #t 2 10 0
-                       #\space
-                       (list-intersperse
-                        #\space
-                        (string->words
-                         "the quick brown fox jumps over a lazy dog"))))))
+     (newline)
+     (print-in-frame #t #t 2 10 0
+                     #\space
+                     (list-intersperse
+                      #\space
+                      (string->words
+                       "the quick brown fox jumps over a lazy dog")))))
 
   (assert=
    "
@@ -92,14 +81,13 @@
   │dog   │
   └──────┘"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #t #t 2 10 0
-                       #\space
-                       (list-intersperse
-                        #\space
-                        (string->words
-                         "the quick brown fox jumps over a lazy dog"))))))
+     (newline)
+     (print-in-frame #t #t 2 10 0
+                     #\space
+                     (list-intersperse
+                      #\space
+                      (string->words
+                       "the quick brown fox jumps over a lazy dog")))))
 
   (assert=
    "
@@ -117,14 +105,13 @@
   │dog   │
   └──────┘"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #t #t 2 10 0
-                       #\space
-                       (list-intersperse
-                        #\space
-                        (string->words
-                         "the quick brown fox abcdefyawbyxnwoeqe jumps over a lazy dog"))))))
+     (newline)
+     (print-in-frame #t #t 2 10 0
+                     #\space
+                     (list-intersperse
+                      #\space
+                      (string->words
+                       "the quick brown fox abcdefyawbyxnwoeqe jumps over a lazy dog")))))
 
   (assert=
    "
@@ -138,14 +125,13 @@
   │lazy  │
   │dog   │"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #t #f 2 10 0
-                       #\space
-                       (list-intersperse
-                        #\space
-                        (string->words
-                         "the quick brown fox jumps over a lazy dog"))))))
+     (newline)
+     (print-in-frame #t #f 2 10 0
+                     #\space
+                     (list-intersperse
+                      #\space
+                      (string->words
+                       "the quick brown fox jumps over a lazy dog")))))
 
   (assert=
    "
@@ -159,14 +145,13 @@
   │dog   │
   └──────┘"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #f #t 2 10 0
-                       #\space
-                       (list-intersperse
-                        #\space
-                        (string->words
-                         "the quick brown fox jumps over a lazy dog"))))))
+     (newline)
+     (print-in-frame #f #t 2 10 0
+                     #\space
+                     (list-intersperse
+                      #\space
+                      (string->words
+                       "the quick brown fox jumps over a lazy dog")))))
 
   (assert=
    "
@@ -179,13 +164,12 @@
   │lazy  │
   │dog   │"
    (with-output-to-string
-     (lambda _
-       (newline)
-       (print-in-frame #f #f 2 10 0
-                       #\space
-                       (list-intersperse
-                        #\space
-                        (string->words
-                         "the quick brown fox jumps over a lazy dog"))))))
+     (newline)
+     (print-in-frame #f #f 2 10 0
+                     #\space
+                     (list-intersperse
+                      #\space
+                      (string->words
+                       "the quick brown fox jumps over a lazy dog")))))
 
   )

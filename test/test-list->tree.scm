@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list->tree)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-to-tree) :select (list->tree))
-    :use-module ((euphrates string-to-words) :select (string->words)))))
 
 ;; list->tree
 

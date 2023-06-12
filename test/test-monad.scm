@@ -1,20 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-monad)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates compose-under) :select (compose-under))
-    :use-module ((euphrates identity-monad) :select (identity-monad))
-    :use-module ((euphrates lines-to-string) :select (lines->string))
-    :use-module ((euphrates log-monad) :select (log-monad))
-    :use-module ((euphrates maybe-monad) :select (maybe-monad))
-    :use-module ((euphrates monad-apply) :select (monad-apply))
-    :use-module ((euphrates monad-make-no-cont) :select (monad-make/no-cont))
-    :use-module ((euphrates monad-parameterize) :select (with-monad-left with-monad-right))
-    :use-module ((euphrates monadic-id) :select (monadic-id))
-    :use-module ((euphrates monadic) :select (monadic))
-    :use-module ((euphrates monadstate) :select (monadstate-ret monadstate?))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; monad basics
 
@@ -23,7 +7,7 @@
     (define buffer "")
     (define (add! monad-input)
       (let ((s (with-output-to-string
-                 (lambda _ (monad-apply log-monad monad-input)))))
+                 (monad-apply log-monad monad-input))))
         (set! buffer (string-append buffer s))))
 
     (monad-make/no-cont
@@ -64,12 +48,11 @@
         "(return 40)"
         ""))
  (with-output-to-string
-   (lambda _
-     (monadic
-      log-monad
-      (x (+ 2 3))
-      ((y m) (values (* (x) (x)) (+ (x) (x))))
-      (h (+ (x) (y) (m)) 'tag1)))))
+   (monadic
+    log-monad
+    (x (+ 2 3))
+    ((y m) (values (* (x) (x)) (+ (x) (x))))
+    (h (+ (x) (y) (m)) 'tag1))))
 
 (assert=
  (lines->string

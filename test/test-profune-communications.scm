@@ -1,28 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-profune-communications)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates lines-to-string) :select (lines->string))
-    :use-module ((euphrates printf) :select (printf))
-    :use-module ((euphrates profun-handler) :select (profun-make-handler))
-    :use-module ((euphrates profun-op-divisible) :select (profun-op-divisible))
-    :use-module ((euphrates profun-op-equals) :select (profun-op-equals))
-    :use-module ((euphrates profun-op-false) :select (profun-op-false))
-    :use-module ((euphrates profun-op-less) :select (profun-op-less))
-    :use-module ((euphrates profun-op-mult) :select (profun-op*))
-    :use-module ((euphrates profun-op-plus) :select (profun-op+))
-    :use-module ((euphrates profun-op-separate) :select (profun-op-separate))
-    :use-module ((euphrates profun-op-sqrt) :select (profun-op-sqrt))
-    :use-module ((euphrates profun-op-true) :select (profun-op-true))
-    :use-module ((euphrates profun-op-unify) :select (profun-op-unify))
-    :use-module ((euphrates profun-op-value) :select (profun-op-value))
-    :use-module ((euphrates profun) :select (profun-create-database))
-    :use-module ((euphrates profune-communications-hook-p) :select (profune-communications-hook/p))
-    :use-module ((euphrates profune-communications) :select (profune-communications))
-    :use-module ((euphrates profune-communicator) :select (make-profune-communicator))
-    :use-module ((euphrates tilda-a) :select (~a))
-    :use-module ((euphrates words-to-string) :select (words->string)))))
 
 
 (define server-handler
@@ -85,9 +61,8 @@
     (define expected (lines->string lines))
     (define actual
       (with-output-to-string
-        (lambda _
-          (define result (comms1 input))
-          (printf "result = ~a" result))))
+        (define result (comms1 input))
+        (printf "result = ~a" result)))
     (unless (equal? expected actual)
       (parameterize ((current-output-port (current-error-port)))
         (printf "expected:\n~a\n" expected)

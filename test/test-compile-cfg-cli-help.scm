@@ -1,13 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-compile-cfg-cli-help)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates compile-cfg-cli-help) :select (CFG-AST->CFG-CLI-help))
-    :use-module ((euphrates current-program-path-p) :select (current-program-path/p))
-    :use-module ((euphrates define-cli) :select (define-cli:raisu/p define-cli:show-help make-cli-with-handler with-cli))
-    )))
 
 
 (parameterize ((current-program-path/p "test"))
@@ -84,8 +75,10 @@
 
 (define in/out-types '(raw word normal))
 
-(define-syntax-rule (test-bodies cli-decl defaults examples helps types exclusives synonyms bodies)
-  ((begin . bodies) (quote cli-decl) defaults examples helps types exclusives synonyms))
+(define-syntax test-bodies
+  (syntax-rules ()
+    ((_ cli-decl defaults examples helps types exclusives synonyms bodies)
+     ((begin . bodies) (quote cli-decl) defaults examples helps types exclusives synonyms))))
 
 (make-cli-with-handler
  test-bodies

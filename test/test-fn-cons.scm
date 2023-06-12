@@ -1,11 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-fn-cons)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates fn-cons) :select (fn-cons))
-    :use-module ((euphrates list-zip-with) :select (list-zip-with))
-    :use-module ((euphrates range) :select (range)))))
 
 
 (let () ;; fn-cons

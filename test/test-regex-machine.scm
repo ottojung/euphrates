@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-regex-machine)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates hashmap) :select (hashmap->alist hashmap-ref make-hashmap))
-    :use-module ((euphrates regex-machine) :select (make-regex-machine*)))))
 
 ;; regex-machine
 

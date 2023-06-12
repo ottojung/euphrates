@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-windows)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates comp) :select (comp))
-    :use-module ((euphrates list-windows) :select (list-windows)))))
 
 ;; list-windows
 

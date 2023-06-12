@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-with-dynamic)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates lazy-parameter) :select (lazy-parameter))
-    :use-module ((euphrates tilda-a) :select (~a))
-    :use-module ((euphrates with-dynamic) :select (with-dynamic))
-    )))
 
 ;; lazy-parameter, with-dynamic
 

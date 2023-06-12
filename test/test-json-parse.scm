@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-json-parse)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates json-parse) :select (json-parse)))))
 
 ;; json-parse
 

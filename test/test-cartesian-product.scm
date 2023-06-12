@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-cartesian-product)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates cartesian-product) :select (cartesian-product)))))
 
 ;; cartesian-product
 

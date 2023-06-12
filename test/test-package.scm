@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-package)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates hashmap) :select (hashmap-ref))
-    :use-module ((euphrates package) :select (make-package use-svars with-package with-svars)))))
 
 ;; package
 

@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-make-cli)
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates define-cli) :select (make-cli))
-    :use-module ((euphrates hashmap) :select (make-hashmap)))))
 
 ;; make-cli
 

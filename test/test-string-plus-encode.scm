@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string-plus-encode)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-plus-encode) :select (string-plus-encode)))))
 
 
 (let () ;; string-plus-encode

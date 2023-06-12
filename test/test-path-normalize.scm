@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-path-normalize)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates path-normalize) :select (path-normalize)))))
 
 
 (let () ;; path-normalize

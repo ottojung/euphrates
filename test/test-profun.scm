@@ -1,27 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-profun)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates catchu-case) :select (catchu-case))
-    :use-module ((euphrates debug) :select (debug))
-    :use-module ((euphrates printf) :select (printf))
-    :use-module ((euphrates profun-RFC) :select (profun-RFC-insert profun-RFC-what profun-RFC?))
-    :use-module ((euphrates profun-accept) :select (profun-accept))
-    :use-module ((euphrates profun-error) :select (profun-error-args profun-error?))
-    :use-module ((euphrates profun-handler) :select (profun-handler-extend))
-    :use-module ((euphrates profun-make-set) :select (profun-make-set))
-    :use-module ((euphrates profun-make-tuple-set) :select (profun-make-tuple-set))
-    :use-module ((euphrates profun-op-apply) :select (profun-apply-fail! profun-apply-return! profun-op-apply))
-    :use-module ((euphrates profun-op-envlambda) :select (profun-op-envlambda))
-    :use-module ((euphrates profun-op-eval) :select (profun-eval-fail! profun-op-eval))
-    :use-module ((euphrates profun-op-function) :select (profun-op-function))
-    :use-module ((euphrates profun-op-parameter) :select (instantiate-profun-parameter make-profun-parameter))
-    :use-module ((euphrates profun-op-value) :select (profun-op-value))
-    :use-module ((euphrates profun-reject) :select (profun-reject))
-    :use-module ((euphrates profun-standard-handler) :select (profun-standard-handler))
-    :use-module ((euphrates profun) :select (profun-create-database profun-eval-query profun-iterate profun-next)))))
 
 ;; profun
 
@@ -43,10 +20,6 @@
 (define (run-query query)
   (define db (get-db))
   (profun-eval-query db query))
-
-(cond-expand
- (guile
-  (use-modules (ice-9 pretty-print))))
 
 (define (pretty x)
   (cond-expand
@@ -720,8 +693,7 @@
    (assert=
     "param1 = 7\n"
     (with-output-to-string
-      (lambda _
-        (test '((= X 7) (p1 X) (printp1 8)) '(((X . 7)))))))
+      (test '((= X 7) (p1 X) (printp1 8)) '(((X . 7))))))
 
    )
 

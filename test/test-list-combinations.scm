@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-combinations)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates list-combinations) :select (list-combinations)))))
 
 ;; list-combinations
 

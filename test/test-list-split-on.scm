@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-split-on)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-split-on) :select (list-split-on)))))
 
 ;; list-split-on
 

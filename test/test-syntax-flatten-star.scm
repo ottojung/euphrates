@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-syntax-flatten-star)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates syntax-flatten-star) :select (syntax-flatten*)))))
 
 
 (let () ;; syntax-flatten-star

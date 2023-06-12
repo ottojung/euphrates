@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-directory-files-rec)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates directory-files-rec) :select (directory-files-rec)))))
 
 ;; directory-files-rec
 

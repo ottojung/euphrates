@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-deduplicate)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates list-deduplicate) :select (list-deduplicate)))))
 
 ;; list-deduplicate
 

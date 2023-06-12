@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string-drop-n)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-drop-n) :select (string-drop-n)))))
 
 
 (let () ;; string-drop-n

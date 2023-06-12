@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-random-shuffle)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-random-shuffle) :select (list-random-shuffle))
-    :use-module ((euphrates with-randomizer-seed) :select (with-randomizer-seed)))))
 
 
 (let () ;; list-random-shuffle

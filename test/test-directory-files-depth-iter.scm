@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-directory-files-depth-iter)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS))
-    :use-module ((euphrates directory-files-depth-iter) :select (directory-files-depth-iter)))))
 
 
 (define iter

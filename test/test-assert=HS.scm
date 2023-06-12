@@ -1,8 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-assert=HS)
-    :use-module ((euphrates assert-equal-hs) :select (assert=HS)))))
 
 ;; assert=HS
 

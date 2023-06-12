@@ -1,6 +1,6 @@
 
-TARGET = test/main.scm
-GUILE = guile --r7rs -L $(PWD)/src -s
+TARGET = test/test-compilation.sld
+GUILE = guile --r7rs -L $(PWD)/src -L $(PWD)/test -s
 
 all: test
 
@@ -11,7 +11,7 @@ test: build
 
 compile:
 	sh scripts/make-test-compilation.sh || true
-	$(MAKE) one TARGET=test/test-compilation.scm
+	$(MAKE) one TARGET=test/test-compilation.sld
 
 one:
 	$(GUILE) $(TARGET)

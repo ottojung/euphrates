@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-url-get-path)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates url-get-path) :select (url-get-path)))))
 
 ;; url-get-path
 

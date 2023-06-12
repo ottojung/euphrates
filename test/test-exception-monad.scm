@@ -1,12 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-exception-monad)
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates catch-any) :select (catch-any))
-    :use-module ((euphrates exception-monad) :select (exception-monad))
-    :use-module ((euphrates monadic) :select (monadic))
-    :use-module ((euphrates raisu) :select (raisu)))))
 
 ;; exception-monad
 

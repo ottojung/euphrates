@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-cfg-inline)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates cfg-inline) :select (CFG-inline))
-    )))
 
 (let ()
   (define parsed

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-list-tag-next)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates list-tag-next) :select (list-tag/next list-untag/next)))))
 
 ;; list-tag/next
 

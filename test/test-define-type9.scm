@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-define-type9)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates define-type9) :select (define-type9 type9-get-record-descriptor)))))
 
 
 (define-type9 mybox0
@@ -56,7 +50,7 @@
 (assert=
  "#<r2m :: mybox a: 1 b: 2>"
  (with-output-to-string
-   (lambda _ (write obj1))))
+   (write obj1)))
 
 (define desc1
   (type9-get-record-descriptor obj1))

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-letin)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates letin) :select (letin)))))
 
 ;; letin
 

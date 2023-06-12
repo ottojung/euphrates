@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-linear-regression)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates linear-regression) :select (linear-regression))
-    )))
 
 (define (LR x y)
   (call-with-values

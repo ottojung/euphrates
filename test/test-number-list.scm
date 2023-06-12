@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-number-list)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates fp) :select (fp))
-    :use-module ((euphrates number-list) :select (number->number-list number-list->number)))))
 
 ;; number-list
 

@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string-to-seconds-columned)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-to-seconds-columned) :select (string->seconds/columned))
-    :use-module ((euphrates string-to-seconds) :select (string->seconds)))))
 
 
 (let () ;; string-to-seconds-columned

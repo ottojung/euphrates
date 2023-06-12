@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-system-re)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates system-re) :select (system-re)))))
 
 ;; system-re
 

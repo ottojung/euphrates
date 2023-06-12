@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-url-get-protocol)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates url-get-protocol) :select (url-get-protocol)))))
 
 ;; url-get-protocol
 

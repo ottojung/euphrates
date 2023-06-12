@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-compile-cfg-cli)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates compile-cfg-cli) :select (CFG-CLI->CFG-lang)))))
 
 ;; compile-cfg-cli
 

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-uri-encode)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates uri-encode) :select (uri-encode)))))
 
 
 (let () ;; uri-encode

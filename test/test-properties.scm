@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-properties)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates properties) :select (define-property)))))
 
 ;; properties
 

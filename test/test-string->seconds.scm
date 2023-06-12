@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-string->seconds)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates string-to-seconds) :select (string->seconds)))))
 
 
 (let () ;; string->seconds

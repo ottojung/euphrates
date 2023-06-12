@@ -1,15 +1,5 @@
 
-(cond-expand
- (guile
-  (define-module (test-serialization-short)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates assert) :select (assert))
-    :use-module ((euphrates define-type9) :select (define-type9))
-    :use-module ((euphrates hashset) :select (list->hashset))
-    :use-module ((euphrates serialization-short) :select (deserialize/short serialize/short)))))
 
-
-(use-modules (ice-9 pretty-print))
 
 (define obj1
   `(hello there "short"))

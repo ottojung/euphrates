@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-cfg-remove-dead-code)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates cfg-remove-dead-code) :select (CFG-remove-dead-code))
-    )))
 
 (let ()
   (define parsed

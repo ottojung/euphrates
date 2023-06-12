@@ -1,10 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-parse-table)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates general-table) :select (general-table))
-    )))
 
 (assert=
  (general-table

@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-syntax-map)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates syntax-map) :select (syntax-map)))))
 
 
 (let () ;; syntax-map

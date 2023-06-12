@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-alist-initialize-bang)
-    :use-module ((euphrates alist-initialize-bang) :select (alist-initialize! alist-initialize!:return-multiple alist-initialize!:stop))
-    :use-module ((euphrates assert-equal) :select (assert=)))))
 
 
 (let ()

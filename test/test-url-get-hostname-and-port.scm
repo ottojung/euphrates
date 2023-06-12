@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-url-get-hostname-and-port)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates url-get-hostname-and-port) :select (url-get-hostname-and-port)))))
 
 ;; url-get-hostname-and-port
 

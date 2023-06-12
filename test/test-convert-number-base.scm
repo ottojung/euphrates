@@ -1,9 +1,4 @@
 
-(cond-expand
- (guile
-  (define-module (test-convert-number-base)
-    :use-module ((euphrates assert-equal) :select (assert=))
-    :use-module ((euphrates convert-number-base) :select (convert-number-base)))))
 
 ;; convert-number-base
 
