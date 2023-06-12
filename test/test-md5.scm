@@ -5,6 +5,10 @@
  "5d41402abc4b2a76b9719d911017c592")
 
 (assert=
+ (md5-digest "The quick brown fox jumps over the lazy dog")
+ "9e107d9d372bb6826bd81d3542a419d6")
+
+(assert=
  (md5-digest "a b c\nd e\tf")
  "572853b8bb902e996262c34b39a850d0")
 
