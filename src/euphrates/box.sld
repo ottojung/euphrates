@@ -6,13 +6,13 @@
    (only (scheme base) begin cond-expand define))
   (cond-expand
    (guile
-    (import (guile))
-    (import (only (srfi srfi-111) box set-box! unbox))
+    (import (rename (srfi srfi-111) (box? is-srfi-111-box-huh?))
+            (only (srfi srfi-111) box set-box! unbox))
     (begin
-      (define make-box (@ (srfi srfi-111) box))
-      (define box? (@ (srfi srfi-111) box?))
-      (define box-ref (@ (srfi srfi-111) unbox))
-      (define box-set! (@ (srfi srfi-111) set-box!))
+      (define make-box box)
+      (define box? is-srfi-111-box-huh?)
+      (define box-ref unbox)
+      (define box-set! set-box!)
       ))
    (racket
     (begin
