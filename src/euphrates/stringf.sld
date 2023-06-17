@@ -3,6 +3,9 @@
   (euphrates stringf)
   (export stringf)
   (import
+    (only (euphrates call-with-output-string)
+          call-with-output-string))
+  (import
     (only (scheme base)
           begin
           cadr
@@ -21,7 +24,6 @@
           let
           newline
           null?
-          open-output-string
           quote
           string->list
           write-char))
