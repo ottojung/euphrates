@@ -7,7 +7,9 @@
           begin
           cond-expand
           define
-          lambda))
+          else
+          lambda
+          with-exception-handler))
   (cond-expand
     (guile (import (only (guile) include-from-path catch))
            (begin

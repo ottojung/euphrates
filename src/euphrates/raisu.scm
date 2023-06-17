@@ -1,5 +1,4 @@
 
-
 ;; One-way exceptions (non-recoverable / not continuable)
 
 (cond-expand
@@ -11,4 +10,4 @@
     (raise (cons x xs))))
  (else
   (define (raisu x . xs)
-    (apply error (cons x xs)))))
+    (raise (cons x xs)))))
