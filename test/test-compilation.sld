@@ -156,6 +156,7 @@
   (import
     (only (euphrates cfg-strip-modifiers)
           CFG-strip-modifiers))
+  (import (only (euphrates clamp) clamp))
   (import
     (only (euphrates command-line-arguments-p)
           command-line-argumets/p))
@@ -967,6 +968,9 @@
   (import
     (only (euphrates printable-stable-alphabet)
           printable/stable/alphabet))
+  (import
+    (only (euphrates printf-threadsafe)
+          printf/threadsafe))
   (import (only (euphrates printf) printf))
   (import
     (only (euphrates profun-CR)
@@ -3106,9 +3110,6 @@
   (cond-expand
     (guile (import (only (srfi srfi-26) cut cute)))
     (else (import (only (srfi 26) cut cute))))
-  (cond-expand
-    (guile (import (only (srfi srfi-28) format)))
-    (else (import (only (srfi 28) format))))
   (cond-expand
     (guile (import (only (srfi srfi-31) rec)))
     (else (import (only (srfi 31) rec))))
