@@ -2,10 +2,30 @@
 (define-library
   (euphrates stringf)
   (export stringf)
-  (import (only (scheme base) begin define))
-  (cond-expand
-    (guile (import (only (srfi srfi-28) format)))
-    (else (import (only (srfi 28) format))))
+  (import
+    (only (scheme base)
+          begin
+          cadr
+          car
+          case
+          cddr
+          cdr
+          char=?
+          cond
+          define
+          else
+          error
+          get-output-string
+          if
+          lambda
+          let
+          newline
+          null?
+          open-output-string
+          quote
+          string->list
+          write-char))
+  (import (only (scheme write) display write))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -7,6 +7,7 @@
     (only (euphrates dynamic-thread-spawn-p)
           dynamic-thread-spawn/p))
   (import (only (euphrates raisu) raisu))
+  (import (only (euphrates stringf) stringf))
   (import
     (only (euphrates uni-spinlock)
           make-uni-spinlock-critical))
@@ -22,9 +23,6 @@
           set!
           when))
   (import (only (scheme write) display))
-  (cond-expand
-    (guile (import (only (srfi srfi-28) format)))
-    (else (import (only (srfi 28) format))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
