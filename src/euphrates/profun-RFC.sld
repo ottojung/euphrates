@@ -18,10 +18,12 @@
           profun-abort-set-iter
           profun-abort-type
           profun-abort-what
-          profun-abort?)
+          profun-abort?))
+  (import
     (only (euphrates profun-iterator)
           profun-abort-insert
-          profun-abort-reset)
+          profun-abort-reset))
+  (import
     (only (scheme base)
           and
           begin

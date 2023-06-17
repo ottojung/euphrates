@@ -3,7 +3,8 @@
   (euphrates monad-bind)
   (export monad-bind)
   (import
-    (only (euphrates monad-do) monad-do/generic)
+    (only (euphrates monad-do) monad-do/generic))
+  (import
     (only (scheme base)
           _
           begin

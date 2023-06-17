@@ -10,13 +10,15 @@
     prefixtree->tree)
   (import
     (only (euphrates list-find-first)
-          list-find-first)
+          list-find-first))
+  (import
     (only (euphrates prefixtree-obj)
           prefixtree
           prefixtree-children
           prefixtree-value
           set-prefixtree-children!
-          set-prefixtree-value!)
+          set-prefixtree-value!))
+  (import
     (only (scheme base)
           append
           apply
@@ -35,8 +37,10 @@
           map
           null?
           quote
-          vector)
-    (only (srfi srfi-31) rec))
+          vector))
+  (cond-expand
+    (guile (import (only (srfi srfi-31) rec)))
+    (else (import (only (srfi 31) rec))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

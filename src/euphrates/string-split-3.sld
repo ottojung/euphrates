@@ -3,9 +3,11 @@
   (euphrates string-split-3)
   (export string-split-3)
   (import
-    (only (euphrates list-drop-n) list-drop-n)
-    (only (euphrates list-prefix-q) list-prefix?)
-    (only (euphrates raisu) raisu)
+    (only (euphrates list-drop-n) list-drop-n))
+  (import
+    (only (euphrates list-prefix-q) list-prefix?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           begin
           car

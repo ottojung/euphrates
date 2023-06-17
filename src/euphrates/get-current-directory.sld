@@ -4,7 +4,8 @@
   (export get-current-directory)
   (import
     (only (euphrates current-directory-p)
-          current-directory/p)
+          current-directory/p))
+  (import
     (only (scheme base)
           begin
           cond-expand

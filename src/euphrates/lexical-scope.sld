@@ -12,18 +12,22 @@
     (only (euphrates hashmap)
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (euphrates lexical-scope-obj)
           lexical-scope-unwrap
-          lexical-scope-wrap)
-    (only (euphrates make-unique) make-unique)
-    (only (euphrates raisu) raisu)
+          lexical-scope-wrap))
+  (import
+    (only (euphrates make-unique) make-unique))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates stack)
           stack->list
           stack-discard!
           stack-make
           stack-peek
-          stack-push!)
+          stack-push!))
+  (import
     (only (scheme base)
           begin
           car
@@ -36,8 +40,8 @@
           let
           null?
           quote
-          values)
-    (only (scheme case-lambda) case-lambda))
+          values))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

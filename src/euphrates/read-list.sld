@@ -11,9 +11,9 @@
           eof-object?
           if
           let
-          quote)
-    (only (scheme case-lambda) case-lambda)
-    (only (scheme read) read))
+          quote))
+  (import (only (scheme case-lambda) case-lambda))
+  (import (only (scheme read) read))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

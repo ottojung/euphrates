@@ -3,9 +3,6 @@
   (euphrates path-extension)
   (export path-extension)
   (import
-    (only (srfi srfi-13)
-          string-drop
-          string-index-right)
     (only (scheme base)
           <
           begin
@@ -13,6 +10,13 @@
           if
           let
           string-length))
+  (cond-expand
+    (guile (import
+             (only (srfi srfi-13)
+                   string-drop
+                   string-index-right)))
+    (else (import
+            (only (srfi 13) string-drop string-index-right))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -3,7 +3,8 @@
   (euphrates vector-random-shuffle-bang)
   (export vector-random-shuffle!)
   (import
-    (only (euphrates big-random-int) big-random-int)
+    (only (euphrates big-random-int) big-random-int))
+  (import
     (only (scheme base)
           +
           -

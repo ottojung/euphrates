@@ -11,7 +11,8 @@
           open-cond-constructor
           open-cond-predicate
           open-cond-value
-          set-open-cond-value!)
+          set-open-cond-value!))
+  (import
     (only (scheme base)
           _
           and

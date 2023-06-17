@@ -2,16 +2,21 @@
 (define-library
   (euphrates profun-op-envlambda)
   (export profun-op-envlambda)
+  (import (only (euphrates compose) compose))
   (import
-    (only (euphrates compose) compose)
-    (only (euphrates define-tuple) define-tuple)
+    (only (euphrates define-tuple) define-tuple))
+  (import
     (only (euphrates profun-current-env-p)
-          profun-current-env/p)
-    (only (euphrates profun-op) make-profun-op)
+          profun-current-env/p))
+  (import
+    (only (euphrates profun-op) make-profun-op))
+  (import
     (only (euphrates profun-value)
-          profun-value-unwrap)
+          profun-value-unwrap))
+  (import
     (only (euphrates profun-variable-arity-op-keyword)
-          profun-variable-arity-op-keyword)
+          profun-variable-arity-op-keyword))
+  (import
     (only (scheme base)
           _
           begin

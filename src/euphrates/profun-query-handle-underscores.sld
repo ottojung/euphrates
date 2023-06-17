@@ -3,9 +3,9 @@
   (euphrates profun-query-handle-underscores)
   (export profun-query-handle-underscores)
   (import
-    (only (euphrates list-and-map) list-and-map)
-    (only (euphrates usymbol) make-usymbol)
-    (only (srfi srfi-13) string-prefix?)
+    (only (euphrates list-and-map) list-and-map))
+  (import (only (euphrates usymbol) make-usymbol))
+  (import
     (only (scheme base)
           +
           =
@@ -25,8 +25,13 @@
           set!
           string-length
           symbol->string
-          symbol?)
-    (only (srfi srfi-1) count))
+          symbol?))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) count)))
+    (else (import (only (srfi 1) count))))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-prefix?)))
+    (else (import (only (srfi 13) string-prefix?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

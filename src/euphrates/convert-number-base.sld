@@ -8,14 +8,17 @@
   (import
     (only (euphrates alphanum-alphabet)
           alphanum/alphabet
-          alphanum/alphabet/index)
-    (only (euphrates fp) fp)
+          alphanum/alphabet/index))
+  (import (only (euphrates fp) fp))
+  (import
     (only (euphrates list-span-while)
-          list-span-while)
+          list-span-while))
+  (import
     (only (euphrates number-list)
           number->number-list
-          number-list->number)
-    (only (euphrates raisu) raisu)
+          number-list->number))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           >
           append
@@ -41,8 +44,8 @@
           string?
           vector-length
           vector-ref
-          when)
-    (only (scheme case-lambda) case-lambda))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

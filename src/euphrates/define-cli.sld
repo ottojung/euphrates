@@ -12,28 +12,36 @@
     define-cli:raisu/default-exit
     define-cli:show-help)
   (import
-    (only (euphrates cfg-machine) make-cfg-machine)
+    (only (euphrates cfg-machine) make-cfg-machine))
+  (import
     (only (euphrates compile-cfg-cli-help)
-          CFG-AST->CFG-CLI-help)
+          CFG-AST->CFG-CLI-help))
+  (import
     (only (euphrates compile-cfg-cli)
-          CFG-CLI->CFG-lang)
-    (only (euphrates compose) compose)
-    (only (euphrates define-pair) define-pair)
+          CFG-CLI->CFG-lang))
+  (import (only (euphrates compose) compose))
+  (import
+    (only (euphrates define-pair) define-pair))
+  (import
     (only (euphrates get-command-line-arguments)
-          get-command-line-arguments)
+          get-command-line-arguments))
+  (import
     (only (euphrates hashmap)
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (euphrates immutable-hashmap)
           alist->immutable-hashmap
           immutable-hashmap-foreach
-          immutable-hashmap-ref/first)
-    (only (euphrates list-init) list-init)
-    (only (euphrates list-last) list-last)
+          immutable-hashmap-ref/first))
+  (import (only (euphrates list-init) list-init))
+  (import (only (euphrates list-last) list-last))
+  (import
     (only (euphrates syntax-flatten-star)
-          syntax-flatten*)
-    (only (euphrates tilda-a) ~a)
+          syntax-flatten*))
+  (import (only (euphrates tilda-a) ~a))
+  (import
     (only (scheme base)
           /
           _
@@ -78,10 +86,12 @@
           syntax-rules
           unless
           values
-          when)
-    (only (scheme process-context) exit)
-    (only (scheme write) display)
-    (only (srfi srfi-42) :))
+          when))
+  (import (only (scheme process-context) exit))
+  (import (only (scheme write) display))
+  (cond-expand
+    (guile (import (only (srfi srfi-42) :)))
+    (else (import (only (srfi 42) :))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

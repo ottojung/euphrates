@@ -2,10 +2,10 @@
 (define-library
   (euphrates curry-if)
   (export curry-if)
+  (import (only (euphrates identity) identity))
   (import
-    (only (euphrates identity) identity)
-    (only (scheme base) begin define if lambda)
-    (only (scheme case-lambda) case-lambda))
+    (only (scheme base) begin define if lambda))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -2,8 +2,8 @@
 (define-library
   (euphrates list-windows)
   (export list-windows)
+  (import (only (euphrates list-span) list-span))
   (import
-    (only (euphrates list-span) list-span)
     (only (scheme base)
           append
           begin

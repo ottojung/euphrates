@@ -8,8 +8,9 @@
     (only (euphrates hashset)
           hashset-add!
           hashset-has?
-          make-hashset)
-    (only (euphrates identity) identity)
+          make-hashset))
+  (import (only (euphrates identity) identity))
+  (import
     (only (scheme base)
           begin
           car
@@ -21,8 +22,8 @@
           let
           null?
           quote
-          reverse)
-    (only (scheme case-lambda) case-lambda))
+          reverse))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

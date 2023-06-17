@@ -6,12 +6,16 @@
     (only (euphrates profun-accept)
           profun-accept
           profun-ctx-set
-          profun-set)
+          profun-set))
+  (import
     (only (euphrates profun-op-lambda)
-          profun-op-lambda)
-    (only (euphrates profun-reject) profun-reject)
+          profun-op-lambda))
+  (import
+    (only (euphrates profun-reject) profun-reject))
+  (import
     (only (euphrates profun-value)
-          profun-unbound-value?)
+          profun-unbound-value?))
+  (import
     (only (scheme base)
           +
           _

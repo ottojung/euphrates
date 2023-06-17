@@ -3,7 +3,8 @@
   (euphrates list-chunks)
   (export list-chunks)
   (import
-    (only (euphrates list-span-n) list-span-n)
+    (only (euphrates list-span-n) list-span-n))
+  (import
     (only (scheme base)
           _
           begin

@@ -4,9 +4,9 @@
   (export string-strip)
   (import
     (only (euphrates string-trim-chars)
-          string-trim-chars)
-    (only (scheme base) begin define quote)
-    (only (scheme case-lambda) case-lambda))
+          string-trim-chars))
+  (import (only (scheme base) begin define quote))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

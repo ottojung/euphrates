@@ -2,11 +2,12 @@
 (define-library
   (euphrates assert-equal-hs)
   (export assert=HS)
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert) assert)
     (only (euphrates multiset)
           make-multiset
-          multiset-equal?)
+          multiset-equal?))
+  (import
     (only (scheme base)
           _
           begin

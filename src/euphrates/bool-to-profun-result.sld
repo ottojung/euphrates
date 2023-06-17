@@ -3,8 +3,10 @@
   (euphrates bool-to-profun-result)
   (export bool->profun-result)
   (import
-    (only (euphrates profun-accept) profun-accept)
-    (only (euphrates profun-reject) profun-reject)
+    (only (euphrates profun-accept) profun-accept))
+  (import
+    (only (euphrates profun-reject) profun-reject))
+  (import
     (only (scheme base)
           begin
           cond

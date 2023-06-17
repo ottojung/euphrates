@@ -2,15 +2,16 @@
 (define-library
   (euphrates monad-compose)
   (export monad-compose)
+  (import (only (euphrates compose) compose))
   (import
-    (only (euphrates compose) compose)
     (only (euphrates monadobj)
           monadobj-constructor
           monadobj-handles-fin?
           monadobj-procedure
           monadobj-uses-continuations?
-          monadobj?)
-    (only (euphrates raisu) raisu)
+          monadobj?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base) begin define or quote unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))

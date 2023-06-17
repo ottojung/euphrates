@@ -3,8 +3,9 @@
   (euphrates list-random-element)
   (export list-random-element)
   (import
-    (only (euphrates big-random-int) big-random-int)
-    (only (euphrates raisu) raisu)
+    (only (euphrates big-random-int) big-random-int))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           begin
           define

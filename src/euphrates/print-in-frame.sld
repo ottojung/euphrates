@@ -3,10 +3,12 @@
   (euphrates print-in-frame)
   (export print-in-frame)
   (import
-    (only (euphrates list-span-n) list-span-n)
-    (only (euphrates raisu) raisu)
-    (only (euphrates replicate) replicate)
-    (only (euphrates string-to-lines) string->lines)
+    (only (euphrates list-span-n) list-span-n))
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates replicate) replicate))
+  (import
+    (only (euphrates string-to-lines) string->lines))
+  (import
     (only (scheme base)
           +
           -
@@ -39,8 +41,8 @@
           string?
           unless
           unquote
-          when)
-    (only (scheme write) display))
+          when))
+  (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

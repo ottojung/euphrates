@@ -11,7 +11,8 @@
     (only (euphrates hashmap)
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (scheme base)
           _
           assq

@@ -4,10 +4,12 @@
   (export profun-op-print)
   (import
     (only (euphrates bool-to-profun-result)
-          bool->profun-result)
-    (only (euphrates dprintln) dprintln)
+          bool->profun-result))
+  (import (only (euphrates dprintln) dprintln))
+  (import
     (only (euphrates profun-op-lambda)
-          profun-op-lambda)
+          profun-op-lambda))
+  (import
     (only (scheme base)
           and
           apply

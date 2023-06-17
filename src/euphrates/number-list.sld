@@ -6,8 +6,8 @@
     number->number-list
     number->number-list:precision/p
     number-list->number-list)
+  (import (only (euphrates fp) fp))
   (import
-    (only (euphrates fp) fp)
     (only (scheme base)
           *
           +
@@ -30,8 +30,8 @@
           remainder
           reverse
           values
-          zero?)
-    (only (scheme r5rs) inexact->exact))
+          zero?))
+  (import (only (scheme r5rs) inexact->exact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

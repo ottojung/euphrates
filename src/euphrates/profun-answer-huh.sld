@@ -3,10 +3,12 @@
   (euphrates profun-answer-huh)
   (export profun-answer?)
   (import
-    (only (euphrates profun-abort) profun-abort?)
-    (only (euphrates profun-accept) profun-accept?)
-    (only (euphrates profun-reject) profun-reject?)
-    (only (scheme base) begin define or))
+    (only (euphrates profun-abort) profun-abort?))
+  (import
+    (only (euphrates profun-accept) profun-accept?))
+  (import
+    (only (euphrates profun-reject) profun-reject?))
+  (import (only (scheme base) begin define or))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

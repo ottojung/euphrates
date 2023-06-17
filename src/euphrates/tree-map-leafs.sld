@@ -2,8 +2,8 @@
 (define-library
   (euphrates tree-map-leafs)
   (export tree-map-leafs)
+  (import (only (euphrates fn) fn))
   (import
-    (only (euphrates fn) fn)
     (only (scheme base)
           begin
           define

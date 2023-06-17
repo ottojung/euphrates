@@ -14,12 +14,15 @@
     np-thread-global-mutex-unlock!
     np-thread-global-critical-make)
   (import
-    (only (euphrates box) box-ref box-set! make-box)
+    (only (euphrates box) box-ref box-set! make-box))
+  (import
     (only (euphrates dynamic-thread-cancel-tag)
-          dynamic-thread-cancel-tag)
+          dynamic-thread-cancel-tag))
+  (import
     (only (euphrates dynamic-thread-get-wait-delay)
-          dynamic-thread-get-wait-delay)
-    (only (euphrates fn) fn)
+          dynamic-thread-get-wait-delay))
+  (import (only (euphrates fn) fn))
+  (import
     (only (euphrates np-thread-obj)
           np-thread-obj
           np-thread-obj-cancel-enabled?
@@ -28,20 +31,25 @@
           np-thread-obj?
           set-np-thread-obj-cancel-enabled?!
           set-np-thread-obj-cancel-scheduled?!
-          set-np-thread-obj-continuation!)
+          set-np-thread-obj-continuation!))
+  (import
     (only (euphrates queue)
           make-queue
           queue-pop!
-          queue-push!)
-    (only (euphrates raisu) raisu)
-    (only (euphrates sys-usleep) sys-usleep)
+          queue-push!))
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates sys-usleep) sys-usleep))
+  (import
     (only (euphrates
             time-get-monotonic-nanoseconds-timestamp)
-          time-get-monotonic-nanoseconds-timestamp)
+          time-get-monotonic-nanoseconds-timestamp))
+  (import
     (only (euphrates unit-conversions)
           micro->nano/unit
-          nano->micro/unit)
-    (only (euphrates with-critical) with-critical)
+          nano->micro/unit))
+  (import
+    (only (euphrates with-critical) with-critical))
+  (import
     (only (scheme base)
           +
           -
@@ -62,8 +70,10 @@
           set!
           unless
           values
-          when)
-    (only (srfi srfi-18) current-thread))
+          when))
+  (cond-expand
+    (guile (import (only (srfi srfi-18) current-thread)))
+    (else (import (only (srfi 18) current-thread))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

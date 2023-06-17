@@ -4,7 +4,8 @@
   (export profun-default)
   (import
     (only (euphrates profun-value)
-          profun-unbound-value?)
+          profun-unbound-value?))
+  (import
     (only (scheme base)
           _
           begin

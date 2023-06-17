@@ -3,8 +3,10 @@
   (euphrates profun-op-true)
   (export profun-op-true)
   (import
-    (only (euphrates profun-accept) profun-accept)
-    (only (euphrates profun-op) make-profun-op)
+    (only (euphrates profun-accept) profun-accept))
+  (import
+    (only (euphrates profun-op) make-profun-op))
+  (import
     (only (scheme base) _ begin define lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))

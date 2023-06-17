@@ -3,7 +3,8 @@
   (euphrates syntax-map)
   (export syntax-map)
   (import
-    (only (euphrates syntax-reverse) syntax-reverse)
+    (only (euphrates syntax-reverse) syntax-reverse))
+  (import
     (only (scheme base)
           _
           begin

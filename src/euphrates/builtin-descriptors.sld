@@ -3,8 +3,9 @@
   (euphrates builtin-descriptors)
   (export builtin-descriptors)
   (import
-    (only (euphrates atomic-box) atomic-box?)
-    (only (euphrates box) box?)
+    (only (euphrates atomic-box) atomic-box?))
+  (import (only (euphrates box) box?))
+  (import
     (only (scheme base)
           begin
           char?

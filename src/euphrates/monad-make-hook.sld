@@ -4,13 +4,16 @@
   (export monad-make/hook)
   (import
     (only (euphrates monad-make-no-cont-no-fin)
-          monad-make/no-cont/no-fin)
+          monad-make/no-cont/no-fin))
+  (import
     (only (euphrates monadstate-current-p)
-          monadstate-current/p)
+          monadstate-current/p))
+  (import
     (only (euphrates monadstate)
           monadstate-args
           monadstate-qtags
-          monadstate-ret)
+          monadstate-ret))
+  (import
     (only (scheme base)
           _
           apply

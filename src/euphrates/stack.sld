@@ -12,13 +12,14 @@
     stack->list
     list->stack
     stack-unload!)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (euphrates stack-obj)
           set-stack-lst!
           stack-constructor
           stack-lst
-          stack-predicate)
+          stack-predicate))
+  (import
     (only (scheme base)
           begin
           car
@@ -30,8 +31,8 @@
           null?
           quote
           unless
-          when)
-    (only (scheme case-lambda) case-lambda))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "euphrates/stack.scm")))

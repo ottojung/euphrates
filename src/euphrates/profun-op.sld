@@ -4,8 +4,8 @@
   (export make-profun-op)
   (import
     (only (euphrates profun-op-obj)
-          profun-op-constructor)
-    (only (scheme base) begin define))
+          profun-op-constructor))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

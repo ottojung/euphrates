@@ -4,7 +4,8 @@
   (export list-random-shuffle)
   (import
     (only (euphrates vector-random-shuffle-bang)
-          vector-random-shuffle!)
+          vector-random-shuffle!))
+  (import
     (only (scheme base)
           begin
           define

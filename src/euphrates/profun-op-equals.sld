@@ -3,17 +3,23 @@
   (euphrates profun-op-equals)
   (export profun-op-equals)
   (import
-    (only (euphrates list-and-map) list-and-map)
+    (only (euphrates list-and-map) list-and-map))
+  (import
     (only (euphrates profun-accept)
           profun-ctx-set
-          profun-set)
+          profun-set))
+  (import
     (only (euphrates profun-op-lambda)
-          profun-op-lambda)
-    (only (euphrates profun-reject) profun-reject)
+          profun-op-lambda))
+  (import
+    (only (euphrates profun-reject) profun-reject))
+  (import
     (only (euphrates profun-request-value)
-          profun-request-value)
+          profun-request-value))
+  (import
     (only (euphrates profun-value)
-          profun-unbound-value?)
+          profun-unbound-value?))
+  (import
     (only (scheme base)
           and
           begin

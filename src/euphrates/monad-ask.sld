@@ -3,9 +3,11 @@
   (euphrates monad-ask)
   (export monad-ask)
   (import
-    (only (euphrates catchu-case) catchu-case)
-    (only (euphrates monad-do) monad-do/generic)
-    (only (euphrates raisu) raisu)
+    (only (euphrates catchu-case) catchu-case))
+  (import
+    (only (euphrates monad-do) monad-do/generic))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           <
           >

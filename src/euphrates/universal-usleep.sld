@@ -4,16 +4,20 @@
   (export universal-usleep)
   (import
     (only (euphrates dynamic-thread-get-wait-delay)
-          dynamic-thread-get-wait-delay)
+          dynamic-thread-get-wait-delay))
+  (import
     (only (euphrates dynamic-thread-get-yield-procedure)
-          dynamic-thread-get-yield-procedure)
-    (only (euphrates sys-usleep) sys-usleep)
+          dynamic-thread-get-yield-procedure))
+  (import (only (euphrates sys-usleep) sys-usleep))
+  (import
     (only (euphrates
             time-get-monotonic-nanoseconds-timestamp)
-          time-get-monotonic-nanoseconds-timestamp)
+          time-get-monotonic-nanoseconds-timestamp))
+  (import
     (only (euphrates unit-conversions)
           micro->nano/unit
-          nano->micro/unit)
+          nano->micro/unit))
+  (import
     (only (scheme base)
           +
           -

@@ -4,18 +4,23 @@
   (export profun-op-divisible)
   (import
     (only (euphrates bool-to-profun-result)
-          bool->profun-result)
+          bool->profun-result))
+  (import
     (only (euphrates profun-accept)
           profun-ctx-set
-          profun-set)
+          profun-set))
+  (import
     (only (euphrates profun-op-lambda)
-          profun-op-lambda)
+          profun-op-lambda))
+  (import
     (only (euphrates profun-request-value)
-          profun-request-value)
+          profun-request-value))
+  (import
     (only (euphrates profun-value)
           profun-bound-value?
-          profun-unbound-value?)
-    (only (euphrates raisu) raisu)
+          profun-unbound-value?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           +
           <
@@ -29,8 +34,10 @@
           number?
           or
           quote
-          remainder)
-    (only (srfi srfi-1) last))
+          remainder))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) last)))
+    (else (import (only (srfi 1) last))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

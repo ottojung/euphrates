@@ -2,8 +2,8 @@
 (define-library
   (euphrates string-to-seconds)
   (export string->seconds)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           *
           +

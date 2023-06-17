@@ -4,8 +4,9 @@
   (export dynamic-thread-cancel)
   (import
     (only (euphrates dynamic-thread-cancel-p)
-          #{dynamic-thread-cancel#p}#)
-    (only (euphrates raisu) raisu)
+          #{dynamic-thread-cancel#p}#))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base) begin define or quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))

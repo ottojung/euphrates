@@ -3,8 +3,9 @@
   (euphrates monadic-id)
   (export monadic-id)
   (import
-    (only (euphrates identity-monad) identity-monad)
-    (only (euphrates monadic) monadic)
+    (only (euphrates identity-monad) identity-monad))
+  (import (only (euphrates monadic) monadic))
+  (import
     (only (scheme base)
           _
           begin

@@ -2,8 +2,8 @@
 (define-library
   (euphrates assert-equal)
   (export assert=)
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert) assert)
     (only (scheme base)
           _
           begin

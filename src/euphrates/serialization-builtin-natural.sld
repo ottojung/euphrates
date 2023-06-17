@@ -8,9 +8,11 @@
     (only (euphrates atomic-box)
           atomic-box-ref
           atomic-box?
-          make-atomic-box)
-    (only (euphrates box) box-ref box? make-box)
-    (only (euphrates raisu) raisu)
+          make-atomic-box))
+  (import
+    (only (euphrates box) box-ref box? make-box))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           _
           apply
@@ -42,9 +44,9 @@
           unquote-splicing
           vector
           vector?
-          when)
-    (only (scheme case-lambda) case-lambda)
-    (only (scheme cxr) caddr))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
+  (import (only (scheme cxr) caddr))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import

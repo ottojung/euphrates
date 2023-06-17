@@ -4,7 +4,8 @@
   (export dynamic-thread-async)
   (import
     (only (euphrates dynamic-thread-async-thunk)
-          dynamic-thread-async-thunk)
+          dynamic-thread-async-thunk))
+  (import
     (only (scheme base)
           _
           begin

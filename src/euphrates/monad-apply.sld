@@ -3,8 +3,8 @@
   (euphrates monad-apply)
   (export monad-apply)
   (import
-    (only (euphrates monadobj) monadobj-procedure)
-    (only (scheme base) begin define))
+    (only (euphrates monadobj) monadobj-procedure))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

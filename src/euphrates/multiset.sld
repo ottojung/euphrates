@@ -18,12 +18,14 @@
           hashmap-foreach
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (euphrates multiset-obj)
           multiset-constructor
           multiset-predicate
-          multiset-value)
-    (only (euphrates raisu) raisu)
+          multiset-value))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           +
           -

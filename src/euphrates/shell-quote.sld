@@ -2,10 +2,11 @@
 (define-library
   (euphrates shell-quote)
   (export shell-quote shell-quote/always/list)
+  (import (only (euphrates negate) negate))
   (import
-    (only (euphrates negate) negate)
     (only (euphrates shell-safe-alphabet)
-          shell-safe/alphabet/index)
+          shell-safe/alphabet/index))
+  (import
     (only (scheme base)
           begin
           car
@@ -18,8 +19,10 @@
           list->string
           null?
           quote
-          string->list)
-    (only (srfi srfi-1) filter))
+          string->list))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

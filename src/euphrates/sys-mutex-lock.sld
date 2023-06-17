@@ -2,9 +2,10 @@
 (define-library
   (euphrates sys-mutex-lock)
   (export sys-mutex-lock!)
-  (import
-    (only (scheme base) begin define)
-    (only (srfi srfi-18) mutex-lock!))
+  (import (only (scheme base) begin define))
+  (cond-expand
+    (guile (import (only (srfi srfi-18) mutex-lock!)))
+    (else (import (only (srfi 18) mutex-lock!))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

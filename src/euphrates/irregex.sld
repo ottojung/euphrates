@@ -38,6 +38,7 @@
     irregex-num-submatches
     irregex-extract
     irregex-split)
+  (import (only (euphrates range) range))
   (import
     (only (scheme base)
           *
@@ -139,7 +140,8 @@
           vector-ref
           vector-set!
           vector?
-          zero?)
+          zero?))
+  (import
     (only (scheme char)
           char-alphabetic?
           char-ci=?
@@ -148,7 +150,8 @@
           char-upcase
           char-upper-case?
           char-whitespace?
-          string-ci=?)
+          string-ci=?))
+  (import
     (only (scheme cxr)
           cadadr
           cadar
@@ -157,19 +160,42 @@
           caddr
           cddadr
           cddar
-          cdddr)
-    (only (scheme read) read)
-    (only (srfi srfi-1)
-          any
-          count
-          every
-          filter
-          find
-          find-tail
-          first
-          fold
-          last
-          remove))
+          cdddr))
+  (import (only (scheme read) read))
+  (cond-expand
+    (guile (import
+             (only (srfi srfi-1)
+                   any
+                   count
+                   every
+                   filter
+                   find
+                   find-tail
+                   first
+                   fold
+                   last
+                   remove)))
+    (else (import
+            (only (srfi 1)
+                  any
+                  count
+                  every
+                  filter
+                  find
+                  find-tail
+                  first
+                  fold
+                  last
+                  remove))))
+  (cond-expand
+    (guile (import (only (srfi srfi-31) rec)))
+    (else (import (only (srfi 31) rec))))
+  (cond-expand
+    (guile (import (only (srfi srfi-42) :)))
+    (else (import (only (srfi 42) :))))
+  (cond-expand
+    (guile (import (only (srfi srfi-67) =? >=?)))
+    (else (import (only (srfi 67) =? >=?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

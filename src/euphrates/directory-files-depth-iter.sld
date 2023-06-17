@@ -4,15 +4,19 @@
   (export directory-files-depth-iter)
   (import
     (only (euphrates append-posix-path)
-          append-posix-path)
-    (only (euphrates catch-any) catch-any)
-    (only (euphrates define-type9) define-type9)
-    (only (euphrates path-normalize) path-normalize)
+          append-posix-path))
+  (import (only (euphrates catch-any) catch-any))
+  (import
+    (only (euphrates define-type9) define-type9))
+  (import
+    (only (euphrates path-normalize) path-normalize))
+  (import
     (only (euphrates queue)
           make-queue
           queue-empty?
           queue-pop!
-          queue-push!)
+          queue-push!))
+  (import
     (only (scheme base)
           +
           <
@@ -42,8 +46,8 @@
           string-append
           string=?
           syntax-rules
-          when)
-    (only (scheme case-lambda) case-lambda))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import

@@ -4,7 +4,8 @@
   (export CFG-strip-modifiers)
   (import
     (only (euphrates cfg-parse-modifiers)
-          CFG-parse-modifiers)
+          CFG-parse-modifiers))
+  (import
     (only (scheme base) begin define define-values))
   (cond-expand
     (guile (import (only (guile) include-from-path))

@@ -13,24 +13,31 @@
     sys-thread-sleep)
   (import
     (only (euphrates dynamic-thread-cancel-tag)
-          dynamic-thread-cancel-tag)
-    (only (euphrates raisu) raisu)
-    (only (euphrates sys-mutex-lock) sys-mutex-lock!)
-    (only (euphrates sys-mutex-make) sys-mutex-make)
+          dynamic-thread-cancel-tag))
+  (import (only (euphrates raisu) raisu))
+  (import
+    (only (euphrates sys-mutex-lock) sys-mutex-lock!))
+  (import
+    (only (euphrates sys-mutex-make) sys-mutex-make))
+  (import
     (only (euphrates sys-mutex-unlock)
-          sys-mutex-unlock!)
+          sys-mutex-unlock!))
+  (import
     (only (euphrates sys-thread-current-p-default)
-          #{sys-thread-current#p-default}#)
+          #{sys-thread-current#p-default}#))
+  (import
     (only (euphrates sys-thread-current-p)
-          #{sys-thread-current#p}#)
+          #{sys-thread-current#p}#))
+  (import
     (only (euphrates sys-thread-obj)
           set-sys-thread-obj-cancel-enabled?!
           set-sys-thread-obj-cancel-scheduled?!
           set-sys-thread-obj-handle!
           sys-thread-obj
           sys-thread-obj-cancel-enabled?
-          sys-thread-obj-cancel-scheduled?)
-    (only (euphrates sys-usleep) sys-usleep)
+          sys-thread-obj-cancel-scheduled?))
+  (import (only (euphrates sys-usleep) sys-usleep))
+  (import
     (only (scheme base)
           and
           begin

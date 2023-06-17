@@ -4,12 +4,16 @@
   (export random-variable-name)
   (import
     (only (euphrates alpha-lowercase-alphabet)
-          alpha-lowercase/alphabet)
+          alpha-lowercase/alphabet))
+  (import
     (only (euphrates alphanum-lowercase-alphabet)
-          alphanum-lowercase/alphabet)
-    (only (euphrates big-random-int) big-random-int)
-    (only (euphrates raisu) raisu)
-    (only (euphrates random-choice) random-choice)
+          alphanum-lowercase/alphabet))
+  (import
+    (only (euphrates big-random-int) big-random-int))
+  (import (only (euphrates raisu) raisu))
+  (import
+    (only (euphrates random-choice) random-choice))
+  (import
     (only (scheme base)
           -
           <

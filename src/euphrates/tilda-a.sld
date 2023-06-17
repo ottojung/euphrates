@@ -2,8 +2,8 @@
 (define-library
   (euphrates tilda-a)
   (export ~a)
+  (import (only (euphrates stringf) stringf))
   (import
-    (only (euphrates stringf) stringf)
     (only (scheme base)
           begin
           cond

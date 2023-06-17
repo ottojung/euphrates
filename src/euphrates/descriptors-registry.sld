@@ -7,14 +7,17 @@
     descriptors-registry-decolisify-name)
   (import
     (only (euphrates builtin-descriptors)
-          builtin-descriptors)
+          builtin-descriptors))
+  (import
     (only (euphrates hashmap)
           hashmap-count
           hashmap-ref
           hashmap-set!
-          make-hashmap)
-    (only (euphrates list-and-map) list-and-map)
-    (only (euphrates raisu) raisu)
+          make-hashmap))
+  (import
+    (only (euphrates list-and-map) list-and-map))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           +
           =

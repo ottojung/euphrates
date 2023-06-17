@@ -2,12 +2,14 @@
 (define-library
   (euphrates debugs)
   (export debugs)
+  (import (only (euphrates debug) debug))
   (import
-    (only (euphrates debug) debug)
     (only (euphrates serialization-short)
-          serialize/short)
+          serialize/short))
+  (import
     (only (euphrates with-output-to-string)
-          with-output-to-string)
+          with-output-to-string))
+  (import
     (only (scheme base)
           _
           begin

@@ -4,9 +4,10 @@
   (export url-decompose)
   (import
     (only (euphrates list-find-first)
-          list-find-first)
-    (only (euphrates string-split-3) string-split-3)
-    (only (srfi srfi-13) string-null?)
+          list-find-first))
+  (import
+    (only (euphrates string-split-3) string-split-3))
+  (import
     (only (scheme base)
           begin
           case
@@ -20,6 +21,9 @@
           string->list
           string-append
           values))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-null?)))
+    (else (import (only (srfi 13) string-null?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

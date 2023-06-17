@@ -2,8 +2,8 @@
 (define-library
   (euphrates list-find-first)
   (export list-find-first)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           _
           begin

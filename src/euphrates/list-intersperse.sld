@@ -2,8 +2,8 @@
 (define-library
   (euphrates list-intersperse)
   (export list-intersperse)
+  (import (only (euphrates conss) conss))
   (import
-    (only (euphrates conss) conss)
     (only (scheme base)
           begin
           car

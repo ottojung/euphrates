@@ -13,8 +13,8 @@
           list->string
           quote
           read-char
-          reverse)
-    (only (scheme case-lambda) case-lambda))
+          reverse))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

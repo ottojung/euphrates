@@ -2,8 +2,8 @@
 (define-library
   (euphrates profun-varname-q)
   (export profun-varname?)
+  (import (only (euphrates usymbol) usymbol?))
   (import
-    (only (euphrates usymbol) usymbol?)
     (only (scheme base) begin define or symbol?))
   (cond-expand
     (guile (import (only (guile) include-from-path))

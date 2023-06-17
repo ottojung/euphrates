@@ -3,8 +3,10 @@
   (euphrates read-string-file)
   (export read-string-file)
   (import
-    (only (euphrates open-file-port) open-file-port)
-    (only (euphrates read-all-port) read-all-port)
+    (only (euphrates open-file-port) open-file-port))
+  (import
+    (only (euphrates read-all-port) read-all-port))
+  (import
     (only (scheme base)
           begin
           close-port

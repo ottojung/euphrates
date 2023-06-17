@@ -4,7 +4,8 @@
   (export profun-op*)
   (import
     (only (euphrates profun-op-binary)
-          profun-op-binary)
+          profun-op-binary))
+  (import
     (only (scheme base)
           *
           /
@@ -18,9 +19,9 @@
           lambda
           let
           not
-          quote)
-    (only (scheme inexact) sqrt)
-    (only (scheme r5rs) inexact->exact))
+          quote))
+  (import (only (scheme inexact) sqrt))
+  (import (only (scheme r5rs) inexact->exact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

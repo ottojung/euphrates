@@ -4,14 +4,17 @@
   (export lazy-monad)
   (import
     (only (euphrates dynamic-thread-async)
-          dynamic-thread-async)
+          dynamic-thread-async))
+  (import
     (only (euphrates monad-make-no-cont-no-fin)
-          monad-make/no-cont/no-fin)
+          monad-make/no-cont/no-fin))
+  (import
     (only (euphrates monadstate)
           monadstate-arg
           monadstate-lval
           monadstate-qtags
-          monadstate-ret/thunk)
+          monadstate-ret/thunk))
+  (import
     (only (scheme base)
           _
           begin

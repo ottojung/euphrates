@@ -3,11 +3,6 @@
   (euphrates get-directory-name)
   (export get-directory-name)
   (import
-    (only (srfi srfi-13)
-          string-every
-          string-index-right
-          string-null?
-          string-trim-right)
     (only (scheme base)
           begin
           cond
@@ -19,6 +14,19 @@
           let
           let*
           substring))
+  (cond-expand
+    (guile (import
+             (only (srfi srfi-13)
+                   string-every
+                   string-index-right
+                   string-null?
+                   string-trim-right)))
+    (else (import
+            (only (srfi 13)
+                  string-every
+                  string-index-right
+                  string-null?
+                  string-trim-right))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

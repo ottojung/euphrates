@@ -4,7 +4,8 @@
   (export get-command-line-arguments)
   (import
     (only (euphrates command-line-arguments-p)
-          command-line-argumets/p)
+          command-line-argumets/p))
+  (import
     (only (scheme base)
           <
           _
@@ -18,7 +19,8 @@
           let
           or
           quote
-          vector->list)
+          vector->list))
+  (import
     (only (scheme process-context) command-line))
   (cond-expand
     (guile (import (only (guile) include-from-path))

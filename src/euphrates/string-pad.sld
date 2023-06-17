@@ -2,8 +2,8 @@
 (define-library
   (euphrates string-pad)
   (export string-pad-L string-pad-R)
+  (import (only (euphrates replicate) replicate))
   (import
-    (only (euphrates replicate) replicate)
     (only (scheme base)
           -
           >=

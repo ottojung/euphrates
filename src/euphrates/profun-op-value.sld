@@ -3,22 +3,28 @@
   (euphrates profun-op-value)
   (export profun-op-value)
   (import
-    (only (euphrates profun-CR) make-profun-CR)
+    (only (euphrates profun-CR) make-profun-CR))
+  (import
     (only (euphrates profun-accept)
           profun-accept
-          profun-set)
+          profun-set))
+  (import
     (only (euphrates profun-answer-join)
           profun-answer-join/and
           profun-answer-join/any
-          profun-answer-join/or)
+          profun-answer-join/or))
+  (import
     (only (euphrates profun-op-envlambda)
-          profun-op-envlambda)
-    (only (euphrates profun-reject) profun-reject)
+          profun-op-envlambda))
+  (import
+    (only (euphrates profun-reject) profun-reject))
+  (import
     (only (euphrates profun-value)
           profun-bound-value?
           profun-unbound-value?
-          profun-value-name)
-    (only (euphrates raisu) raisu)
+          profun-value-name))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           and
           assq
@@ -37,8 +43,10 @@
           or
           pair?
           quote
-          symbol?)
-    (only (srfi srfi-1) any))
+          symbol?))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) any)))
+    (else (import (only (srfi 1) any))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

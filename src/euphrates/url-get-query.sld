@@ -3,7 +3,8 @@
   (euphrates url-get-query)
   (export url-get-query)
   (import
-    (only (euphrates url-decompose) url-decompose)
+    (only (euphrates url-decompose) url-decompose))
+  (import
     (only (scheme base) begin define define-values))
   (cond-expand
     (guile (import (only (guile) include-from-path))

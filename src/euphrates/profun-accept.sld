@@ -13,13 +13,17 @@
     profun-set-meta
     profun-set-parameter)
   (import
-    (only (euphrates assq-set-value) assq-set-value)
-    (only (euphrates define-type9) define-type9)
+    (only (euphrates assq-set-value) assq-set-value))
+  (import
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (euphrates profun-meta-key)
-          profun-meta-key)
+          profun-meta-key))
+  (import
     (only (euphrates profun-varname-q)
-          profun-varname?)
-    (only (euphrates raisu) raisu)
+          profun-varname?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           _
           begin
@@ -30,8 +34,8 @@
           procedure?
           quote
           syntax-rules
-          unless)
-    (only (scheme case-lambda) case-lambda))
+          unless))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

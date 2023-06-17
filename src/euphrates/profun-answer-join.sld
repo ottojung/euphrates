@@ -8,16 +8,20 @@
   (import
     (only (euphrates hashmap)
           alist->hashmap
-          hashmap->alist)
-    (only (euphrates profun-abort) profun-abort?)
+          hashmap->alist))
+  (import
+    (only (euphrates profun-abort) profun-abort?))
+  (import
     (only (euphrates profun-accept)
           make-profun-accept
           profun-accept-alist
           profun-accept-ctx
           profun-accept-ctx-changed?
-          profun-accept?)
-    (only (euphrates profun-reject) profun-reject?)
-    (only (euphrates raisu) raisu)
+          profun-accept?))
+  (import
+    (only (euphrates profun-reject) profun-reject?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           append
           begin

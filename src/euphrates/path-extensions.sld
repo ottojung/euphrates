@@ -4,10 +4,13 @@
   (export path-extensions)
   (import
     (only (euphrates alphanum-alphabet)
-          alphanum/alphabet/index)
-    (only (euphrates list-and-map) list-and-map)
+          alphanum/alphabet/index))
+  (import
+    (only (euphrates list-and-map) list-and-map))
+  (import
     (only (euphrates string-split-simple)
-          string-split/simple)
+          string-split/simple))
+  (import
     (only (scheme base)
           begin
           car

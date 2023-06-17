@@ -4,13 +4,11 @@
   (export path-normalize)
   (import
     (only (euphrates list-drop-while)
-          list-drop-while)
+          list-drop-while))
+  (import
     (only (euphrates string-split-simple)
-          string-split/simple)
-    (only (srfi srfi-13)
-          string-join
-          string-null?
-          string-prefix?)
+          string-split/simple))
+  (import
     (only (scheme base)
           begin
           car
@@ -27,8 +25,21 @@
           or
           quote
           reverse
-          string-append)
-    (only (srfi srfi-1) filter))
+          string-append))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
+  (cond-expand
+    (guile (import
+             (only (srfi srfi-13)
+                   string-join
+                   string-null?
+                   string-prefix?)))
+    (else (import
+            (only (srfi 13)
+                  string-join
+                  string-null?
+                  string-prefix?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

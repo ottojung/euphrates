@@ -2,8 +2,8 @@
 (define-library
   (euphrates string-split-simple)
   (export string-split/simple)
+  (import (only (euphrates irregex) irregex-split))
   (import
-    (only (euphrates irregex) irregex-split)
     (only (scheme base)
           begin
           char?

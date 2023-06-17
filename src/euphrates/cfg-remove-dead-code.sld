@@ -4,14 +4,17 @@
   (export CFG-remove-dead-code)
   (import
     (only (euphrates cfg-strip-modifiers)
-          CFG-strip-modifiers)
+          CFG-strip-modifiers))
+  (import
     (only (euphrates hashmap)
           alist->hashmap
-          hashmap-ref)
+          hashmap-ref))
+  (import
     (only (euphrates hashset)
           hashset-add!
           hashset-has?
-          make-hashset)
+          make-hashset))
+  (import
     (only (scheme base)
           begin
           car
@@ -25,8 +28,10 @@
           null?
           string->symbol
           unless
-          when)
-    (only (srfi srfi-1) filter))
+          when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

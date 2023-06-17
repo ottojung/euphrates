@@ -4,8 +4,8 @@
   (export make-node/directed)
   (import
     (only (euphrates node-directed-obj)
-          node/directed)
-    (only (scheme base) begin define))
+          node/directed))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

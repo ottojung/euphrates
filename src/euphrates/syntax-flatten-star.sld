@@ -3,7 +3,8 @@
   (euphrates syntax-flatten-star)
   (export syntax-flatten*)
   (import
-    (only (euphrates syntax-reverse) syntax-reverse)
+    (only (euphrates syntax-reverse) syntax-reverse))
+  (import
     (only (scheme base)
           ...
           _

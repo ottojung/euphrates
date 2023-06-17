@@ -2,26 +2,35 @@
 (define-library
   (euphrates profun-op-function)
   (export profun-op-function)
+  (import (only (euphrates identity) identity))
   (import
-    (only (euphrates identity) identity)
     (only (euphrates list-singleton-q)
-          list-singleton?)
-    (only (euphrates list-span-n) list-span-n)
+          list-singleton?))
+  (import
+    (only (euphrates list-span-n) list-span-n))
+  (import
     (only (euphrates profun-accept)
           profun-accept
-          profun-set)
+          profun-set))
+  (import
     (only (euphrates profun-answer-huh)
-          profun-answer?)
-    (only (euphrates profun-error) make-profun-error)
-    (only (euphrates profun-op) make-profun-op)
-    (only (euphrates profun-reject) profun-reject)
+          profun-answer?))
+  (import
+    (only (euphrates profun-error) make-profun-error))
+  (import
+    (only (euphrates profun-op) make-profun-op))
+  (import
+    (only (euphrates profun-reject) profun-reject))
+  (import
     (only (euphrates profun-request-value)
-          profun-request-value)
+          profun-request-value))
+  (import
     (only (euphrates profun-value)
           profun-bound-value?
           profun-unbound-value?
-          profun-value-unwrap)
-    (only (euphrates raisu) raisu)
+          profun-value-unwrap))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           +
           =
@@ -51,8 +60,10 @@
           procedure?
           quote
           syntax-rules
-          unless)
-    (only (srfi srfi-1) filter))
+          unless))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

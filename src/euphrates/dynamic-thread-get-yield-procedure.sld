@@ -4,8 +4,8 @@
   (export dynamic-thread-get-yield-procedure)
   (import
     (only (euphrates dynamic-thread-yield-p)
-          #{dynamic-thread-yield#p}#)
-    (only (scheme base) begin define))
+          #{dynamic-thread-yield#p}#))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

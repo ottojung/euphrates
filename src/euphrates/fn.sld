@@ -4,8 +4,9 @@
   (export fn)
   (import
     (only (euphrates syntax-identity)
-          syntax-identity)
-    (only (euphrates syntax-map) syntax-map)
+          syntax-identity))
+  (import (only (euphrates syntax-map) syntax-map))
+  (import
     (only (scheme base)
           _
           begin

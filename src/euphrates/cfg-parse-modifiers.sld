@@ -4,11 +4,13 @@
   (export CFG-parse-modifiers)
   (import
     (only (euphrates compile-cfg-cli)
-          CFG-lang-modifier-char?)
+          CFG-lang-modifier-char?))
+  (import
     (only (euphrates list-span-while)
-          list-span-while)
-    (only (euphrates negate) negate)
-    (only (euphrates tilda-a) ~a)
+          list-span-while))
+  (import (only (euphrates negate) negate))
+  (import (only (euphrates tilda-a) ~a))
+  (import
     (only (scheme base)
           begin
           define

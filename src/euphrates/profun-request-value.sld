@@ -3,7 +3,8 @@
   (euphrates profun-request-value)
   (export profun-request-value)
   (import
-    (only (euphrates profun-RFC) make-profun-RFC)
+    (only (euphrates profun-RFC) make-profun-RFC))
+  (import
     (only (scheme base)
           begin
           define

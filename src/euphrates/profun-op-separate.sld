@@ -3,14 +3,19 @@
   (euphrates profun-op-separate)
   (export profun-op-separate)
   (import
-    (only (euphrates profun-accept) profun-accept)
+    (only (euphrates profun-accept) profun-accept))
+  (import
     (only (euphrates profun-op-lambda)
-          profun-op-lambda)
-    (only (euphrates profun-reject) profun-reject)
+          profun-op-lambda))
+  (import
+    (only (euphrates profun-reject) profun-reject))
+  (import
     (only (euphrates profun-request-value)
-          profun-request-value)
+          profun-request-value))
+  (import
     (only (euphrates profun-variable-equal-q)
-          profun-variable-equal?)
+          profun-variable-equal?))
+  (import
     (only (scheme base)
           begin
           case

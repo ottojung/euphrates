@@ -13,7 +13,8 @@
     profun-instruction-build
     profun-instruction-build/next)
   (import
-    (only (euphrates define-type9) define-type9)
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (scheme base)
           begin
           car

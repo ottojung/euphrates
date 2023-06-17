@@ -4,34 +4,50 @@
   (export petri-profun-net)
   (import
     (only (euphrates bool-to-profun-result)
-          bool->profun-result)
-    (only (euphrates hashmap) multi-alist->hashmap)
+          bool->profun-result))
+  (import
+    (only (euphrates hashmap) multi-alist->hashmap))
+  (import
     (only (euphrates list-deduplicate)
-          list-deduplicate)
-    (only (euphrates petri-net-make) petri-net-make)
-    (only (euphrates petri) petri-push)
+          list-deduplicate))
+  (import
+    (only (euphrates petri-net-make) petri-net-make))
+  (import (only (euphrates petri) petri-push))
+  (import
     (only (euphrates profun-handler)
-          profun-make-handler)
+          profun-make-handler))
+  (import
     (only (euphrates profun-op-apply)
-          profun-op-apply)
+          profun-op-apply))
+  (import
     (only (euphrates profun-op-divisible)
-          profun-op-divisible)
-    (only (euphrates profun-op-eval) profun-op-eval)
+          profun-op-divisible))
+  (import
+    (only (euphrates profun-op-eval) profun-op-eval))
+  (import
     (only (euphrates profun-op-lambda)
-          profun-op-lambda)
-    (only (euphrates profun-op-less) profun-op-less)
-    (only (euphrates profun-op-mult) profun-op*)
-    (only (euphrates profun-op-plus) profun-op+)
+          profun-op-lambda))
+  (import
+    (only (euphrates profun-op-less) profun-op-less))
+  (import
+    (only (euphrates profun-op-mult) profun-op*))
+  (import
+    (only (euphrates profun-op-plus) profun-op+))
+  (import
     (only (euphrates profun-op-print)
-          profun-op-print)
+          profun-op-print))
+  (import
     (only (euphrates profun-op-separate)
-          profun-op-separate)
+          profun-op-separate))
+  (import
     (only (euphrates profun-op-unify)
-          profun-op-unify)
+          profun-op-unify))
+  (import
     (only (euphrates profun)
           profun-create-database
-          profun-eval-query)
-    (only (euphrates raisu) raisu)
+          profun-eval-query))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           *
           +
@@ -56,8 +72,8 @@
           string?
           unless
           unquote
-          unquote-splicing)
-    (only (scheme eval) eval))
+          unquote-splicing))
+  (import (only (scheme eval) eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

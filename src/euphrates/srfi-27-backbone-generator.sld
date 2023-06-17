@@ -7,8 +7,8 @@
     mrg32k3a-random-range
     mrg32k3a-random-integer
     mrg32k3a-random-real)
+  (import (only (euphrates range) range))
   (import
-    (only (euphrates range) range)
     (only (scheme base)
           *
           +

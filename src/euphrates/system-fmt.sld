@@ -2,14 +2,16 @@
 (define-library
   (euphrates system-fmt)
   (export system-fmt)
+  (import (only (euphrates compose) compose))
   (import
-    (only (euphrates compose) compose)
     (only (euphrates shell-quote-permissive)
-          shell-quote/permissive)
-    (only (euphrates stringf) stringf)
+          shell-quote/permissive))
+  (import (only (euphrates stringf) stringf))
+  (import
     (only (euphrates system-star-exit-code)
-          system*/exit-code)
-    (only (euphrates tilda-a) ~a)
+          system*/exit-code))
+  (import (only (euphrates tilda-a) ~a))
+  (import
     (only (scheme base)
           apply
           begin

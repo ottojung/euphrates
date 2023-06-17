@@ -2,8 +2,8 @@
 (define-library
   (euphrates list-span)
   (export list-span)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           -
           begin

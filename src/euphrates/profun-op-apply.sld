@@ -10,18 +10,24 @@
           box-ref
           box-set!
           box?
-          make-box)
+          make-box))
+  (import
     (only (euphrates profun-accept)
           profun-ctx-set
-          profun-set)
+          profun-set))
+  (import
     (only (euphrates profun-op-apply-result-p)
-          #{profun-op-apply/result#p}#)
+          #{profun-op-apply/result#p}#))
+  (import
     (only (euphrates profun-op-lambda)
-          profun-op-lambda)
-    (only (euphrates profun-reject) profun-reject)
+          profun-op-lambda))
+  (import
+    (only (euphrates profun-reject) profun-reject))
+  (import
     (only (euphrates profun-value)
-          profun-bound-value?)
-    (only (euphrates raisu) raisu)
+          profun-bound-value?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           +
           <=

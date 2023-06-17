@@ -2,11 +2,12 @@
 (define-library
   (euphrates debug)
   (export debug)
+  (import (only (euphrates conss) conss))
   (import
-    (only (euphrates conss) conss)
     (only (euphrates global-debug-mode-filter)
-          global-debug-mode-filter)
-    (only (euphrates printf) printf)
+          global-debug-mode-filter))
+  (import (only (euphrates printf) printf))
+  (import
     (only (scheme base)
           apply
           begin

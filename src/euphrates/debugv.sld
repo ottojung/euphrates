@@ -2,12 +2,13 @@
 (define-library
   (euphrates debugv)
   (export debugv)
+  (import (only (euphrates const) const))
+  (import (only (euphrates debug) debug))
   (import
-    (only (euphrates const) const)
-    (only (euphrates debug) debug)
     (only (euphrates list-intersperse)
-          list-intersperse)
-    (only (euphrates range) range)
+          list-intersperse))
+  (import (only (euphrates range) range))
+  (import
     (only (scheme base)
           _
           apply
@@ -19,8 +20,10 @@
           quote
           reverse
           string-append
-          syntax-rules)
-    (only (srfi srfi-1) count))
+          syntax-rules))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) count)))
+    (else (import (only (srfi 1) count))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -17,9 +17,11 @@
           hashmap-has?
           hashmap-ref
           hashmap-set!
-          make-hashmap)
-    (only (euphrates make-unique) make-unique)
-    (only (euphrates raisu) raisu)
+          make-hashmap))
+  (import
+    (only (euphrates make-unique) make-unique))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           _
           begin
@@ -33,8 +35,8 @@
           let*
           map
           quote
-          syntax-rules)
-    (only (scheme case-lambda) case-lambda))
+          syntax-rules))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "euphrates/mdict.scm")))

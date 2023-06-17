@@ -4,7 +4,8 @@
   (export path-replace-extension)
   (import
     (only (euphrates path-without-extension)
-          path-without-extension)
+          path-without-extension))
+  (import
     (only (scheme base)
           begin
           define

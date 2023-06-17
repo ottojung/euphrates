@@ -5,9 +5,11 @@
     cartesian-product/g/reversed
     cartesian-product/g)
   (import
-    (only (euphrates cartesian-map) cartesian-map)
+    (only (euphrates cartesian-map) cartesian-map))
+  (import
     (only (euphrates cartesian-product)
-          cartesian-product)
+          cartesian-product))
+  (import
     (only (scheme base)
           begin
           cadr

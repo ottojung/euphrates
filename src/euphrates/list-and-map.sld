@@ -10,8 +10,8 @@
           define
           if
           let
-          null?)
-    (only (scheme case-lambda) case-lambda))
+          null?))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -3,13 +3,18 @@
   (euphrates with-monad)
   (export with-monad)
   (import
-    (only (euphrates monad-apply) monad-apply)
+    (only (euphrates monad-apply) monad-apply))
+  (import
     (only (euphrates monad-current-p)
-          monad-current/p)
+          monad-current/p))
+  (import
     (only (euphrates monad-transformer-current-p)
-          monad-transformer-current/p)
-    (only (euphrates monadfinobj) monadfinobj)
-    (only (euphrates monadstate) monadstate-arg)
+          monad-transformer-current/p))
+  (import
+    (only (euphrates monadfinobj) monadfinobj))
+  (import
+    (only (euphrates monadstate) monadstate-arg))
+  (import
     (only (scheme base)
           _
           begin

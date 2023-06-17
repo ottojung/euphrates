@@ -2,19 +2,22 @@
 (define-library
   (euphrates monad-do)
   (export monad-do monad-do/generic)
+  (import (only (euphrates memconst) memconst))
   (import
-    (only (euphrates memconst) memconst)
-    (only (euphrates monad-apply) monad-apply)
+    (only (euphrates monad-apply) monad-apply))
+  (import
     (only (euphrates monad-current-p)
-          monad-current/p)
-    (only (euphrates monadobj) monadobj?)
+          monad-current/p))
+  (import (only (euphrates monadobj) monadobj?))
+  (import
     (only (euphrates monadstateobj)
           monadstateobj
           monadstateobj-cont
           monadstateobj-lval
-          monadstateobj-qvar)
-    (only (euphrates raisu) raisu)
-    (only (euphrates range) range)
+          monadstateobj-qvar))
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates range) range))
+  (import
     (only (scheme base)
           =
           _

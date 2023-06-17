@@ -11,14 +11,15 @@
     random-source-pseudo-randomize!
     random-source-make-integers
     random-source-make-reals)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (euphrates srfi-27-backbone-generator)
           mrg32k3a-pack-state
           mrg32k3a-random-integer
           mrg32k3a-random-range
           mrg32k3a-random-real
-          mrg32k3a-unpack-state)
+          mrg32k3a-unpack-state))
+  (import
     (only (euphrates srfi-27-random-source-obj)
           :random-source-current-time
           :random-source-make
@@ -28,7 +29,8 @@
           :random-source-randomize!
           :random-source-state-ref
           :random-source-state-set!
-          :random-source?)
+          :random-source?))
+  (import
     (only (scheme base)
           *
           +
@@ -74,8 +76,8 @@
           vector
           vector->list
           vector-ref
-          zero?)
-    (only (scheme r5rs) exact->inexact))
+          zero?))
+  (import (only (scheme r5rs) exact->inexact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

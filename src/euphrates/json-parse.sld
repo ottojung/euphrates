@@ -2,8 +2,8 @@
 (define-library
   (euphrates json-parse)
   (export json-parse)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           *
           +
@@ -41,9 +41,9 @@
           string-ref
           values
           when
-          zero?)
-    (only (scheme char) char-whitespace?)
-    (only (scheme r5rs) exact->inexact))
+          zero?))
+  (import (only (scheme char) char-whitespace?))
+  (import (only (scheme r5rs) exact->inexact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

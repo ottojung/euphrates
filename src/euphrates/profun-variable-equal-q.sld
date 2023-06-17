@@ -4,7 +4,8 @@
   (export profun-variable-equal?)
   (import
     (only (euphrates profun-value)
-          profun-unbound-value?)
+          profun-unbound-value?))
+  (import
     (only (scheme base) begin define equal? if quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))

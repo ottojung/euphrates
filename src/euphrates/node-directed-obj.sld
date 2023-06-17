@@ -9,8 +9,8 @@
     node/directed-label
     set-node/directed-label!)
   (import
-    (only (euphrates define-type9) define-type9)
-    (only (scheme base) begin))
+    (only (euphrates define-type9) define-type9))
+  (import (only (scheme base) begin))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

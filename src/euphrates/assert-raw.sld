@@ -2,9 +2,9 @@
 (define-library
   (euphrates assert-raw)
   (export assert/raw)
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates stringf) stringf))
   (import
-    (only (euphrates raisu) raisu)
-    (only (euphrates stringf) stringf)
     (only (scheme base)
           _
           begin

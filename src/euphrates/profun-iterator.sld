@@ -15,26 +15,34 @@
     profun-abort-insert
     profun-abort-reset)
   (import
-    (only (euphrates define-type9) define-type9)
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (euphrates profun-abort)
           profun-abort-additional
-          profun-abort-iter)
+          profun-abort-iter))
+  (import
     (only (euphrates profun-database)
           profun-database-copy
-          profun-database-extend)
-    (only (euphrates profun-env) profun-env-copy)
-    (only (euphrates profun-error) make-profun-error)
+          profun-database-extend))
+  (import
+    (only (euphrates profun-env) profun-env-copy))
+  (import
+    (only (euphrates profun-error) make-profun-error))
+  (import
     (only (euphrates profun-instruction)
           profun-instruction-arity
           profun-instruction-build/next
-          profun-instruction-name)
+          profun-instruction-name))
+  (import
     (only (euphrates profun-query-handle-underscores)
-          profun-query-handle-underscores)
+          profun-query-handle-underscores))
+  (import
     (only (euphrates profun-state)
           profun-state-build
           profun-state-current
           profun-state-stack
-          set-profun-state-current)
+          set-profun-state-current))
+  (import
     (only (scheme base)
           begin
           car

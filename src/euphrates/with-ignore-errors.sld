@@ -2,13 +2,15 @@
 (define-library
   (euphrates with-ignore-errors)
   (export with-ignore-errors!)
+  (import (only (euphrates catch-any) catch-any))
   (import
-    (only (euphrates catch-any) catch-any)
     (only (euphrates current-source-info-to-string)
-          current-source-info->string)
-    (only (euphrates debug) debug)
+          current-source-info->string))
+  (import (only (euphrates debug) debug))
+  (import
     (only (euphrates get-current-source-info)
-          get-current-source-info)
+          get-current-source-info))
+  (import
     (only (scheme base)
           _
           begin

@@ -2,11 +2,11 @@
 (define-library
   (euphrates path-get-basename)
   (export path-get-basename)
+  (import (only (euphrates list-last) list-last))
   (import
-    (only (euphrates list-last) list-last)
     (only (euphrates string-split-simple)
-          string-split/simple)
-    (only (scheme base) begin define))
+          string-split/simple))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

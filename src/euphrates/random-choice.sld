@@ -3,7 +3,8 @@
   (euphrates random-choice)
   (export random-choice)
   (import
-    (only (euphrates big-random-int) big-random-int)
+    (only (euphrates big-random-int) big-random-int))
+  (import
     (only (scheme base)
           -
           <=

@@ -6,9 +6,11 @@
     with-monad-left
     with-monad-right)
   (import
-    (only (euphrates monad-compose) monad-compose)
+    (only (euphrates monad-compose) monad-compose))
+  (import
     (only (euphrates monad-transformer-current-p)
-          monad-transformer-current/p)
+          monad-transformer-current/p))
+  (import
     (only (scheme base)
           _
           begin

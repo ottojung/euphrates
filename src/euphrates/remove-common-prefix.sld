@@ -4,8 +4,9 @@
   (export remove-common-prefix)
   (import
     (only (euphrates list-remove-common-prefix)
-          list-remove-common-prefix)
-    (only (euphrates raisu) raisu)
+          list-remove-common-prefix))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           begin
           cond

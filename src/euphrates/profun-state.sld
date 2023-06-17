@@ -14,11 +14,13 @@
     profun-state-final?
     profun-state-finish)
   (import
-    (only (euphrates define-type9) define-type9)
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (euphrates profun-instruction)
-          profun-instruction-build)
-    (only (scheme base) begin define list not quote)
-    (only (scheme case-lambda) case-lambda))
+          profun-instruction-build))
+  (import
+    (only (scheme base) begin define list not quote))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

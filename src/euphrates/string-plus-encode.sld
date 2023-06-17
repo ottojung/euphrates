@@ -8,13 +8,15 @@
   (import
     (only (euphrates alphanum-alphabet)
           alphanum/alphabet
-          alphanum/alphabet/index)
+          alphanum/alphabet/index))
+  (import
     (only (euphrates call-with-output-string)
-          call-with-output-string)
+          call-with-output-string))
+  (import
     (only (euphrates convert-number-base)
-          convert-number-base/generic)
-    (only (euphrates negate) negate)
-    (only (srfi srfi-13) string-index)
+          convert-number-base/generic))
+  (import (only (euphrates negate) negate))
+  (import
     (only (scheme base)
           +
           -
@@ -39,8 +41,11 @@
           values
           vector-length
           vector-ref
-          when)
-    (only (scheme write) display))
+          when))
+  (import (only (scheme write) display))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-index)))
+    (else (import (only (srfi 13) string-index))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -4,8 +4,10 @@
   (export builtin-type?)
   (import
     (only (euphrates builtin-descriptors)
-          builtin-descriptors)
-    (only (euphrates list-or-map) list-or-map)
+          builtin-descriptors))
+  (import
+    (only (euphrates list-or-map) list-or-map))
+  (import
     (only (scheme base)
           assoc
           begin

@@ -3,8 +3,8 @@
   (euphrates profun-reject)
   (export profun-reject profun-reject?)
   (import
-    (only (euphrates define-type9) define-type9)
-    (only (scheme base) begin define))
+    (only (euphrates define-type9) define-type9))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

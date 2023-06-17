@@ -5,13 +5,14 @@
     make-regex-machine/full
     make-regex-machine
     make-regex-machine*)
+  (import (only (euphrates hashmap) hashmap-set!))
   (import
-    (only (euphrates hashmap) hashmap-set!)
     (only (euphrates immutable-hashmap)
           immutable-hashmap-foreach
           immutable-hashmap-ref
           immutable-hashmap-set
-          make-immutable-hashmap)
+          make-immutable-hashmap))
+  (import
     (only (scheme base)
           *
           +
@@ -39,9 +40,11 @@
           quasiquote
           quote
           unquote
-          values)
-    (only (scheme case-lambda) case-lambda)
-    (only (srfi srfi-1) any first))
+          values))
+  (import (only (scheme case-lambda) case-lambda))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) any first)))
+    (else (import (only (srfi 1) any first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

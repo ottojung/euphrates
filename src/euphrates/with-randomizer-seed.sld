@@ -4,16 +4,20 @@
   (export with-randomizer-seed)
   (import
     (only (euphrates current-random-source-p)
-          current-random-source/p)
+          current-random-source/p))
+  (import
     (only (euphrates fast-parameterizeable-timestamp-p)
-          fast-parameterizeable-timestamp/p)
-    (only (euphrates raisu) raisu)
+          fast-parameterizeable-timestamp/p))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates srfi-27-generic)
           make-random-source
-          random-source-randomize!)
+          random-source-randomize!))
+  (import
     (only (euphrates
             time-get-fast-parameterizeable-timestamp)
-          time-get-fast-parameterizeable-timestamp)
+          time-get-fast-parameterizeable-timestamp))
+  (import
     (only (scheme base)
           +
           -
@@ -28,8 +32,8 @@
           parameterize
           quote
           syntax-rules
-          unless)
-    (only (scheme r5rs) inexact->exact))
+          unless))
+  (import (only (scheme r5rs) inexact->exact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

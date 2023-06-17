@@ -3,7 +3,8 @@
   (euphrates key-value-map)
   (export key-value-map key-value-map/list)
   (import
-    (only (euphrates hashmap) alist->hashmap)
+    (only (euphrates hashmap) alist->hashmap))
+  (import
     (only (scheme base)
           +
           _

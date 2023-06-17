@@ -33,7 +33,8 @@
           unquote
           unquote-splicing
           vector-ref
-          vector-set!)
+          vector-set!))
+  (import
     (only (scheme cxr) cadddr caddr cddddr cdddr))
   (cond-expand
     (guile (import (only (guile) include-from-path))

@@ -4,7 +4,8 @@
   (export define-newtype)
   (import
     (only (euphrates define-type9)
-          define-type9/nobind-descriptor)
+          define-type9/nobind-descriptor))
+  (import
     (only (scheme base)
           _
           begin

@@ -9,12 +9,16 @@
     (only (euphrates hashmap)
           hashmap-merge
           hashmap-ref
-          multi-alist->hashmap)
+          multi-alist->hashmap))
+  (import
     (only (euphrates list-find-first)
-          list-find-first)
-    (only (euphrates profun-op-obj) profun-op-arity)
+          list-find-first))
+  (import
+    (only (euphrates profun-op-obj) profun-op-arity))
+  (import
     (only (euphrates profun-variable-arity-op-huh)
-          profun-variable-arity-op?)
+          profun-variable-arity-op?))
+  (import
     (only (scheme base)
           =
           _

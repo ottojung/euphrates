@@ -4,17 +4,21 @@
   (export CFG-inline)
   (import
     (only (euphrates cfg-parse-modifiers)
-          CFG-parse-modifiers)
-    (only (euphrates comp) comp)
+          CFG-parse-modifiers))
+  (import (only (euphrates comp) comp))
+  (import
     (only (euphrates hashmap)
           alist->hashmap
-          hashmap-ref)
-    (only (euphrates list-and-map) list-and-map)
+          hashmap-ref))
+  (import
+    (only (euphrates list-and-map) list-and-map))
+  (import
     (only (euphrates list-map-flatten)
-          list-map/flatten)
+          list-map/flatten))
+  (import
     (only (euphrates list-singleton-q)
-          list-singleton?)
-    (only (srfi srfi-13) string-null?)
+          list-singleton?))
+  (import
     (only (scheme base)
           and
           begin
@@ -36,6 +40,9 @@
           string->list
           string->symbol
           string-append))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-null?)))
+    (else (import (only (srfi 13) string-null?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

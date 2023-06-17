@@ -4,13 +4,15 @@
   (export make-directories)
   (import
     (only (euphrates append-posix-path)
-          append-posix-path)
+          append-posix-path))
+  (import
     (only (euphrates file-or-directory-exists-q)
-          file-or-directory-exists?)
-    (only (euphrates list-fold) list-fold)
+          file-or-directory-exists?))
+  (import (only (euphrates list-fold) list-fold))
+  (import
     (only (euphrates string-split-simple)
-          string-split/simple)
-    (only (srfi srfi-13) string-null?)
+          string-split/simple))
+  (import
     (only (scheme base)
           begin
           cond-expand
@@ -18,6 +20,9 @@
           if
           let*
           unless))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-null?)))
+    (else (import (only (srfi 13) string-null?))))
   (cond-expand
     (guile (import (only (guile) include-from-path mkdir))
            (begin

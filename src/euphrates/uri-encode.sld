@@ -4,11 +4,12 @@
   (export uri-encode)
   (import
     (only (euphrates call-with-output-string)
-          call-with-output-string)
-    (only (euphrates negate) negate)
+          call-with-output-string))
+  (import (only (euphrates negate) negate))
+  (import
     (only (euphrates uri-safe-alphabet)
-          uri-safe/alphabet/index)
-    (only (srfi srfi-13) string-index)
+          uri-safe/alphabet/index))
+  (import
     (only (scheme base)
           +
           <
@@ -23,10 +24,13 @@
           number->string
           string
           string-for-each
-          when)
-    (only (scheme case-lambda) case-lambda)
-    (only (scheme char) string-upcase)
-    (only (scheme write) display))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
+  (import (only (scheme char) string-upcase))
+  (import (only (scheme write) display))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-index)))
+    (else (import (only (srfi 13) string-index))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import

@@ -4,7 +4,8 @@
   (export assoc-set-default)
   (import
     (only (euphrates assoc-set-value)
-          assoc-set-value)
+          assoc-set-value))
+  (import
     (only (scheme base)
           _
           assoc

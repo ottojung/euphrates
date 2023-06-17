@@ -4,9 +4,11 @@
   (export big-random-int)
   (import
     (only (euphrates get-current-random-source)
-          get-current-random-source)
+          get-current-random-source))
+  (import
     (only (euphrates srfi-27-generic)
-          random-source-make-integers)
+          random-source-make-integers))
+  (import
     (only (scheme base) begin define lambda max))
   (cond-expand
     (guile (import (only (guile) include-from-path))

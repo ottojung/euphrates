@@ -5,10 +5,12 @@
     serialize/sexp/generic
     deserialize/sexp/generic)
   (import
-    (only (euphrates builtin-type-huh) builtin-type?)
+    (only (euphrates builtin-type-huh) builtin-type?))
+  (import
     (only (euphrates define-type9)
-          type9-get-record-descriptor)
-    (only (euphrates raisu) raisu)
+          type9-get-record-descriptor))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           _
           begin

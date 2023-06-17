@@ -12,7 +12,8 @@
     profun-abort-modify-iter
     profun-abort-add-info)
   (import
-    (only (euphrates define-type9) define-type9)
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (scheme base)
           append
           apply

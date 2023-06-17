@@ -2,8 +2,8 @@
 (define-library
   (euphrates lazy-parameter)
   (export lazy-parameter)
+  (import (only (euphrates memconst) memconst))
   (import
-    (only (euphrates memconst) memconst)
     (only (scheme base)
           _
           begin
@@ -11,8 +11,8 @@
           let
           make-parameter
           parameterize
-          syntax-rules)
-    (only (scheme case-lambda) case-lambda))
+          syntax-rules))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

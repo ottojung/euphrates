@@ -4,7 +4,8 @@
   (export list-tag list-untag)
   (import
     (only (euphrates list-tag-prev)
-          list-tag/prev/rev)
+          list-tag/prev/rev))
+  (import
     (only (scheme base)
           and
           append

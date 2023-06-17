@@ -4,9 +4,10 @@
   (export profun-op-sqrt)
   (import
     (only (euphrates profun-op-unary)
-          profun-op-unary)
-    (only (scheme base) * begin define lambda)
-    (only (scheme inexact) sqrt))
+          profun-op-unary))
+  (import
+    (only (scheme base) * begin define lambda))
+  (import (only (scheme inexact) sqrt))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

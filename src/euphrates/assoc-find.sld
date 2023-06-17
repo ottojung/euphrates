@@ -2,8 +2,8 @@
 (define-library
   (euphrates assoc-find)
   (export assoc/find)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           _
           begin

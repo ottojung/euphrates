@@ -3,8 +3,8 @@
   (euphrates cartesian-product)
   (export cartesian-product)
   (import
-    (only (euphrates cartesian-map) cartesian-map)
-    (only (scheme base) begin cons define))
+    (only (euphrates cartesian-map) cartesian-map))
+  (import (only (scheme base) begin cons define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

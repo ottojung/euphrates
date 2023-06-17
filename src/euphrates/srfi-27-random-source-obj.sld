@@ -14,7 +14,8 @@
   (import
     (only (euphrates
             time-get-fast-parameterizeable-timestamp)
-          time-get-fast-parameterizeable-timestamp)
+          time-get-fast-parameterizeable-timestamp))
+  (import
     (only (scheme base)
           =
           and

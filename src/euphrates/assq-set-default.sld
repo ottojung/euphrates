@@ -3,7 +3,8 @@
   (euphrates assq-set-default)
   (export assq-set-default)
   (import
-    (only (euphrates assq-set-value) assq-set-value)
+    (only (euphrates assq-set-value) assq-set-value))
+  (import
     (only (scheme base)
           _
           assq

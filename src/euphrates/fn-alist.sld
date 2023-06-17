@@ -2,9 +2,9 @@
 (define-library
   (euphrates fn-alist)
   (export fn-alist)
+  (import (only (euphrates assq-or) assq-or))
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates assq-or) assq-or)
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           _
           apply

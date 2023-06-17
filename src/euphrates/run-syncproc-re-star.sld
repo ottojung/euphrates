@@ -3,11 +3,14 @@
   (euphrates run-syncproc-re-star)
   (export run-syncproc/re*)
   (import
-    (only (euphrates asyncproc) asyncproc-status)
+    (only (euphrates asyncproc) asyncproc-status))
+  (import
     (only (euphrates run-syncproc-star)
-          run-syncproc*)
+          run-syncproc*))
+  (import
     (only (euphrates with-output-to-string)
-          with-output-to-string)
+          with-output-to-string))
+  (import
     (only (scheme base)
           apply
           begin

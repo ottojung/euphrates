@@ -7,7 +7,8 @@
           make-profun-abort
           profun-abort-type
           profun-abort-what
-          profun-abort?)
+          profun-abort?))
+  (import
     (only (scheme base)
           and
           begin

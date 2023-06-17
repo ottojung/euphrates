@@ -4,7 +4,8 @@
   (export string->numstring)
   (import
     (only (euphrates list-intersperse)
-          list-intersperse)
+          list-intersperse))
+  (import
     (only (scheme base)
           apply
           begin

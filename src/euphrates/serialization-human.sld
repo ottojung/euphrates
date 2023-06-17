@@ -2,15 +2,17 @@
 (define-library
   (euphrates serialization-human)
   (export serialize/human deserialize/human)
+  (import (only (euphrates assoc-or) assoc-or))
+  (import (only (euphrates const) const))
   (import
-    (only (euphrates assoc-or) assoc-or)
-    (only (euphrates const) const)
     (only (euphrates descriptors-registry)
-          descriptors-registry-get)
-    (only (euphrates raisu) raisu)
+          descriptors-registry-get))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates serialization-sexp-natural)
           deserialize/sexp/natural
-          serialize/sexp/natural)
+          serialize/sexp/natural))
+  (import
     (only (scheme base)
           and
           apply

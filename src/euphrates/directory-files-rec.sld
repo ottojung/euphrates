@@ -4,7 +4,8 @@
   (export directory-files-rec)
   (import
     (only (euphrates directory-files-depth-iter)
-          directory-files-depth-iter)
+          directory-files-depth-iter))
+  (import
     (only (scheme base)
           begin
           case
@@ -17,8 +18,8 @@
           let
           map
           quote
-          reverse)
-    (only (scheme case-lambda) case-lambda))
+          reverse))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

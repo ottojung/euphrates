@@ -2,19 +2,24 @@
 (define-library
   (euphrates system-re)
   (export system-re)
+  (import (only (euphrates compose) compose))
   (import
-    (only (euphrates compose) compose)
-    (only (euphrates file-delete) file-delete)
+    (only (euphrates file-delete) file-delete))
+  (import
     (only (euphrates make-temporary-filename)
-          make-temporary-filename)
+          make-temporary-filename))
+  (import
     (only (euphrates read-string-file)
-          read-string-file)
+          read-string-file))
+  (import
     (only (euphrates shell-quote-permissive)
-          shell-quote/permissive)
-    (only (euphrates stringf) stringf)
+          shell-quote/permissive))
+  (import (only (euphrates stringf) stringf))
+  (import
     (only (euphrates system-star-exit-code)
-          system*/exit-code)
-    (only (euphrates tilda-a) ~a)
+          system*/exit-code))
+  (import (only (euphrates tilda-a) ~a))
+  (import
     (only (scheme base)
           apply
           begin

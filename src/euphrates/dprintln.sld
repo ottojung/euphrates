@@ -2,9 +2,9 @@
 (define-library
   (euphrates dprintln)
   (export dprintln)
+  (import (only (euphrates conss) conss))
+  (import (only (euphrates dprint) dprint))
   (import
-    (only (euphrates conss) conss)
-    (only (euphrates dprint) dprint)
     (only (scheme base)
           apply
           begin

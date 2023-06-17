@@ -6,7 +6,8 @@
     seconds->H/M/s
     seconds->time-string)
   (import
-    (only (euphrates string-pad) string-pad-L)
+    (only (euphrates string-pad) string-pad-L))
+  (import
     (only (scheme base)
           begin
           define

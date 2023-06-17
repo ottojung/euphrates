@@ -2,19 +2,22 @@
 (define-library
   (euphrates exception-monad)
   (export exception-monad)
+  (import (only (euphrates catch-any) catch-any))
+  (import (only (euphrates cons-bang) cons!))
   (import
-    (only (euphrates catch-any) catch-any)
-    (only (euphrates cons-bang) cons!)
     (only (euphrates monad-make-no-cont)
-          monad-make/no-cont)
-    (only (euphrates monadfinobj) monadfinobj?)
+          monad-make/no-cont))
+  (import
+    (only (euphrates monadfinobj) monadfinobj?))
+  (import
     (only (euphrates monadstate)
           monadstate-arg
           monadstate-lval
           monadstate-qtags
           monadstate-ret
-          monadstate-ret/thunk)
-    (only (euphrates raisu) raisu)
+          monadstate-ret/thunk))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           _
           apply

@@ -9,14 +9,17 @@
     (only (euphrates hashmap)
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (euphrates immutable-hashmap)
           immutable-hashmap-foreach
-          make-immutable-hashmap)
-    (only (euphrates raisu) raisu)
+          make-immutable-hashmap))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates regex-machine)
-          make-regex-machine/full)
-    (only (euphrates tilda-s) ~s)
+          make-regex-machine/full))
+  (import (only (euphrates tilda-s) ~s))
+  (import
     (only (scheme base)
           _
           and
@@ -40,8 +43,8 @@
           quote
           string-append
           unless
-          values)
-    (only (scheme case-lambda) case-lambda))
+          values))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

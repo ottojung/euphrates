@@ -19,8 +19,8 @@
           quote
           read-line
           string?
-          when)
-    (only (scheme case-lambda) case-lambda))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import (except (guile) cond-expand))

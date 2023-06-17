@@ -14,20 +14,26 @@
     make-falsy-profun-database
     profun-database-extend)
   (import
-    (only (euphrates define-type9) define-type9)
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (euphrates hashmap)
           hashmap-copy
           hashmap-ref
           hashmap-set!
-          make-hashmap)
-    (only (euphrates list-ref-or) list-ref-or)
+          make-hashmap))
+  (import
+    (only (euphrates list-ref-or) list-ref-or))
+  (import
     (only (euphrates profun-handler)
-          profun-handler-get)
+          profun-handler-get))
+  (import
     (only (euphrates profun-rule)
-          profun-rule-constructor)
+          profun-rule-constructor))
+  (import
     (only (euphrates profun-varname-q)
-          profun-varname?)
-    (only (euphrates usymbol) make-usymbol)
+          profun-varname?))
+  (import (only (euphrates usymbol) make-usymbol))
+  (import
     (only (scheme base)
           +
           =
@@ -51,8 +57,10 @@
           quasiquote
           quote
           reverse
-          unquote)
-    (only (srfi srfi-1) first))
+          unquote))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) first)))
+    (else (import (only (srfi 1) first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

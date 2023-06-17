@@ -2,9 +2,8 @@
 (define-library
   (euphrates dynamic-load)
   (export dynamic-load)
-  (import
-    (only (scheme base) begin define)
-    (only (scheme load) load))
+  (import (only (scheme base) begin define))
+  (import (only (scheme load) load))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

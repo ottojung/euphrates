@@ -4,8 +4,8 @@
   (export
     linear-interpolate-1d
     linear-interpolate-2d)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           *
           +

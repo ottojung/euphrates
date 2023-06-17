@@ -6,8 +6,8 @@
     lexical-scope?
     lexical-scope-unwrap)
   (import
-    (only (euphrates define-newtype) define-newtype)
-    (only (scheme base) begin))
+    (only (euphrates define-newtype) define-newtype))
+  (import (only (scheme base) begin))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

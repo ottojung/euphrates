@@ -3,9 +3,11 @@
   (euphrates system-environment-get-all)
   (export system-environment-get-all)
   (import
-    (only (euphrates string-drop-n) string-drop-n)
+    (only (euphrates string-drop-n) string-drop-n))
+  (import
     (only (euphrates string-split-simple)
-          string-split/simple)
+          string-split/simple))
+  (import
     (only (scheme base)
           +
           begin

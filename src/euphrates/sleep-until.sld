@@ -4,14 +4,18 @@
   (export sleep-until)
   (import
     (only (euphrates dynamic-thread-get-delay-procedure)
-          dynamic-thread-get-delay-procedure)
+          dynamic-thread-get-delay-procedure))
+  (import
     (only (euphrates dynamic-thread-yield)
-          dynamic-thread-yield)
+          dynamic-thread-yield))
+  (import
     (only (euphrates
             time-get-monotonic-nanoseconds-timestamp)
-          time-get-monotonic-nanoseconds-timestamp)
+          time-get-monotonic-nanoseconds-timestamp))
+  (import
     (only (euphrates unit-conversions)
-          milli->nano/unit)
+          milli->nano/unit))
+  (import
     (only (scheme base)
           +
           >

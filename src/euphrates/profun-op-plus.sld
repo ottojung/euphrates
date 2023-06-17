@@ -4,7 +4,8 @@
   (export profun-op+)
   (import
     (only (euphrates profun-op-binary)
-          profun-op-binary)
+          profun-op-binary))
+  (import
     (only (scheme base)
           +
           -

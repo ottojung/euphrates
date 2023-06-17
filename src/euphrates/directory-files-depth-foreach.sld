@@ -4,9 +4,10 @@
   (export directory-files-depth-foreach)
   (import
     (only (euphrates directory-files-depth-iter)
-          directory-files-depth-iter)
-    (only (scheme base) begin define if let when)
-    (only (scheme case-lambda) case-lambda))
+          directory-files-depth-iter))
+  (import
+    (only (scheme base) begin define if let when))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

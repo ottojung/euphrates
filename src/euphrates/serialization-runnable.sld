@@ -2,14 +2,16 @@
 (define-library
   (euphrates serialization-runnable)
   (export serialize/runnable deserialize/runnable)
+  (import (only (euphrates assoc-or) assoc-or))
   (import
-    (only (euphrates assoc-or) assoc-or)
     (only (euphrates descriptors-registry)
-          descriptors-registry-get)
-    (only (euphrates raisu) raisu)
+          descriptors-registry-get))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates serialization-sexp-natural)
           deserialize/sexp/natural
-          serialize/sexp/natural)
+          serialize/sexp/natural))
+  (import
     (only (scheme base)
           and
           apply

@@ -3,7 +3,8 @@
   (euphrates compose-under-par)
   (export compose-under-par)
   (import
-    (only (euphrates syntax-reverse) syntax-reverse)
+    (only (euphrates syntax-reverse) syntax-reverse))
+  (import
     (only (scheme base)
           _
           begin

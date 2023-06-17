@@ -9,8 +9,10 @@
           define
           let
           string-copy
-          values)
-    (only (srfi srfi-60) logand))
+          values))
+  (cond-expand
+    (guile (import (only (srfi srfi-60) logand)))
+    (else (import (only (srfi 60) logand))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import (except (guile) cond-expand))

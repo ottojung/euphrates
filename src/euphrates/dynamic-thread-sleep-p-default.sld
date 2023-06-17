@@ -2,9 +2,8 @@
 (define-library
   (euphrates dynamic-thread-sleep-p-default)
   (export #{dynamic-thread-sleep#p-default}#)
-  (import
-    (only (euphrates sys-usleep) sys-usleep)
-    (only (scheme base) begin define))
+  (import (only (euphrates sys-usleep) sys-usleep))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

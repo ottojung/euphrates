@@ -7,11 +7,12 @@
   (import
     (only (euphrates serialization-builtin-short)
           deserialize-builtin/short
-          serialize-builtin/short)
+          serialize-builtin/short))
+  (import
     (only (euphrates serialization-sexp-generic)
           deserialize/sexp/generic
-          serialize/sexp/generic)
-    (only (scheme base) begin define))
+          serialize/sexp/generic))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

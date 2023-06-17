@@ -4,7 +4,8 @@
   (export directory-files)
   (import
     (only (euphrates directory-files-depth-iter)
-          directory-files-depth-iter)
+          directory-files-depth-iter))
+  (import
     (only (scheme base)
           begin
           cadr
@@ -21,9 +22,11 @@
           map
           not
           quote
-          unless)
-    (only (scheme case-lambda) case-lambda)
-    (only (srfi srfi-1) filter))
+          unless))
+  (import (only (scheme case-lambda) case-lambda))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import (ice-9 ftw))

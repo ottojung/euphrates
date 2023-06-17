@@ -17,14 +17,17 @@
     monadstate-replicate-multiple
     monadstate-handle-multiple)
   (import
-    (only (euphrates identity-star) identity*)
-    (only (euphrates memconst) memconst)
+    (only (euphrates identity-star) identity*))
+  (import (only (euphrates memconst) memconst))
+  (import
     (only (euphrates monadfinobj)
           monadfinobj
           monadfinobj-lval
-          monadfinobj?)
+          monadfinobj?))
+  (import
     (only (euphrates monadstate-current-p)
-          monadstate-current/p)
+          monadstate-current/p))
+  (import
     (only (euphrates monadstateobj)
           monadstateobj
           monadstateobj-cont
@@ -32,9 +35,10 @@
           monadstateobj-qtags
           monadstateobj-qval
           monadstateobj-qvar
-          monadstateobj?)
-    (only (euphrates raisu) raisu)
-    (only (euphrates replicate) replicate)
+          monadstateobj?))
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates replicate) replicate))
+  (import
     (only (scheme base)
           <
           _
@@ -51,8 +55,8 @@
           quote
           syntax-rules
           unless
-          values)
-    (only (scheme case-lambda) case-lambda))
+          values))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

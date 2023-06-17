@@ -5,10 +5,11 @@
   (import
     (only (euphrates
             dynamic-thread-get-delay-procedure-p-default)
-          #{dynamic-thread-get-delay-procedure#p-default}#)
+          #{dynamic-thread-get-delay-procedure#p-default}#))
+  (import
     (only (euphrates dynamic-thread-get-delay-procedure-p)
-          #{dynamic-thread-get-delay-procedure#p}#)
-    (only (scheme base) begin define if let))
+          #{dynamic-thread-get-delay-procedure#p}#))
+  (import (only (scheme base) begin define if let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

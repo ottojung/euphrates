@@ -3,10 +3,12 @@
   (euphrates filter-monad)
   (export filter-monad)
   (import
-    (only (euphrates list-or-map) list-or-map)
-    (only (euphrates raisu) raisu)
+    (only (euphrates list-or-map) list-or-map))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates replacement-monad)
-          replacement-monad)
+          replacement-monad))
+  (import
     (only (scheme base)
           _
           begin

@@ -4,8 +4,8 @@
   (export run-asyncproc)
   (import
     (only (euphrates run-asyncproc-p)
-          run-asyncproc/p)
-    (only (scheme base) apply begin define))
+          run-asyncproc/p))
+  (import (only (scheme base) apply begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

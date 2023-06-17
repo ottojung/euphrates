@@ -4,8 +4,8 @@
   (export string->lines)
   (import
     (only (euphrates string-split-simple)
-          string-split/simple)
-    (only (scheme base) begin define))
+          string-split/simple))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -2,11 +2,11 @@
 (define-library
   (euphrates identity-monad)
   (export identity-monad)
+  (import (only (euphrates identity) identity))
   (import
-    (only (euphrates identity) identity)
     (only (euphrates monad-make-no-cont-no-fin)
-          monad-make/no-cont/no-fin)
-    (only (scheme base) begin define))
+          monad-make/no-cont/no-fin))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

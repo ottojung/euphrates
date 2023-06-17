@@ -2,17 +2,19 @@
 (define-library
   (euphrates serialization-short)
   (export serialize/short deserialize/short)
+  (import (only (euphrates assoc-or) assoc-or))
+  (import (only (euphrates const) const))
   (import
-    (only (euphrates assoc-or) assoc-or)
-    (only (euphrates const) const)
     (only (euphrates descriptors-registry)
-          descriptors-registry-get)
-    (only (euphrates raisu) raisu)
+          descriptors-registry-get))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates serialization-sexp-short)
           deserialize/sexp/short
-          serialize/sexp/short)
-    (only (euphrates string-drop-n) string-drop-n)
-    (only (srfi srfi-13) string-prefix?)
+          serialize/sexp/short))
+  (import
+    (only (euphrates string-drop-n) string-drop-n))
+  (import
     (only (scheme base)
           and
           apply
@@ -40,6 +42,9 @@
           symbol?
           unless
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-prefix?)))
+    (else (import (only (srfi 13) string-prefix?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

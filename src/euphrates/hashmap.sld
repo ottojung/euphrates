@@ -18,13 +18,15 @@
     hashmap-delete!
     hashmap-merge!
     hashmap-merge)
+  (import (only (euphrates fn) fn))
   (import
-    (only (euphrates fn) fn)
     (only (euphrates hashmap-obj)
           hashmap-constructor
-          hashmap-predicate)
-    (only (euphrates make-unique) make-unique)
-    (only (euphrates raisu) raisu)
+          hashmap-predicate))
+  (import
+    (only (euphrates make-unique) make-unique))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           _
           begin
@@ -41,8 +43,8 @@
           let
           not
           quote
-          syntax-rules)
-    (only (scheme case-lambda) case-lambda))
+          syntax-rules))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import
              (only (guile)

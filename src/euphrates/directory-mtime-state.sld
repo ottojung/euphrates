@@ -4,11 +4,13 @@
   (export directory-mtime-state)
   (import
     (only (euphrates directory-files-rec)
-          directory-files-rec)
-    (only (euphrates file-mtime) file-mtime)
-    (only (euphrates hashset) list->hashset)
+          directory-files-rec))
+  (import (only (euphrates file-mtime) file-mtime))
+  (import (only (euphrates hashset) list->hashset))
+  (import
     (only (euphrates with-ignore-errors)
-          with-ignore-errors!)
+          with-ignore-errors!))
+  (import
     (only (scheme base) begin car cons define map))
   (cond-expand
     (guile (import (only (guile) include-from-path))

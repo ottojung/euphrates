@@ -4,8 +4,10 @@
   (export make-temporary-filename)
   (import
     (only (euphrates alphanum-alphabet)
-          alphanum/alphabet)
-    (only (euphrates random-choice) random-choice)
+          alphanum/alphabet))
+  (import
+    (only (euphrates random-choice) random-choice))
+  (import
     (only (scheme base)
           begin
           define

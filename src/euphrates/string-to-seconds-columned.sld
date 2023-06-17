@@ -2,12 +2,13 @@
 (define-library
   (euphrates string-to-seconds-columned)
   (export string->seconds/columned)
+  (import (only (euphrates const) const))
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates range) range))
   (import
-    (only (euphrates const) const)
-    (only (euphrates raisu) raisu)
-    (only (euphrates range) range)
     (only (euphrates string-split-simple)
-          string-split/simple)
+          string-split/simple))
+  (import
     (only (scheme base)
           *
           +

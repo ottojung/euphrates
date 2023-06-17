@@ -4,11 +4,14 @@
   (export run-asyncproc/p-default)
   (import
     (only (euphrates asyncproc-input-text-p)
-          asyncproc-input-text/p)
+          asyncproc-input-text/p))
+  (import
     (only (euphrates asyncproc-stderr)
-          asyncproc-stderr)
+          asyncproc-stderr))
+  (import
     (only (euphrates asyncproc-stdout)
-          asyncproc-stdout)
+          asyncproc-stdout))
+  (import
     (only (euphrates asyncproc)
           asyncproc
           asyncproc-args
@@ -16,20 +19,27 @@
           set-asyncproc-exited?!
           set-asyncproc-pid!
           set-asyncproc-pipe!
-          set-asyncproc-status!)
+          set-asyncproc-status!))
+  (import
     (only (euphrates call-with-finally)
-          call-with-finally)
-    (only (euphrates catch-any) catch-any)
-    (only (euphrates conss) conss)
+          call-with-finally))
+  (import (only (euphrates catch-any) catch-any))
+  (import (only (euphrates conss) conss))
+  (import
     (only (euphrates dynamic-thread-get-delay-procedure)
-          dynamic-thread-get-delay-procedure)
+          dynamic-thread-get-delay-procedure))
+  (import
     (only (euphrates dynamic-thread-spawn)
-          dynamic-thread-spawn)
-    (only (euphrates file-delete) file-delete)
+          dynamic-thread-spawn))
+  (import
+    (only (euphrates file-delete) file-delete))
+  (import
     (only (euphrates make-temporary-fileport)
-          make-temporary-fileport)
+          make-temporary-fileport))
+  (import
     (only (euphrates read-string-file)
-          read-string-file)
+          read-string-file))
+  (import
     (only (scheme base)
           _
           apply
@@ -55,8 +65,8 @@
           set!
           syntax-rules
           values
-          when)
-    (only (scheme write) display))
+          when))
+  (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import (ice-9 popen))

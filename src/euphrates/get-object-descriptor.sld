@@ -4,10 +4,13 @@
   (export get-object-descriptor)
   (import
     (only (euphrates builtin-descriptors)
-          builtin-descriptors)
+          builtin-descriptors))
+  (import
     (only (euphrates define-type9)
-          type9-get-record-descriptor)
-    (only (euphrates list-map-first) list-map-first)
+          type9-get-record-descriptor))
+  (import
+    (only (euphrates list-map-first) list-map-first))
+  (import
     (only (scheme base)
           and
           assoc

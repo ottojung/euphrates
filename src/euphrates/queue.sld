@@ -22,8 +22,9 @@
           queue-vector
           set-queue-first!
           set-queue-last!
-          set-queue-vector!)
-    (only (euphrates raisu) raisu)
+          set-queue-vector!))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           *
           +
@@ -50,9 +51,11 @@
           vector-ref
           vector-set!
           vector?
-          when)
-    (only (scheme case-lambda) case-lambda)
-    (only (srfi srfi-1) first last))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) first last)))
+    (else (import (only (srfi 1) first last))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "euphrates/queue.scm")))

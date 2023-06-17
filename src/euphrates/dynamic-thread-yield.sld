@@ -4,10 +4,11 @@
   (export dynamic-thread-yield)
   (import
     (only (euphrates dynamic-thread-yield-p-default)
-          #{dynamic-thread-yield#p-default}#)
+          #{dynamic-thread-yield#p-default}#))
+  (import
     (only (euphrates dynamic-thread-yield-p)
-          #{dynamic-thread-yield#p}#)
-    (only (scheme base) begin define or))
+          #{dynamic-thread-yield#p}#))
+  (import (only (scheme base) begin define or))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

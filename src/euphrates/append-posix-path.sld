@@ -4,10 +4,12 @@
   (export append-posix-path)
   (import
     (only (euphrates absolute-posix-path-q)
-          absolute-posix-path?)
-    (only (euphrates raisu) raisu)
+          absolute-posix-path?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates remove-common-prefix)
-          remove-common-prefix)
+          remove-common-prefix))
+  (import
     (only (scheme base)
           -
           =

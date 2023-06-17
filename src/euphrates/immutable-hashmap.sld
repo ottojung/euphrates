@@ -15,13 +15,14 @@
     immutable-hashmap-set
     immutable-hashmap-clear
     immutable-hashmap-count)
+  (import (only (euphrates assoc-any) assoc/any))
+  (import (only (euphrates fn) fn))
   (import
-    (only (euphrates assoc-any) assoc/any)
-    (only (euphrates fn) fn)
     (only (euphrates immutable-hashmap-obj)
           immutable-hashmap-constructor
           immutable-hashmap-predicate
-          immutable-hashmap-value)
+          immutable-hashmap-value))
+  (import
     (only (scheme base)
           append
           assoc

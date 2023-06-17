@@ -18,8 +18,8 @@
     hashset-map
     hashset-clear!
     hashset-delete!)
+  (import (only (euphrates fn) fn))
   (import
-    (only (euphrates fn) fn)
     (only (euphrates hashmap)
           hashmap->alist
           hashmap-clear!
@@ -29,12 +29,14 @@
           hashmap-map
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (euphrates hashset-obj)
           hashset-constructor
           hashset-predicate
-          hashset-value)
-    (only (euphrates raisu) raisu)
+          hashset-value))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           -
           >=
@@ -60,8 +62,8 @@
           vector-length
           vector-ref
           vector?
-          when)
-    (only (scheme case-lambda) case-lambda))
+          when))
+  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

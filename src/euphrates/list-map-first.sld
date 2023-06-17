@@ -2,8 +2,8 @@
 (define-library
   (euphrates list-map-first)
   (export list-map-first)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           _
           begin

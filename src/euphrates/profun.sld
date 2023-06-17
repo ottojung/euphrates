@@ -9,46 +9,56 @@
     profun-iterate
     profun-next
     profun-next/boolean)
+  (import (only (euphrates comp) comp))
   (import
-    (only (euphrates comp) comp)
-    (only (euphrates define-type9) define-type9)
-    (only (euphrates fn-cons) fn-cons)
-    (only (euphrates fn-pair) fn-pair)
-    (only (euphrates hashmap) hashmap->alist)
-    (only (euphrates identity) identity)
+    (only (euphrates define-type9) define-type9))
+  (import (only (euphrates fn-cons) fn-cons))
+  (import (only (euphrates fn-pair) fn-pair))
+  (import
+    (only (euphrates hashmap) hashmap->alist))
+  (import (only (euphrates identity) identity))
+  (import
     (only (euphrates profun-CR)
           profun-CR-what
-          profun-CR?)
+          profun-CR?))
+  (import
     (only (euphrates profun-IDR)
           make-profun-IDR
-          profun-IDR?)
+          profun-IDR?))
+  (import
     (only (euphrates profun-RFC)
           profun-RFC-modify-iter
-          profun-RFC?)
+          profun-RFC?))
+  (import
     (only (euphrates profun-abort)
           profun-abort-set-iter
-          profun-abort?)
+          profun-abort?))
+  (import
     (only (euphrates profun-accept)
           profun-accept-alist
           profun-accept-ctx
           profun-accept-ctx-changed?
-          profun-accept?)
+          profun-accept?))
+  (import
     (only (euphrates profun-database)
           make-falsy-profun-database
           make-profun-database
           profun-database-falsy?
           profun-database-get
           profun-database-handle
-          profun-database?)
+          profun-database?))
+  (import
     (only (euphrates profun-env)
           make-profun-env
           profun-env-get
           profun-env-set!
-          profun-env-unset!)
+          profun-env-unset!))
+  (import
     (only (euphrates profun-error)
           make-profun-error
           profun-error-args
-          profun-error?)
+          profun-error?))
+  (import
     (only (euphrates profun-instruction)
           profun-instruction-args
           profun-instruction-arity
@@ -57,7 +67,8 @@
           profun-instruction-constructor
           profun-instruction-context
           profun-instruction-name
-          profun-instruction-next)
+          profun-instruction-next))
+  (import
     (only (euphrates profun-iterator)
           profun-abort-insert
           profun-iterator-constructor
@@ -66,17 +77,22 @@
           profun-iterator-env
           profun-iterator-query
           profun-iterator-state
-          set-profun-iterator-state!)
+          set-profun-iterator-state!))
+  (import
     (only (euphrates profun-op-obj)
-          profun-op-procedure)
+          profun-op-procedure))
+  (import
     (only (euphrates profun-query-handle-underscores)
-          profun-query-handle-underscores)
-    (only (euphrates profun-reject) profun-reject?)
+          profun-query-handle-underscores))
+  (import
+    (only (euphrates profun-reject) profun-reject?))
+  (import
     (only (euphrates profun-rule)
           profun-rule-args
           profun-rule-body
           profun-rule-index
-          profun-rule-name)
+          profun-rule-name))
+  (import
     (only (euphrates profun-state)
           profun-state-build
           profun-state-constructor
@@ -87,15 +103,18 @@
           profun-state-stack
           profun-state-undo
           profun-state?
-          set-profun-state-current)
+          set-profun-state-current))
+  (import
     (only (euphrates profun-value)
           profun-bound-value?
           profun-make-var
-          profun-value-unwrap)
+          profun-value-unwrap))
+  (import
     (only (euphrates profun-varname-q)
-          profun-varname?)
-    (only (euphrates raisu) raisu)
-    (only (euphrates usymbol) make-usymbol)
+          profun-varname?))
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates usymbol) make-usymbol))
+  (import
     (only (scheme base)
           +
           =
@@ -124,8 +143,10 @@
           quote
           set!
           symbol?
-          when)
-    (only (srfi srfi-1) filter reverse!))
+          when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter reverse!)))
+    (else (import (only (srfi 1) filter reverse!))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

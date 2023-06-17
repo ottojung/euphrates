@@ -3,8 +3,8 @@
   (euphrates monad-make)
   (export monad-make)
   (import
-    (only (euphrates monadobj) monadobj-constructor)
-    (only (scheme base) begin define))
+    (only (euphrates monadobj) monadobj-constructor))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

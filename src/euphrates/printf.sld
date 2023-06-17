@@ -2,13 +2,15 @@
 (define-library
   (euphrates printf)
   (export printf)
+  (import (only (euphrates catch-any) catch-any))
   (import
-    (only (euphrates catch-any) catch-any)
     (only (euphrates dynamic-thread-spawn-p)
-          #{dynamic-thread-spawn#p}#)
-    (only (euphrates raisu) raisu)
+          #{dynamic-thread-spawn#p}#))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates uni-spinlock)
-          make-uni-spinlock-critical)
+          make-uni-spinlock-critical))
+  (import
     (only (scheme base)
           apply
           begin
@@ -18,9 +20,11 @@
           lambda
           let
           set!
-          when)
-    (only (scheme write) display)
-    (only (srfi srfi-28) format))
+          when))
+  (import (only (scheme write) display))
+  (cond-expand
+    (guile (import (only (srfi srfi-28) format)))
+    (else (import (only (srfi 28) format))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

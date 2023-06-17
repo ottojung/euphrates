@@ -4,15 +4,19 @@
   (export universal-lockr! universal-unlockr!)
   (import
     (only (euphrates dynamic-thread-get-delay-procedure)
-          dynamic-thread-get-delay-procedure)
+          dynamic-thread-get-delay-procedure))
+  (import
     (only (euphrates hashmap)
           hashmap-delete!
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (euphrates uni-spinlock)
-          make-uni-spinlock-critical)
-    (only (euphrates with-critical) with-critical)
+          make-uni-spinlock-critical))
+  (import
+    (only (euphrates with-critical) with-critical))
+  (import
     (only (scheme base)
           begin
           define-values

@@ -4,12 +4,13 @@
   (export
     linux-get-memory-stat
     linux-get-memory-free%)
+  (import (only (euphrates comp) comp))
+  (import (only (euphrates list-last) list-last))
+  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates read-lines) read/lines))
   (import
-    (only (euphrates comp) comp)
-    (only (euphrates list-last) list-last)
-    (only (euphrates raisu) raisu)
-    (only (euphrates read-lines) read/lines)
-    (only (euphrates string-to-words) string->words)
+    (only (euphrates string-to-words) string->words))
+  (import
     (only (scheme base)
           /
           =
@@ -34,10 +35,12 @@
           string->number
           unless
           unquote
-          when)
-    (only (scheme cxr) caddr)
-    (only (scheme r5rs) exact->inexact)
-    (only (srfi srfi-1) filter))
+          when))
+  (import (only (scheme cxr) caddr))
+  (import (only (scheme r5rs) exact->inexact))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

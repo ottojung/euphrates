@@ -2,8 +2,8 @@
 (define-library
   (euphrates open-file-port)
   (export open-file-port)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           append
           begin
@@ -13,12 +13,14 @@
           member
           quasiquote
           quote
-          unquote)
+          unquote))
+  (import
     (only (scheme file)
           open-input-file
           open-output-file))
   (cond-expand
-    (guile (import (only (guile) include-from-path open-file))
+    (guile (import
+             (only (guile) include-from-path open-file))
            (begin
              (include-from-path
                "euphrates/open-file-port.scm")))

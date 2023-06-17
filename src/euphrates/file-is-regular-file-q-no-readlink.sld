@@ -9,8 +9,8 @@
           cond-expand
           define
           equal?
-          quote)
-    (only (scheme file) file-exists?))
+          quote))
+  (import (only (scheme file) file-exists?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import (only (guile) stat stat:type))

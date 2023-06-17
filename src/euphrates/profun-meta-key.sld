@@ -2,9 +2,8 @@
 (define-library
   (euphrates profun-meta-key)
   (export profun-meta-key)
-  (import
-    (only (euphrates usymbol) make-usymbol)
-    (only (scheme base) begin define quote))
+  (import (only (euphrates usymbol) make-usymbol))
+  (import (only (scheme base) begin define quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

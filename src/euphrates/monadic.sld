@@ -3,12 +3,15 @@
   (euphrates monadic)
   (export monadic-bare monadic)
   (import
-    (only (euphrates identity-star) identity*)
-    (only (euphrates identity) identity)
+    (only (euphrates identity-star) identity*))
+  (import (only (euphrates identity) identity))
+  (import
     (only (euphrates monad-current-p)
-          monad-current/p)
-    (only (euphrates monad-do) monad-do/generic)
-    (only (euphrates with-monad) with-monad)
+          monad-current/p))
+  (import
+    (only (euphrates monad-do) monad-do/generic))
+  (import (only (euphrates with-monad) with-monad))
+  (import
     (only (scheme base)
           _
           apply

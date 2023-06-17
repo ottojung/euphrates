@@ -3,8 +3,8 @@
   (euphrates file-or-directory-exists-q)
   (export file-or-directory-exists?)
   (import
-    (only (scheme base) begin cond-expand define or)
-    (only (scheme file) file-exists?))
+    (only (scheme base) begin cond-expand define or))
+  (import (only (scheme file) file-exists?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -4,8 +4,8 @@
   (export date-get-current-time24h-string)
   (import
     (only (euphrates date-get-current-string)
-          date-get-current-string)
-    (only (scheme base) begin define))
+          date-get-current-string))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

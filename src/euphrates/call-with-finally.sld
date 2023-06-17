@@ -2,9 +2,9 @@
 (define-library
   (euphrates call-with-finally)
   (export call-with-finally)
+  (import (only (euphrates catch-any) catch-any))
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates catch-any) catch-any)
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           apply
           begin

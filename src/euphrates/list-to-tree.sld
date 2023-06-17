@@ -9,7 +9,6 @@
           car
           case
           cdr
-          cond-expand
           cons
           define
           else

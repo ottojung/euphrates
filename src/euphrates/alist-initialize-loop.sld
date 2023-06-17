@@ -6,17 +6,22 @@
     (only (euphrates alist-initialize-bang)
           alist-initialize!
           alist-initialize!:get-setters
-          alist-initialize!:makelet/static)
-    (only (euphrates assq-or) assq-or)
-    (only (euphrates fn-pair) fn-pair)
+          alist-initialize!:makelet/static))
+  (import (only (euphrates assq-or) assq-or))
+  (import (only (euphrates fn-pair) fn-pair))
+  (import
     (only (euphrates hashset)
           hashset-has?
-          list->hashset)
-    (only (euphrates list-and-map) list-and-map)
+          list->hashset))
+  (import
+    (only (euphrates list-and-map) list-and-map))
+  (import
     (only (euphrates list-deduplicate)
-          list-deduplicate)
-    (only (euphrates syntax-append) syntax-append)
-    (only (euphrates syntax-map) syntax-map)
+          list-deduplicate))
+  (import
+    (only (euphrates syntax-append) syntax-append))
+  (import (only (euphrates syntax-map) syntax-map))
+  (import
     (only (scheme base)
           _
           and
@@ -34,8 +39,10 @@
           or
           quote
           syntax-rules
-          unless)
-    (only (srfi srfi-17) setter))
+          unless))
+  (cond-expand
+    (guile (import (only (srfi srfi-17) setter)))
+    (else (import (only (srfi 17) setter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

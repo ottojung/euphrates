@@ -7,7 +7,8 @@
           hashmap->alist
           hashmap-ref
           hashmap-set!
-          make-hashmap)
+          make-hashmap))
+  (import
     (only (scheme base)
           begin
           cons

@@ -2,8 +2,8 @@
 (define-library
   (euphrates fn-tuple)
   (export fn-tuple)
+  (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates raisu) raisu)
     (only (scheme base)
           begin
           define
