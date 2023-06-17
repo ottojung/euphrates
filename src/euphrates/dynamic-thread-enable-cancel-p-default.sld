@@ -2,8 +2,7 @@
 (define-library
   (euphrates
     dynamic-thread-enable-cancel-p-default)
-  (export
-    dynamic-thread-enable-cancel/p-default)
+  (export dynamic-thread-enable-cancel/p-default)
   (import
     (only (scheme base) _ begin define lambda))
   (cond-expand
