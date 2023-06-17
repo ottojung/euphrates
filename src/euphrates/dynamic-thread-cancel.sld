@@ -4,7 +4,7 @@
   (export dynamic-thread-cancel)
   (import
     (only (euphrates dynamic-thread-cancel-p)
-          #{dynamic-thread-cancel#p}#))
+          dynamic-thread-cancel/p))
   (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base) begin define or quote))

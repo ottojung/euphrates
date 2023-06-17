@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-mutex-make-p-default)
-  (export #{dynamic-thread-mutex-make#p-default}#)
+  (export dynamic-thread-mutex-make/p-default)
   (import
     (only (scheme base) _ begin define lambda))
   (cond-expand

@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-critical-make-p)
-  (export #{dynamic-thread-critical-make#p}#)
+  (export dynamic-thread-critical-make/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

@@ -3,5 +3,5 @@
 
 
 (define (dynamic-thread-get-yield-procedure)
-  (dynamic-thread-yield#p))
+  (dynamic-thread-yield/p))
 

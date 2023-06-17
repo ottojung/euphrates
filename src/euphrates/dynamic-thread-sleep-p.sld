@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-sleep-p)
-  (export #{dynamic-thread-sleep#p}#)
+  (export dynamic-thread-sleep/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

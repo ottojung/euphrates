@@ -17,7 +17,7 @@
           profun-set))
   (import
     (only (euphrates profun-op-apply-result-p)
-          #{profun-op-apply/result#p}#))
+          profun-op-apply/result/p))
   (import
     (only (euphrates profun-op-lambda)
           profun-op-lambda))

@@ -3,13 +3,13 @@
   (euphrates
     dynamic-thread-get-delay-procedure-p-default)
   (export
-    #{dynamic-thread-get-delay-procedure#p-default}#)
+    dynamic-thread-get-delay-procedure/p-default)
   (import
     (only (euphrates dynamic-thread-get-wait-delay)
           dynamic-thread-get-wait-delay))
   (import
     (only (euphrates dynamic-thread-sleep-p)
-          #{dynamic-thread-sleep#p}#))
+          dynamic-thread-sleep/p))
   (import
     (only (euphrates dynamic-thread-sleep)
           dynamic-thread-sleep))

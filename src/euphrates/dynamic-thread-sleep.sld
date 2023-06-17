@@ -4,10 +4,10 @@
   (export dynamic-thread-sleep)
   (import
     (only (euphrates dynamic-thread-sleep-p-default)
-          #{dynamic-thread-sleep#p-default}#))
+          dynamic-thread-sleep/p-default))
   (import
     (only (euphrates dynamic-thread-sleep-p)
-          #{dynamic-thread-sleep#p}#))
+          dynamic-thread-sleep/p))
   (import (only (scheme base) begin define or))
   (cond-expand
     (guile (import (only (guile) include-from-path))

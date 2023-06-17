@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates time-get-current-unixtime-values-p)
-  (export #{time-get-current-unixtime/values#p}#)
+  (export time-get-current-unixtime/values/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

@@ -4,7 +4,7 @@
   (export dynamic-thread-spawn)
   (import
     (only (euphrates dynamic-thread-spawn-p)
-          #{dynamic-thread-spawn#p}#))
+          dynamic-thread-spawn/p))
   (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base) begin define or quote))

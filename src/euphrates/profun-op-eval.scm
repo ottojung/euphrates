@@ -29,7 +29,7 @@
              (arguments (cddr args))
              (box (make-box #f)))
 
-         (parameterize ((profun-op-eval/result#p box))
+         (parameterize ((profun-op-eval/result/p box))
            (let ((result (apply procedure arguments)))
              (if (equal? 'fail (box-ref box))
                  (profun-reject)
@@ -38,7 +38,7 @@
                   (profun-ctx-set #t)))))))))
 
 (define (profun-eval-fail!)
-  (let ((box (profun-op-eval/result#p)))
+  (let ((box (profun-op-eval/result/p)))
     (unless (box? box)
       (raisu 'profun-eval-return-called-outside-of-eval box))
     (box-set! box 'fail)))

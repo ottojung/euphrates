@@ -5,7 +5,7 @@
   (import (only (euphrates catch-any) catch-any))
   (import
     (only (euphrates dynamic-thread-spawn-p)
-          #{dynamic-thread-spawn#p}#))
+          dynamic-thread-spawn/p))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates uni-spinlock)

@@ -6,11 +6,11 @@
     time-get-current-unixtime/values)
   (import
     (only (euphrates
-           time-get-current-unixtime-values-p-default)
-          time-get-current-unixtime/values#p-default))
+            time-get-current-unixtime-values-p-default)
+          time-get-current-unixtime/values/p-default))
   (import
     (only (euphrates time-get-current-unixtime-values-p)
-          #{time-get-current-unixtime/values#p}#))
+          time-get-current-unixtime/values/p))
   (import
     (only (euphrates unit-conversions)
           nano->normal/unit))

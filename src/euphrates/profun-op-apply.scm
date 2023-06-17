@@ -25,7 +25,7 @@
              (arguments (cdr args))
              (box (make-box #f)))
 
-         (parameterize ((profun-op-apply/result#p box))
+         (parameterize ((profun-op-apply/result/p box))
            (apply procedure arguments))
 
          (let ((result (box-ref box))
@@ -47,13 +47,13 @@
                     (profun-ctx-set #t))))))))))
 
 (define (profun-apply-return! . args)
-  (let ((box (profun-op-apply/result#p)))
+  (let ((box (profun-op-apply/result/p)))
     (unless (box? box)
       (raisu 'profun-apply-return-called-outside-of-apply box))
     (box-set! box args)))
 
 (define (profun-apply-fail!)
-  (let ((box (profun-op-apply/result#p)))
+  (let ((box (profun-op-apply/result/p)))
     (unless (box? box)
       (raisu 'profun-apply-return-called-outside-of-apply box))
     (box-set! box 'fail)))

@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-mutex-lock-p)
-  (export #{dynamic-thread-mutex-lock!#p}#)
+  (export dynamic-thread-mutex-lock!/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

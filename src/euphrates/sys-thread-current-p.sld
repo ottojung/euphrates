@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates sys-thread-current-p)
-  (export #{sys-thread-current#p}#)
+  (export sys-thread-current/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

@@ -6,8 +6,8 @@
 
 
 (define (time-get-current-unixtime/values)
-  ((or (time-get-current-unixtime/values#p)
-       time-get-current-unixtime/values#p-default)))
+  ((or (time-get-current-unixtime/values/p)
+       time-get-current-unixtime/values/p-default)))
 
 (define (time-get-current-unixtime)
   (define-values (second nanosecond) (time-get-current-unixtime/values))

@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-disable-cancel-p)
-  (export #{dynamic-thread-disable-cancel#p}#)
+  (export dynamic-thread-disable-cancel/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

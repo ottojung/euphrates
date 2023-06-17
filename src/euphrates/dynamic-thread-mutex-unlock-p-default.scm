@@ -2,5 +2,5 @@
 
 
 
-(define dynamic-thread-mutex-unlock!#p-default
+(define dynamic-thread-mutex-unlock!/p-default
   (lambda _ 0))

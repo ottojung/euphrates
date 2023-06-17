@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-spawn-p)
-  (export #{dynamic-thread-spawn#p}#)
+  (export dynamic-thread-spawn/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

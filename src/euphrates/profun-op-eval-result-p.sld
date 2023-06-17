@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates profun-op-eval-result-p)
-  (export #{profun-op-eval/result#p}#)
+  (export profun-op-eval/result/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

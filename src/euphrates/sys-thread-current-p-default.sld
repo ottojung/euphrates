@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates sys-thread-current-p-default)
-  (export #{sys-thread-current#p-default}#)
+  (export sys-thread-current/p-default)
   (import
     (only (euphrates sys-thread-obj) sys-thread-obj))
   (import (only (scheme base) begin define))

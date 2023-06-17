@@ -21,8 +21,8 @@
   (set-sys-thread-obj-cancel-scheduled?! th #t))
 
 (define (sys-thread-current)
-  (or (sys-thread-current#p)
-      sys-thread-current#p-default))
+  (or (sys-thread-current/p)
+      sys-thread-current/p-default))
 
 (define (sys-thread-disable-cancel)
   (let ((me (sys-thread-current)))

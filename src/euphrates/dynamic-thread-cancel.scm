@@ -5,5 +5,5 @@
 
 
 (define (dynamic-thread-cancel th)
-  ((or (dynamic-thread-cancel#p)
+  ((or (dynamic-thread-cancel/p)
        (raisu 'threading-system-is-not-parameterized)) th))

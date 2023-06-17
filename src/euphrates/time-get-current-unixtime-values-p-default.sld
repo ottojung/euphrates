@@ -3,7 +3,7 @@
   (euphrates
     time-get-current-unixtime-values-p-default)
   (export
-    #{time-get-current-unixtime/values#p-default}#)
+    time-get-current-unixtime/values/p-default)
   (import
     (only (scheme base) begin define let values))
   (cond-expand

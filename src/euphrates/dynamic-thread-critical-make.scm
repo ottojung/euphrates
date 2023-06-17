@@ -6,5 +6,5 @@
 
 
 (define (dynamic-thread-critical-make)
-  ((or (dynamic-thread-critical-make#p)
-       dynamic-thread-critical-make#p-default)))
+  ((or (dynamic-thread-critical-make/p)
+       dynamic-thread-critical-make/p-default)))

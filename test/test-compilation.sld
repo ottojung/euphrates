@@ -272,7 +272,7 @@
           dynamic-thread-async))
   (import
     (only (euphrates dynamic-thread-cancel-p)
-          #{dynamic-thread-cancel#p}#))
+          dynamic-thread-cancel/p))
   (import
     (only (euphrates dynamic-thread-cancel-tag)
           dynamic-thread-cancel-tag))
@@ -282,40 +282,40 @@
   (import
     (only (euphrates
             dynamic-thread-critical-make-p-default)
-          #{dynamic-thread-critical-make#p-default}#))
+          dynamic-thread-critical-make/p-default))
   (import
     (only (euphrates dynamic-thread-critical-make-p)
-          #{dynamic-thread-critical-make#p}#))
+          dynamic-thread-critical-make/p))
   (import
     (only (euphrates dynamic-thread-critical-make)
           dynamic-thread-critical-make))
   (import
     (only (euphrates
             dynamic-thread-disable-cancel-p-default)
-          #{dynamic-thread-disable-cancel#p-default}#))
+          dynamic-thread-disable-cancel/p-default))
   (import
     (only (euphrates dynamic-thread-disable-cancel-p)
-          #{dynamic-thread-disable-cancel#p}#))
+          dynamic-thread-disable-cancel/p))
   (import
     (only (euphrates dynamic-thread-disable-cancel)
           dynamic-thread-disable-cancel))
   (import
     (only (euphrates
             dynamic-thread-enable-cancel-p-default)
-          #{dynamic-thread-enable-cancel#p-default}#))
+          dynamic-thread-enable-cancel/p-default))
   (import
     (only (euphrates dynamic-thread-enable-cancel-p)
-          #{dynamic-thread-enable-cancel#p}#))
+          dynamic-thread-enable-cancel/p))
   (import
     (only (euphrates dynamic-thread-enable-cancel)
           dynamic-thread-enable-cancel))
   (import
     (only (euphrates
             dynamic-thread-get-delay-procedure-p-default)
-          #{dynamic-thread-get-delay-procedure#p-default}#))
+          dynamic-thread-get-delay-procedure/p-default))
   (import
     (only (euphrates dynamic-thread-get-delay-procedure-p)
-          #{dynamic-thread-get-delay-procedure#p}#))
+          dynamic-thread-get-delay-procedure/p))
   (import
     (only (euphrates dynamic-thread-get-delay-procedure)
           dynamic-thread-get-delay-procedure))
@@ -327,58 +327,58 @@
           dynamic-thread-get-yield-procedure))
   (import
     (only (euphrates dynamic-thread-mutex-lock-p-default)
-          #{dynamic-thread-mutex-lock!#p-default}#))
+          dynamic-thread-mutex-lock!/p-default))
   (import
     (only (euphrates dynamic-thread-mutex-lock-p)
-          #{dynamic-thread-mutex-lock!#p}#))
+          dynamic-thread-mutex-lock!/p))
   (import
     (only (euphrates dynamic-thread-mutex-lock)
           dynamic-thread-mutex-lock!))
   (import
     (only (euphrates dynamic-thread-mutex-make-p-default)
-          #{dynamic-thread-mutex-make#p-default}#))
+          dynamic-thread-mutex-make/p-default))
   (import
     (only (euphrates dynamic-thread-mutex-make-p)
-          #{dynamic-thread-mutex-make#p}#))
+          dynamic-thread-mutex-make/p))
   (import
     (only (euphrates dynamic-thread-mutex-make)
           dynamic-thread-mutex-make))
   (import
     (only (euphrates dynamic-thread-mutex-unlock-p-default)
-          #{dynamic-thread-mutex-unlock!#p-default}#))
+          dynamic-thread-mutex-unlock!/p-default))
   (import
     (only (euphrates dynamic-thread-mutex-unlock-p)
-          #{dynamic-thread-mutex-unlock!#p}#))
+          dynamic-thread-mutex-unlock!/p))
   (import
     (only (euphrates dynamic-thread-mutex-unlock)
           dynamic-thread-mutex-unlock!))
   (import
     (only (euphrates dynamic-thread-sleep-p-default)
-          #{dynamic-thread-sleep#p-default}#))
+          dynamic-thread-sleep/p-default))
   (import
     (only (euphrates dynamic-thread-sleep-p)
-          #{dynamic-thread-sleep#p}#))
+          dynamic-thread-sleep/p))
   (import
     (only (euphrates dynamic-thread-sleep)
           dynamic-thread-sleep))
   (import
     (only (euphrates dynamic-thread-spawn-p)
-          #{dynamic-thread-spawn#p}#))
+          dynamic-thread-spawn/p))
   (import
     (only (euphrates dynamic-thread-spawn)
           dynamic-thread-spawn))
   (import
     (only (euphrates dynamic-thread-wait-delay-p-default)
-          #{dynamic-thread-wait-delay#us#p-default}#))
+          dynamic-thread-wait-delay/us/p-default))
   (import
     (only (euphrates dynamic-thread-wait-delay-p)
-          #{dynamic-thread-wait-delay#us#p}#))
+          dynamic-thread-wait-delay/us/p))
   (import
     (only (euphrates dynamic-thread-yield-p-default)
-          #{dynamic-thread-yield#p-default}#))
+          dynamic-thread-yield/p-default))
   (import
     (only (euphrates dynamic-thread-yield-p)
-          #{dynamic-thread-yield#p}#))
+          dynamic-thread-yield/p))
   (import
     (only (euphrates dynamic-thread-yield)
           dynamic-thread-yield))
@@ -1095,7 +1095,7 @@
           profun-meta-key))
   (import
     (only (euphrates profun-op-apply-result-p)
-          #{profun-op-apply/result#p}#))
+          profun-op-apply/result/p))
   (import
     (only (euphrates profun-op-apply)
           profun-apply-fail!
@@ -1115,7 +1115,7 @@
           profun-op-equals))
   (import
     (only (euphrates profun-op-eval-result-p)
-          #{profun-op-eval/result#p}#))
+          profun-op-eval/result/p))
   (import
     (only (euphrates profun-op-eval)
           profun-eval-fail!
@@ -1502,10 +1502,10 @@
           sys-mutex-unlock!))
   (import
     (only (euphrates sys-thread-current-p-default)
-          #{sys-thread-current#p-default}#))
+          sys-thread-current/p-default))
   (import
     (only (euphrates sys-thread-current-p)
-          #{sys-thread-current#p}#))
+          sys-thread-current/p))
   (import
     (only (euphrates sys-thread-obj)
           set-sys-thread-obj-cancel-enabled?!
@@ -1545,10 +1545,10 @@
   (import
     (only (euphrates
             time-get-current-unixtime-values-p-default)
-          #{time-get-current-unixtime/values#p-default}#))
+          time-get-current-unixtime/values/p-default))
   (import
     (only (euphrates time-get-current-unixtime-values-p)
-          #{time-get-current-unixtime/values#p}#))
+          time-get-current-unixtime/values/p))
   (import
     (only (euphrates time-get-current-unixtime)
           time-get-current-unixtime

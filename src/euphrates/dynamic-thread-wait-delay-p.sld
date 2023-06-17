@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-wait-delay-p)
-  (export #{dynamic-thread-wait-delay#us#p}#)
+  (export dynamic-thread-wait-delay/us/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

@@ -4,10 +4,10 @@
   (export dynamic-thread-mutex-lock!)
   (import
     (only (euphrates dynamic-thread-mutex-lock-p-default)
-          #{dynamic-thread-mutex-lock!#p-default}#))
+          dynamic-thread-mutex-lock!/p-default))
   (import
     (only (euphrates dynamic-thread-mutex-lock-p)
-          #{dynamic-thread-mutex-lock!#p}#))
+          dynamic-thread-mutex-lock!/p))
   (import (only (scheme base) begin define or))
   (cond-expand
     (guile (import (only (guile) include-from-path))

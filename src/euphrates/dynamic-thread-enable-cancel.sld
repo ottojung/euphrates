@@ -5,10 +5,10 @@
   (import
     (only (euphrates
             dynamic-thread-enable-cancel-p-default)
-          #{dynamic-thread-enable-cancel#p-default}#))
+          dynamic-thread-enable-cancel/p-default))
   (import
     (only (euphrates dynamic-thread-enable-cancel-p)
-          #{dynamic-thread-enable-cancel#p}#))
+          dynamic-thread-enable-cancel/p))
   (import (only (scheme base) begin define or))
   (cond-expand
     (guile (import (only (guile) include-from-path))

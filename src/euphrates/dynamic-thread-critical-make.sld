@@ -5,10 +5,10 @@
   (import
     (only (euphrates
             dynamic-thread-critical-make-p-default)
-          #{dynamic-thread-critical-make#p-default}#))
+          dynamic-thread-critical-make/p-default))
   (import
     (only (euphrates dynamic-thread-critical-make-p)
-          #{dynamic-thread-critical-make#p}#))
+          dynamic-thread-critical-make/p))
   (import (only (scheme base) begin define or))
   (cond-expand
     (guile (import (only (guile) include-from-path))

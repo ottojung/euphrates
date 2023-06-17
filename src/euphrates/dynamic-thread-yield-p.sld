@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-yield-p)
-  (export #{dynamic-thread-yield#p}#)
+  (export dynamic-thread-yield/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

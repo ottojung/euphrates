@@ -2,7 +2,7 @@
 (define-library
   (euphrates dynamic-thread-mutex-unlock-p-default)
   (export
-    #{dynamic-thread-mutex-unlock!#p-default}#)
+    dynamic-thread-mutex-unlock!/p-default)
   (import
     (only (scheme base) _ begin define lambda))
   (cond-expand

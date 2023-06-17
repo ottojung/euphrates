@@ -2,5 +2,5 @@
 
 
 
-(define dynamic-thread-mutex-make#p-default
+(define dynamic-thread-mutex-make/p-default
   (lambda _ 0))

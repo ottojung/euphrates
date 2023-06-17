@@ -14,5 +14,5 @@
 
 
 
-(define profun-op-apply/result#p
+(define profun-op-apply/result/p
   (make-parameter #f))

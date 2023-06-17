@@ -14,6 +14,6 @@
         (when err (apply raisu err))))))
 
 (define (printf fmt . args)
-  (if (dynamic-thread-spawn#p)
+  (if (dynamic-thread-spawn/p)
       (printf/threadsafe fmt args)
       (display (apply format (cons fmt args)))))

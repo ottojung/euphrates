@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates dynamic-thread-get-delay-procedure-p)
-  (export #{dynamic-thread-get-delay-procedure#p}#)
+  (export dynamic-thread-get-delay-procedure/p)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand

@@ -24,10 +24,10 @@
           sys-mutex-unlock!))
   (import
     (only (euphrates sys-thread-current-p-default)
-          #{sys-thread-current#p-default}#))
+          sys-thread-current/p-default))
   (import
     (only (euphrates sys-thread-current-p)
-          #{sys-thread-current#p}#))
+          sys-thread-current/p))
   (import
     (only (euphrates sys-thread-obj)
           set-sys-thread-obj-cancel-enabled?!
