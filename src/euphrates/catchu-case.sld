@@ -2,14 +2,15 @@
 (define-library
   (euphrates catchu-case)
   (export catchu-case)
+  (import (only (euphrates catch-any) catch-any))
   (import
     (only (scheme base)
           _
           apply
           begin
           cdr
-          cond-expand
           define-syntax
+          else
           lambda
           syntax-rules))
   (cond-expand
