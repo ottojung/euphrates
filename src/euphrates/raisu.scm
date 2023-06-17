@@ -8,4 +8,7 @@
     (apply throw (cons x xs))))
  (racket
   (define (raisu x . xs)
-    (raise (cons x xs)))))
+    (raise (cons x xs))))
+ (else
+  (define (raisu x . xs)
+    (apply error (cons x xs)))))

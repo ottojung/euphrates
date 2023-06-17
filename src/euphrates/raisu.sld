@@ -9,6 +9,8 @@
           cond-expand
           cons
           define
+          else
+          error
           raise))
   (cond-expand
     (guile (import (only (guile) include-from-path throw))
