@@ -88,29 +88,34 @@
                      got2)))
           got))))
 
+(define properties-secret-get-obj
+  (make-unique))
 
 (define-syntax define-property
   (syntax-rules ()
     ((_ getter setter)
      (begin
-       (define define-property-key (make-unique))
        (define-syntax setter
          (syntax-rules ()
            ((_2 obj value)
-            (let* ((obj/eval obj)
+            (let* ((define-property-key (getter properties-secret-get-obj))
+                   (obj/eval obj)
                    (H (get-current-H obj/eval)))
               (unless H (storage-not-found-response))
               (hashmap-set! H define-property-key (memconst value))))))
        (define getter
-         (let ((not-found (make-unique)))
+         (let ((not-found (make-unique))
+               (define-property-key (make-unique)))
            (case-lambda
             ((obj)
-             (let ((H (get-current-H obj)))
-               (if H
-                   (let ((R (hashmap-ref H obj not-found)))
-                     (if (eq? R not-found)
-                         (raisu 'object-does-not-have-this-property (quote H) obj)
-                         (R)))
+             (if (eq? obj properties-secret-get-obj) ;; This is a workaround for Guile that
+                 define-property-key                 ;; allows us to not declare `define-property-key' at module's toplevel. Go to https://www.gnu.org/software/guile/manual/html_node/Hygiene-and-the-Top_002dLevel.html to see what would happen if we didn't do this (under "Guile does a terrible thing here").
+                 (let ((H (get-current-H obj)))
+                   (if H
+                       (let ((R (hashmap-ref H obj not-found)))
+                         (if (eq? R not-found)
+                             (raisu 'object-does-not-have-this-property (quote H) obj)
+                             (R))))
                    (storage-not-found-response))))
             ((obj default)
              (let ((H (get-current-H obj)))
