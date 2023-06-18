@@ -160,6 +160,8 @@
     (only (euphrates chibi-parser)
           char-hex-digit?
           char-octal-digit?
+          define-grammar
+          parse
           parse-binary-op
           parse-c-integer
           parse-common-domain
@@ -167,6 +169,7 @@
           parse-delimited
           parse-domain
           parse-email
+          parse-fully
           parse-identifier
           parse-integer
           parse-ip-address

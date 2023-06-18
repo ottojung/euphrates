@@ -1,6 +1,7 @@
 
 (define-library (euphrates chibi-parser)
   (export parse-integer parse-unsigned-integer parse-c-integer
+          define-grammar parse parse-fully
           parse-real parse-complex
           parse-identifier parse-delimited parse-separated parse-records
           parse-space parse-binary-op
