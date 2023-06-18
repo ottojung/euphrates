@@ -140,6 +140,8 @@
           cartesian-product))
   (import (only (euphrates catch-any) catch-any))
   (import
+    (only (euphrates catch-specific) catch-specific))
+  (import
     (only (euphrates catchu-case) catchu-case))
   (import (only (euphrates cfg-inline) CFG-inline))
   (import
@@ -201,6 +203,9 @@
   (import
     (only (euphrates compose-under-par)
           compose-under-par))
+  (import
+    (only (euphrates compose-under-seq)
+          compose-under-seq))
   (import
     (only (euphrates compose-under) compose-under))
   (import (only (euphrates compose) compose))
@@ -1283,7 +1288,9 @@
           profune-communicator-handle
           profune-communicator?))
   (import
-    (only (euphrates properties) define-property))
+    (only (euphrates properties)
+          define-property
+          with-properties))
   (import
     (only (euphrates queue-obj)
           queue-constructor
