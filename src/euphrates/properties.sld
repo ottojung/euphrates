@@ -1,12 +1,17 @@
 
 (define-library
   (euphrates properties)
-  (export define-property)
+  (export define-property with-properties)
   (import
     (only (euphrates hashmap)
           hashmap-ref
           hashmap-set!
           make-hashmap))
+  (import
+    (only (euphrates immutable-hashmap)
+          immutable-hashmap-ref
+          immutable-hashmap-set
+          make-immutable-hashmap))
   (import
     (only (euphrates make-unique) make-unique))
   (import (only (euphrates memconst) memconst))
@@ -14,14 +19,20 @@
   (import
     (only (scheme base)
           _
+          and
           begin
           define
           define-syntax
           eq?
           if
+          lambda
           let
+          let*
+          make-parameter
+          parameterize
           quote
-          syntax-rules))
+          syntax-rules
+          unless))
   (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (srfi srfi-17) setter)))
