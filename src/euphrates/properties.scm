@@ -64,7 +64,7 @@
 
 (define (storage-not-found-response)
   (raisu 'properties-storage-not-initiailized
-         "Storage not initialized. Did you forget to use `with-storage'?"))
+         "Storage not initialized. Did you forget to use `with-properties'?"))
 
 (define get-current-H
   (let ()
