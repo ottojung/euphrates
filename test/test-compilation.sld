@@ -156,6 +156,28 @@
   (import
     (only (euphrates cfg-strip-modifiers)
           CFG-strip-modifiers))
+  (import
+    (only (euphrates chibi-parser)
+          char-hex-digit?
+          char-octal-digit?
+          parse-binary-op
+          parse-c-integer
+          parse-common-domain
+          parse-complex
+          parse-delimited
+          parse-domain
+          parse-email
+          parse-identifier
+          parse-integer
+          parse-ip-address
+          parse-ipv4-address
+          parse-ipv6-address
+          parse-real
+          parse-records
+          parse-separated
+          parse-space
+          parse-unsigned-integer
+          parse-uri))
   (import (only (euphrates clamp) clamp))
   (import
     (only (euphrates command-line-arguments-p)
@@ -2794,6 +2816,139 @@
                   string>=
                   substring/shared
                   xsubstring))))
+  (cond-expand
+    (guile (import
+             (only (srfi srfi-14)
+                   ->char-set
+                   char-set
+                   char-set->list
+                   char-set->string
+                   char-set-adjoin
+                   char-set-adjoin!
+                   char-set-any
+                   char-set-complement
+                   char-set-complement!
+                   char-set-contains?
+                   char-set-copy
+                   char-set-count
+                   char-set-cursor
+                   char-set-cursor-next
+                   char-set-delete
+                   char-set-delete!
+                   char-set-diff+intersection
+                   char-set-diff+intersection!
+                   char-set-difference
+                   char-set-difference!
+                   char-set-every
+                   char-set-filter
+                   char-set-filter!
+                   char-set-fold
+                   char-set-for-each
+                   char-set-hash
+                   char-set-intersection
+                   char-set-intersection!
+                   char-set-map
+                   char-set-ref
+                   char-set-size
+                   char-set-unfold
+                   char-set-unfold!
+                   char-set-union
+                   char-set-union!
+                   char-set-xor
+                   char-set-xor!
+                   char-set:ascii
+                   char-set:blank
+                   char-set:digit
+                   char-set:empty
+                   char-set:full
+                   char-set:graphic
+                   char-set:hex-digit
+                   char-set:iso-control
+                   char-set:letter
+                   char-set:letter+digit
+                   char-set:lower-case
+                   char-set:printing
+                   char-set:punctuation
+                   char-set:symbol
+                   char-set:title-case
+                   char-set:upper-case
+                   char-set:whitespace
+                   char-set<=
+                   char-set=
+                   char-set?
+                   end-of-char-set?
+                   list->char-set
+                   list->char-set!
+                   string->char-set
+                   string->char-set!
+                   ucs-range->char-set
+                   ucs-range->char-set!)))
+    (else (import
+            (only (srfi 14)
+                  ->char-set
+                  char-set
+                  char-set->list
+                  char-set->string
+                  char-set-adjoin
+                  char-set-adjoin!
+                  char-set-any
+                  char-set-complement
+                  char-set-complement!
+                  char-set-contains?
+                  char-set-copy
+                  char-set-count
+                  char-set-cursor
+                  char-set-cursor-next
+                  char-set-delete
+                  char-set-delete!
+                  char-set-diff+intersection
+                  char-set-diff+intersection!
+                  char-set-difference
+                  char-set-difference!
+                  char-set-every
+                  char-set-filter
+                  char-set-filter!
+                  char-set-fold
+                  char-set-for-each
+                  char-set-hash
+                  char-set-intersection
+                  char-set-intersection!
+                  char-set-map
+                  char-set-ref
+                  char-set-size
+                  char-set-unfold
+                  char-set-unfold!
+                  char-set-union
+                  char-set-union!
+                  char-set-xor
+                  char-set-xor!
+                  char-set:ascii
+                  char-set:blank
+                  char-set:digit
+                  char-set:empty
+                  char-set:full
+                  char-set:graphic
+                  char-set:hex-digit
+                  char-set:iso-control
+                  char-set:letter
+                  char-set:letter+digit
+                  char-set:lower-case
+                  char-set:printing
+                  char-set:punctuation
+                  char-set:symbol
+                  char-set:title-case
+                  char-set:upper-case
+                  char-set:whitespace
+                  char-set<=
+                  char-set=
+                  char-set?
+                  end-of-char-set?
+                  list->char-set
+                  list->char-set!
+                  string->char-set
+                  string->char-set!
+                  ucs-range->char-set
+                  ucs-range->char-set!))))
   (cond-expand
     (guile (import
              (only (srfi srfi-17) getter-with-setter setter)))
