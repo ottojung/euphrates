@@ -17,7 +17,6 @@
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))
-           (import (only (guile) catch))
            (begin
              (include-from-path "euphrates/catchu-case.scm")))
     (else (include "catchu-case.scm"))))
