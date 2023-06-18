@@ -80,7 +80,12 @@
                    (immutable-hashmap-ref
                     global properties-everything-key
                     'impossible-not-found-properties))
-                 local))
+                 (define got2 (hashmap-ref local obj not-found))
+                 (if (eq? got2 not-found)
+                     (let ((new (make-hashmap)))
+                       (hashmap-set! local obj new)
+                       new)
+                     got2)))
           got))))
 
 
@@ -88,13 +93,14 @@
   (syntax-rules ()
     ((_ getter setter)
      (begin
+       (define define-property-key (make-unique))
        (define-syntax setter
          (syntax-rules ()
            ((_2 obj value)
             (let* ((obj/eval obj)
                    (H (get-current-H obj/eval)))
               (unless H (storage-not-found-response))
-              (hashmap-set! H obj/eval (memconst value))))))
+              (hashmap-set! H define-property-key (memconst value))))))
        (define getter
          (let ((not-found (make-unique)))
            (case-lambda
@@ -109,7 +115,7 @@
             ((obj default)
              (let ((H (get-current-H obj)))
                (if H
-                   (let ((R (hashmap-ref H obj not-found)))
+                   (let ((R (hashmap-ref H define-property-key not-found)))
                      (if (eq? R not-found)
                          default
                          (R)))
