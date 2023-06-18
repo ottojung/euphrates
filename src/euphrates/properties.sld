@@ -31,6 +31,7 @@
           make-parameter
           parameterize
           quote
+          set!
           syntax-rules
           unless))
   (import (only (scheme case-lambda) case-lambda))

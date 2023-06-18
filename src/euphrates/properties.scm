@@ -92,8 +92,12 @@
   (make-unique))
 
 (define-syntax define-property
-  (syntax-rules ()
+  (syntax-rules (:initialize)
     ((_ getter setter)
+     (define-property
+       getter :initialize #f
+       setter))
+    ((_ getter :initiaze initializer setter)
      (begin
        (define-syntax setter
          (syntax-rules ()
@@ -106,6 +110,19 @@
        (define getter
          (let ((not-found (make-unique))
                (define-property-key (make-unique)))
+
+           (define (try-initializer H obj)
+             (define initialized? #t)
+             (define (skip-initialization!) (set! initialized? #f))
+             (if initializer
+                 (let ((new (initializer obj skip-initialization!)))
+                   (if initialized?
+                       (begin
+                         (hashmap-set! H obj new)
+                         new)
+                       not-found))
+                 not-found))
+
            (case-lambda
             ((obj)
              (if (eq? obj properties-secret-get-obj) ;; This is a workaround for Guile that
@@ -114,14 +131,22 @@
                    (if H
                        (let ((R (hashmap-ref H obj not-found)))
                          (if (eq? R not-found)
-                             (raisu 'object-does-not-have-this-property (quote H) obj)
-                             (R))))
-                   (storage-not-found-response))))
+                             (let ((R2 (try-initializer H obj)))
+                               (if (eq? R2 not-found)
+                                   (raisu 'object-does-not-have-this-property
+                                          obj (quote getter) (quote setter))
+                                   R2))
+                             (R)))
+                       (storage-not-found-response)))))
             ((obj default)
-             (let ((H (get-current-H obj)))
+             (let ()
+               (define H (get-current-H obj))
                (if H
                    (let ((R (hashmap-ref H define-property-key not-found)))
                      (if (eq? R not-found)
-                         default
+                         (let ((R2 (try-initializer H obj)))
+                           (if (eq? R2 not-found)
+                               default
+                               R2))
                          (R)))
                    default))))))))))
