@@ -4,6 +4,8 @@
   (export catchu-case)
   (import (only (euphrates catch-any) catch-any))
   (import
+    (only (euphrates catch-specific) catch-specific))
+  (import
     (only (scheme base)
           _
           apply

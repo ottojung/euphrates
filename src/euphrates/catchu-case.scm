@@ -21,7 +21,7 @@
       (lambda _ invokebody)
       (lambda args . bodies)))
     ((_ invokebody ((symbolic-error-key . args) . bodies))
-     (catch
+     (catch-specific
       symbolic-error-key
       (lambda _ invokebody)
       (lambda args-all
