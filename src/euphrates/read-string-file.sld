@@ -3,16 +3,20 @@
   (euphrates read-string-file)
   (export read-string-file)
   (import
-    (only (euphrates open-file-port) open-file-port))
-  (import
-    (only (euphrates read-all-port) read-all-port))
+    (only (euphrates call-with-output-string)
+          call-with-output-string))
   (import
     (only (scheme base)
           begin
-          close-port
           define
-          let*
-          read-char))
+          eof-object?
+          lambda
+          let
+          read-string
+          unless))
+  (import
+    (only (scheme file) call-with-input-file))
+  (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
