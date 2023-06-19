@@ -270,3 +270,21 @@
    (set-absolute! object1 3)
 
    (assert= (absolute object1 #f) 3)))
+
+(let ()
+
+  (define object1 -3)
+
+  (define-property absolute
+    :initiaze (const 'unknown)
+    set-absolute!)
+
+  (with-properties
+   :for-everything
+
+   (assert= (absolute object1 #f) 'unknown)
+   (assert= (absolute object1 #f) 'unknown)
+
+   (set-absolute! object1 3)
+
+   (assert= (absolute object1 #f) 3)))

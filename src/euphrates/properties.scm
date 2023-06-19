@@ -118,7 +118,7 @@
                  (let ((new (initializer obj skip-initialization!)))
                    (if initialized?
                        (begin
-                         (hashmap-set! H obj new)
+                         (hashmap-set! H define-property-key (lambda _ new))
                          new)
                        not-found))
                  not-found))
@@ -129,7 +129,7 @@
                  define-property-key                 ;; allows us to not declare `define-property-key' at module's toplevel. Go to https://www.gnu.org/software/guile/manual/html_node/Hygiene-and-the-Top_002dLevel.html to see what would happen if we didn't do this (under "Guile does a terrible thing here").
                  (let ((H (get-current-H obj)))
                    (if H
-                       (let ((R (hashmap-ref H obj not-found)))
+                       (let ((R (hashmap-ref H define-property-key not-found)))
                          (if (eq? R not-found)
                              (let ((R2 (try-initializer H obj)))
                                (if (eq? R2 not-found)
