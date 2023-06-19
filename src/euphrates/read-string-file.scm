@@ -8,4 +8,5 @@
          (let loop ()
            (define r (read-string 4096 p))
            (unless (eof-object? r)
-             (display r s))))))))
+             (display r s)
+             (loop))))))))
