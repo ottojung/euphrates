@@ -1,11 +1,11 @@
 
 (define-library
   (test-string-split-simple)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates string-split-simple)
-          string-split/simple)
-    (only (scheme base) begin let quote))
+          string-split/simple))
+  (import (only (scheme base) begin let quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
