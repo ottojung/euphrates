@@ -20,7 +20,9 @@
     ((_ sym buf ((quote x) . bodies) . clauses)
      (caseq/helper
       sym (((x) . bodies) . buf)
-      . clauses))))
+      . clauses))
+    ((_ sym buf (c . bodies) . clauses)
+     (syntax-error "Expected a quoted symbol, but got" c))))
 
 (define-syntax caseq
   (syntax-rules ()

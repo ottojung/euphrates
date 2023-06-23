@@ -12,6 +12,7 @@
           define-syntax
           else
           quote
+          syntax-error
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path catch))
