@@ -36,7 +36,7 @@
   (make-hashmap))
 
 
-(define properties-storage-map
+(define properties-objmap
   (make-parameter (make-immutable-hashmap)))
 
 
@@ -52,16 +52,16 @@
   (syntax-rules (:for :for-everything)
     ((_ :for object . bodies)
      (parameterize
-         ((properties-storage-map
+         ((properties-objmap
            (immutable-hashmap-set
-            (properties-storage-map)
+            (properties-objmap)
             object (make-hashmap))))
        (let () . bodies)))
     ((_ :for-everything . bodies)
      (parameterize ((properties-for-everything? #t)
-                    (properties-storage-map
+                    (properties-objmap
                      (immutable-hashmap-set
-                      (properties-storage-map)
+                      (properties-objmap)
                       properties-everything-key
                       (make-hashmap))))
        (let () . bodies)))))
@@ -70,12 +70,12 @@
   (raisu 'properties-storage-not-initiailized
          "Storage not initialized. Did you forget to use `with-properties'?"))
 
-(define get-current-H
+(define properties-get-current-objmap
   (let ()
     (define not-found (make-unique))
 
     (lambda (obj)
-      (define global (properties-storage-map))
+      (define global (properties-objmap))
       (define got (immutable-hashmap-ref global obj not-found))
       (if (eq? got not-found)
           (and (properties-for-everything?)
@@ -101,7 +101,7 @@
 (define (properties-make-setter getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define define-property-key (pproperty-key pprop))
-  (define H (get-current-H obj))
+  (define H (properties-get-current-objmap obj))
   (unless H (storage-not-found-response))
   (hashmap-set! H define-property-key evaluator))
 
@@ -111,7 +111,7 @@
   (define get
     (case-lambda
      ((obj)
-      (let ((H (get-current-H obj)))
+      (let ((H (properties-get-current-objmap obj)))
         (if H
             (let ((R (hashmap-ref H define-property-key not-found)))
               (if (eq? R not-found)
@@ -121,7 +121,7 @@
             (storage-not-found-response))))
      ((obj default)
       (let ()
-        (define H (get-current-H obj))
+        (define H (properties-get-current-objmap obj))
         (if H
             (let ((R (hashmap-ref H define-property-key not-found)))
               (if (eq? R not-found)
