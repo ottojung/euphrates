@@ -5,7 +5,6 @@
   (import (only (euphrates assert) assert))
   (import
     (only (euphrates catchu-case) catchu-case))
-  (import (only (euphrates const) const))
   (import
     (only (euphrates properties)
           define-property
