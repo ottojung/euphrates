@@ -32,6 +32,10 @@
 ;; (size object1) ;; => returns 10 ("hello" is memoized)
 
 
+(define properties-getters-map
+  (make-hashmap))
+
+
 (define properties-storage-map
   (make-parameter (make-immutable-hashmap)))
 
@@ -88,12 +92,10 @@
                      got2)))
           got))))
 
-(define properties-secret-get-obj
-  (make-unique))
-
 (define-type9 <pproperty>
-  (make-pproperty getfn) pproperty?
+  (make-pproperty getfn key) pproperty?
   (getfn pproperty-getfn)
+  (key pproperty-key)
   )
 
 (define-syntax define-property
@@ -103,7 +105,8 @@
        (define-syntax setter
          (syntax-rules ()
            ((_2 obj value)
-            (let* ((define-property-key (getter properties-secret-get-obj))
+            (let* ((pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
+                   (define-property-key (pproperty-key pprop))
                    (obj/eval obj)
                    (H (get-current-H obj/eval)))
               (unless H (storage-not-found-response))
@@ -115,16 +118,14 @@
            (define get
              (case-lambda
               ((obj)
-               (if (eq? obj properties-secret-get-obj) ;; This is a workaround for Guile that
-                   define-property-key                 ;; allows us to not declare `define-property-key' at module's toplevel. Go to https://www.gnu.org/software/guile/manual/html_node/Hygiene-and-the-Top_002dLevel.html to see what would happen if we didn't do this (under "Guile does a terrible thing here").
-                   (let ((H (get-current-H obj)))
-                     (if H
-                         (let ((R (hashmap-ref H define-property-key not-found)))
-                           (if (eq? R not-found)
-                               (raisu 'object-does-not-have-this-property
-                                      obj (quote getter) (quote setter))
-                               (R)))
-                         (storage-not-found-response)))))
+               (let ((H (get-current-H obj)))
+                 (if H
+                     (let ((R (hashmap-ref H define-property-key not-found)))
+                       (if (eq? R not-found)
+                           (raisu 'object-does-not-have-this-property
+                                  obj (quote getter) (quote setter))
+                           (R)))
+                     (storage-not-found-response))))
               ((obj default)
                (let ()
                  (define H (get-current-H obj))
@@ -136,6 +137,8 @@
                      default)))))
 
            (define p
-             (make-pproperty get))
+             (make-pproperty get define-property-key))
+
+           (hashmap-set! properties-getters-map get p)
 
            get))))))
