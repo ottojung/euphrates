@@ -91,6 +91,11 @@
 (define properties-secret-get-obj
   (make-unique))
 
+(define-type9 <pproperty>
+  (make-pproperty getfn) pproperty?
+  (getfn pproperty-getfn)
+  )
+
 (define-syntax define-property
   (syntax-rules ()
     ((_ getter setter)
@@ -104,27 +109,33 @@
               (unless H (storage-not-found-response))
               (hashmap-set! H define-property-key (memconst value))))))
        (define getter
-         (let ((not-found (make-unique))
-               (define-property-key (make-unique)))
+         (let ()
+           (define not-found (make-unique))
+           (define define-property-key (make-unique))
+           (define get
+             (case-lambda
+              ((obj)
+               (if (eq? obj properties-secret-get-obj) ;; This is a workaround for Guile that
+                   define-property-key                 ;; allows us to not declare `define-property-key' at module's toplevel. Go to https://www.gnu.org/software/guile/manual/html_node/Hygiene-and-the-Top_002dLevel.html to see what would happen if we didn't do this (under "Guile does a terrible thing here").
+                   (let ((H (get-current-H obj)))
+                     (if H
+                         (let ((R (hashmap-ref H define-property-key not-found)))
+                           (if (eq? R not-found)
+                               (raisu 'object-does-not-have-this-property
+                                      obj (quote getter) (quote setter))
+                               (R)))
+                         (storage-not-found-response)))))
+              ((obj default)
+               (let ()
+                 (define H (get-current-H obj))
+                 (if H
+                     (let ((R (hashmap-ref H define-property-key not-found)))
+                       (if (eq? R not-found)
+                           default
+                           (R)))
+                     default)))))
 
-           (case-lambda
-            ((obj)
-             (if (eq? obj properties-secret-get-obj) ;; This is a workaround for Guile that
-                 define-property-key                 ;; allows us to not declare `define-property-key' at module's toplevel. Go to https://www.gnu.org/software/guile/manual/html_node/Hygiene-and-the-Top_002dLevel.html to see what would happen if we didn't do this (under "Guile does a terrible thing here").
-                 (let ((H (get-current-H obj)))
-                   (if H
-                       (let ((R (hashmap-ref H define-property-key not-found)))
-                         (if (eq? R not-found)
-                             (raisu 'object-does-not-have-this-property
-                                    obj (quote getter) (quote setter))
-                             (R)))
-                       (storage-not-found-response)))))
-            ((obj default)
-             (let ()
-               (define H (get-current-H obj))
-               (if H
-                   (let ((R (hashmap-ref H define-property-key not-found)))
-                     (if (eq? R not-found)
-                         default
-                         (R)))
-                   default))))))))))
+           (define p
+             (make-pproperty get))
+
+           get))))))

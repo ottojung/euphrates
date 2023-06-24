@@ -3,6 +3,8 @@
   (euphrates properties)
   (export define-property with-properties)
   (import
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (euphrates hashmap)
           hashmap-ref
           hashmap-set!
