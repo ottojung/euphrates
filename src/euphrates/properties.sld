@@ -29,7 +29,6 @@
           if
           lambda
           let
-          let*
           make-parameter
           parameterize
           quote

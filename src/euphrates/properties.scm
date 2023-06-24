@@ -98,47 +98,52 @@
   (key pproperty-key)
   )
 
+(define (properties-make-setter getter obj evaluator)
+  (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
+  (define define-property-key (pproperty-key pprop))
+  (define H (get-current-H obj))
+  (unless H (storage-not-found-response))
+  (hashmap-set! H define-property-key evaluator))
+
+(define (properties-make-getter)
+  (define not-found (make-unique))
+  (define define-property-key (make-unique))
+  (define get
+    (case-lambda
+     ((obj)
+      (let ((H (get-current-H obj)))
+        (if H
+            (let ((R (hashmap-ref H define-property-key not-found)))
+              (if (eq? R not-found)
+                  (raisu 'object-does-not-have-this-property
+                         obj (quote getter) (quote setter))
+                  (R)))
+            (storage-not-found-response))))
+     ((obj default)
+      (let ()
+        (define H (get-current-H obj))
+        (if H
+            (let ((R (hashmap-ref H define-property-key not-found)))
+              (if (eq? R not-found)
+                  default
+                  (R)))
+            default)))))
+
+  (define p
+    (make-pproperty get define-property-key))
+
+  (hashmap-set! properties-getters-map get p)
+
+  get)
+
 (define-syntax define-property
   (syntax-rules ()
     ((_ getter setter)
      (begin
+       (define getter
+         (properties-make-getter))
+
        (define-syntax setter
          (syntax-rules ()
            ((_2 obj value)
-            (let* ((pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
-                   (define-property-key (pproperty-key pprop))
-                   (obj/eval obj)
-                   (H (get-current-H obj/eval)))
-              (unless H (storage-not-found-response))
-              (hashmap-set! H define-property-key (memconst value))))))
-       (define getter
-         (let ()
-           (define not-found (make-unique))
-           (define define-property-key (make-unique))
-           (define get
-             (case-lambda
-              ((obj)
-               (let ((H (get-current-H obj)))
-                 (if H
-                     (let ((R (hashmap-ref H define-property-key not-found)))
-                       (if (eq? R not-found)
-                           (raisu 'object-does-not-have-this-property
-                                  obj (quote getter) (quote setter))
-                           (R)))
-                     (storage-not-found-response))))
-              ((obj default)
-               (let ()
-                 (define H (get-current-H obj))
-                 (if H
-                     (let ((R (hashmap-ref H define-property-key not-found)))
-                       (if (eq? R not-found)
-                           default
-                           (R)))
-                     default)))))
-
-           (define p
-             (make-pproperty get define-property-key))
-
-           (hashmap-set! properties-getters-map get p)
-
-           get))))))
+            (properties-make-setter getter obj (memconst value)))))))))
