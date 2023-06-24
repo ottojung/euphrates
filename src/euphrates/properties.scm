@@ -32,6 +32,35 @@
 ;; (size object1) ;; => returns 10 ("hello" is memoized)
 
 
+(define-type9 <pproperty>
+  (make-pproperty getfn providers dependants key) pproperty?
+  (getfn pproperty-getfn)
+  (providers pproperty-providers)
+  (dependants pproperty-dependants)
+  (key pproperty-key)
+  )
+
+
+(define-type9 <pprovider>
+  (make-pprovider targets sources evaluator) pprovider?
+  (targets pprovider-targets)
+  (sources pprovider-sources)
+  (evaluator pprovider-evaluator)
+  )
+
+
+;; Every property has a timestamp associated with it.
+;; When provider sees that its target is older than source,
+;; it performs an update.
+;; The timestamp does not have to be the actual real-world time.
+;; For performance reasons it's gonna be simply an integer
+;; whose values is increased monotonically.
+(define properties-current-timestamp 0)
+(define (properties-bump-current-timestamp!)
+  (set! properties-bump-current-timestamp!
+        (+ 1 properties-bump-current-timestamp!)))
+
+
 (define properties-getters-map
   (make-hashmap))
 
@@ -46,6 +75,34 @@
 
 (define properties-everything-key
   (make-unique))
+
+
+(define (make-provider target source evaluator)
+  (define target-struct
+    (hashmap-ref properties-getters-map target
+                 (raisu 'cannot-find-target-property target)))
+
+  (define source-struct
+    (hashmap-ref properties-getters-map source
+                 (raisu 'cannot-find-source-property source)))
+
+  (define fun evaluator)
+
+  (define ret
+    (make-pprovider (list target-struct)
+                    (list source-struct)
+                    fun))
+
+  (define target-providers
+    (pproperty-providers target-struct))
+
+  (define source-dependants
+    (pproperty-dependants source-struct))
+
+  (stack-push! target-providers ret)
+  (stack-push! source-dependants target-struct)
+
+  ret)
 
 
 (define-syntax with-properties
@@ -92,56 +149,81 @@
                      got2)))
           got))))
 
-(define-type9 <pproperty>
-  (make-pproperty getfn key) pproperty?
-  (getfn pproperty-getfn)
-  (key pproperty-key)
-  )
-
 (define (properties-make-setter getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
-  (define define-property-key (pproperty-key pprop))
+  (define property-key (pproperty-key pprop))
   (define H (properties-get-current-objmap obj))
   (unless H (storage-not-found-response))
-  (hashmap-set! H define-property-key evaluator))
+  (hashmap-set! H property-key evaluator))
 
-(define (properties-make-getter)
+
+(define (run-providers this H obj key default-fn)
+  (define providers
+    (stack->list
+     (pproperty-providers this)))
+
+  (define first
+    (let loop ((rest providers))
+      (if (null? rest)
+          (default-fn)
+          (let ()
+            (define current (car rest))
+            (define ev (pprovider-evaluator current))
+            (define-values (evaluated? result) (ev obj))
+            (if evaluated?
+                result
+                (loop (cdr rest)))))))
+
+  (hashmap-set! H key (lambda _ first))
+
+  first)
+
+(define (make-property)
   (define not-found (make-unique))
-  (define define-property-key (make-unique))
+  (define property-key (make-unique))
   (define get
     (case-lambda
      ((obj)
-      (let ((H (properties-get-current-objmap obj)))
+      (let ()
+        (define H (properties-get-current-objmap obj))
         (if H
-            (let ((R (hashmap-ref H define-property-key not-found)))
+            (let ((R (hashmap-ref H property-key not-found)))
               (if (eq? R not-found)
-                  (raisu 'object-does-not-have-this-property
-                         obj (quote getter) (quote setter))
+                  (run-providers
+                   this H obj property-key
+                   (lambda _ (raisu 'object-does-not-have-this-property obj (quote getter) (quote setter))))
                   (R)))
             (storage-not-found-response))))
      ((obj default)
       (let ()
         (define H (properties-get-current-objmap obj))
         (if H
-            (let ((R (hashmap-ref H define-property-key not-found)))
+            (let ((R (hashmap-ref H property-key not-found)))
               (if (eq? R not-found)
-                  default
+                  (run-providers
+                   this H obj property-key
+                   (lambda _ default))
                   (R)))
             default)))))
 
-  (define p
-    (make-pproperty get define-property-key))
+  (define providers (stack-make))
+  (define dependants (stack-make))
+  (define this
+    (make-pproperty get providers dependants property-key))
 
-  (hashmap-set! properties-getters-map get p)
+  (hashmap-set! properties-getters-map get this)
 
   get)
 
 (define-syntax define-property
   (syntax-rules ()
+    ((_ getter)
+     (define getter (make-property)))
+
     ((_ getter setter)
      (begin
        (define getter
-         (properties-make-getter))
+         (make-property))
 
        (define-syntax setter
          (syntax-rules ()
