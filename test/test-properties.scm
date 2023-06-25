@@ -48,6 +48,13 @@
    (assert= (absolute object2 #f) 3)))
 
 (let ()
+  (define object1 -3)
+  (define-property absolute)
+  (with-properties
+   :for-everything
+   (assert= (absolute object1 #f) #f)))
+
+(let ()
 
   (define object1 -3)
   (define object2 -2)
