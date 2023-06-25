@@ -65,6 +65,14 @@
   (make-unique))
 
 
+(define not-found-obj
+  (make-unique))
+
+
+(define not-found-storage
+  (make-unique))
+
+
 (define (make-provider/general targets sources evaluator)
   (define target-structs
     (map
@@ -171,7 +179,7 @@
           got))))
 
 
-(define (run-providers this H obj key default-fn)
+(define (run-providers this H obj key default)
   (define providers
     (stack->list
      (pproperty-providers this)))
@@ -179,7 +187,7 @@
   (define first
     (let loop ((rest providers))
       (if (null? rest)
-          (default-fn)
+          default
           (let ()
             (define current (car rest))
             (define ev (pprovider-evaluator current))
@@ -194,27 +202,35 @@
 
 
 (define (make-property)
-  (define not-found (make-unique))
   (define property-key (make-unique))
-  (define (get obj)
+  (define (getfn obj)
     (define H (properties-get-current-objmap obj))
     (if H
-        (let ((R (hashmap-ref H property-key not-found)))
-          (if (eq? R not-found)
+        (let ((R (hashmap-ref H property-key not-found-obj)))
+          (if (eq? R not-found-obj)
               (run-providers
                this H obj property-key
-               (lambda _ (raisu 'object-does-not-have-this-property obj (quote getter) (quote setter))))
+               not-found-obj)
               (R)))
-        (storage-not-found-response)))
+        not-found-storage))
+
+  (define (get-wrapped obj)
+    (define ret (getfn obj))
+    (cond
+     ((eq? ret not-found-obj)
+      (raisu 'object-does-not-have-this-property obj (quote getter) (quote setter)))
+     ((eq? ret not-found-storage)
+      (storage-not-found-response))
+     (else ret)))
 
   (define providers (stack-make))
   (define dependants (stack-make))
   (define this
-    (make-pproperty get providers dependants property-key))
+    (make-pproperty getfn providers dependants property-key))
 
-  (hashmap-set! properties-getters-map get this)
+  (hashmap-set! properties-getters-map get-wrapped this)
 
-  get)
+  get-wrapped)
 
 
 (define-syntax define-property
@@ -231,16 +247,12 @@
     ((_ (prop obj) default)
      (let ()
        (define pprop (hashmap-ref properties-getters-map prop (raisu 'no-getter-initialized getter)))
-       (define property-key (pproperty-key pprop))
-       (define H (properties-get-current-objmap obj))
-       (if H
-           ((hashmap-ref
-             H property-key
-             (lambda _
-               (run-providers
-                pprop H obj property-key
-                (lambda _ default)))))
-           default)))))
+       (define getfn (pproperty-getfn pprop))
+       (define result (getfn obj))
+       (if (or (eq? result not-found-obj)
+               (eq? result not-found-storage))
+           default
+           result)))))
 
 
 (define (unset-property!/fun S H dependant obj)
@@ -278,7 +290,7 @@
 
 (define-syntax set-property!
   (syntax-rules ()
-    ((_2 (getter obj) value)
+    ((_ (getter obj) value)
      (set/unset-property!/fun getter obj (memconst value)))))
 
 

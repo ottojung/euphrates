@@ -46,9 +46,11 @@
           begin
           car
           cdr
+          cond
           define
           define-syntax
           define-values
+          else
           eq?
           for-each
           if
@@ -58,6 +60,7 @@
           make-parameter
           map
           null?
+          or
           parameterize
           quote
           syntax-rules
