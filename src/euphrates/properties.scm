@@ -12,6 +12,17 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;; Once upon a time, in the land of Quirkville, there was a jolly bunch of objects
+;; who loved to gossip about their ever-changing properties. Properties, my friends,
+;; are like the flavors of ice cream that objects get to wear.
+;; But here's the twist: just like your mood swings, these properties change over time!
+;; Picture a mischievous rubber duck that can magically turn from yellow to polka-dotted purple,
+;; making bath time quite the spectacle. Or how about a talking toaster that loves
+;; to switch between a British accent and a pirate's growl? And let's not forget the
+;; snazzy sneakers that sprout wings every full moon, allowing them to moonwalk
+;; across the room. So you see, properties are the zesty spices of an object's life,
+;; making them quirky, surprising, and just plain fun!
+
 ;; usage:
 ;; (define object1 (make-unique))
 ;; (with-properties
