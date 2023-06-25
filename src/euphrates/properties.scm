@@ -77,37 +77,49 @@
   (make-unique))
 
 
-(define (make-provider/general target source evaluator)
-  (define target-struct
-    (hashmap-ref properties-getters-map target
-                 (raisu 'cannot-find-target-property target)))
-
-  (define source-struct
-    (hashmap-ref properties-getters-map source
-                 (raisu 'cannot-find-source-property source)))
-
-  (define fun evaluator)
+(define (make-provider/general targets sources evaluator)
+  (define target-structs
+    (map
+      (lambda (target)
+        (hashmap-ref properties-getters-map target
+                     (raisu 'cannot-find-target-property target)))
+      targets))
+  (define source-structs
+    (map
+      (lambda (source)
+        (hashmap-ref properties-getters-map source
+                     (raisu 'cannot-find-source-property source)))
+      sources))
 
   (define ret
-    (make-pprovider (list target-struct)
-                    (list source-struct)
-                    fun))
+    (make-pprovider target-structs
+                    source-structs
+                    evaluator))
 
-  (define target-providers
-    (pproperty-providers target-struct))
+  (for-each
+   (lambda (target-struct)
+     (define target-providers
+       (pproperty-providers target-struct))
+     (stack-push! target-providers ret))
+   target-structs)
 
-  (define source-dependants
-    (pproperty-dependants source-struct))
+  (for-each
+   (lambda (source-struct)
+     (define source-dependants
+       (pproperty-dependants source-struct))
 
-  (stack-push! target-providers ret)
-  (stack-push! source-dependants target-struct)
+     (for-each
+      (lambda (target-struct)
+        (stack-push! source-dependants target-struct))
+      target-structs))
+   source-structs)
 
   ret)
 
 
-(define (make-provider target source evaluator)
+(define (make-provider targets sources evaluator)
   (make-provider/general
-   target source
+   targets sources
    (lambda args
      (values (apply evaluator args) #t))))
 

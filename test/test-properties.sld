@@ -17,6 +17,7 @@
           define
           lambda
           let
+          list
           quote
           set!))
   (cond-expand

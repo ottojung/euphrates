@@ -42,11 +42,12 @@
           define-syntax
           define-values
           eq?
+          for-each
           if
           lambda
           let
-          list
           make-parameter
+          map
           null?
           parameterize
           quote

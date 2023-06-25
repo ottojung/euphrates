@@ -258,8 +258,8 @@
    (set-identity-prop! object1 -3)
 
    (make-provider
-    absolute
-    identity-prop
+    (list absolute)
+    (list identity-prop)
     (lambda (this) (- (identity-prop this))))
 
    (assert= (absolute object1 #f) 3)
