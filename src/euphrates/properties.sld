@@ -18,6 +18,11 @@
           hashmap-set!
           make-hashmap))
   (import
+    (only (euphrates hashset)
+          hashset-add!
+          hashset-has?
+          make-hashset))
+  (import
     (only (euphrates immutable-hashmap)
           immutable-hashmap-ref
           immutable-hashmap-set

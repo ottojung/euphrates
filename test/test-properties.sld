@@ -14,8 +14,10 @@
   (import
     (only (scheme base)
           -
+          <
           begin
           define
+          if
           lambda
           let
           list
