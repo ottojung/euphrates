@@ -227,19 +227,22 @@
 
   get)
 
+
 (define-syntax define-property
   (syntax-rules ()
     ((_ getter)
      (define getter (make-property)))))
 
-(define (set-property/fun! getter obj evaluator)
+
+(define (set-property!/fun getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define property-key (pproperty-key pprop))
   (define H (properties-get-current-objmap obj))
   (unless H (storage-not-found-response))
   (hashmap-set! H property-key evaluator))
 
+
 (define-syntax set-property!
   (syntax-rules ()
     ((_2 (getter obj) value)
-     (set-property/fun! getter obj (memconst value)))))
+     (set-property!/fun getter obj (memconst value)))))
