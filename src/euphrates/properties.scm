@@ -33,10 +33,11 @@
 
 
 (define-type9 <pproperty>
-  (make-pproperty getfn providers dependants key) pproperty?
+  (make-pproperty getfn providers dependants sethook key) pproperty?
   (getfn pproperty-getfn)
   (providers pproperty-providers)
   (dependants pproperty-dependants)
+  (sethook pproperty-sethook)
   (key pproperty-key)
   )
 
@@ -225,8 +226,9 @@
 
   (define providers (stack-make))
   (define dependants (stack-make))
+  (define sethook #f)
   (define this
-    (make-pproperty getfn providers dependants property-key))
+    (make-pproperty getfn providers dependants sethook property-key))
 
   (hashmap-set! properties-getters-map get-wrapped this)
 
