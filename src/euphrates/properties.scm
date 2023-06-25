@@ -49,18 +49,6 @@
   )
 
 
-;; Every property has a timestamp associated with it.
-;; When provider sees that its target is older than source,
-;; it performs an update.
-;; The timestamp does not have to be the actual real-world time.
-;; For performance reasons it's gonna be simply an integer
-;; whose values is increased monotonically.
-(define properties-current-timestamp 0)
-(define (properties-bump-current-timestamp!)
-  (set! properties-bump-current-timestamp!
-        (+ 1 properties-bump-current-timestamp!)))
-
-
 (define properties-getters-map
   (make-hashmap))
 

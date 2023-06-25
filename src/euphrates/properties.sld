@@ -39,7 +39,6 @@
           stack-push!))
   (import
     (only (scheme base)
-          +
           _
           and
           apply
@@ -60,7 +59,6 @@
           null?
           parameterize
           quote
-          set!
           syntax-rules
           unless
           values))
