@@ -361,9 +361,10 @@
    (set-property! (identity-prop object1) -3)
 
    (define-provider
-    :targets (absolute)
-    :sources (identity-prop)
-    (lambda (this) (- (identity-prop this))))
+     absolute-calculator
+     :targets (absolute)
+     :sources (identity-prop)
+     (lambda (this) (- (identity-prop this))))
 
    (assert= (get-property (absolute object1) #f) 3)
    (assert= (get-property (identity-prop object1) #f) -3)

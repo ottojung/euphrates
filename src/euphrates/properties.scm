@@ -126,12 +126,14 @@
 
 (define-syntax define-provider
   (syntax-rules (:targets :sources)
-    ((_ :targets targets
+    ((_ name
+        :targets targets
         :sources sources
         evaluator)
-     (make-provider
-      (list . targets) (list . sources)
-      evaluator))))
+     (define name
+       (make-provider
+        (list . targets) (list . sources)
+        evaluator)))))
 
 
 (define-syntax with-properties
