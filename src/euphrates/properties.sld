@@ -6,6 +6,7 @@
     with-properties
     make-property
     make-provider
+    make-provider/general
     define-provider)
   (import
     (only (euphrates define-type9) define-type9))
@@ -33,6 +34,7 @@
           +
           _
           and
+          apply
           begin
           car
           cdr
@@ -50,7 +52,8 @@
           quote
           set!
           syntax-rules
-          unless))
+          unless
+          values))
   (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (srfi srfi-1) first)))

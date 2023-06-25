@@ -8,9 +8,17 @@
   (import
     (only (euphrates properties)
           define-property
+          make-provider
           with-properties))
   (import
-    (only (scheme base) begin define let quote set!))
+    (only (scheme base)
+          -
+          begin
+          define
+          lambda
+          let
+          quote
+          set!))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "test-properties.scm")))

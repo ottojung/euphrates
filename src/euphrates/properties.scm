@@ -77,7 +77,7 @@
   (make-unique))
 
 
-(define (make-provider target source evaluator)
+(define (make-provider/general target source evaluator)
   (define target-struct
     (hashmap-ref properties-getters-map target
                  (raisu 'cannot-find-target-property target)))
@@ -103,6 +103,13 @@
   (stack-push! source-dependants target-struct)
 
   ret)
+
+
+(define (make-provider target source evaluator)
+  (make-provider/general
+   target source
+   (lambda args
+     (values (apply evaluator args) #t))))
 
 
 (define-syntax with-properties
@@ -169,12 +176,12 @@
           (let ()
             (define current (car rest))
             (define ev (pprovider-evaluator current))
-            (define-values (evaluated? result) (ev obj))
+            (define-values (result evaluated?) (ev obj))
             (if evaluated?
-                result
+                (begin
+                  (hashmap-set! H key (lambda _ first))
+                  result)
                 (loop (cdr rest)))))))
-
-  (hashmap-set! H key (lambda _ first))
 
   first)
 
