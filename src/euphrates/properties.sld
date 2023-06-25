@@ -6,6 +6,7 @@
     with-properties
     make-property
     set-property!
+    get-property
     make-provider
     make-provider/general
     define-provider)
@@ -62,7 +63,6 @@
           syntax-rules
           unless
           values))
-  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (srfi srfi-1) first)))
     (else (import (only (srfi 1) first))))

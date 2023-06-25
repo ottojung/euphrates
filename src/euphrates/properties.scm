@@ -193,30 +193,16 @@
 (define (make-property)
   (define not-found (make-unique))
   (define property-key (make-unique))
-  (define get
-    (case-lambda
-     ((obj)
-      (let ()
-        (define H (properties-get-current-objmap obj))
-        (if H
-            (let ((R (hashmap-ref H property-key not-found)))
-              (if (eq? R not-found)
-                  (run-providers
-                   this H obj property-key
-                   (lambda _ (raisu 'object-does-not-have-this-property obj (quote getter) (quote setter))))
-                  (R)))
-            (storage-not-found-response))))
-     ((obj default)
-      (let ()
-        (define H (properties-get-current-objmap obj))
-        (if H
-            (let ((R (hashmap-ref H property-key not-found)))
-              (if (eq? R not-found)
-                  (run-providers
-                   this H obj property-key
-                   (lambda _ default))
-                  (R)))
-            default)))))
+  (define (get obj)
+    (define H (properties-get-current-objmap obj))
+    (if H
+        (let ((R (hashmap-ref H property-key not-found)))
+          (if (eq? R not-found)
+              (run-providers
+               this H obj property-key
+               (lambda _ (raisu 'object-does-not-have-this-property obj (quote getter) (quote setter))))
+              (R)))
+        (storage-not-found-response)))
 
   (define providers (stack-make))
   (define dependants (stack-make))
@@ -232,6 +218,26 @@
   (syntax-rules ()
     ((_ getter)
      (define getter (make-property)))))
+
+;; This is just like the usual call to property,
+;; but support default arguments
+(define-syntax get-property
+  (syntax-rules ()
+    ((_ (prop obj)) (prop obj))
+    ((_ (prop obj) default)
+     (let ()
+       (define not-found (make-unique))
+       (define pprop (hashmap-ref properties-getters-map prop (raisu 'no-getter-initialized getter)))
+       (define property-key (pproperty-key pprop))
+       (define H (properties-get-current-objmap obj))
+       (if H
+           (let ((R (hashmap-ref H property-key not-found)))
+             (if (eq? R not-found)
+                 (run-providers
+                  pprop H obj property-key
+                  (lambda _ default))
+                 (R)))
+           default)))))
 
 
 (define (unset-property! S H dependant obj)
