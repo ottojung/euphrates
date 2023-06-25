@@ -266,3 +266,31 @@
    (assert= (identity-prop object1 #f) -3)
 
    ))
+
+(let ()
+  (define object1 -3)
+
+  (define-property absolute)
+  (define-property identity-prop)
+
+  (with-properties
+   :for-everything
+   (assert= (absolute object1 #f) #f)
+   (assert= (identity-prop object1 #f) #f)
+
+   (set-property! (identity-prop object1) -3)
+
+   (make-provider
+    (list absolute)
+    (list identity-prop)
+    (lambda (this) (- (identity-prop this))))
+
+   (assert= (absolute object1 #f) 3)
+   (assert= (identity-prop object1 #f) -3)
+
+   (set-property! (identity-prop object1) -5)
+
+   (assert= (absolute object1 #f) 5)
+   (assert= (identity-prop object1 #f) -5)
+
+   ))

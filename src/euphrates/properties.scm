@@ -234,12 +234,31 @@
      (define getter (make-property)))))
 
 
+(define (unset-property! H dependant obj)
+  (define not-found (make-unique))
+  (define property-key (pproperty-key dependant))
+  (hashmap-delete! H property-key))
+
+
+(define (notify-dependants H pprop obj)
+  (define dependants
+    (stack->list
+     (pproperty-dependants pprop)))
+
+  (for-each
+   (lambda (dependant)
+     (unset-property! H dependant obj))
+   dependants))
+
+
 (define (set-property!/fun getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define property-key (pproperty-key pprop))
   (define H (properties-get-current-objmap obj))
   (unless H (storage-not-found-response))
-  (hashmap-set! H property-key evaluator))
+
+  (hashmap-set! H property-key evaluator)
+  (notify-dependants H pprop obj))
 
 
 (define-syntax set-property!
