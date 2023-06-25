@@ -142,9 +142,11 @@
                       (make-hashmap))))
        (let () . bodies)))))
 
+
 (define (storage-not-found-response)
   (raisu 'properties-storage-not-initiailized
          "Storage not initialized. Did you forget to use `with-properties'?"))
+
 
 (define properties-get-current-objmap
   (let ()
@@ -184,11 +186,12 @@
             (define-values (result evaluated?) (ev obj))
             (if evaluated?
                 (begin
-                  (hashmap-set! H key (lambda _ first))
+                  (hashmap-set! H key (lambda _ result))
                   result)
                 (loop (cdr rest)))))))
 
   first)
+
 
 (define (make-property)
   (define not-found (make-unique))
@@ -219,6 +222,7 @@
     ((_ getter)
      (define getter (make-property)))))
 
+
 ;; This is just like the usual call to property,
 ;; but support default arguments
 (define-syntax get-property
@@ -226,17 +230,16 @@
     ((_ (prop obj)) (prop obj))
     ((_ (prop obj) default)
      (let ()
-       (define not-found (make-unique))
        (define pprop (hashmap-ref properties-getters-map prop (raisu 'no-getter-initialized getter)))
        (define property-key (pproperty-key pprop))
        (define H (properties-get-current-objmap obj))
        (if H
-           (let ((R (hashmap-ref H property-key not-found)))
-             (if (eq? R not-found)
-                 (run-providers
-                  pprop H obj property-key
-                  (lambda _ default))
-                 (R)))
+           ((hashmap-ref
+             H property-key
+             (lambda _
+               (run-providers
+                pprop H obj property-key
+                (lambda _ default)))))
            default)))))
 
 

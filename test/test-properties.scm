@@ -21,13 +21,28 @@
   (define-property absolute)
 
   (with-properties
+   :for-everything
+
+   (assert= (get-property (absolute object1) #f) #f)
+
+   (set-property! (absolute object1) 3)
+
+   (assert= (absolute object1) 3)))
+
+(let ()
+
+  (define object1 -3)
+
+  (define-property absolute)
+
+  (with-properties
    :for object1
 
    (assert= (get-property (absolute object1) #f) #f)
 
    (set-property! (absolute object1) 3)
 
-   (assert= (get-property (absolute object1) #f) 3)))
+   (assert= (absolute object1) 3)))
 
 (let ()
 
@@ -45,7 +60,7 @@
    (set-property! (absolute object2) 3)
 
    (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) 3)))
+   (assert= (absolute object2) 3)))
 
 (let ()
   (define object1 -3)
