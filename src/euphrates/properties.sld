@@ -54,6 +54,7 @@
           if
           lambda
           let
+          list
           make-parameter
           map
           null?

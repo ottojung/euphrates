@@ -124,6 +124,16 @@
      (values (apply evaluator args) #t))))
 
 
+(define-syntax define-provider
+  (syntax-rules (:targets :sources)
+    ((_ :targets targets
+        :sources sources
+        evaluator)
+     (make-provider
+      (list . targets) (list . sources)
+      evaluator))))
+
+
 (define-syntax with-properties
   (syntax-rules (:for :for-everything)
     ((_ :for object . bodies)

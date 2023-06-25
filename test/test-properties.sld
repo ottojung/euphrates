@@ -8,6 +8,7 @@
   (import
     (only (euphrates properties)
           define-property
+          define-provider
           get-property
           make-provider
           set-property!
