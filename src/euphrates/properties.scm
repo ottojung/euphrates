@@ -16,21 +16,23 @@
 ;; (define object1 (make-unique))
 ;; (with-properties
 ;;   :for object1
-;;   (define-property size set-size!)
-;;   (set-size! object1 10)
+;;   (define-property size)
+;;   (set-property! (size object1) 10)
 ;;   (size object1) ;; => 10
 ;;   (size #t) ;; => throws an exception because size is not set for #t
-;;   (size #t #f) ;; => #f
+;;   (get-property (size #t) #f) ;; => #f ;; default is #f
 ;; )
 
 ;; note: setter is lazy:
-;; (define object1 (make-unique))
-;; (define-property size set-size! s1)
-;; (set-size! object1 (begin (display "hello") 10))
-;; ;; does not do anything
-;; (size object1) ;; => prints "hello" and returns 10
-;; (size object1) ;; => returns 10 ("hello" is memoized)
-
+;; (with-properties
+;;   :for-everything
+;;   (define object1 (make-unique))
+;;   (define-property size)
+;;   (set-property! (size object1) (begin (display "hello") 10))
+;;   ;; does not print anything yet
+;;   (size object1) ;; => prints "hello" and returns 10
+;;   (size object1) ;; => returns 10 ("hello" is memoized)
+;; )
 
 (define-type9 <pproperty>
   (make-pproperty getfn providers dependants sethook key) pproperty?
