@@ -168,13 +168,6 @@
                      got2)))
           got))))
 
-(define (properties-make-setter getter obj evaluator)
-  (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
-  (define property-key (pproperty-key pprop))
-  (define H (properties-get-current-objmap obj))
-  (unless H (storage-not-found-response))
-  (hashmap-set! H property-key evaluator))
-
 
 (define (run-providers this H obj key default-fn)
   (define providers
@@ -237,14 +230,16 @@
 (define-syntax define-property
   (syntax-rules ()
     ((_ getter)
-     (define getter (make-property)))
+     (define getter (make-property)))))
 
-    ((_ getter setter)
-     (begin
-       (define getter
-         (make-property))
+(define (set-property/fun! getter obj evaluator)
+  (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
+  (define property-key (pproperty-key pprop))
+  (define H (properties-get-current-objmap obj))
+  (unless H (storage-not-found-response))
+  (hashmap-set! H property-key evaluator))
 
-       (define-syntax setter
-         (syntax-rules ()
-           ((_2 obj value)
-            (properties-make-setter getter obj (memconst value)))))))))
+(define-syntax set-property!
+  (syntax-rules ()
+    ((_2 (getter obj) value)
+     (set-property/fun! getter obj (memconst value)))))

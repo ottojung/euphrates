@@ -9,6 +9,7 @@
     (only (euphrates properties)
           define-property
           make-provider
+          set-property!
           with-properties))
   (import
     (only (scheme base)

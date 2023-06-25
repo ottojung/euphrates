@@ -5,6 +5,7 @@
     define-property
     with-properties
     make-property
+    set-property!
     make-provider
     make-provider/general
     define-provider)
