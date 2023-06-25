@@ -7,6 +7,7 @@
     make-property
     set-property!
     get-property
+    unset-property!
     make-provider
     make-provider/general
     define-provider)

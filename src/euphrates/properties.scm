@@ -243,7 +243,7 @@
            default)))))
 
 
-(define (unset-property! S H dependant obj)
+(define (unset-property!/fun S H dependant obj)
   (define property-key (pproperty-key dependant))
   (unless (hashset-has? S property-key)
     (hashset-add! S property-key)
@@ -258,22 +258,32 @@
 
   (for-each
    (lambda (dependant)
-     (unset-property! S H dependant obj))
+     (unset-property!/fun S H dependant obj))
    dependants))
 
 
-(define (set-property!/fun getter obj evaluator)
+(define (set/unset-property!/fun getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define property-key (pproperty-key pprop))
   (define H (properties-get-current-objmap obj))
   (define S (make-hashset)) ;; for recursion checking
   (unless H (storage-not-found-response))
 
-  (hashmap-set! H property-key evaluator)
+  (if evaluator
+      (hashmap-set! H property-key evaluator)
+      (hashmap-delete! H property-key))
+
   (notify-dependants S H pprop obj))
 
 
 (define-syntax set-property!
   (syntax-rules ()
     ((_2 (getter obj) value)
-     (set-property!/fun getter obj (memconst value)))))
+     (set/unset-property!/fun getter obj (memconst value)))))
+
+
+(define unset-property!
+  (syntax-rules ()
+    ((_ (getter obj))
+     (let ()
+       (set/unset-property!/fun getter obj #f)))))
