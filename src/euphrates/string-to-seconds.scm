@@ -5,14 +5,19 @@
 
 (define (string->seconds s)
   (define lst (string->list s))
+  (define (get-last-number buf)
+    (string->number (list->string (reverse buf))))
+
   (let loop ((lst lst) (buf '()))
-    (if (null? lst) 0
+    (if (null? lst)
+        (if (null? buf) 0
+            (get-last-number buf))
         (let ((x (car lst)))
           (case x
             ((#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\.)
              (loop (cdr lst) (cons x buf)))
             (else
-             (let* ((last-number (string->number (list->string (reverse buf)))))
+             (let* ((last-number (get-last-number buf)))
                (or
                 (and
                  last-number
