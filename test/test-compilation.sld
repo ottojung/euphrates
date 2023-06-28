@@ -138,6 +138,7 @@
   (import
     (only (euphrates cartesian-product)
           cartesian-product))
+  (import (only (euphrates caseq) caseq))
   (import (only (euphrates catch-any) catch-any))
   (import
     (only (euphrates catch-specific) catch-specific))
@@ -1290,6 +1291,13 @@
   (import
     (only (euphrates properties)
           define-property
+          define-provider
+          get-property
+          make-property
+          make-provider
+          make-provider/general
+          set-property!
+          unset-property!
           with-properties))
   (import
     (only (euphrates queue-obj)
