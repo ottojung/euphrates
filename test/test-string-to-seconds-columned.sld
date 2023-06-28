@@ -1,13 +1,11 @@
 
 (define-library
   (test-string-to-seconds-columned)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates string-to-seconds-columned)
-          string->seconds/columned)
-    (only (euphrates string-to-seconds)
-          string->seconds)
-    (only (scheme base) * + begin let))
+          string->seconds/columned))
+  (import (only (scheme base) * + begin))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
