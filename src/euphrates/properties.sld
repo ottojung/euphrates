@@ -42,14 +42,12 @@
     (only (scheme base)
           _
           and
-          apply
           begin
+          call-with-values
           car
-          cdr
           cond
           define
           define-syntax
-          define-values
           else
           eq?
           for-each
@@ -57,6 +55,7 @@
           lambda
           let
           list
+          list-ref
           make-parameter
           map
           null?
@@ -64,11 +63,10 @@
           parameterize
           quote
           syntax-rules
-          unless
-          values))
+          unless))
   (cond-expand
-    (guile (import (only (srfi srfi-1) first)))
-    (else (import (only (srfi 1) first))))
+    (guile (import (only (srfi srfi-1) list-index)))
+    (else (import (only (srfi 1) list-index))))
   (cond-expand
     (guile (import (only (srfi srfi-17) setter)))
     (else (import (only (srfi 17) setter))))

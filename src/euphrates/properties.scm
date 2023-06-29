@@ -46,20 +46,21 @@
 ;; )
 
 (define-type9 <pproperty>
-  (make-pproperty getfn providers dependants sethook key) pproperty?
+  (make-pproperty getfn providersin providersou sethook key) pproperty?
   (getfn pproperty-getfn)
-  (providers pproperty-providers)
-  (dependants pproperty-dependants)
+  (providersin pproperty-providersin)
+  (providersou pproperty-providersou)
   (sethook pproperty-sethook)
   (key pproperty-key)
   )
 
 
 (define-type9 <pprovider>
-  (make-pprovider targets sources evaluator) pprovider?
+  (make-pprovider targets sources evaluator key) pprovider?
   (targets pprovider-targets)
   (sources pprovider-sources)
   (evaluator pprovider-evaluator)
+  (key pprovider-key)
   )
 
 
@@ -101,27 +102,25 @@
                      (raisu 'cannot-find-source-property source)))
       sources))
 
+  (define key (make-unique))
   (define ret
     (make-pprovider target-structs
                     source-structs
-                    evaluator))
+                    evaluator
+                    key))
 
   (for-each
    (lambda (target-struct)
-     (define target-providers
-       (pproperty-providers target-struct))
-     (stack-push! target-providers ret))
+     (define target-providersin
+       (pproperty-providersin target-struct))
+     (stack-push! target-providersin ret))
    target-structs)
 
   (for-each
    (lambda (source-struct)
-     (define source-dependants
-       (pproperty-dependants source-struct))
-
-     (for-each
-      (lambda (target-struct)
-        (stack-push! source-dependants target-struct))
-      target-structs))
+     (define source-providersou
+       (pproperty-providersou source-struct))
+     (stack-push! source-providersou ret))
    source-structs)
 
   ret)
@@ -130,8 +129,7 @@
 (define (make-provider targets sources evaluator)
   (make-provider/general
    targets sources
-   (lambda args
-     (values (apply evaluator args) #t))))
+   evaluator))
 
 
 (define-syntax define-provider
@@ -193,26 +191,46 @@
           got))))
 
 
+(define (pprovider-reset! H provider)
+  (define vkey (pprovider-key provider))
+  (hashmap-delete! H vkey))
+
+
+(define (pprovider-evaluate H provider this obj)
+  (define ev (pprovider-evaluator provider))
+  (define vkey (pprovider-key provider))
+  (define ret
+    (or (hashmap-ref H vkey #f)
+        (call-with-values
+            (lambda _ (ev obj))
+          (lambda results
+            (hashmap-set! H vkey results)
+            results))))
+
+  (if (null? ret)
+      (raisu 'provider-did-not-produce-the-promised-value provider)
+      (let ()
+        (define targets (pprovider-targets provider))
+
+        ;; TODO: optimize indexation
+        (define index
+          (list-index
+           (lambda (x) (eq? this x))
+           targets))
+
+        ;; FIXME: check the list length
+        (list-ref ret index))))
+
+
 (define (run-providers this H obj key default)
   (define providers
     (stack->list
-     (pproperty-providers this)))
+     (pproperty-providersin this)))
 
-  (define first
-    (let loop ((rest providers))
-      (if (null? rest)
-          default
-          (let ()
-            (define current (car rest))
-            (define ev (pprovider-evaluator current))
-            (define-values (result evaluated?) (ev obj))
-            (if evaluated?
-                (begin
-                  (hashmap-set! H key (lambda _ result))
-                  result)
-                (loop (cdr rest)))))))
-
-  first)
+  (if (null? providers) default
+      (let ()
+        (define best-provider (car providers))
+        (pprovider-evaluate H best-provider this obj))))
 
 
 (define (make-property)
@@ -237,11 +255,11 @@
       (storage-not-found-response))
      (else ret)))
 
-  (define providers (stack-make))
-  (define dependants (stack-make))
+  (define providersin (stack-make))
+  (define providersou (stack-make))
   (define sethook #f)
   (define this
-    (make-pproperty getfn providers dependants sethook property-key))
+    (make-pproperty getfn providersin providersou sethook property-key))
 
   (hashmap-set! properties-getters-map get-wrapped this)
 
@@ -279,14 +297,21 @@
 
 
 (define (notify-dependants S H pprop obj)
-  (define dependants
+  (define outs
     (stack->list
-     (pproperty-dependants pprop)))
+     (pproperty-providersou pprop)))
 
   (for-each
-   (lambda (dependant)
-     (unset-property!/fun S H dependant obj))
-   dependants))
+   (lambda (out)
+     (define dependants (pprovider-targets out))
+
+     (pprovider-reset! H out)
+
+     (for-each
+      (lambda (dependant)
+        (unset-property!/fun S H dependant obj))
+      dependants))
+   outs))
 
 
 (define (set/unset-property!/fun getter obj evaluator)
