@@ -39,6 +39,7 @@
           stack-push!))
   (import
     (only (scheme base)
+          +
           _
           and
           begin
@@ -53,6 +54,7 @@
           if
           lambda
           let
+          let*
           list
           list-ref
           make-parameter
@@ -61,6 +63,7 @@
           or
           parameterize
           quote
+          set!
           syntax-rules
           unless))
   (cond-expand

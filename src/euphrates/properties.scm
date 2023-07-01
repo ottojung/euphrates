@@ -66,10 +66,20 @@
 
 
 (define-type9 <propbox> ;; this is a wrapper for the stored value
-  (make-propbox mem evaluated?) propbox?
+  (make-propbox mem evaluated? ctime) propbox?
   (mem propbox-mem set-propbox-mem!)
   (evaluated? propbox-evaluated? set-propbox-evaluated?!)
+  (ctime propbox-ctime set-propbox-ctime!) ;; creation time for this instance of mem
   )
+
+
+(define properties-current-time 0)
+(define properties-advance-time
+  (lambda _
+    (let* ((current properties-current-time)
+           (new (+ 1 current)))
+      (set! properties-current-time new)
+      new)))
 
 
 (define properties-getters-map
@@ -109,16 +119,18 @@
 
 (define (make-propbox/eager value)
   (define evaluated? #t)
-  (make-propbox value evaluated?))
+  (define ctime (properties-advance-time))
+  (make-propbox value evaluated? ctime))
 
 
 (define-syntax make-propbox/lazy
   (syntax-rules ()
     ((_ value)
-     (let ((evaluated? #f))
+     (let ((evaluated? #f)
+           (ctime (properties-advance-time)))
        (make-propbox
         (lambda _ value)
-        evaluated?)))))
+        evaluated? ctime)))))
 
 
 (define (make-provider/general targets sources evaluator)
