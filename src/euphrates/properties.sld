@@ -52,6 +52,7 @@
           define-syntax
           else
           eq?
+          equal?
           for-each
           if
           lambda
@@ -61,6 +62,7 @@
           list-ref
           make-parameter
           map
+          not
           null?
           or
           parameterize
@@ -72,6 +74,9 @@
   (cond-expand
     (guile (import (only (srfi srfi-1) list-index)))
     (else (import (only (srfi 1) list-index))))
+  (cond-expand
+    (guile (import (only (srfi srfi-18) current-time)))
+    (else (import (only (srfi 18) current-time))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

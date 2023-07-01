@@ -66,11 +66,11 @@
 
 
 (define-type9 <pbox> ;; this is a wrapper for the stored value
-  (make-pbox mem evaluated? ctime outdated?) pbox?
+  (make-pbox mem evaluated? ctime pctime) pbox?
   (mem pbox-mem set-pbox-mem!)
   (evaluated? pbox-evaluated? set-pbox-evaluated?!)
   (ctime pbox-ctime set-pbox-ctime!) ;; creation time for this instance of mem
-  (outdated? pbox-outdated? set-pbox-outdated?!) ;; true if one of the dependencies has updated
+  (pctime pbox-pctime set-pbox-pctime!) ;; potential creation time - i.e. ctime if recalculated
   )
 
 
@@ -118,22 +118,28 @@
         new)))
 
 
+(define (pbox-outdated? pbox)
+  (not (equal? (pbox-ctime pbox)
+               (pbox-pctime pbox))))
+
+
 (define (make-pbox/eager value)
   (define evaluated? #t)
   (define ctime (properties-advance-time))
-  (define outdated? #f)
-  (make-pbox value evaluated? ctime outdated?))
+  (define pctime ctime)
+  (make-pbox value evaluated? ctime pctime))
 
 
 (define-syntax make-pbox/lazy
   (syntax-rules ()
     ((_ value)
-     (let ((evaluated? #f)
-           (ctime (properties-advance-time))
-           (outdated? #f))
+     (let ()
+       (define evaluated? #f)
+       (define ctime (properties-advance-time))
+       (define pctime ctime)
        (make-pbox
         (lambda _ value)
-        evaluated? ctime outdated?)))))
+        evaluated? ctime pctime)))))
 
 
 (define (make-provider/general targets sources evaluator)
@@ -412,12 +418,14 @@
 (define (outdate-property!/fun getter obj)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define H (properties-get-current-objmap obj))
+  (define current-time properties-current-time)
 
   (define (property-fun p)
     (define property-key (pproperty-key p))
     (define current (hashmap-ref H property-key #f))
     (when current
-      (set-pbox-outdated?! current #t)))
+      (set-pbox-pctime! current current-time))
+    #t)
 
   (define provider-fun (lambda _ (when #f #t)))
 
