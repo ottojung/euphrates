@@ -338,30 +338,39 @@
            result)))))
 
 
-(define (traverse-properties-graph
-         property-fun provider-fun
-         starting-pprop)
-  (define S (make-hashset))
-  (define (dive pprop)
-    (unless (hashset-has? S pprop)
-      (hashset-add! S pprop)
-      (when (property-fun pprop)
-        (loop pprop))
-      (hashset-delete! S pprop)))
+(define (traverse-properties-graph/generic forward?)
+  (lambda (property-fun provider-fun starting-pprop)
+    (define S (make-hashset))
+    (define (dive pprop)
+      (unless (hashset-has? S pprop)
+        (hashset-add! S pprop)
+        (when (property-fun pprop)
+          (loop pprop))
+        (hashset-delete! S pprop)))
 
-  (define (loop pprop)
-    (define outs
-      (stack->list
-       (pproperty-providersou pprop)))
-    (for-each
-     (lambda (out)
-       (define dependants (pprovider-targets out))
-       (provider-fun out)
-       (for-each dive dependants))
-     outs))
+    (define (loop pprop)
+      (define outs
+        (stack->list
+         (if forward?
+             (pproperty-providersou pprop)
+             (pproperty-providersin pprop))))
+      (for-each
+       (lambda (out)
+         (define dependants
+           (if forward?
+               (pprovider-targets out)
+               (pprovider-sources out)))
+         (provider-fun out)
+         (for-each dive dependants))
+       outs))
 
-  (dive starting-pprop))
+    (dive starting-pprop)))
 
+(define traverse-properties-graph
+  (traverse-properties-graph/generic #t))
+
+(define traverse-properties-graph/reverse
+  (traverse-properties-graph/generic #f))
 
 (define (set/unset-property!/fun getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
