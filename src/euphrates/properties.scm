@@ -65,12 +65,12 @@
   )
 
 
-(define-type9 <propbox> ;; this is a wrapper for the stored value
-  (make-propbox mem evaluated? ctime outdated?) propbox?
-  (mem propbox-mem set-propbox-mem!)
-  (evaluated? propbox-evaluated? set-propbox-evaluated?!)
-  (ctime propbox-ctime set-propbox-ctime!) ;; creation time for this instance of mem
-  (outdated? propbox-outdated? set-propbox-outdated?!) ;; true if one of the dependencies has updated
+(define-type9 <pbox> ;; this is a wrapper for the stored value
+  (make-pbox mem evaluated? ctime outdated?) pbox?
+  (mem pbox-mem set-pbox-mem!)
+  (evaluated? pbox-evaluated? set-pbox-evaluated?!)
+  (ctime pbox-ctime set-pbox-ctime!) ;; creation time for this instance of mem
+  (outdated? pbox-outdated? set-pbox-outdated?!) ;; true if one of the dependencies has updated
   )
 
 
@@ -107,31 +107,31 @@
   (make-unique))
 
 
-(define (propbox-value propbox)
-  (if (propbox-evaluated? propbox)
-      (propbox-mem propbox)
+(define (pbox-value pbox)
+  (if (pbox-evaluated? pbox)
+      (pbox-mem pbox)
       (let ()
-        (define fun (propbox-mem propbox))
+        (define fun (pbox-mem pbox))
         (define new (fun))
-        (set-propbox-mem! propbox new)
-        (set-propbox-evaluated?! propbox #t)
+        (set-pbox-mem! pbox new)
+        (set-pbox-evaluated?! pbox #t)
         new)))
 
 
-(define (make-propbox/eager value)
+(define (make-pbox/eager value)
   (define evaluated? #t)
   (define ctime (properties-advance-time))
   (define outdated? #f)
-  (make-propbox value evaluated? ctime outdated?))
+  (make-pbox value evaluated? ctime outdated?))
 
 
-(define-syntax make-propbox/lazy
+(define-syntax make-pbox/lazy
   (syntax-rules ()
     ((_ value)
      (let ((evaluated? #f)
            (ctime (properties-advance-time))
            (outdated? #f))
-       (make-propbox
+       (make-pbox
         (lambda _ value)
         evaluated? ctime outdated?)))))
 
@@ -253,7 +253,7 @@
             (lambda _ (ev obj))
           (lambda results
             (define maped
-              (map make-propbox/eager results))
+              (map make-pbox/eager results))
             (hashmap-set! H vkey maped)
             maped))))
 
@@ -269,7 +269,7 @@
            targets))
 
         ;; FIXME: check the list length
-        (propbox-mem (list-ref ret index)))))
+        (pbox-mem (list-ref ret index)))))
 
 
 (define (run-providers this H obj key default)
@@ -290,7 +290,7 @@
     (if H
         (let ((R (hashmap-ref H property-key #f)))
           (if R
-              (propbox-value R)
+              (pbox-value R)
               (run-providers
                this H obj property-key
                not-found-obj)))
@@ -383,7 +383,7 @@
     ((_ (getter obj) value)
      (set/unset-property!/fun
       getter obj
-      (make-propbox/lazy value)))))
+      (make-pbox/lazy value)))))
 
 
 (define-syntax unset-property!
