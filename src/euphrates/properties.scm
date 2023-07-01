@@ -300,7 +300,7 @@
     (define ret (getfn obj))
     (cond
      ((eq? ret not-found-obj)
-      (raisu 'object-does-not-have-this-property obj (quote getter) (quote setter)))
+      (raisu 'object-does-not-have-this-property obj))
      ((eq? ret not-found-storage)
       (storage-not-found-response))
      (else ret)))
@@ -338,44 +338,51 @@
            result)))))
 
 
-(define (unset-property!/fun S H dependant obj)
-  (define property-key (pproperty-key dependant))
-  (unless (hashset-has? S property-key)
-    (hashset-add! S property-key)
-    (hashmap-delete! H property-key)
-    (notify-dependants S H dependant obj)))
+(define (traverse-properties-graph
+         property-fun provider-fun
+         starting-pprop)
+  (define S (make-hashset))
+  (define (dive pprop)
+    (unless (hashset-has? S pprop)
+      (hashset-add! S pprop)
+      (property-fun pprop)
+      (loop pprop)
+      (hashset-delete! S pprop)))
 
+  (define (loop pprop)
+    (define outs
+      (stack->list
+       (pproperty-providersou pprop)))
+    (for-each
+     (lambda (out)
+       (define dependants (pprovider-targets out))
+       (provider-fun out)
+       (for-each dive dependants))
+     outs))
 
-(define (notify-dependants S H pprop obj)
-  (define outs
-    (stack->list
-     (pproperty-providersou pprop)))
-
-  (for-each
-   (lambda (out)
-     (define dependants (pprovider-targets out))
-
-     (pprovider-reset! H out)
-
-     (for-each
-      (lambda (dependant)
-        (unset-property!/fun S H dependant obj))
-      dependants))
-   outs))
+  (dive starting-pprop))
 
 
 (define (set/unset-property!/fun getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
-  (define property-key (pproperty-key pprop))
   (define H (properties-get-current-objmap obj))
-  (define S (make-hashset)) ;; for recursion checking
+
+  (define (property-fun p)
+    (define property-key (pproperty-key p))
+    (if (eq? p pprop)
+        (if evaluator
+            (hashmap-set! H property-key evaluator)
+            (hashmap-delete! H property-key))
+        (hashmap-delete! H property-key)))
+
+  (define (provider-fun provider)
+    (pprovider-reset! H provider))
+
   (unless H (storage-not-found-response))
 
-  (if evaluator
-      (hashmap-set! H property-key evaluator)
-      (hashmap-delete! H property-key))
-
-  (notify-dependants S H pprop obj))
+  (traverse-properties-graph
+   property-fun provider-fun
+   pprop))
 
 
 (define-syntax set-property!

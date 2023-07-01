@@ -22,6 +22,7 @@
   (import
     (only (euphrates hashset)
           hashset-add!
+          hashset-delete!
           hashset-has?
           make-hashset))
   (import
@@ -69,9 +70,6 @@
   (cond-expand
     (guile (import (only (srfi srfi-1) list-index)))
     (else (import (only (srfi 1) list-index))))
-  (cond-expand
-    (guile (import (only (srfi srfi-17) setter)))
-    (else (import (only (srfi 17) setter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
