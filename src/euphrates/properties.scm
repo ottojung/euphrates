@@ -323,7 +323,7 @@
 
 
 ;; This is just like the usual call to property,
-;; but support default arguments
+;; but supports default arguments
 (define-syntax get-property
   (syntax-rules ()
     ((_ (prop obj)) (prop obj))
@@ -396,8 +396,7 @@
 (define-syntax unset-property!
   (syntax-rules ()
     ((_ (getter obj))
-     (let ()
-       (set/unset-property!/fun getter obj #f)))))
+     (set/unset-property!/fun getter obj #f))))
 
 
 (define (outdate-property!/fun getter obj)
