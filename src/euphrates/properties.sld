@@ -31,7 +31,6 @@
           make-immutable-hashmap))
   (import
     (only (euphrates make-unique) make-unique))
-  (import (only (euphrates memconst) memconst))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates stack)

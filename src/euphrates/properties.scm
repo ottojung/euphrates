@@ -45,6 +45,7 @@
 ;;   (size object1) ;; => returns 10 ("hello" is memoized)
 ;; )
 
+
 (define-type9 <pproperty>
   (make-pproperty getfn providersin providersou sethook key) pproperty?
   (getfn pproperty-getfn)
@@ -61,6 +62,13 @@
   (sources pprovider-sources)
   (evaluator pprovider-evaluator)
   (key pprovider-key)
+  )
+
+
+(define-type9 <propbox> ;; this is a wrapper for the stored value
+  (make-propbox mem evaluated?) propbox?
+  (mem propbox-mem set-propbox-mem!)
+  (evaluated? propbox-evaluated? set-propbox-evaluated?!)
   )
 
 
@@ -86,6 +94,31 @@
 
 (define not-found-storage
   (make-unique))
+
+
+(define (propbox-value propbox)
+  (if (propbox-evaluated? propbox)
+      (propbox-mem propbox)
+      (let ()
+        (define fun (propbox-mem propbox))
+        (define new (fun))
+        (set-propbox-mem! propbox new)
+        (set-propbox-evaluated?! propbox #t)
+        new)))
+
+
+(define (make-propbox/eager value)
+  (define evaluated? #t)
+  (make-propbox value evaluated?))
+
+
+(define-syntax make-propbox/lazy
+  (syntax-rules ()
+    ((_ value)
+     (let ((evaluated? #f))
+       (make-propbox
+        (lambda _ value)
+        evaluated?)))))
 
 
 (define (make-provider/general targets sources evaluator)
@@ -204,8 +237,10 @@
         (call-with-values
             (lambda _ (ev obj))
           (lambda results
-            (hashmap-set! H vkey results)
-            results))))
+            (define maped
+              (map make-propbox/eager results))
+            (hashmap-set! H vkey maped)
+            maped))))
 
   (if (null? ret)
       (raisu 'provider-did-not-produce-the-promised-value provider)
@@ -219,7 +254,7 @@
            targets))
 
         ;; FIXME: check the list length
-        (list-ref ret index))))
+        (propbox-mem (list-ref ret index)))))
 
 
 (define (run-providers this H obj key default)
@@ -238,12 +273,12 @@
   (define (getfn obj)
     (define H (properties-get-current-objmap obj))
     (if H
-        (let ((R (hashmap-ref H property-key not-found-obj)))
-          (if (eq? R not-found-obj)
+        (let ((R (hashmap-ref H property-key #f)))
+          (if R
+              (propbox-value R)
               (run-providers
                this H obj property-key
-               not-found-obj)
-              (R)))
+               not-found-obj)))
         not-found-storage))
 
   (define (get-wrapped obj)
@@ -331,7 +366,9 @@
 (define-syntax set-property!
   (syntax-rules ()
     ((_ (getter obj) value)
-     (set/unset-property!/fun getter obj (memconst value)))))
+     (set/unset-property!/fun
+      getter obj
+      (make-propbox/lazy value)))))
 
 
 (define-syntax unset-property!
