@@ -398,3 +398,28 @@
     ((_ (getter obj))
      (let ()
        (set/unset-property!/fun getter obj #f)))))
+
+
+(define (outdate-property!/fun getter obj)
+  (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
+  (define H (properties-get-current-objmap obj))
+
+  (define (property-fun p)
+    (define property-key (pproperty-key p))
+    (define current (hashmap-ref H property-key #f))
+    (when current
+      (set-pbox-outdated?! current #t)))
+
+  (define provider-fun (lambda _ (when #f #t)))
+
+  (unless H (storage-not-found-response))
+
+  (traverse-properties-graph
+   property-fun provider-fun
+   pprop))
+
+
+(define-syntax outdate-property!
+  (syntax-rules ()
+    ((_ (getter obj))
+     (outdate-property!/fun getter obj))))

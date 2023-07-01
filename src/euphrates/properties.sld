@@ -8,6 +8,7 @@
     set-property!
     get-property
     unset-property!
+    outdate-property!
     make-provider
     make-provider/general
     define-provider)
@@ -66,7 +67,8 @@
           quote
           set!
           syntax-rules
-          unless))
+          unless
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-1) list-index)))
     (else (import (only (srfi 1) list-index))))
