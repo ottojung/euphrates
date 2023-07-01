@@ -345,8 +345,8 @@
   (define (dive pprop)
     (unless (hashset-has? S pprop)
       (hashset-add! S pprop)
-      (property-fun pprop)
-      (loop pprop)
+      (when (property-fun pprop)
+        (loop pprop))
       (hashset-delete! S pprop)))
 
   (define (loop pprop)
@@ -373,7 +373,8 @@
         (if evaluator
             (hashmap-set! H property-key evaluator)
             (hashmap-delete! H property-key))
-        (hashmap-delete! H property-key)))
+        (hashmap-delete! H property-key))
+    #t)
 
   (define (provider-fun provider)
     (pprovider-reset! H provider))
