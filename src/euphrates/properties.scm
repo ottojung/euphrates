@@ -66,10 +66,11 @@
 
 
 (define-type9 <propbox> ;; this is a wrapper for the stored value
-  (make-propbox mem evaluated? ctime) propbox?
+  (make-propbox mem evaluated? ctime outdated?) propbox?
   (mem propbox-mem set-propbox-mem!)
   (evaluated? propbox-evaluated? set-propbox-evaluated?!)
   (ctime propbox-ctime set-propbox-ctime!) ;; creation time for this instance of mem
+  (outdated? propbox-outdated? set-propbox-outdated?!) ;; true if one of the dependencies has updated
   )
 
 
@@ -120,17 +121,19 @@
 (define (make-propbox/eager value)
   (define evaluated? #t)
   (define ctime (properties-advance-time))
-  (make-propbox value evaluated? ctime))
+  (define outdated? #f)
+  (make-propbox value evaluated? ctime outdated?))
 
 
 (define-syntax make-propbox/lazy
   (syntax-rules ()
     ((_ value)
      (let ((evaluated? #f)
-           (ctime (properties-advance-time)))
+           (ctime (properties-advance-time))
+           (outdated? #f))
        (make-propbox
         (lambda _ value)
-        evaluated? ctime)))))
+        evaluated? ctime outdated?)))))
 
 
 (define (make-provider/general targets sources evaluator)
