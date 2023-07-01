@@ -334,7 +334,7 @@
      (set/unset-property!/fun getter obj (memconst value)))))
 
 
-(define unset-property!
+(define-syntax unset-property!
   (syntax-rules ()
     ((_ (getter obj))
      (let ()
