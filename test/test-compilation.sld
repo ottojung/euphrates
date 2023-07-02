@@ -1296,6 +1296,7 @@
           make-property
           make-provider
           make-provider/general
+          outdate-property!
           set-property!
           unset-property!
           with-properties))
