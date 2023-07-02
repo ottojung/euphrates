@@ -66,11 +66,11 @@
 
 
 (define-type9 <pbox> ;; this is a wrapper for the stored value
-  (make-pbox mem evaluated? ctime pctime) pbox?
+  (make-pbox mem evaluated? mtime pmtime) pbox?
   (mem pbox-mem set-pbox-mem!)
   (evaluated? pbox-evaluated? set-pbox-evaluated?!)
-  (ctime pbox-ctime set-pbox-ctime!) ;; creation time for this instance of mem
-  (pctime pbox-pctime set-pbox-pctime!) ;; potential creation time - i.e. ctime if recalculated
+  (mtime pbox-mtime set-pbox-mtime!) ;; modification time for this instance of mem
+  (pmtime pbox-pmtime set-pbox-pmtime!) ;; possible modification time - i.e. mtime if recalculated
   )
 
 
@@ -119,15 +119,15 @@
 
 
 (define (pbox-outdated? pbox)
-  (not (equal? (pbox-ctime pbox)
-               (pbox-pctime pbox))))
+  (not (equal? (pbox-mtime pbox)
+               (pbox-pmtime pbox))))
 
 
 (define (make-pbox/eager value)
   (define evaluated? #t)
-  (define ctime (properties-advance-time))
-  (define pctime ctime)
-  (make-pbox value evaluated? ctime pctime))
+  (define mtime (properties-advance-time))
+  (define pmtime mtime)
+  (make-pbox value evaluated? mtime pmtime))
 
 
 (define-syntax make-pbox/lazy
@@ -135,11 +135,11 @@
     ((_ value)
      (let ()
        (define evaluated? #f)
-       (define ctime (properties-advance-time))
-       (define pctime ctime)
+       (define mtime (properties-advance-time))
+       (define pmtime mtime)
        (make-pbox
         (lambda _ value)
-        evaluated? ctime pctime)))))
+        evaluated? mtime pmtime)))))
 
 
 (define (make-provider/general targets sources evaluator)
@@ -388,7 +388,9 @@
         (if evaluator
             (hashmap-set! H property-key evaluator)
             (hashmap-delete! H property-key))
-        (hashmap-delete! H property-key))
+        (let ((current (hashmap-ref H property-key #f)))
+          (when current
+            (set-pbox-pmtime! current 'to-be-determined))))
     #t)
 
   (define (provider-fun provider)
@@ -418,13 +420,12 @@
 (define (outdate-property!/fun getter obj)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define H (properties-get-current-objmap obj))
-  (define current-time properties-current-time)
 
   (define (property-fun p)
     (define property-key (pproperty-key p))
     (define current (hashmap-ref H property-key #f))
     (when current
-      (set-pbox-pctime! current current-time))
+      (set-pbox-pmtime! current 'to-be-determined))
     #t)
 
   (define provider-fun (lambda _ (when #f #t)))
@@ -440,3 +441,84 @@
   (syntax-rules ()
     ((_ (getter obj))
      (outdate-property!/fun getter obj))))
+
+
+(define (mtime->numer x)
+  (cond
+   ((equal? 'not-evaluatable x) -1)
+   ((number? x)
+    (if (< x 0)
+        (raisu 'mtime-should-not-be-negative x)
+        x))
+   (else
+    (raisu 'bad-mtime-type x))))
+
+
+(define (get-best-mtime mtimes)
+  (list-maximal-element-or
+   'not-evaluatable
+   mtime->numer
+   mtimes))
+
+
+(define (get-providers-best-mtime/rec dive in)
+  (define dependants
+    (pprovider-sources in))
+  (define mtimes
+    (map dive dependants))
+
+  (get-best-mtime mtimes))
+
+
+(define (get-providers-best-mtime in)
+  (get-providers-best-mtime/rec get-pmtime in))
+
+
+(define (get-pmtime getter obj)
+  (define starting-pprop
+    (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
+  (define current-time properties-current-time)
+  (define S (make-hashset))
+  (define H (properties-get-current-objmap obj))
+
+  (define (dive pprop)
+    (if (hashset-has? S pprop)
+        (let ()
+          (define property-key (pproperty-key pprop))
+          (define pbox (hashmap-ref H property-key #f))
+          (define r
+            (if pbox (pbox-mtime pbox)
+                'not-evaluatable))
+          r)
+        (begin
+          (hashset-add! S pprop)
+          (let ((ret (loop pprop)))
+            (hashset-delete! S pprop)
+            ret))))
+
+  (define (loop pprop)
+    (define property-key (pproperty-key pprop))
+    (define pbox (hashmap-ref H property-key #f))
+
+    (if (or (not pbox)
+            (pbox-outdated? pbox))
+        (let ()
+          (define ins
+            (stack->list
+             (pproperty-providersin pprop)))
+          (define mtimes
+            (map (comp (get-providers-best-mtime/rec dive)) ins))
+          (get-best-mtime mtimes))
+
+        (pbox-pmtime pbox)))
+
+  (unless H (storage-not-found-response))
+
+  (dive starting-pprop))
+
+
+(define-syntax property-evaluatable?
+  (syntax-rules ()
+    ((_ (getter obj))
+     (let ((pmtime (get-pmtime getter obj)))
+       (and (number? pmtime) pmtime)))))

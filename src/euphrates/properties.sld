@@ -11,7 +11,9 @@
     outdate-property!
     make-provider
     make-provider/general
+    property-evaluatable?
     define-provider)
+  (import (only (euphrates comp) comp))
   (import
     (only (euphrates define-type9) define-type9))
   (import
@@ -32,6 +34,9 @@
           immutable-hashmap-set
           make-immutable-hashmap))
   (import
+    (only (euphrates list-maximal-element-or)
+          list-maximal-element-or))
+  (import
     (only (euphrates make-unique) make-unique))
   (import (only (euphrates raisu) raisu))
   (import
@@ -42,6 +47,7 @@
   (import
     (only (scheme base)
           +
+          <
           _
           and
           begin
@@ -64,6 +70,7 @@
           map
           not
           null?
+          number?
           or
           parameterize
           quote
