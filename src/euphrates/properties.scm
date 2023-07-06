@@ -475,11 +475,17 @@
   (get-best-mtime mtimes))
 
 
-(define (get-providers-best-mtime in)
-  (get-providers-best-mtime/rec get-pmtime in))
+(define (get-provider-umtime/optimized provider dive)
+  (get-providers-best-mtime/rec dive provider))
 
 
-(define (get-pmtime getter obj)
+(define (get-provider-umtime provider obj)
+  (define (dive pprop)
+    (get-property-umtime pprop obj))
+  (get-providers-best-mtime/rec provider dive))
+
+
+(define (get-property-umtime getter obj)
   (define starting-pprop
     (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define current-time properties-current-time)
@@ -512,7 +518,7 @@
             (stack->list
              (pproperty-providersin pprop)))
           (define mtimes
-            (map (comp (get-providers-best-mtime/rec dive)) ins))
+            (map (comp (get-provider-umtime/optimized dive)) ins))
           (get-best-mtime mtimes))
 
         (pbox-pmtime pbox)))
@@ -525,5 +531,5 @@
 (define-syntax property-evaluatable?
   (syntax-rules ()
     ((_ (getter obj))
-     (let ((pmtime (get-pmtime getter obj)))
+     (let ((pmtime (get-property-umtime getter obj)))
        (and (number? pmtime) pmtime)))))
