@@ -15,6 +15,8 @@
     define-provider)
   (import (only (euphrates comp) comp))
   (import
+    (only (euphrates define-pair) define-pair))
+  (import
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates hashmap)
@@ -56,7 +58,9 @@
           and
           begin
           call-with-values
+          car
           cond
+          cons
           define
           define-syntax
           else

@@ -284,11 +284,14 @@
 
 
 (define (get-best-provider obj providers)
+  (define paired
+    (map (lambda (provider)
+           (cons (get-provider-umtime provider obj) provider))
+         providers))
+
   (list-maximal-element-or/proj
-   #f (lambda (provider)
-        (get-provider-umtime provider obj))
-   mtime-better?
-   providers))
+   #f car mtime-better?
+   paired))
 
 
 (define (run-providers this H obj key default)
@@ -298,8 +301,12 @@
 
   (if (null? providers) default
       (let ()
-        (define best-provider
+        (define best
           (get-best-provider obj providers))
+
+        (define-pair (best-score best-provider)
+          (if best best (cons 'not-evaluatable #f)))
+
         (if best-provider
             (pprovider-evaluate H key best-provider this obj)
             default))))
@@ -501,12 +508,10 @@
   (unless H (storage-not-found-response))
   (define (dive pprop)
     (get-property-umtime/optimized S H pprop obj))
-  (get-provider-best-mtime/rec provider dive))
+  (get-provider-best-mtime/rec dive provider))
 
 
-(define (get-property-umtime/optimized S H getter obj)
-  (define starting-pprop
-    (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
+(define (get-property-umtime/optimized S H starting-pprop obj)
   (define current-time properties-current-time)
 
   (define (dive pprop)
@@ -544,10 +549,12 @@
 
 
 (define (get-property-umtime getter obj)
+  (define starting-pprop
+    (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define S (make-hashset))
   (define H (properties-get-current-objmap obj))
   (unless H (storage-not-found-response))
-  (get-property-umtime/optimized S H getter obj))
+  (get-property-umtime/optimized S H starting-pprop obj))
 
 
 (define-syntax property-evaluatable?
