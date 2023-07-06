@@ -250,7 +250,7 @@
   (hashmap-delete! H vkey))
 
 
-(define (pprovider-evaluate H provider this obj)
+(define (pprovider-evaluate H key provider this obj)
   (define ev (pprovider-evaluator provider))
   (define vkey (pprovider-key provider))
   (define ret
@@ -275,7 +275,12 @@
            targets))
 
         ;; FIXME: check the list length
-        (pbox-mem (list-ref ret index)))))
+        (define rbox
+          (list-ref ret index))
+
+        (hashmap-set! H key rbox)
+
+        (pbox-mem rbox))))
 
 
 (define (run-providers this H obj key default)
@@ -286,7 +291,7 @@
   (if (null? providers) default
       (let ()
         (define best-provider (car providers))
-        (pprovider-evaluate H best-provider this obj))))
+        (pprovider-evaluate H key best-provider this obj))))
 
 
 (define (make-property)

@@ -15,7 +15,6 @@
   (import
     (only (scheme base)
           -
-          <
           >
           begin
           define

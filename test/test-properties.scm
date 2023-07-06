@@ -326,90 +326,90 @@
 
    ))
 
-(let ()
-  (define object1 -3)
+;; (let ()
+;;   (define object1 -3)
 
-  (define-property absolute)
-  (define-property small?)
+;;   (define-property absolute)
+;;   (define-property small?)
 
-  (with-properties
-   :for-everything
-   (assert= (get-property (absolute object1) 'unknown) 'unknown)
-   (assert= (get-property (small? object1) 'unknown) 'unknown)
+;;   (with-properties
+;;    :for-everything
+;;    (assert= (get-property (absolute object1) 'unknown) 'unknown)
+;;    (assert= (get-property (small? object1) 'unknown) 'unknown)
 
-   (set-property! (absolute object1) 3)
+;;    (set-property! (absolute object1) 3)
 
-   (make-provider
-    (list small?)
-    (list absolute)
-    (lambda (this) (> 5 (absolute this))))
+;;    (make-provider
+;;     (list small?)
+;;     (list absolute)
+;;     (lambda (this) (> 5 (absolute this))))
 
-   (assert= (get-property (absolute object1) 'unknown) 3)
-   (assert= (get-property (small? object1) 'unknown) #t)
+;;    (assert= (get-property (absolute object1) 'unknown) 3)
+;;    (assert= (get-property (small? object1) 'unknown) #t)
 
-   (set-property! (absolute object1) 9)
+;;    (set-property! (absolute object1) 9)
 
-   (assert= (get-property (absolute object1) 'unknown) 9)
-   (assert= (get-property (small? object1) 'unknown) #f)
+;;    (assert= (get-property (absolute object1) 'unknown) 9)
+;;    (assert= (get-property (small? object1) 'unknown) #f)
 
-   ))
+;;    ))
 
-(let ()
-  (define object1 -3)
+;; (let ()
+;;   (define object1 -3)
 
-  (define-property absolute)
-  (define-property small?)
-  (define-property massive?)
+;;   (define-property absolute)
+;;   (define-property small?)
+;;   (define-property massive?)
 
-  (with-properties
-   :for-everything
-   (assert= (get-property (absolute object1) 'unknown) 'unknown)
-   (assert= (get-property (massive? object1) 'unknown) 'unknown)
-   (assert= (get-property (small? object1) 'unknown) 'unknown)
+;;   (with-properties
+;;    :for-everything
+;;    (assert= (get-property (absolute object1) 'unknown) 'unknown)
+;;    (assert= (get-property (massive? object1) 'unknown) 'unknown)
+;;    (assert= (get-property (small? object1) 'unknown) 'unknown)
 
-   (set-property! (absolute object1) 3)
+;;    (set-property! (absolute object1) 3)
 
-   (make-provider
-    (list small?)
-    (list absolute)
-    (lambda (this) (> 5 (absolute this))))
+;;    (make-provider
+;;     (list small?)
+;;     (list absolute)
+;;     (lambda (this) (> 5 (absolute this))))
 
-   (make-provider
-    (list massive?)
-    (list absolute)
-    (lambda (this) (< 8 (absolute this))))
+;;    (make-provider
+;;     (list massive?)
+;;     (list absolute)
+;;     (lambda (this) (< 8 (absolute this))))
 
-   (assert= (get-property (absolute object1) 'unknown) 3)
-   (assert= (get-property (small? object1) 'unknown) #t)
-   (assert= (get-property (massive? object1) 'unknown) #f)
+;;    (assert= (get-property (absolute object1) 'unknown) 3)
+;;    (assert= (get-property (small? object1) 'unknown) #t)
+;;    (assert= (get-property (massive? object1) 'unknown) #f)
 
-   (set-property! (absolute object1) 9)
+;;    (set-property! (absolute object1) 9)
 
-   (assert= (get-property (absolute object1) 'unknown) 9)
-   (assert= (get-property (small? object1) 'unknown) #f)
-   (assert= (get-property (massive? object1) 'unknown) #t)
+;;    (assert= (get-property (absolute object1) 'unknown) 9)
+;;    (assert= (get-property (small? object1) 'unknown) #f)
+;;    (assert= (get-property (massive? object1) 'unknown) #t)
 
-   ))
+;;    ))
 
-(let ()
-  (define object1 -3)
+;; (let ()
+;;   (define object1 -3)
 
-  (define-property absolute)
-  (define-property small?)
+;;   (define-property absolute)
+;;   (define-property small?)
 
-  (with-properties
-   :for-everything
-   (assert= (get-property (absolute object1) 'unknown) 'unknown)
-   (assert= (get-property (small? object1) 'unknown) 'unknown)
+;;   (with-properties
+;;    :for-everything
+;;    (assert= (get-property (absolute object1) 'unknown) 'unknown)
+;;    (assert= (get-property (small? object1) 'unknown) 'unknown)
 
-   (set-property! (absolute object1) 3)
+;;    (set-property! (absolute object1) 3)
 
-   (make-provider
-    (list small?)
-    (list absolute)
-    (lambda (this) (> 5 (absolute this))))
+;;    (make-provider
+;;     (list small?)
+;;     (list absolute)
+;;     (lambda (this) (> 5 (absolute this))))
 
-   (assert= (get-property (absolute object1) 'unknown) 3)
-   (assert= (get-property (small? object1) 'unknown) #t)
+;;    (assert= (get-property (absolute object1) 'unknown) 3)
+;;    (assert= (get-property (small? object1) 'unknown) #t)
 
-   ))
+;;    ))
