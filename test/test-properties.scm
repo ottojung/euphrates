@@ -1,4 +1,19 @@
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Interesting examples towards the end of this file. ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
+;;   ████████ ██                      ██
+;;  ██░░░░░░ ░░              ██████  ░██
+;; ░██        ██ ██████████ ░██░░░██ ░██  █████
+;; ░█████████░██░░██░░██░░██░██  ░██ ░██ ██░░░██
+;; ░░░░░░░░██░██ ░██ ░██ ░██░██████  ░██░███████ ██
+;;        ░██░██ ░██ ░██ ░██░██░░░   ░██░██░░░░ ░░
+;;  ████████ ░██ ███ ░██ ░██░██      ███░░██████ ██
+;; ░░░░░░░░  ░░ ░░░  ░░  ░░ ░░      ░░░  ░░░░░░ ░░
+;;
+
 (let ()
 
   (define object1 -3)
@@ -8,11 +23,11 @@
   (with-properties
    :for-everything
 
-   (assert= (get-property (absolute object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
-   (assert= (get-property (absolute object1) #f) 3)))
+   (assert= (get-property (absolute object1) 'unknown) 3)))
 
 (let ()
 
@@ -23,7 +38,7 @@
   (with-properties
    :for-everything
 
-   (assert= (get-property (absolute object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
@@ -38,7 +53,7 @@
   (with-properties
    :for object1
 
-   (assert= (get-property (absolute object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
@@ -54,12 +69,12 @@
   (with-properties
    :for object2
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
 
    (set-property! (absolute object2) 3)
 
-   (assert= (get-property (absolute object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
    (assert= (absolute object2) 3)))
 
 (let ()
@@ -67,21 +82,21 @@
   (define-property absolute)
   (with-properties
    :for-everything
-   (assert= (get-property (absolute object1) #f) #f)))
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)))
 
 (let ()
 
   (define object1 -3)
   (define object2 -2)
-  (define cought? #f)
+  (define cought? 'unknown)
 
   (define-property absolute)
 
   (with-properties
    :for object2
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
 
    (set-property! (absolute object2) 3)
    (catchu-case
@@ -90,22 +105,22 @@
      (set! cought? #t)))
    (assert cought?)
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) 3)))
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 3)))
 
 (let ()
 
   (define object1 -3)
   (define object2 -2)
-  (define cought? #f)
+  (define cought? 'unknown)
 
   (define-property absolute)
 
   (with-properties
    :for object2
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
 
    (set-property! (absolute object2) 3)
    (catchu-case
@@ -114,25 +129,25 @@
      (set! cought? #t)))
    (assert cought?)
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) 3))
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 3))
 
-  (assert= (get-property (absolute object1) #f) #f)
-  (assert= (get-property (absolute object2) #f) #f))
+  (assert= (get-property (absolute object1) 'unknown) 'unknown)
+  (assert= (get-property (absolute object2) 'unknown) 'unknown))
 
 (let ()
 
   (define object1 -3)
   (define object2 -2)
-  (define cought? #f)
+  (define cought? 'unknown)
 
   (define-property absolute)
 
   (with-properties
    :for object2
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
 
    (set-property! (absolute object2) 3)
    (catchu-case
@@ -141,14 +156,14 @@
      (set! cought? #t)))
    (assert cought?)
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) 3)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 3)
 
    (with-properties
     :for object2
 
-    (assert= (get-property (absolute object1) #f) #f)
-    (assert= (get-property (absolute object2) #f) #f)
+    (assert= (get-property (absolute object1) 'unknown) 'unknown)
+    (assert= (get-property (absolute object2) 'unknown) 'unknown)
 
     (set-property! (absolute object2) 3)
     (catchu-case
@@ -157,8 +172,8 @@
       (set! cought? #t)))
     (assert cought?)
 
-    (assert= (get-property (absolute object1) #f) #f)
-    (assert= (get-property (absolute object2) #f) 3))))
+    (assert= (get-property (absolute object1) 'unknown) 'unknown)
+    (assert= (get-property (absolute object2) 'unknown) 3))))
 
 (let ()
 
@@ -170,12 +185,12 @@
   (with-properties
    :for-everything
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (evenq object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
-   (assert= (get-property (absolute object1) #f) 3)))
+   (assert= (get-property (absolute object1) 'unknown) 3)))
 
 (let ()
 
@@ -187,13 +202,13 @@
   (with-properties
    :for-everything
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (evenq object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (evenq object1) #f) #f)))
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)))
 
 (let ()
 
@@ -205,13 +220,13 @@
   (with-properties
    :for object1
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (evenq object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (evenq object1) #f) #f)))
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)))
 
 (let ()
 
@@ -224,17 +239,17 @@
   (with-properties
    :for object1
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (evenq object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
-   (assert= (get-property (evenq object2) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
+   (assert= (get-property (evenq object2) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (evenq object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
-   (assert= (get-property (evenq object2) #f) #f)))
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
+   (assert= (get-property (evenq object2) 'unknown) 'unknown)))
 
 (let ()
 
@@ -247,38 +262,44 @@
   (with-properties
    :for-everything
 
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (evenq object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
-   (assert= (get-property (evenq object2) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
+   (assert= (get-property (evenq object2) 'unknown) 'unknown)
 
    (set-property! (absolute object1) 3)
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (evenq object1) #f) #f)
-   (assert= (get-property (absolute object2) #f) #f)
-   (assert= (get-property (evenq object2) #f) #f)))
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (evenq object1) 'unknown) 'unknown)
+   (assert= (get-property (absolute object2) 'unknown) 'unknown)
+   (assert= (get-property (evenq object2) 'unknown) 'unknown)))
+
+
+;;
+;;  ███████                           ██      ██
+;; ░██░░░░██                         ░░      ░██
+;; ░██   ░██ ██████  ██████  ██    ██ ██     ░██  █████  ██████  ██████
+;; ░███████ ░░██░░█ ██░░░░██░██   ░██░██  ██████ ██░░░██░░██░░█ ██░░░░
+;; ░██░░░░   ░██ ░ ░██   ░██░░██ ░██ ░██ ██░░░██░███████ ░██ ░ ░░█████  ██
+;; ░██       ░██   ░██   ░██ ░░████  ░██░██  ░██░██░░░░  ░██    ░░░░░██░░
+;; ░██      ░███   ░░██████   ░░██   ░██░░██████░░██████░███    ██████  ██
+;; ░░       ░░░     ░░░░░░     ░░    ░░  ░░░░░░  ░░░░░░ ░░░    ░░░░░░  ░░
+;;
 
 (let ()
   (define object1 -3)
 
   (define-property absolute)
-  (define-property identity-prop)
+  (define-property small?)
 
   (with-properties
    :for-everything
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (identity-prop object1) #f) #f)
-
-   (set-property! (identity-prop object1) -3)
-
    (make-provider
-    (list absolute)
-    (list identity-prop)
-    (lambda (this) (- (identity-prop this))))
+    (list absolute) ;; targets
+    (list) ;; sources
+    (lambda (this) (if (> 0 this) (- this) this)))
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (identity-prop object1) #f) -3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
 
    ))
 
@@ -286,27 +307,22 @@
   (define object1 -3)
 
   (define-property absolute)
-  (define-property identity-prop)
+  (define-property small?)
 
   (with-properties
    :for-everything
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (identity-prop object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (small? object1) 'unknown) 'unknown)
 
-   (set-property! (identity-prop object1) -3)
+   (set-property! (absolute object1) 3)
 
    (make-provider
+    (list small?)
     (list absolute)
-    (list identity-prop)
-    (lambda (this) (- (identity-prop this))))
+    (lambda (this) (> 5 (absolute this))))
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (identity-prop object1) #f) -3)
-
-   (set-property! (identity-prop object1) -5)
-
-   (assert= (get-property (absolute object1) #f) 5)
-   (assert= (get-property (identity-prop object1) #f) -5)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (small? object1) 'unknown) #t)
 
    ))
 
@@ -314,36 +330,27 @@
   (define object1 -3)
 
   (define-property absolute)
-  (define-property identity-prop)
-  (define-property massive)
+  (define-property small?)
 
   (with-properties
    :for-everything
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (massive object1) #f) #f)
-   (assert= (get-property (identity-prop object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (small? object1) 'unknown) 'unknown)
 
-   (set-property! (identity-prop object1) -3)
-
-   (make-provider
-    (list absolute)
-    (list identity-prop)
-    (lambda (this) (- (identity-prop this))))
+   (set-property! (absolute object1) 3)
 
    (make-provider
-    (list massive)
+    (list small?)
     (list absolute)
-    (lambda (this) (if (< 4 (absolute this)) 'yes 'no)))
+    (lambda (this) (> 5 (absolute this))))
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (identity-prop object1) #f) -3)
-   (assert= (get-property (massive object1) #f) 'no)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (small? object1) 'unknown) #t)
 
-   (set-property! (identity-prop object1) -5)
+   (set-property! (absolute object1) 9)
 
-   (assert= (get-property (absolute object1) #f) 5)
-   (assert= (get-property (identity-prop object1) #f) -5)
-   (assert= (get-property (massive object1) #f) 'yes)
+   (assert= (get-property (absolute object1) 'unknown) 9)
+   (assert= (get-property (small? object1) 'unknown) #f)
 
    ))
 
@@ -351,22 +358,58 @@
   (define object1 -3)
 
   (define-property absolute)
-  (define-property identity-prop)
+  (define-property small?)
+  (define-property massive?)
 
   (with-properties
    :for-everything
-   (assert= (get-property (absolute object1) #f) #f)
-   (assert= (get-property (identity-prop object1) #f) #f)
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (massive? object1) 'unknown) 'unknown)
+   (assert= (get-property (small? object1) 'unknown) 'unknown)
 
-   (set-property! (identity-prop object1) -3)
+   (set-property! (absolute object1) 3)
 
-   (define-provider
-     absolute-calculator
-     :targets (absolute)
-     :sources (identity-prop)
-     (lambda (this) (- (identity-prop this))))
+   (make-provider
+    (list small?)
+    (list absolute)
+    (lambda (this) (> 5 (absolute this))))
 
-   (assert= (get-property (absolute object1) #f) 3)
-   (assert= (get-property (identity-prop object1) #f) -3)
+   (make-provider
+    (list massive?)
+    (list absolute)
+    (lambda (this) (< 8 (absolute this))))
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (small? object1) 'unknown) #t)
+   (assert= (get-property (massive? object1) 'unknown) #f)
+
+   (set-property! (absolute object1) 9)
+
+   (assert= (get-property (absolute object1) 'unknown) 9)
+   (assert= (get-property (small? object1) 'unknown) #f)
+   (assert= (get-property (massive? object1) 'unknown) #t)
+
+   ))
+
+(let ()
+  (define object1 -3)
+
+  (define-property absolute)
+  (define-property small?)
+
+  (with-properties
+   :for-everything
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (small? object1) 'unknown) 'unknown)
+
+   (set-property! (absolute object1) 3)
+
+   (make-provider
+    (list small?)
+    (list absolute)
+    (lambda (this) (> 5 (absolute this))))
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (small? object1) 'unknown) #t)
 
    ))

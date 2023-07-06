@@ -8,7 +8,6 @@
   (import
     (only (euphrates properties)
           define-property
-          define-provider
           get-property
           make-provider
           set-property!
@@ -17,6 +16,7 @@
     (only (scheme base)
           -
           <
+          >
           begin
           define
           if
