@@ -34,6 +34,9 @@
           immutable-hashmap-set
           make-immutable-hashmap))
   (import
+    (only (euphrates list-maximal-element-or-proj)
+          list-maximal-element-or/proj))
+  (import
     (only (euphrates list-maximal-element-or)
           list-maximal-element-or))
   (import
@@ -53,7 +56,6 @@
           and
           begin
           call-with-values
-          car
           cond
           define
           define-syntax

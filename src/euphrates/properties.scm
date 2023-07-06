@@ -283,6 +283,14 @@
         (pbox-mem rbox))))
 
 
+(define (get-best-provider obj providers)
+  (list-maximal-element-or/proj
+   #f (lambda (provider)
+        (get-provider-umtime provider obj))
+   mtime-better?
+   providers))
+
+
 (define (run-providers this H obj key default)
   (define providers
     (stack->list
@@ -290,8 +298,11 @@
 
   (if (null? providers) default
       (let ()
-        (define best-provider (car providers))
-        (pprovider-evaluate H key best-provider this obj))))
+        (define best-provider
+          (get-best-provider obj providers))
+        (if best-provider
+            (pprovider-evaluate H key best-provider this obj)
+            default))))
 
 
 (define (make-property)
