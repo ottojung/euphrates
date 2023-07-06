@@ -480,17 +480,18 @@
 
 
 (define (get-provider-umtime provider obj)
+  (define S (make-hashset))
+  (define H (properties-get-current-objmap obj))
+  (unless H (storage-not-found-response))
   (define (dive pprop)
-    (get-property-umtime pprop obj))
+    (get-property-umtime/optimized S H pprop obj))
   (get-providers-best-mtime/rec provider dive))
 
 
-(define (get-property-umtime getter obj)
+(define (get-property-umtime/optimized S H getter obj)
   (define starting-pprop
     (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define current-time properties-current-time)
-  (define S (make-hashset))
-  (define H (properties-get-current-objmap obj))
 
   (define (dive pprop)
     (if (hashset-has? S pprop)
@@ -523,9 +524,14 @@
 
         (pbox-pmtime pbox)))
 
-  (unless H (storage-not-found-response))
-
   (dive starting-pprop))
+
+
+(define (get-property-umtime getter obj)
+  (define S (make-hashset))
+  (define H (properties-get-current-objmap obj))
+  (unless H (storage-not-found-response))
+  (get-property-umtime/optimized S H getter obj))
 
 
 (define-syntax property-evaluatable?
