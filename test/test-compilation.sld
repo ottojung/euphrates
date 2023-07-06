@@ -669,8 +669,14 @@
     (only (euphrates list-map-flatten)
           list-map/flatten))
   (import
+    (only (euphrates list-maximal-element-or-proj)
+          list-maximal-element-or/proj))
+  (import
     (only (euphrates list-maximal-element-or)
           list-maximal-element-or))
+  (import
+    (only (euphrates list-minimal-element-or-proj)
+          list-minimal-element-or/proj))
   (import
     (only (euphrates list-minimal-element-or)
           list-minimal-element-or))
@@ -1297,6 +1303,7 @@
           make-provider
           make-provider/general
           outdate-property!
+          property-evaluatable?
           set-property!
           unset-property!
           with-properties))
