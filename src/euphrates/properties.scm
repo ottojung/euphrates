@@ -554,4 +554,4 @@
   (syntax-rules ()
     ((_ (getter obj))
      (let ((pmtime (get-property-umtime getter obj)))
-       (and (number? pmtime) pmtime)))))
+       (number? pmtime)))))
