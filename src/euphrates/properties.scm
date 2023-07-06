@@ -448,7 +448,7 @@
      (outdate-property!/fun getter obj))))
 
 
-(define (mtime->numer x)
+(define (mtime->number x)
   (cond
    ((equal? 'not-evaluatable x) -1)
    ((number? x)
@@ -459,10 +459,15 @@
     (raisu 'bad-mtime-type x))))
 
 
+(define (mtime-better? this other)
+  (> (mtime->number this)
+     (mtime->number other)))
+
+
 (define (get-best-mtime mtimes)
   (list-maximal-element-or
    'not-evaluatable
-   mtime->numer
+   mtime-better?
    mtimes))
 
 

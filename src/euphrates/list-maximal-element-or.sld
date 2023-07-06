@@ -4,14 +4,12 @@
   (export list-maximal-element-or)
   (import
     (only (scheme base)
-          >
           begin
           car
           cdr
           define
           if
           let
-          let*
           max
           null?))
   (cond-expand

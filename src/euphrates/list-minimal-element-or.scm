@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -14,11 +14,12 @@
 
 
 
-(define (list-minimal-element-or default projection lst)
-  (let loop ((lst lst) (min #f) (min-elem #f))
-    (if (null? lst) (if min min-elem default)
-        (let* ((x (car lst))
-               (p (projection x))
-               (new-min (if min (if (< p min) p min) p))
-               (new-min-elem (if min (if (< p min) x min-elem) x)))
-          (loop (cdr lst) new-min new-min-elem)))))
+(define (list-minimal-element-or default less-than? lst)
+  (if (null? lst) default
+      (let loop ((lst (cdr lst)) (min (car lst)))
+        (if (null? lst) min
+            (let ((x (car lst)))
+              (loop (cdr lst)
+                    (if (less-than? x min)
+                        x
+                        min)))))))

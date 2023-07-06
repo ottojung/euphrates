@@ -4,14 +4,12 @@
   (export list-minimal-element-or)
   (import
     (only (scheme base)
-          <
           begin
           car
           cdr
           define
           if
           let
-          let*
           min
           null?))
   (cond-expand

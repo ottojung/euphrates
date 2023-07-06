@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -14,11 +14,12 @@
 
 
 
-(define (list-maximal-element-or default projection lst)
-  (let loop ((lst lst) (max #f) (max-elem #f))
-    (if (null? lst) (if max max-elem default)
-        (let* ((x (car lst))
-               (p (projection x))
-               (new-max (if max (if (> p max) p max) p))
-               (new-max-elem (if max (if (> p max) x max-elem) x)))
-          (loop (cdr lst) new-max new-max-elem)))))
+(define (list-maximal-element-or default greater-than? lst)
+  (if (null? lst) default
+      (let loop ((lst (cdr lst)) (max (car lst)))
+        (if (null? lst) max
+            (let ((x (car lst)))
+              (loop (cdr lst)
+                    (if (greater-than? x max)
+                        x
+                        max)))))))
