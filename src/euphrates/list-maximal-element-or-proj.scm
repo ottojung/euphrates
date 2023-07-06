@@ -15,14 +15,17 @@
 
 
 (define (list-maximal-element-or/proj default projection greater-than? lst)
-  (if (null? lst) default
-      (let loop ((lst (cdr lst))
-                 (max (car lst))
-                 (max/p (projection (car lst))))
-        (if (null? lst) max
-            (let* ((x (car lst))
-                   (x/p (projection x))
-                   (test (greater-than? x/p max/p)))
-              (loop (cdr lst)
-                    (if test x max)
-                    (if test x/p max/p)))))))
+  (cond
+   ((null? lst) default)
+   ((null? (cdr lst)) (car lst))
+   (else
+    (let loop ((lst (cdr lst))
+               (max (car lst))
+               (max/p (projection (car lst))))
+      (if (null? lst) max
+          (let* ((x (car lst))
+                 (x/p (projection x))
+                 (test (greater-than? x/p max/p)))
+            (loop (cdr lst)
+                  (if test x max)
+                  (if test x/p max/p))))))))

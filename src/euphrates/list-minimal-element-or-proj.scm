@@ -15,14 +15,17 @@
 
 
 (define (list-minimal-element-or/proj default projection less-than? lst)
-  (if (null? lst) default
-      (let loop ((lst (cdr lst))
-                 (min (car lst))
-                 (min/p (projection (car lst))))
-        (if (null? lst) min
-            (let* ((x (car lst))
-                   (x/p (projection x))
-                   (test (less-than? x/p min/p)))
-              (loop (cdr lst)
-                    (if test x min)
-                    (if test x/p min/p)))))))
+  (cond
+   ((null? lst) default)
+   ((null? (cdr lst)) (car lst))
+   (else
+    (let loop ((lst (cdr lst))
+               (min (car lst))
+               (min/p (projection (car lst))))
+      (if (null? lst) min
+          (let* ((x (car lst))
+                 (x/p (projection x))
+                 (test (less-than? x/p min/p)))
+            (loop (cdr lst)
+                  (if test x min)
+                  (if test x/p min/p))))))))

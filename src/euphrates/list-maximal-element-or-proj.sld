@@ -7,7 +7,9 @@
           begin
           car
           cdr
+          cond
           define
+          else
           if
           let
           let*
