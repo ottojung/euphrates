@@ -471,7 +471,7 @@
    mtimes))
 
 
-(define (get-providers-best-mtime/rec dive in)
+(define (get-provider-best-mtime/rec dive in)
   (define dependants
     (pprovider-sources in))
   (define mtimes
@@ -481,7 +481,7 @@
 
 
 (define (get-provider-umtime/optimized provider dive)
-  (get-providers-best-mtime/rec dive provider))
+  (get-provider-best-mtime/rec dive provider))
 
 
 (define (get-provider-umtime provider obj)
@@ -490,7 +490,7 @@
   (unless H (storage-not-found-response))
   (define (dive pprop)
     (get-property-umtime/optimized S H pprop obj))
-  (get-providers-best-mtime/rec provider dive))
+  (get-provider-best-mtime/rec provider dive))
 
 
 (define (get-property-umtime/optimized S H getter obj)
