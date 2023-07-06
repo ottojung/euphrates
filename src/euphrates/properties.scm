@@ -300,7 +300,7 @@
     (define H (properties-get-current-objmap obj))
     (if H
         (let ((R (hashmap-ref H property-key #f)))
-          (if R
+          (if (and R (not (pbox-outdated? R)))
               (pbox-value R)
               (run-providers
                this H obj property-key
