@@ -550,9 +550,12 @@
           (define ins
             (stack->list
              (pproperty-providersin pprop)))
-          (define mtimes
-            (map (comp (get-provider-umtime/optimized dive)) ins))
-          (get-best-mtime mtimes))
+
+          (if (null? ins) 'not-evaluatable
+              (let ()
+                (define mtimes
+                  (map (comp (get-provider-umtime/optimized dive)) ins))
+                (get-best-mtime mtimes))))
 
         (pbox-pmtime pbox)))
 
