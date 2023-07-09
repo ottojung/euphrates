@@ -74,7 +74,8 @@
   )
 
 
-(define properties-current-time 0)
+(define properties-bigbang-time 0)
+(define properties-current-time properties-bigbang-time)
 (define properties-advance-time
   (lambda _
     (let* ((current properties-current-time)
@@ -484,9 +485,7 @@
 
 (define (get-best-mtime mtimes)
   (list-maximal-element-or
-   'not-evaluatable
-   mtime-better?
-   mtimes))
+   #f mtime-better? mtimes))
 
 
 (define (get-provider-best-mtime/rec dive in)
@@ -495,7 +494,8 @@
   (define mtimes
     (map dive dependants))
 
-  (get-best-mtime mtimes))
+  (or (get-best-mtime mtimes)
+      properties-bigbang-time))
 
 
 (define (get-provider-umtime/optimized provider dive)
