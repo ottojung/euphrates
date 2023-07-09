@@ -292,11 +292,13 @@
 ;; A helper function to test how many times a certain provider has been called:
 ;;
 (define (make-counter)
-  (define count -1)
-  (lambda _
-    (let ((new (+ 1 count)))
-      (set! count new)
-      new)))
+  (make-box 0))
+
+(define (counter-value counter)
+  (box-ref counter))
+
+(define (bump counter)
+  (box-set! counter (+ 1 (counter-value counter))))
 
 (let ()
   (define object1 -3)
@@ -314,6 +316,51 @@
    (assert= (get-property (absolute object1) 'unknown) 3)
 
    ))
+
+
+
+;; test that properties are only evaluated once
+(let ()
+  (define c1 (make-counter))
+
+  (define object1 -3)
+
+  (define-property absolute)
+  (define-property small?)
+
+  (with-properties
+   :for-everything
+   (define-provider p1
+     :targets (absolute)
+     :sources ()
+     (lambda (this)
+       (bump c1)
+       (if (> 0 this) (- this) this)))
+
+   (assert= 0 (counter-value c1))
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+   (assert= 1 (counter-value c1)) ;; called once
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+   (assert= 1 (counter-value c1)) ;; doesn't get called anymore
+
+   (unset-property! (absolute object1))
+
+   (assert= 1 (counter-value c1)) ;; doesn't trigger reevaluation on unset
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+   (assert= 1 (counter-value c1)) ;; even when the property is reset, the provider still remembers last value
+
+   ))
+
+
 
 (let ()
   (define object1 -3)
@@ -337,6 +384,8 @@
    (assert= (get-property (small? object1) 'unknown) #t)
 
    ))
+
+
 
 (let ()
   (define object1 -3)
@@ -365,6 +414,7 @@
    (assert= (get-property (small? object1) 'unknown) #f)
 
    ))
+
 
 (let ()
   (define object1 -3)
@@ -402,6 +452,83 @@
    (assert= (get-property (massive? object1) 'unknown) #t)
 
    ))
+
+
+
+
+(let ()
+  (define c1 (make-counter))
+  (define c2 (make-counter))
+
+  (define object1 -3)
+
+  (define-property absolute)
+  (define-property small?)
+  (define-property massive?)
+
+  (with-properties
+   :for-everything
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (massive? object1) 'unknown) 'unknown)
+   (assert= (get-property (small? object1) 'unknown) 'unknown)
+
+   (set-property! (absolute object1) 3)
+
+   (define-provider p1
+     :targets (small?)
+     :sources (absolute)
+     (lambda (this)
+       (bump c1)
+       (> 5 (absolute this))))
+
+   (define-provider p2
+     :targets (massive?)
+     :sources (absolute)
+     (lambda (this)
+       (bump c2)
+       (< 8 (absolute this))))
+
+   (assert= 0 (counter-value c1))
+   (assert= 0 (counter-value c2))
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (small? object1) 'unknown) #t)
+   (assert= (get-property (massive? object1) 'unknown) #f)
+
+   (assert= 1 (counter-value c1))
+   (assert= 1 (counter-value c2))
+
+   (set-property! (absolute object1) 9)
+
+   (assert= 1 (counter-value c1)) ;; Does not get recalculated immediately
+   (assert= 1 (counter-value c2)) ;; Similarly not recalculated immediately
+
+   (assert= (get-property (absolute object1) 'unknown) 9)
+   (assert= (get-property (small? object1) 'unknown) #f)
+   (assert= (get-property (massive? object1) 'unknown) #t)
+
+   (assert= 2 (counter-value c1))
+   (assert= 2 (counter-value c2))
+
+   (assert= (get-property (absolute object1) 'unknown) 9)
+   (assert= (get-property (small? object1) 'unknown) #f)
+   (assert= (get-property (massive? object1) 'unknown) #t)
+   (assert= (get-property (absolute object1) 'unknown) 9)
+   (assert= (get-property (small? object1) 'unknown) #f)
+   (assert= (get-property (massive? object1) 'unknown) #t)
+   (assert= (get-property (absolute object1) 'unknown) 9)
+   (assert= (get-property (small? object1) 'unknown) #f)
+   (assert= (get-property (massive? object1) 'unknown) #t)
+   (assert= (get-property (absolute object1) 'unknown) 9)
+   (assert= (get-property (small? object1) 'unknown) #f)
+   (assert= (get-property (massive? object1) 'unknown) #t)
+
+   (assert= 2 (counter-value c1))
+   (assert= 2 (counter-value c2))
+
+   ))
+
+
 
 (let ()
   (define object1 -3)
@@ -543,7 +670,7 @@
     :targets (area)
     :sources (width height)
     (lambda (this)
-      (common-counter)
+      (bump common-counter)
       (* (width this) (height this))))
 
   ;; D^2 = W^2 + H^2
@@ -557,7 +684,7 @@
     :targets (area)
     :sources (diagonal width)
     (lambda (this)
-      (diagonal-counter)
+      (bump diagonal-counter)
 
       (* (width this)
          (sqrt
@@ -576,8 +703,8 @@
    (assert= (get-property (diagonal rect) 'unknown) 5)
    (assert= (get-property (area rect) 'unknown) 12)
 
-   (assert= (common-counter) 0)
-   (assert= (diagonal-counter) 1)
+   (assert= 0 (counter-value common-counter))
+   (assert= 1 (counter-value diagonal-counter))
 
    ))
 
@@ -653,7 +780,7 @@
     :targets (area)
     :sources (width height)
     (lambda (this)
-      (common-counter)
+      (bump common-counter)
 
       (* (width this) (height this))))
 
@@ -668,7 +795,7 @@
     :targets (area)
     :sources (diagonal width)
     (lambda (this)
-      (diagonal-counter)
+      (bump diagonal-counter)
 
       (* (width this)
          (sqrt
@@ -687,8 +814,8 @@
    (assert= (get-property (diagonal rect) 'unknown) 5)
    (assert= (get-property (area rect) 'unknown) 12)
 
-   (assert= (common-counter) 0)
-   (assert= (diagonal-counter) 1)
+   (assert= 0 (counter-value common-counter))
+   (assert= 1 (counter-value diagonal-counter))
 
    ))
 
