@@ -332,36 +332,45 @@
    paired))
 
 
-(define (run-providers this H obj key default)
+(define (run-providers this S H obj key default)
   (define providers
     (stack->list
      (pproperty-providersin this)))
 
   (if (null? providers) default
-      (let ()
-        (define best
-          (get-best-provider obj providers))
+      (dynamic-wind ;; TODO: implement something more efficient.
+          (lambda _
+            (hashset-add! S key))
 
-        (define-pair (best-score best-provider)
-          (or best (cons 'not-evaluatable #f)))
+          (lambda _
+            (define best
+              (get-best-provider obj providers))
 
-        (if best-provider
-            (pprovider-evaluate H key best-provider this obj)
-            default))))
+            (define-pair (best-score best-provider)
+              (or best (cons 'not-evaluatable #f)))
+
+            (if best-provider
+                (pprovider-evaluate H key best-provider this obj)
+                default))
+          (lambda _
+            (hashset-delete! S key)))))
 
 
 (define (make-property)
   (define property-key (make-unique))
   (define (getfn obj)
     (define pctx (properties-get-context))
+    (define S (pcontext-recset pctx))
     (define H (properties-get-current-objmap pctx obj))
     (if H
         (let ((R (hashmap-ref H property-key #f)))
           (if (and R (not (pbox-outdated? R)))
               (pbox-value R)
-              (run-providers
-               this H obj property-key
-               not-found-obj)))
+              (if (hashset-has? S get-wrapped)
+                  (if R (pbox-value R) not-found-obj) ;; TODO: better return value that mentions recursion reason
+                  (run-providers
+                   this S H obj property-key
+                   not-found-obj))))
         not-found-storage))
 
   (define (get-wrapped obj)

@@ -63,6 +63,7 @@
           cons
           define
           define-syntax
+          dynamic-wind
           else
           eq?
           equal?
