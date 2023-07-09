@@ -294,10 +294,10 @@
 
   (with-properties
    :for-everything
-   (make-provider
-    (list absolute) ;; targets
-    (list) ;; sources
-    (lambda (this) (if (> 0 this) (- this) this)))
+   (define-provider p1
+     :targets (absolute)
+     :sources ()
+     (lambda (this) (if (> 0 this) (- this) this)))
 
    (assert= (get-property (absolute object1) 'unknown) 3)
 
@@ -316,10 +316,10 @@
 
    (set-property! (absolute object1) 3)
 
-   (make-provider
-    (list small?)
-    (list absolute)
-    (lambda (this) (> 5 (absolute this))))
+   (define-provider p1
+     :targets (small?)
+     :sources (absolute)
+     (lambda (this) (> 5 (absolute this))))
 
    (assert= (get-property (absolute object1) 'unknown) 3)
    (assert= (get-property (small? object1) 'unknown) #t)
@@ -339,10 +339,10 @@
 
    (set-property! (absolute object1) 3)
 
-   (make-provider
-    (list small?)
-    (list absolute)
-    (lambda (this) (> 5 (absolute this))))
+   (define-provider p1
+     :targets (small?)
+     :sources (absolute)
+     (lambda (this) (> 5 (absolute this))))
 
    (assert= (get-property (absolute object1) 'unknown) 3)
    (assert= (get-property (small? object1) 'unknown) #t)
@@ -369,15 +369,15 @@
 
    (set-property! (absolute object1) 3)
 
-   (make-provider
-    (list small?)
-    (list absolute)
-    (lambda (this) (> 5 (absolute this))))
+   (define-provider p1
+     :targets (small?)
+     :sources (absolute)
+     (lambda (this) (> 5 (absolute this))))
 
-   (make-provider
-    (list massive?)
-    (list absolute)
-    (lambda (this) (< 8 (absolute this))))
+   (define-provider p2
+     :targets (massive?)
+     :sources (absolute)
+     (lambda (this) (< 8 (absolute this))))
 
    (assert= (get-property (absolute object1) 'unknown) 3)
    (assert= (get-property (small? object1) 'unknown) #t)
@@ -404,10 +404,10 @@
 
    (set-property! (absolute object1) 3)
 
-   (make-provider
-    (list small?)
-    (list absolute)
-    (lambda (this) (> 5 (absolute this))))
+   (define-provider p1
+     :targets (small?)
+     :sources (absolute)
+     (lambda (this) (> 5 (absolute this))))
 
    (assert= (get-property (absolute object1) 'unknown) 3)
    (assert= (get-property (small? object1) 'unknown) #t)

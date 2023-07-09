@@ -8,8 +8,8 @@
   (import
     (only (euphrates properties)
           define-property
+          define-provider
           get-property
-          make-provider
           set-property!
           with-properties))
   (import
@@ -22,7 +22,6 @@
           if
           lambda
           let
-          list
           quote
           set!))
   (cond-expand
