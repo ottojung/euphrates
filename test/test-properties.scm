@@ -553,6 +553,74 @@
 
    ))
 
+
+
+;; Check evaluatable result
+(let ()
+  (define object1 -3)
+
+  (define-property absolute)
+  (define-property small?)
+
+  (with-properties
+   :for-everything
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (small? object1) 'unknown) 'unknown)
+
+   (set-property! (absolute object1) 3)
+
+   (define-provider p1
+     :targets (small?)
+     :sources (absolute)
+     (lambda (this) (> 5 (absolute this))))
+
+
+   (let ((absolute-ev? (property-evaluatable? (absolute object1))))
+     (assert absolute-ev?))
+
+   (let ((small?-ev? (property-evaluatable? (small? object1))))
+     (assert small?-ev?))
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (small? object1) 'unknown) #t)
+
+   ))
+
+
+
+;; Corner case: unresolvable mutual recursion
+(let ()
+  (define object1 -3)
+
+  (define-property absolute)
+  (define-property negative)
+
+  (define-provider p1
+    :targets (negative)
+    :sources (absolute)
+    (lambda (this) (- 0 (absolute this))))
+
+  (define-provider p2
+    :targets (absolute)
+    :sources (negative)
+    (lambda (this) (- 0 (negative this))))
+
+  (with-properties
+   :for-everything
+
+   (assert (not (property-evaluatable? (absolute object1))))
+
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+   (assert= (get-property (negative object1) 'unknown) 'unknown)
+
+   (set-property! (absolute object1) 3)
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (negative object1) 'unknown) -3)
+
+   ))
+
+
 ;;
 ;;  ████     ████          ██   ██   ██          ██
 ;; ░██░██   ██░██         ░██  ░██  ░░  ██████  ░██

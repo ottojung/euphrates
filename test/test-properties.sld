@@ -12,6 +12,7 @@
           define-property
           define-provider
           get-property
+          property-evaluatable?
           set-property!
           unset-property!
           with-properties))
@@ -30,6 +31,7 @@
           if
           lambda
           let
+          not
           quote
           round
           set!
