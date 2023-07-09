@@ -338,7 +338,7 @@
           (get-best-provider obj providers))
 
         (define-pair (best-score best-provider)
-          (if best best (cons 'not-evaluatable #f)))
+          (or best (cons 'not-evaluatable #f)))
 
         (if best-provider
             (pprovider-evaluate H key best-provider this obj)
