@@ -143,7 +143,7 @@
         evaluated? mtime pmtime)))))
 
 
-(define (make-provider/general targets sources evaluator)
+(define (make-provider/general targets sources conditions evaluator)
   (define target-structs
     (map
       (lambda (target)
@@ -181,21 +181,32 @@
   ret)
 
 
-(define (make-provider targets sources evaluator)
+(define (make-provider targets sources conditions evaluator)
   (make-provider/general
-   targets sources
+   targets sources conditions
    evaluator))
 
 
 (define-syntax define-provider
-  (syntax-rules (:targets :sources)
+  (syntax-rules (:targets :sources :conditions)
     ((_ name
         :targets targets
         :sources sources
         evaluator)
+     (define-provider name
+       :targets targets
+       :sources sources
+       :conditions ()
+       evaluator))
+    ((_ name
+        :targets targets
+        :sources sources
+        :conditions conditions
+        evaluator)
      (define name
        (make-provider
         (list . targets) (list . sources)
+        (list . conditions)
         evaluator)))))
 
 
