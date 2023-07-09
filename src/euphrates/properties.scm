@@ -75,9 +75,10 @@
 
 
 (define-type9 <pcontext>
-  (make-pcontext objmap foreverething?) pcontext?
+  (make-pcontext objmap foreverething? recset) pcontext?
   (objmap pcontext-objmap)
   (foreverething? pcontext-foreverething?)
+  (recset pcontext-recset) ;; set for recursion tracking. Initially (at the global scope) is #f
   )
 
 
@@ -97,10 +98,11 @@
 
 (define properties-context/p
   (let ((objmap (make-immutable-hashmap))
-        (foreverething? #f))
+        (foreverething? #f)
+        (recset #f))
     (make-parameter
      (make-pcontext
-      objmap foreverething?))))
+      objmap foreverething? recset))))
 
 
 (define properties-everything-key
@@ -230,8 +232,11 @@
   (define foreverething?
     (if for-everything? #t
         (pcontext-foreverething? old-pctx)))
+  (define recset
+    (or (pcontext-recset old-pctx)
+        (make-hashset)))
 
-  (make-pcontext objmap foreverething?))
+  (make-pcontext objmap foreverething? recset))
 
 
 (define-syntax with-properties
