@@ -14,16 +14,26 @@
           with-properties))
   (import
     (only (scheme base)
+          *
+          +
           -
           <
           >
+          _
           begin
           define
+          exact
+          expt
           if
           lambda
           let
           quote
+          round
           set!))
+  (import (only (scheme inexact) sqrt))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) count)))
+    (else (import (only (srfi 1) count))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "test-properties.scm")))
