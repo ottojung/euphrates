@@ -217,35 +217,32 @@
         evaluator)))))
 
 
+(define (make-new-pcontext for-object for-everything?)
+  (define old-pctx
+    (properties-get-context))
+  (define objmap
+    (immutable-hashmap-set
+     (pcontext-objmap old-pctx)
+     (if for-everything?
+         properties-everything-key
+         for-object)
+     (make-hashmap)))
+  (define foreverething?
+    (if for-everything? #t
+        (pcontext-foreverething? old-pctx)))
+
+  (make-pcontext objmap foreverething?))
+
+
 (define-syntax with-properties
   (syntax-rules (:for :for-everything)
     ((_ :for object . bodies)
-     (let ()
-       (define old-pctx
-         (properties-get-context))
-       (define objmap
-         (immutable-hashmap-set
-          (pcontext-objmap old-pctx)
-          object (make-hashmap)))
-       (define foreverething?
-         (pcontext-foreverething? old-pctx))
-       (define pctx
-         (make-pcontext objmap foreverething?))
-       (parameterize ((properties-context/p pctx))
+     (let ((new (make-new-pcontext object #f)))
+       (parameterize ((properties-context/p new))
          (let () . bodies))))
     ((_ :for-everything . bodies)
-     (let ()
-       (define old-pctx
-         (properties-get-context))
-       (define objmap
-         (immutable-hashmap-set
-          (pcontext-objmap old-pctx)
-          properties-everything-key
-          (make-hashmap)))
-       (define foreverething? #t)
-       (define pctx
-         (make-pcontext objmap foreverething?))
-       (parameterize ((properties-context/p pctx))
+     (let ((new (make-new-pcontext #f #t)))
+       (parameterize ((properties-context/p new))
          (let () . bodies))))))
 
 
