@@ -17,6 +17,7 @@
           *
           +
           -
+          /
           <
           >
           _
@@ -29,7 +30,8 @@
           let
           quote
           round
-          set!))
+          set!
+          values))
   (import (only (scheme inexact) sqrt))
   (cond-expand
     (guile (import (only (srfi srfi-1) count)))

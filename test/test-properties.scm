@@ -276,6 +276,7 @@
 
 
 ;;
+;;
 ;;  ███████                           ██      ██
 ;; ░██░░░░██                         ░░      ░██
 ;; ░██   ░██ ██████  ██████  ██    ██ ██     ░██  █████  ██████  ██████
@@ -285,9 +286,10 @@
 ;; ░██      ░███   ░░██████   ░░██   ░██░░██████░░██████░███    ██████  ██
 ;; ░░       ░░░     ░░░░░░     ░░    ░░  ░░░░░░  ░░░░░░ ░░░    ░░░░░░  ░░
 ;;
+;;
 
 ;;
-;; A helper function to test how many times a certain provider has been called.
+;; A helper function to test how many times a certain provider has been called:
 ;;
 (define (make-counter)
   (define count -1)
@@ -424,6 +426,7 @@
 
    ))
 
+;;
 ;;  ████     ████          ██   ██   ██          ██
 ;; ░██░██   ██░██         ░██  ░██  ░░  ██████  ░██
 ;; ░██░░██ ██ ░██ ██   ██ ░██ ██████ ██░██░░░██ ░██  █████
@@ -432,7 +435,7 @@
 ;; ░██   ░    ░██░██  ░██ ░██  ░██  ░██░██░░░   ░██░██░░░░   ░░
 ;; ░██        ░██░░██████ ███  ░░██ ░██░██      ███░░██████   ██
 ;; ░░         ░░  ░░░░░░ ░░░    ░░  ░░ ░░      ░░░  ░░░░░░   ░░
-
+;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                           ;;
@@ -487,13 +490,13 @@
     (lambda (this)
       (* (width this) (height this))))
 
-  ;; L^2 = W^2 + H^2
-  ;; L^2 - W^2 = H^2
-  ;; H^2 = L^2 - W^2
-  ;; H = sqrt(L^2 - W^2)
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)
   ;;
   ;; A = W * H
-  ;; A = W * sqrt(L^2 - W^2)    <-
+  ;; A = W * sqrt(D^2 - W^2)    <-
   (define-provider diagonal/width-area-calculator
     :targets (area)
     :sources (diagonal width)
@@ -543,13 +546,13 @@
       (common-counter)
       (* (width this) (height this))))
 
-  ;; L^2 = W^2 + H^2
-  ;; L^2 - W^2 = H^2
-  ;; H^2 = L^2 - W^2
-  ;; H = sqrt(L^2 - W^2)
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)
   ;;
   ;; A = W * H
-  ;; A = W * sqrt(L^2 - W^2)    <-
+  ;; A = W * sqrt(D^2 - W^2)    <-
   (define-provider diagonal/width-area-calculator
     :targets (area)
     :sources (diagonal width)
@@ -598,13 +601,13 @@
     (lambda (this)
       (* (width this) (height this))))
 
-  ;; L^2 = W^2 + H^2
-  ;; L^2 - W^2 = H^2
-  ;; H^2 = L^2 - W^2
-  ;; H = sqrt(L^2 - W^2)
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)
   ;;
   ;; A = W * H
-  ;; A = W * sqrt(L^2 - W^2)    <-
+  ;; A = W * sqrt(D^2 - W^2)    <-
   (define-provider diagonal/width-area-calculator
     :targets (area)
     :sources (diagonal width)
@@ -654,13 +657,13 @@
 
       (* (width this) (height this))))
 
-  ;; L^2 = W^2 + H^2
-  ;; L^2 - W^2 = H^2
-  ;; H^2 = L^2 - W^2
-  ;; H = sqrt(L^2 - W^2)
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)
   ;;
   ;; A = W * H
-  ;; A = W * sqrt(L^2 - W^2)    <-
+  ;; A = W * sqrt(D^2 - W^2)    <-
   (define-provider diagonal/width-area-calculator
     :targets (area)
     :sources (diagonal width)
@@ -708,10 +711,10 @@
     (lambda (this)
       (* (width this) (height this))))
 
-  ;; L^2 = W^2 + H^2
-  ;; L^2 - W^2 = H^2
-  ;; H^2 = L^2 - W^2
-  ;; H = sqrt(L^2 - W^2)    <-
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)    <-
   (define-provider diagonal/width-height-calculator
     :targets (height)
     :sources (diagonal width)
@@ -726,6 +729,57 @@
    (set-property! (diagonal rect) 5)
    (set-property! (width rect) 3)
    ;; (set-property! (height rect) 4)
+
+   (assert= (get-property (width rect) 'unknown) 3)
+   (assert= (get-property (height rect) 'unknown) 4)
+   (assert= (get-property (diagonal rect) 'unknown) 5)
+   (assert= (get-property (area rect) 'unknown) 12)
+
+   ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                                                           ;;
+;; Additionally we can recover both height and width from area and diagonal. ;;
+;; There can be two solutions (width is shorter vs width is longer),         ;;
+;;  we ignore the second one although it is a valid solution.                ;;
+;;                                                                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(let ()
+  (define rect "my rectangle 1") ;; a rectangle object
+
+  (define-property width)
+  (define-property height)
+  (define-property diagonal)
+  (define-property area)
+
+  ;; A = W * H
+  ;; W = A / H
+  ;; D^2 = W^2 + H^2
+  ;; D^2 = (A/W)^2 + W^2
+  ;; D^2 = A^2 / W^2 + W^2
+  ;; D^2 * W^2 = A^2 + W^4        (Multiplied both sides by W^2)
+  ;; W^4 - D^2 * W^2 + A^2 = 0    (Rearranged as a polynomial)
+  ;; X^2 - D^2 * X   + A^2 = 0    (W^2 -> X)
+  ;; X = 0.5 * (D^2 - sqrt(D^4 - 4*A^2))    (Solution #1)
+  ;; X = 0.5 * (D^2 + sqrt(D^4 - 4*A^2))    (Solution #2)
+  ;; W = sqrt(X)             <-
+  (define-provider reverse-area-calulator
+    :targets (width height)
+    :sources (area diagonal)
+    (lambda (this)
+      (define D2 (expt (diagonal this) 2))
+      (define D4 (expt D2 2))
+      (define A2 (expt (area this) 2))
+      (define X (* 1/2 (- D2 (sqrt (- D4 (* 4 A2))))))
+      (define W (sqrt X))
+      (define H (/ (area this) W))
+      (values W H)))
+
+  (with-properties
+   :for-everything
+
+   (set-property! (diagonal rect) 5)
+   (set-property! (area rect) 12)
 
    (assert= (get-property (width rect) 'unknown) 3)
    (assert= (get-property (height rect) 'unknown) 4)
@@ -754,10 +808,10 @@
     (lambda (this)
       (* (width this) (height this))))
 
-  ;; L^2 = W^2 + H^2
-  ;; L^2 - W^2 = H^2
-  ;; H^2 = L^2 - W^2
-  ;; H = sqrt(L^2 - W^2)    <-
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)    <-
   (define-provider diagonal/width-height-calculator
     :targets (height)
     :sources (diagonal width)
@@ -784,5 +838,144 @@
    (assert= (exact (round (get-property (height rect) 'unknown))) 6)
    (assert= (get-property (diagonal rect) 'unknown) 7)
    (assert= (exact (round (get-property (area rect) 'unknown))) 19)
+
+   ))
+
+
+;;
+;;  ███████                                          ██
+;; ░██░░░░██                                        ░░
+;; ░██   ░██   █████   █████  ██   ██ ██████  ██████ ██  ██████  ███████
+;; ░███████   ██░░░██ ██░░░██░██  ░██░░██░░█ ██░░░░ ░██ ██░░░░██░░██░░░██
+;; ░██░░░██  ░███████░██  ░░ ░██  ░██ ░██ ░ ░░█████ ░██░██   ░██ ░██  ░██   ██
+;; ░██  ░░██ ░██░░░░ ░██   ██░██  ░██ ░██    ░░░░░██░██░██   ░██ ░██  ░██  ░░
+;; ░██   ░░██░░██████░░█████ ░░██████░███    ██████ ░██░░██████  ███  ░██   ██
+;; ░░     ░░  ░░░░░░  ░░░░░   ░░░░░░ ░░░    ░░░░░░  ░░  ░░░░░░  ░░░   ░░   ░░
+;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                                                               ;;
+;; Let's complete our model by adding providers that work in both directions!    ;;
+;; For instance, the diagonal is itself can be calculated from depth and height. ;;
+;;                                                                               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(let ()
+  (define rect "my rectangle 1") ;; a rectangle object
+
+  (define-property width)
+  (define-property height)
+  (define-property diagonal)
+  (define-property area)
+
+  (define-provider common-area-calulator
+    :targets (area)
+    :sources (width height)
+    (lambda (this)
+      (* (width this) (height this))))
+
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)    <-
+  (define-provider diagonal/width-height-calculator
+    :targets (height)
+    :sources (diagonal width)
+    (lambda (this)
+      (sqrt
+       (- (expt (diagonal this) 2)
+          (expt (width this) 2)))))
+
+  ;; D^2 = W^2 + H^2
+  ;; D   = sqrt(W^2 + H^2)  <-
+  (define-provider diagonal-calculator
+    :targets (diagonal)
+    :sources (width height)
+    (lambda (this)
+      (sqrt
+       (+ (expt (width this) 2)
+          (expt (height this) 2)))))
+
+  (with-properties
+   :for-everything
+
+   (set-property! (width rect) 3)
+   (set-property! (height rect) 4)
+
+   (assert= (get-property (width rect) 'unknown) 3)
+   (assert= (get-property (height rect) 'unknown) 4)
+   (assert= (get-property (diagonal rect) 'unknown) 5)
+   (assert= (get-property (area rect) 'unknown) 12)
+
+   ))
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                                                     ;;
+;; As before, check that updates work, even in our model is recursive: ;;
+;;                                                                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(let ()
+  (define rect "my rectangle 1") ;; a rectangle object
+
+  (define-property width)
+  (define-property height)
+  (define-property diagonal)
+  (define-property area)
+
+  (define-provider common-area-calulator
+    :targets (area)
+    :sources (width height)
+    (lambda (this)
+      (* (width this) (height this))))
+
+  ;; D^2 = W^2 + H^2
+  ;; D^2 - W^2 = H^2
+  ;; H^2 = D^2 - W^2
+  ;; H = sqrt(D^2 - W^2)    <-
+  (define-provider diagonal/width-height-calculator
+    :targets (height)
+    :sources (diagonal width)
+    (lambda (this)
+      (sqrt
+       (- (expt (diagonal this) 2)
+          (expt (width this) 2)))))
+
+  ;; D^2 = W^2 + H^2
+  ;; D   = sqrt(W^2 + H^2)  <-
+  (define-provider diagonal-calculator
+    :targets (diagonal)
+    :sources (width height)
+    (lambda (this)
+      (sqrt
+       (+ (expt (width this) 2)
+          (expt (height this) 2)))))
+
+  (with-properties
+   :for-everything
+
+   (set-property! (width rect) 3)
+   (set-property! (height rect) 4)
+
+   (assert= (get-property (width rect) 'unknown) 3)
+   (assert= (get-property (height rect) 'unknown) 4)
+   (assert= (get-property (diagonal rect) 'unknown) 5)
+   (assert= (get-property (area rect) 'unknown) 12)
+
+   (set-property! (width rect) 5)
+   (set-property! (height rect) 12)
+
+   (assert= (get-property (width rect) 'unknown) 5)
+   (assert= (get-property (height rect) 'unknown) 12)
+   (assert= (get-property (diagonal rect) 'unknown) 13)
+   (assert= (get-property (area rect) 'unknown) 60)
+
+   (set-property! (diagonal rect) 7)
+
+   (assert= (get-property (width rect) 'unknown) 5)
+   (assert= (exact (round (get-property (height rect) 'unknown))) 5)
+   (assert= (get-property (diagonal rect) 'unknown) 7)
+   (assert= (exact (round (get-property (area rect) 'unknown))) 24)
 
    ))
