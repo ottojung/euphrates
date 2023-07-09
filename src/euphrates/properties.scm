@@ -74,6 +74,13 @@
   )
 
 
+(define-type9 <pcontext>
+  (make-pcontext objmap foreverething?) pcontext?
+  (objmap pcontext-objmap)
+  (foreverething? pcontext-foreverething?)
+  )
+
+
 (define properties-bigbang-time 0)
 (define properties-current-time properties-bigbang-time)
 (define properties-advance-time
@@ -88,12 +95,12 @@
   (make-hashmap))
 
 
-(define properties-objmap
-  (make-parameter (make-immutable-hashmap)))
-
-
-(define properties-for-everything?
-  (make-parameter #f))
+(define properties-context/p
+  (let ((objmap (make-immutable-hashmap))
+        (foreverething? #f))
+    (make-parameter
+     (make-pcontext
+      objmap foreverething?))))
 
 
 (define properties-everything-key
@@ -213,20 +220,33 @@
 (define-syntax with-properties
   (syntax-rules (:for :for-everything)
     ((_ :for object . bodies)
-     (parameterize
-         ((properties-objmap
-           (immutable-hashmap-set
-            (properties-objmap)
-            object (make-hashmap))))
-       (let () . bodies)))
+     (let ()
+       (define old-pctx
+         (properties-get-context))
+       (define objmap
+         (immutable-hashmap-set
+          (pcontext-objmap old-pctx)
+          object (make-hashmap)))
+       (define foreverething?
+         (pcontext-foreverething? old-pctx))
+       (define pctx
+         (make-pcontext objmap foreverething?))
+       (parameterize ((properties-context/p pctx))
+         (let () . bodies))))
     ((_ :for-everything . bodies)
-     (parameterize ((properties-for-everything? #t)
-                    (properties-objmap
-                     (immutable-hashmap-set
-                      (properties-objmap)
-                      properties-everything-key
-                      (make-hashmap))))
-       (let () . bodies)))))
+     (let ()
+       (define old-pctx
+         (properties-get-context))
+       (define objmap
+         (immutable-hashmap-set
+          (pcontext-objmap old-pctx)
+          properties-everything-key
+          (make-hashmap)))
+       (define foreverething? #t)
+       (define pctx
+         (make-pcontext objmap foreverething?))
+       (parameterize ((properties-context/p pctx))
+         (let () . bodies))))))
 
 
 (define (storage-not-found-response)
@@ -234,15 +254,19 @@
          "Storage not initialized. Did you forget to use `with-properties'?"))
 
 
+(define (properties-get-context)
+  (properties-context/p))
+
+
 (define properties-get-current-objmap
   (let ()
     (define not-found (make-unique))
 
-    (lambda (obj)
-      (define global (properties-objmap))
+    (lambda (pctx obj)
+      (define global (pcontext-objmap pctx))
       (define got (immutable-hashmap-ref global obj not-found))
       (if (eq? got not-found)
-          (and (properties-for-everything?)
+          (and (pcontext-foreverething? pctx)
                (let ()
                  (define local
                    (immutable-hashmap-ref
@@ -327,7 +351,8 @@
 (define (make-property)
   (define property-key (make-unique))
   (define (getfn obj)
-    (define H (properties-get-current-objmap obj))
+    (define pctx (properties-get-context))
+    (define H (properties-get-current-objmap pctx obj))
     (if H
         (let ((R (hashmap-ref H property-key #f)))
           (if (and R (not (pbox-outdated? R)))
@@ -415,7 +440,8 @@
 
 (define (set/unset-property!/fun getter obj evaluator)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
-  (define H (properties-get-current-objmap obj))
+  (define pctx (properties-get-context))
+  (define H (properties-get-current-objmap pctx obj))
 
   (define (property-fun p)
     (define property-key (pproperty-key p))
@@ -454,7 +480,8 @@
 
 (define (outdate-property!/fun getter obj)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
-  (define H (properties-get-current-objmap obj))
+  (define pctx (properties-get-context))
+  (define H (properties-get-current-objmap pctx obj))
 
   (define (property-fun p)
     (define property-key (pproperty-key p))
@@ -515,7 +542,8 @@
 
 (define (get-provider-umtime provider obj)
   (define S (make-hashset))
-  (define H (properties-get-current-objmap obj))
+  (define pctx (properties-get-context))
+  (define H (properties-get-current-objmap pctx obj))
   (unless H (storage-not-found-response))
   (define (dive pprop)
     (get-property-umtime/optimized S H pprop obj))
@@ -566,7 +594,8 @@
   (define starting-pprop
     (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define S (make-hashset))
-  (define H (properties-get-current-objmap obj))
+  (define pctx (properties-get-context))
+  (define H (properties-get-current-objmap pctx obj))
   (unless H (storage-not-found-response))
   (get-property-umtime/optimized S H starting-pprop obj))
 
