@@ -621,6 +621,42 @@
    ))
 
 
+
+
+;; Check updatehook
+(let ()
+  (define c1 (make-counter))
+  (define object1 -3)
+
+  (define-property absolute
+    :on-update (lambda _ (bump c1)))
+
+  (with-properties
+   :for-everything
+
+   (assert= 0 (counter-value c1))
+
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+
+   (assert= 0 (counter-value c1))
+
+   (set-property! (absolute object1) 3)
+
+   (assert= 1 (counter-value c1))
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+   (assert= 1 (counter-value c1))
+
+   ))
+
+
+
 ;;
 ;;  ████     ████          ██   ██   ██          ██
 ;; ░██░██   ██░██         ░██  ░██  ░░  ██████  ░██
