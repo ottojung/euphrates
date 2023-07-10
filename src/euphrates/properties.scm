@@ -320,9 +320,18 @@
         (define rbox
           (list-ref ret index))
 
+        (define updatehook
+          (pproperty-updatehook pprop))
+
+        (define result
+          (pbox-mem rbox))
+
         (hashmap-set! H property-key rbox)
 
-        (pbox-mem rbox))))
+        (when updatehook
+          (updatehook obj result))
+
+        result)))
 
 
 (define (get-best-provider obj providers)
