@@ -288,6 +288,16 @@
   (hashmap-delete! H vkey))
 
 
+(define (update-property-pbox! H pprop obj property-key pbox)
+  (define updatehook
+    (pproperty-updatehook pprop))
+
+  (hashmap-set! H property-key pbox)
+
+  (when updatehook
+    (updatehook obj)))
+
+
 (define (pprovider-evaluate S H property-key provider pprop obj)
   (define ev (pprovider-evaluator provider))
   (define vkey (pprovider-key provider))
@@ -320,18 +330,8 @@
         (define rbox
           (list-ref ret index))
 
-        (define updatehook
-          (pproperty-updatehook pprop))
-
-        (define result
-          (pbox-mem rbox))
-
-        (hashmap-set! H property-key rbox)
-
-        (when updatehook
-          (updatehook obj result))
-
-        result)))
+        (update-property-pbox! H pprop obj property-key rbox)
+        (pbox-mem rbox))))
 
 
 (define (get-best-provider obj providers)
@@ -462,15 +462,17 @@
   (traverse-properties-graph/generic #f))
 
 (define (set/unset-property!/fun getter obj pbox)
-  (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
+  (define starting-pprop
+    (hashmap-ref properties-getters-map getter
+                 (raisu 'no-getter-initialized getter)))
   (define pctx (properties-get-context))
   (define H (properties-get-current-objmap pctx obj))
 
-  (define (property-fun p)
-    (define property-key (pproperty-key p))
-    (if (eq? p pprop)
+  (define (property-fun pprop)
+    (define property-key (pproperty-key pprop))
+    (if (eq? pprop starting-pprop)
         (if pbox
-            (hashmap-set! H property-key pbox)
+            (update-property-pbox! H pprop obj property-key pbox)
             (hashmap-delete! H property-key))
         (let ((current (hashmap-ref H property-key #f)))
           (when current
@@ -484,7 +486,7 @@
 
   (traverse-properties-graph
    property-fun provider-fun
-   pprop))
+   starting-pprop))
 
 
 (define-syntax set-property!
