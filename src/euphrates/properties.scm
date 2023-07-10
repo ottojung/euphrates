@@ -288,7 +288,7 @@
   (hashmap-delete! H vkey))
 
 
-(define (pprovider-evaluate S H key provider this obj)
+(define (pprovider-evaluate S H property-key provider this obj)
   (define ev (pprovider-evaluator provider))
   (define vkey (pprovider-key provider))
   (define ret
@@ -296,9 +296,9 @@
         (call-with-values
             (lambda _
               (dynamic-wind ;; TODO: implement something more efficient.
-                  (lambda _ (hashset-add! S key))
+                  (lambda _ (hashset-add! S property-key))
                   (lambda _ (ev obj))
-                  (lambda _ (hashset-delete! S key))))
+                  (lambda _ (hashset-delete! S property-key))))
           (lambda results
             (define maped
               (map make-pbox/eager results))
@@ -320,7 +320,7 @@
         (define rbox
           (list-ref ret index))
 
-        (hashmap-set! H key rbox)
+        (hashmap-set! H property-key rbox)
 
         (pbox-mem rbox))))
 
@@ -336,7 +336,7 @@
    paired))
 
 
-(define (run-providers this S H obj key default)
+(define (run-providers this S H obj property-key default)
   (define providers
     (stack->list
      (pproperty-providersin this)))
@@ -350,7 +350,7 @@
           (or best (cons 'not-evaluatable #f)))
 
         (if best-provider
-            (pprovider-evaluate S H key best-provider this obj)
+            (pprovider-evaluate S H property-key best-provider this obj)
             default))))
 
 
