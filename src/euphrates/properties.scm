@@ -355,7 +355,7 @@
          (else (pprovider-evaluate S H property-key best-provider this obj))))))
 
 
-(define (make-property)
+(define (make-property updatehook)
   (define property-key (make-unique))
   (define (getfn obj)
     (define pctx (properties-get-context))
@@ -383,9 +383,11 @@
 
   (define providersin (stack-make))
   (define providersou (stack-make))
-  (define updatehook #f)
   (define this
     (make-pproperty getfn providersin providersou updatehook property-key))
+
+  (unless (or (not updatehook) (procedure? updatehook))
+    (raisu 'type-error "Expected a procedure for update hook, but got something else" updatehook))
 
   (hashmap-set! properties-getters-map get-wrapped this)
 
@@ -393,9 +395,11 @@
 
 
 (define-syntax define-property
-  (syntax-rules ()
+  (syntax-rules (:on-update)
     ((_ getter)
-     (define getter (make-property)))))
+     (define-property getter :on-update #f))
+    ((_ getter :on-update updatehook)
+     (define getter (make-property updatehook)))))
 
 
 ;; This is just like the usual call to property,

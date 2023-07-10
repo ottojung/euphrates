@@ -81,6 +81,7 @@
           number?
           or
           parameterize
+          procedure?
           quote
           set!
           syntax-rules
