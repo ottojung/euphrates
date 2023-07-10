@@ -12,15 +12,15 @@ Personal all-in-one library for schemes.
 - Composable monads `src/monadic.scm`
   - work kind of like `Redux`, but more powerful thanks to macros and continuations
   - suppport Haskell-like DSL for do-notation
-- JSON parser `src/json-parse.scm`
 - Petri networks `src/petri.scm`
   - with `profun` integration `src/petri-net-parse-profun.scm`
 - Dynamic threading environment `src/dynamic-thread-*.scm`
   - with an implementaion of non-preemptive portable threads `src/np-thread.scm`
-- Number conversions `src/convert-number-base.scm` and `src/number-list.scm`
 - Simple subprocesses `src/run-asyncproc.scm`
-- Various alphabets `src/*-alphabet.scm`
+- JSON parser `src/json-parse.scm`
 - Lots of list functions `src/list-*.scm`
+- Number conversions `src/convert-number-base.scm` and `src/number-list.scm`
+- Various alphabets `src/*-alphabet.scm`
 
 ## How to use
 
