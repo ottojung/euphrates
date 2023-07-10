@@ -364,7 +364,7 @@
         (let ((R (hashmap-ref H property-key #f)))
           (if (and R (not (pbox-outdated? R)))
               (pbox-value R)
-              (if (hashset-has? S get-wrapped)
+              (if (hashset-has? S property-key)
                   (if R (pbox-value R) not-found-obj) ;; TODO: better return value that mentions recursion reason
                   (run-providers
                    this S H obj property-key
