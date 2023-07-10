@@ -288,7 +288,7 @@
   (hashmap-delete! H vkey))
 
 
-(define (pprovider-evaluate S H property-key provider this obj)
+(define (pprovider-evaluate S H property-key provider pprop obj)
   (define ev (pprovider-evaluator provider))
   (define vkey (pprovider-key provider))
   (define ret
@@ -313,7 +313,7 @@
         ;; TODO: optimize indexation
         (define index
           (list-index
-           (lambda (x) (eq? this x))
+           (lambda (x) (eq? pprop x))
            targets))
 
         ;; FIXME: check the list length
@@ -336,10 +336,10 @@
    paired))
 
 
-(define (run-providers this S H obj property-key default)
+(define (run-providers pprop S H obj property-key default)
   (define providers
     (stack->list
-     (pproperty-providersin this)))
+     (pproperty-providersin pprop)))
 
   (if (null? providers) default
       (let ()
@@ -352,7 +352,7 @@
         (cond
          ((not best-provider) default)
          ((equal? 'not-evaluatable best-score) default)
-         (else (pprovider-evaluate S H property-key best-provider this obj))))))
+         (else (pprovider-evaluate S H property-key best-provider pprop obj))))))
 
 
 (define (make-property updatehook)
@@ -368,7 +368,7 @@
               (if (hashset-has? S property-key)
                   (if R (pbox-value R) not-found-obj) ;; TODO: better return value that mentions recursion reason
                   (run-providers
-                   this S H obj property-key
+                   pprop S H obj property-key
                    not-found-obj))))
         not-found-storage))
 
@@ -383,13 +383,13 @@
 
   (define providersin (stack-make))
   (define providersou (stack-make))
-  (define this
+  (define pprop
     (make-pproperty getfn providersin providersou updatehook property-key))
 
   (unless (or (not updatehook) (procedure? updatehook))
     (raisu 'type-error "Expected a procedure for update hook, but got something else" updatehook))
 
-  (hashmap-set! properties-getters-map get-wrapped this)
+  (hashmap-set! properties-getters-map get-wrapped pprop)
 
   get-wrapped)
 
