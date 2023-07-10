@@ -349,9 +349,10 @@
         (define-pair (best-score best-provider)
           (or best (cons 'not-evaluatable #f)))
 
-        (if best-provider
-            (pprovider-evaluate S H property-key best-provider this obj)
-            default))))
+        (cond
+         ((not best-provider) default)
+         ((equal? 'not-evaluatable best-score) default)
+         (else (pprovider-evaluate S H property-key best-provider this obj))))))
 
 
 (define (make-property)
