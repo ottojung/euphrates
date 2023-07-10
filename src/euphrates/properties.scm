@@ -47,11 +47,11 @@
 
 
 (define-type9 <pproperty>
-  (make-pproperty getfn providersin providersou sethook key) pproperty?
+  (make-pproperty getfn providersin providersou updatehook key) pproperty?
   (getfn pproperty-getfn)
   (providersin pproperty-providersin)
   (providersou pproperty-providersou)
-  (sethook pproperty-sethook)
+  (updatehook pproperty-updatehook)
   (key pproperty-key)
   )
 
@@ -383,9 +383,9 @@
 
   (define providersin (stack-make))
   (define providersou (stack-make))
-  (define sethook #f)
+  (define updatehook #f)
   (define this
-    (make-pproperty getfn providersin providersou sethook property-key))
+    (make-pproperty getfn providersin providersou updatehook property-key))
 
   (hashmap-set! properties-getters-map get-wrapped this)
 
