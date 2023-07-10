@@ -452,7 +452,7 @@
 (define traverse-properties-graph/reverse
   (traverse-properties-graph/generic #f))
 
-(define (set/unset-property!/fun getter obj evaluator)
+(define (set/unset-property!/fun getter obj pbox)
   (define pprop (hashmap-ref properties-getters-map getter (raisu 'no-getter-initialized getter)))
   (define pctx (properties-get-context))
   (define H (properties-get-current-objmap pctx obj))
@@ -460,8 +460,8 @@
   (define (property-fun p)
     (define property-key (pproperty-key p))
     (if (eq? p pprop)
-        (if evaluator
-            (hashmap-set! H property-key evaluator)
+        (if pbox
+            (hashmap-set! H property-key pbox)
             (hashmap-delete! H property-key))
         (let ((current (hashmap-ref H property-key #f)))
           (when current
