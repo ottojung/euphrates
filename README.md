@@ -6,6 +6,8 @@ Personal all-in-one library for schemes.
 ## Content
 
 - CFG-based CLI parsing `src/define-cli.scm`
+- Object system based on properties constraints `src/properties.scm`
+  - Similar to propagators but less (computationally) expensive, and time-aware
 - Embedabble mini prolog `src/profun.scm`
 - Composable monads `src/monadic.scm`
   - work kind of like `Redux`, but more powerful thanks to macros and continuations
