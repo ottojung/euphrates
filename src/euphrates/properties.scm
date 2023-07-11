@@ -315,23 +315,31 @@
             (hashmap-set! H vkey maped)
             maped))))
 
-  (if (null? ret)
-      (raisu 'provider-did-not-produce-the-promised-value provider)
-      (let ()
-        (define targets (pprovider-targets provider))
+  ;; TODO: optimize indexation
+  (define targets (pprovider-targets provider))
+  (define targetslen (length targets))
+  (define retlen (length ret))
 
-        ;; TODO: optimize indexation
-        (define index
-          (list-index
-           (lambda (x) (eq? pprop x))
-           targets))
+  (cond
+   ((not (equal? retlen targetslen))
+    (if (null? ret)
+        (raisu 'provider-did-not-produce-the-promised-value
+               provider)
+        (raisu 'provider-returned-bad-number-of-arguments
+               retlen targetslen)))
+   (else
+    (let ()
+      ;; TODO: optimize indexation
+      (define index
+        (list-index
+         (lambda (x) (eq? pprop x))
+         targets))
 
-        ;; FIXME: check the list length
-        (define rbox
-          (list-ref ret index))
+      (define rbox
+        (list-ref ret index))
 
-        (update-property-pbox! H pprop obj property-key rbox)
-        (pbox-mem rbox))))
+      (update-property-pbox! H pprop obj property-key rbox)
+      (pbox-mem rbox)))))
 
 
 (define (get-best-provider obj providers)

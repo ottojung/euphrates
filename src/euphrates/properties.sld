@@ -70,6 +70,7 @@
           for-each
           if
           lambda
+          length
           let
           let*
           list
