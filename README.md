@@ -6,7 +6,10 @@ Library of common functionalities for use in Scheme projects.
 Similar to
 
 - [SLIB](https://people.csail.mit.edu/jaffer/SLIB.html)
+- [Scmutils](https://groups.csail.mit.edu/mac/users/gjs/6946/installation.html)
 - [Schemepunk](https://github.com/ar-nelson/schemepunk)
+- [Spells](https://github.com/rotty/spells/tree/master/spells)
+- [Alschemist](https://github.com/ashinn/alschemist)
 
 ## Content
 
