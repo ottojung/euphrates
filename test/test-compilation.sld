@@ -42,6 +42,10 @@
     (only (euphrates append-string-file)
           append-string-file))
   (import
+    (only (euphrates assert-called-once)
+          assert-called-once
+          with-called-once-extent))
+  (import
     (only (euphrates assert-equal-hs) assert=HS))
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates assert-raw) assert/raw))
