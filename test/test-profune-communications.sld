@@ -32,8 +32,8 @@
     (only (euphrates profune-communicator)
           make-profune-communicator)
     (only (euphrates tilda-a) ~a)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (euphrates words-to-string) words->string)
     (only (scheme base)
           *

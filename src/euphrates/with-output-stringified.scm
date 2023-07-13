@@ -1,5 +1,5 @@
 
-(define-syntax with-output-to-string
+(define-syntax with-output-stringified
   (syntax-rules ()
     ((_ . bodies)
      (let ((q (open-output-string)))

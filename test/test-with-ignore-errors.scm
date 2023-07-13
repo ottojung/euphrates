@@ -6,7 +6,7 @@
    "error:"
    (cadr
     (string->words
-     (with-output-to-string
+     (with-output-stringified
        (parameterize ((current-error-port (current-output-port)))
          (with-ignore-errors!
           (raisu 'test "arg1" "arg2"))))))))

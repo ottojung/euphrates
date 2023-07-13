@@ -10,8 +10,8 @@
     (only (euphrates monad-bind) monad-bind)
     (only (euphrates monad-do) monad-do)
     (only (euphrates with-monad) with-monad)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           *
           +

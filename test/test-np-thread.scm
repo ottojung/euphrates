@@ -76,6 +76,6 @@
 
 (assert=
  (lines->string parameterized-order)
- (with-output-to-string
+ (with-output-stringified
    (with-np-thread-env/non-interruptible
     (test-body))))

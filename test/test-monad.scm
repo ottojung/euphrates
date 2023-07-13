@@ -6,7 +6,7 @@
   (lambda _
     (define buffer "")
     (define (add! monad-input)
-      (let ((s (with-output-to-string
+      (let ((s (with-output-stringified
                  (monad-apply log-monad monad-input))))
         (set! buffer (string-append buffer s))))
 
@@ -47,7 +47,7 @@
         "(h = 40 = (+ (x) (y) (m)))"
         "(return 40)"
         ""))
- (with-output-to-string
+ (with-output-stringified
    (monadic
     log-monad
     (x (+ 2 3))

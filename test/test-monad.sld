@@ -20,8 +20,8 @@
           monadstate-ret
           monadstate?)
     (only (euphrates raisu) raisu)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           *
           +

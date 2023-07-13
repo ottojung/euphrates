@@ -56,8 +56,8 @@
   (import (only (euphrates tilda-a) ~a))
   (import (only (euphrates tilda-s) ~s))
   (import
-    (only (euphrates with-output-to-string)
-          with-output-to-string))
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
   (import
     (only (euphrates words-to-string) words->string))
   (import

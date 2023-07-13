@@ -7,8 +7,8 @@
     (only (euphrates string-to-words) string->words)
     (only (euphrates with-ignore-errors)
           with-ignore-errors!)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           begin
           cadr

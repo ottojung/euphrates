@@ -11,8 +11,8 @@
     (only (euphrates petri-net-parse)
           petri-lambda-net)
     (only (euphrates petri) petri-push petri-run)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           _
           apply

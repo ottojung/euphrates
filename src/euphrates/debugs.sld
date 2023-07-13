@@ -7,8 +7,8 @@
     (only (euphrates serialization-short)
           serialize/short))
   (import
-    (only (euphrates with-output-to-string)
-          with-output-to-string))
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
   (import
     (only (scheme base)
           _

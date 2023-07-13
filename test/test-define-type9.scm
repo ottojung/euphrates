@@ -49,7 +49,7 @@
 
 (assert=
  "#<r2m :: mybox a: 1 b: 2>"
- (with-output-to-string
+ (with-output-stringified
    (write obj1)))
 
 (define desc1

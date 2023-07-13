@@ -7,8 +7,8 @@
     (only (euphrates define-type9)
           define-type9
           type9-get-record-descriptor)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           _
           assoc

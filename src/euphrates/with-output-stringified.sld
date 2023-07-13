@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates with-output-to-string)
-  (export with-output-to-string)
+  (euphrates with-output-stringified)
+  (export with-output-stringified)
   (import
     (only (scheme base)
           _
@@ -18,5 +18,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/with-output-to-string.scm")))
-    (else (include "with-output-to-string.scm"))))
+               "euphrates/with-output-stringified.scm")))
+    (else (include "with-output-stringified.scm"))))

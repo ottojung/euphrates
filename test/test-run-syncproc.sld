@@ -8,8 +8,8 @@
     (only (euphrates asyncproc) asyncproc-status)
     (only (euphrates run-syncproc-star)
           run-syncproc*)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           _
           begin

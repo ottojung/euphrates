@@ -45,8 +45,8 @@
           profun-eval-query
           profun-iterate
           profun-next)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           *
           +

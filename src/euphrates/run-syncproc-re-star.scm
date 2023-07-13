@@ -16,7 +16,7 @@
 (define (run-syncproc/re* command . args)
   (define status #f)
   (define text
-    (with-output-to-string
+    (with-output-stringified
       (define p
         (apply run-syncproc* (cons command args)))
       (set! status (asyncproc-status p))))

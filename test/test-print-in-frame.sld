@@ -7,8 +7,8 @@
           list-intersperse)
     (only (euphrates print-in-frame) print-in-frame)
     (only (euphrates string-to-words) string->words)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base) _ begin lambda let newline))
   (cond-expand
     (guile (import (only (guile) include-from-path))

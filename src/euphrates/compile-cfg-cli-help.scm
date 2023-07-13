@@ -212,7 +212,7 @@
        (range (length main-regex))
        main-regex))
 
-    (with-output-to-string
+    (with-output-stringified
       (display-cli-decl)
       (display (or header1 ""))
       (display-productions)

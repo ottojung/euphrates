@@ -60,7 +60,7 @@
   (define (test-dialog input . lines)
     (define expected (lines->string lines))
     (define actual
-      (with-output-to-string
+      (with-output-stringified
         (define result (comms1 input))
         (printf "result = ~a" result)))
     (unless (equal? expected actual)

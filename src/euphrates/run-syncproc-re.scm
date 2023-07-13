@@ -13,7 +13,7 @@
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (run-syncproc/re command . args)
-  (with-output-to-string
+  (with-output-stringified
     (define p
       (apply run-syncproc* (cons command args)))
     (unless (= 0 (asyncproc-status p))

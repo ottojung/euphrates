@@ -17,7 +17,7 @@
        "Bye Robert the Smith!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -36,7 +36,7 @@
        "Bye Robert the Smith!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -59,7 +59,7 @@
        "Bye Bob the Rogers!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -82,7 +82,7 @@
        "Bye Robert the Smith!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -103,7 +103,7 @@
        "Bye Robert the Smith!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (petri-profun-net
@@ -122,7 +122,7 @@
        "Bye Robert the Smith!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -140,7 +140,7 @@
        "Bye Robert the Smith!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -165,7 +165,7 @@
        "Bye Robert the Rogers!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -190,7 +190,7 @@
        "Bye Robert the Rogers!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello '((deduplicate)) handler
         (list
@@ -218,7 +218,7 @@
        "Bye Bob the Rogers!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -250,7 +250,7 @@
        "Bye Bob the Rogers!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list
@@ -276,7 +276,7 @@
        "Bye Bob the Rogers!"
        "Finish"
        ""))
-     (with-output-to-string
+     (with-output-stringified
        (petri-run
         'hello handler
         (list

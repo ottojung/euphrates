@@ -2125,8 +2125,8 @@
           with-ignore-errors!))
   (import (only (euphrates with-monad) with-monad))
   (import
-    (only (euphrates with-output-to-string)
-          with-output-to-string))
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
   (import
     (only (euphrates with-randomizer-seed)
           with-randomizer-seed))

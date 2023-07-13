@@ -9,8 +9,8 @@
     (only (euphrates run-syncproc-star)
           run-syncproc*))
   (import
-    (only (euphrates with-output-to-string)
-          with-output-to-string))
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
   (import
     (only (scheme base)
           =

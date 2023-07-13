@@ -23,7 +23,7 @@
             (sy (serialize/short y)))
        (if (pair? sy)
            (debug "~a:\n~a" (quote x)
-                  (with-output-to-string
+                  (with-output-stringified
                     (pretty-print sy)))
            (debug "~a = ~s" (quote x) sy))
        y))))

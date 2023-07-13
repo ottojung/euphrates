@@ -6,8 +6,8 @@
     (only (euphrates catchu-case) catchu-case)
     (only (euphrates dprintln) dprintln)
     (only (euphrates raisu) raisu)
-    (only (euphrates with-output-to-string)
-          with-output-to-string)
+    (only (euphrates with-output-stringified)
+          with-output-stringified)
     (only (scheme base)
           _
           apply

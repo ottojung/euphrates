@@ -12,7 +12,7 @@
      "(#f = 16 = (* 8 2))"
      "(return 16)"
      ""))
-   (with-output-to-string
+   (with-output-stringified
      (with-monad
       log-monad
 
@@ -35,7 +35,7 @@
      "(y = 16 = (* 8 2))"
      "(return 16)"
      ""))
-   (with-output-to-string
+   (with-output-stringified
      (with-monad
       log-monad
 

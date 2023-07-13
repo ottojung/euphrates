@@ -8,7 +8,7 @@
       ((_ body)
        (assert=
         "OK: x y z\n"
-        (with-output-to-string
+        (with-output-stringified
           body)))))
 
   (assert=

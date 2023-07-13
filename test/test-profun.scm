@@ -692,7 +692,7 @@
 
    (assert=
     "param1 = 7\n"
-    (with-output-to-string
+    (with-output-stringified
       (test '((= X 7) (p1 X) (printp1 8)) '(((X . 7))))))
 
    )

@@ -21,7 +21,7 @@
 
  (assert=
   "5.4.1.3.2."
-  (with-output-to-string
+  (with-output-stringified
     (monadic
      lazy-monad
      (x (begin (display "1.") (+ 2 3)))

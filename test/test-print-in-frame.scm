@@ -15,7 +15,7 @@
   │ a laz│
   │y dog │
   └──────┘"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #t #t 2 10 0 #\space "the quick brown fox jumps over a lazy dog")))
 
@@ -29,7 +29,7 @@
   │s over│
   │ a laz│
   │y dog │"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #t #f 2 10 0 #\space "the quick brown fox jumps over a lazy dog")))
 
@@ -43,7 +43,7 @@
   │ a laz│
   │y dog │
   └──────┘"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #f #t 2 10 0 #\space "the quick brown fox jumps over a lazy dog")))
 
@@ -59,7 +59,7 @@
   │lazy  │
   │dog   │
   └──────┘"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #t #t 2 10 0
                      #\space
@@ -80,7 +80,7 @@
   │lazy  │
   │dog   │
   └──────┘"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #t #t 2 10 0
                      #\space
@@ -104,7 +104,7 @@
   │lazy  │
   │dog   │
   └──────┘"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #t #t 2 10 0
                      #\space
@@ -124,7 +124,7 @@
   │over a│
   │lazy  │
   │dog   │"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #t #f 2 10 0
                      #\space
@@ -144,7 +144,7 @@
   │lazy  │
   │dog   │
   └──────┘"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #f #t 2 10 0
                      #\space
@@ -163,7 +163,7 @@
   │over a│
   │lazy  │
   │dog   │"
-   (with-output-to-string
+   (with-output-stringified
      (newline)
      (print-in-frame #f #f 2 10 0
                      #\space
