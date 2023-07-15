@@ -35,6 +35,15 @@
   (assert= ""
            (path-normalize ""))
 
+  (assert= "."
+           (path-normalize "."))
+
+  (assert= "."
+           (path-normalize "././."))
+
+  (assert= "../.."
+           (path-normalize "hello/../../.."))
+
   (assert= " "
            (path-normalize " "))
 

@@ -49,6 +49,11 @@
   (define joined
     (string-join rooted-parts "/"))
 
-  (if (string-prefix? "/" path)
-      (string-append "/" joined)
-      joined))
+  (cond
+   ((string-prefix? "/" path)
+    (string-append "/" joined))
+   ((and (equal? joined "")
+         (not (equal? path ""))
+         (not (null? parts)))
+    ".")
+   (else joined)))

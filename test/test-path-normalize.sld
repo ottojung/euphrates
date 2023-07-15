@@ -1,10 +1,10 @@
 
 (define-library
   (test-path-normalize)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates path-normalize) path-normalize)
-    (only (scheme base) begin let))
+    (only (euphrates path-normalize) path-normalize))
+  (import (only (scheme base) begin let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

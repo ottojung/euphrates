@@ -10,11 +10,14 @@
           string-split/simple))
   (import
     (only (scheme base)
+          and
           begin
           car
           cdr
+          cond
           cons
           define
+          else
           equal?
           if
           lambda
