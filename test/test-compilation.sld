@@ -706,7 +706,7 @@
           list-remove-common-prefix))
   (import
     (only (euphrates list-replace-last)
-          list-replace-last-element))
+          list-replace-last))
   (import
     (only (euphrates list-singleton-q)
           list-singleton?))

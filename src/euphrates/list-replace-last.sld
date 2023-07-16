@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates list-replace-last)
-  (export list-replace-last-element)
+  (export list-replace-last)
   (import
     (only (scheme base)
           begin
