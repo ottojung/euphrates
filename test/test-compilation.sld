@@ -741,6 +741,9 @@
   (import
     (only (euphrates list-windows) list-windows))
   (import
+    (only (euphrates list-zip-longest)
+          list-zip-longest))
+  (import
     (only (euphrates list-zip-with) list-zip-with))
   (import (only (euphrates list-zip) list-zip))
   (import (only (euphrates log-monad) log-monad))
