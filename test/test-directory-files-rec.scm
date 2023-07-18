@@ -1,4 +1,15 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import
+     (only (euphrates directory-files-rec)
+           directory-files-rec))
+   (import
+     (only (scheme base) begin cond-expand let quote))))
+
 
 ;; directory-files-rec
 

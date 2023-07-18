@@ -1,4 +1,42 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates compile-cfg-cli-help)
+           CFG-AST->CFG-CLI-help))
+   (import
+     (only (euphrates current-program-path-p)
+           current-program-path/p))
+   (import (only (euphrates debug) debug))
+   (import
+     (only (euphrates define-cli)
+           define-cli:raisu/p
+           define-cli:show-help
+           make-cli-with-handler
+           with-cli))
+   (import
+     (only (scheme base)
+           /
+           _
+           begin
+           car
+           cond-expand
+           define
+           define-syntax
+           lambda
+           let
+           map
+           max
+           parameterize
+           quasiquote
+           quote
+           string?
+           syntax-rules
+           unquote))))
+
 
 
 (parameterize ((current-program-path/p "test"))

@@ -1,4 +1,19 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates list-length-geq-q)
+           list-length=<?))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           let
+           not
+           quote))))
+
 
 ;; list-length-less-geq-q
 

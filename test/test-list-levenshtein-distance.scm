@@ -1,4 +1,19 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates list-levenshtein-distance)
+           list-levenshtein-distance))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           let
+           string->list))))
+
 
 ;; list-levenshtein-distance
 

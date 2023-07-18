@@ -1,4 +1,16 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates big-random-int) big-random-int))
+   (import
+     (only (euphrates with-randomizer-seed)
+           with-randomizer-seed))
+   (import
+     (only (scheme base) begin cond-expand define let))))
+
 
 
 (let () ; big-random-int

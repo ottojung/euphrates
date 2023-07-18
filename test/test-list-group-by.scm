@@ -1,4 +1,21 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import
+     (only (euphrates list-group-by) list-group-by))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           even?
+           lambda
+           let
+           modulo
+           quote))))
+
 
 
 (let () ;; list-group-by

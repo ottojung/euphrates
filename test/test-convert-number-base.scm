@@ -1,4 +1,23 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates convert-number-base)
+           convert-number-base))
+   (import
+     (only (scheme base)
+           begin
+           car
+           cdr
+           cond-expand
+           cons
+           for-each
+           lambda
+           let
+           list))))
+
 
 ;; convert-number-base
 

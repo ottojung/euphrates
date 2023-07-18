@@ -1,4 +1,16 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates hashset)
+           hashset-equal?
+           make-hashset))
+   (import (only (euphrates negate) negate))
+   (import
+     (only (scheme base) begin cond-expand let quote))))
+
 
 ;; hashset-negative
 

@@ -1,4 +1,12 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates url-goto) url-goto))
+   (import
+     (only (scheme base) begin cond-expand let))))
+
 
 ;; url-goto
 

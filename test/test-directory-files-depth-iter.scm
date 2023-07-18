@@ -1,4 +1,22 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import
+     (only (euphrates directory-files-depth-iter)
+           directory-files-depth-iter))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           cons
+           define
+           if
+           let
+           quote))))
+
 
 
 (define iter

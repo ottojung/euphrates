@@ -1,4 +1,15 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import
+     (only (euphrates list-deduplicate)
+           list-deduplicate))
+   (import
+     (only (scheme base) begin cond-expand let quote))))
+
 
 ;; list-deduplicate
 

@@ -1,4 +1,21 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates syntax-map) syntax-map))
+   (import
+     (only (scheme base)
+           _
+           begin
+           cond-expand
+           cons
+           define-syntax
+           let
+           list
+           quote
+           syntax-rules))))
+
 
 
 (let () ;; syntax-map

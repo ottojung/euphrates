@@ -1,4 +1,28 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates cfg-machine) make-cfg-machine))
+   (import
+     (only (euphrates immutable-hashmap)
+           immutable-hashmap->alist))
+   (import
+     (only (scheme base)
+           =
+           and
+           begin
+           cond-expand
+           define
+           define-values
+           let
+           list
+           or
+           quote))))
+
 
 ;; cfg-machine
 

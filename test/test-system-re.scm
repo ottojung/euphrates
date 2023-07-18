@@ -1,4 +1,12 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates system-re) system-re))
+   (import
+     (only (scheme base) begin cond-expand cons let))))
+
 
 ;; system-re
 

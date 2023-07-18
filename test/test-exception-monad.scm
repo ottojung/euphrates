@@ -1,4 +1,26 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert) assert))
+   (import (only (euphrates catch-any) catch-any))
+   (import
+     (only (euphrates exception-monad)
+           exception-monad))
+   (import (only (euphrates monadic) monadic))
+   (import (only (euphrates raisu) raisu))
+   (import
+     (only (scheme base)
+           +
+           -
+           _
+           begin
+           cond-expand
+           lambda
+           let
+           quote
+           set!))))
+
 
 ;; exception-monad
 

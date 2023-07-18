@@ -1,4 +1,22 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates list-random-shuffle)
+           list-random-shuffle))
+   (import
+     (only (euphrates with-randomizer-seed)
+           with-randomizer-seed))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           let
+           quote
+           set!))))
+
 
 
 (let () ;; list-random-shuffle

@@ -1,4 +1,19 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates define-cli) lambda-cli))
+   (import
+     (only (scheme base)
+           /
+           begin
+           cond-expand
+           define
+           let
+           list
+           string-append))))
+
 
 ;; lambda-cli
 

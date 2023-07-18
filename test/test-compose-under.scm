@@ -1,4 +1,24 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates compose-under) compose-under))
+   (import (only (euphrates range) range))
+   (import
+     (only (scheme base)
+           *
+           +
+           -
+           begin
+           cond-expand
+           let
+           list
+           odd?
+           or
+           zero?))))
+
 
 
 (let () ;; compose-under

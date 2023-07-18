@@ -1,4 +1,17 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates mdict)
+           mdict
+           mdict-has?
+           mdict-set!))
+   (import
+     (only (scheme base) begin cond-expand let not))))
+
 
 ;; mdict
 

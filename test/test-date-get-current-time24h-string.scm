@@ -1,4 +1,9 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (scheme base) begin cond-expand))))
+
 
 
 ;; NOTE: guile timezones are broken

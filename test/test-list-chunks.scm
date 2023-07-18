@@ -1,4 +1,13 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates list-chunks) list-chunks))
+   (import
+     (only (scheme base) begin cond-expand let quote))))
+
 
 ;; list-chunks
 

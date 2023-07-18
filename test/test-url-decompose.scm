@@ -1,4 +1,18 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates url-decompose) url-decompose))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           define-values
+           vector))))
+
 
 ;; url-decompose
 

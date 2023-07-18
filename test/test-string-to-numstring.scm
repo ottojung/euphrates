@@ -1,4 +1,14 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates string-to-numstring)
+           string->numstring))
+   (import
+     (only (scheme base) begin cond-expand let))))
+
 
 
 (let () ;; string-to-numstring

@@ -1,4 +1,23 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates lazy-parameter) lazy-parameter))
+   (import (only (euphrates tilda-a) ~a))
+   (import
+     (only (euphrates with-dynamic) with-dynamic))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           lambda
+           make-parameter
+           set!
+           string->number))))
+
 
 ;; lazy-parameter, with-dynamic
 

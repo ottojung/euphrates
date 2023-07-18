@@ -1,4 +1,14 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates url-get-hostname-and-port)
+           url-get-hostname-and-port))
+   (import
+     (only (scheme base) begin cond-expand let))))
+
 
 ;; url-get-hostname-and-port
 

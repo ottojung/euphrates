@@ -1,4 +1,19 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates cfg-remove-dead-code)
+           CFG-remove-dead-code))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           let
+           quasiquote))))
+
 
 (let ()
   (define parsed

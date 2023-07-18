@@ -1,4 +1,22 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates list-tag-next)
+           list-tag/next
+           list-untag/next))
+   (import
+     (only (scheme base)
+           begin
+           car
+           cond-expand
+           even?
+           let
+           map
+           quote))))
+
 
 ;; list-tag/next
 

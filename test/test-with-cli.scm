@@ -1,4 +1,32 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates command-line-arguments-p)
+           command-line-argumets/p))
+   (import (only (euphrates define-cli) with-cli))
+   (import
+     (only (scheme base)
+           +
+           /
+           begin
+           cond-expand
+           define
+           let
+           list
+           not
+           number->string
+           parameterize
+           procedure?
+           quote
+           string-append
+           string?))))
+
 
 ;; with-cli
 

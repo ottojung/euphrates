@@ -1,4 +1,19 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates list-zip-longest)
+           list-zip-longest))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           let
+           quote))))
+
 (let () ;; list-zip-longest
   (define fill-value 'x)
 

@@ -1,4 +1,20 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert) assert))
+   (import (only (euphrates define-cli) make-cli))
+   (import (only (euphrates hashmap) make-hashmap))
+   (import
+     (only (scheme base)
+           /
+           begin
+           cond-expand
+           define
+           let
+           list
+           not))))
+
 
 ;; make-cli
 

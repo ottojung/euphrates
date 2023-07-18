@@ -1,4 +1,22 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates key-value-map)
+           key-value-map/list))
+   (import
+     (only (scheme base)
+           +
+           begin
+           cond-expand
+           let
+           list
+           quasiquote
+           quote
+           unquote))))
+
 
 (assert=
  (key-value-map/list

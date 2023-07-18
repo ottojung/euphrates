@@ -1,4 +1,21 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates const) const))
+   (import
+     (only (euphrates string-split-3) string-split-3))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define-values
+           lambda
+           let
+           member
+           string->list))))
+
 
 ;; string-split-3
 

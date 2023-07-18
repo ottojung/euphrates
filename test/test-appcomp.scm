@@ -1,4 +1,20 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates comp) appcomp comp))
+   (import
+     (only (scheme base)
+           *
+           +
+           begin
+           cond-expand
+           define
+           expt
+           lambda
+           let))))
+
 
 ;; appcomp
 

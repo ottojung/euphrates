@@ -1,4 +1,31 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-called-once)
+           assert-called-once
+           with-called-once-extent))
+   (import (only (euphrates catch-any) catch-any))
+   (import
+     (only (scheme base)
+           +
+           _
+           and
+           begin
+           cond-expand
+           define
+           define-values
+           equal?
+           lambda
+           let
+           newline
+           set!
+           unless
+           values))
+   (import (only (scheme process-context) exit))
+   (import (only (scheme write) display))))
+
 (let ()
   (with-called-once-extent
 

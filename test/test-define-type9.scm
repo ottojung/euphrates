@@ -1,4 +1,28 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates define-type9)
+           define-type9
+           type9-get-record-descriptor))
+   (import
+     (only (euphrates with-output-stringified)
+           with-output-stringified))
+   (import
+     (only (scheme base)
+           assoc
+           begin
+           cdr
+           cond-expand
+           define
+           eq?
+           not
+           quote))
+   (import (only (scheme write) write))))
+
 
 
 (define-type9 mybox0

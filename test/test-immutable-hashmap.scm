@@ -1,4 +1,21 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates immutable-hashmap)
+           immutable-hashmap-ref
+           immutable-hashmap-set
+           make-immutable-hashmap))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           let
+           quote))))
+
 
 ;; immutable-hashmap
 

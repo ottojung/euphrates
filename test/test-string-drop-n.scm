@@ -1,4 +1,13 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates string-drop-n) string-drop-n))
+   (import
+     (only (scheme base) begin cond-expand let))))
+
 
 
 (let () ;; string-drop-n

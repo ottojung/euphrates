@@ -1,4 +1,13 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates path-extension) path-extension))
+   (import
+     (only (scheme base) begin cond-expand let))))
+
 
 ;; path-extension
 

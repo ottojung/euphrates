@@ -1,4 +1,11 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates clamp) clamp))
+   (import (only (scheme base) begin cond-expand))))
+
 (assert= 0.5 (clamp 0 1 0.5))
 (assert= 1 (clamp 0 1 7))
 (assert= 0 (clamp 0 1 -2)) ; x is lower than the range, should return the lower bound

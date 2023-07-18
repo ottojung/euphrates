@@ -1,4 +1,25 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates alist-initialize-bang)
+           alist-initialize!
+           alist-initialize!:return-multiple
+           alist-initialize!:stop))
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (scheme base)
+           *
+           +
+           begin
+           cond-expand
+           define
+           let
+           or
+           quasiquote
+           quote))))
+
 
 
 (let ()

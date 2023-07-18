@@ -1,4 +1,24 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates compile-cfg-cli)
+           CFG-CLI->CFG-lang))
+   (import
+     (only (scheme base)
+           *
+           /
+           =
+           and
+           begin
+           cond-expand
+           define
+           let
+           or
+           quote))))
+
 
 ;; compile-cfg-cli
 

@@ -1,4 +1,21 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates general-table) general-table))
+   (import
+     (only (scheme base)
+           +
+           begin
+           cond-expand
+           let
+           list
+           quasiquote
+           quote
+           unquote))))
+
 
 (assert=
  (general-table

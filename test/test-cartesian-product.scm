@@ -1,4 +1,15 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import
+     (only (euphrates cartesian-product)
+           cartesian-product))
+   (import
+     (only (scheme base) begin cond-expand let quote))))
+
 
 ;; cartesian-product
 

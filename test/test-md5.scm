@@ -1,4 +1,11 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates md5) md5-digest))
+   (import (only (scheme base) begin cond-expand))))
+
 
 (assert=
  (md5-digest "hello")

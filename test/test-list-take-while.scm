@@ -1,4 +1,19 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates list-take-while)
+           list-take-while))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           even?
+           let
+           quote))))
+
 
 ;; list-take-while
 

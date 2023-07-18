@@ -1,4 +1,14 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates string-plus-encode)
+           string-plus-encode))
+   (import
+     (only (scheme base) begin cond-expand define let))))
+
 
 
 (let () ;; string-plus-encode

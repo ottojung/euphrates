@@ -1,4 +1,28 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates define-type9) define-type9))
+   (import (only (euphrates hashset) list->hashset))
+   (import
+     (only (euphrates serialization-short)
+           deserialize/short
+           serialize/short))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           eq?
+           equal?
+           not
+           quasiquote
+           quote
+           unquote))))
+
 
 
 (define obj1

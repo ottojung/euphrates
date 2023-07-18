@@ -1,4 +1,23 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates linear-regression)
+           linear-regression))
+   (import
+     (only (scheme base)
+           begin
+           call-with-values
+           cond-expand
+           define
+           lambda
+           let
+           map
+           quote))
+   (import (only (scheme r5rs) exact->inexact))))
+
 
 (define (LR x y)
   (call-with-values

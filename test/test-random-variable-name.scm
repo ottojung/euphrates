@@ -1,4 +1,20 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates random-variable-name)
+           random-variable-name))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           let
+           string-length))
+   (import (only (scheme char) string-downcase))))
+
 
 
 (let () ;; random-variable-name

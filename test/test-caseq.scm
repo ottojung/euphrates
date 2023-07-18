@@ -1,4 +1,17 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates caseq) caseq))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           else
+           let
+           quote))))
+
 (let ()
 
   (assert=

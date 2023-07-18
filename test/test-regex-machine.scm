@@ -1,4 +1,32 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import
+     (only (euphrates assert-equal-hs) assert=HS))
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates assert) assert))
+   (import
+     (only (euphrates hashmap)
+           hashmap->alist
+           hashmap-ref
+           make-hashmap))
+   (import
+     (only (euphrates regex-machine)
+           make-regex-machine*))
+   (import
+     (only (scheme base)
+           *
+           =
+           and
+           begin
+           cond-expand
+           define
+           let
+           list
+           or
+           quote))))
+
 
 ;; regex-machine
 

@@ -1,4 +1,29 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert) assert))
+   (import (only (euphrates catch-any) catch-any))
+   (import
+     (only (scheme base)
+           *
+           +
+           =
+           _
+           begin
+           cond-expand
+           define
+           equal?
+           lambda
+           let
+           newline
+           not
+           quote
+           set!
+           unless))
+   (import (only (scheme process-context) exit))
+   (import (only (scheme write) display))))
+
 (assert #t)
 
 (assert 0)

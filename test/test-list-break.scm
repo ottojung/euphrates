@@ -1,4 +1,18 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates list-break) list-break))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define-values
+           even?
+           let
+           quote))))
+
 
 ;; list-break
 

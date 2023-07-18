@@ -1,4 +1,18 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import (only (euphrates cfg-inline) CFG-inline))
+   (import (only (euphrates debug) debug))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           let
+           quasiquote))))
+
 
 (let ()
   (define parsed

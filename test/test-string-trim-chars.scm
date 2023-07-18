@@ -1,4 +1,19 @@
 
+(cond-expand
+  (guile)
+  ((not guile)
+   (import (only (euphrates assert-equal) assert=))
+   (import
+     (only (euphrates string-trim-chars)
+           string-trim-chars))
+   (import
+     (only (scheme base)
+           begin
+           cond-expand
+           define
+           let*
+           quote))))
+
 
 ;; string-trim-chars
 
