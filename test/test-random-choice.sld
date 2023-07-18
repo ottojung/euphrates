@@ -1,13 +1,16 @@
 
 (define-library
   (test-random-choice)
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert) assert)
     (only (euphrates printable-alphabet)
-          printable/alphabet)
-    (only (euphrates random-choice) random-choice)
+          printable/alphabet))
+  (import
+    (only (euphrates random-choice) random-choice))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           equal?
           let
           list->string

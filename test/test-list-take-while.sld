@@ -1,11 +1,17 @@
 
 (define-library
   (test-list-take-while)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates list-take-while)
-          list-take-while)
-    (only (scheme base) begin even? let quote))
+          list-take-while))
+  (import
+    (only (scheme base)
+          begin
+          cond-expand
+          even?
+          let
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

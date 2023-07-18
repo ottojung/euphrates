@@ -1,10 +1,11 @@
 
 (define-library
   (test-url-get-path)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates url-get-path) url-get-path)
-    (only (scheme base) begin let))
+    (only (euphrates url-get-path) url-get-path))
+  (import
+    (only (scheme base) begin cond-expand let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

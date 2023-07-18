@@ -10,6 +10,7 @@
           =
           _
           begin
+          cond-expand
           define
           equal?
           lambda

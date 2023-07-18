@@ -1,12 +1,14 @@
 
 (define-library
   (test-big-random-int)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates big-random-int) big-random-int)
+    (only (euphrates big-random-int) big-random-int))
+  (import
     (only (euphrates with-randomizer-seed)
-          with-randomizer-seed)
-    (only (scheme base) begin define let))
+          with-randomizer-seed))
+  (import
+    (only (scheme base) begin cond-expand define let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

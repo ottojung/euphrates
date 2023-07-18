@@ -1,20 +1,23 @@
 
 (define-library
   (test-run-syncproc)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates asyncproc-input-text-p)
-          asyncproc-input-text/p)
-    (only (euphrates asyncproc) asyncproc-status)
+          asyncproc-input-text/p))
+  (import
+    (only (euphrates asyncproc) asyncproc-status))
+  (import
     (only (euphrates run-syncproc-star)
-          run-syncproc*)
+          run-syncproc*))
+  (import
     (only (euphrates with-output-stringified)
-          with-output-stringified)
+          with-output-stringified))
+  (import
     (only (scheme base)
-          _
           begin
+          cond-expand
           define
-          lambda
           let
           parameterize))
   (cond-expand

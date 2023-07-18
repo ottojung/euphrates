@@ -2,11 +2,14 @@
 (define-library
   (test-directory-files-depth-iter)
   (import
-    (only (euphrates assert-equal-hs) assert=HS)
+    (only (euphrates assert-equal-hs) assert=HS))
+  (import
     (only (euphrates directory-files-depth-iter)
-          directory-files-depth-iter)
+          directory-files-depth-iter))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           cons
           define
           if

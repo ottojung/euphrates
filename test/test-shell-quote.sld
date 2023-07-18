@@ -1,10 +1,11 @@
 
 (define-library
   (test-shell-quote)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates shell-quote) shell-quote)
-    (only (scheme base) begin let))
+    (only (euphrates shell-quote) shell-quote))
+  (import
+    (only (scheme base) begin cond-expand let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

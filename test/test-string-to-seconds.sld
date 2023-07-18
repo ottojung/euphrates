@@ -5,7 +5,7 @@
   (import
     (only (euphrates string-to-seconds)
           string->seconds))
-  (import (only (scheme base) begin))
+  (import (only (scheme base) begin cond-expand))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -1,24 +1,28 @@
 
 (define-library
   (test-compile-cfg-cli-help)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates assert) assert)
     (only (euphrates compile-cfg-cli-help)
-          CFG-AST->CFG-CLI-help)
+          CFG-AST->CFG-CLI-help))
+  (import
     (only (euphrates current-program-path-p)
-          current-program-path/p)
-    (only (euphrates debug) debug)
+          current-program-path/p))
+  (import (only (euphrates debug) debug))
+  (import
     (only (euphrates define-cli)
           define-cli:raisu/p
           define-cli:show-help
           make-cli-with-handler
-          with-cli)
+          with-cli))
+  (import
     (only (scheme base)
           /
           _
           begin
           car
+          cond-expand
           define
           define-syntax
           lambda
@@ -30,8 +34,10 @@
           quote
           string?
           syntax-rules
-          unquote)
-    (only (srfi srfi-42) :))
+          unquote))
+  (cond-expand
+    (guile (import (only (srfi srfi-42) :)))
+    (else (import (only (srfi 42) :))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

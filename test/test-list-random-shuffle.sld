@@ -1,13 +1,20 @@
 
 (define-library
   (test-list-random-shuffle)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates list-random-shuffle)
-          list-random-shuffle)
+          list-random-shuffle))
+  (import
     (only (euphrates with-randomizer-seed)
-          with-randomizer-seed)
-    (only (scheme base) begin let quote set!))
+          with-randomizer-seed))
+  (import
+    (only (scheme base)
+          begin
+          cond-expand
+          let
+          quote
+          set!))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

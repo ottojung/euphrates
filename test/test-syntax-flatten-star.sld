@@ -1,13 +1,15 @@
 
 (define-library
   (test-syntax-flatten-star)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates syntax-flatten-star)
-          syntax-flatten*)
+          syntax-flatten*))
+  (import
     (only (scheme base)
           _
           begin
+          cond-expand
           define-syntax
           let
           list

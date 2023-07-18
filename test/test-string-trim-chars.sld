@@ -1,11 +1,17 @@
 
 (define-library
   (test-string-trim-chars)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates string-trim-chars)
-          string-trim-chars)
-    (only (scheme base) begin define let* quote))
+          string-trim-chars))
+  (import
+    (only (scheme base)
+          begin
+          cond-expand
+          define
+          let*
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

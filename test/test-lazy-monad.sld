@@ -1,24 +1,25 @@
 
 (define-library
   (test-lazy-monad)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates lazy-monad) lazy-monad))
+  (import (only (euphrates monadic) monadic))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates lazy-monad) lazy-monad)
-    (only (euphrates monadic) monadic)
     (only (euphrates np-thread-parameterize)
-          with-np-thread-env/non-interruptible)
+          with-np-thread-env/non-interruptible))
+  (import
     (only (euphrates with-output-stringified)
-          with-output-stringified)
+          with-output-stringified))
+  (import
     (only (scheme base)
           *
           +
-          _
           begin
-          lambda
+          cond-expand
           let*
           quote
-          values)
-    (only (scheme write) display))
+          values))
+  (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "test-lazy-monad.scm")))

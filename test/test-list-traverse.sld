@@ -1,13 +1,15 @@
 
 (define-library
   (test-list-traverse)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates list-traverse) list-traverse)
-    (only (euphrates range) range)
+    (only (euphrates list-traverse) list-traverse))
+  (import (only (euphrates range) range))
+  (import
     (only (scheme base)
           <
           begin
+          cond-expand
           if
           lambda
           let

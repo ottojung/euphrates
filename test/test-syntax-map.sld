@@ -1,12 +1,13 @@
 
 (define-library
   (test-syntax-map)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates syntax-map) syntax-map))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates syntax-map) syntax-map)
     (only (scheme base)
           _
           begin
+          cond-expand
           cons
           define-syntax
           let

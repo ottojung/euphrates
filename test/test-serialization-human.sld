@@ -1,15 +1,17 @@
 
 (define-library
   (test-serialization-human)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates assert) assert))
+  (import (only (euphrates hashset) list->hashset))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates assert) assert)
-    (only (euphrates hashset) list->hashset)
     (only (euphrates serialization-human)
           deserialize/human
-          serialize/human)
+          serialize/human))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           cons
           define
           eq?

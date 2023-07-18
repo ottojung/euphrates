@@ -1,12 +1,14 @@
 
 (define-library
   (test-general-table)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates general-table) general-table)
+    (only (euphrates general-table) general-table))
+  (import
     (only (scheme base)
           +
           begin
+          cond-expand
           let
           list
           quasiquote

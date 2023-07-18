@@ -1,13 +1,15 @@
 
 (define-library
   (test-json-parse)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates call-with-input-string)
-          call-with-input-string)
-    (only (euphrates json-parse) json-parse)
+          call-with-input-string))
+  (import (only (euphrates json-parse) json-parse))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           define
           lambda
           let

@@ -1,16 +1,18 @@
 
 (define-library
   (test-compose-under-par)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates compose-under-par)
-          compose-under-par)
-    (only (euphrates range) range)
+          compose-under-par))
+  (import (only (euphrates range) range))
+  (import
     (only (scheme base)
           *
           +
           -
           begin
+          cond-expand
           lambda
           let
           list

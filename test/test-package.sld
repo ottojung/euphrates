@@ -1,16 +1,18 @@
 
 (define-library
   (test-package)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates hashmap) hashmap-ref))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates hashmap) hashmap-ref)
     (only (euphrates package)
           make-package
           use-svars
           with-package
-          with-svars)
+          with-svars))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           cons
           define
           lambda

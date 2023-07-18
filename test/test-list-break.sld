@@ -1,11 +1,12 @@
 
 (define-library
   (test-list-break)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates list-break) list-break))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates list-break) list-break)
     (only (scheme base)
           begin
+          cond-expand
           define-values
           even?
           let

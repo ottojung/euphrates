@@ -6,7 +6,12 @@
     (only (euphrates list-zip-longest)
           list-zip-longest))
   (import
-    (only (scheme base) begin define let quote))
+    (only (scheme base)
+          begin
+          cond-expand
+          define
+          let
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

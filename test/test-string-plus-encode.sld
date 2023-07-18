@@ -1,11 +1,12 @@
 
 (define-library
   (test-string-plus-encode)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates string-plus-encode)
-          string-plus-encode)
-    (only (scheme base) begin define let))
+          string-plus-encode))
+  (import
+    (only (scheme base) begin cond-expand define let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

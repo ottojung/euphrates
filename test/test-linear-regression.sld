@@ -1,19 +1,21 @@
 
 (define-library
   (test-linear-regression)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates linear-regression)
-          linear-regression)
+          linear-regression))
+  (import
     (only (scheme base)
           begin
           call-with-values
+          cond-expand
           define
           lambda
           let
           map
-          quote)
-    (only (scheme r5rs) exact->inexact))
+          quote))
+  (import (only (scheme r5rs) exact->inexact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -1,15 +1,16 @@
 
 (define-library
   (test-list-fold)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates list-fold) list-fold))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates list-fold) list-fold)
     (only (scheme base)
           *
           +
           _
           begin
           call-with-values
+          cond-expand
           lambda
           let
           quote

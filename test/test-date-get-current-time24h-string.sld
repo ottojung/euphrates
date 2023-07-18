@@ -1,7 +1,7 @@
 
 (define-library
   (test-date-get-current-time24h-string)
-  (import (only (scheme base) begin))
+  (import (only (scheme base) begin cond-expand))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

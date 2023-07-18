@@ -2,10 +2,17 @@
 (define-library
   (test-list-permutations)
   (import
-    (only (euphrates assert-equal-hs) assert=HS)
+    (only (euphrates assert-equal-hs) assert=HS))
+  (import
     (only (euphrates list-permutations)
-          list-permutations)
-    (only (scheme base) begin let list quote))
+          list-permutations))
+  (import
+    (only (scheme base)
+          begin
+          cond-expand
+          let
+          list
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

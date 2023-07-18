@@ -1,16 +1,18 @@
 
 (define-library
   (test-serialization-runnable)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates assert) assert))
+  (import (only (euphrates hashset) list->hashset))
+  (import (only (euphrates identity) identity))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates assert) assert)
-    (only (euphrates hashset) list->hashset)
-    (only (euphrates identity) identity)
     (only (euphrates serialization-runnable)
           deserialize/runnable
-          serialize/runnable)
+          serialize/runnable))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           cons
           define
           eq?

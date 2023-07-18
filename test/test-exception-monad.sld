@@ -1,18 +1,20 @@
 
 (define-library
   (test-exception-monad)
+  (import (only (euphrates assert) assert))
+  (import (only (euphrates catch-any) catch-any))
   (import
-    (only (euphrates assert) assert)
-    (only (euphrates catch-any) catch-any)
     (only (euphrates exception-monad)
-          exception-monad)
-    (only (euphrates monadic) monadic)
-    (only (euphrates raisu) raisu)
+          exception-monad))
+  (import (only (euphrates monadic) monadic))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (scheme base)
           +
           -
           _
           begin
+          cond-expand
           lambda
           let
           quote

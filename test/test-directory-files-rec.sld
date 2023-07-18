@@ -2,10 +2,12 @@
 (define-library
   (test-directory-files-rec)
   (import
-    (only (euphrates assert-equal-hs) assert=HS)
+    (only (euphrates assert-equal-hs) assert=HS))
+  (import
     (only (euphrates directory-files-rec)
-          directory-files-rec)
-    (only (scheme base) begin let quote))
+          directory-files-rec))
+  (import
+    (only (scheme base) begin cond-expand let quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

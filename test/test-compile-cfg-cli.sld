@@ -1,22 +1,28 @@
 
 (define-library
   (test-compile-cfg-cli)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates compile-cfg-cli)
-          CFG-CLI->CFG-lang)
+          CFG-CLI->CFG-lang))
+  (import
     (only (scheme base)
           *
           /
           =
           and
           begin
+          cond-expand
           define
           let
           or
-          quote)
-    (only (srfi srfi-1) any)
-    (only (srfi srfi-42) :))
+          quote))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) any)))
+    (else (import (only (srfi 1) any))))
+  (cond-expand
+    (guile (import (only (srfi srfi-42) :)))
+    (else (import (only (srfi 42) :))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -1,13 +1,14 @@
 
 (define-library
   (test-hashset-negative)
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert) assert)
     (only (euphrates hashset)
           hashset-equal?
-          make-hashset)
-    (only (euphrates negate) negate)
-    (only (scheme base) begin let quote))
+          make-hashset))
+  (import (only (euphrates negate) negate))
+  (import
+    (only (scheme base) begin cond-expand let quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

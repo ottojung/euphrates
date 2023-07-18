@@ -1,10 +1,11 @@
 
 (define-library
   (test-list-chunks)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates list-chunks) list-chunks)
-    (only (scheme base) begin let quote))
+    (only (euphrates list-chunks) list-chunks))
+  (import
+    (only (scheme base) begin cond-expand let quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

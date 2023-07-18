@@ -26,6 +26,7 @@
           >
           _
           begin
+          cond-expand
           define
           exact
           expt

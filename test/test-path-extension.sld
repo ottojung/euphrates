@@ -1,10 +1,11 @@
 
 (define-library
   (test-path-extension)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates path-extension) path-extension)
-    (only (scheme base) begin let))
+    (only (euphrates path-extension) path-extension))
+  (import
+    (only (scheme base) begin cond-expand let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

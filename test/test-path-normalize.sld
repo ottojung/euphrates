@@ -4,7 +4,8 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates path-normalize) path-normalize))
-  (import (only (scheme base) begin let))
+  (import
+    (only (scheme base) begin cond-expand let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

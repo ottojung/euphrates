@@ -1,12 +1,14 @@
 
 (define-library
   (test-list-levenshtein-distance)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates list-levenshtein-distance)
-          list-levenshtein-distance)
+          list-levenshtein-distance))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           define
           let
           string->list))

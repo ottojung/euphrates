@@ -10,6 +10,7 @@
     (only (scheme base)
           >
           begin
+          cond-expand
           list
           string-length
           string>=?))

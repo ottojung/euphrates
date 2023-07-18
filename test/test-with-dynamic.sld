@@ -1,13 +1,16 @@
 
 (define-library
   (test-with-dynamic)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates lazy-parameter) lazy-parameter)
-    (only (euphrates tilda-a) ~a)
-    (only (euphrates with-dynamic) with-dynamic)
+    (only (euphrates lazy-parameter) lazy-parameter))
+  (import (only (euphrates tilda-a) ~a))
+  (import
+    (only (euphrates with-dynamic) with-dynamic))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           define
           lambda
           make-parameter

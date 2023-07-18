@@ -1,13 +1,15 @@
 
 (define-library
   (test-key-value-map)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates key-value-map)
-          key-value-map/list)
+          key-value-map/list))
+  (import
     (only (scheme base)
           +
           begin
+          cond-expand
           let
           list
           quasiquote

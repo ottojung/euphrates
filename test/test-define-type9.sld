@@ -1,25 +1,26 @@
 
 (define-library
   (test-define-type9)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates assert) assert)
     (only (euphrates define-type9)
           define-type9
-          type9-get-record-descriptor)
+          type9-get-record-descriptor))
+  (import
     (only (euphrates with-output-stringified)
-          with-output-stringified)
+          with-output-stringified))
+  (import
     (only (scheme base)
-          _
           assoc
           begin
           cdr
+          cond-expand
           define
           eq?
-          lambda
           not
-          quote)
-    (only (scheme write) write))
+          quote))
+  (import (only (scheme write) write))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

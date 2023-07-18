@@ -2,10 +2,12 @@
 (define-library
   (test-list-deduplicate)
   (import
-    (only (euphrates assert-equal-hs) assert=HS)
+    (only (euphrates assert-equal-hs) assert=HS))
+  (import
     (only (euphrates list-deduplicate)
-          list-deduplicate)
-    (only (scheme base) begin let quote))
+          list-deduplicate))
+  (import
+    (only (scheme base) begin cond-expand let quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

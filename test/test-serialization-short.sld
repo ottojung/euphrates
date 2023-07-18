@@ -1,16 +1,19 @@
 
 (define-library
   (test-serialization-short)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates assert) assert)
-    (only (euphrates define-type9) define-type9)
-    (only (euphrates hashset) list->hashset)
+    (only (euphrates define-type9) define-type9))
+  (import (only (euphrates hashset) list->hashset))
+  (import
     (only (euphrates serialization-short)
           deserialize/short
-          serialize/short)
+          serialize/short))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           define
           eq?
           equal?

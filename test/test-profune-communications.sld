@@ -1,47 +1,66 @@
 
 (define-library
   (test-profune-communications)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates lines-to-string) lines->string)
-    (only (euphrates printf) printf)
+    (only (euphrates lines-to-string) lines->string))
+  (import (only (euphrates printf) printf))
+  (import
     (only (euphrates profun-handler)
-          profun-make-handler)
+          profun-make-handler))
+  (import
     (only (euphrates profun-op-divisible)
-          profun-op-divisible)
+          profun-op-divisible))
+  (import
     (only (euphrates profun-op-equals)
-          profun-op-equals)
+          profun-op-equals))
+  (import
     (only (euphrates profun-op-false)
-          profun-op-false)
-    (only (euphrates profun-op-less) profun-op-less)
-    (only (euphrates profun-op-mult) profun-op*)
-    (only (euphrates profun-op-plus) profun-op+)
+          profun-op-false))
+  (import
+    (only (euphrates profun-op-less) profun-op-less))
+  (import
+    (only (euphrates profun-op-mult) profun-op*))
+  (import
+    (only (euphrates profun-op-plus) profun-op+))
+  (import
     (only (euphrates profun-op-separate)
-          profun-op-separate)
-    (only (euphrates profun-op-sqrt) profun-op-sqrt)
-    (only (euphrates profun-op-true) profun-op-true)
+          profun-op-separate))
+  (import
+    (only (euphrates profun-op-sqrt) profun-op-sqrt))
+  (import
+    (only (euphrates profun-op-true) profun-op-true))
+  (import
     (only (euphrates profun-op-unify)
-          profun-op-unify)
+          profun-op-unify))
+  (import
     (only (euphrates profun-op-value)
-          profun-op-value)
-    (only (euphrates profun) profun-create-database)
+          profun-op-value))
+  (import
+    (only (euphrates profun) profun-create-database))
+  (import
     (only (euphrates profune-communications-hook-p)
-          profune-communications-hook/p)
+          profune-communications-hook/p))
+  (import
     (only (euphrates profune-communications)
-          profune-communications)
+          profune-communications))
+  (import
     (only (euphrates profune-communicator)
-          make-profune-communicator)
-    (only (euphrates tilda-a) ~a)
+          make-profune-communicator))
+  (import (only (euphrates tilda-a) ~a))
+  (import
     (only (euphrates with-output-stringified)
-          with-output-stringified)
-    (only (euphrates words-to-string) words->string)
+          with-output-stringified))
+  (import
+    (only (euphrates words-to-string) words->string))
+  (import
     (only (scheme base)
           *
           +
           <
           =
-          _
           begin
+          cond-expand
           current-error-port
           current-output-port
           define
@@ -51,8 +70,8 @@
           parameterize
           quasiquote
           quote
-          unless)
-    (only (scheme inexact) sqrt))
+          unless))
+  (import (only (scheme inexact) sqrt))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

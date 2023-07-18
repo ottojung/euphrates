@@ -3,11 +3,13 @@
   (test-file-or-directory-exists?)
   (import
     (only (euphrates append-posix-path)
-          append-posix-path)
-    (only (euphrates assert) assert)
+          append-posix-path))
+  (import (only (euphrates assert) assert))
+  (import
     (only (euphrates file-or-directory-exists-q)
-          file-or-directory-exists?)
-    (only (scheme base) begin let not))
+          file-or-directory-exists?))
+  (import
+    (only (scheme base) begin cond-expand let not))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -2,10 +2,12 @@
 (define-library
   (test-cartesian-product)
   (import
-    (only (euphrates assert-equal-hs) assert=HS)
+    (only (euphrates assert-equal-hs) assert=HS))
+  (import
     (only (euphrates cartesian-product)
-          cartesian-product)
-    (only (scheme base) begin let quote))
+          cartesian-product))
+  (import
+    (only (scheme base) begin cond-expand let quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

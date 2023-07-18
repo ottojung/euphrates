@@ -1,12 +1,19 @@
 
 (define-library
   (test-time-get-monotonic-nanoseconds-timestamp)
+  (import (only (euphrates assert) assert))
   (import
-    (only (euphrates assert) assert)
     (only (euphrates
             time-get-monotonic-nanoseconds-timestamp)
-          time-get-monotonic-nanoseconds-timestamp)
-    (only (scheme base) > begin integer? let number?))
+          time-get-monotonic-nanoseconds-timestamp))
+  (import
+    (only (scheme base)
+          >
+          begin
+          cond-expand
+          integer?
+          let
+          number?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

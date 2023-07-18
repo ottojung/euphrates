@@ -1,15 +1,18 @@
 
 (define-library
   (test-list->tree)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates list-to-tree) list->tree)
-    (only (euphrates string-to-words) string->words)
+    (only (euphrates list-to-tree) list->tree))
+  (import
+    (only (euphrates string-to-words) string->words))
+  (import
     (only (scheme base)
           <
           >
           begin
           cond
+          cond-expand
           define
           else
           equal?

@@ -1,17 +1,20 @@
 
 (define-library
   (test-catchu-case)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates catchu-case) catchu-case)
-    (only (euphrates dprintln) dprintln)
-    (only (euphrates raisu) raisu)
+    (only (euphrates catchu-case) catchu-case))
+  (import (only (euphrates dprintln) dprintln))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates with-output-stringified)
-          with-output-stringified)
+          with-output-stringified))
+  (import
     (only (scheme base)
           _
           apply
           begin
+          cond-expand
           cons
           define-syntax
           let

@@ -1,13 +1,19 @@
 
 (define-library
   (test-immutable-hashmap)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates immutable-hashmap)
           immutable-hashmap-ref
           immutable-hashmap-set
-          make-immutable-hashmap)
-    (only (scheme base) begin define let quote))
+          make-immutable-hashmap))
+  (import
+    (only (scheme base)
+          begin
+          cond-expand
+          define
+          let
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

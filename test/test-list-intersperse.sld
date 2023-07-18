@@ -1,12 +1,19 @@
 
 (define-library
   (test-list-intersperse)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates list-intersperse)
-          list-intersperse)
-    (only (euphrates range) range)
-    (only (scheme base) begin length let list quote))
+          list-intersperse))
+  (import (only (euphrates range) range))
+  (import
+    (only (scheme base)
+          begin
+          cond-expand
+          length
+          let
+          list
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

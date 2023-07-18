@@ -1,14 +1,17 @@
 
 (define-library
   (test-vector-random-shuffle-bang)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates vector-random-shuffle-bang)
-          vector-random-shuffle!)
+          vector-random-shuffle!))
+  (import
     (only (euphrates with-randomizer-seed)
-          with-randomizer-seed)
+          with-randomizer-seed))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           let
           make-vector
           quote

@@ -5,12 +5,14 @@
     (only (euphrates alist-initialize-bang)
           alist-initialize!
           alist-initialize!:return-multiple
-          alist-initialize!:stop)
-    (only (euphrates assert-equal) assert=)
+          alist-initialize!:stop))
+  (import (only (euphrates assert-equal) assert=))
+  (import
     (only (scheme base)
           *
           +
           begin
+          cond-expand
           define
           let
           or

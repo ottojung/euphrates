@@ -5,7 +5,8 @@
   (import
     (only (euphrates path-extensions)
           path-extensions))
-  (import (only (scheme base) begin let))
+  (import
+    (only (scheme base) begin cond-expand let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

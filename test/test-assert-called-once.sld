@@ -12,6 +12,7 @@
           _
           and
           begin
+          cond-expand
           define
           define-values
           equal?

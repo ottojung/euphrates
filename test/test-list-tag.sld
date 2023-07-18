@@ -1,12 +1,14 @@
 
 (define-library
   (test-list-tag)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates list-tag) list-tag list-untag)
+    (only (euphrates list-tag) list-tag list-untag))
+  (import
     (only (scheme base)
           begin
           car
+          cond-expand
           even?
           let
           map

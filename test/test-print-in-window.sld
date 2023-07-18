@@ -1,16 +1,20 @@
 
 (define-library
   (test-print-in-window)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
     (only (euphrates list-intersperse)
-          list-intersperse)
+          list-intersperse))
+  (import
     (only (euphrates print-in-window)
-          print-in-window)
-    (only (euphrates string-to-words) string->words)
+          print-in-window))
+  (import
+    (only (euphrates string-to-words) string->words))
+  (import
     (only (euphrates with-output-stringified)
-          with-output-stringified)
-    (only (scheme base) _ begin lambda let))
+          with-output-stringified))
+  (import
+    (only (scheme base) begin cond-expand let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

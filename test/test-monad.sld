@@ -1,27 +1,36 @@
 
 (define-library
   (test-monad)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates compose-under) compose-under)
-    (only (euphrates identity-monad) identity-monad)
-    (only (euphrates lines-to-string) lines->string)
-    (only (euphrates log-monad) log-monad)
-    (only (euphrates maybe-monad) maybe-monad)
-    (only (euphrates monad-apply) monad-apply)
+    (only (euphrates compose-under) compose-under))
+  (import
+    (only (euphrates identity-monad) identity-monad))
+  (import
+    (only (euphrates lines-to-string) lines->string))
+  (import (only (euphrates log-monad) log-monad))
+  (import
+    (only (euphrates maybe-monad) maybe-monad))
+  (import
+    (only (euphrates monad-apply) monad-apply))
+  (import
     (only (euphrates monad-make-no-cont)
-          monad-make/no-cont)
+          monad-make/no-cont))
+  (import
     (only (euphrates monad-parameterize)
           with-monad-left
-          with-monad-right)
-    (only (euphrates monadic-id) monadic-id)
-    (only (euphrates monadic) monadic)
+          with-monad-right))
+  (import (only (euphrates monadic-id) monadic-id))
+  (import (only (euphrates monadic) monadic))
+  (import
     (only (euphrates monadstate)
           monadstate-ret
-          monadstate?)
-    (only (euphrates raisu) raisu)
+          monadstate?))
+  (import (only (euphrates raisu) raisu))
+  (import
     (only (euphrates with-output-stringified)
-          with-output-stringified)
+          with-output-stringified))
+  (import
     (only (scheme base)
           *
           +
@@ -29,6 +38,7 @@
           and
           begin
           call-with-values
+          cond-expand
           define
           even?
           if

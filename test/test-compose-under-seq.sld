@@ -13,6 +13,7 @@
           =
           and
           begin
+          cond-expand
           define
           even?
           let

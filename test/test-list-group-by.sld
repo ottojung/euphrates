@@ -2,10 +2,13 @@
 (define-library
   (test-list-group-by)
   (import
-    (only (euphrates assert-equal-hs) assert=HS)
-    (only (euphrates list-group-by) list-group-by)
+    (only (euphrates assert-equal-hs) assert=HS))
+  (import
+    (only (euphrates list-group-by) list-group-by))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           even?
           lambda
           let

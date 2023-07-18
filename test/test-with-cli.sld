@@ -2,16 +2,19 @@
 (define-library
   (test-with-cli)
   (import
-    (only (euphrates assert-equal-hs) assert=HS)
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates assert) assert)
+    (only (euphrates assert-equal-hs) assert=HS))
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates assert) assert))
+  (import
     (only (euphrates command-line-arguments-p)
-          command-line-argumets/p)
-    (only (euphrates define-cli) with-cli)
+          command-line-argumets/p))
+  (import (only (euphrates define-cli) with-cli))
+  (import
     (only (scheme base)
           +
           /
           begin
+          cond-expand
           define
           let
           list
@@ -21,8 +24,10 @@
           procedure?
           quote
           string-append
-          string?)
-    (only (srfi srfi-42) :))
+          string?))
+  (cond-expand
+    (guile (import (only (srfi srfi-42) :)))
+    (else (import (only (srfi 42) :))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "test-with-cli.scm")))

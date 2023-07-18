@@ -1,13 +1,14 @@
 
 (define-library
   (test-appcomp)
+  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates comp) appcomp comp))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates comp) appcomp comp)
     (only (scheme base)
           *
           +
           begin
+          cond-expand
           define
           expt
           lambda

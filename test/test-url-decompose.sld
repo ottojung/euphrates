@@ -1,11 +1,13 @@
 
 (define-library
   (test-url-decompose)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates url-decompose) url-decompose)
+    (only (euphrates url-decompose) url-decompose))
+  (import
     (only (scheme base)
           begin
+          cond-expand
           define
           define-values
           vector))

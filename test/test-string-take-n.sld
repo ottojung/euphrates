@@ -1,10 +1,11 @@
 
 (define-library
   (test-string-take-n)
+  (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-equal) assert=)
-    (only (euphrates string-take-n) string-take-n)
-    (only (scheme base) begin let))
+    (only (euphrates string-take-n) string-take-n))
+  (import
+    (only (scheme base) begin cond-expand let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
