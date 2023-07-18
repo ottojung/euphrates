@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -12,23 +12,6 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-;; The srfi-9 define-record-type.
-;; Look into srfi-99 if your system does not implement srfi-9.
-
-(cond-expand
- (guile
-
-  (define-syntax define-dumb-record
-    (syntax-rules ()
-      ((_ . args) (define-record-type . args))))
-
-  )
-
- (racket
-
-  (define-syntax define-dumb-record
-    (syntax-rules ()
-      ((_ . args) (define-record-type . args))))
-
-  ))
+(define-syntax define-dumb-record
+  (syntax-rules ()
+    ((_ . args) (define-record-type . args))))
