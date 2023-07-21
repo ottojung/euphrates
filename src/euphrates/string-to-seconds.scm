@@ -53,7 +53,7 @@
                ((number? last) last)
                ((equal? #f last) 0)
                (else
-                (raisu 'bad-format-for-string->seconds "Strings ends too soon, expected a number")))
+                (raisu 'bad-format-for-string->seconds "String ends too soon, expected a number")))
               (let ((x (car lst)))
                 (cond
                  ((number? x)
