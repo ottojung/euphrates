@@ -6,14 +6,15 @@
     (only (scheme base)
           -
           <
+          and
           begin
-          case
+          cond-expand
           define
-          else
           if
           let
           string-length
           string-ref))
+  (import (only (scheme char) char-whitespace?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
