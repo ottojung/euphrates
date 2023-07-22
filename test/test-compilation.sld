@@ -59,10 +59,14 @@
   (import
     (only (euphrates assoc-set-value)
           assoc-set-value))
+  (import (only (euphrates assq-or-star) assq-or*))
   (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates assq-set-default)
           assq-set-default))
+  (import
+    (only (euphrates assq-set-value-star)
+          assq-set-value*))
   (import
     (only (euphrates assq-set-value) assq-set-value))
   (import
