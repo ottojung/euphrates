@@ -22,3 +22,5 @@
 (assert= 23 (assq-or* '(xxx mmm) '((yyy . 7) (xxx (ooo . 17) (iii . 5) (ttt . 19)) (zzz . 11)) 23))
 
 (assert= #f (assq-or* '(xxx mmm) '((yyy . 7) (xxx (ooo . 17) (iii . 5) (ttt . 19)) (zzz . 11))))
+
+(assert= '((yyy . 7)) (assq-or* '() '((yyy . 7))))
