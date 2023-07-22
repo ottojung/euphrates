@@ -64,13 +64,15 @@
                   (if (number? last)
                       (raisu 'bad-format-for-string->seconds "Expected a modifier, but got a connector" x)
                       (loop (cdr lst) last)))
-                 (else
+                 (last
                   (let ((modifier (assq-or x time-table #f)))
                     (if modifier
                         (if (number? last)
                             (+ (* modifier last) (loop (cdr lst) #f))
                             (raisu 'bad-format-for-string->seconds "Expected a number, but got a modifier" x))
-                        (raisu 'bad-format-for-string->seconds "Expected a modifier, but got an unrecognized word" x)))))))))
+                        (raisu 'bad-format-for-string->seconds "Expected a modifier, but got an unrecognized word" x))))
+                 (else
+                  (raisu 'bad-format-for-string->seconds "Expected a number, but got a word" x)))))))
 
       (if (integer? result)
           result
