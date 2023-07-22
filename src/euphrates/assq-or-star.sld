@@ -17,8 +17,8 @@
           if
           let
           let*
+          list?
           null?
-          pair?
           quote
           syntax-rules))
   (cond-expand

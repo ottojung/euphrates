@@ -10,7 +10,7 @@
                 (current alist))
        (cond
         ((null? keylist*) current)
-        ((pair? current)
+        ((list? current)
          (let* ((key (car keylist*))
                 (got (assq key current)))
            (if got
