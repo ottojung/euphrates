@@ -19,19 +19,21 @@
           =
           _
           and
+          append
           begin
           cadr
           call-with-values
           car
           case
           cdr
-          cons
+          cond-expand
           define
           else
           equal?
           if
           lambda
           let
+          list
           map
           not
           null?

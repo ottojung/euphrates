@@ -37,7 +37,7 @@
     (assert sucess?)
 
     (assert=HS
-     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 3 9 8))
      (immutable-hashmap->alist H)))
 
   (let ()
@@ -51,7 +51,7 @@
     (assert sucess?)
 
     (assert=HS
-     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 3 9 8))
      (immutable-hashmap->alist H)))
 
   (let ()
@@ -66,7 +66,7 @@
     (assert sucess?)
 
     (assert=HS
-     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 3 9 8))
      (immutable-hashmap->alist H)))
 
   (let ()
@@ -81,7 +81,7 @@
     (assert sucess?)
 
     (assert=HS
-     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 3 9 8))
      (immutable-hashmap->alist H)))
 
   (let ()

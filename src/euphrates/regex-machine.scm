@@ -110,7 +110,7 @@
             (loop
              (immutable-hashmap-set
               hash name
-              (cons first (immutable-hashmap-ref hash name '())))
+              (append (immutable-hashmap-ref hash name '()) (list first)))
              (cdr pattern))))))
 
   (if (not (null? buf))

@@ -42,7 +42,7 @@
     (assert (m H (list 1 2 3 9 8 7)))
 
     (assert=HS
-     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 8 9 3))
+     '((k . 2) (x . 1) (z . 1) (m . 2) (y . 7) (i 3 9 8))
      (hashmap->alist H)))
 
   (let ()
@@ -52,6 +52,6 @@
     (define H (make-hashmap))
     (assert (m H (list "a" "b" "c" "d" "e")))
     (assert= (hashmap-ref H '<group1...>)
-             '("e" "d" "c" "b" "a")))
+             (list "a" "b" "c" "d" "e")))
 
   )

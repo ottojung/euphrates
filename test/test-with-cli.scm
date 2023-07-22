@@ -62,7 +62,7 @@
       GROUP2 : <group2...>
       )
 
-     (assert= <group1...> '("e" "d" "c" "b" "a"))
+     (assert= <group1...> '("a" "b" "c" "d" "e"))
 
      )))
 
@@ -97,7 +97,7 @@
        ;; :example (run --opts fast -O3! --flag1 some/fi.le june 30 goodbye))
 
        (assert= <arg1> "defaultarg1")
-       (assert=HS <opts...>+ '("fast" -O1!)) ;; note the different types
+       (assert=HS <opts...>+ '(-O1! "fast")) ;; note the different types
 
        (string-append "prefix-" run "-"
                       (number->string (+ <nth> <nth>))))))
