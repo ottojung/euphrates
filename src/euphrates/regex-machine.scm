@@ -45,10 +45,13 @@
   (define rest (cdr pattern))
   (define main `(and ,expr (* ,@pattern)))
   (define alternative
-    (if (null? rest) '(epsilon) `(and ,@rest)))
+    (if (null? rest)
+        '(epsilon)
+        `(and ,@rest)))
+  (define choices
+    `(,main ,alternative))
 
-  (match-or (list main alternative)
-            hash buf cont))
+  (match-or choices hash buf cont))
 
 (define (match-and pattern hash buf cont)
   (let loop ((hash hash) (pattern pattern) (buf buf))
