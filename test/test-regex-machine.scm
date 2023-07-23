@@ -33,6 +33,101 @@
 (let ()
 
   (let ()
+    (define input
+      (list "config" "set" "port" "80"))
+
+    (define m (make-regex-machine*
+               '(and (= "config" config)
+                     (= "set" set)
+                     (* (any* <keylist...>))
+                     (any <value>))))
+    (define H (make-hashmap))
+    (assert (m H input))
+
+    (assert=HS
+     '((config . "config")
+       (set . "set")
+       (<keylist...> "port")
+       (<value> . "80"))
+     (hashmap->alist H)))
+
+  (let ()
+    (define input
+      (list "config" "set" "port" "real" "one" "80"))
+
+    (define m (make-regex-machine*
+               '(and (= "config" config)
+                     (= "set" set)
+                     (and* (any* <keylist...>))
+                     (any <value>))))
+    (define H (make-hashmap))
+    (assert (m H input))
+
+    (assert=HS
+     '((config . "config")
+       (set . "set")
+       (<keylist...> "port" "real" "one")
+       (<value> . "80"))
+     (hashmap->alist H)))
+
+  (let ()
+    (define input
+      (list "config" "set" "port" "real" "one" "80"))
+
+    (define m (make-regex-machine*
+               '(and (= "config" config)
+                     (= "set" set)
+                     (+ (any* <keylist...>))
+                     (any <value>))))
+    (define H (make-hashmap))
+    (assert (m H input))
+
+    (assert=HS
+     '((config . "config")
+       (set . "set")
+       (<keylist...> "port" "real" "one")
+       (<value> . "80"))
+     (hashmap->alist H)))
+
+  (let ()
+    (define input
+      (list "set" "port" "80"))
+
+    (define m (make-regex-machine*
+               '(and (= "set" set)
+                     (any* <keylist...>)
+                     (* (any* <keylist...>))
+                     (any <value>))))
+    (define H (make-hashmap))
+    (define match? (m H input))
+    (assert match?)
+
+    (assert=HS
+     '((set . "set")
+       (<keylist...> "port")
+       (<value> . "80"))
+     (hashmap->alist H)))
+
+  (let ()
+    (define input
+      (list "config" "set" "port" "80"))
+
+    (define m (make-regex-machine*
+               '(and (= "config" config)
+                     (= "set" set)
+                     (+ (any* <keylist...>))
+                     (any <value>))))
+    (define H (make-hashmap))
+    (m H input)
+
+    (assert=HS
+     '((config . "config")
+       (set . "set")
+       (<keylist...> "port")
+       (<value> . "80"))
+     (hashmap->alist H)))
+
+  (let ()
     (define m (make-regex-machine*
                '(and (any x z)
                      (or (= 3) (= 2 m k))

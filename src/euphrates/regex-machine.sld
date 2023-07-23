@@ -42,6 +42,7 @@
           quasiquote
           quote
           unquote
+          unquote-splicing
           values))
   (import (only (scheme case-lambda) case-lambda))
   (cond-expand

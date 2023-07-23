@@ -16,6 +16,7 @@
   (import
     (only (scheme base)
           *
+          +
           =
           and
           begin
@@ -23,6 +24,7 @@
           define
           let
           list
+          not
           or
           quote))
   (cond-expand

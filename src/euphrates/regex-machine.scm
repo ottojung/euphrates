@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021  Otto Jung
+;;;; Copyright (C) 2021, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -40,22 +40,15 @@
 ;;   (? expr)
 ;;   (and* expr)
 
-
 (define (match-kleene-star pattern hash buf cont)
   (define expr (car pattern))
-  (let loop ((hash hash) (buf buf))
-    (if (null? buf)
-        (cont hash buf)
-        (match1 expr hash buf
-                (lambda (new-hash ret)
-                  (if ret
-                      (call-with-values
-                          (lambda _ (loop new-hash ret))
-                        (lambda (h ret2)
-                          (if ret2
-                              (values h ret2)
-                              (cont new-hash ret))))
-                      (cont hash buf)))))))
+  (define rest (cdr pattern))
+  (define main `(and ,expr (* ,@pattern)))
+  (define alternative
+    (if (null? rest) '(epsilon) `(and ,@rest)))
+
+  (match-or (list main alternative)
+            hash buf cont))
 
 (define (match-and pattern hash buf cont)
   (let loop ((hash hash) (pattern pattern) (buf buf))
