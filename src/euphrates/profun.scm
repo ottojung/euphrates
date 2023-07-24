@@ -345,9 +345,9 @@
           (state #f))
       (profun-iterator-constructor db env state query)))))
 
-(define (profun-eval-from iterator start)
+(define (profun-eval-from/generic get-next start)
   (let loop ((buf start))
-    (let ((r (profun-next iterator)))
+    (let ((r (get-next)))
       (cond
        ((or (pair? r) (null? r)) (loop (cons r buf)))
        ((equal? #f r) (reverse! buf))
@@ -363,6 +363,10 @@
                     (lambda (new-iter) (profun-eval-from new-iter buf)))))
           (raisu 'profun-needs-more-info mod)))
        (else (raisu 'unknown-result-type-in-profun-query r))))))
+
+(define (profun-eval-from iterator start)
+  (profun-eval-from/generic
+   (lambda _ (profun-next iterator)) start))
 
 ;; accepts profun-database `db` and list of symbols `query`
 ;; returns a list of result alists

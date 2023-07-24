@@ -6,6 +6,8 @@
     profun-create-falsy-database
     profun-eval-query
     profun-eval-query/boolean
+    profun-eval-from
+    profun-eval-from/generic
     profun-iterate
     profun-next
     profun-next/boolean)
@@ -118,6 +120,7 @@
     (only (scheme base)
           +
           =
+          _
           and
           begin
           boolean?
@@ -125,6 +128,7 @@
           case
           cdr
           cond
+          cond-expand
           cons
           define
           else
