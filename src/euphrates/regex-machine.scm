@@ -32,26 +32,13 @@
 ;;   (* expr)
 ;;   (not expr)
 ;;
-;;   (= object var1 var2...)
+;;   (= value var1 var2...)
 ;;   (any var1 var2...)
 ;;   (any* var1 var2...)
 ;;
 ;;   (+ expr)
 ;;   (? expr)
 ;;   (and* expr)
-
-(define (match-kleene-star pattern hash buf cont)
-  (define expr (car pattern))
-  (define rest (cdr pattern))
-  (define main `(and ,expr (* ,@pattern)))
-  (define alternative
-    (if (null? rest)
-        '(epsilon)
-        `(and ,@rest)))
-  (define choices
-    `(,main ,alternative))
-
-  (match-or choices hash buf cont))
 
 (define (match-and pattern hash buf cont)
   (let loop ((hash hash) (pattern pattern) (buf buf))
@@ -75,6 +62,13 @@
                               (values h ret2)
                               (loop (cdr pattern)))))
                       (loop (cdr pattern))))))))
+
+(define (match-kleene-star pattern hash buf cont)
+  (define expr (car pattern))
+  (define main `(and ,expr (* ,@pattern)))
+  (define alternative '(epsilon))
+  (define choices `(,main ,alternative))
+  (match-or choices hash buf cont))
 
 (define (match-negation pattern hash buf cont)
   (match1 (car pattern) hash buf
