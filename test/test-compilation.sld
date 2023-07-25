@@ -1103,6 +1103,9 @@
           profun-error-args
           profun-error?))
   (import
+    (only (euphrates profun-eval-query-terms)
+          profun-eval-query/terms))
+  (import
     (only (euphrates profun-handler)
           profun-handler-extend
           profun-handler-get
@@ -1145,6 +1148,9 @@
   (import
     (only (euphrates profun-meta-key)
           profun-meta-key))
+  (import
+    (only (euphrates profun-next-term-group)
+          profun-next/term-group))
   (import
     (only (euphrates profun-op-apply-result-p)
           profun-op-apply/result/p))
@@ -1288,6 +1294,8 @@
     (only (euphrates profun)
           profun-create-database
           profun-create-falsy-database
+          profun-eval-from
+          profun-eval-from/generic
           profun-eval-query
           profun-eval-query/boolean
           profun-iterate
