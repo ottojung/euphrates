@@ -64,4 +64,7 @@
          (seconds->string-columned
           (+ (* 0 24 60 60) (* 0 0) (* 23 60) (* 0 1) 1/2)))
 
-(assert= "0" (seconds->string-columned 0))
+(assert= "00" (seconds->string-columned 0))
+(assert= "01" (seconds->string-columned 1))
+(assert= "15" (seconds->string-columned 15.0))
+(assert= "05" (seconds->string-columned 5.0))

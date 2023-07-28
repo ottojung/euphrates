@@ -6,7 +6,13 @@
     (only (euphrates seconds-to-string-columned)
           seconds->string-columned))
   (import
-    (only (scheme base) * + begin cond-expand not))
+    (only (scheme base)
+          *
+          +
+          begin
+          cond-expand
+          else
+          not))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

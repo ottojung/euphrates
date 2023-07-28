@@ -33,25 +33,25 @@
      (comp (= 0))
      (list ndays nhours nminutes)))
 
-  (if (equal? 0 seconds) "0"
-      (apply
-       string-append
-       (append
-        (appcomp
-         large
-         reverse (list-drop-n 2) reverse
-         (map (comp stringify connect)))
-        (appcomp
-         large
-         reverse (list-take-n 2) reverse
-         (map (comp stringify pad connect)))
-        (appcomp
-         (list nseconds)
-         (map (comp stringify pad)))
-        (appcomp
-         (list after-seconds)
-         (filter (negate (comp (equal? 0))))
-         (map (comp
-               inexact
-               number->string
-               string->list cdr list->string)))))))
+  (apply
+   string-append
+   (append
+    (appcomp
+     large
+     reverse (list-drop-n 2) reverse
+     (map (comp stringify connect)))
+    (appcomp
+     large
+     reverse (list-take-n 2) reverse
+     (map (comp stringify pad connect)))
+    (appcomp
+     (list nseconds)
+     (map (comp stringify pad)))
+    (appcomp
+     (list after-seconds)
+     (filter (negate (comp (equal? 0))))
+     (filter (negate (comp (equal? 0.0))))
+     (map (comp
+           inexact
+           number->string
+           string->list cdr list->string))))))
