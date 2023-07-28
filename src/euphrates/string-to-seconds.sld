@@ -26,7 +26,6 @@
           car
           cdr
           cond
-          cond-expand
           define
           else
           equal?
@@ -41,6 +40,7 @@
           null?
           number?
           or
+          quasiquote
           quote
           string->list
           string->number

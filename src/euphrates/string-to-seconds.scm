@@ -10,7 +10,7 @@
 (define string->seconds
   (let ()
     (define time-table
-      '((s . 1)
+      `((s . 1)
         (m . 60)
         (h . 3600)
         (d . ,(* 24 60 60 60))
