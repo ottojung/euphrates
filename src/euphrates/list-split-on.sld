@@ -13,7 +13,9 @@
           else
           if
           let
+          not
           null?
+          or
           quote
           reverse))
   (cond-expand

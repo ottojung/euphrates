@@ -1,16 +1,17 @@
 
-
-
 (define (list-split-on predicate lst)
-  (let loop ((lst lst) (buf '()) (ret '()))
+  (let loop ((lst lst)
+             (buf '())
+             (ret '())
+             (last-split? #t))
     (cond
      ((null? lst)
-      (if (null? buf)
-          (reverse ret)
-          (reverse (cons (reverse buf) ret))))
+      (if (or last-split? (not (null? buf)))
+          (reverse (cons (reverse buf) ret))
+          (reverse ret)))
      ((predicate (car lst))
       (loop (cdr lst) '()
-            (if (null? buf) ret
-                (cons (reverse buf) ret))))
+            (cons (reverse buf) ret)
+            #t))
      (else
-      (loop (cdr lst) (cons (car lst) buf) ret)))))
+      (loop (cdr lst) (cons (car lst) buf) ret #f)))))

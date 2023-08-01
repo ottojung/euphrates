@@ -53,4 +53,14 @@
      (string-split/simple "1.1.1.." #\.)
      '("1" "1" "1" "" "")))
 
+  (let ()
+    (assert=
+     (string-split/simple "" #\.)
+     '("")))
+
+  (let ()
+    (assert=
+     (string-split/simple "..." #\.)
+     '("" "" "" "")))
+
   )

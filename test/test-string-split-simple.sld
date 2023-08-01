@@ -6,7 +6,12 @@
     (only (euphrates string-split-simple)
           string-split/simple))
   (import
-    (only (scheme base) begin cond-expand let quote))
+    (only (scheme base)
+          begin
+          cond-expand
+          let
+          not
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
