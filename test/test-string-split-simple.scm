@@ -56,7 +56,7 @@
   (let ()
     (assert=
      (string-split/simple "" #\.)
-     '("")))
+     '()))
 
   (let ()
     (assert=

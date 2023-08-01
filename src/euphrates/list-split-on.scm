@@ -3,7 +3,7 @@
   (let loop ((lst lst)
              (buf '())
              (ret '())
-             (last-split? #t))
+             (last-split? #f))
     (cond
      ((null? lst)
       (if (or last-split? (not (null? buf)))

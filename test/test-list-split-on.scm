@@ -30,7 +30,7 @@
            (list-split-on even? (list 1 3 2 2 5 7)))
   (assert= '((1) (3) (5) ())
            (list-split-on even? (list 1 2 3 4 5 6)))
-  (assert= '(())
+  (assert= '()
            (list-split-on even? (list)))
   (assert= '(() () () ())
            (list-split-on even? (list 2 4 6)))

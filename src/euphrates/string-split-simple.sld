@@ -11,8 +11,12 @@
           cond-expand
           define
           else
+          if
           quote
           string))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-null?)))
+    (else (import (only (srfi 13) string-null?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import (only (guile) string-split))
