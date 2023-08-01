@@ -7,9 +7,9 @@
   (import
     (only (euphrates words-to-string) words->string))
   (import
-    (only (scheme base) begin cond-expand list))
+    (only (scheme base) begin cond-expand list not))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "test-string->words.scm")))
-    (else (include "test-string->words.scm"))))
+             (include-from-path "test-string-to-words.scm")))
+    (else (include "test-string-to-words.scm"))))
