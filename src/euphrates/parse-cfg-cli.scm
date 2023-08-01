@@ -68,7 +68,8 @@
   ;;     : JUNE-OPTS*   -f3 / -f4)
 
   (define grouped
-    (list-split-on semicolon? shifted-semilocons))
+    (filter (negate null?)
+            (list-split-on semicolon? shifted-semilocons)))
 
   ;; Example grouped:
   ;;   '((run OPTS* DATE <end-statement>)

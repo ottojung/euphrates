@@ -4,6 +4,7 @@
   (export CFG-CLI->CFG-AST)
   (import
     (only (euphrates list-split-on) list-split-on))
+  (import (only (euphrates negate) negate))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -27,8 +28,8 @@
           unless
           when))
   (cond-expand
-    (guile (import (only (srfi srfi-1) last)))
-    (else (import (only (srfi 1) last))))
+    (guile (import (only (srfi srfi-1) filter last)))
+    (else (import (only (srfi 1) filter last))))
   (cond-expand
     (guile (import (only (srfi srfi-42) :)))
     (else (import (only (srfi 42) :))))
