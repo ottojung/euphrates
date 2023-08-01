@@ -1415,6 +1415,9 @@
   (import
     (only (euphrates run-syncproc) run-syncproc))
   (import
+    (only (euphrates seconds-to-string-columned)
+          seconds->string-columned))
+  (import
     (only (euphrates serialization-builtin-natural)
           deserialize-builtin/natural
           serialize-builtin/natural))
