@@ -1,22 +1,21 @@
+
 (define-library
   (euphrates list-zip-with-longest)
   (export list-zip-with-longest)
-  (import (only (euphrates range) range))
   (import
     (only (scheme base)
-          *
-          +
-          -
-          <
+          and
           begin
+          car
+          cdr
+          cons
           define
-          do
+          if
           let
-          let*
-          modulo
-          quotient
-          vector-ref
-          vector-set!))
+          list
+          null?
+          quote
+          reverse))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
