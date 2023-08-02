@@ -49,6 +49,8 @@
     (only (euphrates assert-equal-hs) assert=HS))
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates assert-raw) assert/raw))
+  (import
+    (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates assert) assert))
   (import (only (euphrates assoc-any) assoc/any))
   (import (only (euphrates assoc-find) assoc/find))
