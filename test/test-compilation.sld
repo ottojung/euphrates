@@ -655,6 +655,9 @@
     (only (euphrates list-fold-star) list-fold*))
   (import (only (euphrates list-fold) list-fold))
   (import
+    (only (euphrates list-get-duplicates)
+          list-get-duplicates))
+  (import
     (only (euphrates list-group-by) list-group-by))
   (import (only (euphrates list-init) list-init))
   (import
