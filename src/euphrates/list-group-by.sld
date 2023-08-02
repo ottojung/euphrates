@@ -4,7 +4,6 @@
   (export list-group-by)
   (import
     (only (euphrates hashmap)
-          hashmap->alist
           hashmap-ref
           hashmap-set!
           make-hashmap))
@@ -15,7 +14,13 @@
           define
           for-each
           lambda
-          quote))
+          list
+          map
+          null?
+          quote
+          reverse
+          set!
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
