@@ -24,6 +24,9 @@
     (only (euphrates alist-initialize-loop)
           alist-initialize-loop))
   (import
+    (only (euphrates alist-initialize)
+          alist-initialize))
+  (import
     (only (euphrates alpha-alphabet) alpha/alphabet))
   (import
     (only (euphrates alpha-lowercase-alphabet)
@@ -639,8 +642,11 @@
   (import
     (only (euphrates list-chunks) list-chunks))
   (import
+    (only (euphrates list-collapse) list-collapse))
+  (import
     (only (euphrates list-combinations)
           list-combinations))
+  (import (only (euphrates list-count) list-count))
   (import
     (only (euphrates list-deduplicate)
           list-deduplicate
@@ -747,6 +753,7 @@
     (only (euphrates list-to-tree) list->tree))
   (import
     (only (euphrates list-traverse) list-traverse))
+  (import (only (euphrates list-unzip) list-unzip))
   (import
     (only (euphrates list-windows) list-windows))
   (import
