@@ -5,7 +5,8 @@
     (only (euphrates alist-initialize-bang)
           alist-initialize!
           alist-initialize!:return-multiple
-          alist-initialize!:stop))
+          alist-initialize!:stop
+          alist-initialize!:unset))
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (scheme base)
@@ -15,9 +16,11 @@
           cond-expand
           define
           let
+          not
           or
           quasiquote
-          quote))
+          quote
+          unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

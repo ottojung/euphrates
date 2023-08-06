@@ -4,6 +4,7 @@
   (export
     alist-initialize!
     alist-initialize!:stop
+    alist-initialize!:unset
     alist-initialize!:return-multiple
     alist-initialize!:get-setters
     alist-initialize!:makelet/static
@@ -19,6 +20,9 @@
   (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates assq-set-value) assq-set-value))
+  (import
+    (only (euphrates assq-unset-value)
+          assq-unset-value))
   (import
     (only (euphrates catchu-case) catchu-case))
   (import
@@ -40,6 +44,7 @@
           car
           case
           cdr
+          cond
           cons
           define
           define-syntax
@@ -54,6 +59,7 @@
           not
           null?
           or
+          pair?
           parameterize
           quote
           reverse

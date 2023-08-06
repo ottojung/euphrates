@@ -26,6 +26,16 @@
   (alist-initialize!:return-multiple vals) alist-initialize!:multiret?
   (vals alist-initialize!:multiret-vals))
 
+;; This simply removes the `target` from the returned alist.
+(define-type9 alist-initialize!:unsetstruct
+  (alist-initialize!:unset-make target) alist-initialize!:unsetstruct?
+  (target alist-initialize!:unsetstruct-target))
+
+(define alist-initialize!:unset
+  (case-lambda
+   (() (alist-initialize!:unset-make #f))
+   ((target) (alist-initialize!:unset-make target))))
+
 (define alist-initialize!:stop-signal
   'euphrates-alist-initialize!:stop-signal)
 
@@ -52,25 +62,31 @@
 
   (values name ret threw? ret-value?))
 
-(define (alist-initialize!:multi-set alist val)
+(define (alist-initialize!:multi-set name-orig alist val)
   (unless (list? alist)
     (raisu 'multiple-return-values-mut-be-encoded-as-an-alist))
   (let loop ((val val) (alist alist))
     (if (null? val) alist
-        (let* ((p (car val))
-               (name (car p))
-               (value (cdr p)))
+        (let* ((p (car val)))
+          (define-values (name value)
+            (if (pair? p)
+                (values (car p) (cdr p))
+                (values name-orig p)))
           (loop
            (cdr val)
-           (assq-set-value
-            name value
-            alist))))))
+           (alist-initialize!:generic-set name value alist))))))
 
 (define (alist-initialize!:generic-set name value alist)
-  (if (alist-initialize!:multiret? value)
-      (alist-initialize!:multi-set
-       alist (alist-initialize!:multiret-vals value))
-      (assq-set-value name value alist)))
+  (cond
+   ((alist-initialize!:multiret? value)
+    (alist-initialize!:multi-set
+     name alist (alist-initialize!:multiret-vals value)))
+   ((alist-initialize!:unsetstruct? value)
+    (let* ((maybe-target (alist-initialize!:unsetstruct-target value))
+           (key (or maybe-target name)))
+      (assq-unset-value key alist)))
+   (else
+    (assq-set-value name value alist))))
 
 (define-syntax alist-initialize!:run
   (syntax-rules ()

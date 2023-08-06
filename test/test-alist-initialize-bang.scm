@@ -193,3 +193,105 @@
   (define state `((X . 3) (Y . 4)))
   (alist-initialize! state)
   (assert= state `((X . 3) (Y . 4))))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+
+  (alist-initialize!
+   state
+
+   (X 7)
+   (Y (alist-initialize!:unset)))
+
+  (assert= `((X . 7)) state))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+
+  (alist-initialize!
+   state
+
+   (X (alist-initialize!:unset))
+   (Y 5))
+
+  (assert= `((Y . 5)) state))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+
+  (alist-initialize!
+   state
+
+   (X 5)
+   (Y (alist-initialize!:unset 'X)))
+
+  (assert= `((Y . 4)) state))
+
+(let ()
+  (define state `((X . 3) (Y . 4) (Z . 5)))
+
+  (alist-initialize!
+   state
+
+   (X (alist-initialize!:unset))
+   (Y (alist-initialize!:unset)))
+
+  (assert= `((Z . 5)) state))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+
+  (alist-initialize!
+   state
+
+   (Z (alist-initialize!:unset)))
+
+  (assert= `((X . 3) (Y . 4)) state))
+
+(let ()
+  (define state `((X . 3) (Y . 4)))
+
+  (alist-initialize!
+   state
+
+   (X (alist-initialize!:unset))
+   (Y (alist-initialize!:return-multiple `((X . 7)))))
+
+  (assert= `((Y . 4) (X . 7)) state))
+
+(let ()
+  (define state `((Y . 4)))
+
+  (alist-initialize!
+   state
+
+   (X 'Y)
+   (Y (alist-initialize!:unset (X))))
+
+  (assert= `((X . Y)) state))
+
+(let ()
+  (define state `((X . 3) (Y . 4) (Z . 5)))
+
+  (alist-initialize!
+   state
+
+   (X (alist-initialize!:unset))
+   (Y (alist-initialize!:unset))
+   (Z (alist-initialize!:unset)))
+
+  (assert= `() state))
+
+(let ()
+  (define state `((X . 3) (Y . 4) (M . 8)))
+  (alist-initialize!
+   state
+
+   (Y 9)
+   (X 7)
+   (* (alist-initialize!:return-multiple
+       `((X . 1) ,(alist-initialize!:unset 'Y) (Z . 5))))
+   (Z 9)
+   )
+
+  (assert= state `((X . 1) (M . 8) (Z . 9))))
