@@ -19,7 +19,8 @@
           alist-initialize!:makelet/static
           alist-initialize!:return-multiple
           alist-initialize!:run
-          alist-initialize!:stop))
+          alist-initialize!:stop
+          alist-initialize!:unset))
   (import
     (only (euphrates alist-initialize-loop)
           alist-initialize-loop))
@@ -74,6 +75,9 @@
           assq-set-value*))
   (import
     (only (euphrates assq-set-value) assq-set-value))
+  (import
+    (only (euphrates assq-unset-value)
+          assq-unset-value))
   (import
     (only (euphrates asyncproc-input-text-p)
           asyncproc-input-text/p))
