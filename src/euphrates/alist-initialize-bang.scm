@@ -66,6 +66,12 @@
             name value
             alist))))))
 
+(define (alist-initialize!:generic-set name value alist)
+  (if (alist-initialize!:multiret? value)
+      (alist-initialize!:multi-set
+       alist (alist-initialize!:multiret-vals value))
+      (assq-set-value name value alist)))
+
 (define-syntax alist-initialize!:run
   (syntax-rules ()
     ((_ alist setters/0)
@@ -80,7 +86,9 @@
                    (alist-initialize!:get-value first))
                  (if threw?
                      (if value?
-                         (let ((ret (assq-set-value name val alist)))
+                         (let ((ret
+                                (alist-initialize!:generic-set
+                                 name val alist)))
                            (set! alist ret)
                            ret)
                          alist)
@@ -151,12 +159,8 @@
              (set! evaluated? #t)
              (set! value ret)
              (set! alist
-                   (if (alist-initialize!:multiret? value)
-                       (alist-initialize!:multi-set
-                        alist (alist-initialize!:multiret-vals value))
-                       (assq-set-value
-                        (quote setter) value
-                        alist)))
+                   (alist-initialize!:generic-set
+                    (quote setter) value alist))
              ret)))
        (define (wrap ev rec)
          (if evaluated? value
