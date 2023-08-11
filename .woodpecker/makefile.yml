@@ -1,0 +1,14 @@
+
+steps:
+  build:
+    image: alpine
+    commands:
+      - apk add --no-cache $SCHEME make
+      - make build
+      - CI=0 make test
+    when:
+      branch: [master]
+
+matrix:
+  SCHEME:
+    - guile
