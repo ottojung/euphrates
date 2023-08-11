@@ -21,7 +21,6 @@ one:
 cleanrun: | clean one
 
 clean:
-	git submodule foreach --recursive 'git clean -dfx'
-	git clean -dfx
+	true
 
 .PHONY: all test compile compilation-test one cleanrun clean
