@@ -1,7 +1,13 @@
 
 (define-library
   (euphrates lalr-parser)
-  (export lalr-parser)
+  (export
+    lalr-parser
+    glr-driver
+    lr-driver
+    lexical-token?
+    lexical-token-value
+    lexical-token-source)
   (import
     (only (scheme base)
           *

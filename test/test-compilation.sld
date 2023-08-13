@@ -611,7 +611,13 @@
           key-value-map
           key-value-map/list))
   (import
-    (only (euphrates lalr-parser) lalr-parser))
+    (only (euphrates lalr-parser)
+          glr-driver
+          lalr-parser
+          lexical-token-source
+          lexical-token-value
+          lexical-token?
+          lr-driver))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))

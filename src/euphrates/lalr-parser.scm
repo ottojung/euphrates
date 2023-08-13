@@ -32,31 +32,21 @@
 
 (define *lalr-scm-version* "2.5.0")
 
-(cond-expand
- (chez
-  (define-record lexical-token (category source value))
-  (define-record source-location (input line column offset length)))
+(define-record-type lexical-token
+  (make-lexical-token category source value)
+  lexical-token?
+  (category lexical-token-category)
+  (source   lexical-token-source)
+  (value    lexical-token-value))
 
- (stklos
-  (define-struct lexical-token category source value)
-  (define-struct source-location input line column offset length))
-
- (else
-  (define-record-type lexical-token
-    (make-lexical-token category source value)
-    lexical-token?
-    (category lexical-token-category)
-    (source   lexical-token-source)
-    (value    lexical-token-value))
-
-  (define-record-type source-location
-    (make-source-location input line column offset length)
-    source-location?
-    (input   source-location-input)
-    (line    source-location-line)
-    (column  source-location-column)
-    (offset  source-location-offset)
-    (length  source-location-length))))
+(define-record-type source-location
+  (make-source-location input line column offset length)
+  source-location?
+  (input   source-location-input)
+  (line    source-location-line)
+  (column  source-location-column)
+  (offset  source-location-offset)
+  (length  source-location-length))
 
 
       ;; - Macros pour la gestion des vecteurs de bits
