@@ -180,27 +180,27 @@
     (only (euphrates chibi-parser)
           char-hex-digit?
           char-octal-digit?
-          define-grammar
-          parse
-          parse-binary-op
-          parse-c-integer
-          parse-common-domain
-          parse-complex
-          parse-delimited
-          parse-domain
-          parse-email
-          parse-fully
-          parse-identifier
-          parse-integer
-          parse-ip-address
-          parse-ipv4-address
-          parse-ipv6-address
-          parse-real
-          parse-records
-          parse-separated
-          parse-space
-          parse-unsigned-integer
-          parse-uri))
+          chibi-parse
+          chibi-parse-binary-op
+          chibi-parse-c-integer
+          chibi-parse-common-domain
+          chibi-parse-complex
+          chibi-parse-delimited
+          chibi-parse-domain
+          chibi-parse-email
+          chibi-parse-fully
+          chibi-parse-identifier
+          chibi-parse-integer
+          chibi-parse-ip-address
+          chibi-parse-ipv4-address
+          chibi-parse-ipv6-address
+          chibi-parse-real
+          chibi-parse-records
+          chibi-parse-separated
+          chibi-parse-space
+          chibi-parse-unsigned-integer
+          chibi-parse-uri
+          define-grammar))
   (import (only (euphrates clamp) clamp))
   (import
     (only (euphrates command-line-arguments-p)
@@ -3652,7 +3652,6 @@
   (cond-expand
     (guile (import
              (only (srfi srfi-42)
-                   :
                    :-dispatch-ref
                    :-dispatch-set!
                    :char-range
@@ -3691,7 +3690,6 @@
                    vector-of-length-ec)))
     (else (import
             (only (srfi 42)
-                  :
                   :-dispatch-ref
                   :-dispatch-set!
                   :char-range
