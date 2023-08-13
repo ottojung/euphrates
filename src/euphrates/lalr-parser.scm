@@ -3,6 +3,7 @@
 ;;;
 ;; Copyright 2014  Jan Nieuwenhuizen <janneke@gnu.org>
 ;; Copyright 1993, 2010 Dominique Boucher
+;; Copyright 2023  Otto Jung <otto.jung@vauplace.com>
 ;;
 ;; This program is free software: you can redistribute it and/or
 ;; modify it under the terms of the GNU Lesser General Public License
@@ -17,138 +18,19 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+(define-macro (def-macro form . body)
+  `(define-macro ,form (let () ,@body)))
+
+(def-macro (BITS-PER-WORD) 28)
+(def-macro (logical-or x . y) `(logior ,x ,@y))
+(def-macro (lalr-error msg obj) `(error ,msg ,obj))
+
+(define pprint pretty-print)
+(define lalr-keyword? keyword?)
+
+(define (note-source-location lvalue tok) lvalue)
 
 (define *lalr-scm-version* "2.5.0")
-
-
-(cond-expand 
-
- ;; -- Gambit-C
- (gambit
-
-  (define-macro (def-macro form . body)
-    `(define-macro ,form (let () ,@body)))
-
-  (def-macro (BITS-PER-WORD) 28)
-  (def-macro (logical-or x . y) `(bitwise-ior ,x ,@y))
-  (def-macro (lalr-error msg obj) `(error ,msg ,obj))
-
-  (define pprint pretty-print)
-  (define lalr-keyword? keyword?)
-  (define (note-source-location lvalue tok) lvalue))
- 
- ;; -- 
- (bigloo
-  (define-macro (def-macro form . body)
-    `(define-macro ,form (let () ,@body)))
-
-  (define pprint (lambda (obj) (write obj) (newline)))
-  (define lalr-keyword? keyword?)
-  (def-macro (BITS-PER-WORD) 29)
-  (def-macro (logical-or x . y) `(bit-or ,x ,@y))
-  (def-macro (lalr-error msg obj) `(error "lalr-parser" ,msg ,obj))
-  (define (note-source-location lvalue tok) lvalue))
- 
- ;; -- Chicken
- (chicken
-  
-  (define-macro (def-macro form . body)
-    `(define-macro ,form (let () ,@body)))
-
-  (define pprint pretty-print)
-  (define lalr-keyword? symbol?)
-  (def-macro (BITS-PER-WORD) 30)
-  (def-macro (logical-or x . y) `(bitwise-ior ,x ,@y))
-  (def-macro (lalr-error msg obj) `(error ,msg ,obj))
-  (define (note-source-location lvalue tok) lvalue))
-
- ;; -- STKlos
- (stklos
-  (require "pretty-print")
-
-  (define pprint pp)
-  (define lalr-keyword? keyword?)
-  (define-macro (BITS-PER-WORD) 30)
-  (define-macro (logical-or x . y) `(bit-or ,x ,@y))
-  (define-macro (lalr-error msg obj) `(error 'lalr-parser ,msg ,obj))
-  (define (note-source-location lvalue tok) lvalue))
-
- ;; -- Guile
- (guile
-  (use-modules (ice-9 pretty-print))
-  (use-modules (srfi srfi-9))
-
-  (define pprint pretty-print)
-  (define lalr-keyword? symbol?)
-  (define-macro (BITS-PER-WORD) 30)
-  (define-macro (logical-or x . y) `(logior ,x ,@y))
-  (define-macro (lalr-error msg obj) `(error ,msg ,obj))
-  (define (note-source-location lvalue tok)
-    (if (and (supports-source-properties? lvalue)
-             (not (source-property lvalue 'loc))
-             (lexical-token? tok))
-        (set-source-property! lvalue 'loc (lexical-token-source tok)))
-    lvalue))
-
-
- ;; -- Kawa
- (kawa
-  (require 'pretty-print)
-  (define (BITS-PER-WORD) 30)
-  (define logical-or logior)
-  (define (lalr-keyword? obj) (keyword? obj))
-  (define (pprint obj) (pretty-print obj))
-  (define (lalr-error msg obj) (error msg obj))
-  (define (note-source-location lvalue tok) lvalue))
-
- ;; -- SISC
- (sisc
-  (import logicops)
-  (import record)
-	
-  (define pprint pretty-print)
-  (define lalr-keyword? symbol?)
-  (define-macro BITS-PER-WORD (lambda () 32))
-  (define-macro logical-or (lambda (x . y) `(logor ,x ,@y)))
-  (define-macro (lalr-error msg obj) `(error "~a ~S:" ,msg ,obj))
-  (define (note-source-location lvalue tok) lvalue))
-       
- ;; -- Gauche
- (gauche
-  (use gauche.record)
-  (define-macro (def-macro form . body)
-    `(define-macro ,form (let () ,@body)))
-  (define pprint (lambda (obj) (write obj) (newline)))
-  (define lalr-keyword? symbol?)
-  (def-macro (BITS-PER-WORD) 30)
-  (def-macro (logical-or x . y) `(logior ,x . ,y))
-  (def-macro (lalr-error msg obj) `(error "lalr-parser" ,msg ,obj))
-  (define (note-source-location lvalue tok) lvalue))
-
- ;; -- Chez Scheme
- (chez
-  (define-syntax define-macro
-    (lambda (x)
-      (syntax-case x ()
-        ((_ (name . args) body ...)
-         (syntax (define-macro name (lambda args body ...))))
-        ((_ name transform)
-         (syntax
-           (define-syntax name
-             (lambda (x)
-               (datum->syntax (syntax x)
-                              (apply transform (cdr (syntax->datum x)))))))))))
-
-  (define (BITS-PER-WORD) 29)
-  (define lalr-error error)
-  (define lalr-keyword? symbol?)
-  (define logical-or logior)
-  (define pprint pretty-print)
-  (define (note-source-location lvalue tok) lvalue))
-
- (else
-  (error "Unsupported Scheme system")))
-
 
 (cond-expand
  (chez

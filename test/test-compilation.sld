@@ -610,6 +610,8 @@
     (only (euphrates key-value-map)
           key-value-map
           key-value-map/list))
+  (import
+    (only (euphrates lalr-parser) lalr-parser))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))
