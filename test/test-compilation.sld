@@ -612,13 +612,11 @@
           key-value-map/list))
   (import
     (only (euphrates lalr-parser)
-          glr-driver
           lalr-parser
           lexical-token-category
           lexical-token-source
           lexical-token-value
           lexical-token?
-          lr-driver
           make-lexical-token
           make-source-location
           source-location-column

@@ -4,13 +4,11 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates lalr-parser)
-          glr-driver
           lalr-parser
           lexical-token-category
           lexical-token-source
           lexical-token-value
           lexical-token?
-          lr-driver
           make-lexical-token
           make-source-location
           source-location-column
@@ -28,11 +26,16 @@
           +
           -
           /
+          <
           =
+          >=
+          _
           and
           apply
+          assoc
           assq
           begin
+          cadr
           call-with-current-continuation
           car
           cdr
@@ -43,16 +46,19 @@
           define
           else
           eof-object?
+          eq?
           error
           expt
           for-each
           if
           lambda
+          length
           let
           let*
           letrec
           list
           list-ref
+          make-vector
           newline
           not
           number?
@@ -68,12 +74,17 @@
           string
           string->number
           string->symbol
+          symbol?
           vector
-          vector-ref))
+          vector-length
+          vector-ref
+          vector-set!
+          vector?))
   (import
     (only (scheme char)
           char-alphabetic?
           char-numeric?))
+  (import (only (scheme cxr) cadar))
   (import (only (scheme inexact) cos sin sqrt tan))
   (import (only (scheme write) display))
   (cond-expand

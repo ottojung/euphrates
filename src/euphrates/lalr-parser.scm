@@ -29,12 +29,32 @@
 
 (define *lalr-scm-version* "2.5.0")
 
-(define-record-type lexical-token
-  (make-lexical-token category source value)
-  lexical-token?
-  (category lexical-token-category)
-  (source   lexical-token-source)
-  (value    lexical-token-value))
+(define lexical-token-typetag
+  '*lexical-token*)
+
+(define (make-lexical-token category source value)
+  (vector lexical-token-typetag category source value))
+
+(define (lexical-token? x)
+  (and (vector? x)
+       (= 4 (vector-length x))
+       (eq? (vector-ref x 0) lexical-token-typetag)))
+
+(define (lexical-token-category x)
+  (vector-ref x 1))
+
+(define (lexical-token-source x)
+  (vector-ref x 2))
+
+(define (lexical-token-value x)
+  (vector-ref x 3))
+
+;; (define-record-type lexical-token
+;;   (make-lexical-token category source value)
+;;   lexical-token?
+;;   (category lexical-token-category)
+;;   (source   lexical-token-source)
+;;   (value    lexical-token-value))
 
 (define-record-type source-location
   (make-source-location input line column offset length)
@@ -54,6 +74,317 @@
      (lalr-parser/1order (quote arguments)))))
 
 (define (lalr-parser/1order arguments)
+  (define lexical-token-code
+    `((define (lexical-token? x)
+        (and (vector? x)
+             (= 4 (vector-length x))
+             (eq? (vector-ref x 0) (quote ,lexical-token-typetag))))
+
+      (define (lexical-token-category x)
+        (vector-ref x 1))
+
+      (define (lexical-token-source x)
+        (vector-ref x 2))
+
+      (define (lexical-token-value x)
+        (vector-ref x 3))))
+
+;;;
+;;;;  LR-driver
+;;;
+
+  (define lr-driver
+    `(lambda (action-table goto-table reduction-table)
+       (define *max-stack-size* 500)
+
+       (define ___atable action-table)
+       (define ___gtable goto-table)
+       (define ___rtable reduction-table)
+
+       (define ___lexerp #f)
+       (define ___errorp #f)
+
+       (define ___stack  #f)
+       (define ___sp     0)
+
+       (define ___curr-input #f)
+       (define ___reuse-input #f)
+
+       (define ___input #f)
+       (define (___consume)
+         (set! ___input (if ___reuse-input ___curr-input (___lexerp)))
+         (set! ___reuse-input #f)
+         (set! ___curr-input ___input))
+
+       (define (___pushback)
+         (set! ___reuse-input #t))
+
+       (define (___initstack)
+         (set! ___stack (make-vector *max-stack-size* 0))
+         (set! ___sp 0))
+
+       (define (___growstack)
+         (let ((new-stack (make-vector (* 2 (vector-length ___stack)) 0)))
+           (let loop ((i (- (vector-length ___stack) 1)))
+             (if (>= i 0)
+                 (begin
+                   (vector-set! new-stack i (vector-ref ___stack i))
+                   (loop (- i 1)))))
+           (set! ___stack new-stack)))
+
+       (define (___checkstack)
+         (if (>= ___sp (vector-length ___stack))
+             (___growstack)))
+
+       (define (___push delta new-category lvalue tok)
+         (set! ___sp (- ___sp (* delta 2)))
+         (let* ((state     (vector-ref ___stack ___sp))
+                (new-state (cdr (assoc new-category (vector-ref ___gtable state)))))
+           (set! ___sp (+ ___sp 2))
+           (___checkstack)
+           (vector-set! ___stack ___sp new-state)
+           (vector-set! ___stack (- ___sp 1) (note-source-location lvalue tok))))
+
+       (define (___reduce st)
+         ((vector-ref ___rtable st) ___stack ___sp ___gtable ___push ___pushback))
+
+       (define (___shift token attribute)
+         (set! ___sp (+ ___sp 2))
+         (___checkstack)
+         (vector-set! ___stack (- ___sp 1) attribute)
+         (vector-set! ___stack ___sp token))
+
+       (define (___action x l)
+         (let ((y (assoc x l)))
+           (if y (cadr y) (cadar l))))
+
+       (define (___recover tok)
+         (let find-state ((sp ___sp))
+           (if (< sp 0)
+               (set! ___sp sp)
+               (let* ((state (vector-ref ___stack sp))
+                      (act   (assoc 'error (vector-ref ___atable state))))
+                 (if act
+                     (begin
+                       (set! ___sp sp)
+                       (___sync (cadr act) tok))
+                     (find-state (- sp 2)))))))
+
+       (define (___sync state tok)
+         (let ((sync-set (map car (cdr (vector-ref ___atable state)))))
+           (set! ___sp (+ ___sp 4))
+           (___checkstack)
+           (vector-set! ___stack (- ___sp 3) #f)
+           (vector-set! ___stack (- ___sp 2) state)
+           (let skip ()
+             (let ((i (___category ___input)))
+               (if (eq? i '*eoi*)
+                   (set! ___sp -1)
+                   (if (memq i sync-set)
+                       (let ((act (assoc i (vector-ref ___atable state))))
+                         (vector-set! ___stack (- ___sp 1) #f)
+                         (vector-set! ___stack ___sp (cadr act)))
+                       (begin
+                         (___consume)
+                         (skip))))))))
+
+       (define (___category tok)
+         (if (lexical-token? tok)
+             (lexical-token-category tok)
+             tok))
+
+       (define (___run)
+         (let loop ()
+           (if ___input
+               (let* ((state (vector-ref ___stack ___sp))
+                      (i     (___category ___input))
+                      (act   (___action i (vector-ref ___atable state))))
+
+                 (cond ((not (symbol? i))
+                        (___errorp "Syntax error: invalid token: " ___input)
+                        #f)
+
+                       ;; Input succesfully parsed
+                       ((eq? act 'accept)
+                        (vector-ref ___stack 1))
+
+                       ;; Syntax error in input
+                       ((eq? act '*error*)
+                        (if (eq? i '*eoi*)
+                            (begin
+                              (___errorp "Syntax error: unexpected end of input")
+                              #f)
+                            (begin
+                              (___errorp "Syntax error: unexpected token : " ___input)
+                              (___recover i)
+                              (if (>= ___sp 0)
+                                  (set! ___input #f)
+                                  (begin
+                                    (set! ___sp 0)
+                                    (set! ___input '*eoi*)))
+                              (loop))))
+
+                       ;; Shift current token on top of the stack
+                       ((>= act 0)
+                        (___shift act ___input)
+                        (set! ___input (if (eq? i '*eoi*) '*eoi* #f))
+                        (loop))
+
+                       ;; Reduce by rule (- act)
+                       (else
+                        (___reduce (- act))
+                        (loop))))
+
+               ;; no lookahead, so check if there is a default action
+               ;; that does not require the lookahead
+               (let* ((state  (vector-ref ___stack ___sp))
+                      (acts   (vector-ref ___atable state))
+                      (defact (if (pair? acts) (cadar acts) #f)))
+                 (if (and (= 1 (length acts)) (< defact 0))
+                     (___reduce (- defact))
+                     (___consume))
+                 (loop)))))
+
+
+       (lambda (lexerp errorp)
+         (set! ___errorp errorp)
+         (set! ___lexerp lexerp)
+         (___initstack)
+         (___run))))
+
+
+;;;
+;;;;  Simple-minded GLR-driver
+;;;
+
+
+  (define glr-driver
+    `(lambda (action-table goto-table reduction-table)
+       (define ___atable action-table)
+       (define ___gtable goto-table)
+       (define ___rtable reduction-table)
+
+       (define ___lexerp #f)
+       (define ___errorp #f)
+
+       ;; -- Input handling
+
+       (define *input* #f)
+       (define (initialize-lexer lexer)
+         (set! ___lexerp lexer)
+         (set! *input* #f))
+       (define (consume)
+         (set! *input* (___lexerp)))
+
+       (define (token-category tok)
+         (if (lexical-token? tok)
+             (lexical-token-category tok)
+             tok))
+
+       (define (token-attribute tok)
+         (if (lexical-token? tok)
+             (lexical-token-value tok)
+             tok))
+
+       ;; -- Processes (stacks) handling
+
+       (define *processes* '())
+
+       (define (initialize-processes)
+         (set! *processes* '()))
+       (define (add-process process)
+         (set! *processes* (cons process *processes*)))
+       (define (get-processes)
+         (reverse *processes*))
+
+       (define (for-all-processes proc)
+         (let ((processes (get-processes)))
+           (initialize-processes)
+           (for-each proc processes)))
+
+       ;; -- parses
+       (define *parses* '())
+       (define (get-parses)
+         *parses*)
+       (define (initialize-parses)
+         (set! *parses* '()))
+       (define (add-parse parse)
+         (set! *parses* (cons parse *parses*)))
+
+
+       (define (push delta new-category lvalue stack tok)
+         (let* ((stack     (drop stack (* delta 2)))
+                (state     (car stack))
+                (new-state (cdr (assv new-category (vector-ref ___gtable state)))))
+           (cons new-state (cons (note-source-location lvalue tok) stack))))
+
+       (define (reduce state stack)
+         ((vector-ref ___rtable state) stack ___gtable push))
+
+       (define (shift state symbol stack)
+         (cons state (cons symbol stack)))
+
+       (define (get-actions token action-list)
+         (let ((pair (assoc token action-list)))
+           (if pair
+               (cdr pair)
+               (cdar action-list)))) ;; get the default action
+
+
+       (define (run)
+         (let loop-tokens ()
+           (consume)
+           (let ((symbol (token-category *input*)))
+             (for-all-processes
+              (lambda (process)
+                (let loop ((stacks (list process)) (active-stacks '()))
+                  (cond ((pair? stacks)
+                         (let* ((stack   (car stacks))
+                                (state   (car stack)))
+                           (let actions-loop ((actions      (get-actions symbol (vector-ref ___atable state)))
+                                              (active-stacks active-stacks))
+                             (if (pair? actions)
+                                 (let ((action        (car actions))
+                                       (other-actions (cdr actions)))
+                                   (cond ((eq? action '*error*)
+                                          (actions-loop other-actions active-stacks))
+                                         ((eq? action 'accept)
+                                          (add-parse (car (take-right stack 2)))
+                                          (actions-loop other-actions active-stacks))
+                                         ((>= action 0)
+                                          (let ((new-stack (shift action *input* stack)))
+                                            (add-process new-stack))
+                                          (actions-loop other-actions active-stacks))
+                                         (else
+                                          (let ((new-stack (reduce (- action) stack)))
+                                            (actions-loop other-actions (cons new-stack active-stacks))))))
+                                 (loop (cdr stacks) active-stacks)))))
+                        ((pair? active-stacks)
+                         (loop (reverse active-stacks) '())))))))
+           (if (pair? (get-processes))
+               (loop-tokens))))
+
+
+       (lambda (lexerp errorp)
+         (set! ___errorp errorp)
+         (initialize-lexer lexerp)
+         (initialize-processes)
+         (initialize-parses)
+         (add-process '(0))
+         (run)
+         (get-parses))))
+
+
+  (define (drop l n)
+    (cond ((and (> n 0) (pair? l))
+           (drop (cdr l) (- n 1)))
+          (else
+           l)))
+
+  (define (take-right l n)
+    (drop l (- (length l) n)))
+
+
   (define (set-bit v b)
     (let ((x (quotient b (BITS-PER-WORD)))
           (y (expt 2 (remainder b (BITS-PER-WORD)))))
@@ -1645,11 +1976,17 @@
     (set-expected-conflicts! options)
     (set-driver-name! options)
     (let* ((gram/actions (gen-tables! tokens rules))
-           (code         `(,driver-name ',action-table ,(build-goto-table) ,(build-reduction-table gram/actions))))
+           (code
+            `(let ()
+               ,@lexical-token-code
+               (define lr-driver ,lr-driver)
+               (define glr-driver ,glr-driver)
+               (define driver ,driver-name)
+               (driver ',action-table ,(build-goto-table) ,(build-reduction-table gram/actions)))))
 
       (output-table! options)
       (output-parser! options code)
-      (eval-in-current-namespace code)))
+      (eval code (interaction-environment))))
 
   (extract-arguments arguments build-driver))
 
@@ -1697,298 +2034,3 @@
                                  (source-location-column src-location-1)
                                  offset-2
                                  (- (+ offset-1 length-1) offset-2))))))
-
-
-;;;
-;;;;  LR-driver
-;;;
-
-
-(define *max-stack-size* 500)
-
-(define (lr-driver action-table goto-table reduction-table)
-  (define ___atable action-table)
-  (define ___gtable goto-table)
-  (define ___rtable reduction-table)
-
-  (define ___lexerp #f)
-  (define ___errorp #f)
-
-  (define ___stack  #f)
-  (define ___sp     0)
-
-  (define ___curr-input #f)
-  (define ___reuse-input #f)
-
-  (define ___input #f)
-  (define (___consume)
-    (set! ___input (if ___reuse-input ___curr-input (___lexerp)))
-    (set! ___reuse-input #f)
-    (set! ___curr-input ___input))
-
-  (define (___pushback)
-    (set! ___reuse-input #t))
-
-  (define (___initstack)
-    (set! ___stack (make-vector *max-stack-size* 0))
-    (set! ___sp 0))
-
-  (define (___growstack)
-    (let ((new-stack (make-vector (* 2 (vector-length ___stack)) 0)))
-      (let loop ((i (- (vector-length ___stack) 1)))
-        (if (>= i 0)
-            (begin
-              (vector-set! new-stack i (vector-ref ___stack i))
-              (loop (- i 1)))))
-      (set! ___stack new-stack)))
-
-  (define (___checkstack)
-    (if (>= ___sp (vector-length ___stack))
-        (___growstack)))
-
-  (define (___push delta new-category lvalue tok)
-    (set! ___sp (- ___sp (* delta 2)))
-    (let* ((state     (vector-ref ___stack ___sp))
-           (new-state (cdr (assoc new-category (vector-ref ___gtable state)))))
-      (set! ___sp (+ ___sp 2))
-      (___checkstack)
-      (vector-set! ___stack ___sp new-state)
-      (vector-set! ___stack (- ___sp 1) (note-source-location lvalue tok))))
-
-  (define (___reduce st)
-    ((vector-ref ___rtable st) ___stack ___sp ___gtable ___push ___pushback))
-
-  (define (___shift token attribute)
-    (set! ___sp (+ ___sp 2))
-    (___checkstack)
-    (vector-set! ___stack (- ___sp 1) attribute)
-    (vector-set! ___stack ___sp token))
-
-  (define (___action x l)
-    (let ((y (assoc x l)))
-      (if y (cadr y) (cadar l))))
-
-  (define (___recover tok)
-    (let find-state ((sp ___sp))
-      (if (< sp 0)
-          (set! ___sp sp)
-          (let* ((state (vector-ref ___stack sp))
-                 (act   (assoc 'error (vector-ref ___atable state))))
-            (if act
-                (begin
-                  (set! ___sp sp)
-                  (___sync (cadr act) tok))
-                (find-state (- sp 2)))))))
-
-  (define (___sync state tok)
-    (let ((sync-set (map car (cdr (vector-ref ___atable state)))))
-      (set! ___sp (+ ___sp 4))
-      (___checkstack)
-      (vector-set! ___stack (- ___sp 3) #f)
-      (vector-set! ___stack (- ___sp 2) state)
-      (let skip ()
-        (let ((i (___category ___input)))
-          (if (eq? i '*eoi*)
-              (set! ___sp -1)
-              (if (memq i sync-set)
-                  (let ((act (assoc i (vector-ref ___atable state))))
-                    (vector-set! ___stack (- ___sp 1) #f)
-                    (vector-set! ___stack ___sp (cadr act)))
-                  (begin
-                    (___consume)
-                    (skip))))))))
-
-  (define (___category tok)
-    (if (lexical-token? tok)
-        (lexical-token-category tok)
-        tok))
-
-  (define (___run)
-    (let loop ()
-      (if ___input
-          (let* ((state (vector-ref ___stack ___sp))
-                 (i     (___category ___input))
-                 (act   (___action i (vector-ref ___atable state))))
-
-            (cond ((not (symbol? i))
-                   (___errorp "Syntax error: invalid token: " ___input)
-                   #f)
-
-                  ;; Input succesfully parsed
-                  ((eq? act 'accept)
-                   (vector-ref ___stack 1))
-
-                  ;; Syntax error in input
-                  ((eq? act '*error*)
-                   (if (eq? i '*eoi*)
-                       (begin
-                         (___errorp "Syntax error: unexpected end of input")
-                         #f)
-                       (begin
-                         (___errorp "Syntax error: unexpected token : " ___input)
-                         (___recover i)
-                         (if (>= ___sp 0)
-                             (set! ___input #f)
-                             (begin
-                               (set! ___sp 0)
-                               (set! ___input '*eoi*)))
-                         (loop))))
-
-                  ;; Shift current token on top of the stack
-                  ((>= act 0)
-                   (___shift act ___input)
-                   (set! ___input (if (eq? i '*eoi*) '*eoi* #f))
-                   (loop))
-
-                  ;; Reduce by rule (- act)
-                  (else
-                   (___reduce (- act))
-                   (loop))))
-
-          ;; no lookahead, so check if there is a default action
-          ;; that does not require the lookahead
-          (let* ((state  (vector-ref ___stack ___sp))
-                 (acts   (vector-ref ___atable state))
-                 (defact (if (pair? acts) (cadar acts) #f)))
-            (if (and (= 1 (length acts)) (< defact 0))
-                (___reduce (- defact))
-                (___consume))
-            (loop)))))
-
-
-  (lambda (lexerp errorp)
-    (set! ___errorp errorp)
-    (set! ___lexerp lexerp)
-    (___initstack)
-    (___run)))
-
-
-;;;
-;;;;  Simple-minded GLR-driver
-;;;
-
-
-(define (glr-driver action-table goto-table reduction-table)
-  (define ___atable action-table)
-  (define ___gtable goto-table)
-  (define ___rtable reduction-table)
-
-  (define ___lexerp #f)
-  (define ___errorp #f)
-
-  ;; -- Input handling
-
-  (define *input* #f)
-  (define (initialize-lexer lexer)
-    (set! ___lexerp lexer)
-    (set! *input* #f))
-  (define (consume)
-    (set! *input* (___lexerp)))
-
-  (define (token-category tok)
-    (if (lexical-token? tok)
-        (lexical-token-category tok)
-        tok))
-
-  (define (token-attribute tok)
-    (if (lexical-token? tok)
-        (lexical-token-value tok)
-        tok))
-
-  ;; -- Processes (stacks) handling
-
-  (define *processes* '())
-
-  (define (initialize-processes)
-    (set! *processes* '()))
-  (define (add-process process)
-    (set! *processes* (cons process *processes*)))
-  (define (get-processes)
-    (reverse *processes*))
-
-  (define (for-all-processes proc)
-    (let ((processes (get-processes)))
-      (initialize-processes)
-      (for-each proc processes)))
-
-  ;; -- parses
-  (define *parses* '())
-  (define (get-parses)
-    *parses*)
-  (define (initialize-parses)
-    (set! *parses* '()))
-  (define (add-parse parse)
-    (set! *parses* (cons parse *parses*)))
-
-
-  (define (push delta new-category lvalue stack tok)
-    (let* ((stack     (drop stack (* delta 2)))
-           (state     (car stack))
-           (new-state (cdr (assv new-category (vector-ref ___gtable state)))))
-      (cons new-state (cons (note-source-location lvalue tok) stack))))
-
-  (define (reduce state stack)
-    ((vector-ref ___rtable state) stack ___gtable push))
-
-  (define (shift state symbol stack)
-    (cons state (cons symbol stack)))
-
-  (define (get-actions token action-list)
-    (let ((pair (assoc token action-list)))
-      (if pair
-          (cdr pair)
-          (cdar action-list)))) ;; get the default action
-
-
-  (define (run)
-    (let loop-tokens ()
-      (consume)
-      (let ((symbol (token-category *input*)))
-        (for-all-processes
-         (lambda (process)
-           (let loop ((stacks (list process)) (active-stacks '()))
-             (cond ((pair? stacks)
-                    (let* ((stack   (car stacks))
-                           (state   (car stack)))
-                      (let actions-loop ((actions      (get-actions symbol (vector-ref ___atable state)))
-                                         (active-stacks active-stacks))
-                        (if (pair? actions)
-                            (let ((action        (car actions))
-                                  (other-actions (cdr actions)))
-                              (cond ((eq? action '*error*)
-                                     (actions-loop other-actions active-stacks))
-                                    ((eq? action 'accept)
-                                     (add-parse (car (take-right stack 2)))
-                                     (actions-loop other-actions active-stacks))
-                                    ((>= action 0)
-                                     (let ((new-stack (shift action *input* stack)))
-                                       (add-process new-stack))
-                                     (actions-loop other-actions active-stacks))
-                                    (else
-                                     (let ((new-stack (reduce (- action) stack)))
-                                       (actions-loop other-actions (cons new-stack active-stacks))))))
-                            (loop (cdr stacks) active-stacks)))))
-                   ((pair? active-stacks)
-                    (loop (reverse active-stacks) '())))))))
-      (if (pair? (get-processes))
-          (loop-tokens))))
-
-
-  (lambda (lexerp errorp)
-    (set! ___errorp errorp)
-    (initialize-lexer lexerp)
-    (initialize-processes)
-    (initialize-parses)
-    (add-process '(0))
-    (run)
-    (get-parses)))
-
-
-(define (drop l n)
-  (cond ((and (> n 0) (pair? l))
-         (drop (cdr l) (- n 1)))
-        (else
-         l)))
-
-(define (take-right l n)
-  (drop l (- (length l) n)))

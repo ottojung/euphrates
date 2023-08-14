@@ -1,11 +1,14 @@
 
+(define (note-source-location lvalue tok) lvalue)
+
 (define hidden-imports
-  '(glr-driver lr-driver
-               vector vector-ref let* list-ref
-               lexical-token?
-               force-output
-               lexical-token-value
-               lexical-token-source))
+  '(_
+    vector vector-ref let* list-ref
+    lexical-token?
+    force-output
+    set! vector? make-vector *max-stack-size* pair? cadar length lexical-token-category assoc not symbol? eq? >= < cdr vector-length vector-set! note-source-location cadr
+    lexical-token-value
+    lexical-token-source))
 
 (define (make-lexer)
   (lambda ()

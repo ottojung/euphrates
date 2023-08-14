@@ -3,8 +3,6 @@
   (euphrates lalr-parser)
   (export
     lalr-parser
-    glr-driver
-    lr-driver
     make-source-location
     source-location?
     source-location-line
@@ -14,9 +12,6 @@
     lexical-token-category
     lexical-token-value
     lexical-token-source)
-  (import
-    (only (euphrates eval-in-current-namespace)
-          eval-in-current-namespace))
   (import
     (only (scheme base)
           *
@@ -102,7 +97,10 @@
           vector-set!
           vector?))
   (import (only (scheme cxr) caaar cadar caddr))
+  (import (only (scheme eval) eval))
   (import (only (scheme file) with-output-to-file))
+  (import
+    (only (scheme repl) interaction-environment))
   (import (only (scheme write) display))
   (cond-expand
     (guile (import
