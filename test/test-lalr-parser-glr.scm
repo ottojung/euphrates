@@ -76,11 +76,8 @@
 (define (test-2)
   (parser-2 (make-lexer *phrase-2*) syntax-error))
 
-
-
-
 (define (assert-length l n test-name)
-  (display "Test '") 
+  (display "Test '")
   (display test-name)
   (display (if (not (= (length l) n)) "' failed!" "' passed!"))
   (newline))

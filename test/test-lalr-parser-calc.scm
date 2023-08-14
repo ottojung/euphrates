@@ -3,7 +3,7 @@
 ;;;
 ;;
 ;;   This program illustrates the use of the lalr-scm parser generator
-;; for Scheme. It is NOT robust, since calling a function with 
+;; for Scheme. It is NOT robust, since calling a function with
 ;; the wrong number of arguments may generate an error that will
 ;; cause the calculator to crash.
 
@@ -24,8 +24,8 @@
 (define calc-parser
   (lalr-parser
 
-   ;; --- Options 
-   ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm, 
+   ;; --- Options
+   ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm,
    ;; (output:    calc-parser "/tmp/calc.yy.scm")
    ;; ;; output the LALR table to calc.out
    ;; (out-table: "/tmp/calc.out")
@@ -45,7 +45,7 @@
    ;; --- rules
    (line     (assign NEWLINE)        : $1
              (expr   NEWLINE)        : $1
-	     (NEWLINE)               : #f
+             (NEWLINE)               : #f
              (error  NEWLINE)        : #f)
 
    (assign   (ID = expr)             : (add-binding $1 $3))
@@ -197,28 +197,28 @@
        (letrec ((errorp
                  (lambda (message . args)
                    (display message)
-                   (if (and (pair? args) 
+                   (if (and (pair? args)
                             (lexical-token? (car args)))
                        (let ((token (car args)))
                          (display (or (lexical-token-value token)
                                       (lexical-token-category token)))
                          (let ((source (lexical-token-source token)))
                            (if (source-location? source)
-                               (let ((line (source-location-line source))   
-				     (column (source-location-column source)))
-				 (if (and (number? line) (number? column))
-				     (begin
-				       (display " (at line ")
-				       (display line)
-				       (display ", column ")
-				       (display (+ 1 column))
-				       (display ")")))))))
+                               (let ((line (source-location-line source))
+                     (column (source-location-column source)))
+                 (if (and (number? line) (number? column))
+                     (begin
+                       (display " (at line ")
+                       (display line)
+                       (display ", column ")
+                       (display (+ 1 column))
+                       (display ")")))))))
                        (for-each display args))
                    (newline)))
                 (start
                  (lambda ()
                    (calc-parser (make-lexer errorp) errorp))))
-	 (display-prompt)
+     (display-prompt)
          (start))))))
 
 
