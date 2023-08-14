@@ -18,12 +18,9 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-macro (def-macro form . body)
-  `(define-macro ,form (let () ,@body)))
-
-(def-macro (BITS-PER-WORD) 28)
-(def-macro (logical-or x . y) `(logior ,x ,@y))
-(def-macro (lalr-error msg obj) `(error ,msg ,obj))
+(define (BITS-PER-WORD) 28)
+(define logical-or logior)
+(define lalr-error error)
 
 (define pprint pretty-print)
 (define lalr-keyword? keyword?)
