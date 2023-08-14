@@ -15,6 +15,9 @@
     lexical-token-value
     lexical-token-source)
   (import
+    (only (euphrates eval-in-current-namespace)
+          eval-in-current-namespace))
+  (import
     (only (scheme base)
           *
           +
@@ -25,6 +28,7 @@
           =>
           >
           >=
+          _
           and
           append
           apply
@@ -43,6 +47,7 @@
           cons
           define
           define-record-type
+          define-syntax
           do
           else
           eq?
@@ -86,6 +91,7 @@
           string?
           symbol->string
           symbol?
+          syntax-rules
           unquote
           unquote-splicing
           vector

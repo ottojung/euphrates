@@ -48,7 +48,14 @@
 
 ;; - Macros pour la gestion des vecteurs de bits
 
-(define-macro (lalr-parser . arguments)
+(define-syntax define-syntax-rule1
+  (syntax-rules ()
+    ((_ (name . args) . bodies)
+     (define-syntax name
+       (syntax-rules ()
+         ((_ . args) (let () . bodies)))))))
+
+(define-syntax-rule1 (lalr-parser . arguments)
   (define (set-bit v b)
     (let ((x (quotient b (BITS-PER-WORD)))
           (y (expt 2 (remainder b (BITS-PER-WORD)))))
@@ -1644,9 +1651,9 @@
 
       (output-table! options)
       (output-parser! options code)
-      code))
+      (eval-in-current-namespace code)))
 
-  (extract-arguments arguments build-driver))
+  (extract-arguments (quote arguments) build-driver))
 
 
 
