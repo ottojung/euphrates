@@ -3,9 +3,6 @@
   (test-lalr-parser-calc)
   (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates call-with-input-string)
-          call-with-input-string))
-  (import
     (only (euphrates lalr-parser)
           glr-driver
           lalr-parser
@@ -22,6 +19,9 @@
   (import
     (only (euphrates with-output-stringified)
           with-output-stringified))
+  (import
+    (only (euphrates with-string-as-input)
+          with-string-as-input))
   (import
     (only (scheme base)
           *
@@ -58,7 +58,6 @@
           number?
           or
           pair?
-          parameterize
           peek-char
           procedure?
           quote

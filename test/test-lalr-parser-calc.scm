@@ -234,8 +234,6 @@
 [calculator]> "
 
  (with-output-stringified
-  (call-with-input-string
+  (with-string-as-input
    "2 + 2\nquit()\n"
-   (lambda (p)
-     (parameterize ((current-input-port p))
-       (calc))))))
+   (calc))))
