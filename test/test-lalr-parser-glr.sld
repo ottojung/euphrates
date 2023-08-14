@@ -1,6 +1,7 @@
 
 (define-library
   (test-lalr-parser-glr)
+  (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates lalr-parser)
           glr-driver
@@ -12,7 +13,6 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
-          =
           begin
           car
           cdr
@@ -28,7 +28,6 @@
           let*
           list-ref
           newline
-          not
           null?
           parameterize
           quote
