@@ -48,15 +48,10 @@
 
 ;; - Macros pour la gestion des vecteurs de bits
 
-(define-syntax define-syntax-rule1
+(define-syntax lalr-parser
   (syntax-rules ()
-    ((_ (name . args) . bodies)
-     (define-syntax name
-       (syntax-rules ()
-         ((_ . args) (let () . bodies)))))))
-
-(define-syntax-rule1 (lalr-parser . arguments)
-  (lalr-parser/1order (quote arguments)))
+    ((_  . arguments)
+     (lalr-parser/1order (quote arguments)))))
 
 (define (lalr-parser/1order arguments)
   (define (set-bit v b)
