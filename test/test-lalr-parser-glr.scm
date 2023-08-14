@@ -5,8 +5,6 @@
 ;; @created   "Fri Aug 19 11:23:48 EDT 2005"
 ;;
 
-(define (note-source-location lvalue tok) lvalue)
-
 (define hidden-imports
   '(_
     vector let* list-ref

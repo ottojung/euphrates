@@ -12,8 +12,6 @@
 ;;;;   The LALR(1) parser
 ;;;
 
-(define (note-source-location lvalue tok) lvalue)
-
 (define hidden-imports
   '(_
     vector vector-ref let* list-ref

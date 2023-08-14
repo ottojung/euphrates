@@ -25,8 +25,6 @@
 (define pprint pretty-print)
 (define lalr-keyword? keyword?)
 
-(define (note-source-location lvalue tok) lvalue)
-
 (define *lalr-scm-version* "2.5.0")
 
 (define lexical-token-typetag
@@ -75,7 +73,8 @@
 
 (define (lalr-parser/1order arguments)
   (define lexical-token-code
-    `((define (lexical-token? x)
+    `((define (note-source-location lvalue tok) lvalue)
+      (define (lexical-token? x)
         (and (vector? x)
              (= 4 (vector-length x))
              (eq? (vector-ref x 0) (quote ,lexical-token-typetag))))
