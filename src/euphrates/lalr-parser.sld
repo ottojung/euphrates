@@ -40,7 +40,6 @@
           cddr
           cdr
           cond
-          cond-expand
           cons
           define
           define-record-type

@@ -1656,22 +1656,6 @@
 ;;;
 
 
-(cond-expand
- (gambit
-  (declare
-   (standard-bindings)
-   (fixnum)
-   (block)
-   (not safe)))
- (chicken
-  (declare
-   (uses extras)
-   (usual-integrations)
-   (fixnum)
-   (not safe)))
- (else))
-
-
 ;;;
 ;;;; Source location utilities
 ;;;
