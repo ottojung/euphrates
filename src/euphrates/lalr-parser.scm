@@ -56,6 +56,9 @@
          ((_ . args) (let () . bodies)))))))
 
 (define-syntax-rule1 (lalr-parser . arguments)
+  (lalr-parser/1order (quote arguments)))
+
+(define (lalr-parser/1order arguments)
   (define (set-bit v b)
     (let ((x (quotient b (BITS-PER-WORD)))
           (y (expt 2 (remainder b (BITS-PER-WORD)))))
@@ -1653,7 +1656,7 @@
       (output-parser! options code)
       (eval-in-current-namespace code)))
 
-  (extract-arguments (quote arguments) build-driver))
+  (extract-arguments arguments build-driver))
 
 
 
