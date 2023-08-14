@@ -3,6 +3,8 @@
   (test-lalr-parser-standardcases)
   (import (only (euphrates assert-equal) assert=))
   (import
+    (only (euphrates assert-throw) assert-throw))
+  (import
     (only (euphrates lalr-parser)
           glr-driver
           lalr-parser
@@ -43,6 +45,7 @@
           letrec
           list
           list-ref
+          or
           peek-char
           quote
           read-char
