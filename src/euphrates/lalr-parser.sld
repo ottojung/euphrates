@@ -5,7 +5,13 @@
     lalr-parser
     glr-driver
     lr-driver
+    make-source-location
+    source-location?
+    source-location-line
+    source-location-column
+    make-lexical-token
     lexical-token?
+    lexical-token-category
     lexical-token-value
     lexical-token-source)
   (import
