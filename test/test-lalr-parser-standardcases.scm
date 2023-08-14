@@ -52,50 +52,54 @@
    (stringf "PARSE ERROR : ~s" args)
    args))
 
-(define id-list-parser
-  (lalr-parser
-   ;; --- tokens
-   (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+(define-syntax test-parser
+  (syntax-rules ()
+    ((_ parser-rules input expected-output)
+     (let ()
+       (define parser
+         (lalr-parser
+          (expect: 1000)
 
-   ;; --- rules
-   (exprs    (exprs expr) : (list 'exprs $1 $2)
-             (expr) : (list 'exprs $1))
-   (expr     (SPACE) : (list 'expr $1)
-             (ID) : (list 'expr $1))))
+          ;; --- tokens
+          (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+          ;; --- rules
+          . parser-rules))
 
+       (define result
+         (run-input parser input))
 
-(define multiline-id-list-parser
-  (lalr-parser
-
-   (expect: 3)
-
-   ;; --- tokens
-   (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-
-   ;; --- rules
-   (lines    (line lines) : (list 'lines $1 $2)
-             (line)       : (list 'lines $1)
-             (exprs)      : (list 'lines $1))
-   (line     (exprs line) : (list 'line $1 $2)
-             (NEWLINE)    : (list 'line $1))
-   (exprs    (exprs expr) : (list 'exprs $1 $2)
-             (expr) : (list 'exprs $1))
-   (expr     (SPACE) : (list 'expr $1)
-             (ID) : (list 'expr $1))))
+       (assert= result expected-output)))))
 
 (define (run-input parser input)
   (with-string-as-input
    input (parser (make-lexer) error-procedure)))
 
-(assert=
- '(exprs (exprs (exprs (exprs (exprs (exprs (exprs (expr "ida")) (expr SPACE)) (expr "idb")) (expr SPACE)) (expr "idc")) (expr SPACE)) (expr "longerid"))
- (run-input
-  id-list-parser
-  "ida idb idc longerid"))
+(test-parser
+ ((exprs    (exprs expr) : (list 'exprs $1 $2)
+            (expr) : (list 'exprs $1))
+  (expr     (SPACE) : (list 'expr $1)
+            (ID) : (list 'expr $1)))
 
-(assert=
- '(lines (line (exprs (exprs (exprs (exprs (exprs (exprs (exprs (expr "idala")) (expr SPACE)) (expr "idbla")) (expr SPACE)) (expr "idcla")) (expr SPACE)) (expr "longeridla")) (line NEWLINE)) (lines (exprs (exprs (exprs (exprs (exprs (expr "idblb")) (expr SPACE)) (expr "idclb")) (expr SPACE)) (expr "longeridlb"))))
- (run-input
-  multiline-id-list-parser
+ "ida idb idc longerid"
+
+ '(exprs (exprs (exprs (exprs (exprs (exprs (exprs (expr "ida")) (expr SPACE)) (expr "idb")) (expr SPACE)) (expr "idc")) (expr SPACE)) (expr "longerid"))
+
+ )
+
+(test-parser
+ ((lines    (line lines) : (list 'lines $1 $2)
+            (line)       : (list 'lines $1)
+            (exprs)      : (list 'lines $1))
+  (line     (exprs line) : (list 'line $1 $2)
+            (NEWLINE)    : (list 'line $1))
+  (exprs    (exprs expr) : (list 'exprs $1 $2)
+            (expr) : (list 'exprs $1))
+  (expr     (SPACE) : (list 'expr $1)
+            (ID) : (list 'expr $1)))
+
   "idala idbla idcla longeridla
-idblb idclb longeridlb"))
+idblb idclb longeridlb"
+
+  '(lines (line (exprs (exprs (exprs (exprs (exprs (exprs (exprs (expr "idala")) (expr SPACE)) (expr "idbla")) (expr SPACE)) (expr "idcla")) (expr SPACE)) (expr "longeridla")) (line NEWLINE)) (lines (exprs (exprs (exprs (exprs (exprs (expr "idblb")) (expr SPACE)) (expr "idclb")) (expr SPACE)) (expr "longeridlb"))))
+
+ )

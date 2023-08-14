@@ -24,6 +24,7 @@
           -
           /
           =
+          _
           and
           apply
           begin
@@ -32,6 +33,7 @@
           cond
           cons
           define
+          define-syntax
           else
           eof-object?
           if
@@ -47,6 +49,7 @@
           reverse
           string
           string->number
+          syntax-rules
           vector
           vector-ref))
   (import
