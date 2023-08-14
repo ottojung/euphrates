@@ -614,10 +614,16 @@
     (only (euphrates lalr-parser)
           glr-driver
           lalr-parser
+          lexical-token-category
           lexical-token-source
           lexical-token-value
           lexical-token?
-          lr-driver))
+          lr-driver
+          make-lexical-token
+          make-source-location
+          source-location-column
+          source-location-line
+          source-location?))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))
@@ -2178,6 +2184,9 @@
   (import
     (only (euphrates with-singlethread-env)
           with-singlethread-env))
+  (import
+    (only (euphrates with-string-as-input)
+          with-string-as-input))
   (import
     (only (euphrates words-to-string) words->string))
   (import
