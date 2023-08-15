@@ -45,11 +45,11 @@
      ((vector? o) `(vector ,@(map loop o)))
      ((is-parameter? o) `(make-parameter ,@(loop (o))))
      ((error-object? o) `(error-object ,(loop (error-object-message o)) ,@(map loop (error-object-irritants o))))
-     ((equal? (when #f #f) o) o)
-     ((eof-object? o) o)
+     ((equal? (when #f #f) o) '*unspecified*)
+     ((eof-object? o) '*eof-object*)
      ((serialize/human-hashtable? o) `(alist->hash-table ,(loop (serialize/human-hashtable o))))
-     ((box? o) `(box ,(loop (box-ref o))))
-     ((atomic-box? o) `(box ,(loop (atomic-box-ref o))))
+     ((box? o) `(make-box ,(loop (box-ref o))))
+     ((atomic-box? o) `(make-atomic-box ,(loop (atomic-box-ref o))))
      (else (fail))))))
 
 (define deserialize-builtin/natural
@@ -65,6 +65,8 @@
      ((char? o) o)
      ((equal? #t o) o)
      ((equal? #f o) o)
+     ((equal? o '*eof-object*) (eof-object))
+     ((equal? o '*unspecified*) (when #f #f))
 
      ((pair? o)
       (case (car o)

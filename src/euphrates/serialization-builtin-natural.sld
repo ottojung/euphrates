@@ -30,6 +30,7 @@
           cons
           define
           else
+          eof-object
           eof-object?
           equal?
           error-object-irritants
