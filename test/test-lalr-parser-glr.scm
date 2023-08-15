@@ -5,7 +5,7 @@
 ;; @created   "Fri Aug 19 11:23:48 EDT 2005"
 ;;
 
-(define (syntax-error msg . args)
+(define (syntax-error type msg . args)
   (display msg (current-error-port))
   (parameterize ((current-output-port (current-error-port)))
     (for-each (cut stringf " ~A" <>) args))

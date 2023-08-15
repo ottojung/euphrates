@@ -184,7 +184,7 @@
        (init-bindings)
        (add-binding 'quit (lambda () (k #t)))
        (letrec ((errorp
-                 (lambda (message . args)
+                 (lambda (type message . args)
                    (display message)
                    (if (and (pair? args)
                             (lexical-token? (car args)))

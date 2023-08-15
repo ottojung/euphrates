@@ -9,6 +9,7 @@
           lalr-parser
           make-lexical-token
           make-source-location))
+  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import
@@ -28,6 +29,8 @@
           and
           apply
           begin
+          car
+          cdr
           char=?
           char?
           cond

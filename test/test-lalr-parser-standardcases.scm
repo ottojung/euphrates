@@ -40,11 +40,10 @@
                   c)
                  (loop))))))))
 
-(define (error-procedure . args)
-  (raisu
-   'parse-error
-   (stringf "PARSE ERROR : ~s" args)
-   args))
+(define (error-procedure type/subtype message-fmt token)
+  (raisu* :type (car type/subtype)
+          :message (stringf message-fmt token)
+          :args (list (cdr type/subtype) token)))
 
 (define (make-test-parser parser-rules)
   (with-lalr-parser-conflict-handler
