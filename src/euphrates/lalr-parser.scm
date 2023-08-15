@@ -1983,6 +1983,8 @@
              (grammar-error "Missing required option ~s" (~a 'tokens:))))
 
 
+  (define (gkeyword? x) (or (fkeyword? x) (rkeyword? x)))
+
   ;; -- arguments
 
   (define (extract-arguments lst proc)
@@ -1993,7 +1995,7 @@
         (let ((p (car lst)))
           (cond
            ((and (pair? p)
-                 (keyword? (car p))
+                 (gkeyword? (car p))
                  (assq (car p) *valid-options*))
             (loop (cons p options) (cdr lst)))
            (else

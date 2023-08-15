@@ -15,6 +15,7 @@
   (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates define-type9) define-type9))
+  (import (only (euphrates fkeyword) fkeyword?))
   (import
     (only (euphrates
             lalr-parser-conflict-handler-p-default)
@@ -25,6 +26,7 @@
   (import
     (only (euphrates pretty-print) pretty-print))
   (import (only (euphrates raisu-fmt) raisu-fmt))
+  (import (only (euphrates rkeyword) rkeyword?))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -141,9 +143,6 @@
   (cond-expand
     (guile (import (only (srfi srfi-60) logior)))
     (else (import (only (srfi 60) logior))))
-  (cond-expand
-    (guile (import (only (srfi srfi-88) keyword?)))
-    (else (import (only (srfi 88) keyword?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
