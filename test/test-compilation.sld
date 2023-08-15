@@ -1465,6 +1465,13 @@
   (import
     (only (euphrates reversed-args) reversed-args))
   (import
+    (only (euphrates rkeyword)
+          looks-like-an-unquoted-rkeyword?
+          rkeyword
+          rkeyword->string
+          rkeyword?
+          string->rkeyword))
+  (import
     (only (euphrates rtree)
           rtree
           rtree-children
