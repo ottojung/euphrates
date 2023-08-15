@@ -647,6 +647,9 @@
           key-value-map
           key-value-map/list))
   (import
+    (only (euphrates keylist-to-alist)
+          keylist->alist))
+  (import
     (only (euphrates
             lalr-parser-conflict-handler-p-default)
           lalr-parser-conflict-handler/p-default))
