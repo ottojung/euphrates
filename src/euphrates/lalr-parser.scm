@@ -40,7 +40,7 @@
 (define (lexical-token-value x)
   (vector-ref x 3))
 
-(define-record-type source-location
+(define-type9 source-location
   (make-source-location input line column offset length)
   source-location?
   (input   source-location-input)

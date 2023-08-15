@@ -13,6 +13,8 @@
     lexical-token-value
     lexical-token-source)
   (import
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (euphrates pretty-print) pretty-print))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import
@@ -43,7 +45,6 @@
           cond
           cons
           define
-          define-record-type
           do
           else
           eq?
