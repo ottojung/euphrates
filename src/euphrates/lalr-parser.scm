@@ -1472,6 +1472,7 @@
   ;; --
 
   (define actions-list '())
+  (define actions-list-length 0)
 
   (define (rewrite-grammar tokens grammar k)
 
@@ -1626,13 +1627,15 @@
       (if (not (pair? action)) action
           (let ()
             (define proc (car action))
+            (define index actions-list-length)
+
             (unless (procedure? proc)
               (lalr-error
                "Type error. Expected procedure as action, but got something else:"
                proc))
 
-            (define index (length actions-list))
             (set! actions-list (cons proc actions-list))
+            (set! actions-list-length (+ 1 actions-list-length))
             (cons 'call (cons index (cdr action))))))
 
     (if (not (pair? (cdr nonterm-def)))
