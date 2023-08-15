@@ -1915,6 +1915,9 @@
                   (integer? (cadr option))
                   (>= (cadr option) 0))))
 
+     (cons 'rules: (lambda (option) (list? option)))
+     (cons 'tokens: (lambda (option) (list? option)))
+
      (cons 'driver:
            (lambda (option)
              (and (list? option)
@@ -1961,27 +1964,40 @@
           (let ((driver-type (cadr option)))
             (set! driver-name (if (eq? driver-type 'glr) 'glr-driver 'lr-driver))))))
 
+  (define (options-get-rules options)
+    (assq-or 'rules: options
+             (grammar-error "Missing required option ~s" (~a 'rules:))))
+
+  (define (options-get-tokens options)
+    (assq-or 'tokens: options
+             (grammar-error "Missing required option ~s" (~a 'tokens:))))
+
 
   ;; -- arguments
 
   (define (extract-arguments lst proc)
     (let loop ((options '())
-               (tokens  '())
-               (rules   '())
                (lst     lst))
-      (if (pair? lst)
-          (let ((p (car lst)))
-            (cond
-             ((and (pair? p)
-                   (keyword? (car p))
-                   (assq (car p) *valid-options*))
-              (loop (cons p options) tokens rules (cdr lst)))
-             (else
-              (proc options p (cdr lst)))))
-          (grammar-error "Malformed lalr-parser form: ~s" lst))))
+      (cond
+       ((pair? lst)
+        (let ((p (car lst)))
+          (cond
+           ((and (pair? p)
+                 (keyword? (car p))
+                 (assq (car p) *valid-options*))
+            (loop (cons p options) (cdr lst)))
+           (else
+            (grammar-error "Invalid option: ~s" (~a p))))))
+       ((null? lst)
+        (proc options))
+       (else
+        (grammar-error "Malformed lalr-parser form: ~s" lst)))))
 
 
-  (define (build-driver options tokens rules)
+  (define (build-driver options)
+    (define tokens (options-get-tokens options))
+    (define rules (options-get-rules options))
+
     (validate-options options)
     (set-expected-conflicts! options)
     (set-driver-name! options)

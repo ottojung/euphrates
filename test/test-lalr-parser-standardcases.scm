@@ -49,10 +49,9 @@
 (define (make-test-parser parser-rules)
   (lalr-parser
    `((expect: 1000)
-     ;; --- tokens
-     (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+     (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
      ;; --- rules
-     ,@parser-rules)))
+     (rules: ,@parser-rules))))
 
 (define (test-parser parser-rules input expected-output)
   (define parser

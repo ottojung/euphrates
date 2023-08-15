@@ -12,11 +12,13 @@
     lexical-token-category
     lexical-token-value
     lexical-token-source)
+  (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates pretty-print) pretty-print))
   (import (only (euphrates raisu-fmt) raisu-fmt))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           *

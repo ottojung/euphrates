@@ -33,14 +33,15 @@
   (lalr-parser
    `((driver: glr)
      (expect: 2)
-     (*n *v *d *p)
-     (<s>  (<np> <vp>)
-           (<s> <pp>))
-     (<np> (*n)
-           (*d *n)
-           (<np> <pp>))
-     (<pp> (*p <np>))
-     (<vp> (*v <np>)))))
+     (tokens: *n *v *d *p)
+     (rules:
+      (<s>  (<np> <vp>)
+            (<s> <pp>))
+      (<np> (*n)
+            (*d *n)
+            (<np> <pp>))
+      (<pp> (*p <np>))
+      (<vp> (*v <np>))))))
 
 
 (define *phrase-1* '(*n *v *d *n *p *d *n *p *d *n *p *d *n))
@@ -59,10 +60,11 @@
   (lalr-parser
    `((driver: glr)
      (expect: 1)
-     ((nonassoc: if then else e s))
-     (<s> (s)
-          (if e then <s>)
-          (if e then <s> else <s>)))))
+     (tokens: (nonassoc: if then else e s))
+     (rules:
+      (<s> (s)
+           (if e then <s>)
+           (if e then <s> else <s>))))))
 
 
 (define *phrase-2* '(if e then if e then s else s))
