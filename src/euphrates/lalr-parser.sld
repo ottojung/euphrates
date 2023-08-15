@@ -134,8 +134,6 @@
     (else (import (only (srfi 88) keyword?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
-           (import (only (guile) define-macro))
-           (import (srfi srfi-9))
            (begin
              (include-from-path "euphrates/lalr-parser.scm")))
     (else (include "lalr-parser.scm"))))
