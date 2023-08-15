@@ -40,7 +40,6 @@
           cond
           cons
           define
-          define-syntax
           else
           eof-object?
           eq?
@@ -57,6 +56,7 @@
           or
           pair?
           peek-char
+          quasiquote
           quote
           read-char
           reverse
@@ -64,7 +64,8 @@
           string
           string->number
           symbol?
-          syntax-rules
+          unquote
+          unquote-splicing
           vector
           vector-length
           vector-ref

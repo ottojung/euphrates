@@ -56,15 +56,7 @@
   (offset  source-location-offset)
   (length  source-location-length))
 
-
-;; - Macros pour la gestion des vecteurs de bits
-
-(define-syntax lalr-parser
-  (syntax-rules ()
-    ((_  . arguments)
-     (lalr-parser/1order (quote arguments)))))
-
-(define (lalr-parser/1order arguments)
+(define (lalr-parser arguments)
   (define common-definitions-code
     `((define (cadar l) (car (cdr (car l))))
       (define (drop l n)
@@ -1479,6 +1471,8 @@
 
   ;; --
 
+  (define actions-list '())
+
   (define (rewrite-grammar tokens grammar k)
 
     (define eoi '*eoi*)
@@ -1628,6 +1622,18 @@
                   (lalr-error "Invalid 'error' production. A single terminal symbol must follow the 'error' token.:" rhs))
               (loop (cdr rhs))))))
 
+    (define (serialize-action action)
+      (if (not (pair? action)) action
+          (let ()
+            (define proc (car action))
+            (unless (procedure? proc)
+              (lalr-error
+               "Type error. Expected procedure as action, but got something else:"
+               proc))
+
+            (define index (length actions-list))
+            (set! actions-list (cons proc actions-list))
+            (cons 'call (cons index (cdr action))))))
 
     (if (not (pair? (cdr nonterm-def)))
         (lalr-error "At least one production needed for nonterminal:" (car nonterm-def))
@@ -1653,8 +1659,10 @@
                            (pair? (cdr rest)))
                       (loop1 (cddr rest)
                              (+ i 1)
-                             (cons (cons prod (cadr rest))
-                                   rev-productions-and-actions))
+                             (let* ((action/0 (cadr rest))
+                                    (action (serialize-action action/0)))
+                               (cons (cons prod action)
+                                     rev-productions-and-actions)))
                       (let* ((rhs-length (length rhs))
                              (action
                               (cons 'vector
@@ -1981,6 +1989,8 @@
            (code
             `(let ()
                ,@common-definitions-code
+               (define actions ,(list->vector (reverse actions-list)))
+               (define call (lambda (index . args) (apply (vector-ref actions index) args)))
                (define lr-driver ,lr-driver)
                (define glr-driver ,glr-driver)
                (define driver ,driver-name)

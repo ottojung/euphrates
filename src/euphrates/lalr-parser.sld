@@ -23,7 +23,6 @@
           =>
           >
           >=
-          _
           and
           append
           apply
@@ -42,7 +41,6 @@
           cons
           define
           define-record-type
-          define-syntax
           do
           else
           eq?
@@ -73,6 +71,7 @@
           number?
           or
           pair?
+          procedure?
           quasiquote
           quote
           quotient
@@ -86,7 +85,7 @@
           string?
           symbol->string
           symbol?
-          syntax-rules
+          unless
           unquote
           unquote-splicing
           vector

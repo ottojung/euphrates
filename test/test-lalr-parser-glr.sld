@@ -49,6 +49,7 @@
           null?
           pair?
           parameterize
+          quasiquote
           quote
           reverse
           set!

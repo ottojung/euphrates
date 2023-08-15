@@ -66,6 +66,7 @@
           pair?
           peek-char
           procedure?
+          quasiquote
           quote
           read-char
           reverse
@@ -75,6 +76,7 @@
           string->number
           string->symbol
           symbol?
+          unquote
           vector
           vector-length
           vector-ref

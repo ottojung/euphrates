@@ -21,50 +21,96 @@
     lexical-token-value
     lexical-token-source))
 
+(define (display-result v)
+  (if v
+      (begin
+        (display v)
+        (newline)))
+  (display-prompt))
+
+;;;
+;;;;   Environment management
+;;;
+
+
+(define *env* (list (cons '$$ 0)))
+
+
+(define (init-bindings)
+  (set-cdr! *env* '())
+  (add-binding 'cos cos)
+  (add-binding 'sin sin)
+  (add-binding 'tan tan)
+  (add-binding 'expt expt)
+  (add-binding 'sqrt sqrt))
+
+
+(define (add-binding var val)
+  (set! *env* (cons (cons var val) *env*))
+  val)
+
+
+(define (get-binding var)
+  (let ((p (assq var *env*)))
+    (if p
+        (cdr p)
+        0)))
+
+
+(define (invoke-proc proc-name args)
+  (let ((proc (get-binding proc-name)))
+    (if (procedure? proc)
+        (apply proc args)
+        (begin
+          (display "ERROR: invalid procedure:")
+          (display proc-name)
+          (newline)
+          0))))
+
 (define calc-parser
   (lalr-parser
 
-   ;; --- Options
-   ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm,
-   ;; (output:    calc-parser "/tmp/calc.yy.scm")
-   ;; ;; output the LALR table to calc.out
-   ;; (out-table: "/tmp/calc.out")
-   ;; there should be no conflict
-   (expect:    5)
+   `(;; --- Options
+     ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm,
+     ;; (output:    calc-parser "/tmp/calc.yy.scm")
+     ;; ;; output the LALR table to calc.out
+     ;; (out-table: "/tmp/calc.out")
+     ;; there should be no conflict
+     (expect:    5)
 
-   ;; --- token definitions
-   (ID NUM = LPAREN RPAREN NEWLINE COMMA
-       (left: + -)
-       (left: * /)
-       (nonassoc: uminus))
+     ;; --- token definitions
+     (ID NUM = LPAREN RPAREN NEWLINE COMMA
+         (left: + -)
+         (left: * /)
+         (nonassoc: uminus))
 
-   (lines    (lines line) : (display-result $2)
-             (line)       : (display-result $1))
+     (lines    (lines line) : (,display-result $2)
+               (line)       : (,display-result $1))
 
 
-   ;; --- rules
-   (line     (assign NEWLINE)        : $1
-             (expr   NEWLINE)        : $1
-             (NEWLINE)               : #f
-             (error  NEWLINE)        : #f)
+     ;; --- rules
+     (line     (assign NEWLINE)        : $1
+               (expr   NEWLINE)        : $1
+               (NEWLINE)               : #f
+               (error  NEWLINE)        : #f)
 
-   (assign   (ID = expr)             : (add-binding $1 $3))
+     (assign   (ID = expr)             : (,add-binding $1 $3))
 
-   (expr     (expr + expr)           : (+ $1 $3)
-             (expr - expr)           : (- $1 $3)
-             (expr * expr)           : (* $1 $3)
-             (expr / expr)           : (/ $1 $3)
-             (- expr (prec: uminus)) : (- $2)
-             (ID)                    : (get-binding $1)
-             (ID LPAREN args RPAREN) : (invoke-proc $1 $3)
-             (NUM)                   : $1
-             (LPAREN expr RPAREN)    : $2)
+     (expr     (expr + expr)           : (,+ $1 $3)
+               (expr - expr)           : (,- $1 $3)
+               (expr * expr)           : (,* $1 $3)
+               (expr / expr)           : (,/ $1 $3)
+               (- expr (prec: uminus)) : (,- $2)
+               (ID)                    : (,get-binding $1)
+               (ID LPAREN args RPAREN) : (,invoke-proc $1 $3)
+               (NUM)                   : $1
+               (LPAREN expr RPAREN)    : $2)
 
-   (args     ()                      : '()
-             (expr arg-rest)         : (cons $1 $2))
+     (args     ()                      : (,list)
+               (expr arg-rest)         : (,cons $1 $2))
 
-   (arg-rest (COMMA expr arg-rest)   : (cons $2 $3)
-             ()                      : '())))
+     (arg-rest (COMMA expr arg-rest)   : (,cons $2 $3)
+               ()                      : (,list)))))
 
 
 ;;;
@@ -124,56 +170,8 @@
 
 
 ;;;
-;;;;   Environment management
-;;;
-
-
-(define *env* (list (cons '$$ 0)))
-
-
-(define (init-bindings)
-  (set-cdr! *env* '())
-  (add-binding 'cos cos)
-  (add-binding 'sin sin)
-  (add-binding 'tan tan)
-  (add-binding 'expt expt)
-  (add-binding 'sqrt sqrt))
-
-
-(define (add-binding var val)
-  (set! *env* (cons (cons var val) *env*))
-  val)
-
-
-(define (get-binding var)
-  (let ((p (assq var *env*)))
-    (if p
-        (cdr p)
-        0)))
-
-
-(define (invoke-proc proc-name args)
-  (let ((proc (get-binding proc-name)))
-    (if (procedure? proc)
-        (apply proc args)
-        (begin
-          (display "ERROR: invalid procedure:")
-          (display proc-name)
-          (newline)
-          0))))
-
-
-;;;
 ;;;;   The main program
 ;;;
-
-
-(define (display-result v)
-  (if v
-      (begin
-        (display v)
-        (newline)))
-  (display-prompt))
 
 
 (define (display-prompt)
