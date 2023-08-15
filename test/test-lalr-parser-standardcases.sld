@@ -33,6 +33,7 @@
           assoc
           begin
           cadr
+          car
           cdr
           char=?
           char?

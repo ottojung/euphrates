@@ -47,13 +47,6 @@
 (define (lexical-token-value x)
   (vector-ref x 3))
 
-;; (define-record-type lexical-token
-;;   (make-lexical-token category source value)
-;;   lexical-token?
-;;   (category lexical-token-category)
-;;   (source   lexical-token-source)
-;;   (value    lexical-token-value))
-
 (define-record-type source-location
   (make-source-location input line column offset length)
   source-location?
@@ -73,7 +66,17 @@
 
 (define (lalr-parser/1order arguments)
   (define lexical-token-code
-    `((define (note-source-location lvalue tok) lvalue)
+    `((define (cadar l) (car (cdr (car l))))
+      (define (drop l n)
+        (cond ((and (> n 0) (pair? l))
+               (drop (cdr l) (- n 1)))
+              (else
+               l)))
+      (define (take-right l n)
+        (drop l (- (length l) n)))
+
+      (define (note-source-location lvalue tok) lvalue)
+
       (define (lexical-token? x)
         (and (vector? x)
              (= 4 (vector-length x))

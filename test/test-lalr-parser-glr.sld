@@ -17,6 +17,7 @@
           -
           <
           =
+          >
           >=
           _
           and
@@ -61,8 +62,8 @@
   (import (only (scheme cxr) cadar))
   (import (only (scheme write) display))
   (cond-expand
-    (guile (import (only (srfi srfi-1) drop take-right)))
-    (else (import (only (srfi 1) drop take-right))))
+    (guile (import (only (srfi srfi-1) drop)))
+    (else (import (only (srfi 1) drop))))
   (cond-expand
     (guile (import (only (srfi srfi-26) cut)))
     (else (import (only (srfi 26) cut))))
