@@ -12,6 +12,8 @@
     lexical-token-category
     lexical-token-value
     lexical-token-source)
+  (import
+    (only (euphrates pretty-print) pretty-print))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import
     (only (scheme base)
@@ -133,7 +135,6 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (import (only (guile) define-macro))
-           (import (only (ice-9 pretty-print) pretty-print))
            (import (srfi srfi-9))
            (begin
              (include-from-path "euphrates/lalr-parser.scm")))

@@ -21,7 +21,6 @@
 (define (BITS-PER-WORD) 28)
 (define logical-or logior)
 
-(define pprint pretty-print)
 (define lalr-keyword? keyword?)
 
 (define *lalr-scm-version* "2.5.0")
@@ -1945,7 +1944,7 @@
                 (file-name   (caddr option)))
             (with-output-to-file file-name
               (lambda ()
-                (pprint `(define ,parser-name ,code))
+                (pretty-print `(define ,parser-name ,code))
                 (newline)))))))
 
 

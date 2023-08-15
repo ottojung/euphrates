@@ -4,6 +4,8 @@
   (export debugs)
   (import (only (euphrates debug) debug))
   (import
+    (only (euphrates pretty-print) pretty-print))
+  (import
     (only (euphrates serialization-short)
           serialize/short))
   (import
@@ -21,7 +23,6 @@
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))
-           (import (only (ice-9 pretty-print) pretty-print))
            (begin
              (include-from-path "euphrates/debugs.scm")))
     (else (include "debugs.scm"))))
