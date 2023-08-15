@@ -65,7 +65,7 @@
      (lalr-parser/1order (quote arguments)))))
 
 (define (lalr-parser/1order arguments)
-  (define lexical-token-code
+  (define common-definitions-code
     `((define (cadar l) (car (cdr (car l))))
       (define (drop l n)
         (cond ((and (> n 0) (pair? l))
@@ -1980,7 +1980,7 @@
     (let* ((gram/actions (gen-tables! tokens rules))
            (code
             `(let ()
-               ,@lexical-token-code
+               ,@common-definitions-code
                (define lr-driver ,lr-driver)
                (define glr-driver ,glr-driver)
                (define driver ,driver-name)
