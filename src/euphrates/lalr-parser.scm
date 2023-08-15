@@ -1990,9 +1990,8 @@
     (set-driver-name! options)
     (let* ((gram/actions (gen-tables! tokens rules))
            (code
-            `(let ()
+            `(lambda (actions)
                ,@common-definitions-code
-               (define actions ,(list->vector (reverse actions-list)))
                (define call (lambda (index . args) (apply (vector-ref actions index) args)))
                (define lr-driver ,lr-driver)
                (define glr-driver ,glr-driver)
@@ -2001,7 +2000,10 @@
 
       (output-table! options)
       (output-parser! options code)
-      (eval code (environment '(scheme base)))))
+
+      (let ((compiled (eval code (environment '(scheme base))))
+            (actions (list->vector (reverse actions-list))))
+        (compiled actions))))
 
   (extract-arguments arguments build-driver))
 
