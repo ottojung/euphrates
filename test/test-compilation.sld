@@ -461,6 +461,13 @@
   (import (only (euphrates file-size) file-size))
   (import
     (only (euphrates filter-monad) filter-monad))
+  (import
+    (only (euphrates fkeyword)
+          fkeyword
+          fkeyword->string
+          fkeyword?
+          looks-like-an-unquoted-fkeyword?
+          string->fkeyword))
   (import (only (euphrates fn-alist) fn-alist))
   (import (only (euphrates fn-cons) fn-cons))
   (import (only (euphrates fn-pair) fn-pair))
@@ -639,6 +646,13 @@
     (only (euphrates key-value-map)
           key-value-map
           key-value-map/list))
+  (import
+    (only (euphrates
+            lalr-parser-conflict-handler-p-default)
+          lalr-parser-conflict-handler/p-default))
+  (import
+    (only (euphrates lalr-parser-conflict-handler-p)
+          lalr-parser-conflict-handler/p))
   (import
     (only (euphrates lalr-parser)
           lalr-parser
@@ -2208,6 +2222,9 @@
   (import
     (only (euphrates with-ignore-errors)
           with-ignore-errors!))
+  (import
+    (only (euphrates with-lalr-parser-conflict-handler)
+          with-lalr-parser-conflict-handler))
   (import (only (euphrates with-monad) with-monad))
   (import
     (only (euphrates with-output-stringified)
