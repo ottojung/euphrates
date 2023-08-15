@@ -14,6 +14,7 @@
           define
           eof-object?
           equal?
+          error-object?
           lambda
           list
           list?

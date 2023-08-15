@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@
      ((pair? o) `(cons ,(loop (car o)) ,(loop (cdr o))))
      ((vector? o) `(vector ,@(map loop o)))
      ((is-parameter? o) `(make-parameter ,@(loop (o))))
+     ((error-object? o) `(error-object ,(loop (error-object-message o)) ,@(map loop (error-object-irritants o))))
      ((equal? (when #f #f) o) o)
      ((eof-object? o) o)
      ((serialize/human-hashtable? o) `(alist->hash-table ,(loop (serialize/human-hashtable o))))
@@ -72,6 +73,7 @@
         ((cons) (cons (loop (cadr o)) (loop (caddr o))))
         ((vector) (apply vector (map loop (cdr o))))
         ((make-parameter) (make-parameter (loop (cadr o))))
+        ((error-object) (apply make-error-object (cdr o)))
         ((alist->hash-table) (deserialize/human-hashtable (loop (cadr o))))
         ((make-box) (make-box (loop (cadr o))))
         ((make-atomic-box) (make-atomic-box (loop (cadr o))))

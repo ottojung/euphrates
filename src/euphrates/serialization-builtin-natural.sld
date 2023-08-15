@@ -11,6 +11,9 @@
           make-atomic-box))
   (import
     (only (euphrates box) box-ref box? make-box))
+  (import
+    (only (euphrates make-error-object)
+          make-error-object))
   (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base)
@@ -29,6 +32,9 @@
           else
           eof-object?
           equal?
+          error-object-irritants
+          error-object-message
+          error-object?
           lambda
           list
           list?

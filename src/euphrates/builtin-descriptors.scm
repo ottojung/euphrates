@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung
+;;;; Copyright (C) 2022, 2023  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
    (make-builtin-descriptor 'cons pair?)
    (make-builtin-descriptor 'vector vector?)
    (make-builtin-descriptor 'parameter is-parameter?)
+   (make-builtin-descriptor 'error-object error-object?)
    (make-builtin-descriptor 'unspecified (lambda (x) (equal? x (when #f #f))))
    (make-builtin-descriptor 'eof eof-object?)
 
