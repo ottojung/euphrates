@@ -2002,13 +2002,18 @@
     (set-expected-conflicts! options)
     (set-driver-name! options)
     (let* ((gram/actions (gen-tables! tokens rules))
+           (driver-code
+            (cond
+             ((equal? driver-name 'lr-driver) lr-driver)
+             ((equal? driver-name 'glr-driver) glr-driver)
+             (else (raisu-fmt
+                    'logic-error "Expected either ~s or ~s but got ~s somehow"
+                    (list (~a 'lr-driver) (~a 'glr-driver) (~a driver-name))))))
            (code
             `(lambda (actions)
                ,@common-definitions-code
-               (define call (lambda (index . args) (apply (vector-ref actions index) args)))
-               (define lr-driver ,lr-driver)
-               (define glr-driver ,glr-driver)
-               (define driver ,driver-name)
+               (define (call index . args) (apply (vector-ref actions index) args))
+               (define driver ,driver-code)
                (driver ',action-table ,(build-goto-table) ,(build-reduction-table gram/actions)))))
 
       (output-table! options)
