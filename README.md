@@ -1,17 +1,31 @@
 
-## What is this
+# Euphrates: nourishing projects
 
-Library of common functionalities for use in Scheme projects.
+## Introduction
 
-Similar to
+Euphrates is a standard library/computing environment for Scheme.
+
+Euphrates is similar to:
 
 - [SLIB](https://people.csail.mit.edu/jaffer/SLIB.html)
 - [Scmutils](https://groups.csail.mit.edu/mac/users/gjs/6946/installation.html)
 - [Schemepunk](https://github.com/ar-nelson/schemepunk)
 - [Spells](https://github.com/rotty/spells/tree/master/spells)
 - [Alschemist](https://github.com/ashinn/alschemist)
+- [Xitomatl](https://github.com/weinholt/xitomatl)
+- [Riastradh](https://github.com/arcfide/riastradh)
+- [Ocelotl](https://github.com/rotty/ocelotl)
+
+in that it contains various common functionalities that can be used independently
+from the rest of the library.
+
+However, some of the things that Euphrates provides are deeply connected.
+For example: subprocesses and petri-nets abstract over threading systems
+using dynamic threading implementation of Euphrates.
 
 ## Content
+
+Here's a snapshot of what Euphrates offers:
 
 - CFG-based CLI parsing `src/define-cli.scm`
 - Object system based on properties constraints `src/properties.scm`
@@ -30,10 +44,16 @@ Similar to
 - Number conversions `src/convert-number-base.scm` and `src/number-list.scm`
 - Various alphabets `src/*-alphabet.scm`
 
-## How to use
+...and much more.
 
-Look into `test/test-<functionality-name>.scm` for examples.
+The code is predominantly R<sup>7</sup>RS Scheme,
+with GNU Guile being the primary target.
 
-## License
+## Getting Started
 
-GPL-3
+To explore how to use functionalities implemented in `src/euphrates/name.scm`,
+refer to the corresponding examples in `test/test-name.scm`.
+
+## Licensing
+
+Euphrates is licensed under the GPL-3.
