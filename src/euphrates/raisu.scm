@@ -1,13 +1,8 @@
 
-;; One-way exceptions (non-recoverable / not continuable)
+;; Simple one-way exceptions (unrecoverable / uncontinuable)
 
-(cond-expand
- (guile
-  (define (raisu x . xs)
-    (apply throw (cons x xs))))
- (racket
-  (define (raisu x . xs)
-    (raise (cons x xs))))
- (else
-  (define (raisu x . xs)
-    (raise (cons x xs)))))
+(define (raisu type . args)
+  (generic-error
+   (list
+    (cons generic-error:type-key type)
+    (cons generic-error:irritants-key args))))

@@ -12,7 +12,7 @@
 ;;;; You should have received a copy of the GNU General Public License
 ;;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; Use together with `raisu'.
+;; Works only with `generic-error'.
 
 (define-syntax catchu-case-single
   (syntax-rules (else)
@@ -24,9 +24,12 @@
      (catch-specific
       symbolic-error-key
       (lambda _ invokebody)
-      (lambda args-all
+      (lambda (err)
+        (define args-all
+          (generic-error:value/unsafe
+           err generic-error:irritants-key '()))
         (apply (lambda args . bodies)
-               (cdr args-all)))))))
+               args-all))))))
 
 (define-syntax catchu-case
   (syntax-rules ()

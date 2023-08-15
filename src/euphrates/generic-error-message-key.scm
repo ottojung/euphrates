@@ -4,4 +4,5 @@
 ;; Key to the error's message.
 ;; The message should be a string,
 ;; and also it should be displayed to the user.
-(define generic-error:message-key (make-unique))
+(define (generic-error:message-key)
+  'generic-error:message-key)

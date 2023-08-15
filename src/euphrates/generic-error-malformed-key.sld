@@ -2,9 +2,7 @@
 (define-library
   (euphrates generic-error-malformed-key)
   (export generic-error:malformed-key)
-  (import
-    (only (euphrates make-unique) make-unique))
-  (import (only (scheme base) begin define))
+  (import (only (scheme base) begin define quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

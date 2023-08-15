@@ -6,14 +6,21 @@
   (import
     (only (euphrates catch-specific) catch-specific))
   (import
+    (only (euphrates generic-error-irritants-key)
+          generic-error:irritants-key))
+  (import
+    (only (euphrates generic-error-value-unsafe)
+          generic-error:value/unsafe))
+  (import
     (only (scheme base)
           _
           apply
           begin
-          cdr
+          define
           define-syntax
           else
           lambda
+          quote
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))

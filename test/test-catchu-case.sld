@@ -16,10 +16,17 @@
           begin
           cond-expand
           cons
+          current-error-port
           define-syntax
+          equal?
           let
+          newline
+          not
           quote
-          syntax-rules))
+          syntax-rules
+          unless))
+  (import (only (scheme process-context) exit))
+  (import (only (scheme write) display write))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

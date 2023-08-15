@@ -3,4 +3,5 @@
 
 ;; Type of generic error is just a symbol.
 ;; This is a key to its value.
-(define generic-error:type-key (make-unique))
+(define (generic-error:type-key)
+  'generic-error:type-key)

@@ -1,13 +1,10 @@
 
-(cond-expand
- (guile
-  (define (catch-specific key body handler)
-    (catch key body handler)))
- (else
-  (define (catch-specific key body handler)
-    (guard
-     (err1
-      ((and (pair? err1)
-            (equal? key (car err1)))
-       (apply handler err1)))
-     (body)))))
+(define (nonexistant-key) 'dummy-key)
+
+(define (catch-specific key body handler)
+  (guard
+   (err1
+    ((and (generic-error? err1)
+          (equal? key (generic-error:value/unsafe err1 generic-error:type-key nonexistant-key)))
+     (handler err1)))
+   (body)))

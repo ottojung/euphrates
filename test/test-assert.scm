@@ -76,10 +76,16 @@
   (define threw? #f)
   (catch-any
    (lambda _ (assert (= (* 2 2) (+ 3 5))))
-   (lambda errors
+   (lambda (err)
+     (define type
+       (generic-error:value err generic-error:type-key #f))
+     (define irr
+       (generic-error:value err generic-error:irritants-key #f))
+     (define errors
+       (cons type irr))
      (unless (equal?
               errors
-              '((assertion-fail (test: (= 4 8)) (original: (= (* 2 2) (+ 3 5))))))
+              '(assertion-fail (test: (= 4 8)) (original: (= (* 2 2) (+ 3 5)))))
        (display "Unexpected error from assert")
        (newline)
        (exit 1)))))

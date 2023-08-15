@@ -29,10 +29,12 @@
   (define-syntax test
     (syntax-rules ()
       ((_ body)
-       (assert=
-        "OK: x y z\n"
-        (with-output-stringified
-          body)))))
+       (let ((got (with-output-stringified body)))
+         (unless (equal? got "OK: x y z\n")
+           (display "Expected a different output, got: " (current-error-port))
+           (write got (current-error-port))
+           (newline (current-error-port))
+           (exit 1))))))
 
   (assert=
    10

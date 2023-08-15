@@ -2,9 +2,7 @@
 (define-library
   (euphrates generic-error-type-key)
   (export generic-error:type-key)
-  (import
-    (only (euphrates make-unique) make-unique))
-  (import (only (scheme base) begin define))
+  (import (only (scheme base) begin define quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
