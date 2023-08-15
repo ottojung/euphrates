@@ -18,11 +18,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (BITS-PER-WORD) 28)
-(define logical-or logior)
-
-(define lalr-keyword? keyword?)
-
 (define *lalr-scm-version* "2.5.0")
 
 (define lexical-token-typetag
@@ -55,6 +50,8 @@
   (length  source-location-length))
 
 (define (lalr-parser arguments)
+  (define *bits-per-word* 28)
+
   (define (grammar-error message-fmt . args)
     (raisu-fmt 'type-error message-fmt args))
 
@@ -379,17 +376,16 @@
   (define (take-right l n)
     (drop l (- (length l) n)))
 
-
   (define (set-bit v b)
-    (let ((x (quotient b (BITS-PER-WORD)))
-          (y (expt 2 (remainder b (BITS-PER-WORD)))))
-      (vector-set! v x (logical-or (vector-ref v x) y))))
+    (let ((x (quotient b *bits-per-word*))
+          (y (expt 2 (remainder b *bits-per-word*))))
+      (vector-set! v x (logior (vector-ref v x) y))))
 
   (define (bit-union v1 v2 n)
     (do ((i 0 (+ i 1)))
         ((= i n))
-      (vector-set! v1 i (logical-or (vector-ref v1 i)
-                                    (vector-ref v2 i)))))
+      (vector-set! v1 i (logior (vector-ref v1 i)
+                                (vector-ref v2 i)))))
 
   ;; - Macro pour les structures de donnees
 
@@ -927,7 +923,7 @@
                                         ; --
 
   (define (lalr)
-    (set! token-set-size (+ 1 (quotient nterms (BITS-PER-WORD))))
+    (set! token-set-size (+ 1 (quotient nterms *bits-per-word*)))
     (set-accessing-symbol)
     (set-shift-table)
     (set-reduction-table)
@@ -1404,7 +1400,7 @@
                                   (let ((in-la-set? (modulo x 2)))
                                     (if (= in-la-set? 1)
                                         (add-action i token rule)))
-                                  (if (= y (BITS-PER-WORD))
+                                  (if (= y *bits-per-word*)
                                       (loop2 (+ token 1)
                                              (vector-ref lav (+ z 1))
                                              1
@@ -1977,7 +1973,7 @@
           (let ((p (car lst)))
             (cond
              ((and (pair? p)
-                   (lalr-keyword? (car p))
+                   (keyword? (car p))
                    (assq (car p) *valid-options*))
               (loop (cons p options) tokens rules (cdr lst)))
              (else
