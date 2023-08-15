@@ -28,6 +28,9 @@
     (only (euphrates alist-initialize)
           alist-initialize))
   (import
+    (only (euphrates alist-to-hashmap-native)
+          alist->hashmap/native))
+  (import
     (only (euphrates alpha-alphabet) alpha/alphabet))
   (import
     (only (euphrates alpha-lowercase-alphabet)

@@ -18,6 +18,9 @@
     hashmap-delete!
     hashmap-merge!
     hashmap-merge)
+  (import
+    (only (euphrates alist-to-hashmap-native)
+          alist->hashmap/native))
   (import (only (euphrates fn) fn))
   (import
     (only (euphrates hashmap-obj)

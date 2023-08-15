@@ -11,7 +11,7 @@
   (define hashmap-set! hash-set!)
   (define hashmap-clear! hash-clear!)
 
-  (define alist->hashmap alist->hash-table)
+  (define alist->hashmap alist->hashmap/native)
 
   (define (hashmap->alist h)
     (hash-map->list cons h))
