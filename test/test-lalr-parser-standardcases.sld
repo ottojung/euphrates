@@ -12,6 +12,9 @@
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import
+    (only (euphrates with-lalr-parser-conflict-handler)
+          with-lalr-parser-conflict-handler))
+  (import
     (only (euphrates with-string-as-input)
           with-string-as-input))
   (import
@@ -21,6 +24,7 @@
           -
           /
           =
+          _
           and
           apply
           begin

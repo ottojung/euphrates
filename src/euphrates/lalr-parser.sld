@@ -16,8 +16,16 @@
   (import
     (only (euphrates define-type9) define-type9))
   (import
+    (only (euphrates
+            lalr-parser-conflict-handler-p-default)
+          lalr-parser-conflict-handler/p-default))
+  (import
+    (only (euphrates lalr-parser-conflict-handler-p)
+          lalr-parser-conflict-handler/p))
+  (import
     (only (euphrates pretty-print) pretty-print))
   (import (only (euphrates raisu-fmt) raisu-fmt))
+  (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
@@ -47,6 +55,7 @@
           cond
           cons
           define
+          define-values
           do
           else
           eq?
@@ -91,10 +100,10 @@
           string?
           symbol->string
           symbol?
-          syntax-error
           unless
           unquote
           unquote-splicing
+          values
           vector
           vector->list
           vector-length

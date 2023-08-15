@@ -193,7 +193,7 @@
                       (act   (___action i (vector-ref ___atable state))))
 
                  (cond ((not (symbol? i))
-                        (___errorp 'syntax-error "Syntax error: invalid token: ~s" __input)
+                        (___errorp 'parse-error "Syntax error: invalid token: ~s" __input)
                         #f)
 
                        ;; Input succesfully parsed
@@ -204,10 +204,10 @@
                        ((eq? act '*error*)
                         (if (eq? i '*eoi*)
                             (begin
-                              (___errorp 'syntax-error "Syntax error: unexpected end of input")
+                              (___errorp 'parse-error "Syntax error: unexpected end of input")
                               #f)
                             (begin
-                              (___errorp 'syntax-error "Syntax error: unexpected token: ~s" ___input)
+                              (___errorp 'parse-error "Syntax error: unexpected token: ~s" ___input)
                               (___recover i)
                               (if (>= ___sp 0)
                                   (set! ___input #f)
@@ -1325,16 +1325,33 @@
 
     (define conflict-messages '())
 
-    (define (add-conflict-message . l)
-      (set! conflict-messages (cons l conflict-messages)))
+    (define (add-conflict-message type new current on-symbol in-state)
+      (set! conflict-messages (cons (list type new current on-symbol in-state) conflict-messages)))
+
+    (define conflict-handler
+      (or (lalr-parser-conflict-handler/p)
+          lalr-parser-conflict-handler/p-default))
+
+    (define (signal-conflict type new current on-symbol in-state)
+      (define-values (type/print action1 action2)
+        (cond
+         ((equal? type 'reduce/reduce) (values "Reduce/Reduce" 'reduce 'reduce))
+         ((equal? type 'shift/reduce) (values "Shift/Reduce" 'shift 'reduce))
+         (else (raisu-fmt 'logic-error "Expected only ~s and ~s, but got ~s"
+                          (list (~a 'reduce/reduce) (~a 'shift/reduce) (~a type/print))))))
+
+      (define message
+        (stringf "%% ~a conflict (~a ~a, ~a ~a) on '~a in state ~s"
+                 type/print action1 new action2 current on-symbol in-state))
+
+      (apply conflict-handler
+             (cons message (list type new current on-symbol in-state))))
 
     (define (log-conflicts)
-      (if (> (length conflict-messages) expected-conflicts)
-          (for-each
-           (lambda (message)
-             (for-each display message)
-             (newline))
-           conflict-messages)))
+      (for-each
+       (lambda (args)
+         (apply signal-conflict args))
+       conflict-messages))
 
     ;; --- Add an action to the action table
     (define (add-action state symbol new-action)
@@ -1349,8 +1366,11 @@
                         ;; --- reduce/reduce conflict
                         (begin
                           (add-conflict-message
-                           "%% Reduce/Reduce conflict (reduce " (- new-action) ", reduce " (- current-action)
-                           ") on '" (get-symbol (+ symbol nvars)) "' in state " state)
+                           'reduce/reduce
+                           (- new-action)
+                           (- current-action)
+                           (get-symbol (+ symbol nvars))
+                           state)
                           (if (glr-driver?)
                               (set-cdr! (cdr actions) (cons new-action (cddr actions)))
                               (set-car! (cdr actions) (max current-action new-action))))
@@ -1365,8 +1385,8 @@
                           ((reduce)  #f) ; well, nothing to do...
                           ;; -- signal a conflict!
                           (else      (add-conflict-message
-                                      "%% Shift/Reduce conflict (shift " new-action ", reduce " (- current-action)
-                                      ") on '" (get-symbol (+ symbol nvars)) "' in state " state)
+                                      'shift/reduce new-action (- current-action)
+                                      (get-symbol (+ symbol nvars)) state)
                                      (if (glr-driver?)
                                          (set-cdr! (cdr actions) (cons new-action (cddr actions)))
                                          (set-car! (cdr actions) new-action))))))))

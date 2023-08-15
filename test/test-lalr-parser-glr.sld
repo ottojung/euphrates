@@ -7,7 +7,11 @@
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import
+    (only (euphrates with-lalr-parser-conflict-handler)
+          with-lalr-parser-conflict-handler))
+  (import
     (only (scheme base)
+          _
           begin
           car
           cdr

@@ -47,11 +47,13 @@
    args))
 
 (define (make-test-parser parser-rules)
-  (lalr-parser
-   `((expect: 1000)
-     (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-     ;; --- rules
-     (rules: ,@parser-rules))))
+  (with-lalr-parser-conflict-handler
+   (lambda _ #f)
+   (lalr-parser
+    `((expect: 1000)
+      (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+      ;; --- rules
+      (rules: ,@parser-rules)))))
 
 (define (test-parser parser-rules input expected-output)
   (define parser
