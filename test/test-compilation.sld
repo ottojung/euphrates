@@ -470,6 +470,23 @@
   (import
     (only (euphrates general-table) general-table))
   (import
+    (only (euphrates generic-error-huh)
+          generic-error?))
+  (import
+    (only (euphrates generic-error-irritants-key)
+          generic-error:irritants-key))
+  (import
+    (only (euphrates generic-error-malformed-key)
+          generic-error:malformed-key))
+  (import
+    (only (euphrates generic-error-message-key)
+          generic-error:message-key))
+  (import
+    (only (euphrates generic-error-self-key)
+          generic-error:self-key))
+  (import
+    (only (euphrates generic-error) generic-error))
+  (import
     (only (euphrates get-command-line-arguments)
           get-command-line-arguments))
   (import
