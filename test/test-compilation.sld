@@ -1069,6 +1069,8 @@
           prefixtree-ref-furthest
           prefixtree-set!))
   (import
+    (only (euphrates pretty-print) pretty-print))
+  (import
     (only (euphrates print-in-frame) print-in-frame))
   (import
     (only (euphrates print-in-window)
