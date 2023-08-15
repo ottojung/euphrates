@@ -1412,6 +1412,7 @@
           queue-rotate!
           queue-unload!
           queue?))
+  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates random-choice) random-choice))
