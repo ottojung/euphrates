@@ -64,7 +64,6 @@
           expt
           for-each
           if
-          integer?
           lambda
           length
           let

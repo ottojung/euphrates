@@ -34,7 +34,6 @@
    (lambda _ #f)
    (lalr-parser
     `((driver: glr)
-      (expect: 2)
       (tokens: *n *v *d *p)
       (rules:
        (<s>  (<np> <vp>)
@@ -63,7 +62,6 @@
    (lambda _ #f)
    (lalr-parser
     `((driver: glr)
-      (expect: 1)
       (tokens: (nonassoc: if then else e s))
       (rules:
        (<s> (s)

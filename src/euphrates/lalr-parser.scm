@@ -1928,12 +1928,6 @@
                   (= (length option) 3)
                   (symbol? (cadr option))
                   (string? (caddr option)))))
-     (cons 'expect:
-           (lambda (option)
-             (and (list? option)
-                  (= (length option) 2)
-                  (integer? (cadr option))
-                  (>= (cadr option) 0))))
 
      (cons 'rules: (lambda (option) (list? option)))
      (cons 'tokens: (lambda (option) (list? option)))
@@ -1973,10 +1967,6 @@
           (let ((file-name (cadr option)))
             (with-output-to-file file-name print-states)))))
 
-
-  (define (set-expected-conflicts! options)
-    (let ((option (assq 'expect: options)))
-      (set! expected-conflicts (if option (cadr option) 0))))
 
   (define (set-driver-name! options)
     (let ((option (assq 'driver: options)))
@@ -2019,7 +2009,6 @@
     (define rules (options-get-rules options))
 
     (validate-options options)
-    (set-expected-conflicts! options)
     (set-driver-name! options)
     (let* ((gram/actions (gen-tables! tokens rules))
            (driver-code

@@ -67,9 +67,7 @@
      ;; ;; output the LALR table to calc.out
      ;; (out-table: "/tmp/calc.out")
      ;; there should be no conflict
-     (expect:    5)
 
-     ;; --- token definitions
      (tokens:
       ID NUM = LPAREN RPAREN NEWLINE COMMA
       (left: + -)
