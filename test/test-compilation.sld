@@ -815,6 +815,9 @@
     (only (euphrates make-directories)
           make-directories))
   (import
+    (only (euphrates make-error-object)
+          make-error-object))
+  (import
     (only (euphrates make-temporary-filename)
           make-temporary-filename))
   (import
