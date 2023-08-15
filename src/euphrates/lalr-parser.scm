@@ -1653,7 +1653,7 @@
 
             (set! actions-list (cons proc actions-list))
             (set! actions-list-length (+ 1 actions-list-length))
-            (cons 'call (cons index (cdr action))))))
+            (cons 'external (cons index (cdr action))))))
 
     (if (not (pair? (cdr nonterm-def)))
         (grammar-error "At least one production needed for nonterminal: ~s" (car nonterm-def))
@@ -2023,9 +2023,12 @@
            (code
             `(lambda (actions)
                ,@common-definitions-code
-               (define (call index . args) (apply (vector-ref actions index) args))
+               (define (external index . args) (apply (vector-ref actions index) args))
                (define driver ,driver-code)
-               (driver ',action-table ,(build-goto-table) ,(build-reduction-table gram/actions)))))
+               (define action-table (quote ,action-table))
+               (define goto-table ,(build-goto-table))
+               (define reduction-table ,(build-reduction-table gram/actions))
+               (driver action-table goto-table reduction-table))))
 
       (output-table! options)
       (output-parser! options code)
