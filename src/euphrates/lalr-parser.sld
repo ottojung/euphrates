@@ -91,6 +91,7 @@
           string?
           symbol->string
           symbol?
+          syntax-error
           unless
           unquote
           unquote-splicing
