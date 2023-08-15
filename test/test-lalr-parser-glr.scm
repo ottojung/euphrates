@@ -5,14 +5,6 @@
 ;; @created   "Fri Aug 19 11:23:48 EDT 2005"
 ;;
 
-(define hidden-imports
-  '(_
-    vector let* list-ref
-    cond > = * assv drop cons - and cdar reverse vector-ref list set! vector? make-vector *max-stack-size* pair? cadar length lexical-token-category assoc not symbol? eq? >= < cdr vector-length vector-set! note-source-location cadr
-    lexical-token?
-    lexical-token-value
-    lexical-token-source))
-
 (define (syntax-error msg . args)
   (display msg (current-error-port))
   (parameterize ((current-output-port (current-error-port)))

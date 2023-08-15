@@ -12,15 +12,6 @@
 ;;;;   The LALR(1) parser
 ;;;
 
-(define hidden-imports
-  '(_
-    vector vector-ref let* list-ref
-    lexical-token?
-    cond set! vector? make-vector *max-stack-size* pair? cadar length lexical-token-category assoc not symbol? eq? >= < cdr vector-length vector-set! note-source-location cadr
-    force-output
-    lexical-token-value
-    lexical-token-source))
-
 (define (display-result v)
   (if v
       (begin

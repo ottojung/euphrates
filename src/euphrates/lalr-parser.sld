@@ -96,10 +96,8 @@
           vector-set!
           vector?))
   (import (only (scheme cxr) caaar cadar caddr))
-  (import (only (scheme eval) eval))
+  (import (only (scheme eval) environment eval))
   (import (only (scheme file) with-output-to-file))
-  (import
-    (only (scheme repl) interaction-environment))
   (import (only (scheme write) display))
   (cond-expand
     (guile (import

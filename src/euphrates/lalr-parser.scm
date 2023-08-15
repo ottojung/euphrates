@@ -2001,7 +2001,7 @@
 
       (output-table! options)
       (output-parser! options code)
-      (eval code (interaction-environment))))
+      (eval code (environment '(scheme base)))))
 
   (extract-arguments arguments build-driver))
 

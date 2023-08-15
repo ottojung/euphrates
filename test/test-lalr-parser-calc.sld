@@ -26,16 +26,11 @@
           +
           -
           /
-          <
           =
-          >=
-          _
           and
           apply
-          assoc
           assq
           begin
-          cadr
           call-with-current-continuation
           car
           cdr
@@ -46,19 +41,15 @@
           define
           else
           eof-object?
-          eq?
           error
           expt
           for-each
           if
           lambda
-          length
           let
           let*
           letrec
           list
-          list-ref
-          make-vector
           newline
           not
           number?
@@ -75,18 +66,11 @@
           string
           string->number
           string->symbol
-          symbol?
-          unquote
-          vector
-          vector-length
-          vector-ref
-          vector-set!
-          vector?))
+          unquote))
   (import
     (only (scheme char)
           char-alphabetic?
           char-numeric?))
-  (import (only (scheme cxr) cadar))
   (import (only (scheme inexact) cos sin sqrt tan))
   (import (only (scheme write) display))
   (cond-expand

@@ -7,10 +7,6 @@
   (import
     (only (euphrates lalr-parser)
           lalr-parser
-          lexical-token-category
-          lexical-token-source
-          lexical-token-value
-          lexical-token?
           make-lexical-token
           make-source-location))
   (import (only (euphrates raisu) raisu))
@@ -24,17 +20,10 @@
           +
           -
           /
-          <
           =
-          >=
-          _
           and
           apply
-          assoc
           begin
-          cadr
-          car
-          cdr
           char=?
           char?
           cond
@@ -42,41 +31,27 @@
           define
           else
           eof-object?
-          eq?
           if
           lambda
-          length
           let
           let*
           letrec
           list
-          list-ref
-          make-vector
-          not
           or
-          pair?
           peek-char
           quasiquote
           quote
           read-char
           reverse
-          set!
           string
           string->number
-          symbol?
           unquote
-          unquote-splicing
-          vector
-          vector-length
-          vector-ref
-          vector-set!
-          vector?))
+          unquote-splicing))
   (import
     (only (scheme char)
           char-alphabetic?
           char-numeric?
           char-whitespace?))
-  (import (only (scheme cxr) cadar))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

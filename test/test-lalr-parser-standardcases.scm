@@ -1,13 +1,4 @@
 
-(define hidden-imports
-  '(_
-    vector vector-ref let* list-ref
-    lexical-token?
-    force-output
-    car set! vector? make-vector *max-stack-size* pair? cadar length lexical-token-category assoc not symbol? eq? >= < cdr vector-length vector-set! note-source-location cadr
-    lexical-token-value
-    lexical-token-source))
-
 (define (make-lexer)
   (lambda ()
     (letrec ((read-number
