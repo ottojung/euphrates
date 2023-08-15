@@ -488,6 +488,12 @@
     (only (euphrates generic-error-type-key)
           generic-error:type-key))
   (import
+    (only (euphrates generic-error-value-unsafe)
+          generic-error:value/unsafe))
+  (import
+    (only (euphrates generic-error-value)
+          generic-error:value))
+  (import
     (only (euphrates generic-error) generic-error))
   (import
     (only (euphrates get-command-line-arguments)
