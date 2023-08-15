@@ -12,6 +12,7 @@
     lexical-token-category
     lexical-token-value
     lexical-token-source)
+  (import (only (euphrates raisu-fmt) raisu-fmt))
   (import
     (only (scheme base)
           *
@@ -94,7 +95,8 @@
           vector-map
           vector-ref
           vector-set!
-          vector?))
+          vector?
+          when))
   (import (only (scheme cxr) caaar cadar caddr))
   (import (only (scheme eval) environment eval))
   (import (only (scheme file) with-output-to-file))

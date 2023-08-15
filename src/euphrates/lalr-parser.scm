@@ -20,7 +20,6 @@
 
 (define (BITS-PER-WORD) 28)
 (define logical-or logior)
-(define lalr-error error)
 
 (define pprint pretty-print)
 (define lalr-keyword? keyword?)
@@ -57,6 +56,9 @@
   (length  source-location-length))
 
 (define (lalr-parser arguments)
+  (define (grammar-error message-fmt . args)
+    (raisu-fmt 'type-error message-fmt args))
+
   (define common-definitions-code
     `((define (cadar l) (car (cdr (car l))))
       (define (drop l n)
@@ -1481,9 +1483,9 @@
     (define (check-terminal term terms)
       (cond
        ((not (valid-terminal? term))
-        (lalr-error "invalid terminal: " term))
+        (grammar-error "Invalid terminal: ~s" term))
        ((member term terms)
-        (lalr-error "duplicate definition of terminal: " term))))
+        (grammar-error "Duplicate definition of terminal: ~s" term))))
 
     (define (prec->type prec)
       (cdr (assq prec '((left:     . left)
@@ -1493,9 +1495,9 @@
     (cond
      ;; --- a few error conditions
      ((not (list? tokens))
-      (lalr-error "Invalid token list: " tokens))
+      (grammar-error "Invalid token list: ~s" tokens))
      ((not (pair? grammar))
-      (lalr-error "Grammar definition must have a non-empty list of productions" '()))
+      (grammar-error "Grammar definition must have a non-empty list of productions"))
 
      (else
       ;; --- check the terminals
@@ -1523,7 +1525,7 @@
                                (cons term rev-terms)
                                (cons (list term optype prec) rev-terms/prec))))))
 
-                    (lalr-error "invalid operator precedence specification: " term)))
+                    (grammar-error "Invalid operator precedence specification: ~s" term)))
 
                (else
                 (check-terminal term rev-terms)
@@ -1537,13 +1539,13 @@
               (if (pair? lst)
                   (let ((def (car lst)))
                     (if (not (pair? def))
-                        (lalr-error "Nonterminal definition must be a non-empty list" '())
+                        (grammar-error "Nonterminal definition must be a non-empty list")
                         (let ((nonterm (car def)))
                           (cond ((not (valid-nonterminal? nonterm))
-                                 (lalr-error "Invalid nonterminal:" nonterm))
+                                 (grammar-error "Invalid nonterminal: ~s" nonterm))
                                 ((or (member nonterm rev-terms)
                                      (assoc nonterm rev-nonterm-defs))
-                                 (lalr-error "Nonterminal previously defined:" nonterm))
+                                 (grammar-error "Nonterminal previously defined: ~s" nonterm))
                                 (else
                                  (loop2 (cdr lst)
                                         (cons def rev-nonterm-defs)))))))
@@ -1552,7 +1554,7 @@
                          (nonterm-defs (reverse rev-nonterm-defs))
                          (nonterms     (cons '*start* (map car nonterm-defs))))
                     (if (= (length nonterms) 1)
-                        (lalr-error "Grammar must contain at least one nonterminal" '())
+                        (grammar-error "Grammar must contain at least one nonterminal")
                         (let loop-defs ((defs      (cons `(*start* (,(cadr nonterms) ,eoi) : $1)
                                                          nonterm-defs))
                                         (ruleno    0)
@@ -1587,7 +1589,7 @@
             (let ((PosInT (pos-in-list x terms)))
               (if PosInT
                   (+ No-NT PosInT)
-                  (lalr-error "undefined symbol : " x))))))
+                  (grammar-error "Undefined symbol: ~s" x))))))
 
     (define (process-prec-directive rhs ruleno)
       (let loop ((l rhs))
@@ -1607,20 +1609,20 @@
                         (begin
                           (add-rule-precedence! ruleno (pos-in-list (cadr first) terms))
                           (loop rest))
-                        (lalr-error "prec: directive should be at end of rule: " rhs))
-                    (lalr-error "Invalid prec: directive: " first)))
+                        (grammar-error "Invalid prec position: directive should be at end of rule: ~s" rhs))
+                    (grammar-error "Invalid prec: directive: ~s" first)))
                (else
-                (lalr-error "Invalid terminal or nonterminal: " first)))))))
+                (grammar-error "Invalid terminal or nonterminal: ~s" first)))))))
 
     (define (check-error-production rhs)
       (let loop ((rhs rhs))
         (if (pair? rhs)
             (begin
-              (if (and (eq? (car rhs) 'error)
-                       (or (null? (cdr rhs))
-                           (not (member (cadr rhs) terms))
-                           (not (null? (cddr rhs)))))
-                  (lalr-error "Invalid 'error' production. A single terminal symbol must follow the 'error' token.:" rhs))
+              (when (and (eq? (car rhs) 'error)
+                         (or (null? (cdr rhs))
+                             (not (member (cadr rhs) terms))
+                             (not (null? (cddr rhs)))))
+                (grammar-error "Invalid 'error' production. A single terminal symbol must follow the 'error' token: ~s" rhs))
               (loop (cdr rhs))))))
 
     (define (serialize-action action)
@@ -1630,16 +1632,16 @@
             (define index actions-list-length)
 
             (unless (procedure? proc)
-              (lalr-error
-               "Type error. Expected procedure as action, but got something else:"
-               proc))
+              (grammar-error
+               "Expected procedure as action, but got something else: ~s (context: ~s)"
+               proc action))
 
             (set! actions-list (cons proc actions-list))
             (set! actions-list-length (+ 1 actions-list-length))
             (cons 'call (cons index (cdr action))))))
 
     (if (not (pair? (cdr nonterm-def)))
-        (lalr-error "At least one production needed for nonterminal:" (car nonterm-def))
+        (grammar-error "At least one production needed for nonterminal: ~s" (car nonterm-def))
         (let ((name (symbol->string (car nonterm-def))))
           (let loop1 ((lst (cdr nonterm-def))
                       (i 1)
@@ -1652,7 +1654,7 @@
                   ;; -- check for undefined tokens
                   (for-each (lambda (x)
                               (if (not (or (member x terms) (member x nonterms)))
-                                  (lalr-error "Invalid terminal or nonterminal:" x)))
+                                  (grammar-error "Invalid terminal or nonterminal: ~s" x)))
                             rhs)
                   ;; -- check 'error' productions
                   (check-error-production rhs)
@@ -1932,7 +1934,7 @@
        (let ((p (assoc (car option) *valid-options*)))
          (if (or (not p)
                  (not ((cdr p) option)))
-             (lalr-error "Invalid option:" option))))
+             (grammar-error "Invalid option: ~s" option))))
      options))
 
 
@@ -1981,7 +1983,7 @@
               (loop (cons p options) tokens rules (cdr lst)))
              (else
               (proc options p (cdr lst)))))
-          (lalr-error "Malformed lalr-parser form" lst))))
+          (grammar-error "Malformed lalr-parser form: ~s" lst))))
 
 
   (define (build-driver options tokens rules)
