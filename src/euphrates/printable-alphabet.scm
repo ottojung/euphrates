@@ -1,7 +1,6 @@
 
-
-
-;; Starts off like base64 table
+;; Starts like the base64 table.
+;; Contains all printable ASCII characters.
 (define printable/alphabet
   #(#\A #\B #\C #\D #\E #\F #\G #\H #\I #\J
     #\K #\L #\M #\N #\O #\P #\Q #\R #\S #\T
@@ -12,4 +11,4 @@
     #\8 #\9 #\+ #\/ #\, #\_ #\: #\@ #\= #\%
     #\. #\- #\* #\? #\^ #\\ #\~ #\! #\& #\#
     #\( #\) #\[ #\] #\{ #\} #\; #\< #\> #\$
-    #\" #\'))
+    #\" #\' #\| #\`))
