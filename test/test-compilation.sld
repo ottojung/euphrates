@@ -527,6 +527,11 @@
     (only (euphrates get-object-descriptor)
           get-object-descriptor))
   (import
+    (only (euphrates gkeyword)
+          gkeyword->fkeyword
+          gkeyword->rkeyword
+          gkeyword?))
+  (import
     (only (euphrates global-debug-mode-filter)
           global-debug-mode-filter))
   (import
