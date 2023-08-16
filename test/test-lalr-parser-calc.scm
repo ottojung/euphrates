@@ -61,21 +61,20 @@
 (define calc-parser
   (lalr-parser
 
-   `(;; --- Options
+   `(
      ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm,
-     ;; (output:    calc-parser "/tmp/calc.yy.scm")
+     ;; :output (calc-parser "/tmp/calc.yy.scm")
      ;; ;; output the LALR table to calc.out
-     ;; (out-table: "/tmp/calc.out")
-     ;; there should be no conflict
+     ;; :out-table "/tmp/calc.out"
 
-     (tokens:
-      ID NUM = LPAREN RPAREN NEWLINE COMMA
-      (left: + -)
-      (left: * /)
-      (nonassoc: uminus))
+     :tokens
+     (ID NUM = LPAREN RPAREN NEWLINE COMMA
+         (left: + -)
+         (left: * /)
+         (nonassoc: uminus))
 
-     (rules:
-      (lines    (lines line) : (,display-result $2)
+     :rules
+     ((lines    (lines line) : (,display-result $2)
                 (line)       : (,display-result $1))
 
 

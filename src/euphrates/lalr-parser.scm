@@ -1919,9 +1919,9 @@
     (list
      (cons 'out-table:
            (lambda (option)
-             (and (list? option)
-                  (= (length option) 2)
-                  (string? (cadr option)))))
+             (and (pair? option)
+                  (string? (cdr option)))))
+
      (cons 'output:
            (lambda (option)
              (and (list? option)
@@ -1930,23 +1930,26 @@
                   (string? (caddr option)))))
 
      (cons 'rules: (lambda (option) (list? option)))
+
      (cons 'tokens: (lambda (option) (list? option)))
 
      (cons 'driver:
            (lambda (option)
-             (and (list? option)
-                  (= (length option) 2)
-                  (symbol? (cadr option))
-                  (memq (cadr option) '(lr glr)))))))
+             (and (pair? option)
+                  (symbol? (cdr option))
+                  (memq (cdr option) '(lr glr)))))))
 
 
   (define (validate-options options)
     (for-each
      (lambda (option)
-       (let ((p (assoc (car option) *valid-options*)))
-         (if (or (not p)
-                 (not ((cdr p) option)))
-             (grammar-error "Invalid option: ~s" option))))
+       (define p (assq-or (car option) *valid-options*))
+       (unless p
+         (grammar-error "Invalid option: ~s" option))
+       (unless (p option)
+         (grammar-error "Option ~s has invalid format: ~s"
+                        (~a (car option))
+                        option)))
      options))
 
 
@@ -1962,17 +1965,15 @@
 
 
   (define (output-table! options)
-    (let ((option (assq 'out-table: options)))
-      (if option
-          (let ((file-name (cadr option)))
-            (with-output-to-file file-name print-states)))))
+    (let ((file-name (assq-or 'out-table: options)))
+      (when file-name
+        (with-output-to-file file-name print-states))))
 
 
   (define (set-driver-name! options)
-    (let ((option (assq 'driver: options)))
-      (if option
-          (let ((driver-type (cadr option)))
-            (set! driver-name (if (eq? driver-type 'glr) 'glr-driver 'lr-driver))))))
+    (let ((driver-type (assq-or 'driver: options)))
+      (when driver-type
+        (set! driver-name (if (eq? driver-type 'glr) 'glr-driver 'lr-driver)))))
 
   (define (options-get-rules options)
     (assq-or 'rules: options
@@ -1983,25 +1984,39 @@
              (grammar-error "Missing required option ~s" (~a 'tokens:))))
 
 
-  (define (gkeyword? x) (or (fkeyword? x) (rkeyword? x)))
-
   ;; -- arguments
 
-  (define (extract-arguments lst proc)
+  (define (extract-arguments lst)
+    (define translated
+      (catchu-case
+       (keylist->alist lst)
+       (('type-error . args)
+        (grammar-error "Malformed lalr-parser form: ~s" lst))))
+
+    (define (normalize-name name)
+      (if (gkeyword? name)
+          (gkeyword->fkeyword name)
+          name))
+
+    (define (normalize p)
+      (define name (car p))
+      (cons (normalize-name name) (cdr p)))
+
     (let loop ((options '())
-               (lst     lst))
+               (lst     translated))
       (cond
        ((pair? lst)
-        (let ((p (car lst)))
+        (let ()
+          (define p/0 (car lst))
+          (define p (normalize p/0))
+
           (cond
            ((and (pair? p)
-                 (gkeyword? (car p))
-                 (assq (car p) *valid-options*))
-            (loop (cons p options) (cdr lst)))
+                 (gkeyword? (car p)))
+            (loop (cons (normalize p) options) (cdr lst)))
            (else
             (grammar-error "Invalid option: ~s" (~a p))))))
-       ((null? lst)
-        (proc options))
+       ((null? lst) options)
        (else
         (grammar-error "Malformed lalr-parser form: ~s" lst)))))
 
@@ -2037,6 +2052,11 @@
             (actions (list->vector (reverse actions-list))))
         (compiled actions))))
 
-  (extract-arguments arguments build-driver))
+  (define options
+    (extract-arguments arguments))
+
+  (build-driver options))
+
+
 
 

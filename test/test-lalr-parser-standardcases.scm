@@ -49,8 +49,8 @@
   (with-lalr-parser-conflict-handler
    (lambda _ #f)
    (lalr-parser
-    `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-      (rules: ,@parser-rules)))))
+    `(:tokens (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+      :rules ,parser-rules))))
 
 (define (test-parser parser-rules input expected-output)
   (define parser

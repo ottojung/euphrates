@@ -33,10 +33,10 @@
   (with-lalr-parser-conflict-handler
    (lambda _ #f)
    (lalr-parser
-    `((driver: glr)
-      (tokens: *n *v *d *p)
-      (rules:
-       (<s>  (<np> <vp>)
+    `(:driver glr
+      :tokens (*n *v *d *p)
+      :rules
+      ((<s>  (<np> <vp>)
              (<s> <pp>))
        (<np> (*n)
              (*d *n)
@@ -61,10 +61,10 @@
   (with-lalr-parser-conflict-handler
    (lambda _ #f)
    (lalr-parser
-    `((driver: glr)
-      (tokens: (nonassoc: if then else e s))
-      (rules:
-       (<s> (s)
+    `(:driver glr
+      :tokens ((nonassoc: if then else e s))
+      :rules
+      ((<s> (s)
             (if e then <s>)
             (if e then <s> else <s>)))))))
 

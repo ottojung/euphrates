@@ -14,8 +14,16 @@
     lexical-token-source)
   (import (only (euphrates assq-or) assq-or))
   (import
+    (only (euphrates catchu-case) catchu-case))
+  (import
     (only (euphrates define-type9) define-type9))
-  (import (only (euphrates fkeyword) fkeyword?))
+  (import
+    (only (euphrates gkeyword)
+          gkeyword->fkeyword
+          gkeyword?))
+  (import
+    (only (euphrates keylist-to-alist)
+          keylist->alist))
   (import
     (only (euphrates
             lalr-parser-conflict-handler-p-default)
@@ -26,7 +34,6 @@
   (import
     (only (euphrates pretty-print) pretty-print))
   (import (only (euphrates raisu-fmt) raisu-fmt))
-  (import (only (euphrates rkeyword) rkeyword?))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
