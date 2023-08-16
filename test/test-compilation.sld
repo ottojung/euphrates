@@ -655,6 +655,9 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
+    (only (euphrates lalr-lexer-latin)
+          make-lalr-lexer/latin))
+  (import
     (only (euphrates
             lalr-parser-conflict-handler-p-default)
           lalr-parser-conflict-handler/p-default))
