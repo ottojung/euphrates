@@ -655,8 +655,23 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
+    (only (euphrates lalr-lexer-latin-digits)
+          lalr-lexer/latin/digits))
+  (import
+    (only (euphrates lalr-lexer-latin-letters)
+          lalr-lexer/latin/letters))
+  (import
+    (only (euphrates lalr-lexer-latin-lowercases)
+          lalr-lexer/latin/lowercases))
+  (import
+    (only (euphrates lalr-lexer-latin-uppercases)
+          lalr-lexer/latin/uppercases))
+  (import
     (only (euphrates lalr-lexer-latin)
           make-lalr-lexer/latin))
+  (import
+    (only (euphrates lalr-lexr-latin-tokens)
+          lalr-lexr/latin-tokens))
   (import
     (only (euphrates
             lalr-parser-conflict-handler-p-default)
