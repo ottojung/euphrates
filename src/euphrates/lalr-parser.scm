@@ -1308,8 +1308,6 @@
   ;; Build the various tables
   ;; ----------------------------------------------------------------------
 
-  (define expected-conflicts 0)
-
   (define (build-tables)
 
     (define (resolve-conflict sym rule)
