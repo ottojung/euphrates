@@ -18,7 +18,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define *lalr-scm-version* "2.5.0")
+(define *lalr-scm-version* "3.0.0")
 
 (define lexical-token-typetag
   '*lexical-token*)
