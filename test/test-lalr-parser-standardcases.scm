@@ -45,11 +45,15 @@
           :message (stringf message-fmt token)
           :args (list (cdr type/subtype) token)))
 
+(define glr-parser?/p
+  (make-parameter #f))
+
 (define (make-test-parser parser-rules)
   (with-lalr-parser-conflict-handler
    (lambda _ #f)
    (lalr-parser
-    `(:tokens (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+    `(:driver ,(if (glr-parser?/p) 'glr 'lr)
+      :tokens (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
       :rules ,parser-rules))))
 
 (define (test-parser parser-rules input expected-output)
@@ -424,4 +428,38 @@ d e f"
 idblb idclb longeridlb"
 
  '(lines (line (exprs (exprs (exprs (exprs (exprs (exprs (exprs (expr "idala")) (expr SPACE)) (expr "idbla")) (expr SPACE)) (expr "idcla")) (expr SPACE)) (expr "longeridla")) (line NEWLINE)) (lines (exprs (exprs (exprs (exprs (exprs (expr "idblb")) (expr SPACE)) (expr "idclb")) (expr SPACE)) (expr "longeridlb")))))
+
+
+
+
+
+(parameterize ((glr-parser?/p #t))
+  (test-parser
+   `((expr     (expr add term) : (,save 'expr $1 $2 $3)
+               (term) : (,save 'expr $1))
+     (add      (mspace + mspace) : (,save 'add $1 $2 $3))
+     (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+     (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
+               () : (,save 'mspace)))
+
+   "5+3"
+
+   '((expr (expr (term (mspace) 5 (mspace))) (add (mspace) "+" (mspace)) (term (mspace) 3 (mspace))))))
+
+
+
+
+(parameterize ((glr-parser?/p #t))
+  (test-parser
+   `((funcall  (ID LPAREN args RPAREN) : (,save 'funcall $1 $2 $3 $4))
+     (args     (args COMMA mspace arg) : (,save 'args $1 $2 $3)
+               (arg) : (,save 'args $1))
+     (arg      (ID) : (,save 'arg $1)
+               (NUM) : (,save 'arg $1))
+     (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
+               () : (,save 'mspace)))
+
+   "func(1,x ,y ,3)"
+
+   '()))
 

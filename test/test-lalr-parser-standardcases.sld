@@ -44,7 +44,9 @@
           let*
           letrec
           list
+          make-parameter
           or
+          parameterize
           peek-char
           quasiquote
           quote
