@@ -22,8 +22,8 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
-    (only (euphrates lalr-lexer-latin)
-          make-lalr-lexer/latin))
+    (only (euphrates lalr-lexer-irregex)
+          make-lalr-lexer/irregex))
   (import
     (only (euphrates lalr-parser) lalr-parser))
   (import
@@ -40,6 +40,7 @@
     (only (scheme base)
           +
           =
+          _
           append
           apply
           begin

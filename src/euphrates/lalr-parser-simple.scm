@@ -72,10 +72,13 @@
     (filter terminal? all-expansion-terms))
 
   (define (terminal->token t)
-    (string->symbol (string-append terminal-prefix t))) ;; TODO
+    (string->symbol (string-append terminal-prefix t)))
 
   (define tokens-map
     (map (compose-under cons terminal->token identity) all-terminals))
+
+  (define make-lexer
+    (lambda _ (make-lalr-lexer/irregex tokens-map)))
 
   (define tokens
     (map car tokens-map))
@@ -96,9 +99,7 @@
      (fn-cons identity (comp (map translate-rhs)))
      rules/1))
 
-  (define rules rules/2) ;; TODO: use irregex in grammar
-
-  (define make-lexer make-lalr-lexer/latin) ;; TODO: use irregex in grammar
+  (define rules rules/2)
 
   (when (assq-or 'tokens: options*)
     (raisu* :type 'type-error ;; TODO: make tokens: optionally settable
