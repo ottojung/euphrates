@@ -13,13 +13,18 @@
           +
           -
           /
+          <
           =
           begin
           define
+          get-output-string
           let
           list?
+          open-output-string
           quasiquote
           set!
+          string-length
+          string?
           unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
