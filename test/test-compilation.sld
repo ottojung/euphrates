@@ -123,6 +123,9 @@
   (import
     (only (euphrates big-random-int) big-random-int))
   (import
+    (only (euphrates bnf-tree-to-alist)
+          bnf-tree->alist))
+  (import
     (only (euphrates bool-to-profun-result)
           bool->profun-result))
   (import
@@ -476,6 +479,9 @@
   (import (only (euphrates fp) fp))
   (import
     (only (euphrates general-table) general-table))
+  (import
+    (only (euphrates generic-bnf-tree-to-alist)
+          generic-bnf-tree->alist))
   (import
     (only (euphrates generic-error-from-key)
           generic-error:from-key))
