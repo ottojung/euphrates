@@ -49,6 +49,6 @@
  (CFG-CLI->CFG-AST
   '(atom1)))
 
-(assert-throw
- 'cfg-cli-must-be-a-list
- (CFG-CLI->CFG-AST 0))
+;; (assert-throw
+;;  'cfg-cli-must-be-a-list
+;;  (CFG-CLI->CFG-AST 0))

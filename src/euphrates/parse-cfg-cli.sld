@@ -3,36 +3,18 @@
   (euphrates parse-cfg-cli)
   (export CFG-CLI->CFG-AST)
   (import
-    (only (euphrates list-split-on) list-split-on))
-  (import (only (euphrates negate) negate))
-  (import (only (euphrates raisu) raisu))
-  (import (only (euphrates tilda-a) ~a))
+    (only (euphrates bnf-tree-to-alist)
+          bnf-tree->alist))
+  (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)
-          /
           begin
-          car
-          cdr
           cons
           define
-          equal?
-          if
-          lambda
-          let
           list
-          list?
-          map
           null?
-          or
           quote
-          unless
           when))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter last)))
-    (else (import (only (srfi 1) filter last))))
-  (cond-expand
-    (guile (import (only (srfi srfi-42) :)))
-    (else (import (only (srfi 42) :))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
