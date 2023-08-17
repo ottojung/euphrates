@@ -30,19 +30,18 @@
 
 (define parser-1
   ;; Grammar taken from Tomita's "An Efficient Augmented-Context-Free Parsing Algorithm"
-  (with-lalr-parser-conflict-handler
-   (lambda _ #f)
-   (lalr-parser
-    `(:driver glr
-      :tokens (*n *v *d *p)
-      :rules
-      ((<s>  (<np> <vp>)
-             (<s> <pp>))
-       (<np> (*n)
-             (*d *n)
-             (<np> <pp>))
-       (<pp> (*p <np>))
-       (<vp> (*v <np>)))))))
+  (lalr-parser
+   `(:driver glr
+     :on-conflict ,ignore
+     :tokens (*n *v *d *p)
+     :rules
+     ((<s>  (<np> <vp>)
+            (<s> <pp>))
+      (<np> (*n)
+            (*d *n)
+            (<np> <pp>))
+      (<pp> (*p <np>))
+      (<vp> (*v <np>))))))
 
 
 (define *phrase-1* '(*n *v *d *n *p *d *n *p *d *n *p *d *n))
@@ -58,15 +57,14 @@
 
 (define parser-2
   ;; The dangling-else problem
-  (with-lalr-parser-conflict-handler
-   (lambda _ #f)
-   (lalr-parser
-    `(:driver glr
-      :tokens ((nonassoc: if then else e s))
-      :rules
-      ((<s> (s)
-            (if e then <s>)
-            (if e then <s> else <s>)))))))
+  (lalr-parser
+   `(:driver glr
+     :on-conflict ,ignore
+     :tokens ((nonassoc: if then else e s))
+     :rules
+     ((<s> (s)
+           (if e then <s>)
+           (if e then <s> else <s>))))))
 
 
 (define *phrase-2* '(if e then if e then s else s))

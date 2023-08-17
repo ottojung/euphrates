@@ -1326,10 +1326,6 @@
     (define (add-conflict-message type new current on-symbol in-state)
       (set! conflict-messages (cons (list type new current on-symbol in-state) conflict-messages)))
 
-    (define conflict-handler
-      (or (lalr-parser-conflict-handler/p)
-          lalr-parser-conflict-handler/p-default))
-
     (define (signal-conflict type new current on-symbol in-state)
       (define-values (type/print action1 action2)
         (cond
@@ -1923,6 +1919,11 @@
                   (symbol? (cadr option))
                   (string? (caddr option)))))
 
+     (cons 'on-conflict:
+           (lambda (option)
+             (and (pair? option)
+                  (procedure? (cdr option)))))
+
      (cons 'rules: (lambda (option) (list? option)))
 
      (cons 'tokens: (lambda (option) (list? option)))
@@ -1946,6 +1947,10 @@
                         option)))
      options))
 
+  (define (conflict-handler message type new current on-symbol in-state)
+    (raisu* :type 'parse-conflict
+            :message message
+            :args (list type new current on-symbol in-state)))
 
   (define (output-parser! options code)
     (let ((option (assq 'output: options)))
@@ -1957,12 +1962,15 @@
                 (pretty-print `(define ,parser-name ,code))
                 (newline)))))))
 
-
   (define (output-table! options)
     (let ((file-name (assq-or 'out-table: options)))
       (when file-name
         (with-output-to-file file-name print-states))))
 
+  (define (set-conflict-handler! options)
+    (let ((handler (assq-or 'on-conflict: options)))
+      (when handler
+        (set! conflict-handler handler))))
 
   (define (set-driver-name! options)
     (let ((driver-type (assq-or 'driver: options)))
@@ -2021,6 +2029,8 @@
 
     (validate-options options)
     (set-driver-name! options)
+    (set-conflict-handler! options)
+
     (let* ((gram/actions (gen-tables! tokens rules))
            (driver-code
             (cond

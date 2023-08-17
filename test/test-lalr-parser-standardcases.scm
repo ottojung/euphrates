@@ -49,12 +49,11 @@
   (make-parameter #f))
 
 (define (make-test-parser parser-rules)
-  (with-lalr-parser-conflict-handler
-   (lambda _ #f)
-   (lalr-parser
-    `(:driver ,(if (glr-parser?/p) 'glr 'lr)
-      :tokens (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-      :rules ,parser-rules))))
+  (lalr-parser
+   `(:driver ,(if (glr-parser?/p) 'glr 'lr)
+     :on-conflict ,ignore
+     :tokens (ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+     :rules ,parser-rules)))
 
 (define (test-parser parser-rules input expected-output)
   (define parser

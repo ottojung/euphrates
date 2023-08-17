@@ -4,6 +4,7 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
+  (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates lalr-parser)
           lalr-parser
@@ -12,9 +13,6 @@
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
-  (import
-    (only (euphrates with-lalr-parser-conflict-handler)
-          with-lalr-parser-conflict-handler))
   (import
     (only (euphrates with-string-as-input)
           with-string-as-input))
@@ -25,7 +23,6 @@
           -
           /
           =
-          _
           and
           apply
           begin

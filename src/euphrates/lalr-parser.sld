@@ -25,15 +25,9 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
-    (only (euphrates
-            lalr-parser-conflict-handler-p-default)
-          lalr-parser-conflict-handler/p-default))
-  (import
-    (only (euphrates lalr-parser-conflict-handler-p)
-          lalr-parser-conflict-handler/p))
-  (import
     (only (euphrates pretty-print) pretty-print))
   (import (only (euphrates raisu-fmt) raisu-fmt))
+  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import

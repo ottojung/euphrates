@@ -674,13 +674,6 @@
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
-    (only (euphrates
-            lalr-parser-conflict-handler-p-default)
-          lalr-parser-conflict-handler/p-default))
-  (import
-    (only (euphrates lalr-parser-conflict-handler-p)
-          lalr-parser-conflict-handler/p))
-  (import
     (only (euphrates lalr-parser)
           lalr-parser
           lexical-token-category
@@ -2256,9 +2249,6 @@
   (import
     (only (euphrates with-ignore-errors)
           with-ignore-errors!))
-  (import
-    (only (euphrates with-lalr-parser-conflict-handler)
-          with-lalr-parser-conflict-handler))
   (import (only (euphrates with-monad) with-monad))
   (import
     (only (euphrates with-output-stringified)
