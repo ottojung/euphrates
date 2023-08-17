@@ -8,8 +8,8 @@
 
 (define (make-test-parser parser-rules)
    (lalr-parser
-    `(:tokens ,lalr-lexr/latin-tokens
-      :rules ,parser-rules)))
+    `((tokens: ,@lalr-lexr/latin-tokens)
+      (rules: ,@parser-rules))))
 
 (define (test-parser parser-rules input expected-output)
   (define parser

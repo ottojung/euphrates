@@ -1912,8 +1912,9 @@
     (list
      (cons 'out-table:
            (lambda (option)
-             (and (pair? option)
-                  (string? (cdr option)))))
+             (and (list? option)
+                  (list-length= 2 option)
+                  (string? (cadr option)))))
 
      (cons 'output:
            (lambda (option)
@@ -1924,8 +1925,9 @@
 
      (cons 'on-conflict:
            (lambda (option)
-             (and (pair? option)
-                  (procedure? (cdr option)))))
+             (and (list? option)
+                  (list-length= 2 option)
+                  (procedure? (cadr option)))))
 
      (cons 'rules: (lambda (option) (list? option)))
 
@@ -1933,9 +1935,10 @@
 
      (cons 'driver:
            (lambda (option)
-             (and (pair? option)
-                  (symbol? (cdr option))
-                  (memq (cdr option) '(lr glr)))))))
+             (and (list? option)
+                  (list-length= 2 option)
+                  (symbol? (cadr option))
+                  (memq (cadr option) '(lr glr)))))))
 
 
   (define (validate-options options)
@@ -1968,17 +1971,17 @@
   (define (output-table! options)
     (let ((file-name (assq-or 'out-table: options)))
       (when file-name
-        (with-output-to-file file-name print-states))))
+        (with-output-to-file (car file-name) print-states))))
 
   (define (set-conflict-handler! options)
     (let ((handler (assq-or 'on-conflict: options)))
       (when handler
-        (set! conflict-handler handler))))
+        (set! conflict-handler (car handler)))))
 
   (define (set-driver-name! options)
     (let ((driver-type (assq-or 'driver: options)))
       (when driver-type
-        (set! driver-name (if (eq? driver-type 'glr) 'glr-driver 'lr-driver)))))
+        (set! driver-name (if (eq? (car driver-type) 'glr) 'glr-driver 'lr-driver)))))
 
   (define (options-get-rules options)
     (assq-or 'rules: options
@@ -1992,33 +1995,16 @@
   ;; -- arguments
 
   (define (extract-arguments lst)
-    (define translated
-      (catchu-case
-       (keylist->alist lst)
-       (('type-error . args)
-        (grammar-error "Malformed lalr-parser form: ~s" lst))))
-
-    (define (normalize-name name)
-      (if (gkeyword? name)
-          (gkeyword->fkeyword name)
-          name))
-
-    (define (normalize p)
-      (define name (car p))
-      (cons (normalize-name name) (cdr p)))
-
     (let loop ((options '())
-               (lst     translated))
+               (lst     lst))
       (cond
        ((pair? lst)
         (let ()
-          (define p/0 (car lst))
-          (define p (normalize p/0))
-
+          (define p (car lst))
           (cond
            ((and (pair? p)
-                 (gkeyword? (car p)))
-            (loop (cons (normalize p) options) (cdr lst)))
+                 (fkeyword? (car p)))
+            (loop (cons p options) (cdr lst)))
            (else
             (grammar-error "Invalid option: ~s" (~a p))))))
        ((null? lst) options)

@@ -51,7 +51,8 @@
           reverse
           string
           string->number
-          unquote))
+          unquote
+          unquote-splicing))
   (import
     (only (scheme char)
           char-alphabetic?

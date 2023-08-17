@@ -67,14 +67,14 @@
      ;; ;; output the LALR table to calc.out
      ;; :out-table "/tmp/calc.out"
 
-     :tokens
-     (ID NUM = LPAREN RPAREN NEWLINE COMMA
-         (left: + -)
-         (left: * /)
-         (nonassoc: uminus))
+     (tokens:
+      ID NUM = LPAREN RPAREN NEWLINE COMMA
+      (left: + -)
+      (left: * /)
+      (nonassoc: uminus))
 
-     :rules
-     ((lines    (lines line) : (,display-result $2)
+     (rules:
+      (lines    (lines line) : (,display-result $2)
                 (line)       : (,display-result $1))
 
 
