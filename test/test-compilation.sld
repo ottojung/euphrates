@@ -683,6 +683,9 @@
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
+    (only (euphrates lalr-parser-simple)
+          lalr-parser/simple))
+  (import
     (only (euphrates lalr-parser)
           lalr-parser
           lexical-token-category
