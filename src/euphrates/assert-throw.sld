@@ -2,8 +2,9 @@
 (define-library
   (euphrates assert-throw)
   (export assert-throw)
+  (import (only (euphrates catch-any) catch-any))
   (import
-    (only (euphrates catchu-case) catchu-case))
+    (only (euphrates catch-specific) catch-specific))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import
@@ -11,6 +12,9 @@
           _
           begin
           define-syntax
+          eq?
+          if
+          lambda
           let
           quote
           set!

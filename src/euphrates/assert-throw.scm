@@ -6,10 +6,16 @@
     ((_ error-tag . bodies)
      (let ((thrown? #f)
            (error-tag* error-tag))
-       (catchu-case
-        (let () . bodies)
-        ((error-tag* . args)
-         (set! thrown? #t)))
+       (if (eq? #t error-tag*)
+           (catch-any
+            (lambda _ . bodies)
+            (lambda _
+              (set! thrown? #t)))
+           (catch-specific
+            error-tag*
+            (lambda _ . bodies)
+            (lambda _
+              (set! thrown? #t))))
        (unless thrown?
          (raisu 'assertion-fail
                 (stringf "Expected ~s to be thrown" error-tag*)
