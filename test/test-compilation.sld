@@ -588,6 +588,7 @@
   (import
     (only (euphrates identity-star) identity*))
   (import (only (euphrates identity) identity))
+  (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates immutable-hashmap-obj)
           immutable-hashmap-constructor
