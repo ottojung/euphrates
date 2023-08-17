@@ -477,14 +477,14 @@
   (import
     (only (euphrates general-table) general-table))
   (import
+    (only (euphrates generic-error-from-key)
+          generic-error:from-key))
+  (import
     (only (euphrates generic-error-huh)
           generic-error?))
   (import
     (only (euphrates generic-error-irritants-key)
           generic-error:irritants-key))
-  (import
-    (only (euphrates generic-error-kind-key)
-          generic-error:kind-key))
   (import
     (only (euphrates generic-error-malformed-key)
           generic-error:malformed-key))

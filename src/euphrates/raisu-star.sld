@@ -3,11 +3,11 @@
   (euphrates raisu-star)
   (export raisu*)
   (import
+    (only (euphrates generic-error-from-key)
+          generic-error:from-key))
+  (import
     (only (euphrates generic-error-irritants-key)
           generic-error:irritants-key))
-  (import
-    (only (euphrates generic-error-kind-key)
-          generic-error:kind-key))
   (import
     (only (euphrates generic-error-message-key)
           generic-error:message-key))
