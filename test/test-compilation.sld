@@ -483,6 +483,9 @@
     (only (euphrates generic-error-irritants-key)
           generic-error:irritants-key))
   (import
+    (only (euphrates generic-error-kind-key)
+          generic-error:kind-key))
+  (import
     (only (euphrates generic-error-malformed-key)
           generic-error:malformed-key))
   (import
