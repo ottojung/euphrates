@@ -3,18 +3,12 @@
   (euphrates lalr-parser)
   (export
     lalr-parser
-    make-source-location
-    source-location?
-    source-location-line
-    source-location-column
     make-lexical-token
     lexical-token?
     lexical-token-category
     lexical-token-value
     lexical-token-source)
   (import (only (euphrates assq-or) assq-or))
-  (import
-    (only (euphrates define-type9) define-type9))
   (import (only (euphrates fkeyword) fkeyword?))
   (import
     (only (euphrates list-length-eq) list-length=))

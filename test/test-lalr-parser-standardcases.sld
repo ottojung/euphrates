@@ -8,10 +8,12 @@
   (import
     (only (euphrates lalr-parser)
           lalr-parser
-          make-lexical-token
-          make-source-location))
+          make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
+  (import
+    (only (euphrates source-location)
+          make-source-location))
   (import (only (euphrates stringf) stringf))
   (import
     (only (euphrates with-string-as-input)

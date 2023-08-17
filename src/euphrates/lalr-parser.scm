@@ -40,15 +40,6 @@
 (define (lexical-token-value x)
   (vector-ref x 3))
 
-(define-type9 source-location
-  (make-source-location input line column offset length)
-  source-location?
-  (input   source-location-input)
-  (line    source-location-line)
-  (column  source-location-column)
-  (offset  source-location-offset)
-  (length  source-location-length))
-
 (define (lalr-parser arguments)
   (define *bits-per-word* 28)
 

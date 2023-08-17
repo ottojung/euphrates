@@ -3,8 +3,9 @@
   (euphrates lalr-lexer-latin)
   (export make-lalr-lexer/latin)
   (import
-    (only (euphrates lalr-parser)
-          make-lexical-token
+    (only (euphrates lalr-parser) make-lexical-token))
+  (import
+    (only (euphrates source-location)
           make-source-location))
   (import
     (only (scheme base)

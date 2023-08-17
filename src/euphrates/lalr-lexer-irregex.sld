@@ -13,14 +13,15 @@
           irregex-search
           sre->irregex))
   (import
-    (only (euphrates lalr-parser)
-          make-lexical-token
-          make-source-location))
+    (only (euphrates lalr-parser) make-lexical-token))
   (import
     (only (euphrates list-map-first) list-map-first))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates read-all-port) read-all-port))
+  (import
+    (only (euphrates source-location)
+          make-source-location))
   (import
     (only (scheme base)
           +

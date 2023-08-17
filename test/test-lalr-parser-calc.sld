@@ -9,7 +9,9 @@
           lexical-token-source
           lexical-token-value
           lexical-token?
-          make-lexical-token
+          make-lexical-token))
+  (import
+    (only (euphrates source-location)
           make-source-location
           source-location-column
           source-location-line

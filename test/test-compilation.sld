@@ -695,11 +695,7 @@
           lexical-token-source
           lexical-token-value
           lexical-token?
-          make-lexical-token
-          make-source-location
-          source-location-column
-          source-location-line
-          source-location?))
+          make-lexical-token))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))
@@ -1588,6 +1584,15 @@
           shell-safe/alphabet/index))
   (import
     (only (euphrates sleep-until) sleep-until))
+  (import
+    (only (euphrates source-location)
+          make-source-location
+          source-location-column
+          source-location-input
+          source-location-length
+          source-location-line
+          source-location-offset
+          source-location?))
   (import
     (only (euphrates srfi-27-backbone-generator)
           mrg32k3a-pack-state
