@@ -463,3 +463,32 @@ idblb idclb longeridlb"
 
    '()))
 
+
+
+
+(test-parser
+ `((expr     (expr add term)
+             (term))
+   (add      (mspace + mspace))
+   (term     (mspace NUM mspace))
+   (mspace   (SPACE mspace) : (,save 'mspace-start $1 $2)
+             () : (,save 'mspace-end)))
+
+ "5+3"
+
+ #(expr-1 #(expr-2 #(term-1 (mspace-end) 5 (mspace-end))) #(add-1 (mspace-end) "+" (mspace-end)) #(term-1 (mspace-end) 3 (mspace-end))))
+
+
+
+(parameterize ((glr-parser?/p #t))
+  (test-parser
+   `((expr     (expr add term)
+               (term))
+     (add      (mspace + mspace))
+     (term     (mspace NUM mspace))
+     (mspace   (SPACE mspace) : (,save 'mspace-start)
+               () : (,save 'mspace-end)))
+
+   "5+3"
+
+   (list #(expr-1 #(expr-2 #(term-1 (mspace-end) 5 (mspace-end))) #(add-1 (mspace-end) "+" (mspace-end)) #(term-1 (mspace-end) 3 (mspace-end))))))
