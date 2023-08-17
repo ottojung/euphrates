@@ -17,7 +17,7 @@
     (let ((nl? (equal? c #\newline)))
       (set! offset (+ offset 1))
       (set! linenum (if nl? (+ linenum 1) linenum))
-      (set! colnum (if nl? 1 (+ 1 colnum))))
+      (set! colnum (if nl? 0 (+ 1 colnum))))
 
     (if (eof-object? c) '*eoi*
         (case c
