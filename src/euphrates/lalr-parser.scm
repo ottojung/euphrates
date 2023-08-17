@@ -193,7 +193,8 @@
                       (act   (___action i (vector-ref ___atable state))))
 
                  (cond ((not (symbol? i))
-                        (___errorp '(parse-error invalid-token) "Syntax error: invalid token: ~s" __input)
+                        (when ___errorp
+                          (___errorp '(parse-error invalid-token) "Syntax error: invalid token: ~s" __input))
                         #f)
 
                        ;; Input succesfully parsed
@@ -204,10 +205,12 @@
                        ((eq? act '*error*)
                         (if (eq? i '*eoi*)
                             (begin
-                              (___errorp '(parse-error end-of-input) "Syntax error: unexpected end of input: ~s" ___input)
+                              (when ___errorp
+                                (___errorp '(parse-error end-of-input) "Syntax error: unexpected end of input: ~s" ___input))
                               #f)
                             (begin
-                              (___errorp '(parse-error unexpected-token) "Syntax error: unexpected token: ~s" ___input)
+                              (when ___errorp
+                                (___errorp '(parse-error unexpected-token) "Syntax error: unexpected token: ~s" ___input))
                               (___recover i)
                               (if (>= ___sp 0)
                                   (set! ___input #f)
