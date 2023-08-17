@@ -59,4 +59,19 @@
          (cons name (list-split-on slash? regex)))
        grouped))
 
-    split-by-cases))
+    (define dmap
+      (multi-alist->hashmap split-by-cases))
+
+    (define deduplicated
+      (filter
+       identity
+       (map (lambda (production)
+              (define name (car production))
+              (define rhss (hashmap-ref dmap name #f))
+              (and rhss
+                   (let ((rhs (apply append (reverse rhss))))
+                     (hashmap-set! dmap name #f)
+                     (cons name rhs))))
+            split-by-cases)))
+
+    deduplicated))

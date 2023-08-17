@@ -1,5 +1,15 @@
 
 (assert=
+ '((s1 (a b c) (g f)))
+ (bnf-tree->alist '(s1 ::= a b c / g f)))
+
+(assert=
+ '((s1 (a b c) (g f))
+   (s2 (g k)))
+ (bnf-tree->alist '( s1 ::= a b c / g f
+                     s2 ::= g k)))
+
+(assert=
  '((run (OPTS* DATE <end-statement>))
    (OPTS* (--opts <opts...>*)
           (--param1 <arg1>)
@@ -79,3 +89,14 @@
 (assert-throw
  'bnf-must-begin-with-production-definition
  (bnf-tree->alist '(atom1 atom2 ::= atom3)))
+
+(assert=
+ '((s1 (a b c) (g f) (g k)))
+ (bnf-tree->alist '( s1 ::= a b c / g f
+                     s1 ::= g k)))
+
+(assert=
+ '((s1 (a b c) (g f) (g k)) (s2 (o u)))
+ (bnf-tree->alist '( s1 ::= a b c / g f
+                     s2 ::= o u
+                     s1 ::= g k)))

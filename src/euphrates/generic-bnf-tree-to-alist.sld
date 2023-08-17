@@ -3,6 +3,12 @@
   (euphrates generic-bnf-tree-to-alist)
   (export generic-bnf-tree->alist)
   (import
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          multi-alist->hashmap))
+  (import (only (euphrates identity) identity))
+  (import
     (only (euphrates list-length-geq-q)
           list-length=<?))
   (import
@@ -13,6 +19,9 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          and
+          append
+          apply
           begin
           cadr
           car
@@ -28,6 +37,7 @@
           map
           null?
           quote
+          reverse
           unless
           when))
   (cond-expand
