@@ -774,6 +774,8 @@
     (only (euphrates list-levenshtein-distance)
           list-levenshtein-distance))
   (import
+    (only (euphrates list-map-deep) list-map/deep))
+  (import
     (only (euphrates list-map-first) list-map-first))
   (import
     (only (euphrates list-map-flatten)
