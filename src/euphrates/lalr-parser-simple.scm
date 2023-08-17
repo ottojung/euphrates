@@ -14,7 +14,8 @@
          (list-find-first (negate gkeyword?) #f
                           (map car options))))
     (when bad-apple
-      (raisu* :type 'type-error
+      (raisu* :from 'lalr-parser/simple
+              :type 'type-error
               :message
               (stringf "Expected a keylist as arguments, but this is not a key: ~s"
                        bad-apple)
@@ -35,12 +36,28 @@
 
   (define rules/0
     (assq-or 'rules: options*
-             (raisu* :type 'type-error
+             (raisu* :from 'lalr-parser/simple
+                     :type 'type-error
                      :message (stringf "Missing required argument ~s" (~a 'rules:))
                      :args (list 'missing-argument 'rules:))))
 
   (define rules/1
     (bnf-tree->alist rules/0))
+
+  (define non-terminals
+    (map car rules/1))
+
+  (define terminal-prefix
+    (let ()
+      (define (make-prefix x)
+        (string-append "t" (if (= 0 x) "" (~a x)) "_"))
+
+      (make-prefix
+       (list-fold
+        (acc 0)
+        (cur (map ~a (list-collapse rules/1)))
+        (if (string-prefix? (make-prefix acc) cur)
+            (+ 1 acc) acc)))))
 
   (define rhss
     (map cdr rules/1))
@@ -55,13 +72,16 @@
     (filter terminal? all-expansion-terms))
 
   (define (terminal->token t)
-    (string->symbol (string-append "<" t))) ;; TODO
+    (string->symbol (string-append terminal-prefix t))) ;; TODO
+
+  (define tokens-map
+    (map (compose-under cons terminal->token identity) all-terminals))
 
   (define tokens
-    (map terminal->token all-terminals))
+    (map car tokens-map))
 
   (define (translate-terminal x)
-    (string->symbol (string-append "<" x)))
+    (string->symbol (string-append terminal-prefix x)))
 
   (define (maybe-translate-terminal x)
     (if (terminal? x)
