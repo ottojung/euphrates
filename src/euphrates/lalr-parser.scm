@@ -1910,11 +1910,11 @@
 
   (define *valid-options*
     (list
-     (cons 'out-table:
+     (cons 'output-table:
            (lambda (option)
              (and (list? option)
                   (list-length= 2 option)
-                  (string? (cadr option)))))
+                  (port? (cadr option)))))
 
      (cons 'output-code:
            (lambda (option)
@@ -1964,9 +1964,10 @@
             (callback code)))))
 
   (define (output-table! options)
-    (let ((file-name (assq-or 'out-table: options)))
-      (when file-name
-        (with-output-to-file (car file-name) print-states))))
+    (let ((option (assq-or 'output-table: options)))
+      (when option
+        (parameterize ((current-output-port (car option)))
+          (print-states)))))
 
   (define (set-conflict-handler! options)
     (let ((handler (assq-or 'on-conflict: options)))

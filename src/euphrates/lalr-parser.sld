@@ -49,6 +49,7 @@
           cdr
           cond
           cons
+          current-output-port
           define
           define-values
           do
@@ -80,6 +81,8 @@
           number?
           or
           pair?
+          parameterize
+          port?
           procedure?
           quasiquote
           quote
@@ -91,7 +94,6 @@
           set-cdr!
           string->symbol
           string-append
-          string?
           symbol->string
           symbol?
           unless
@@ -108,7 +110,6 @@
           when))
   (import (only (scheme cxr) caaar cadar caddr))
   (import (only (scheme eval) environment eval))
-  (import (only (scheme file) with-output-to-file))
   (import (only (scheme write) display))
   (cond-expand
     (guile (import
