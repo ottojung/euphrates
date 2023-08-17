@@ -37,13 +37,16 @@
 
 
 
-;; (lalr-parser/simple
-;;  `(:rules
-;;    ( expr ::= t_term add expr / t_term
-;;      add ::= "+"
-;;      t_term ::= num
-;;      num ::= dig num / dig
-;;      dig ::= "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")))
+(lalr-parser/simple
+ `(:rules
+   ( expr ::= t_term add expr / t_term
+     add ::= "+"
+     t_term ::= num
+     num ::= dig num / dig
+     dig ::= "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")))
+
+
+
 
 (test-parser
  `( expr ::= term add expr / term
@@ -57,214 +60,17 @@
 
 
 
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (dig      ,@lalr-lexer/latin/digits))
-
-;;  "5+3"
-
-;;  '(expr (term (num #\5)) (add #\+) (expr (term (num #\3)))))
 
 
+(test-parser
+ `( expr ::= term add expr / term
+    add ::= "+" / space add / add space
+    term ::= num / space term / term space
+    num ::= dig num / dig
+    dig ::= "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+    space ::= " ")
 
+ " 5 + 3 "
 
+ #(expr #(term #(space " ") #(term #(term #(num #(dig "5"))) #(space " "))) #(add "+") #(expr #(term #(space " ") #(term #(term #(num #(dig "3"))) #(space " "))))))
 
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (dig      ,@lalr-lexer/latin/digits))
-
-;;  "47+3732"
-
-;;  '(expr (term (num #\4 (num #\7))) (add #\+) (expr (term (num #\3 (num #\7 (num #\3 (num #\2))))))))
-
-
-
-
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1)
-;;              (id) : (,save 'term $1))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (id       (alpha idcont) : (,save 'id $1 $2))
-;;    (idcont   (idcont alphanum) : (,save 'idcont $1 $2)
-;;              (alphanum) : (,save 'idcont $1))
-;;    (alphanum (alpha) : $1
-;;              (dig) : $1)
-;;    (alpha    ,@lalr-lexer/latin/letters)
-;;    (dig      ,@lalr-lexer/latin/digits))
-
-;;  "47+3732"
-
-;;  '(expr (term (num #\4 (num #\7))) (add #\+) (expr (term (num #\3 (num #\7 (num #\3 (num #\2))))))))
-
-
-
-
-
-
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1)
-;;              (id) : (,save 'term $1))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (id       (alpha idcont) : (,save 'id $1 $2))
-;;    (idcont   (idcont alphanum) : (,save 'idcont $1 $2)
-;;              (alphanum) : (,save 'idcont $1))
-;;    (alphanum (alpha) : $1
-;;              (dig) : $1)
-;;    (alpha    ,@lalr-lexer/latin/letters)
-;;    (dig      ,@lalr-lexer/latin/digits))
-
-;;  "47+x3"
-
-;;  '(expr (term (num #\4 (num #\7))) (add #\+) (expr (term (id #\x (idcont #\3))))))
-
-
-
-
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1)
-;;              (id) : (,save 'term $1))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (id       (alpha idcont) : (,save 'id $1 $2))
-;;    (idcont   (idcont alphanum) : (,save 'idcont $1 $2)
-;;              (alphanum) : (,save 'idcont $1))
-;;    (alphanum (alpha) : $1
-;;              (dig) : $1)
-;;    (alpha    ,@lalr-lexer/latin/letters)
-;;    (dig      ,@lalr-lexer/latin/digits)
-;;    (space    (<SPACE) : $1
-;;              (<TAB) : $1))
-
-;;  "47+x3"
-
-;;  '(expr (term (num #\4 (num #\7))) (add #\+) (expr (term (id #\x (idcont #\3))))))
-
-
-
-
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1)
-;;              (id) : (,save 'term $1)
-;;              (space term) : (,save 'term $1 $2)
-;;              (term space) : (,save 'term $1 $2))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (id       (alpha idcont) : (,save 'id $1 $2))
-;;    (idcont   (idcont alphanum) : (,save 'idcont $1 $2)
-;;              (alphanum) : (,save 'idcont $1))
-;;    (alphanum (alpha) : $1
-;;              (dig) : $1)
-;;    (alpha    ,@lalr-lexer/latin/letters)
-;;    (dig      ,@lalr-lexer/latin/digits)
-;;    (space    (<SPACE) : $1
-;;              (<TAB) : $1))
-
-;;  "47+x3"
-
-;;  '(expr (term (num #\4 (num #\7))) (add #\+) (expr (term (id #\x (idcont #\3))))))
-
-
-
-
-
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1)
-;;              (id) : (,save 'term $1)
-;;              (space term) : (,save 'term $1 $2)
-;;              (term space) : (,save 'term $1 $2))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (id       (alpha idcont) : (,save 'id $1 $2))
-;;    (idcont   (idcont alphanum) : (,save 'idcont $1 $2)
-;;              (alphanum) : (,save 'idcont $1))
-;;    (alphanum (alpha) : $1
-;;              (dig) : $1)
-;;    (alpha    ,@lalr-lexer/latin/letters)
-;;    (dig      ,@lalr-lexer/latin/digits)
-;;    (space    (<SPACE) : $1
-;;              (<TAB) : $1))
-
-;;  "47 + x3"
-
-;;  '(expr (term (term (num #\4 (num #\7))) #\space) (add #\+) (expr (term #\space (term (id #\x (idcont #\3)))))))
-
-
-
-
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1)
-;;              (id) : (,save 'term $1)
-;;              (space term) : (,save 'term $1 $2)
-;;              (term space) : (,save 'term $1 $2))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (id       (alpha idcont) : (,save 'id $1 $2))
-;;    (idcont   (idcont alphanum) : (,save 'idcont $1 $2)
-;;              (alphanum) : (,save 'idcont $1))
-;;    (alphanum (alpha) : $1
-;;              (dig) : $1)
-;;    (alpha    ,@lalr-lexer/latin/letters)
-;;    (dig      ,@lalr-lexer/latin/digits)
-;;    (space    (<SPACE) : $1
-;;              (<TAB) : $1))
-
-;;  "   47 +x3   "
-
-;;  '(expr (term #\space (term #\space (term #\space (term (term (num #\4 (num #\7))) #\space)))) (add #\+) (expr (term (term (term (term (id #\x (idcont #\3))) #\space) #\space) #\space))))
-
-
-
-
-;; (test-parser
-;;  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-;;              (term) : (,save 'expr $1))
-;;    (add      (<+) : (,save 'add $1))
-;;    (term     (num) : (,save 'term $1)
-;;              (id) : (,save 'term $1)
-;;              (space* term space*) : (,save 'term $1 $2))
-;;    (num      (dig num) : (,save 'num $1 $2)
-;;              (dig) : (,save 'num $1))
-;;    (id       (alpha idcont) : (,save 'id $1 $2))
-;;    (idcont   (idcont alphanum) : (,save 'idcont $1 $2)
-;;              (alphanum) : (,save 'idcont $1))
-;;    (alphanum (alpha) : $1
-;;              (dig) : $1)
-;;    (alpha    ,@lalr-lexer/latin/letters)
-;;    (dig      ,@lalr-lexer/latin/digits)
-;;    (space*   (space space*) : $1 ())
-;;    (space    (<SPACE) : $1
-;;              (<TAB) : $1))
-
-;;  "   47 +  x3   "
-
-;;  '(expr (term #\space (term (num #\4 (num #\7)))) (add #\+) (expr (term #\space (term (id #\x (idcont #\3)))))))
