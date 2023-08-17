@@ -63,7 +63,7 @@
 
    `(
      ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm,
-     ;; :output (calc-parser "/tmp/calc.yy.scm")
+     ;; :output-code ,ignore
      ;; ;; output the LALR table to calc.out
      ;; :out-table "/tmp/calc.out"
 

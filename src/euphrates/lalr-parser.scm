@@ -1916,12 +1916,11 @@
                   (list-length= 2 option)
                   (string? (cadr option)))))
 
-     (cons 'output:
+     (cons 'output-code:
            (lambda (option)
              (and (list? option)
-                  (= (length option) 3)
-                  (symbol? (cadr option))
-                  (string? (caddr option)))))
+                  (list-length= 2 option)
+                  (procedure? (cadr option)))))
 
      (cons 'on-conflict:
            (lambda (option)
@@ -1959,14 +1958,10 @@
             :args (list type new current on-symbol in-state)))
 
   (define (output-parser! options code)
-    (let ((option (assq 'output: options)))
+    (let ((option (assq-or 'output-code: options)))
       (if option
-          (let ((parser-name (cadr option))
-                (file-name   (caddr option)))
-            (with-output-to-file file-name
-              (lambda ()
-                (pretty-print `(define ,parser-name ,code))
-                (newline)))))))
+          (let ((callback (car option)))
+            (callback code)))))
 
   (define (output-table! options)
     (let ((file-name (assq-or 'out-table: options)))
