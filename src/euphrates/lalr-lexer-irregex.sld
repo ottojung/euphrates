@@ -36,6 +36,7 @@
           equal?
           if
           lambda
+          let
           list
           map
           min

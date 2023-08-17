@@ -33,9 +33,6 @@
       (set! input-string (read-all-port (current-input-port)))
       (set! input-length (string-length input-string)))
 
-    (define location
-      (make-source-location "*stdin*" linenum colnum offset 1))
-
     (define (process-token-mapping p)
       (define-pair (token reg) p)
       (define m (irregex-search reg input-string offset))
@@ -55,7 +52,9 @@
 
       (define-pair (token s) r)
       (adjust-positions! s)
-      (make-lexical-token token location s))
+
+      (let ((location (make-source-location "*stdin*" linenum colnum offset (string-length s))))
+        (make-lexical-token token location s)))
 
     (if (>= offset input-length) '*eoi*
         (process-next))))
