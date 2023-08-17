@@ -2,10 +2,19 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-syntax raisu*
-  (syntax-rules (:type :message :args)
-    ((_ :type type :message message :args args)
+  (syntax-rules (:type :message :args :kind)
+    ((_ :kind kind :type type :message message :args args)
      (generic-error
-      (list
-       (cons generic-error:type-key type)
-       (cons generic-error:message-key message)
-       (cons generic-error:irritants-key args))))))
+      (append
+       (if kind
+           (list (cons generic-error:kind-key kind))
+           '())
+       (list
+        (cons generic-error:type-key type)
+        (cons generic-error:message-key message)
+        (cons generic-error:irritants-key args)))))
+    ((_ :type type :message message :args args)
+     (raisu* :kind #f
+             :type type
+             :message message
+             :args args))))

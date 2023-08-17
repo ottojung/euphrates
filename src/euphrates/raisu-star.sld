@@ -6,6 +6,9 @@
     (only (euphrates generic-error-irritants-key)
           generic-error:irritants-key))
   (import
+    (only (euphrates generic-error-kind-key)
+          generic-error:kind-key))
+  (import
     (only (euphrates generic-error-message-key)
           generic-error:message-key))
   (import
@@ -16,10 +19,13 @@
   (import
     (only (scheme base)
           _
+          append
           begin
           cons
           define-syntax
+          if
           list
+          quote
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))
