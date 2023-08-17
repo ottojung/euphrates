@@ -42,7 +42,41 @@
   (define rules/1
     (bnf-tree->alist rules/0))
 
-  (define rules rules/1) ;; TODO: use irregex in grammar
+  (define rhss
+    (map cdr rules/1))
+
+  (define all-expansion-terms
+    (apply append (apply append rhss)))
+
+  (define (terminal? x)
+    (string? x))
+
+  (define all-terminals
+    (filter terminal? all-expansion-terms))
+
+  (define (terminal->token t)
+    (string->symbol (string-append "<" t))) ;; TODO
+
+  (define tokens
+    (map terminal->token all-terminals))
+
+  (define (translate-terminal x)
+    (string->symbol (string-append "<" x)))
+
+  (define (maybe-translate-terminal x)
+    (if (terminal? x)
+        (translate-terminal x)
+        x))
+
+  (define (translate-rhs rhs)
+    (map maybe-translate-terminal rhs))
+
+  (define rules/2
+    (map
+     (fn-cons identity (comp (map translate-rhs)))
+     rules/1))
+
+  (define rules rules/2) ;; TODO: use irregex in grammar
 
   (define make-lexer make-lalr-lexer/latin) ;; TODO: use irregex in grammar
 
@@ -55,7 +89,7 @@
     (assq-set-value
      'rules: rules
      (assq-set-value
-      'tokens: lalr-lexr/latin-tokens
+      'tokens: tokens
       options*)))
 
   (define upstream (lalr-parser options-to-upstream))

@@ -8,20 +8,20 @@
   (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
+  (import (only (euphrates comp) comp))
+  (import (only (euphrates fn-cons) fn-cons))
   (import (only (euphrates fn-pair) fn-pair))
   (import
     (only (euphrates gkeyword)
           gkeyword->fkeyword
           gkeyword?))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
     (only (euphrates lalr-lexer-latin)
           make-lalr-lexer/latin))
-  (import
-    (only (euphrates lalr-lexr-latin-tokens)
-          lalr-lexr/latin-tokens))
   (import
     (only (euphrates lalr-parser) lalr-parser))
   (import
@@ -33,8 +33,11 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          append
+          apply
           begin
           car
+          cdr
           cons
           define
           if
@@ -44,7 +47,13 @@
           map
           memq
           quote
+          string->symbol
+          string-append
+          string?
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

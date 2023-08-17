@@ -40,10 +40,10 @@
 
 (test-parser
  `( expr : term add expr / term
-    add : <+
+    add : "+"
     term : num
     num : dig num / dig
-    dig : <0 / <1 / <2 / <3 / <4 / <5 / <6 / <7 / <8 / <9)
+    dig : "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
  "5+3"
 
