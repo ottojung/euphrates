@@ -1684,11 +1684,7 @@
                       (let* ((rhs-length (length rhs))
                              (action
                               (cons 'vector
-                                    (cons (list 'quote (string->symbol
-                                                        (string-append
-                                                         name
-                                                         "-"
-                                                         (number->string i))))
+                                    (cons (list 'quote (string->symbol name))
                                           (let loop-j ((j 1))
                                             (if (> j rhs-length)
                                                 '()
