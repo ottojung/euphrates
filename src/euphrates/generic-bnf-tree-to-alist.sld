@@ -9,6 +9,7 @@
     (only (euphrates list-split-on) list-split-on))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)

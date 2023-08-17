@@ -3,6 +3,6 @@
 
 (define bnf-tree->alist
   (let ()
-    (define semicolon ":")
+    (define semicolon "::=")
     (define slash "/")
     (generic-bnf-tree->alist semicolon slash)))

@@ -44,7 +44,7 @@
     (unless (semicolon? (car shifted-semilocons))
       (raisu* :from 'parse-bnf/generic
               :type 'bnf-must-begin-with-production-definition
-              :message "BNF must begin with a production definition, like \"MAIN ::=\""
+              :message (stringf "BNF must begin with a production definition, like \"MAIN ~a\"" semicolon)
               :args (list (car shifted-semilocons) (cadr shifted-semilocons))))
 
     (define grouped

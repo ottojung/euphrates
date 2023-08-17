@@ -3,8 +3,8 @@
   (euphrates parse-cfg-cli)
   (export CFG-CLI->CFG-AST)
   (import
-    (only (euphrates bnf-tree-to-alist)
-          bnf-tree->alist))
+    (only (euphrates generic-bnf-tree-to-alist)
+          generic-bnf-tree->alist))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)

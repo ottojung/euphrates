@@ -18,6 +18,9 @@
 ;;
 
 (define (CFG-CLI->CFG-AST body)
+  (define translator
+    (generic-bnf-tree->alist ":" "/"))
+
   (define body*
     (cons 'EUPHRATES-CFG-CLI-MAIN (cons ': body)))
 
@@ -27,4 +30,4 @@
             :message "CFG CLI must be non-empty"
             :args (list)))
 
-  (bnf-tree->alist body*))
+  (translator body*))

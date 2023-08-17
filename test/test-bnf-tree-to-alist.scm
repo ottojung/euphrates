@@ -10,14 +10,14 @@
    (JUNE-OPTS* (-f3) (-f4)))
 
  (bnf-tree->alist
-  '(run : OPTS* DATE <end-statement>
-        OPTS*   : --opts <opts...>*
+  '(run ::= OPTS* DATE <end-statement>
+        OPTS*   ::= --opts <opts...>*
         /         --param1 <arg1>
         /         --flag1
-        DATE    : may  <nth> MAY-OPTS?
+        DATE    ::= may  <nth> MAY-OPTS?
         /         june <nth> JUNE-OPTS*
-        MAY-OPTS?    : -p <x>
-        JUNE-OPTS*   : -f3 / -f4)))
+        MAY-OPTS?    ::= -p <x>
+        JUNE-OPTS*   ::= -f3 / -f4)))
 
 (assert-throw
  'bnf-must-begin-with-production-definition
@@ -32,13 +32,13 @@
 
  (bnf-tree->alist
   '(run OPTS* DATE <end-statement>
-        OPTS*   : --opts <opts...>*
+        OPTS*   ::= --opts <opts...>*
         /         --param1 <arg1>
         /         --flag1
-        DATE    : may  <nth> MAY-OPTS?
+        DATE    ::= may  <nth> MAY-OPTS?
         /         june <nth> JUNE-OPTS*
-        MAY-OPTS?    : -p <x>
-        JUNE-OPTS*   : -f3 / -f4)))
+        MAY-OPTS?    ::= -p <x>
+        JUNE-OPTS*   ::= -f3 / -f4)))
 
 (assert=
  '((run (OPTS* DATE <end-statement>))
@@ -51,14 +51,14 @@
    (JUNE-OPTS (-f3) (-f4)))
 
  (bnf-tree->alist
-  '(run : OPTS* DATE <end-statement>
-        OPTS   : --opts <opts...>*
+  '(run ::= OPTS* DATE <end-statement>
+        OPTS   ::= --opts <opts...>*
         /      --param1 <arg1>
         /      --flag1
-        DATE    : may  <nth> MAY-OPTS?
+        DATE    ::= may  <nth> MAY-OPTS?
         /         june <nth> JUNE-OPTS*
-        MAY-OPTS    : -p <x>
-        JUNE-OPTS   : -f3 / -f4)))
+        MAY-OPTS    ::= -p <x>
+        JUNE-OPTS   ::= -f3 / -f4)))
 
 (assert-throw
  'bnf-must-be-non-empty
@@ -74,8 +74,8 @@
 
 (assert=
  '((atom1))
- (bnf-tree->alist '(atom1 :)))
+ (bnf-tree->alist '(atom1 ::=)))
 
 (assert-throw
  'bnf-must-begin-with-production-definition
- (bnf-tree->alist '(atom1 atom2 : atom3)))
+ (bnf-tree->alist '(atom1 atom2 ::= atom3)))
