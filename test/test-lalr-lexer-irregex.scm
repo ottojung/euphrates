@@ -196,3 +196,112 @@
      #(t_space " " 0 31 31 1))
 
    (collect lexer "   1937 foofoobar   16barbaz34 ")))
+
+
+
+
+
+
+(let ()
+  (define tokens-alist
+    `((t_0 . "0")
+      (t_1 . "1")
+      (t_2 . "2")
+      (t_3 . "3")
+      (t_4 . "4")
+      (t_5 . "5")
+      (t_6 . "6")
+      (t_7 . "7")
+      (t_8 . "8")
+      (t_9 . "9")
+      (t_hello (or "foo" "bar"))))
+
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
+
+  (assert=
+
+   '(#(t_1 "1" 0 1 1 1)
+     #(t_9 "9" 0 2 2 1)
+     #(t_3 "3" 0 3 3 1)
+     #(t_7 "7" 0 4 4 1)
+     #(t_hello "foo" 0 7 7 3)
+     #(t_1 "1" 0 8 8 1)
+     #(t_6 "6" 0 9 9 1)
+     #(t_hello "bar" 0 12 12 3)
+     #(t_3 "3" 0 13 13 1)
+     #(t_4 "4" 0 14 14 1))
+
+   (collect lexer "1937foo16bar34")))
+
+
+
+
+
+
+(let ()
+  (define tokens-alist
+    `((t_0 . "0")
+      (t_1 . "1")
+      (t_2 . "2")
+      (t_3 . "3")
+      (t_4 . "4")
+      (t_5 . "5")
+      (t_6 . "6")
+      (t_7 . "7")
+      (t_8 . "8")
+      (t_9 . "9")
+      (t_hello (or "foo" "bar"))
+      (t_bye . "foo")))
+
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
+
+  (assert=
+
+   '(#(t_1 "1" 0 1 1 1)
+     #(t_9 "9" 0 2 2 1)
+     #(t_3 "3" 0 3 3 1)
+     #(t_7 "7" 0 4 4 1)
+     #(t_hello "foo" 0 7 7 3)
+     #(t_1 "1" 0 8 8 1)
+     #(t_6 "6" 0 9 9 1)
+     #(t_hello "bar" 0 12 12 3)
+     #(t_3 "3" 0 13 13 1)
+     #(t_4 "4" 0 14 14 1))
+
+   (collect lexer "1937foo16bar34")))
+
+
+
+
+
+(let ()
+  (define tokens-alist
+    `((t_0 . "0")
+      (t_1 . "1")
+      (t_2 . "2")
+      (t_3 . "3")
+      (t_4 . "4")
+      (t_5 . "5")
+      (t_6 . "6")
+      (t_7 . "7")
+      (t_8 . "8")
+      (t_9 . "9")
+      (t_bye . "foo")
+      (t_hello (or "foo" "bar"))))
+
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
+
+  (assert=
+
+   '(#(t_1 "1" 0 1 1 1)
+     #(t_9 "9" 0 2 2 1)
+     #(t_3 "3" 0 3 3 1)
+     #(t_7 "7" 0 4 4 1)
+     #(t_bye "foo" 0 7 7 3)
+     #(t_1 "1" 0 8 8 1)
+     #(t_6 "6" 0 9 9 1)
+     #(t_hello "bar" 0 12 12 3)
+     #(t_3 "3" 0 13 13 1)
+     #(t_4 "4" 0 14 14 1))
+
+   (collect lexer "1937foo16bar34")))

@@ -27,6 +27,7 @@
           equal?
           if
           let
+          or
           quasiquote
           quote
           vector))

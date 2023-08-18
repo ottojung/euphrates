@@ -31,24 +31,30 @@
           begin
           car
           cdr
+          cond
           cons
           current-input-port
           define
+          else
           equal?
           if
           lambda
           let
           list
+          list?
           map
           min
+          pair?
           quasiquote
           quote
           set!
           string-for-each
           string-length
+          string?
           substring
           unless
           unquote
+          unquote-splicing
           when))
   (cond-expand
     (guile (import (only (guile) include-from-path))

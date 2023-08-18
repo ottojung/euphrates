@@ -3,7 +3,16 @@
 
 (define (make-lalr-lexer/irregex-factory tokens-alist)
   (define (terminal->regex t)
-    (sre->irregex `(seq bos ,t)))
+    (cond
+     ((string? t)
+      (sre->irregex `(seq bos ,t)))
+     ((and (list? t) (pair? t))
+      (sre->irregex `(seq bos ,@t)))
+     (else
+      (raisu* :from "make-lalr-lexer/irregex-factory"
+              :type 'bad-regex
+              :message "Irregex lexer expected a string or a non empty list for the regex, but got something else"
+              :args (list t)))))
 
   (define regex-alist
     (map
