@@ -101,19 +101,19 @@
             :message "This parser handles tokens automatically, no need to provide them"
             :args (list (assq-or 'tokens: options*))))
 
-  (define joined/l
-    (assq-or 'join: options* '()))
+  (define flattened/l
+    (assq-or 'flatten: options* '()))
 
-  (unless (list? joined/l)
+  (unless (list? flattened/l)
     (raisu* :from "lalr-parser/simple"
-            :type 'invalid-join-set
+            :type 'invalid-flatten-set
             :message
-            (stringf "The ~s option expected a list of productions to join, but found something other than a list"
-                     (~a 'join:))
-            :args (list 'join: joined/l)))
+            (stringf "The ~s option expected a list of productions to flatten, but found something other than a list"
+                     (~a 'flatten:))
+            :args (list 'flatten: flattened/l)))
 
-  (define joined
-    (list->hashset joined/l))
+  (define flattened
+    (list->hashset flattened/l))
 
   (define skiped/l
     (assq-or 'skip: options* '()))
@@ -149,7 +149,7 @@
      (assq-unset-value
       'skip:
       (assq-unset-value
-       'join:
+       'flatten:
        (assq-unset-value
         'grammar:
         (assq-set-value
@@ -163,5 +163,5 @@
   (lambda (errorp)
     ((curry-if (const spineless?) lalr-parser/simple-remove-spines)
      (lalr-parser/simple-transform-result
-      joined skiped
+      flattened skiped
       (upstream (make-lexer) errorp)))))

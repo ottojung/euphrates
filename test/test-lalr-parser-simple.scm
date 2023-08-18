@@ -122,7 +122,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :join (num)))
+    :flatten (num)))
 
  "5+3"
  '(expr (term (num "5")) (add "+") (expr (term (num "3")))))
@@ -141,7 +141,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :join (num)))
+    :flatten (num)))
 
  "72+8"
  '(expr (term (num "72")) (add "+") (expr (term (num "8")))))
@@ -159,7 +159,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :join (expr)))
+    :flatten (expr)))
 
  "5+3"
  '(expr "5+3"))
@@ -180,7 +180,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :join (id)))
+    :flatten (id)))
 
  "35+x7"
  '(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id "x7")))))
@@ -201,7 +201,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :join (id num)))
+    :flatten (id num)))
 
  "35+x7"
  '(expr (term (num "35")) (add "+") (expr (term (id "x7")))))
@@ -211,7 +211,7 @@
 
 
 (assert-throw
- 'invalid-join-set
+ 'invalid-flatten-set
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -220,7 +220,7 @@
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :join num)))
+    :flatten num)))
 
 
 
@@ -334,7 +334,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :join (num)
+    :flatten (num)
     :skip (space)))
 
  "  83712    + 371673    "
