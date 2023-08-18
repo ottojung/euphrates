@@ -1,13 +1,26 @@
 
 (assert=
  '((s1 (a b c) (g f)))
- (bnf-tree->alist '(s1 ::= a b c / g f)))
+ (ebnf-tree->alist '(s1 = a b c / g f)))
 
 (assert=
  '((s1 (a b c) (g f))
    (s2 (g k)))
- (bnf-tree->alist '( s1 ::= a b c / g f
-                     s2 ::= g k)))
+ (ebnf-tree->alist '( s1 = a b c / g f
+                      s2 = g k)))
+
+(assert=
+ '(((s1 s1opt) (a b c) (g f)))
+ (ebnf-tree->alist '((s1 s1opt) = a b c / g f)))
+
+(assert=
+ '(((s1 s1opt) (a b c) (g f) (u k o))
+   ((s2 s2opt) (k g) (m))
+   (z (p s2)))
+ (ebnf-tree->alist '((s1 s1opt) = a b c / g f
+                     (s2 s2opt) = k g / m
+                     z = p s2
+                     (s1 s1opt) = u k o)))
 
 (assert=
  '((run (OPTS* DATE <end-statement>))

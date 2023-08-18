@@ -7,7 +7,10 @@
   (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
-  (import (only (scheme base) / begin quote))
+  (import
+    (only (euphrates ebnf-tree-to-alist)
+          ebnf-tree->alist))
+  (import (only (scheme base) / = begin quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
