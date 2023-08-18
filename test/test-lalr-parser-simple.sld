@@ -7,6 +7,8 @@
   (import
     (only (euphrates lalr-parser-simple)
           lalr-parser/simple))
+  (import
+    (only (euphrates list-collapse) list-collapse))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import
@@ -16,6 +18,7 @@
     (only (scheme base)
           /
           =
+          apply
           begin
           car
           cdr
@@ -23,7 +26,12 @@
           list
           quasiquote
           quote
+          string-append
+          string?
           unquote))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

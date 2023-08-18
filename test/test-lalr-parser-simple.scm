@@ -15,7 +15,13 @@
   (define result
     (run-input parser input))
 
-  (assert= result expected-output))
+  (assert= result expected-output)
+
+  (define reversed
+    (apply string-append
+           (filter string? (list-collapse result))))
+
+  (assert= input reversed))
 
 (define (test-parser-error parser-rules input)
   (define parser
