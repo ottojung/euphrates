@@ -35,11 +35,12 @@
     (map translate-option options))
 
   (define rules/0
-    (assq-or 'rules: options*
+    (assq-or 'grammar: options*
+             ;; TODO: make grammar optional.
              (raisu* :from 'lalr-parser/simple
                      :type 'type-error
-                     :message (stringf "Missing required argument ~s" (~a 'rules:))
-                     :args (list 'missing-argument 'rules:))))
+                     :message (stringf "Missing required argument ~s" (~a 'grammar:))
+                     :args (list 'missing-argument 'grammar:))))
 
   (define rules/1
     (bnf-tree->alist rules/0))
@@ -107,11 +108,13 @@
             :args (list (assq-or 'tokens: options*))))
 
   (define options-to-upstream
-    (assq-set-value
-     'rules: rules
+    (assq-unset-value
+     'grammar:
      (assq-set-value
-      'tokens: tokens
-      options*)))
+      'rules: rules
+      (assq-set-value
+       'tokens: tokens
+       options*))))
 
   (define upstream (lalr-parser options-to-upstream))
 

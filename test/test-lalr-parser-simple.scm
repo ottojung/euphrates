@@ -6,7 +6,7 @@
 
 (define (make-test-parser parser-rules)
    (lalr-parser/simple
-    `(:rules ,parser-rules)))
+    `(:grammar ,parser-rules)))
 
 (define (test-parser parser-rules input expected-output)
   (define parser
@@ -38,7 +38,7 @@
 
 
 (lalr-parser/simple
- `(:rules
+ `(:grammar
    ( expr ::= t_term add expr / t_term
      add ::= "+"
      t_term ::= num

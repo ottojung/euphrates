@@ -6,6 +6,9 @@
   (import
     (only (euphrates assq-set-value) assq-set-value))
   (import
+    (only (euphrates assq-unset-value)
+          assq-unset-value))
+  (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
   (import (only (euphrates comp) comp))
