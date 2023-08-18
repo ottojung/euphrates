@@ -21,7 +21,9 @@
           apply
           begin
           define
+          if
           list
+          list?
           quasiquote
           quote
           string-append

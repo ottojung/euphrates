@@ -20,8 +20,10 @@
   (define result (check-parser-result parser input expected-output))
 
   (define reversed
-    (apply string-append
-           (filter string? (list-collapse result))))
+    (if (list? result)
+        (apply string-append
+               (filter string? (list-collapse result)))
+        result))
 
   (assert= input reversed))
 
@@ -122,7 +124,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (num)))
+    :flatten (dig)))
 
  "5+3"
  '(expr (term (num "5")) (add "+") (expr (term (num "3")))))
@@ -137,11 +139,12 @@
     ( expr = term add expr / term
       add = "+"
       term = num
-      num = dig num / dig
+      num = num1
+      num1 = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (num)))
+    :flatten (num1)))
 
  "72+8"
  '(expr (term (num "72")) (add "+") (expr (term (num "8")))))
@@ -162,7 +165,7 @@
     :flatten (expr)))
 
  "5+3"
- '(expr "5+3"))
+ "5+3")
 
 
 
@@ -176,11 +179,12 @@
       add = "+"
       term = num / id
       num = dig num / dig
-      id = "x" / "y" / id dig / id id
+      id = id1
+      id1 = "x" / "y" / id1 dig / id1 id1
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (id)))
+    :flatten (id1)))
 
  "35+x7"
  '(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id "x7")))))
@@ -196,12 +200,14 @@
     ( expr = term add expr / term
       add = "+"
       term = num / id
-      num = dig num / dig
-      id = "x" / "y" / id dig / id id
+      num = num1
+      num1 = dig num / dig
+      id = id1
+      id1 = "x" / "y" / id1 dig / id1 id1
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (id num)))
+    :flatten (id1 num1)))
 
  "35+x7"
  '(expr (term (num "35")) (add "+") (expr (term (id "x7")))))
@@ -330,11 +336,12 @@
     ( expr = term add expr / term
       add = "+" / space add / add space
       term = num / space term / term space
-      num = dig num / dig
+      num = num1
+      num1 = dig num1 / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :flatten (num)
+    :flatten (num1)
     :skip (space)))
 
  "  83712    + 371673    "

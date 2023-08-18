@@ -15,7 +15,7 @@
               (define type (car result))
               (cond
                ((hashset-has? flattened type)
-                (list (list (car result) (flatten-result (cdr result)))))
+                (list (flatten-result (cdr result))))
                ((hashset-has? skiped type)
                 (list))
                (else
