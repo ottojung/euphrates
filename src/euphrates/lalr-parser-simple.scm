@@ -176,8 +176,8 @@
 
   (define upstream (lalr-parser options-to-upstream))
 
-  (lambda (errorp)
+  (lambda (errorp input)
     ((curry-if (const spineless?) lalr-parser/simple-remove-spines)
      (lalr-parser/simple-transform-result
       flattened joined skiped
-      (upstream (make-lexer #f) errorp)))))
+      (upstream (make-lexer input) errorp)))))

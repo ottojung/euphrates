@@ -19,12 +19,17 @@
      (compose-under cons car (comp cdr terminal->regex))
      tokens-alist))
 
-  (lambda (maybe-input-string)
+  (lambda (input-string)
     (define offset 0)
     (define linenum 0)
     (define colnum 0)
-    (define input-string #f)
-    (define input-length #f)
+    (define input-length (string-length input-string))
+
+    (unless (string? input-string)
+      (raisu* :from "lalr-lexer/irregex"
+              :type 'bad-input-string-type
+              :message "Lexer expected string as input, but got something else"
+              :args (list input-string)))
 
     (define (adjust-positions! s)
       (set! offset (+ offset (string-length s)))
@@ -61,21 +66,6 @@
       (let ((location (make-source-location '*stdin* linenum colnum offset (string-length s))))
         (make-lexical-token token location s)))
 
-    (define (init-input s)
-      (set! input-string s)
-      (set! input-length (string-length s)))
-
-    (when maybe-input-string
-      (if (string? maybe-input-string)
-          (init-input maybe-input-string)
-          (raisu* :from "lalr-lexer/irregex"
-                  :type 'bad-input-string-type
-                  :message "Lexer expected string as input, but got something else"
-                  :args (list maybe-input-string))))
-
     (lambda _
-      (unless input-string
-        (init-input (read-all-port (current-input-port))))
-
       (if (>= offset input-length) '*eoi*
           (process-next)))))

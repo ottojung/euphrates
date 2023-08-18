@@ -18,8 +18,6 @@
     (only (euphrates list-map-first) list-map-first))
   (import (only (euphrates raisu-star) raisu*))
   (import
-    (only (euphrates read-all-port) read-all-port))
-  (import
     (only (euphrates source-location)
           make-source-location))
   (import
@@ -33,7 +31,6 @@
           cdr
           cond
           cons
-          current-input-port
           define
           else
           equal?

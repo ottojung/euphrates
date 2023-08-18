@@ -17,9 +17,6 @@
           source-location-line
           source-location-offset))
   (import
-    (only (euphrates with-string-as-input)
-          with-string-as-input))
-  (import
     (only (scheme base)
           begin
           cons

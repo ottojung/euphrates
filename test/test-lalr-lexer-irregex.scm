@@ -1,17 +1,20 @@
 
-(define (collect lexer s)
-  (with-string-as-input
-   s (let loop ()
-       (define t (lexer))
-       (if (equal? '*eoi* t) '()
-           (let ((loc (lexical-token-source t)))
-             (cons (vector (lexical-token-category t)
-                           (lexical-token-value t)
-                           (source-location-line loc)
-                           (source-location-column loc)
-                           (source-location-offset loc)
-                           (source-location-length loc))
-                   (loop)))))))
+(define (collect lexer)
+  (let loop ()
+    (define t (lexer))
+    (if (equal? '*eoi* t) '()
+        (let ((loc (lexical-token-source t)))
+          (cons (vector (lexical-token-category t)
+                        (lexical-token-value t)
+                        (source-location-line loc)
+                        (source-location-column loc)
+                        (source-location-offset loc)
+                        (source-location-length loc))
+                (loop))))))
+
+
+
+
 
 (let ()
   (define tokens-alist
@@ -26,7 +29,7 @@
       (t_8 . "8")
       (t_9 . "9")))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) "19371634"))
 
   (assert=
 
@@ -39,7 +42,7 @@
      #(t_3 "3" 0 7 7 1)
      #(t_4 "4" 0 8 8 1))
 
-   (collect lexer "19371634")))
+   (collect lexer)))
 
 
 
@@ -60,7 +63,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) "1937foo16barbaz34"))
 
   (assert=
 
@@ -75,7 +78,7 @@
      #(t_3 "3" 0 16 16 1)
      #(t_4 "4" 0 17 17 1))
 
-   (collect lexer "1937foo16barbaz34")))
+   (collect lexer)))
 
 
 
@@ -98,7 +101,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) "1937foobar16barbaz34"))
 
   (assert=
 
@@ -113,7 +116,7 @@
      #(t_3 "3" 0 19 19 1)
      #(t_4 "4" 0 20 20 1))
 
-   (collect lexer "1937foobar16barbaz34")))
+   (collect lexer)))
 
 
 
@@ -136,7 +139,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) "1937foofoobar16barbaz34"))
 
   (assert=
 
@@ -152,7 +155,7 @@
      #(t_3 "3" 0 22 22 1)
      #(t_4 "4" 0 23 23 1))
 
-   (collect lexer "1937foofoobar16barbaz34")))
+   (collect lexer)))
 
 (let ()
   (define tokens-alist
@@ -171,7 +174,9 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer
+    ((make-lalr-lexer/irregex-factory tokens-alist)
+     "   1937 foofoobar   16barbaz34 "))
 
   (assert=
 
@@ -195,7 +200,7 @@
      #(t_4 "4" 0 30 30 1)
      #(t_space " " 0 31 31 1))
 
-   (collect lexer "   1937 foofoobar   16barbaz34 ")))
+   (collect lexer)))
 
 
 
@@ -216,7 +221,7 @@
       (t_9 . "9")
       (t_hello (or "foo" "bar"))))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) "1937foo16bar34"))
 
   (assert=
 
@@ -231,7 +236,7 @@
      #(t_3 "3" 0 13 13 1)
      #(t_4 "4" 0 14 14 1))
 
-   (collect lexer "1937foo16bar34")))
+   (collect lexer)))
 
 
 
@@ -253,7 +258,9 @@
       (t_hello (or "foo" "bar"))
       (t_bye . "foo")))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer
+    ((make-lalr-lexer/irregex-factory tokens-alist)
+     "1937foo16bar34"))
 
   (assert=
 
@@ -268,7 +275,7 @@
      #(t_3 "3" 0 13 13 1)
      #(t_4 "4" 0 14 14 1))
 
-   (collect lexer "1937foo16bar34")))
+   (collect lexer)))
 
 
 
@@ -289,7 +296,9 @@
       (t_bye . "foo")
       (t_hello (or "foo" "bar"))))
 
-  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist) #f))
+  (define lexer
+    ((make-lalr-lexer/irregex-factory tokens-alist)
+     "1937foo16bar34"))
 
   (assert=
 
@@ -304,4 +313,4 @@
      #(t_3 "3" 0 13 13 1)
      #(t_4 "4" 0 14 14 1))
 
-   (collect lexer "1937foo16bar34")))
+   (collect lexer)))

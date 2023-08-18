@@ -42,8 +42,7 @@
    (run-input parser input)))
 
 (define (run-input parser input)
-  (with-string-as-input
-   input (parser error-procedure)))
+  (parser error-procedure input))
 
 ;;;;;;;;;;;;;;;;
 ;; TEST CASES ;;
