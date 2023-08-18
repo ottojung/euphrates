@@ -129,22 +129,39 @@
   (define skiped
     (list->hashset skiped/l))
 
+  (define spineless?/0
+    (assq-or 'spineless?: options* 'yes))
+
+  (unless (member spineless?/0 (list 'yes 'no #t #f))
+    (raisu* :from "lalr-parser/simple"
+            :type 'invalid-spineless-option
+            :message
+            (stringf "The ~s option expected a yes/no answer, but found something else"
+                     (~a 'spinless?:))
+            :args (list 'spineless?: spineless?/0)))
+
+  (define spineless?
+    (member spineless?/0 (list 'yes #t)))
+
   (define options-to-upstream
     (assq-unset-value
-     'skip:
+     'spineless?:
      (assq-unset-value
-      'join:
+      'skip:
       (assq-unset-value
-       'grammar:
-       (assq-set-value
-        'rules: rules
+       'join:
+       (assq-unset-value
+        'grammar:
         (assq-set-value
-         'tokens: tokens
-         options*))))))
+         'rules: rules
+         (assq-set-value
+          'tokens: tokens
+          options*)))))))
 
   (define upstream (lalr-parser options-to-upstream))
 
   (lambda (errorp)
-    (lalr-parser/simple-transform-result
-     joined skiped
-     (upstream (make-lexer) errorp))))
+    ((curry-if (const spineless?) lalr-parser/simple-remove-spines)
+     (lalr-parser/simple-transform-result
+      joined skiped
+      (upstream (make-lexer) errorp)))))

@@ -6,7 +6,8 @@
 
 (define (make-test-parser parser-rules)
    (lalr-parser/simple
-    `(:grammar ,parser-rules)))
+    `(:grammar ,parser-rules
+      :spineless? no)))
 
 (define (check-parser-result parser input expected-output)
   (define result
@@ -120,6 +121,7 @@
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
+    :spineless? no
     :join (num)))
 
  "5+3"
@@ -138,6 +140,7 @@
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
+    :spineless? no
     :join (num)))
 
  "72+8"
@@ -155,6 +158,7 @@
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
+    :spineless? no
     :join (expr)))
 
  "5+3"
@@ -175,6 +179,7 @@
       id = "x" / "y" / id dig / id id
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
+    :spineless? no
     :join (id)))
 
  "35+x7"
@@ -195,6 +200,7 @@
       id = "x" / "y" / id dig / id id
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
+    :spineless? no
     :join (id num)))
 
  "35+x7"
@@ -230,6 +236,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :spineless? no
     :skip (space)))
 
  " 5 + 3 "
@@ -248,7 +255,88 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :spineless? no
     :skip (space)))
 
  "  5    + 3    "
  '(expr (term (term (term (term (term (term (term (num (dig "5"))))))))) (add "+") (expr (term (term (term (term (term (term (num (dig "3")))))))))))
+
+
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :spineless? yes
+    :skip (space)))
+
+ "  5    + 3    "
+ '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
+
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :skip (space)))
+
+ "  5    + 3    "
+ '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
+
+
+
+
+
+(assert-throw
+ 'invalid-spineless-option
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :spineless? whatever)))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :join (num)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr (term (num "83712")) (add "+") (expr (term (num "371673")))))
+

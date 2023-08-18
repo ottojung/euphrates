@@ -699,6 +699,12 @@
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
   (import
+    (only (euphrates lalr-parser-simple-remove-spines)
+          lalr-parser/simple-remove-spines))
+  (import
+    (only (euphrates lalr-parser-simple-transform-result)
+          lalr-parser/simple-transform-result))
+  (import
     (only (euphrates lalr-parser-simple)
           lalr-parser/simple))
   (import
