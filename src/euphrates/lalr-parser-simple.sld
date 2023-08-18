@@ -18,6 +18,7 @@
   (import (only (euphrates fn-pair) fn-pair))
   (import
     (only (euphrates gkeyword) gkeyword->fkeyword))
+  (import (only (euphrates hashset) list->hashset))
   (import (only (euphrates identity) identity))
   (import
     (only (euphrates keylist-to-alist)
@@ -28,6 +29,9 @@
   (import
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
+  (import
+    (only (euphrates lalr-parser-simple-transform-result)
+          lalr-parser/simple-transform-result))
   (import
     (only (euphrates lalr-parser) lalr-parser))
   (import
@@ -55,12 +59,14 @@
           lambda
           let
           list
+          list?
           map
           memq
           quote
           string->symbol
           string-append
           string?
+          unless
           when))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))

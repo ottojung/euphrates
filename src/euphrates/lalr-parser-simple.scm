@@ -101,16 +101,34 @@
             :message "This parser handles tokens automatically, no need to provide them"
             :args (list (assq-or 'tokens: options*))))
 
+  (define joined/l
+    (assq-or 'join: options* '()))
+
+  (unless (list? joined/l)
+    (raisu* :from "lalr-parser/simple"
+            :type 'invalid-join-set
+            :message
+            (stringf "The ~s option expected a list of productions to join, but found something other than a list"
+                     (~a 'join:))
+            :args (list 'join: joined/l)))
+
+  (define joined
+    (list->hashset joined/l))
+
   (define options-to-upstream
     (assq-unset-value
-     'grammar:
-     (assq-set-value
-      'rules: rules
+     'join:
+     (assq-unset-value
+      'grammar:
       (assq-set-value
-       'tokens: tokens
-       options*))))
+       'rules: rules
+       (assq-set-value
+        'tokens: tokens
+        options*)))))
 
   (define upstream (lalr-parser options-to-upstream))
 
   (lambda (errorp)
-    (upstream (make-lexer) errorp)))
+    (lalr-parser/simple-transform-result
+     joined
+     (upstream (make-lexer) errorp))))

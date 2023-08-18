@@ -8,10 +8,7 @@
    (lalr-parser/simple
     `(:grammar ,parser-rules)))
 
-(define (test-parser parser-rules input expected-output)
-  (define parser
-    (make-test-parser parser-rules))
-
+(define (check-parser-result parser input expected-output)
   (define result
     (run-input parser input))
 
@@ -22,6 +19,12 @@
            (filter string? (list-collapse result))))
 
   (assert= input reversed))
+
+(define (test-parser parser-rules input expected-output)
+  (define parser
+    (make-test-parser parser-rules))
+
+  (check-parser-result parser input expected-output))
 
 (define (test-parser-error parser-rules input)
   (define parser
@@ -35,8 +38,6 @@
   (with-string-as-input
    input (parser error-procedure)))
 
-(define save list)
-
 ;;;;;;;;;;;;;;;;
 ;; TEST CASES ;;
 ;;;;;;;;;;;;;;;;
@@ -45,9 +46,9 @@
 
 (lalr-parser/simple
  `(:grammar
-   ( expr = t_term add expr / t_term
+   ( expr = term add expr / term
      add = "+"
-     t_term = num
+     term = num
      num = dig num / dig
      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")))
 
@@ -91,3 +92,126 @@
 
  "72+8"
  '(expr (term (num (dig+ (dig "7") (dig+ (dig "2"))))) (add "+") (expr (term (num (dig+ (dig "8")))))))
+
+
+
+
+
+(lalr-parser/simple
+ `(:grammar
+   ( expr = t_term add expr / t_term
+     add = "+"
+     t_term = num
+     num = dig num / dig
+     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")))
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+"
+      term = num
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :join (num)))
+
+ "5+3"
+ '(expr (term (num "5")) (add "+") (expr (term (num "3")))))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+"
+      term = num
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :join (num)))
+
+ "72+8"
+ '(expr (term (num "72")) (add "+") (expr (term (num "8")))))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+"
+      term = num
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :join (expr)))
+
+ "5+3"
+ '(expr "5+3"))
+
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+"
+      term = num / id
+      num = dig num / dig
+      id = "x" / "y" / id dig / id id
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :join (id)))
+
+ "35+x7"
+ '(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id "x7")))))
+
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+"
+      term = num / id
+      num = dig num / dig
+      id = "x" / "y" / id dig / id id
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :join (id num)))
+
+ "35+x7"
+ '(expr (term (num "35")) (add "+") (expr (term (id "x7")))))
+
+
+
+
+
+(assert-throw
+ 'invalid-join-set
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+"
+      term = num
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :join num)))
+
+
+
+
