@@ -12,7 +12,7 @@
        (list
         (cons generic-error:type-key type)
         (cons generic-error:message-key message)
-        (cons generic-error:irritants-key args)))))
+        (cons generic-error:irritants-key (cons type args))))))
     ((_ :type type :message message :args args)
      (raisu* :from #f
              :type type
