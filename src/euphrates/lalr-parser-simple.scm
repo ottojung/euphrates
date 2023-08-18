@@ -10,16 +10,7 @@
   (define options
     (keylist->alist arguments))
 
-  (let ((bad-apple
-         (list-find-first (negate gkeyword?) #f
-                          (map car options))))
-    (when bad-apple
-      (raisu* :from 'lalr-parser/simple
-              :type 'type-error
-              :message
-              (stringf "Expected a keylist as arguments, but this is not a key: ~s"
-                       bad-apple)
-              :args (list 'bad-keylist bad-apple))))
+  (lalr-parser/simple-check-options options)
 
   (define translate-option
     (fn-pair
@@ -38,9 +29,9 @@
     (assq-or 'grammar: options*
              ;; TODO: make grammar optional.
              (raisu* :from 'lalr-parser/simple
-                     :type 'type-error
+                     :type 'missing-argument
                      :message (stringf "Missing required argument ~s" (~a 'grammar:))
-                     :args (list 'missing-argument 'grammar:))))
+                     :args (list 'grammar:))))
 
   (define rules/1
     (ebnf-tree->alist
@@ -105,7 +96,7 @@
   (define rules rules/2)
 
   (when (assq-or 'tokens: options*)
-    (raisu* :type 'type-error ;; TODO: make tokens: optionally settable
+    (raisu* :type 'missing-argument ;; TODO: make tokens: optionally settable
             :message "This parser handles tokens automatically, no need to provide them"
             :args (list (assq-or 'tokens: options*))))
 

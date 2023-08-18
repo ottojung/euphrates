@@ -695,6 +695,9 @@
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
+    (only (euphrates lalr-parser-simple-check-options)
+          lalr-parser/simple-check-options))
+  (import
     (only (euphrates lalr-parser-simple)
           lalr-parser/simple))
   (import

@@ -17,9 +17,7 @@
   (import (only (euphrates fn-cons) fn-cons))
   (import (only (euphrates fn-pair) fn-pair))
   (import
-    (only (euphrates gkeyword)
-          gkeyword->fkeyword
-          gkeyword?))
+    (only (euphrates gkeyword) gkeyword->fkeyword))
   (import (only (euphrates identity) identity))
   (import
     (only (euphrates keylist-to-alist)
@@ -28,14 +26,13 @@
     (only (euphrates lalr-lexer-irregex)
           make-lalr-lexer/irregex))
   (import
+    (only (euphrates lalr-parser-simple-check-options)
+          lalr-parser/simple-check-options))
+  (import
     (only (euphrates lalr-parser) lalr-parser))
   (import
     (only (euphrates list-collapse) list-collapse))
-  (import
-    (only (euphrates list-find-first)
-          list-find-first))
   (import (only (euphrates list-fold) list-fold))
-  (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates semis-ebnf-tree-to-ebnf-tree)
