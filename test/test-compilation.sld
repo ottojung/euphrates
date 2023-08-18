@@ -702,8 +702,14 @@
     (only (euphrates lalr-parser-simple-do-flatten)
           lalr-parser/simple-do-flatten))
   (import
+    (only (euphrates lalr-parser-simple-do-join)
+          lalr-parser/simple-do-join))
+  (import
     (only (euphrates lalr-parser-simple-do-skips)
           lalr-parser/simple-do-skips))
+  (import
+    (only (euphrates lalr-parser-simple-flatten1)
+          lalr-parser/simple-flatten1))
   (import
     (only (euphrates lalr-parser-simple-remove-spines)
           lalr-parser/simple-remove-spines))

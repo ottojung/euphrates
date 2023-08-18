@@ -115,6 +115,20 @@
   (define flattened
     (list->hashset flattened/l))
 
+  (define joined/l
+    (assq-or 'join: options* '()))
+
+  (unless (list? joined/l)
+    (raisu* :from "lalr-parser/simple"
+            :type 'invalid-join-set
+            :message
+            (stringf "The ~s option expected a list of productions to join, but found something other than a list"
+                     (~a 'join:))
+            :args (list 'join: joined/l)))
+
+  (define joined
+    (list->hashset joined/l))
+
   (define skiped/l
     (assq-or 'skip: options* '()))
 
@@ -149,19 +163,21 @@
      (assq-unset-value
       'skip:
       (assq-unset-value
-       'flatten:
+       'join:
        (assq-unset-value
-        'grammar:
-        (assq-set-value
-         'rules: rules
+        'flatten:
+        (assq-unset-value
+         'grammar:
          (assq-set-value
-          'tokens: tokens
-          options*)))))))
+          'rules: rules
+          (assq-set-value
+           'tokens: tokens
+           options*))))))))
 
   (define upstream (lalr-parser options-to-upstream))
 
   (lambda (errorp)
     ((curry-if (const spineless?) lalr-parser/simple-remove-spines)
      (lalr-parser/simple-transform-result
-      flattened skiped
+      flattened joined skiped
       (upstream (make-lexer) errorp)))))

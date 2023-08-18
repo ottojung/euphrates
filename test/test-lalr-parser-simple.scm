@@ -124,7 +124,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (dig)))
+    :join (dig)))
 
  "5+3"
  '(expr (term (num "5")) (add "+") (expr (term (num "3")))))
@@ -144,7 +144,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (num1)))
+    :join (num1)))
 
  "72+8"
  '(expr (term (num "72")) (add "+") (expr (term (num "8")))))
@@ -162,7 +162,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (expr)))
+    :join (expr)))
 
  "5+3"
  "5+3")
@@ -184,7 +184,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (id1)))
+    :join (id1)))
 
  "35+x7"
  '(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id "x7")))))
@@ -207,7 +207,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
     :spineless? no
-    :flatten (id1 num1)))
+    :join (id1 num1)))
 
  "35+x7"
  '(expr (term (num "35")) (add "+") (expr (term (id "x7")))))
@@ -217,7 +217,7 @@
 
 
 (assert-throw
- 'invalid-flatten-set
+ 'invalid-join-set
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -226,7 +226,7 @@
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :flatten num)))
+    :join num)))
 
 
 
@@ -329,6 +329,20 @@
 
 
 
+(assert-throw
+ 'invalid-flatten-set
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :flatten num)))
+
+
 
 (check-parser-result
  (lalr-parser/simple
@@ -341,7 +355,29 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :flatten (term add)))
+    :flatten (num)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr (term (num "8" "3" "7" "1" "2")) (add "+") (expr (term (num "3" "7" "1" "6" "7" "3")))))
+
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = num1
+      num1 = dig num1 / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :join (term add)))
 
  "  83712    + 371673    "
  '(expr "  83712    " "+" (expr " 371673    ")))
@@ -361,7 +397,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :flatten (num1)
+    :join (num1)
     :skip (space)))
 
  "  83712    + 371673    "
@@ -384,7 +420,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :flatten (term add)
+    :join (term add)
     :skip (space)))
 
  "  83712    + 371673    "
@@ -405,11 +441,76 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :flatten (expr)
+    :join (expr)
     :skip (space)))
 
  "  83712    + 371673    "
  '(root "83712+371673"))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = num1
+      num1 = dig num1 / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :join (term)
+    :flatten (expr)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr "83712" "+" "371673"))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = num1
+      num1 = dig num1 / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :join (num)
+    :flatten (term)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr (term "83712") (add "+") (expr (term "371673"))))
+
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig+
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :join (num)
+    :flatten (term)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr (term "83712") (add "+") (expr (term "371673"))))
+
 
 
 

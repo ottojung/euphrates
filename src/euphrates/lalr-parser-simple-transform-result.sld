@@ -6,6 +6,9 @@
     (only (euphrates lalr-parser-simple-do-flatten)
           lalr-parser/simple-do-flatten))
   (import
+    (only (euphrates lalr-parser-simple-do-join)
+          lalr-parser/simple-do-join))
+  (import
     (only (euphrates lalr-parser-simple-do-skips)
           lalr-parser/simple-do-skips))
   (import (only (scheme base) begin define))
