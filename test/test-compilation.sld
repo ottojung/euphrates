@@ -438,6 +438,9 @@
     (only (euphrates dynamic-thread-yield)
           dynamic-thread-yield))
   (import
+    (only (euphrates ebnf-tree-to-alist)
+          ebnf-tree->alist))
+  (import
     (only (euphrates euphrates-list-sort)
           euphrates:list-sort))
   (import
@@ -482,6 +485,9 @@
   (import
     (only (euphrates generic-bnf-tree-to-alist)
           generic-bnf-tree->alist))
+  (import
+    (only (euphrates generic-ebnf-tree-to-alist)
+          generic-ebnf-tree->alist))
   (import
     (only (euphrates generic-error-from-key)
           generic-error:from-key))
