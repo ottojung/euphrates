@@ -21,9 +21,6 @@
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import
-    (only (euphrates with-string-as-input)
-          with-string-as-input))
-  (import
     (only (scheme base)
           begin
           car

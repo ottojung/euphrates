@@ -3,14 +3,22 @@
 
 ;; This lexer has a category for each ASCII character that is printable.
 ;; For any other character it outputs category 'OTHER.
-(define (make-lalr-lexer/latin)
+(define (make-lalr-lexer/latin initial-input)
   (define offset 0)
   (define linenum 0)
   (define colnum 0)
+  (define input
+    (cond
+     ((port? initial-input) input)
+     ((string? initial-input) (open-input-string initial-input))
+     (else (raisu* :type 'bad-input-type
+                   :message "Lexer expected a port or a string as input, but got something else"
+                   :args (list initial-input)))))
+
 
   (lambda _
 
-    (define c (read-char))
+    (define c (read-char input))
     (define location
       (make-source-location "*stdin*" linenum colnum offset 1))
 
@@ -19,7 +27,12 @@
       (set! linenum (if nl? (+ linenum 1) linenum))
       (set! colnum (if nl? 0 (+ 1 colnum))))
 
-    (if (eof-object? c) '*eoi*
+    (if (or (eof-object? c) (not input))
+        (begin
+          (when (string? initial-input)
+            (close-port input)
+            (set! input #f))
+          '*eoi*)
         (case c
 
           ((#\newline) (make-lexical-token '<NEWLINE location c))

@@ -29,8 +29,7 @@
    (run-input parser input)))
 
 (define (run-input parser input)
-  (with-string-as-input
-   input (parser (make-lexer) error-procedure)))
+  (parser (make-lexer input) error-procedure))
 
 (define save list)
 
