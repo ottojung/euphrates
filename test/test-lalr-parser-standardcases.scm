@@ -491,3 +491,23 @@ idblb idclb longeridlb"
    "5+3"
 
    '((expr (expr (term (mspace-end) 5 (mspace-end))) (add (mspace-end) "+" (mspace-end)) (term (mspace-end) 3 (mspace-end))))))
+
+
+
+(let ()
+  (define parser
+    (lalr-parser
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules:
+        (expr     (expr add term)
+                  (term))
+        (add      (+))
+        (term     (NUM))))))
+
+  (define (errorp type message-fmt token) 'whatever-ignore-it)
+
+  (define result
+    (parser (make-lexer) errorp))
+
+  (assert= #f result))
+
