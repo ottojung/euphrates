@@ -26,7 +26,7 @@
       (t_8 . "8")
       (t_9 . "9")))
 
-  (define lexer (make-lalr-lexer/irregex tokens-alist))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
 
   (assert=
 
@@ -60,7 +60,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer (make-lalr-lexer/irregex tokens-alist))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
 
   (assert=
 
@@ -98,7 +98,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer (make-lalr-lexer/irregex tokens-alist))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
 
   (assert=
 
@@ -136,7 +136,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer (make-lalr-lexer/irregex tokens-alist))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
 
   (assert=
 
@@ -171,7 +171,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer (make-lalr-lexer/irregex tokens-alist))
+  (define lexer ((make-lalr-lexer/irregex-factory tokens-alist)))
 
   (assert=
 

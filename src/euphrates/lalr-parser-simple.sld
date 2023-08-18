@@ -27,7 +27,7 @@
           keylist->alist))
   (import
     (only (euphrates lalr-lexer-irregex)
-          make-lalr-lexer/irregex))
+          make-lalr-lexer/irregex-factory))
   (import
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
@@ -52,7 +52,6 @@
     (only (scheme base)
           +
           =
-          _
           append
           apply
           begin

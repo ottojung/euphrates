@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates lalr-lexer-irregex)
-  (export make-lalr-lexer/irregex)
+  (export make-lalr-lexer/irregex-factory)
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates compose-under) compose-under))

@@ -72,7 +72,7 @@
     (map (compose-under cons terminal->token identity) all-terminals))
 
   (define make-lexer
-    (lambda _ (make-lalr-lexer/irregex tokens-map)))
+    (make-lalr-lexer/irregex-factory tokens-map))
 
   (define tokens
     (map car tokens-map))

@@ -4,7 +4,7 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates lalr-lexer-irregex)
-          make-lalr-lexer/irregex))
+          make-lalr-lexer/irregex-factory))
   (import
     (only (euphrates lalr-parser)
           lexical-token-category

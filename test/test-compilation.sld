@@ -676,7 +676,7 @@
           keylist->alist))
   (import
     (only (euphrates lalr-lexer-irregex)
-          make-lalr-lexer/irregex))
+          make-lalr-lexer/irregex-factory))
   (import
     (only (euphrates lalr-lexer-latin-digits)
           lalr-lexer/latin/digits))
