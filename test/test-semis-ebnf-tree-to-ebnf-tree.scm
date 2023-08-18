@@ -1,8 +1,6 @@
 
-(define translator (semis-ebnf-tree->ebnf-tree '::= '/))
-
 (define (test1 input expected)
-  (assert= expected (translator input)))
+  (assert= expected (semis-ebnf-tree->ebnf-tree input)))
 
 ;;;;;;;;
 ;;
@@ -78,19 +76,19 @@
 
 (assert-throw
  'terminal-with-multiple-modifiers
- (translator
+ (semis-ebnf-tree->ebnf-tree
   '( s1 ::= a !b* c / g f )))
 
 (assert-throw
  'terminal-with-multiple-modifiers
- (translator
+ (semis-ebnf-tree->ebnf-tree
   '( s1 ::= a b?* c / g f
      s2 ::= o u
      s1 ::= g k)))
 
 (assert-throw
  'terminal-with-multiple-modifiers
- (translator
+ (semis-ebnf-tree->ebnf-tree
   '( s1 ::= a b** c / g f
      s2 ::= o u
      s1 ::= g k)))

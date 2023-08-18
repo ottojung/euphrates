@@ -518,6 +518,9 @@
   (import
     (only (euphrates generic-error) generic-error))
   (import
+    (only (euphrates generic-semis-ebnf-tree-to-ebnf-tree)
+          generic-semis-ebnf-tree->ebnf-tree))
+  (import
     (only (euphrates get-command-line-arguments)
           get-command-line-arguments))
   (import
@@ -1541,6 +1544,9 @@
   (import
     (only (euphrates seconds-to-string-columned)
           seconds->string-columned))
+  (import
+    (only (euphrates semis-ebnf-tree-to-ebnf-tree)
+          semis-ebnf-tree->ebnf-tree))
   (import
     (only (euphrates serialization-builtin-natural)
           deserialize-builtin/natural
