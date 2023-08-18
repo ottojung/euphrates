@@ -165,10 +165,6 @@
           (define (add-process process)
             (set! *processes* (cons process *processes*)))
           (define (get-processes) (reverse *processes*))
-          (define (for-all-processes proc)
-            (let ((processes (get-processes)))
-              (initialize-processes)
-              (for-each proc processes)))
           (define *parses* '())
           (define (get-parses) *parses*)
           (define (initialize-parses) (set! *parses* '()))
@@ -191,62 +187,177 @@
           (define (get-actions token action-list)
             (let ((pair (assoc token action-list)))
               (if pair (cdr pair) (cdar action-list))))
+          (define s_routine 'run)
+          (define s_symbol #f)
+          (define s_processes #f)
+          (define s_stacks #f)
+          (define s_active-stacks #f)
+          (define s_stack #f)
+          (define s_actions #f)
+          (define (save-loop-state!
+                   routine
+                   symbol
+                   processes
+                   stacks
+                   active-stacks
+                   stack
+                   actions)
+            (set! s_routine routine)
+            (set! s_symbol symbol)
+            (set! s_processes processes)
+            (set! s_stacks stacks)
+            (set! s_active-stacks active-stacks)
+            (set! s_stack stack)
+            (set! s_actions actions))
+          (define (continue
+                   routine
+                   symbol
+                   processes
+                   stacks
+                   active-stacks
+                   stack
+                   actions)
+            (case routine
+              ((run) (run))
+              ((run-processes)
+               (run-processes symbol processes))
+              ((run-single-process)
+               (run-single-process
+                 symbol
+                 processes
+                 stacks
+                 active-stacks))
+              ((run-actions-loop)
+               (run-actions-loop
+                 symbol
+                 processes
+                 stacks
+                 active-stacks
+                 stack
+                 actions))
+              (else 'TODO (+ 1 routine) (/ 1 0))))
+          (define (continue-from-saved)
+            (continue
+              s_routine
+              s_symbol
+              s_processes
+              s_stacks
+              s_active-stacks
+              s_stack
+              s_actions))
+          (define (run-actions-loop
+                   symbol
+                   processes
+                   stacks
+                   active-stacks
+                   stack
+                   actions)
+            (let actions-loop ((actions actions) (active-stacks active-stacks))
+              (if (pair? actions)
+                (let ((action (car actions))
+                      (other-actions (cdr actions)))
+                  (cond ((eq? action '*error*)
+                         (actions-loop other-actions active-stacks))
+                        ((eq? action 'accept)
+                         (let ((actions other-actions))
+                           (save-loop-state!
+                             'run-actions-loop
+                             symbol
+                             processes
+                             stacks
+                             active-stacks
+                             stack
+                             actions))
+                         (let ((result (car (take-right stack 2))))
+                           (add-parse result))
+                         (continue-from-saved))
+                        ((>= action 0)
+                         (let ((new-stack (shift action *input* stack)))
+                           (add-process new-stack))
+                         (actions-loop other-actions active-stacks))
+                        (else
+                         (let ((new-stack (reduce (- action) stack)))
+                           (actions-loop
+                             other-actions
+                             (cons new-stack active-stacks))))))
+                (continue
+                  'run-single-process
+                  symbol
+                  processes
+                  (cdr stacks)
+                  active-stacks
+                  #f
+                  #f))))
+          (define (run-single-process
+                   symbol
+                   processes
+                   stacks
+                   active-stacks)
+            (let loop ((stacks stacks) (active-stacks active-stacks))
+              (cond ((pair? stacks)
+                     (let ()
+                       (define stack (car stacks))
+                       (define state (car stack))
+                       (define actions
+                         (get-actions symbol (vector-ref ___atable state)))
+                       (run-actions-loop
+                         symbol
+                         processes
+                         stacks
+                         active-stacks
+                         stack
+                         actions)))
+                    ((pair? active-stacks)
+                     (continue
+                       'run-single-process
+                       symbol
+                       processes
+                       (reverse active-stacks)
+                       '()
+                       #f
+                       #f))
+                    (else
+                     (continue
+                       'run-processes
+                       symbol
+                       (cdr processes)
+                       #f
+                       #f
+                       #f
+                       #f)))))
+          (define (run-processes symbol processes)
+            (let loop ((processes processes))
+              (if (null? processes)
+                (when (pair? (get-processes))
+                      (continue 'run #f #f #f #f #f #f))
+                (continue
+                  'run-single-process
+                  symbol
+                  processes
+                  (list (car processes))
+                  '()
+                  #f
+                  #f))))
           (define (run)
             (let loop-tokens ()
-              (consume)
-              (let ((symbol (token-category *input*)))
-                (for-all-processes
-                  (lambda (process)
-                    (let loop ((stacks (list process)) (active-stacks '()))
-                      (cond ((pair? stacks)
-                             (let* ((stack (car stacks)) (state (car stack)))
-                               (let actions-loop ((actions
-                                                    (get-actions
-                                                      symbol
-                                                      (vector-ref
-                                                        ___atable
-                                                        state)))
-                                                  (active-stacks
-                                                    active-stacks))
-                                 (if (pair? actions)
-                                   (let ((action (car actions))
-                                         (other-actions (cdr actions)))
-                                     (cond ((eq? action '*error*)
-                                            (actions-loop
-                                              other-actions
-                                              active-stacks))
-                                           ((eq? action 'accept)
-                                            (add-parse
-                                              (car (take-right stack 2)))
-                                            (actions-loop
-                                              other-actions
-                                              active-stacks))
-                                           ((>= action 0)
-                                            (let ((new-stack
-                                                    (shift action
-                                                           *input*
-                                                           stack)))
-                                              (add-process new-stack))
-                                            (actions-loop
-                                              other-actions
-                                              active-stacks))
-                                           (else
-                                            (let ((new-stack
-                                                    (reduce (- action) stack)))
-                                              (actions-loop
-                                                other-actions
-                                                (cons new-stack
-                                                      active-stacks))))))
-                                   (loop (cdr stacks) active-stacks)))))
-                            ((pair? active-stacks)
-                             (loop (reverse active-stacks) '())))))))
-              (if (pair? (get-processes)) (loop-tokens))))
+              (define _t (consume))
+              (define symbol (token-category *input*))
+              (define processes (get-processes))
+              (initialize-processes)
+              (continue
+                'run-processes
+                symbol
+                processes
+                #f
+                #f
+                #f
+                #f)))
           (lambda (lexerp errorp)
             (set! ___errorp errorp)
             (initialize-lexer lexerp)
             (initialize-processes)
             (initialize-parses)
             (add-process '(0))
-            (run)
+            (continue-from-saved)
             (get-parses)))))))
 
