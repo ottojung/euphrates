@@ -8,12 +8,12 @@
   (import
     (only (euphrates assq-unset-value)
           assq-unset-value))
-  (import
-    (only (euphrates bnf-tree-to-alist)
-          bnf-tree->alist))
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates compose-under) compose-under))
+  (import
+    (only (euphrates ebnf-tree-to-alist)
+          ebnf-tree->alist))
   (import (only (euphrates fn-cons) fn-cons))
   (import (only (euphrates fn-pair) fn-pair))
   (import
@@ -37,6 +37,9 @@
   (import (only (euphrates list-fold) list-fold))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
+  (import
+    (only (euphrates semis-ebnf-tree-to-ebnf-tree)
+          semis-ebnf-tree->ebnf-tree))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import

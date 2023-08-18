@@ -39,21 +39,21 @@
 
 (lalr-parser/simple
  `(:grammar
-   ( expr ::= t_term add expr / t_term
-     add ::= "+"
-     t_term ::= num
-     num ::= dig num / dig
-     dig ::= "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")))
+   ( expr = t_term add expr / t_term
+     add = "+"
+     t_term = num
+     num = dig num / dig
+     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")))
 
 
 
 
 (test-parser
- `( expr ::= term add expr / term
-    add ::= "+"
-    term ::= num
-    num ::= dig num / dig
-    dig ::= "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+ `( expr = term add expr / term
+    add = "+"
+    term = num
+    num = dig num / dig
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
  "5+3"
  #(expr #(term #(num #(dig "5"))) #(add "+") #(expr #(term #(num #(dig "3"))))))
@@ -63,14 +63,26 @@
 
 
 (test-parser
- `( expr ::= term add expr / term
-    add ::= "+" / space add / add space
-    term ::= num / space term / term space
-    num ::= dig num / dig
-    dig ::= "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
-    space ::= " ")
+ `( expr = term add expr / term
+    add = "+" / space add / add space
+    term = num / space term / term space
+    num = dig num / dig
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+    space = " ")
 
  " 5 + 3 "
 
  #(expr #(term #(space " ") #(term #(term #(num #(dig "5"))) #(space " "))) #(add "+") #(expr #(term #(space " ") #(term #(term #(num #(dig "3"))) #(space " "))))))
 
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num
+    num = dig+
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+ "72+8"
+ #(expr #(term #(num #(dig+ #(dig "7") #(dig+ #(dig "2"))))) #(add "+") #(expr #(term #(num #(dig+ #(dig "8")))))))
