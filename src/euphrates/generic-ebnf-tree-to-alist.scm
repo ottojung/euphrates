@@ -37,13 +37,22 @@
               name))))
 
     (define (handle-term t)
+      (define (err)
+        (raisu* :from '!ebnf-tree->alist
+                :type 'bad-ebnf-modifier
+                :message (stringf "EBNF trees do not support operator ~s" (~a (car t)))
+                :args (list (car t))))
+
       (cond
        ((not (list? t)) t)
+       ((list-length= 0 t) t)
+       ((list-length= 1 t) (err))
        ((list-length= 2 t)
         (let ()
           (define type (car t))
           (define original-name (cadr t))
           (cond
+           ((equal? type 'custom) t)
            ((equal? type '*)
             (let ((name (generate-name (string-append (~a original-name) "*"))))
               (yield `(,name (,original-name ,name) ()))
@@ -56,17 +65,17 @@
             (let ((name (generate-name (string-append (~a original-name) "?"))))
               (yield `(,name (,original-name) ()))
               name))
-           (else t))))
+           (else (err)))))
        ((list-length=<? 2 t)
         (let ()
           (define type (car t))
           (cond
+           ((equal? type 'custom) t)
            ((equal? type '/)
             (let ((name (generate-name 'generated-alternative)))
               (yield (cons name (map list (cdr t))))
               name))
-           (else t))))
-       (else t)))
+           (else (err)))))))
 
     (define translated
       (map

@@ -166,3 +166,30 @@
    (b* (b b*) ())
    (d+ (d d+) (d)))
  (ebnf-tree->alist '( s1 = a (* b) c (+ d))))
+
+
+
+
+;;;;;;;;;;;;;;;;
+;; Strictness ;;
+;;;;;;;;;;;;;;;;
+
+(assert-throw
+ 'bad-ebnf-modifier
+ (ebnf-tree->alist '( s1 = a (unknown-modifier b) c )))
+
+(assert=
+ '((s1 (a (custom unknown-modifier b) c)))
+ (ebnf-tree->alist '( s1 = a (custom unknown-modifier b) c )))
+
+(assert=
+ '((s1 (a () c)))
+ (ebnf-tree->alist '( s1 = a () c )))
+
+(assert-throw
+ 'bad-ebnf-modifier
+ (ebnf-tree->alist '( s1 = a (unknown-modifier) c )))
+
+(assert-throw
+ 'bad-ebnf-modifier
+ (ebnf-tree->alist '( s1 = a (unknown-modifier many different arguments) c )))
