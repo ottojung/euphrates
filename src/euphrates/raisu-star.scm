@@ -7,7 +7,7 @@
      (generic-error
       (append
        (if from
-           (list (cons generic-error:from-key from))
+           (list (cons generic-error:from-key (string->symbol (~a from))))
            '())
        (list
         (cons generic-error:type-key type)

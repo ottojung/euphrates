@@ -8,7 +8,7 @@
     (string->symbol (~a alternation-symbol)))
 
   (define (err t modifiers)
-    (raisu* :from '!semis-ebnf-tree->ebnf-tree
+    (raisu* :from "semis-ebnf-tree->ebnf-tree"
             :type 'terminal-with-multiple-modifiers
             :message
             (stringf
@@ -35,7 +35,7 @@
        ((null? modifiers) t)
        ((null? (cdr modifiers))
         (when (string-null? s)
-          (raisu* :from '!semis-ebnf-tree->ebnf-tree
+          (raisu* :from "semis-ebnf-tree->ebnf-tree"
                   :type 'terminal-named-as-modifier
                   :message (stringf "Terminal named ~s is also a modifier name, which is not allowed" (~a t))
                   :args (list t)))

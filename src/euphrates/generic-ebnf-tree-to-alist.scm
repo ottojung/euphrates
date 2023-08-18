@@ -39,7 +39,7 @@
 
     (define (handle-term t)
       (define (err)
-        (raisu* :from '!ebnf-tree->alist
+        (raisu* :from "ebnf-tree->alist"
                 :type 'bad-ebnf-modifier
                 :message (stringf "EBNF trees do not support operator ~s" (~a (car t)))
                 :args (list (car t))))

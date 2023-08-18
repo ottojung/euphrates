@@ -16,6 +16,7 @@
           generic-error:type-key))
   (import
     (only (euphrates generic-error) generic-error))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           _
@@ -26,6 +27,7 @@
           if
           list
           quote
+          string->symbol
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))

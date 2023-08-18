@@ -28,7 +28,7 @@
   (define rules/0
     (assq-or 'grammar: options*
              ;; TODO: make grammar optional.
-             (raisu* :from 'lalr-parser/simple
+             (raisu* :from "lalr-parser/simple"
                      :type 'missing-argument
                      :message (stringf "Missing required argument ~s" (~a 'grammar:))
                      :args (list 'grammar:))))
@@ -96,7 +96,8 @@
   (define rules rules/2)
 
   (when (assq-or 'tokens: options*)
-    (raisu* :type 'missing-argument ;; TODO: make tokens: optionally settable
+    (raisu* :from "lalr-parser/simple"
+            :type 'invalid-argument ;; TODO: make tokens: optionally settable
             :message "This parser handles tokens automatically, no need to provide them"
             :args (list (assq-or 'tokens: options*))))
 
