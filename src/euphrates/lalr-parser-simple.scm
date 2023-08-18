@@ -115,20 +115,36 @@
   (define joined
     (list->hashset joined/l))
 
+  (define skiped/l
+    (assq-or 'skip: options* '()))
+
+  (unless (list? skiped/l)
+    (raisu* :from "lalr-parser/simple"
+            :type 'invalid-skip-set
+            :message
+            (stringf "The ~s option expected a list of productions to skip, but found something other than a list"
+                     (~a 'skip:))
+            :args (list 'skip: skiped/l)))
+
+  (define skiped
+    (list->hashset skiped/l))
+
   (define options-to-upstream
     (assq-unset-value
-     'join:
+     'skip:
      (assq-unset-value
-      'grammar:
-      (assq-set-value
-       'rules: rules
+      'join:
+      (assq-unset-value
+       'grammar:
        (assq-set-value
-        'tokens: tokens
-        options*)))))
+        'rules: rules
+        (assq-set-value
+         'tokens: tokens
+         options*))))))
 
   (define upstream (lalr-parser options-to-upstream))
 
   (lambda (errorp)
     (lalr-parser/simple-transform-result
-     joined
+     joined skiped
      (upstream (make-lexer) errorp))))

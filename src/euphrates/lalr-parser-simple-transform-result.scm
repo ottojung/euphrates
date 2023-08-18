@@ -5,20 +5,26 @@
   (apply string-append
          (filter string? (list-collapse result))))
 
-(define (do-transform joined result)
-  (let loop ((result result))
-    (cond
-     ((list? result)
-      (if (pair? result)
-          (let ()
-            (define type (car result))
-            (cond
-             ((hashset-has? joined type)
-              (list (car result) (join-result (cdr result))))
-             (else (map loop result))))
-          result))
-     (else result))))
+(define (do-transform joined skiped result)
+  (define re
+    (let loop ((result result))
+      (cond
+       ((list? result)
+        (if (pair? result)
+            (let ()
+              (define type (car result))
+              (cond
+               ((hashset-has? joined type)
+                (list (list (car result) (join-result (cdr result)))))
+               ((hashset-has? skiped type)
+                (list))
+               (else
+                (list (apply append (map loop result))))))
+            (list result)))
+       (else (list result)))))
 
-(define (lalr-parser/simple-transform-result joined result)
+  (if (null? re) re (car re)))
+
+(define (lalr-parser/simple-transform-result joined skiped result)
   (if (not (list? result)) result
-      (do-transform joined result)))
+      (do-transform joined skiped result)))

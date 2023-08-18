@@ -13,6 +13,10 @@
     (run-input parser input))
 
   (assert= result expected-output)
+  result)
+
+(define (check-parser-result-and-reverse parser input expected-output)
+  (define result (check-parser-result parser input expected-output))
 
   (define reversed
     (apply string-append
@@ -24,7 +28,7 @@
   (define parser
     (make-test-parser parser-rules))
 
-  (check-parser-result parser input expected-output))
+  (check-parser-result-and-reverse parser input expected-output))
 
 (define (test-parser-error parser-rules input)
   (define parser
@@ -107,7 +111,7 @@
 
 
 
-(check-parser-result
+(check-parser-result-and-reverse
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -125,7 +129,7 @@
 
 
 
-(check-parser-result
+(check-parser-result-and-reverse
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -142,7 +146,7 @@
 
 
 
-(check-parser-result
+(check-parser-result-and-reverse
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -161,7 +165,7 @@
 
 
 
-(check-parser-result
+(check-parser-result-and-reverse
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -181,7 +185,7 @@
 
 
 
-(check-parser-result
+(check-parser-result-and-reverse
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -215,3 +219,36 @@
 
 
 
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :skip (space)))
+
+ " 5 + 3 "
+ '(expr (term (term (term (num (dig "5"))))) (add "+") (expr (term (term (term (num (dig "3"))))))))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :skip (space)))
+
+ "  5    + 3    "
+ '(expr (term (term (term (term (term (term (term (num (dig "5"))))))))) (add "+") (expr (term (term (term (term (term (term (num (dig "3")))))))))))

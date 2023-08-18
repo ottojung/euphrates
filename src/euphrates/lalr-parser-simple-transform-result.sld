@@ -7,6 +7,7 @@
     (only (euphrates list-collapse) list-collapse))
   (import
     (only (scheme base)
+          append
           apply
           begin
           car
@@ -20,6 +21,7 @@
           list?
           map
           not
+          null?
           pair?
           string-append
           string?))
