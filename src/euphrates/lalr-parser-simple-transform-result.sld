@@ -2,32 +2,13 @@
 (define-library
   (euphrates lalr-parser-simple-transform-result)
   (export lalr-parser/simple-transform-result)
-  (import (only (euphrates hashset) hashset-has?))
   (import
-    (only (euphrates list-collapse) list-collapse))
+    (only (euphrates lalr-parser-simple-do-flatten)
+          lalr-parser/simple-do-flatten))
   (import
-    (only (scheme base)
-          append
-          apply
-          begin
-          car
-          cdr
-          cond
-          define
-          else
-          if
-          let
-          list
-          list?
-          map
-          not
-          null?
-          pair?
-          string-append
-          string?))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
+    (only (euphrates lalr-parser-simple-do-skips)
+          lalr-parser/simple-do-skips))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

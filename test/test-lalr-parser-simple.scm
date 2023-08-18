@@ -341,9 +341,75 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :flatten (term add)))
+
+ "  83712    + 371673    "
+ '(expr "  83712    " "+" (expr " 371673    ")))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = num1
+      num1 = dig num1 / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
     :flatten (num1)
     :skip (space)))
 
  "  83712    + 371673    "
  '(expr (term (num "83712")) (add "+") (expr (term (num "371673")))))
+
+
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = num1
+      num1 = dig num1 / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :flatten (term add)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr "83712" "+" (expr "371673")))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( root = expr
+      expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = num1
+      num1 = dig num1 / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :flatten (expr)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(root "83712+371673"))
+
+
 
