@@ -2024,13 +2024,14 @@
                     'logic-error "Expected either ~s or ~s but got ~s somehow"
                     (list (~a 'lr-driver) (~a 'glr-driver) (~a driver-name))))))
            (code
-            `(lambda (actions)
+            `(let ()
                ,@common-definitions-code
-               (define (external index . args) (apply (vector-ref actions index) args))
                (define action-table (quote ,action-table))
                (define goto-table ,(build-goto-table))
-               (define reduction-table ,(build-reduction-table gram/actions))
-               ,@driver-code)))
+               (lambda (actions)
+                 (define (external index . args) (apply (vector-ref actions index) args))
+                 (define reduction-table ,(build-reduction-table gram/actions))
+                 ,@driver-code))))
 
       (output-table! options)
       (output-parser! options code)
