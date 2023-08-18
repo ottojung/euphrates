@@ -1917,6 +1917,13 @@
                   (list-length= 2 option)
                   (procedure? (cadr option)))))
 
+     (cons 'results:
+           (lambda (option)
+             (and (list? option)
+                  (list-length= 2 option)
+                  (symbol? (cadr option))
+                  (memq (cadr option) '(all first)))))
+
      (cons 'rules: (lambda (option) (list? option)))
 
      (cons 'tokens: (lambda (option) (list? option)))
@@ -1975,6 +1982,9 @@
   (define (options-get-tokens options)
     (assq-or 'tokens: options
              (grammar-error "Missing required option ~s" (~a 'tokens:))))
+
+  (define (options-get-results-mode options)
+    (assq-or 'results: options 'all))
 
 
   ;; -- arguments
