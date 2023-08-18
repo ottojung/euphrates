@@ -1673,7 +1673,7 @@
                                      rev-productions-and-actions)))
                       (let* ((rhs-length (length rhs))
                              (action
-                              (cons 'vector
+                              (cons 'list
                                     (cons (list 'quote (string->symbol name))
                                           (let loop-j ((j 1))
                                             (if (> j rhs-length)

@@ -56,7 +56,7 @@
     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
  "5+3"
- #(expr #(term #(num #(dig "5"))) #(add "+") #(expr #(term #(num #(dig "3"))))))
+ '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
 
 
 
@@ -71,8 +71,7 @@
     space = " ")
 
  " 5 + 3 "
-
- #(expr #(term #(space " ") #(term #(term #(num #(dig "5"))) #(space " "))) #(add "+") #(expr #(term #(space " ") #(term #(term #(num #(dig "3"))) #(space " "))))))
+ '(expr (term (space " ") (term (term (num (dig "5"))) (space " "))) (add "+") (expr (term (space " ") (term (term (num (dig "3"))) (space " "))))))
 
 
 
@@ -85,4 +84,4 @@
     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
  "72+8"
- #(expr #(term #(num #(dig+ #(dig "7") #(dig+ #(dig "2"))))) #(add "+") #(expr #(term #(num #(dig+ #(dig "8")))))))
+ '(expr (term (num (dig+ (dig "7") (dig+ (dig "2"))))) (add "+") (expr (term (num (dig+ (dig "8")))))))

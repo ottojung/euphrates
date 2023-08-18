@@ -475,7 +475,7 @@ idblb idclb longeridlb"
 
  "5+3"
 
- #(expr #(expr #(term (mspace-end) 5 (mspace-end))) #(add (mspace-end) "+" (mspace-end)) #(term (mspace-end) 3 (mspace-end))))
+ '(expr (expr (term (mspace-end) 5 (mspace-end))) (add (mspace-end) "+" (mspace-end)) (term (mspace-end) 3 (mspace-end))))
 
 
 
@@ -490,4 +490,4 @@ idblb idclb longeridlb"
 
    "5+3"
 
-   (list #(expr #(expr #(term (mspace-end) 5 (mspace-end))) #(add (mspace-end) "+" (mspace-end)) #(term (mspace-end) 3 (mspace-end))))))
+   '((expr (expr (term (mspace-end) 5 (mspace-end))) (add (mspace-end) "+" (mspace-end)) (term (mspace-end) 3 (mspace-end))))))
