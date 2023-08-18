@@ -5,8 +5,9 @@
 ;; This is a parser for it.
 ;; It outputs an alist that has all regex things compiled away.
 ;; In result, new productions are added to the original BNF of the input EBNF.
-(define (generic-ebnf-tree->alist equality alternative)
-  (define bnf-handler (generic-bnf-tree->alist equality alternative))
+(define (generic-ebnf-tree->alist equality-symbol alternation-symbol)
+  (define bnf-handler
+    (generic-bnf-tree->alist equality-symbol alternation-symbol))
 
   (lambda (body)
     (define bnf-alist (bnf-handler body))
