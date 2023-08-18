@@ -92,3 +92,10 @@
   '( s1 ::= a b** c / g f
      s2 ::= o u
      s1 ::= g k)))
+
+(assert-throw
+ 'terminal-named-as-modifier
+ (semis-ebnf-tree->ebnf-tree
+  '( s1 ::= a * c / g f
+     s2 ::= o u
+     s1 ::= g k)))

@@ -33,14 +33,19 @@
           string->symbol
           string-length
           substring
-          symbol?))
+          symbol?
+          when))
   (cond-expand
     (guile (import
              (only (srfi srfi-13)
+                   string-null?
                    string-prefix?
                    string-suffix?)))
     (else (import
-            (only (srfi 13) string-prefix? string-suffix?))))
+            (only (srfi 13)
+                  string-null?
+                  string-prefix?
+                  string-suffix?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

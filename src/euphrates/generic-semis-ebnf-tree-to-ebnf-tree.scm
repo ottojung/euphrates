@@ -34,6 +34,11 @@
 
        ((null? modifiers) t)
        ((null? (cdr modifiers))
+        (when (string-null? s)
+          (raisu* :from '!semis-ebnf-tree->ebnf-tree
+                  :type 'terminal-named-as-modifier
+                  :message (stringf "Terminal named ~s is also a modifier name, which is not allowed" (~a t))
+                  :args (list t)))
         (list (car modifiers) (string->symbol s)))
        (else (err t modifiers)))))
 
