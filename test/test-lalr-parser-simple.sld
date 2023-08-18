@@ -20,8 +20,6 @@
           =
           apply
           begin
-          car
-          cdr
           define
           list
           quasiquote

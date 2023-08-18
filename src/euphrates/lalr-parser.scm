@@ -185,7 +185,7 @@
 
                  (cond ((not (symbol? i))
                         (when ___errorp
-                          (___errorp '(parse-error invalid-token) "Syntax error: invalid token: ~s" __input))
+                          (___errorp 'invalid-token "Syntax error: invalid token: ~s" __input))
                         #f)
 
                        ;; Input succesfully parsed
@@ -197,11 +197,11 @@
                         (if (eq? i '*eoi*)
                             (begin
                               (when ___errorp
-                                (___errorp '(parse-error end-of-input) "Syntax error: unexpected end of input: ~s" ___input))
+                                (___errorp 'end-of-input "Syntax error: unexpected end of input: ~s" ___input))
                               #f)
                             (begin
                               (when ___errorp
-                                (___errorp '(parse-error unexpected-token) "Syntax error: unexpected token: ~s" ___input))
+                                (___errorp 'unexpected-token "Syntax error: unexpected token: ~s" ___input))
                               (___recover i)
                               (if (>= ___sp 0)
                                   (set! ___input #f)

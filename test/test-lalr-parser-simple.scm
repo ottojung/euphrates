@@ -1,8 +1,8 @@
 
-(define (error-procedure type/subtype message-fmt token)
-  (raisu* :type (car type/subtype)
+(define (error-procedure type message-fmt token)
+  (raisu* :type 'parse-error
           :message (stringf message-fmt token)
-          :args (list (cdr type/subtype) token)))
+          :args (list type token)))
 
 (define (make-test-parser parser-rules)
    (lalr-parser/simple

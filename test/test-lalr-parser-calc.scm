@@ -153,7 +153,7 @@
                 ((char-numeric? c)    (make-lexical-token 'NUM     location (read-number (list c))))
                 ((char-alphabetic? c) (make-lexical-token 'ID      location (read-id (list c))))
                 (else
-                 (errorp "PARSE ERROR : illegal character: " c)
+                 (errorp 'lexer-error "PARSE ERROR : illegal character: " c)
                  (skip-spaces)
                  (loop))))))))
 

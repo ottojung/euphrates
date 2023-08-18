@@ -28,8 +28,6 @@
           and
           apply
           begin
-          car
-          cdr
           char=?
           char?
           cond
