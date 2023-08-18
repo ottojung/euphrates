@@ -431,7 +431,6 @@ idblb idclb longeridlb"
 
 
 
-
 (parameterize ((glr-parser?/p #t))
   (test-parser
    `((expr     (expr add term) : (,save 'expr $1 $2 $3)
@@ -446,6 +445,53 @@ idblb idclb longeridlb"
    '((expr (expr (term (mspace) 5 (mspace))) (add (mspace) "+" (mspace)) (term (mspace) 3 (mspace))))))
 
 
+
+(test-parser
+ `((expr     (expr add expr) : (,save 'expr $1 $2 $3)
+             (term) : (,save 'expr $1))
+   (add      (+) : (,save 'add $1))
+   (term     (NUM) : (,save 'term $1)))
+
+ "5+3+4"
+
+ '(expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (term 4)))))
+
+
+
+
+(test-parser
+ `((expr     (expr add expr) : (,save 'expr $1 $2 $3)
+             (term) : (,save 'expr $1))
+   (add      (+) : (,save 'add $1))
+   (term     (NUM) : (,save 'term $1)))
+
+ "5+3+4+7"
+ '(expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (expr (term 4)) (add "+") (expr (term 7))))))
+
+
+
+(parameterize ((glr-parser?/p #t))
+  (test-parser
+   `((expr     (expr add expr) : (,save 'expr $1 $2 $3)
+               (term) : (,save 'expr $1))
+     (add      (+) : (,save 'add $1))
+     (term     (NUM) : (,save 'term $1)))
+
+   "5+3+4"
+
+   '((expr (expr (expr (term 5)) (add "+") (expr (term 3))) (add "+") (expr (term 4))) (expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (term 4)))))))
+
+
+(parameterize ((glr-parser?/p #t))
+  (test-parser
+   `((expr     (expr add expr) : (,save 'expr $1 $2 $3)
+               (term) : (,save 'expr $1))
+     (add      (+) : (,save 'add $1))
+     (term     (NUM) : (,save 'term $1)))
+
+   "5+3+4+7"
+
+   '((expr (expr (expr (expr (term 5)) (add "+") (expr (term 3))) (add "+") (expr (term 4))) (add "+") (expr (term 7))) (expr (expr (expr (term 5)) (add "+") (expr (term 3))) (add "+") (expr (expr (term 4)) (add "+") (expr (term 7)))) (expr (expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (term 4)))) (add "+") (expr (term 7))) (expr (expr (term 5)) (add "+") (expr (expr (expr (term 3)) (add "+") (expr (term 4))) (add "+") (expr (term 7)))) (expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (expr (term 4)) (add "+") (expr (term 7))))))))
 
 
 (parameterize ((glr-parser?/p #t))
