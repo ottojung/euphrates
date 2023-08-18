@@ -34,7 +34,7 @@
   (define options*
     (map translate-option options))
 
-  (define rules/-1
+  (define rules/0
     (assq-or 'grammar: options*
              ;; TODO: make grammar optional.
              (raisu* :from 'lalr-parser/simple
@@ -42,11 +42,10 @@
                      :message (stringf "Missing required argument ~s" (~a 'grammar:))
                      :args (list 'missing-argument 'grammar:))))
 
-  (define rules/0
-    (semis-ebnf-tree->ebnf-tree rules/-1))
-
   (define rules/1
-    (ebnf-tree->alist rules/0))
+    (ebnf-tree->alist
+     (semis-ebnf-tree->ebnf-tree
+      rules/0)))
 
   (define non-terminals
     (map car rules/1))
