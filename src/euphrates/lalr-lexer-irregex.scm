@@ -19,7 +19,7 @@
      (compose-under cons car (comp cdr terminal->regex))
      tokens-alist))
 
-  (lambda _
+  (lambda (maybe-input-string)
     (define offset 0)
     (define linenum 0)
     (define colnum 0)
@@ -38,33 +38,44 @@
     (define (make-context-string)
       (substring input-string offset (min (+ offset 10) input-length)))
 
+    (define (process-token-mapping p)
+      (define-pair (token reg) p)
+      (define m (irregex-search reg input-string offset))
+      (and m (cons token (irregex-match-substring m))))
+
+    (define (process-next)
+      (define r
+        (list-map-first
+         process-token-mapping #f
+         regex-alist))
+
+      (unless r
+        (raisu* :from 'lalr-lexer/irregex
+                :type 'lexer-error
+                :message "Lexer encountered an unknown sequence of characters"
+                :args (list offset (make-context-string))))
+
+      (define-pair (token s) r)
+      (adjust-positions! s)
+
+      (let ((location (make-source-location '*stdin* linenum colnum offset (string-length s))))
+        (make-lexical-token token location s)))
+
+    (define (init-input s)
+      (set! input-string s)
+      (set! input-length (string-length s)))
+
+    (when maybe-input-string
+      (if (string? maybe-input-string)
+          (init-input maybe-input-string)
+          (raisu* :from "lalr-lexer/irregex"
+                  :type 'bad-input-string-type
+                  :message "Lexer expected string as input, but got something else"
+                  :args (list maybe-input-string))))
+
     (lambda _
       (unless input-string
-        (set! input-string (read-all-port (current-input-port)))
-        (set! input-length (string-length input-string)))
-
-      (define (process-token-mapping p)
-        (define-pair (token reg) p)
-        (define m (irregex-search reg input-string offset))
-        (and m (cons token (irregex-match-substring m))))
-
-      (define (process-next)
-        (define r
-          (list-map-first
-           process-token-mapping #f
-           regex-alist))
-
-        (unless r
-          (raisu* :from 'lalr-lexer/irregex
-                  :type 'lexer-error
-                  :message "Lexer encountered an unknown sequence of characters"
-                  :args (list offset (make-context-string))))
-
-        (define-pair (token s) r)
-        (adjust-positions! s)
-
-        (let ((location (make-source-location "*stdin*" linenum colnum offset (string-length s))))
-          (make-lexical-token token location s)))
+        (init-input (read-all-port (current-input-port))))
 
       (if (>= offset input-length) '*eoi*
           (process-next)))))

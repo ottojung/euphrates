@@ -180,4 +180,4 @@
     ((curry-if (const spineless?) lalr-parser/simple-remove-spines)
      (lalr-parser/simple-transform-result
       flattened joined skiped
-      (upstream (make-lexer) errorp)))))
+      (upstream (make-lexer #f) errorp)))))
