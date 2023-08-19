@@ -811,6 +811,8 @@
     (only (euphrates list-map-flatten)
           list-map/flatten))
   (import
+    (only (euphrates list-mark-ends) list-mark-ends))
+  (import
     (only (euphrates list-maximal-element-or-proj)
           list-maximal-element-or/proj))
   (import
