@@ -2313,6 +2313,9 @@
     (only (euphrates with-randomizer-seed)
           with-randomizer-seed))
   (import
+    (only (euphrates with-run-time-estimate)
+          with-run-time-estimate))
+  (import
     (only (euphrates with-singlethread-env)
           with-singlethread-env))
   (import
