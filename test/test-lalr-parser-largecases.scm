@@ -61,6 +61,40 @@
 
   (lambda () (next)))
 
+(define (make-brackets-lexer how-deep)
+  (define i 0)
+  (define maxdepth 0)
+  (define closecount 0)
+  (define cycle-tokens #(LPAREN NUM +))
+  (define cycle-values #("(" "5" "+"))
+  (define final 'NUM)
+
+  (define (next)
+    (define imod (modulo i (vector-length cycle-tokens)))
+    (define t (vector-ref cycle-tokens imod))
+    (define v (vector-ref cycle-values imod))
+    (set! i (+ 1 i))
+
+    (cond
+     ((< maxdepth how-deep)
+      (when (equal? t 'LPAREN)
+        (set! maxdepth (+ maxdepth 1)))
+      (make-lexical-token t #f v))
+     ((> maxdepth how-deep)
+      (if (< (+ 1 closecount) maxdepth)
+          (begin
+            (set! closecount (+ closecount 1))
+            (make-lexical-token 'RPAREN #f ")"))
+          '*eoi*))
+     (else
+      (if (equal? t 'LPAREN)
+          (begin
+            (set! maxdepth (+ maxdepth 1))
+            (make-lexical-token 'NUM #f "1"))
+          (make-lexical-token t #f v)))))
+
+  (lambda () (next)))
+
 (define save (const #t))
 
 ;;;;;;;;;;;;
@@ -68,7 +102,14 @@
 ;; Sanity check
 ;;
 
-
+(assert= "(5+(5+(5+(5+(5+1)))))"
+         (with-output-stringified
+          (define lexer (make-brackets-lexer 5))
+          (let loop ()
+            (define t (lexer))
+            (unless (equal? '*eoi* t)
+              (display (lexical-token-value t))
+              (loop)))))
 
 (let ()
   (define parser
@@ -225,22 +266,17 @@
 
 
 
-;;;;;;;;;;;;;;;;;;
-;;
-;; Actual large tests
-;;
-
-
 
 (let ()
   (define parser
     (lalr-parser
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
-                  (term) : (,save $1))
-        (add      (+) : (,save $1))
-        (term     (NUM) : (,save $1))))))
+        (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+                  (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+                  (term) : (,save 'expr $1))
+        (add      (+) : (,save 'add $1))
+        (term     (NUM) : (,save 'term $1))))))
 
   (define (error-procedure type message-fmt token)
     (raisu* :type 'parse-error
@@ -248,15 +284,9 @@
             :args (list type token)))
 
   (define result
-    (parser (make-repeating-lexer
-             99999
-             (list (make-lexical-token 'NUM #f "5")
-                   (make-lexical-token '+ #f "+")))
-             error-procedure))
+    (parser (make-brackets-lexer 3) error-procedure))
 
   (assert= #t result))
-
-
 
 
 
@@ -269,10 +299,11 @@
        (driver: glr)
        (on-conflict: ,ignore)
        (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
-                  (term) : (,save $1))
-        (add      (+) : (,save $1))
-        (term     (NUM) : (,save $1))))))
+        (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+                  (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+                  (term) : (,save 'expr $1))
+        (add      (+) : (,save 'add $1))
+        (term     (NUM) : (,save 'term $1))))))
 
   (define (error-procedure type message-fmt token)
     (raisu* :type 'parse-error
@@ -280,11 +311,137 @@
             :args (list type token)))
 
   (define result
-    (parser (make-repeating-lexer
-             15
-             (list (make-lexical-token 'NUM #f "5")
-                   (make-lexical-token '+ #f "+")))
-             error-procedure))
+    (parser (make-brackets-lexer 3) error-procedure))
 
   (assert (list? result))
   (assert (not (null? result))))
+
+
+
+;;;;;;;;;;;;;;;;;;
+;;
+;; Actual large tests
+;;
+
+(define (run-cases
+         t1-input-size
+         t2-input-size
+         t3-input-size
+         t4-input-size)
+
+
+  (let ()
+    (define parser
+      (lalr-parser
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (rules:
+          (expr     (expr add expr) : (,save $1 $2 $3)
+                    (term) : (,save $1))
+          (add      (+) : (,save $1))
+          (term     (NUM) : (,save $1))))))
+
+    (define (error-procedure type message-fmt token)
+      (raisu* :type 'parse-error
+              :message (stringf message-fmt token)
+              :args (list type token)))
+
+    (define result
+      (parser (make-repeating-lexer
+               t1-input-size
+               (list (make-lexical-token 'NUM #f "5")
+                     (make-lexical-token '+ #f "+")))
+              error-procedure))
+
+    (assert= #t result))
+
+
+
+
+
+
+
+  (let ()
+    (define parser
+      (lalr-parser
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (driver: glr)
+         (on-conflict: ,ignore)
+         (rules:
+          (expr     (expr add expr) : (,save $1 $2 $3)
+                    (term) : (,save $1))
+          (add      (+) : (,save $1))
+          (term     (NUM) : (,save $1))))))
+
+    (define (error-procedure type message-fmt token)
+      (raisu* :type 'parse-error
+              :message (stringf message-fmt token)
+              :args (list type token)))
+
+    (define result
+      (parser (make-repeating-lexer
+               t2-input-size
+               (list (make-lexical-token 'NUM #f "5")
+                     (make-lexical-token '+ #f "+")))
+              error-procedure))
+
+    (assert (list? result))
+    (assert (not (null? result))))
+
+
+
+
+
+
+
+
+  (let ()
+    (define parser
+      (lalr-parser
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (rules:
+          (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+                    (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+                    (term) : (,save 'expr $1))
+          (add      (+) : (,save 'add $1))
+          (term     (NUM) : (,save 'term $1))))))
+
+    (define (error-procedure type message-fmt token)
+      (raisu* :type 'parse-error
+              :message (stringf message-fmt token)
+              :args (list type token)))
+
+    (define result
+      (parser (make-brackets-lexer t3-input-size) error-procedure))
+
+    (assert= #t result))
+
+
+
+
+
+  (let ()
+    (define parser
+      (lalr-parser
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (driver: glr)
+         (on-conflict: ,ignore)
+         (rules:
+          (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+                    (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+                    (term) : (,save 'expr $1))
+          (add      (+) : (,save 'add $1))
+          (term     (NUM) : (,save 'term $1))))))
+
+    (define (error-procedure type message-fmt token)
+      (raisu* :type 'parse-error
+              :message (stringf message-fmt token)
+              :args (list type token)))
+
+    (define result
+      (parser (make-brackets-lexer t4-input-size) error-procedure))
+
+    (assert (list? result))
+    (assert (not (null? result)))))
+
+
+(run-cases 9999 15 999 99)

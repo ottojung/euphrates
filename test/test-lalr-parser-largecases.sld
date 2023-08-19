@@ -8,6 +8,7 @@
   (import
     (only (euphrates lalr-parser)
           lalr-parser
+          lexical-token-value
           make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
@@ -15,6 +16,9 @@
     (only (euphrates source-location)
           make-source-location))
   (import (only (euphrates stringf) stringf))
+  (import
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
   (import
     (only (euphrates with-string-as-input)
           with-string-as-input))
@@ -26,6 +30,7 @@
           /
           <
           =
+          >
           and
           apply
           begin
@@ -38,6 +43,7 @@
           define
           else
           eof-object?
+          equal?
           if
           lambda
           let
@@ -45,6 +51,7 @@
           letrec
           list
           list?
+          modulo
           not
           null?
           or
@@ -56,13 +63,17 @@
           set!
           string
           string->number
+          unless
           unquote
+          vector-length
+          vector-ref
           when))
   (import
     (only (scheme char)
           char-alphabetic?
           char-numeric?
           char-whitespace?))
+  (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
