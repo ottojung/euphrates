@@ -4,6 +4,7 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
+  (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates lalr-parser)
@@ -49,8 +50,10 @@
           quote
           read-char
           reverse
+          set!
           string
           string->number
+          unless
           unquote
           unquote-splicing))
   (import

@@ -550,10 +550,61 @@ idblb idclb longeridlb"
         (add      (+))
         (term     (NUM))))))
 
-  (define (errorp type message-fmt token) 'whatever-ignore-it)
+  (define result
+    (with-string-as-input
+     "5+3" (parser (make-lexer) error-procedure)))
+
+  (assert= '(expr (expr (term 5)) (add "+") (term 3)) result))
+
+
+
+
+(let ()
+  (define parser
+    (lalr-parser
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules:
+        (expr     (expr add term)
+                  (term))
+        (add      (+))
+        (term     (NUM))))))
+
+  (define errored? #f)
+  (define (errorp type message-fmt token)
+    (set! errored? #t)
+    (assert= type 'end-of-input)
+    'whatever-ignore-it)
 
   (define result
-    (parser (make-lexer) errorp))
+    (with-string-as-input
+     "5+" (parser (make-lexer) errorp)))
 
+  (assert errored?)
   (assert= #f result))
 
+
+
+
+(let ()
+  (define parser
+    (lalr-parser
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules:
+        (expr     (expr add term)
+                  (term))
+        (add      (+))
+        (term     (NUM))))))
+
+  (define errored? #f)
+  (define (errorp type message-fmt token)
+    (unless errored?
+      (assert= type 'unexpected-token))
+    (set! errored? #t)
+    'whatever-ignore-it)
+
+  (define result
+    (with-string-as-input
+     "5+-" (parser (make-lexer) errorp)))
+
+  (assert errored?)
+  (assert= #f result))
