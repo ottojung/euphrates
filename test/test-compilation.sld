@@ -2298,6 +2298,9 @@
     (only (euphrates vector-random-shuffle-bang)
           vector-random-shuffle!))
   (import
+    (only (euphrates with-benchmark-simple)
+          with-benchmark/simple))
+  (import
     (only (euphrates with-critical) with-critical))
   (import
     (only (euphrates with-dynamic-set)
