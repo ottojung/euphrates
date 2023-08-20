@@ -6,11 +6,7 @@
     display-alist-as-json/indent
     display-alist-as-json/minimal)
   (import (only (euphrates const) const))
-  (import
-    (only (euphrates define-tuple) define-tuple))
   (import (only (euphrates ignore) ignore))
-  (import
-    (only (euphrates list-mark-ends) list-mark-ends))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
@@ -19,7 +15,6 @@
     (only (scheme base)
           +
           -
-          =
           _
           begin
           car

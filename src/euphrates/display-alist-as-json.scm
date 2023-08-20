@@ -3,7 +3,7 @@
 
 ;;
 ;; Also handles vectors and other primitive types.
-;; Use together with `parse-json'
+;; Use together with `parse-json'.
 ;;
 
 (define (display-alist-as-json/full type indentation-level alist port)
@@ -42,13 +42,14 @@
 
      ((vector? alist)
       (display "[" port)
-      (let ((index 0))
+      (let ((first? #t))
         (vector-for-each
          (lambda (x)
-           (unless (= 0 index)
-             (display "," port)
-             (display-space port))
-           (set! index (+ 1 index))
+           (if first?
+               (set! first? #f)
+               (begin
+                 (display "," port)
+                 (display-space port)))
            (loop indentation-level x))
          alist))
       (display "]" port))
@@ -56,30 +57,41 @@
      ((list? alist)
       (display "{" port)
       (display-newline port)
-      (for-each
-       (lambda (p)
-         (define-tuple (first? last? input) p)
-         (unless (pair? input)
-           (raisu 'object-must-consist-of-key-value-pairs input))
+      (let ((first? #t))
+        (for-each
+         (lambda (input)
+           (if first?
+               (set! first? #f)
+               (begin
+                 (display "," port)
+                 (display-newline port)))
 
-         (define key (car input))
-         (define value (cdr input))
+           (unless (pair? input)
+             (raisu* :from "display-alist-as-json"
+                     :type 'object-must-consist-of-key-value-pairs
+                     :message (stringf "Object must consist of key-value pairs, but it has something else: ~s" input)
+                     :args (list input)))
 
-         (display indentation port)
-         (cond
-          ((string? key) (write key) port)
-          ((symbol? key) (write (~a key) port))
-          (else (raisu 'key-must-be-a-string-or-a-symbol key)))
-         (display ":" port)
-         (display-space port)
-         (loop (+ 1 indentation-level) value)
-         (unless last? (display "," port))
-         (display-newline port))
-       (list-mark-ends alist))
+           (define key (car input))
+           (define value (cdr input))
+
+           (display indentation port)
+           (cond
+            ((string? key) (write key) port)
+            ((symbol? key) (write (~a key) port))
+            (else (raisu 'key-must-be-a-string-or-a-symbol key)))
+           (display ":" port)
+           (display-space port)
+           (loop (+ 1 indentation-level) value))
+         alist))
+      (display-newline port)
       (display (make-indentation (- indentation-level 1)) port)
       (display "}" port))
 
-     (else (raisu 'unsupported-type alist)))))
+     (else (raisu* :from "display-alist-as-json"
+                   :type 'unsupported-object-type
+                   :message (stringf "Cannot turn this object into json: ~s" alist)
+                   :args (list alist))))))
 
 (define display-alist-as-json
   (case-lambda
