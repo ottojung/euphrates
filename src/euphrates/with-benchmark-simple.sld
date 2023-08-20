@@ -3,6 +3,9 @@
   (euphrates with-benchmark-simple)
   (export with-benchmark/simple)
   (import
+    (only (euphrates date-get-current-string)
+          date-get-current-string))
+  (import
     (only (euphrates display-alist-as-json)
           display-alist-as-json))
   (import (only (euphrates fn-cons) fn-cons))

@@ -36,12 +36,16 @@
       (define alltimes (vector time0 time))
       (define avgtime (list-number-average (vector->list alltimes)))
 
+      (define rundate
+        (date-get-current-string "~Y-~m-~dT~H:~M:~S-00:00"))
+
       (display-alist-as-json
        `((name . ,name)
          (time . ,time)
          (alltimes . ,alltimes)
          (avgtime . ,avgtime)
          (inputs . ,inputs-alist)
+         (rundate . ,rundate)
          (euphrates-revision-id . ,(get-euphrates-revision-id "?"))
          (euphrates-revision-date . ,(get-euphrates-revision-date "?"))
          (euphrates-revision-title . ,(get-euphrates-revision-title "?")))
