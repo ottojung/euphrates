@@ -554,6 +554,9 @@
     (only (euphrates get-euphrates-revision-id)
           get-euphrates-revision-id))
   (import
+    (only (euphrates get-euphrates-revision-title)
+          get-euphrates-revision-title))
+  (import
     (only (euphrates get-object-descriptor)
           get-object-descriptor))
   (import
