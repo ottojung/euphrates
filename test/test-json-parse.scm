@@ -25,5 +25,5 @@
     (define parsed
       (call-with-input-string
        inp (lambda (p) (json-parse p))))
-    (assert= '(("bye" . null) ("hello" . #t))
+    (assert= '(("hello" . #t) ("bye" . null))
              parsed)))

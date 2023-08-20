@@ -187,7 +187,7 @@
 
 (define (json-read-object port)
   (json-expect-delimiter port #\{)
-  (let loop ((pairs '()) (added #t))
+  (let loop ((added #t))
     (json-skip-whitespaces port)
     (let ((ch (peek-char port)))
       (cond
@@ -195,17 +195,17 @@
        ((eqv? ch #\})
         (read-char port)
         (cond
-         (added pairs)
+         (added '())
          (else (json-exception port))))
        ;; Read one pair and continue.
        ((eqv? ch #\")
         (let ((pair (json-read-pair port)))
-          (loop (cons pair pairs) #t)))
+          (cons pair (loop #t))))
        ;; Skip comma and read more pairs.
        ((eqv? ch #\,)
         (read-char port)
         (cond
-         (added (loop pairs #f))
+         (added (loop #f))
          (else (json-exception port))))
        ;; Invalid object.
        (else (json-exception port))))))

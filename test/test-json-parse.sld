@@ -13,6 +13,7 @@
           define
           lambda
           let
+          not
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
