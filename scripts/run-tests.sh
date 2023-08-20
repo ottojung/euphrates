@@ -2,6 +2,8 @@
 
 set -e
 
+export EUPHRATES_REVISION_ID="$(git rev-parse HEAD)"
+
 FILES=$(ls test/test-*.sld)
 TESTCOUNT=$(echo "$FILES" | wc -l)
 INDEX=0
