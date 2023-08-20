@@ -79,12 +79,6 @@
             (do-custom t (string-append "generated-alternative" "<>"))))))))
 
     (define translated
-      (map
-       (lambda (production)
-         (define lhs (car production))
-         (define rhs (cdr production))
-         (define rhs* (map (lambda (expansion) (map handle-term expansion)) rhs))
-         (cons lhs rhs*))
-       bnf-alist))
+      (bnf-alist:map-expansion-terms handle-term bnf-alist))
 
     (append translated (reverse (stack->list ret)))))

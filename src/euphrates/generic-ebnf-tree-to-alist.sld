@@ -3,6 +3,9 @@
   (euphrates generic-ebnf-tree-to-alist)
   (export generic-ebnf-tree->alist)
   (import
+    (only (euphrates bnf-alist-map-expansion-terms)
+          bnf-alist:map-expansion-terms))
+  (import
     (only (euphrates generic-bnf-tree-to-alist)
           generic-bnf-tree->alist))
   (import
