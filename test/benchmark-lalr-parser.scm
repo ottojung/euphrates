@@ -181,7 +181,7 @@
 
 (with-benchmark/simple
  :name "benchmark-lalr-parser-8"
- :inputs ((driver "glr") (load? #t) (seq-len 27))
+ :inputs ((driver "glr") (load? #t) (seq-len 29))
  (repeating-template driver load? seq-len))
 
 
