@@ -4,6 +4,7 @@ set -e
 
 export EUPHRATES_REVISION_ID="$(git rev-parse HEAD)"
 export EUPHRATES_REVISION_DATE="$(git log -n 1 --format=%cd --date=iso8601-strict)"
+export EUPHRATES_REVISION_TITLE="$(git log -n 1 --format=%s)"
 
 FILES=$(ls test/test-*.sld)
 TESTCOUNT=$(echo "$FILES" | wc -l)
