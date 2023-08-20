@@ -184,7 +184,7 @@
 
                 (cond ((not (symbol? i))
                        (when ___errorp
-                         (___errorp 'invalid-token "Syntax error: invalid token: ~s" __input))
+                         (___errorp 'invalid-token "Syntax error: invalid token: ~s" ___input))
                        #f)
 
                       ;; Input succesfully parsed
