@@ -17,13 +17,11 @@
   (import
     (only (euphrates list-length-geq-q)
           list-length=<?))
-  (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
           stack->list
           stack-make
           stack-push!))
-  (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)

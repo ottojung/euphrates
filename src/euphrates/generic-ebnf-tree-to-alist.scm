@@ -5,7 +5,7 @@
 ;; This is a parser for it.
 ;; It outputs an alist that has all regex things compiled away.
 ;; In result, new productions are added to the original BNF of the input EBNF.
-(define (generic-ebnf-tree->alist equality-symbol alternation-symbol)
+(define (generic-ebnf-tree->alist equality-symbol alternation-symbol custom-transform)
   (define bnf-handler
     (generic-bnf-tree->alist equality-symbol alternation-symbol))
 
@@ -37,17 +37,15 @@
               (hashset-add! taken-names name)
               name))))
 
-    (define (handle-term t)
-      (define (err)
-        (raisu* :from "ebnf-tree->alist"
-                :type 'bad-ebnf-modifier
-                :message (stringf "EBNF trees do not support operator ~s" (~a (car t)))
-                :args (list (car t))))
+    (define (do-custom t name)
+      (let ((name* (generate-name name)))
+        (custom-transform yield name t)))
 
+    (define (handle-term t)
       (cond
        ((not (list? t)) t)
        ((list-length= 0 t) t)
-       ((list-length= 1 t) (err))
+       ((list-length= 1 t) (do-custom t 'singleton))
        ((list-length= 2 t)
         (let ()
           (define type (car t))
@@ -66,7 +64,8 @@
             (let ((name (generate-name (string-append (~a original-name) "?"))))
               (yield `(,name (,original-name) ()))
               name))
-           (else (err)))))
+           (else
+            (do-custom t (string-append (~a original-name) "<>"))))))
        ((list-length=<? 2 t)
         (let ()
           (define type (car t))
@@ -76,7 +75,8 @@
             (let ((name (generate-name 'generated-alternative)))
               (yield (cons name (map list (cdr t))))
               name))
-           (else (err)))))))
+           (else
+            (do-custom t (string-append "generated-alternative" "<>"))))))))
 
     (define translated
       (map
