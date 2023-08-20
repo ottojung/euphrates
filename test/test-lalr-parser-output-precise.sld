@@ -23,9 +23,7 @@
   (import (only (euphrates printf) printf))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
-  (import
-    (only (euphrates read-string-file)
-          read-string-file))
+  (import (only (euphrates read-list) read-list))
   (import
     (only (euphrates source-location)
           make-source-location))
@@ -87,6 +85,7 @@
           char-whitespace?))
   (import
     (only (scheme file)
+          call-with-input-file
           call-with-output-file
           file-exists?))
   (import (only (scheme write) write))

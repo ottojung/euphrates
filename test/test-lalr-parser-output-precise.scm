@@ -7,11 +7,11 @@
       (stringf "test/data/~a.sld" name))
 
     (define generated
-      (read-string-file filename))
+      (call-with-input-file filename read-list))
 
     (define expected
       (if (file-exists? expected-filename)
-          (read-string-file expected-filename)
+          (call-with-input-file expected-filename read-list)
           #f))
 
     (unless (equal? expected generated)
