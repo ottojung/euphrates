@@ -136,6 +136,9 @@
   (import
     (only (euphrates big-random-int) big-random-int))
   (import
+    (only (euphrates bnf-alist-map-expansion-terms)
+          bnf-alist:map-expansion-terms))
+  (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
   (import
