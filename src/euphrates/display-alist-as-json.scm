@@ -77,7 +77,7 @@
 
            (display indentation port)
            (cond
-            ((string? key) (write key) port)
+            ((string? key) (write key port))
             ((symbol? key) (write (~a key) port))
             (else (raisu 'key-must-be-a-string-or-a-symbol key)))
            (display ":" port)
