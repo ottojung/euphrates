@@ -317,6 +317,7 @@
           display-alist-as-json
           display-alist-as-json/indent
           display-alist-as-json/minimal))
+  (import (only (euphrates do-times) do-times))
   (import
     (only (euphrates dprint-p-default)
           dprint/p-default))
