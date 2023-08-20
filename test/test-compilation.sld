@@ -839,6 +839,9 @@
     (only (euphrates list-minimal-element-or)
           list-minimal-element-or))
   (import
+    (only (euphrates list-number-average)
+          list-number-average))
+  (import
     (only (euphrates list-or-map) list-or-map))
   (import
     (only (euphrates list-partition) list-partition))
