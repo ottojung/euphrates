@@ -2,9 +2,15 @@
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;; Expects date in the ISO-8601 format.
-(define (get-euphrates-revision-date)
-  (or (system-environment-get "EUPHRATES_REVISION_DATE")
-      (raisu* :from "get-euphrates-revision-date"
-              :type 'environment-variable-not-set
-              :message "Euphrates revision date is not set by the environment"
-              :args (list))))
+(define-syntax get-euphrates-revision-date
+  (syntax-rules ()
+    ((_ default)
+     (let ((get (system-environment-get "EUPHRATES_REVISION_DATE")))
+       (if (not get) default
+           (begin
+             (when (string-null? get)
+               (raisu* :from "get-euphrates-revision-date"
+                       :type 'bad-revision-date-format
+                       :message "Euphrates revision date is empty"
+                       :args (list)))
+             get))))))
