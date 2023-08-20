@@ -3,10 +3,10 @@
   (euphrates with-benchmark-simple)
   (export with-benchmark/simple)
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
-    (only (euphrates list-mark-ends) list-mark-ends))
-  (import (only (euphrates tilda-a) ~a))
+    (only (euphrates display-alist-as-json)
+          display-alist-as-json))
+  (import (only (euphrates fn-cons) fn-cons))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates with-run-time-estimate)
           with-run-time-estimate))
@@ -16,23 +16,23 @@
           /
           _
           begin
-          cadr
           car
           current-error-port
           current-output-port
           define
           define-syntax
-          for-each
           lambda
           let
           let*
+          map
           newline
           parameterize
+          quasiquote
           quote
           round
           string-append
           syntax-rules
-          unless))
+          unquote))
   (import
     (only (scheme file) call-with-output-file))
   (import (only (scheme r5rs) exact->inexact))
