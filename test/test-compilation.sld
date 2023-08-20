@@ -313,6 +313,9 @@
   (import
     (only (euphrates directory-tree) directory-tree))
   (import
+    (only (euphrates display-alist-as-json)
+          display-alist-as-json))
+  (import
     (only (euphrates dprint-p-default)
           dprint/p-default))
   (import (only (euphrates dprint-p) dprint/p))
