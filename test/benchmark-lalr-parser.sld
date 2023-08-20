@@ -1,9 +1,20 @@
 
 (define-library
   (benchmark-lalr-parser)
+  (import
+    (only (data parser-branching-glr)
+          parser-branching-glr))
+  (import
+    (only (data parser-branching-lr)
+          parser-branching-lr))
+  (import
+    (only (data parser-repeating-glr)
+          parser-repeating-glr))
+  (import
+    (only (data parser-repeating-lr)
+          parser-repeating-lr))
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates assert) assert))
-  (import (only (euphrates const) const))
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates lalr-parser)
@@ -31,6 +42,7 @@
           define
           else
           equal?
+          even?
           if
           lambda
           let
@@ -42,7 +54,9 @@
           quasiquote
           quote
           set!
+          string->symbol
           unquote
+          vector
           vector-length
           vector-ref
           when))

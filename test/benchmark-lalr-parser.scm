@@ -3,16 +3,22 @@
 ;; this file is like test-lalr-parser-largecases.scm, but cases are even larger
 ;;
 
+(define (error-procedure type message-fmt token)
+  (raisu* :type 'parse-error
+          :message (stringf message-fmt token)
+          :args (list type token)))
+
 (define (make-repeating-lexer for-how-long repeating-tokens)
   (define buf repeating-tokens)
   (define i for-how-long)
+  (define stop (if (even? for-how-long) 0 1))
 
   (define (next)
     (cond
      ((null? buf)
       (set! buf repeating-tokens)
       (next))
-     ((< i 1) '*eoi*)
+     ((< i stop) '*eoi*)
      (else
       (let ((t (car buf)))
         (set! buf (cdr buf))
@@ -58,134 +64,147 @@
 
   (lambda () (next)))
 
-(define save (const #t))
+(define (repeating-template driver load? seq-len)
+  (define parser
+    (if load?
+        (cond
+         ((equal? driver "lr")
+          (parser-repeating-lr (vector)))
+         ((equal? driver "glr")
+          (parser-repeating-glr (vector)))
+         (else
+          (raisu 'bad-driver-type driver)))
+
+        (lalr-parser
+         `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+           (on-conflict: ,ignore)
+           (driver: ,(string->symbol driver))
+           (rules:
+            (expr     (expr add expr) : #t
+                      (term) : #t)
+            (add      (+) : #t)
+            (term     (NUM) : #t))))))
+
+  (define result
+    (parser (make-repeating-lexer
+             seq-len
+             (list (make-lexical-token 'NUM #f "5")
+                   (make-lexical-token '+ #f "+")))
+            error-procedure))
+
+  (if (equal? driver "lr")
+      (assert= #t result)
+      (begin
+        (assert (list? result))
+        (assert (not (null? result))))))
+
+
+(define (brackets-template driver load? tree-depth)
+  (define parser
+    (if load?
+        (cond
+         ((equal? driver "lr")
+          (parser-branching-lr (vector)))
+         ((equal? driver "glr")
+          (parser-branching-glr (vector)))
+         (else
+          (raisu 'bad-driver-type driver)))
+
+        (lalr-parser
+         `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+           (driver: ,(string->symbol driver))
+           (on-conflict: ,ignore)
+           (rules:
+            (expr     (expr add expr) : #t
+                      (LPAREN expr RPAREN) : #t
+                      (term) : #t)
+            (add      (+) : #t)
+            (term     (NUM) : #t))))))
+
+ (define result
+   (parser (make-brackets-lexer tree-depth) error-procedure))
+
+ (if (equal? driver "lr")
+     (assert= #t result)
+     (begin
+       (assert (list? result))
+       (assert (not (null? result))))))
+
 
 ;;;;;;;;;;;;
 ;;
 ;; START
 ;;
 
+
 (with-benchmark/simple
  :name "benchmark-lalr-parser-1"
- :inputs ((seq-len 299999))
-
- (define parser
-   (lalr-parser
-    `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-      (rules:
-       (expr     (expr add expr) : (,save $1 $2 $3)
-                 (term) : (,save $1))
-       (add      (+) : (,save $1))
-       (term     (NUM) : (,save $1))))))
-
- (define (error-procedure type message-fmt token)
-   (raisu* :type 'parse-error
-           :message (stringf message-fmt token)
-           :args (list type token)))
-
- (define result
-   (parser (make-repeating-lexer
-            seq-len
-            (list (make-lexical-token 'NUM #f "5")
-                  (make-lexical-token '+ #f "+")))
-           error-procedure))
-
- (assert= #t result))
-
-
-
-
-
+ :inputs ((driver "lr") (load? #f) (seq-len 300000))
+ (repeating-template driver load? seq-len))
 
 
 (with-benchmark/simple
  :name "benchmark-lalr-parser-2"
- :inputs ((seq-len 23))
-
- (define parser
-   (lalr-parser
-    `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-      (driver: glr)
-      (on-conflict: ,ignore)
-      (rules:
-       (expr     (expr add expr) : (,save $1 $2 $3)
-                 (term) : (,save $1))
-       (add      (+) : (,save $1))
-       (term     (NUM) : (,save $1))))))
-
- (define (error-procedure type message-fmt token)
-   (raisu* :type 'parse-error
-           :message (stringf message-fmt token)
-           :args (list type token)))
-
- (define result
-   (parser (make-repeating-lexer
-            seq-len
-            (list (make-lexical-token 'NUM #f "5")
-                  (make-lexical-token '+ #f "+")))
-           error-procedure))
-
- (assert (list? result))
- (assert (not (null? result))))
-
-
-
-
-
-
+ :inputs ((driver "glr") (load? #f) (seq-len 23))
+ (repeating-template driver load? seq-len))
 
 
 (with-benchmark/simple
  :name "benchmark-lalr-parser-3"
- :inputs ((tree-depth 50000))
-
- (define parser
-   (lalr-parser
-    `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-      (rules:
-       (expr     (expr add expr) : (,save 'expr $1 $2 $3)
-                 (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-                 (term) : (,save 'expr $1))
-       (add      (+) : (,save 'add $1))
-       (term     (NUM) : (,save 'term $1))))))
-
- (define (error-procedure type message-fmt token)
-   (raisu* :type 'parse-error
-           :message (stringf message-fmt token)
-           :args (list type token)))
-
- (define result
-   (parser (make-brackets-lexer tree-depth) error-procedure))
-
- (assert= #t result))
-
-
-
+ :inputs ((driver "lr") (load? #f) (tree-depth 50000))
+ (brackets-template driver load? tree-depth))
 
 
 (with-benchmark/simple
  :name "benchmark-lalr-parser-4"
- :inputs ((tree-depth 50000))
+ :inputs ((driver "glr") (load? #f) (tree-depth 50000))
+ (brackets-template driver load? tree-depth))
 
- (define parser
-   (lalr-parser
-    `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-      (driver: glr)
-      (on-conflict: ,ignore)
-      (rules:
-       (expr     (expr add expr) : (,save 'expr $1 $2 $3)
-                 (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-                 (term) : (,save 'expr $1))
-       (add      (+) : (,save 'add $1))
-       (term     (NUM) : (,save 'term $1))))))
 
- (define (error-procedure type message-fmt token)
-   (raisu* :type 'parse-error
-           :message (stringf message-fmt token)
-           :args (list type token)))
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-5"
+ :inputs ((driver "lr") (load? #t) (seq-len 300000))
+ (repeating-template driver load? seq-len))
 
- (define result
-   (parser (make-brackets-lexer tree-depth) error-procedure))
 
- (assert (list? result))
- (assert (not (null? result))))
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-6"
+ :inputs ((driver "glr") (load? #t) (seq-len 23))
+ (repeating-template driver load? seq-len))
+
+
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-7"
+ :inputs ((driver "lr") (load? #t) (seq-len 30000000))
+ (repeating-template driver load? seq-len))
+
+
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-8"
+ :inputs ((driver "glr") (load? #t) (seq-len 27))
+ (repeating-template driver load? seq-len))
+
+
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-9"
+ :inputs ((driver "lr") (load? #t) (tree-depth 50000))
+ (brackets-template driver load? tree-depth))
+
+
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-10"
+ :inputs ((driver "glr") (load? #t) (tree-depth 50000))
+ (brackets-template driver load? tree-depth))
+
+
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-11"
+ :inputs ((driver "lr") (load? #t) (tree-depth 5000000))
+ (brackets-template driver load? tree-depth))
+
+
+(with-benchmark/simple
+ :name "benchmark-lalr-parser-12"
+ :inputs ((driver "glr") (load? #t) (tree-depth 5000000))
+ (brackets-template driver load? tree-depth))
+
