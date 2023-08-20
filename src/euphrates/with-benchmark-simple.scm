@@ -30,8 +30,17 @@
         (display " seconds.")
         (newline))
 
+      (define (normalize-key key)
+        (string-map
+         (lambda (c)
+           (cond
+            ((equal? #\- c) #\_)
+            ((equal? #\? c) #\q)
+            ((equal? #\/ c) #\_)
+            (else c)))
+         (~a key)))
       (define inputs-alist
-        (map (fn-cons identity car) inputs))
+        (map (fn-cons normalize-key car) inputs))
 
       (define alltimes (vector time0 time))
       (define avgtime (list-number-average (vector->list alltimes)))
@@ -46,9 +55,9 @@
          (avgtime . ,avgtime)
          (inputs . ,inputs-alist)
          (rundate . ,rundate)
-         (euphrates-revision-id . ,(get-euphrates-revision-id "?"))
-         (euphrates-revision-date . ,(get-euphrates-revision-date "?"))
-         (euphrates-revision-title . ,(get-euphrates-revision-title "?")))
+         (euphrates_revision_id . ,(get-euphrates-revision-id "?"))
+         (euphrates_revision_date . ,(get-euphrates-revision-date "?"))
+         (euphrates_revision_title . ,(get-euphrates-revision-title "?")))
        p)
       (newline p))))
 

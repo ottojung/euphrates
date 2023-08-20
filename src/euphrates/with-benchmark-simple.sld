@@ -18,10 +18,10 @@
   (import
     (only (euphrates get-euphrates-revision-title)
           get-euphrates-revision-title))
-  (import (only (euphrates identity) identity))
   (import
     (only (euphrates list-number-average)
           list-number-average))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (euphrates with-run-time-estimate)
           with-run-time-estimate))
@@ -32,10 +32,13 @@
           _
           begin
           car
+          cond
           current-error-port
           current-output-port
           define
           define-syntax
+          else
+          equal?
           lambda
           let
           let*
@@ -46,6 +49,7 @@
           quote
           round
           string-append
+          string-map
           syntax-rules
           unquote
           vector
