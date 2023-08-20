@@ -36,9 +36,10 @@
 (define (json-skip-whitespaces port)
   (let loop ()
     (let ((ch (peek-char port)))
-      (when (json-whitespace? ch)
-        (read-char port)
-        (loop)))))
+      (unless (eof-object? ch)
+        (when (json-whitespace? ch)
+          (read-char port)
+          (loop))))))
 
 (define (json-expect-string port expected return)
   (let loop ((n 0))

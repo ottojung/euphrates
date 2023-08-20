@@ -40,6 +40,7 @@
           reverse
           string-length
           string-ref
+          unless
           values
           when
           zero?))
