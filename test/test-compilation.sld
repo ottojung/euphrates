@@ -548,6 +548,9 @@
     (only (euphrates get-directory-name)
           get-directory-name))
   (import
+    (only (euphrates get-euphrates-revision-date)
+          get-euphrates-revision-date))
+  (import
     (only (euphrates get-euphrates-revision-id)
           get-euphrates-revision-id))
   (import
