@@ -4,7 +4,8 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates display-alist-as-json)
-          display-alist-as-json))
+          display-alist-as-json
+          display-alist-as-json/minimal))
   (import (only (euphrates negate) negate))
   (import
     (only (euphrates with-output-stringified)

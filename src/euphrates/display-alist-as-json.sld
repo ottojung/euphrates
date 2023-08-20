@@ -1,18 +1,26 @@
 
 (define-library
   (euphrates display-alist-as-json)
-  (export display-alist-as-json)
+  (export
+    display-alist-as-json
+    display-alist-as-json/indent
+    display-alist-as-json/minimal)
+  (import (only (euphrates const) const))
   (import
     (only (euphrates define-tuple) define-tuple))
+  (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates list-mark-ends) list-mark-ends))
+  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
+  (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           +
           -
           =
+          _
           begin
           car
           cdr
@@ -22,10 +30,13 @@
           else
           equal?
           for-each
+          if
           lambda
           let
+          list
           list?
           make-string
+          member
           newline
           number?
           pair?

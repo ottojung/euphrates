@@ -6,8 +6,27 @@
 ;; Use together with `parse-json'
 ;;
 
-(define (display-alist-as-json/full indentation-level alist port)
-  (define (make-indentation level) (make-string level #\tab))
+(define (display-alist-as-json/full type indentation-level alist port)
+  (unless (member type (list 'pretty 'minimal))
+    (raisu* :from "display-alist-as-json"
+            :type 'bad-type
+            :message (stringf "Expected ~s or ~s but got ~s"
+                              (~a 'pretty) (~a 'minimal) (~a type))
+            :args (list type)))
+
+  (define minimal? (equal? type 'minimal))
+
+  (define make-indentation
+    (if minimal? (const "")
+        (lambda (level) (make-string level #\tab))))
+
+  (define display-space
+    (if minimal? ignore
+        (lambda _ (display " " port))))
+
+  (define display-newline
+    (if minimal? ignore
+        (lambda _ (newline port))))
 
   (let loop ((indentation-level indentation-level)
              (alist alist))
@@ -26,7 +45,9 @@
       (let ((index 0))
         (vector-for-each
          (lambda (x)
-           (unless (= 0 index) (display ", " port))
+           (unless (= 0 index)
+             (display "," port)
+             (display-space port))
            (set! index (+ 1 index))
            (loop indentation-level x))
          alist))
@@ -34,7 +55,7 @@
 
      ((list? alist)
       (display "{" port)
-      (newline port)
+      (display-newline port)
       (for-each
        (lambda (p)
          (define-tuple (first? last? input) p)
@@ -49,10 +70,11 @@
           ((string? key) (write key) port)
           ((symbol? key) (write (~a key) port))
           (else (raisu 'key-must-be-a-string-or-a-symbol key)))
-         (display ": " port)
+         (display ":" port)
+         (display-space port)
          (loop (+ 1 indentation-level) value)
          (unless last? (display "," port))
-         (newline port))
+         (display-newline port))
        (list-mark-ends alist))
       (display (make-indentation (- indentation-level 1)) port)
       (display "}" port))
@@ -61,9 +83,27 @@
 
 (define display-alist-as-json
   (case-lambda
+   ((alist)
+    (display-alist-as-json/full
+     'pretty 1 alist (current-output-port)))
+   ((alist port)
+    (display-alist-as-json/full
+     'pretty 1 alist port))))
+
+(define display-alist-as-json/indent
+  (case-lambda
    ((indentation-level alist)
     (display-alist-as-json/full
-     indentation-level alist (current-output-port)))
+     'pretty indentation-level alist (current-output-port)))
    ((indentation-level alist port)
     (display-alist-as-json/full
-     indentation-level alist port))))
+     'pretty indentation-level alist port))))
+
+(define display-alist-as-json/minimal
+  (case-lambda
+   ((alist)
+    (display-alist-as-json/full
+     'minimal 1 alist (current-output-port)))
+   ((alist port)
+    (display-alist-as-json/full
+     'minimal 1 alist port))))
