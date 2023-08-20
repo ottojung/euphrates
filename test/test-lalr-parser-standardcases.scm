@@ -608,3 +608,47 @@ idblb idclb longeridlb"
 
   (assert errored?)
   (assert= #f result))
+
+
+
+(let ()
+  (define parser
+    (lalr-parser
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules:
+        (expr     (expr add term)
+                  (term))
+        (add      (+))
+        (term     (NUM))))))
+
+  (for-each
+   (lambda (n)
+     (define input (stringf "5+~a" n))
+     (define result
+       (with-string-as-input
+        input (parser (make-lexer) error-procedure)))
+
+     (assert= `(expr (expr (term 5)) (add "+") (term ,n)) result))
+   (iota 15)))
+
+
+(let ()
+  (define parser
+    (lalr-parser
+     `((driver: glr)
+       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules:
+        (expr     (expr add term)
+                  (term))
+        (add      (+))
+        (term     (NUM))))))
+
+  (for-each
+   (lambda (n)
+     (define input (stringf "5+~a" n))
+     (define result
+       (with-string-as-input
+        input (parser (make-lexer) error-procedure)))
+
+     (assert= `((expr (expr (term 5)) (add "+") (term ,n))) result))
+   (iota 15)))

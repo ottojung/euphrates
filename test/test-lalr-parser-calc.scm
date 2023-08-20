@@ -219,9 +219,13 @@
 * exit.                        *
 ********************************
 [calculator]> 4
+[calculator]> 869
 [calculator]> "
 
  (with-output-stringified
   (with-string-as-input
-   "2 + 2\nquit()\n"
+   "2 + 2
+46+ 823
+quit()
+"
    (calc))))
