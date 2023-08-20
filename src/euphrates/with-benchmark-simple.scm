@@ -33,11 +33,18 @@
       (define inputs-alist
         (map (fn-cons identity car) inputs))
 
+      (define alltimes (vector time0 time))
+      (define avgtime (list-number-average (vector->list alltimes)))
+
       (display-alist-as-json
        `((name . ,name)
          (time . ,time)
-         (time0 . ,time0)
-         (inputs . ,inputs-alist))
+         (alltimes . ,alltimes)
+         (avgtime . ,avgtime)
+         (inputs . ,inputs-alist)
+         (euphrates-revision-id . ,(get-euphrates-revision-id "?"))
+         (euphrates-revision-date . ,(get-euphrates-revision-date "?"))
+         (euphrates-revision-title . ,(get-euphrates-revision-title "?")))
        p)
       (newline p))))
 
