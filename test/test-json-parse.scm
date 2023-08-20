@@ -56,8 +56,6 @@
 (test1 "{ \"a\": [1, 2, [3, 4]], \"b\": 5 }"
        '(("a" . #(1 2 #(3 4))) ("b" . 5)))
 
-(test1 "{}" '())
-
 (test1 "{ \"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4 }"
        '(("a" . 1) ("b" . 2) ("c" . 3) ("d" . 4)))
 
@@ -151,3 +149,21 @@
 ;; Testing mixed types
 (test1 "{ \"a\": [1, \"text\", { \"b\": true }, [2, 3]] }"
        '(("a" . #(1 "text" (("b" . #t)) #(2 3)))))
+
+;; Testing atomic
+(test1 "true" #t)
+(test1 "  true   " #t)
+(test1 "false" #f)
+(test1 "  false  " #f)
+(test1 "null" 'null)
+(test1 "  null   " 'null)
+(test1 "\"null\"" "null")
+(test1 "  \"null\"   " "null")
+(test1 "42" 42)
+(test1 "   42    " 42)
+(test1 "{}" '())
+(test1 "   {}   " '())
+(test1 "   {    }   " '())
+(test1 "[]" #())
+(test1 "   []   " #())
+(test1 "   [    ]   " #())
