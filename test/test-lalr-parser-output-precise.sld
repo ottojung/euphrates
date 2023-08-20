@@ -1,14 +1,21 @@
 
 (define-library
   (test-lalr-parser-output-precise)
-  (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates assert) assert))
   (import (only (euphrates comp) comp))
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates lalr-parser) lalr-parser))
+  (import (only (euphrates printf) printf))
   (import
     (only (euphrates read-string-file)
           read-string-file))
+  (import
+    (only (euphrates stack)
+          stack->list
+          stack-empty?
+          stack-make
+          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
@@ -19,17 +26,21 @@
           =
           begin
           define
+          equal?
           for-each
+          if
           lambda
           let
           newline
           quasiquote
           quote
           string->symbol
-          unquote
-          unquote-splicing))
+          unless
+          unquote))
   (import
-    (only (scheme file) call-with-output-file))
+    (only (scheme file)
+          call-with-output-file
+          file-exists?))
   (import (only (scheme write) write))
   (cond-expand
     (guile (import (only (guile) include-from-path))

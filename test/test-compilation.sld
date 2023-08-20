@@ -2,6 +2,18 @@
 (define-library
   (test-compilation)
   (import
+    (only (data parser-branching-glr)
+          parser-branching-glr))
+  (import
+    (only (data parser-branching-lr)
+          parser-branching-lr))
+  (import
+    (only (data parser-repeating-glr)
+          parser-repeating-glr))
+  (import
+    (only (data parser-repeating-lr)
+          parser-repeating-lr))
+  (import
     (only (euphrates absolute-posix-path-q)
           absolute-posix-path?))
   (import
