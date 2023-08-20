@@ -33,25 +33,36 @@
                      :message (stringf "Missing required argument ~s" (~a 'grammar:))
                      :args (list 'grammar:))))
 
+  (define rules/0a
+    (semis-ebnf-tree->ebnf-tree rules/0))
+
+  (define (lalr-parser/simple-escape-re yield name t) t)
+  (define ebnf-parser
+    (generic-ebnf-tree->alist "=" "/" lalr-parser/simple-escape-re))
+
   (define rules/1
-    (ebnf-tree->alist
-     (semis-ebnf-tree->ebnf-tree
-      rules/0)))
+    (ebnf-parser rules/0a))
 
   (define non-terminals
     (map car rules/1))
 
-  (define terminal-prefix
+  (define-values (terminal-prefix terminal-prefix/re)
     (let ()
       (define (make-prefix x)
         (string-append "t" (if (= 0 x) "" (~a x)) "_"))
+      (define (make-prefix/re x)
+        (string-append "r" (if (= 0 x) "" (~a x)) "_"))
 
-      (make-prefix
-       (list-fold
-        (acc 0)
-        (cur (map ~a (list-collapse rules/1)))
-        (if (string-prefix? (make-prefix acc) cur)
-            (+ 1 acc) acc)))))
+      (define lowest-index
+        (list-fold
+         (acc 0)
+         (cur (map ~a (list-collapse rules/1)))
+         (if (or (string-prefix? (make-prefix acc) cur)
+                 (string-prefix? (make-prefix/re acc) cur))
+             (+ 1 acc) acc)))
+
+      (values (make-prefix lowest-index)
+              (make-prefix/re lowest-index))))
 
   (define rhss
     (map cdr rules/1))
@@ -59,17 +70,39 @@
   (define all-expansion-terms
     (apply append (apply append rhss)))
 
-  (define (terminal? x)
+  (define (string-terminal? x)
     (string? x))
+
+  (define (re-terminal? x)
+    (and (list? x)
+         (pair? x)
+         (equal? 're (car x))))
+
+  (define (terminal? x)
+    (or (string-terminal? x)
+        (re-terminal? x)))
 
   (define all-terminals
     (filter terminal? all-expansion-terms))
 
   (define (terminal->token t)
-    (string->symbol (string-append terminal-prefix t)))
+    (cond
+     ((string-terminal? t)
+      (string->symbol (string-append terminal-prefix t)))
+     ((re-terminal? t)
+      (string->symbol
+       (string-append
+        terminal-prefix/re
+        (apply string-append
+               (list-intersperse "_" (map ~a t))))))
+     (else (raisu 'impossible t))))
+
+  (define terminal->irregex
+    (curry-if re-terminal? cdr))
 
   (define tokens-map
-    (map (compose-under cons terminal->token identity) all-terminals))
+    (map (compose-under cons terminal->token terminal->irregex)
+         all-terminals))
 
   (define make-lexer
     (make-lalr-lexer/irregex-factory tokens-map))
@@ -82,7 +115,7 @@
 
   (define (maybe-translate-terminal x)
     (if (terminal? x)
-        (translate-terminal x)
+        (terminal->token x)
         x))
 
   (define (translate-rhs rhs)

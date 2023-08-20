@@ -21,6 +21,7 @@
           if
           list
           list?
+          or
           quasiquote
           quote
           string-append

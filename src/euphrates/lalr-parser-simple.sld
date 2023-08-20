@@ -13,11 +13,11 @@
     (only (euphrates compose-under) compose-under))
   (import (only (euphrates const) const))
   (import (only (euphrates curry-if) curry-if))
-  (import
-    (only (euphrates ebnf-tree-to-alist)
-          ebnf-tree->alist))
   (import (only (euphrates fn-cons) fn-cons))
   (import (only (euphrates fn-pair) fn-pair))
+  (import
+    (only (euphrates generic-ebnf-tree-to-alist)
+          generic-ebnf-tree->alist))
   (import
     (only (euphrates gkeyword) gkeyword->fkeyword))
   (import (only (euphrates hashset) list->hashset))
@@ -42,7 +42,11 @@
   (import
     (only (euphrates list-collapse) list-collapse))
   (import (only (euphrates list-fold) list-fold))
+  (import
+    (only (euphrates list-intersperse)
+          list-intersperse))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates semis-ebnf-tree-to-ebnf-tree)
           semis-ebnf-tree->ebnf-tree))
@@ -52,13 +56,18 @@
     (only (scheme base)
           +
           =
+          and
           append
           apply
           begin
           car
           cdr
+          cond
           cons
           define
+          define-values
+          else
+          equal?
           if
           lambda
           let
@@ -67,11 +76,14 @@
           map
           member
           memq
+          or
+          pair?
           quote
           string->symbol
           string-append
           string?
           unless
+          values
           when))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
