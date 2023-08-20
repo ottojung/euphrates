@@ -150,8 +150,9 @@
          (fraction (json-read-fraction port))
          (exponent (json-read-exponent port))
          (result (* (+ number fraction) exponent)))
-    (if (and (zero? fraction) (>= exponent 1))
-        result
+    (if (or (and (zero? fraction) (>= exponent 1))
+            (integer? result))
+        (inexact->exact result)
         (exact->inexact result))))
 
 (define (json-read-number port)

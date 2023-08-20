@@ -25,6 +25,7 @@
           expt
           if
           integer->char
+          integer?
           length
           let
           let*
@@ -43,7 +44,10 @@
           when
           zero?))
   (import (only (scheme char) char-whitespace?))
-  (import (only (scheme r5rs) exact->inexact))
+  (import
+    (only (scheme r5rs)
+          exact->inexact
+          inexact->exact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
