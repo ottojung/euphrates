@@ -7,7 +7,20 @@
     (only (euphrates system-environment)
           system-environment-get))
   (import
-    (only (scheme base) begin define list or quote))
+    (only (scheme base)
+          _
+          begin
+          define-syntax
+          if
+          let
+          list
+          not
+          quote
+          syntax-rules
+          when))
+  (cond-expand
+    (guile (import (only (srfi srfi-13) string-null?)))
+    (else (import (only (srfi 13) string-null?))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
