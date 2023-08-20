@@ -27,22 +27,24 @@ using dynamic threading implementation of Euphrates.
 
 Here's a snapshot of what Euphrates offers:
 
-- CFG-based CLI parsing `src/define-cli.scm`
-- Object system based on properties constraints `src/properties.scm`
-  - Similar to propagators but less (computationally) expensive, and time-aware
-- Embedabble mini prolog `src/profun.scm`
-- Composable monads `src/monadic.scm`
+- CFG-based CLI parsing `define-cli.scm`
+- Object system based on properties constraints `properties.scm`
+  - similar to propagators but less (computationally) expensive, and time-aware
+- A fast LALR+GLR parser `lalr-parser.scm`
+  - with a simplified interface (ex. irregex-based lexer) - `lalr-parser-simple.scm`
+- Embedabble mini prolog `profun.scm`
+- Composable monads `monadic.scm`
   - work kind of like `Redux`, but more powerful thanks to macros and continuations
   - suppport Haskell-like DSL for do-notation
-- Petri networks `src/petri.scm`
-  - with `profun` integration `src/petri-net-parse-profun.scm`
-- Dynamic threading environment `src/dynamic-thread-*.scm`
-  - with an implementaion of non-preemptive portable threads `src/np-thread.scm`
-- Simple subprocesses `src/run-asyncproc.scm`
-- JSON parser `src/json-parse.scm`
-- Lots of list functions `src/list-*.scm`
-- Number conversions `src/convert-number-base.scm` and `src/number-list.scm`
-- Various alphabets `src/*-alphabet.scm`
+- Petri networks `petri.scm`
+  - with `profun` integration `petri-net-parse-profun.scm`
+- Dynamic threading environment `dynamic-thread-*.scm`
+  - with an implementaion of non-preemptive portable threads `np-thread.scm`
+- Simple subprocesses `run-asyncproc.scm`
+- JSON parser `json-parse.scm`
+- Lots of list functions `list-*.scm`
+- Number conversions `convert-number-base.scm` and `number-list.scm`
+- Various alphabets `*-alphabet.scm`
 
 ...and much more.
 
