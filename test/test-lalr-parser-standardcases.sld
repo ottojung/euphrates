@@ -63,8 +63,8 @@
           char-numeric?
           char-whitespace?))
   (cond-expand
-    (guile (import (only (srfi srfi-1) iota)))
-    (else (import (only (srfi 1) iota))))
+    (guile (import (only (srfi srfi-1) first iota)))
+    (else (import (only (srfi 1) first iota))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

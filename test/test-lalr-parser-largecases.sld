@@ -50,12 +50,11 @@
           let*
           letrec
           list
-          list?
           modulo
-          not
           null?
           or
           peek-char
+          procedure?
           quasiquote
           quote
           read-char

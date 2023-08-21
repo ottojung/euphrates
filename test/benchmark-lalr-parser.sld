@@ -47,10 +47,9 @@
           lambda
           let
           list
-          list?
           modulo
-          not
           null?
+          procedure?
           quasiquote
           quote
           set!
@@ -60,6 +59,9 @@
           vector-length
           vector-ref
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) first)))
+    (else (import (only (srfi 1) first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

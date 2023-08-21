@@ -1,4 +1,11 @@
 
+(define (collect-iterator iter)
+  (let loop ((buf '()))
+    (define x (iter))
+    (if x
+        (loop (cons x buf))
+        buf)))
+
 (define (make-lexer)
   (lambda ()
     (letrec ((read-number
@@ -49,11 +56,19 @@
   (make-parameter #f))
 
 (define (make-test-parser parser-rules)
-  (lalr-parser
-   `((driver: ,(if (glr-parser?/p) 'glr 'lr))
-     (on-conflict: ,ignore)
-     (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-     (rules: ,@parser-rules))))
+  (define parser0
+    (lalr-parser
+     `((driver: ,(if (glr-parser?/p) 'glr 'lr))
+       (results: ,(if (glr-parser?/p) 'all 'first))
+       (on-conflict: ,ignore)
+       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules: ,@parser-rules))))
+
+  (if (glr-parser?/p)
+      (lambda args
+        (define iter (apply parser0 args))
+        (collect-iterator iter))
+      parser0))
 
 (define (test-parser parser-rules input expected-output)
   (define parser
@@ -433,16 +448,14 @@ idblb idclb longeridlb"
 
 (parameterize ((glr-parser?/p #t))
   (test-parser
-   `((expr     (expr add term) : (,save 'expr $1 $2 $3)
-               (term) : (,save 'expr $1))
-     (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-     (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
-     (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
-               () : (,save 'mspace)))
+   `((expr     (expr add term)
+               (term))
+     (add      (+))
+     (term     (NUM)))
 
    "5+3"
 
-   '((expr (expr (term (mspace) 5 (mspace))) (add (mspace) "+" (mspace)) (term (mspace) 3 (mspace))))))
+   '((expr (expr (term 5)) (add "+") (term 3)))))
 
 
 
@@ -633,18 +646,25 @@ idblb idclb longeridlb"
 
 
 (let ()
-  (define parser
-    (lalr-parser
-     `((driver: glr)
-       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (rules:
-        (expr     (expr add term)
-                  (term))
-        (add      (+))
-        (term     (NUM))))))
 
   (for-each
    (lambda (n)
+     (define parser0
+       (lalr-parser
+        `((driver: glr)
+          (results: all)
+          (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+          (rules:
+           (expr     (expr add term)
+                     (term))
+           (add      (+))
+           (term     (NUM))))))
+
+     (define parser
+       (lambda args
+         (define iter (apply parser0 args))
+         (collect-iterator iter)))
+
      (define input (stringf "5+~a" n))
      (define result
        (with-string-as-input
@@ -652,3 +672,4 @@ idblb idclb longeridlb"
 
      (assert= `((expr (expr (term 5)) (add "+") (term ,n))) result))
    (iota 15)))
+

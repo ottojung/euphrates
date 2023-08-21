@@ -5,6 +5,13 @@
 ;; @created   "Fri Aug 19 11:23:48 EDT 2005"
 ;;
 
+(define (collect-iterator iter)
+  (let loop ((buf '()))
+    (define x (iter))
+    (if x
+        (loop (cons x buf))
+        buf)))
+
 (define (syntax-error type msg . args)
   (display msg (current-error-port))
   (parameterize ((current-output-port (current-error-port)))
@@ -47,7 +54,8 @@
 (define *phrase-1* '(*n *v *d *n *p *d *n *p *d *n *p *d *n))
 
 (define (test-1)
-  (parser-1 (make-lexer *phrase-1*) syntax-error))
+  (collect-iterator
+   (parser-1 (make-lexer *phrase-1*) syntax-error)))
 
 
 ;;;
@@ -70,7 +78,8 @@
 (define *phrase-2* '(if e then if e then s else s))
 
 (define (test-2)
-  (parser-2 (make-lexer *phrase-2*) syntax-error))
+  (collect-iterator
+   (parser-2 (make-lexer *phrase-2*) syntax-error)))
 
 (define (assert-length l n test-name)
   (assert= (length l) n))

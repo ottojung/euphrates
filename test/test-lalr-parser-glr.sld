@@ -12,6 +12,7 @@
           begin
           car
           cdr
+          cons
           current-error-port
           current-output-port
           define

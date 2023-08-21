@@ -242,6 +242,7 @@
     (lalr-parser
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (driver: glr)
+       (results: all)
        (on-conflict: ,ignore)
        (rules:
         (expr     (expr add expr) : (,save $1 $2 $3)
@@ -261,8 +262,8 @@
                    (make-lexical-token '+ #f "+")))
              error-procedure))
 
-  (assert (list? result))
-  (assert (not (null? result))))
+  (assert (procedure? result))
+  (assert (result 'get)))
 
 
 
@@ -297,6 +298,7 @@
     (lalr-parser
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (driver: glr)
+       (results: all)
        (on-conflict: ,ignore)
        (rules:
         (expr     (expr add expr) : (,save 'expr $1 $2 $3)
@@ -313,8 +315,8 @@
   (define result
     (parser (make-brackets-lexer 3) error-procedure))
 
-  (assert (list? result))
-  (assert (not (null? result))))
+  (assert (procedure? result))
+  (assert (result 'get)))
 
 
 
@@ -384,8 +386,8 @@
                      (make-lexical-token '+ #f "+")))
               error-procedure))
 
-    (assert (list? result))
-    (assert (not (null? result))))
+    (assert (procedure? result))
+    (assert (result 'get)))
 
 
 
@@ -424,6 +426,7 @@
       (lalr-parser
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
          (driver: glr)
+         (results: all)
          (on-conflict: ,ignore)
          (rules:
           (expr     (expr add expr) : (,save 'expr $1 $2 $3)
@@ -440,8 +443,8 @@
     (define result
       (parser (make-brackets-lexer t4-input-size) error-procedure))
 
-    (assert (list? result))
-    (assert (not (null? result)))))
+    (assert (procedure? result))
+    (assert (result 'get))))
 
 
 (run-cases 9999 15 999 99)

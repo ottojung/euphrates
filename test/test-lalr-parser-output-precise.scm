@@ -1,4 +1,11 @@
 
+(define (collect-iterator iter)
+  (let loop ((buf '()))
+    (define x (iter))
+    (if x
+        (loop (cons x buf))
+        buf)))
+
 (let ()
   (define failures (stack-make))
 
@@ -42,6 +49,7 @@
        (on-conflict: ,ignore)
        (output-code: ,(comp (save+check "repeating" driver)))
        (driver: ,(string->symbol driver))
+       (results: ,(if (equal? (~a driver) "glr") 'all 'first))
        (rules:
         (expr     (expr add expr) : #t
                   (term) : #t)
@@ -52,6 +60,7 @@
     (lalr-parser
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (driver: ,(string->symbol driver))
+       (results: ,(if (equal? (~a driver) "glr") 'all 'first))
        (on-conflict: ,ignore)
        (output-code: ,(comp (save+check "branching" driver)))
        (rules:
@@ -124,7 +133,11 @@
 
   (define (run-input parser input)
     (with-string-as-input
-     input (parser (make-lexer) error-procedure)))
+     input
+     (let ((result (parser (make-lexer) error-procedure)))
+       (if (procedure? result)
+           (collect-iterator result)
+           result))))
 
   (define (load-and-use driver)
     (define-values (parser-repeating parser-branching)

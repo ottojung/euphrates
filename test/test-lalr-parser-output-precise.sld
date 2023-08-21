@@ -34,6 +34,7 @@
           stack-make
           stack-push!))
   (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (euphrates with-string-as-input)
           with-string-as-input))
@@ -67,6 +68,7 @@
           or
           pair?
           peek-char
+          procedure?
           quasiquote
           quote
           read-char
@@ -89,6 +91,9 @@
           call-with-output-file
           file-exists?))
   (import (only (scheme write) write))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) first)))
+    (else (import (only (srfi 1) first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

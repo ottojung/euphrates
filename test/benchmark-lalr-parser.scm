@@ -3,6 +3,9 @@
 ;; this file is like test-lalr-parser-largecases.scm, but cases are even larger
 ;;
 
+(define (iterate-results iter)
+  (let loop () (when (iter) (loop))))
+
 (define (error-procedure type message-fmt token)
   (raisu* :type 'parse-error
           :message (stringf message-fmt token)
@@ -79,6 +82,7 @@
          `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
            (on-conflict: ,ignore)
            (driver: ,(string->symbol driver))
+           (results: ,(if (equal? driver "glr") 'all 'first))
            (rules:
             (expr     (expr add expr) : #t
                       (term) : #t)
@@ -95,8 +99,9 @@
   (if (equal? driver "lr")
       (assert= #t result)
       (begin
-        (assert (list? result))
-        (assert (not (null? result))))))
+        (assert (procedure? result))
+        (assert= #t (result 'get))
+        (iterate-results result))))
 
 
 (define (brackets-template driver load? tree-depth)
@@ -113,6 +118,7 @@
         (lalr-parser
          `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
            (driver: ,(string->symbol driver))
+           (results: ,(if (equal? driver "glr") 'all 'first))
            (on-conflict: ,ignore)
            (rules:
             (expr     (expr add expr) : #t
@@ -127,8 +133,9 @@
  (if (equal? driver "lr")
      (assert= #t result)
      (begin
-       (assert (list? result))
-       (assert (not (null? result))))))
+       (assert (procedure? result))
+       (assert= #t (result 'get))
+       (iterate-results result))))
 
 
 ;;;;;;;;;;;;
