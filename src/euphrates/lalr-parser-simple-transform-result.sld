@@ -2,9 +2,13 @@
 (define-library
   (euphrates lalr-parser-simple-transform-result)
   (export lalr-parser/simple-transform-result)
+  (import (only (euphrates comp) appcomp))
   (import
     (only (euphrates lalr-parser-simple-do-flatten)
           lalr-parser/simple-do-flatten))
+  (import
+    (only (euphrates lalr-parser-simple-do-inline)
+          lalr-parser/simple-do-inline))
   (import
     (only (euphrates lalr-parser-simple-do-join)
           lalr-parser/simple-do-join))

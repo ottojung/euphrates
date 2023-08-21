@@ -70,28 +70,34 @@
   (define skiped
     (lalr-parser/simple-extract-set 'skip: options*))
 
+  (define inlined
+    (lalr-parser/simple-extract-set 'inline: options*))
+
   (define options-to-upstream
     (assq-unset-value
-     'skip:
+     'inline:
      (assq-unset-value
-      'join:
+      'skip:
       (assq-unset-value
-       'flatten:
+       'join:
        (assq-unset-value
-        'grammar:
-        (assq-set-value
-         'rules: rules
+        'flatten:
+        (assq-unset-value
+         'grammar:
          (assq-set-value
-          'tokens: tokens
-          options*)))))))
+          'rules: rules
+          (assq-set-value
+           'tokens: tokens
+           options*))))))))
 
   (define upstream (lalr-parser options-to-upstream))
 
   (lalr-parser/simple-check-set non-terminals skiped)
   (lalr-parser/simple-check-set non-terminals joined)
   (lalr-parser/simple-check-set non-terminals flattened)
+  (lalr-parser/simple-check-set non-terminals inlined)
 
   (lambda (errorp input)
     (lalr-parser/simple-transform-result
-     flattened joined skiped
+     flattened joined skiped inlined
      (upstream (make-lexer input) errorp))))
