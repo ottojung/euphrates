@@ -115,6 +115,12 @@
 
 
 
+;;;;;;;;;;;;;
+;;
+;; Single set cases
+;;
+
+
 (check-parser-result-and-reverse
  (lalr-parser/simple
   `(:grammar
@@ -282,7 +288,103 @@
 
 
 
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
 
+    :flatten ()))
+
+ "5+3"
+ '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :flatten (expr)))
+
+ "5+3"
+ '(expr (term (num (dig "5"))) (add "+") (term (num (dig "3")))))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :inline (dig num)))
+
+ "5+3"
+ '(expr (term "5") (add "+") (expr (term "3"))))
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :inline (term)))
+
+ "5+3"
+ '(expr (num (dig "5")) (add "+") (expr (num (dig "3")))))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :inline (num dig)))
+
+ "54+3"
+ '(expr (term "5" "4") (add "+") (expr (term "3"))))
+
+
+
+
+
+
+;;;;;;;;;;;;;
+;;
+;; Multiple set cases
+;;
 
 (check-parser-result
  (lalr-parser/simple
@@ -592,24 +694,4 @@
 
  "  83712    + 371673    "
  '(expr (term "83712") "+" (expr (term "371673"))))
-
-
-
-(check-parser-result
- (lalr-parser/simple
-  `(:grammar
-    ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
-      num = dig+
-      dig = (re numeric)
-      space = (re whitespace))
-
-    :inline (add num)
-    :join (num)
-    :flatten (term expr)
-    :skip (space)))
-
- "  83712    + 371673    "
- '(expr (term "83712") "+" (term "371673")))
 
