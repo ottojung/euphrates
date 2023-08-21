@@ -348,12 +348,17 @@
                 #f
                 #f
                 #f)))
-          (define (make-iterator lexerp errorp)
+          (define (init lexerp errorp)
             (set! ___errorp errorp)
             (initialize-lexer lexerp)
             (initialize-processes)
             (save-loop-state! 'run #f #f #f #f #f #f)
-            (add-process '(0))
+            (add-process '(0)))
+          (define (make-iterator lexerp errorp)
+            (init lexerp errorp)
             (lambda _ (continue-from-saved)))
+          (define (make-first-returner lexerp errorp)
+            (init lexerp errorp)
+            (continue-from-saved))
           make-iterator)))))
 

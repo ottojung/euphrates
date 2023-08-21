@@ -14,6 +14,7 @@
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import

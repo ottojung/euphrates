@@ -76,7 +76,15 @@
 ;;;;  LR-driver
 ;;;
 
-  (define lr-driver-code
+  (define (lr-driver-code results-mode)
+    (cond
+     ((equal? results-mode 'first) 'fine)
+     ((equal? results-mode 'all)
+      (grammar-error
+       "Invalid option: ~s because LR parser can only output a single result, so choose ~s ~s for it."
+       (~a results-mode) 'results: 'first))
+     (else (raisu 'impossible 'expected-all-or-first results-mode)))
+
     `((define *max-stack-size* 500)
 
       (define ___atable action-table)
@@ -245,7 +253,7 @@
 ;;;
 
 
-  (define glr-driver-code
+  (define (glr-driver-code results-mode)
     `((define ___atable action-table)
       (define ___gtable goto-table)
       (define ___rtable reduction-table)
@@ -432,15 +440,25 @@
                     #f #f
                     #f #f)))
 
-      (define (make-iterator lexerp errorp)
+      (define (init lexerp errorp)
         (set! ___errorp errorp)
         (initialize-lexer lexerp)
         (initialize-processes)
         (save-loop-state! 'run #f #f #f #f #f #f)
-        (add-process '(0))
+        (add-process '(0)))
+
+      (define (make-iterator lexerp errorp)
+        (init lexerp errorp)
         (lambda _ (continue-from-saved)))
 
-      make-iterator))
+      (define (make-first-returner lexerp errorp)
+        (init lexerp errorp)
+        (continue-from-saved))
+
+      ,(cond
+        ((equal? results-mode 'all) 'make-iterator)
+        ((equal? results-mode 'first) 'make-first-returner)
+        (else (raisu 'impossible 'expected-all-or-first)))))
 
 
   (define (drop l n)
@@ -2065,7 +2083,7 @@
   (define (set-results-mode! options)
     (let ((results-type (assq-or 'results: options)))
       (when results-type
-        (set! results-mode results-type))))
+        (set! results-mode (car results-type)))))
 
   (define (set-driver-name! options)
     (let ((driver-type (assq-or 'driver: options)))
@@ -2113,21 +2131,15 @@
         (validate-options options)
         (set-driver-name! options)
         (set-results-mode! options)
-        (set-conflict-handler! options)
-
-        (when (and (equal? driver-name 'lr-driver)
-                   (equal? results-mode 'all))
-          (grammar-error
-           "Invalid option: ~s because LR parser can only output a single result, so choose ~s ~s for it."
-           (~a results-mode) 'results: 'first))))
+        (set-conflict-handler! options)))
 
     (define gram/actions (gen-tables! tokens rules))
     (define goto-table (build-goto-table))
 
     (define driver-code
       (cond
-       ((equal? driver-name 'lr-driver) lr-driver-code)
-       ((equal? driver-name 'glr-driver) glr-driver-code)
+       ((equal? driver-name 'lr-driver) (lr-driver-code results-mode))
+       ((equal? driver-name 'glr-driver) (glr-driver-code results-mode))
        (else (raisu-fmt
               'logic-error "Expected either ~s or ~s but got ~s somehow"
               (list (~a 'lr-driver) (~a 'glr-driver) (~a driver-name))))))

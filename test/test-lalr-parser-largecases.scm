@@ -367,6 +367,7 @@
       (lalr-parser
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
          (driver: glr)
+         (results: all)
          (on-conflict: ,ignore)
          (rules:
           (expr     (expr add expr) : (,save $1 $2 $3)

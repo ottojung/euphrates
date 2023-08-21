@@ -39,6 +39,7 @@
   ;; Grammar taken from Tomita's "An Efficient Augmented-Context-Free Parsing Algorithm"
   (lalr-parser
    `((driver: glr)
+     (results: all)
      (on-conflict: ,ignore)
      (tokens: *n *v *d *p)
      (rules:
@@ -67,6 +68,7 @@
   ;; The dangling-else problem
   (lalr-parser
    `((driver: glr)
+     (results: all)
      (on-conflict: ,ignore)
      (tokens: (nonassoc: if then else e s))
      (rules:
