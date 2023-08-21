@@ -230,7 +230,7 @@
                  active-stacks
                  stack
                  actions))
-              ((done) '())
+              ((done) #f)
               (else 'TODO (+ 1 routine) (/ 1 0))))
           (define (continue-from-saved)
             (continue
@@ -265,7 +265,7 @@
                              stack
                              actions))
                          (let ((result (car (take-right stack 2))))
-                           (cons result (continue-from-saved))))
+                           result))
                         ((>= action 0)
                          (let ((new-stack (shift action *input* stack)))
                            (add-process new-stack))
@@ -348,10 +348,16 @@
                 #f
                 #f
                 #f)))
-          (lambda (lexerp errorp)
+          (define (make-iterator lexerp errorp)
             (set! ___errorp errorp)
             (initialize-lexer lexerp)
             (initialize-processes)
             (add-process '(0))
-            (reverse (continue-from-saved))))))))
+            (lambda _ (continue-from-saved)))
+          (define (list-wrapper lexerp errorp)
+            (define iter (make-iterator lexerp errorp))
+            (let loop ((buf '()))
+              (define x (iter))
+              (if x (loop (cons x buf)) buf)))
+          list-wrapper)))))
 

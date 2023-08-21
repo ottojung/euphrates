@@ -334,7 +334,7 @@
            (run-single-process symbol processes stacks active-stacks))
           ((run-actions-loop)
            (run-actions-loop symbol processes stacks active-stacks stack actions))
-          ((done) '())
+          ((done) #f)
           (else
            'TODO
            (+ 1 routine)
@@ -361,7 +361,7 @@
                                            stacks active-stacks
                                            stack actions))
                        (let ((result (car (take-right stack 2))))
-                         (cons result (continue-from-saved))))
+                         result))
                       ((>= action 0)
                        (let ((new-stack (shift action *input* stack)))
                          (add-process new-stack))
@@ -432,13 +432,22 @@
                     #f #f
                     #f #f)))
 
-      (lambda (lexerp errorp)
+      (define (make-iterator lexerp errorp)
         (set! ___errorp errorp)
         (initialize-lexer lexerp)
         (initialize-processes)
         (add-process '(0))
-        ;; (run)
-        (reverse (continue-from-saved)))))
+        (lambda _ (continue-from-saved)))
+
+      (define (list-wrapper lexerp errorp)
+        (define iter (make-iterator lexerp errorp))
+        (let loop ((buf '()))
+          (define x (iter))
+          (if x
+              (loop (cons x buf))
+              buf)))
+
+      list-wrapper))
 
 
   (define (drop l n)
