@@ -136,11 +136,6 @@
           (define (add-process process)
             (set! *processes* (cons process *processes*)))
           (define (get-processes) (reverse *processes*))
-          (define *parses* '())
-          (define (get-parses) *parses*)
-          (define (initialize-parses) (set! *parses* '()))
-          (define (add-parse parse)
-            (set! *parses* (cons parse *parses*)))
           (define (push delta new-category lvalue stack tok)
             (let* ((stack (drop stack (* delta 2)))
                    (state (car stack))
@@ -206,6 +201,7 @@
                  active-stacks
                  stack
                  actions))
+              ((done) '())
               (else 'TODO (+ 1 routine) (/ 1 0))))
           (define (continue-from-saved)
             (continue
@@ -240,8 +236,7 @@
                              stack
                              actions))
                          (let ((result (car (take-right stack 2))))
-                           (add-parse result))
-                         (continue-from-saved))
+                           (cons result (continue-from-saved))))
                         ((>= action 0)
                          (let ((new-stack (shift action *input* stack)))
                            (add-process new-stack))
@@ -299,8 +294,9 @@
           (define (run-processes symbol processes)
             (let loop ((processes processes))
               (if (null? processes)
-                (when (pair? (get-processes))
-                      (continue 'run #f #f #f #f #f #f))
+                (if (pair? (get-processes))
+                  (continue 'run #f #f #f #f #f #f)
+                  (continue 'done #f #f #f #f #f #f))
                 (continue
                   'run-single-process
                   symbol
@@ -327,8 +323,6 @@
             (set! ___errorp errorp)
             (initialize-lexer lexerp)
             (initialize-processes)
-            (initialize-parses)
             (add-process '(0))
-            (continue-from-saved)
-            (get-parses)))))))
+            (reverse (continue-from-saved))))))))
 

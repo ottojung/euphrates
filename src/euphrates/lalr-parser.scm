@@ -283,16 +283,6 @@
       (define (get-processes)
         (reverse *processes*))
 
-      ;; -- parses
-      (define *parses* '())
-      (define (get-parses)
-        *parses*)
-      (define (initialize-parses)
-        (set! *parses* '()))
-      (define (add-parse parse)
-        (set! *parses* (cons parse *parses*)))
-
-
       (define (push delta new-category lvalue stack tok)
         (let* ((stack     (drop stack (* delta 2)))
                (state     (car stack))
@@ -344,6 +334,7 @@
            (run-single-process symbol processes stacks active-stacks))
           ((run-actions-loop)
            (run-actions-loop symbol processes stacks active-stacks stack actions))
+          ((done) '())
           (else
            'TODO
            (+ 1 routine)
@@ -370,8 +361,7 @@
                                            stacks active-stacks
                                            stack actions))
                        (let ((result (car (take-right stack 2))))
-                         (add-parse result))
-                       (continue-from-saved))
+                         (cons result (continue-from-saved))))
                       ((>= action 0)
                        (let ((new-stack (shift action *input* stack)))
                          (add-process new-stack))
@@ -420,8 +410,9 @@
       (define (run-processes symbol processes)
         (let loop ((processes processes))
           (if (null? processes)
-              (when (pair? (get-processes))
-                (continue 'run #f #f #f #f #f #f))
+              (if (pair? (get-processes))
+                  (continue 'run #f #f #f #f #f #f)
+                  (continue 'done #f #f #f #f #f #f))
               (continue 'run-single-process
                         symbol processes
                         (list (car processes)) '()
@@ -445,11 +436,9 @@
         (set! ___errorp errorp)
         (initialize-lexer lexerp)
         (initialize-processes)
-        (initialize-parses)
         (add-process '(0))
         ;; (run)
-        (continue-from-saved)
-        (get-parses))))
+        (reverse (continue-from-saved)))))
 
 
   (define (drop l n)
