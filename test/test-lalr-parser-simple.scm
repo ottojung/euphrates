@@ -127,7 +127,7 @@
     :join (dig)))
 
  "5+3"
- '(expr (term (num "5")) (add "+") (expr (term (num "3")))))
+ '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
 
 
 
@@ -146,7 +146,7 @@
     :join (num1)))
 
  "72+8"
- '(expr (term (num "72")) (add "+") (expr (term (num "8")))))
+ '(expr (term (num (num1 "72"))) (add "+") (expr (term (num (num1 "8"))))))
 
 
 
@@ -163,7 +163,7 @@
     :join (expr)))
 
  "5+3"
- "5+3")
+ '(expr "5+3"))
 
 
 
@@ -184,7 +184,7 @@
     :join (id1)))
 
  "35+x7"
- '(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id "x7")))))
+ '(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id (id1 "x7"))))))
 
 
 
@@ -206,7 +206,7 @@
     :join (id1 num1)))
 
  "35+x7"
- '(expr (term (num "35")) (add "+") (expr (term (id "x7")))))
+ '(expr (term (num (num1 "35"))) (add "+") (expr (term (id (id1 "x7"))))))
 
 
 
@@ -373,6 +373,25 @@
     :join (term add)))
 
  "  83712    + 371673    "
+ '(expr (term "  83712    ") (add "+") (expr (term " 371673    "))))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = " ")
+
+    :inline (term add)
+    :join (term add)))
+
+ "  83712    + 371673    "
  '(expr "  83712    " "+" (expr " 371673    ")))
 
 
@@ -390,12 +409,13 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :inline (term num1)
     :flatten (term)
     :join (num1)
     :skip (space)))
 
  "  83712    + 371673    "
- '(expr (term (num "83712")) (add "+") (expr (term (num "371673")))))
+ '(expr (num "83712") (add "+") (expr (num "371673"))))
 
 
 
@@ -412,6 +432,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :inline (term add)
     :join (term add)
     :skip (space)))
 
@@ -435,6 +456,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :inline (expr)
     :join (expr)
     :skip (space)))
 
@@ -455,6 +477,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :inline (term add)
     :join (term add)
     :flatten (expr)
     :skip (space)))
@@ -476,6 +499,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :inline (num)
     :join (num)
     :flatten (term)
     :skip (space)))
@@ -498,6 +522,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :inline (num)
     :join (num)
     :flatten (term)
     :skip (space)))
@@ -519,6 +544,7 @@
       dig = (re (or "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
       space = " ")
 
+    :inline (num)
     :join (num)
     :flatten (term)
     :skip (space)))
@@ -540,6 +566,7 @@
       dig = (re numeric)
       space = (re whitespace))
 
+    :inline (num)
     :join (num)
     :flatten (term)
     :skip (space)))
@@ -558,7 +585,7 @@
       dig = (re numeric)
       space = (re whitespace))
 
-    :inline (add)
+    :inline (add num)
     :join (num)
     :flatten (term)
     :skip (space)))
@@ -578,7 +605,7 @@
       dig = (re numeric)
       space = (re whitespace))
 
-    :inline (add)
+    :inline (add num)
     :join (num)
     :flatten (term expr)
     :skip (space)))

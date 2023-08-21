@@ -10,7 +10,9 @@
             (define type (car result))
             (cond
              ((hashset-has? joined type)
-              (apply string-append (lalr-parser/simple-flatten1 (cdr result))))
+              (list (car result)
+                    (apply string-append
+                           (lalr-parser/simple-flatten1 (cdr result)))))
              (else
               (map loop result))))
           result))
