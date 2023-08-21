@@ -729,6 +729,9 @@
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
   (import
+    (only (euphrates lalr-parser-simple-check-set)
+          lalr-parser/simple-check-set))
+  (import
     (only (euphrates lalr-parser-simple-do-flatten)
           lalr-parser/simple-do-flatten))
   (import

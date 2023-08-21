@@ -228,6 +228,23 @@
 
 
 
+(assert-throw
+ 'invalid-set
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+"
+      term = num
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :skip (whatever))))
+
+
+
+
+
+
 (check-parser-result
  (lalr-parser/simple
   `(:grammar

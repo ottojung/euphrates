@@ -86,6 +86,9 @@
   (define all-terminals
     (filter terminal? all-expansion-terms))
 
+  (define all-nonterminals
+    (map car rules/1))
+
   (define (terminal->token t)
     (cond
      ((string-terminal? t)
@@ -176,6 +179,8 @@
 
   (define skiped
     (list->hashset skiped/l))
+
+  (lalr-parser/simple-check-set non-terminals skiped)
 
   (define options-to-upstream
     (assq-unset-value
