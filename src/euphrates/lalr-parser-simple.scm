@@ -181,6 +181,8 @@
     (list->hashset skiped/l))
 
   (lalr-parser/simple-check-set non-terminals skiped)
+  (lalr-parser/simple-check-set non-terminals joined)
+  (lalr-parser/simple-check-set non-terminals flattened)
 
   (define options-to-upstream
     (assq-unset-value

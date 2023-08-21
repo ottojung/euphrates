@@ -563,6 +563,6 @@
   (define backend-parser
     (lalr-parser/simple
      `(:grammar ,tag-grammar
-       :flatten (args))))
+       :flatten (arg*))))
 
   0)
