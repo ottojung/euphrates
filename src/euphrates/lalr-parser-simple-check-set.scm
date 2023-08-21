@@ -3,7 +3,7 @@
 
 (define (lalr-parser/simple-check-set non-terminals set)
   (define nonexisting-names
-    (filter (negate (lambda (x) (memq x non-terminals)))
+    (filter (negate (comp (hashset-has? non-terminals)))
             (hashset->list set)))
 
   (unless (null? nonexisting-names)

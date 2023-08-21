@@ -2,8 +2,12 @@
 (define-library
   (euphrates lalr-parser-simple-check-set)
   (export lalr-parser/simple-check-set)
+  (import (only (euphrates comp) comp))
   (import (only (euphrates compose) compose))
-  (import (only (euphrates hashset) hashset->list))
+  (import
+    (only (euphrates hashset)
+          hashset->list
+          hashset-has?))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
@@ -15,10 +19,8 @@
     (only (scheme base)
           begin
           define
-          lambda
           list
           map
-          memq
           null?
           quote
           unless))

@@ -45,7 +45,7 @@
     (ebnf-parser rules/0a))
 
   (define non-terminals
-    (map car rules/1))
+    (list->hashset (map car rules/1)))
 
   (define-values (terminal-prefix terminal-prefix/re)
     (let ()
@@ -180,10 +180,6 @@
   (define skiped
     (list->hashset skiped/l))
 
-  (lalr-parser/simple-check-set non-terminals skiped)
-  (lalr-parser/simple-check-set non-terminals joined)
-  (lalr-parser/simple-check-set non-terminals flattened)
-
   (define options-to-upstream
     (assq-unset-value
      'skip:
@@ -200,6 +196,10 @@
           options*)))))))
 
   (define upstream (lalr-parser options-to-upstream))
+
+  (lalr-parser/simple-check-set non-terminals skiped)
+  (lalr-parser/simple-check-set non-terminals joined)
+  (lalr-parser/simple-check-set non-terminals flattened)
 
   (lambda (errorp input)
     (lalr-parser/simple-transform-result
