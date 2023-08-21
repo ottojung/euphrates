@@ -213,7 +213,7 @@
 
 
 (assert-throw
- 'invalid-join-set
+ 'invalid-set
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term
@@ -325,7 +325,7 @@
 
 
 (assert-throw
- 'invalid-flatten-set
+ 'invalid-set
  (lalr-parser/simple
   `(:grammar
     ( expr = term add expr / term

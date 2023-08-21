@@ -138,47 +138,14 @@
             :message "This parser handles tokens automatically, no need to provide them"
             :args (list (assq-or 'tokens: options*))))
 
-  (define flattened/l
-    (assq-or 'flatten: options* '()))
-
-  (unless (list? flattened/l)
-    (raisu* :from "lalr-parser/simple"
-            :type 'invalid-flatten-set
-            :message
-            (stringf "The ~s option expected a list of productions to flatten, but found something other than a list"
-                     (~a 'flatten:))
-            :args (list 'flatten: flattened/l)))
-
   (define flattened
-    (list->hashset flattened/l))
-
-  (define joined/l
-    (assq-or 'join: options* '()))
-
-  (unless (list? joined/l)
-    (raisu* :from "lalr-parser/simple"
-            :type 'invalid-join-set
-            :message
-            (stringf "The ~s option expected a list of productions to join, but found something other than a list"
-                     (~a 'join:))
-            :args (list 'join: joined/l)))
+    (lalr-parser/simple-extract-set 'flatten: options*))
 
   (define joined
-    (list->hashset joined/l))
-
-  (define skiped/l
-    (assq-or 'skip: options* '()))
-
-  (unless (list? skiped/l)
-    (raisu* :from "lalr-parser/simple"
-            :type 'invalid-skip-set
-            :message
-            (stringf "The ~s option expected a list of productions to skip, but found something other than a list"
-                     (~a 'skip:))
-            :args (list 'skip: skiped/l)))
+    (lalr-parser/simple-extract-set 'join: options*))
 
   (define skiped
-    (list->hashset skiped/l))
+    (lalr-parser/simple-extract-set 'skip: options*))
 
   (define options-to-upstream
     (assq-unset-value

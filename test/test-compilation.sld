@@ -741,6 +741,9 @@
     (only (euphrates lalr-parser-simple-do-skips)
           lalr-parser/simple-do-skips))
   (import
+    (only (euphrates lalr-parser-simple-extract-set)
+          lalr-parser/simple-extract-set))
+  (import
     (only (euphrates lalr-parser-simple-flatten1)
           lalr-parser/simple-flatten1))
   (import

@@ -34,6 +34,9 @@
     (only (euphrates lalr-parser-simple-check-set)
           lalr-parser/simple-check-set))
   (import
+    (only (euphrates lalr-parser-simple-extract-set)
+          lalr-parser/simple-extract-set))
+  (import
     (only (euphrates lalr-parser-simple-transform-result)
           lalr-parser/simple-transform-result))
   (import
@@ -81,7 +84,6 @@
           string->symbol
           string-append
           string?
-          unless
           values
           when))
   (cond-expand
