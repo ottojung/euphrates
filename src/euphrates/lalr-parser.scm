@@ -566,6 +566,7 @@
   (define token-set-size  #f)
 
   (define driver-name     'lr-driver)
+  (define results-mode    'first)
 
   (define (glr-driver?)
     (eq? driver-name 'glr-driver))
@@ -2019,6 +2020,13 @@
 
      (cons 'tokens: (lambda (option) (list? option)))
 
+     (cons 'results:
+           (lambda (option)
+             (and (list? option)
+                  (list-length= 2 option)
+                  (symbol? (cadr option))
+                  (memq (cadr option) '(first all)))))
+
      (cons 'driver:
            (lambda (option)
              (and (list? option)
@@ -2060,6 +2068,11 @@
     (let ((handler (assq-or 'on-conflict: options)))
       (when handler
         (set! conflict-handler (car handler)))))
+
+  (define (set-results-mode! options)
+    (let ((results-type (assq-or 'results: options)))
+      (when results-type
+        (set! results-mode results-type))))
 
   (define (set-driver-name! options)
     (let ((driver-type (assq-or 'driver: options)))
@@ -2106,7 +2119,14 @@
       (begin
         (validate-options options)
         (set-driver-name! options)
-        (set-conflict-handler! options)))
+        (set-results-mode! options)
+        (set-conflict-handler! options)
+
+        (when (and (equal? driver-name 'lr-driver)
+                   (equal? results-mode 'all))
+          (grammar-error
+           "Invalid option: ~s because LR parser can only output a single result, so choose ~s ~s for it."
+           (~a results-mode) 'results: 'first))))
 
     (define gram/actions (gen-tables! tokens rules))
     (define goto-table (build-goto-table))
