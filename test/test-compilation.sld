@@ -741,9 +741,6 @@
     (only (euphrates lalr-parser-simple-flatten1)
           lalr-parser/simple-flatten1))
   (import
-    (only (euphrates lalr-parser-simple-remove-spines)
-          lalr-parser/simple-remove-spines))
-  (import
     (only (euphrates lalr-parser-simple-transform-result)
           lalr-parser/simple-transform-result))
   (import

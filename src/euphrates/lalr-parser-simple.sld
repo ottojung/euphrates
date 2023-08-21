@@ -11,7 +11,6 @@
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates compose-under) compose-under))
-  (import (only (euphrates const) const))
   (import (only (euphrates curry-if) curry-if))
   (import (only (euphrates fn-cons) fn-cons))
   (import (only (euphrates fn-pair) fn-pair))
@@ -31,9 +30,6 @@
   (import
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
-  (import
-    (only (euphrates lalr-parser-simple-remove-spines)
-          lalr-parser/simple-remove-spines))
   (import
     (only (euphrates lalr-parser-simple-transform-result)
           lalr-parser/simple-transform-result))
@@ -75,7 +71,6 @@
           list
           list?
           map
-          member
           memq
           or
           pair?

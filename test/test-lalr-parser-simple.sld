@@ -16,9 +16,11 @@
           *
           /
           =
+          _
           apply
           begin
           define
+          define-syntax
           if
           let
           list
@@ -28,6 +30,7 @@
           quote
           string-append
           string?
+          syntax-rules
           unquote))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))

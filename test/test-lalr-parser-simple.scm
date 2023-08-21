@@ -6,15 +6,17 @@
 
 (define (make-test-parser parser-rules)
    (lalr-parser/simple
-    `(:grammar ,parser-rules
-      :spineless? no)))
+    `(:grammar ,parser-rules)))
 
-(define (check-parser-result parser input expected-output)
-  (define result
-    (run-input parser input))
+(define-syntax check-parser-result
+  (syntax-rules ()
+    ((_ parser input expected-output)
+     (let ()
+       (define result
+         (run-input parser input))
 
-  (assert= result expected-output)
-  result)
+       (assert= result expected-output)
+       result))))
 
 (define (check-parser-result-and-reverse parser input expected-output)
   (define result (check-parser-result parser input expected-output))
@@ -122,7 +124,6 @@
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :spineless? no
     :join (dig)))
 
  "5+3"
@@ -142,7 +143,6 @@
       num1 = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :spineless? no
     :join (num1)))
 
  "72+8"
@@ -160,7 +160,6 @@
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :spineless? no
     :join (expr)))
 
  "5+3"
@@ -182,7 +181,6 @@
       id1 = "x" / "y" / id1 dig / id1 id1
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :spineless? no
     :join (id1)))
 
  "35+x7"
@@ -205,7 +203,6 @@
       id1 = "x" / "y" / id1 dig / id1 id1
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :spineless? no
     :join (id1 num1)))
 
  "35+x7"
@@ -241,7 +238,6 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :spineless? no
     :skip (space)))
 
  " 5 + 3 "
@@ -260,7 +256,6 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :spineless? no
     :skip (space)))
 
  "  5    + 3    "
@@ -282,12 +277,11 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :spineless? yes
+    :flatten (term)
     :skip (space)))
 
  "  5    + 3    "
  '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
-
 
 
 
@@ -303,27 +297,12 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :flatten (term)
     :skip (space)))
 
  "  5    + 3    "
  '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
 
-
-
-
-
-(assert-throw
- 'invalid-spineless-option
- (lalr-parser/simple
-  `(:grammar
-    ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
-      num = dig num / dig
-      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
-      space = " ")
-
-    :spineless? whatever)))
 
 
 
@@ -349,17 +328,16 @@
     ( expr = term add expr / term
       add = "+" / space add / add space
       term = num / space term / term space
-      num = num1
-      num1 = dig num1 / dig
+      num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :flatten (num)
+    :flatten (num term)
     :skip (space)))
 
  "  83712    + 371673    "
- '(expr (term (num "8" "3" "7" "1" "2")) (add "+") (expr (term (num "3" "7" "1" "6" "7" "3")))))
 
+ '(expr (term (num (dig "8") (dig "3") (dig "7") (dig "1") (dig "2"))) (add "+") (expr (term (num (dig "3") (dig "7") (dig "1") (dig "6") (dig "7") (dig "3"))))))
 
 
 
@@ -371,8 +349,7 @@
     ( expr = term add expr / term
       add = "+" / space add / add space
       term = num / space term / term space
-      num = num1
-      num1 = dig num1 / dig
+      num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
@@ -396,13 +373,12 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
+    :flatten (term)
     :join (num1)
     :skip (space)))
 
  "  83712    + 371673    "
  '(expr (term (num "83712")) (add "+") (expr (term (num "371673")))))
-
-
 
 
 
@@ -424,6 +400,8 @@
 
  "  83712    + 371673    "
  '(expr "83712" "+" (expr "371673")))
+
+
 
 
 
@@ -460,7 +438,7 @@
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
-    :join (term)
+    :join (term add)
     :flatten (expr)
     :skip (space)))
 
