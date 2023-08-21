@@ -3,6 +3,6 @@
 
 (define bnf-tree->alist
   (let ()
-    (define eq "::=")
-    (define alt "/")
+    (define eq '::=)
+    (define alt '/)
     (generic-bnf-tree->alist eq alt)))

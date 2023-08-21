@@ -19,7 +19,7 @@
 
 (define (CFG-CLI->CFG-AST body)
   (define translator
-    (generic-bnf-tree->alist ":" "/"))
+    (generic-bnf-tree->alist ': '/))
 
   (define body*
     (cons 'EUPHRATES-CFG-CLI-MAIN (cons ': body)))

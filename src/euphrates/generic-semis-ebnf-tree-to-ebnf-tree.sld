@@ -34,6 +34,7 @@
           string-length
           substring
           symbol?
+          unless
           when))
   (cond-expand
     (guile (import

@@ -3,7 +3,7 @@
 
 (define ebnf-tree->alist
   (generic-ebnf-tree->alist
-   "=" "/"
+   '= '/
    (lambda (yield name t)
      (raisu* :from "ebnf-tree->alist"
              :type 'bad-ebnf-modifier

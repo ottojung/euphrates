@@ -16,7 +16,6 @@
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           and
@@ -38,6 +37,7 @@
           null?
           quote
           reverse
+          symbol?
           unless
           when))
   (cond-expand

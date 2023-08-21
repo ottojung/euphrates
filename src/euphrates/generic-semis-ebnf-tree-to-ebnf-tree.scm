@@ -2,10 +2,21 @@
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (generic-semis-ebnf-tree->ebnf-tree equality-symbol alternation-symbol)
-  (define equality-symbol/sym
-    (string->symbol (~a equality-symbol)))
-  (define alternation-symbol/sym
-    (string->symbol (~a alternation-symbol)))
+  (unless (symbol? equality-symbol)
+    (raisu* :from "semis-ebnf-tree->ebnf-tree"
+            :type 'equality-symbol-must-be-asymbol
+            :message (stringf
+                      "Expected equality-symbol to be a symbol, but it wasn't: ~s"
+                      equality-symbol)
+            :args (list equality-symbol)))
+
+  (unless (symbol? alternation-symbol)
+    (raisu* :from "semis-ebnf-tree->ebnf-tree"
+            :type 'alternation-symbol-must-be-asymbol
+            :message (stringf
+                      "Expected alternation-symbol to be a symbol, but it wasn't: ~s"
+                      alternation-symbol)
+            :args (list alternation-symbol)))
 
   (define (err t modifiers)
     (raisu* :from "semis-ebnf-tree->ebnf-tree"
@@ -48,8 +59,8 @@
       (curry-if
        (lambda (t)
          (and (symbol? t)
-              (not (equal? equality-symbol/sym t))
-              (not (equal? alternation-symbol/sym t))))
+              (not (equal? equality-symbol t))
+              (not (equal? alternation-symbol t))))
        parse-symbol-term))
 
     (map parse-term body)))

@@ -551,3 +551,23 @@
 
  "  83712    + 371673    "
  '(expr (term "83712") (add "+") (expr (term "371673"))))
+
+
+(let ()
+
+  (define tag-grammar
+    `( tag = word arg*
+       arg = eqq idset
+       idset = variable comma idset / variable
+       word = (re alpha (* alphanum))
+       variable = word
+       comma = "," / "+"
+       eqq = "="
+       ))
+
+  (define backend-parser
+    (lalr-parser/simple
+     `(:grammar ,tag-grammar
+       :flatten (args))))
+
+  0)

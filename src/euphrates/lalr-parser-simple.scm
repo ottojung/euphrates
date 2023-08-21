@@ -38,7 +38,8 @@
 
   (define (lalr-parser/simple-escape-re yield name t) t)
   (define ebnf-parser
-    (generic-ebnf-tree->alist "=" "/" lalr-parser/simple-escape-re))
+    (generic-ebnf-tree->alist
+     '= '/ lalr-parser/simple-escape-re))
 
   (define rules/1
     (ebnf-parser rules/0a))

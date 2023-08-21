@@ -8,6 +8,7 @@
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)
+          /
           begin
           cons
           define

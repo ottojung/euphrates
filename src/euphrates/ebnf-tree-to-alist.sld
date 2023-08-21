@@ -10,6 +10,8 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          /
+          =
           begin
           car
           define

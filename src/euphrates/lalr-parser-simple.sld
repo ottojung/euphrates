@@ -55,6 +55,7 @@
   (import
     (only (scheme base)
           +
+          /
           =
           and
           append

@@ -13,12 +13,14 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
+          *
           /
           =
           apply
           begin
           define
           if
+          let
           list
           list?
           or

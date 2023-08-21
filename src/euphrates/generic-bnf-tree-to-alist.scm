@@ -2,6 +2,22 @@
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (generic-bnf-tree->alist equality-symbol alternation-symbol)
+  (unless (symbol? equality-symbol)
+    (raisu* :from "parse-bnf/generic"
+            :type 'equality-symbol-must-be-asymbol
+            :message (stringf
+                      "Expected equality-symbol to be a symbol, but it wasn't: ~s"
+                      equality-symbol)
+            :args (list equality-symbol)))
+
+  (unless (symbol? alternation-symbol)
+    (raisu* :from "parse-bnf/generic"
+            :type 'alternation-symbol-must-be-asymbol
+            :message (stringf
+                      "Expected alternation-symbol to be a symbol, but it wasn't: ~s"
+                      alternation-symbol)
+            :args (list alternation-symbol)))
+
   (lambda (body)
     (unless (list? body)
       (raisu* :from 'parse-bnf/generic
@@ -21,14 +37,11 @@
               :message "BNF must consist of at least 3 words"
               :args (list)))
 
-    (define equality-symbol/s (~a equality-symbol))
-    (define alternation-symbol/s (~a alternation-symbol))
-
     (define (equality-symbol? x)
-      (equal? equality-symbol/s (~a x)))
+      (equal? equality-symbol x))
 
     (define (alternation-symbol? x)
-      (equal? alternation-symbol/s (~a x)))
+      (equal? alternation-symbol x))
 
     (define shifted-semilocons
       (let loop ((body (cdr body)) (last (car body)))
