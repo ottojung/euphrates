@@ -5,6 +5,7 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates assert) assert))
+  (import (only (euphrates debugs) debugs))
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates lalr-parser)
@@ -26,6 +27,7 @@
           -
           /
           =
+          _
           and
           apply
           begin

@@ -70,6 +70,23 @@
         (collect-iterator iter))
       parser0))
 
+(define (also-test-respective-glr parser-rules input expected-output)
+  (define conflicting-glr? #f)
+  (define parser/glr/first
+    (lalr-parser
+     `((driver: glr)
+       (results: first)
+       (on-conflict: ,(lambda _ (set! conflicting-glr? #t)))
+       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules: ,@parser-rules))))
+
+  (unless conflicting-glr?
+    (let ()
+      (define result/glr/first
+        (run-input parser/glr/first input))
+
+      (assert= expected-output result/glr/first))))
+
 (define (test-parser parser-rules input expected-output)
   (define parser
     (make-test-parser parser-rules))
@@ -77,7 +94,11 @@
   (define result
     (run-input parser input))
 
-  (assert= result expected-output))
+  (assert= expected-output result)
+
+  (unless (glr-parser?/p)
+    (also-test-respective-glr parser-rules input expected-output)))
+
 
 (define (test-parser-error parser-rules input)
   (define parser
