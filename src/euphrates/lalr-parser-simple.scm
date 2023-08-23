@@ -61,17 +61,15 @@
             :message "This parser handles tokens automatically, no need to provide them"
             :args (list (assq-or 'tokens: options*))))
 
-  (define flattened
-    (lalr-parser/simple-extract-set 'flatten: options*))
+  (define (extract+check key)
+    (define ret (lalr-parser/simple-extract-set key options*))
+    (lalr-parser/simple-check-set non-terminals ret)
+    ret)
 
-  (define joined
-    (lalr-parser/simple-extract-set 'join: options*))
-
-  (define skiped
-    (lalr-parser/simple-extract-set 'skip: options*))
-
-  (define inlined
-    (lalr-parser/simple-extract-set 'inline: options*))
+  (define flattened (extract+check 'flatten:))
+  (define joined  (extract+check 'join:))
+  (define skiped (extract+check 'skip:))
+  (define inlined (extract+check 'inline:))
 
   (define options-to-upstream
     (assq-unset-value
@@ -91,11 +89,6 @@
            options*))))))))
 
   (define upstream (lalr-parser options-to-upstream))
-
-  (lalr-parser/simple-check-set non-terminals skiped)
-  (lalr-parser/simple-check-set non-terminals joined)
-  (lalr-parser/simple-check-set non-terminals flattened)
-  (lalr-parser/simple-check-set non-terminals inlined)
 
   (lambda (errorp input)
     (lalr-parser/simple-transform-result
