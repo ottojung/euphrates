@@ -4,10 +4,7 @@
   (export lalr-parser/simple-check-set)
   (import (only (euphrates comp) comp))
   (import (only (euphrates compose) compose))
-  (import
-    (only (euphrates hashset)
-          hashset->list
-          hashset-has?))
+  (import (only (euphrates hashset) hashset-has?))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))

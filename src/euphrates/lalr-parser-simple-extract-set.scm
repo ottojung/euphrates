@@ -13,4 +13,4 @@
                      (~a set-key))
             :args (list set-key set/l)))
 
-  (list->hashset set/l))
+  (values (list->hashset set/l) set/l))

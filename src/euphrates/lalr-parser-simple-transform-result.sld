@@ -15,6 +15,9 @@
   (import
     (only (euphrates lalr-parser-simple-do-skips)
           lalr-parser/simple-do-skips))
+  (import
+    (only (euphrates lalr-parser-simple-do-transform)
+          lalr-parser/simple-do-transform))
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))

@@ -14,7 +14,8 @@
           list
           list?
           quote
-          unless))
+          unless
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -62,35 +62,45 @@
             :args (list (assq-or 'tokens: options*))))
 
   (define (extract+check key)
-    (define ret (lalr-parser/simple-extract-set key options*))
-    (lalr-parser/simple-check-set non-terminals ret)
+    (define-values (ret set-list)
+      (lalr-parser/simple-extract-set key options*))
+    (lalr-parser/simple-check-set non-terminals set-list)
+    ret)
+
+  (define (extract-alist+check key)
+    (define-values (ret set-list)
+      (lalr-parser/simple-extract-alist key options*))
+    (lalr-parser/simple-check-set non-terminals set-list)
     ret)
 
   (define flattened (extract+check 'flatten:))
   (define joined  (extract+check 'join:))
   (define skiped (extract+check 'skip:))
   (define inlined (extract+check 'inline:))
+  (define transformed (extract-alist+check 'transform:))
 
   (define options-to-upstream
     (assq-unset-value
-     'inline:
+     'transform:
      (assq-unset-value
-      'skip:
+      'inline:
       (assq-unset-value
-       'join:
+       'skip:
        (assq-unset-value
-        'flatten:
+        'join:
         (assq-unset-value
-         'grammar:
-         (assq-set-value
-          'rules: rules
+         'flatten:
+         (assq-unset-value
+          'grammar:
           (assq-set-value
-           'tokens: tokens
-           options*))))))))
+           'rules: rules
+           (assq-set-value
+            'tokens: tokens
+            options*)))))))))
 
   (define upstream (lalr-parser options-to-upstream))
 
   (lambda (errorp input)
     (lalr-parser/simple-transform-result
-     flattened joined skiped inlined
+     flattened joined skiped inlined transformed
      (upstream (make-lexer input) errorp))))

@@ -28,6 +28,9 @@
     (only (euphrates lalr-parser-simple-check-set)
           lalr-parser/simple-check-set))
   (import
+    (only (euphrates lalr-parser-simple-extract-alist)
+          lalr-parser/simple-extract-alist))
+  (import
     (only (euphrates lalr-parser-simple-extract-regexes)
           lalr-parser/simple-extract-regexes))
   (import
