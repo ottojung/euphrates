@@ -74,6 +74,10 @@
  '( s1 ::= a ?*b c / g f )
  '( s1 ::= a ?*b c / g f ))
 
+(test1
+ '( s1 ::= a b* c / g b* f )
+ '( s1 ::= a (* b) c / g (* b) f ))
+
 (assert-throw
  'terminal-with-multiple-modifiers
  (semis-ebnf-tree->ebnf-tree

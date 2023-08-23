@@ -9,6 +9,11 @@
     (only (euphrates generic-bnf-tree-to-alist)
           generic-bnf-tree->alist))
   (import
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates hashset)
           hashset-add!
           hashset-has?
@@ -50,6 +55,7 @@
           map
           not
           number->string
+          or
           quasiquote
           quote
           reverse

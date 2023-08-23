@@ -27,22 +27,31 @@
         symbol?
         (list-collapse bnf-alist))))
 
-    (define (generate-name original-name)
+    (define generated-names
+      (make-hashmap))
+
+    (define (generate-name t original-name)
       (define original-name/s (~a original-name))
-      (let loop ((c 0))
-        (define name (make-name original-name/s c))
-        (if (hashset-has? taken-names name)
-            (loop (+ c 1))
-            (begin
-              (hashset-add! taken-names name)
-              name))))
+      (or (hashmap-ref generated-names t #f)
+          (let loop ((c 0))
+            (define name (make-name original-name/s c))
+            (if (hashset-has? taken-names name)
+                (loop (+ c 1))
+                (begin
+                  (hashset-add! taken-names name)
+                  (hashmap-set! generated-names t name)
+                  name)))))
 
     (define (do-custom t name)
-      (let ((name* (generate-name name)))
+      (let ((name* (generate-name t name)))
         (custom-transform yield name t)))
 
     (define (handle-term t)
+      (define existing
+        (hashmap-ref generated-names t #f))
+
       (cond
+       (existing existing)
        ((not (list? t)) t)
        ((list-length= 0 t) t)
        ((list-length= 1 t) (do-custom t 'singleton))
@@ -53,15 +62,15 @@
           (cond
            ((equal? type 'custom) t)
            ((equal? type '*)
-            (let ((name (generate-name (string-append (~a original-name) "*"))))
+            (let ((name (generate-name t (string-append (~a original-name) "*"))))
               (yield `(,name (,original-name ,name) ()))
               name))
            ((equal? type '+)
-            (let ((name (generate-name (string-append (~a original-name) "+"))))
+            (let ((name (generate-name t (string-append (~a original-name) "+"))))
               (yield `(,name (,original-name ,name) (,original-name)))
               name))
            ((equal? type '?)
-            (let ((name (generate-name (string-append (~a original-name) "?"))))
+            (let ((name (generate-name t (string-append (~a original-name) "?"))))
               (yield `(,name (,original-name) ()))
               name))
            (else
@@ -72,7 +81,7 @@
           (cond
            ((equal? type 'custom) t)
            ((equal? type '/)
-            (let ((name (generate-name 'generated-alternative)))
+            (let ((name (generate-name t 'generated-alternative)))
               (yield (cons name (map list (cdr t))))
               name))
            (else

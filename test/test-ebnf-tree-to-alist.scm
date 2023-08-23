@@ -189,6 +189,14 @@
 
 
 
+(assert=
+ '((s1 (a b* c b* d+))
+   (b* (b b*) ())
+   (d+ (d d+) (d)))
+ (ebnf-tree->alist '( s1 = a (* b) c (* b) (+ d))))
+
+
+
 
 ;;;;;;;;;;;;;;;;
 ;; Strictness ;;
