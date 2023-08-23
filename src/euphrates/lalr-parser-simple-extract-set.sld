@@ -9,10 +9,13 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          and
           begin
           define
           list
           list?
+          not
+          null?
           quote
           unless
           values))

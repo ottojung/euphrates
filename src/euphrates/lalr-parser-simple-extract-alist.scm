@@ -19,5 +19,6 @@
     (map (fn-cons identity (curry-if pair? car))
          set/l))
   (define h (alist->hashmap alist))
+  (define h* (and (not (null? alist)) h))
 
-  (values h set-keys))
+  (values h* set-keys))

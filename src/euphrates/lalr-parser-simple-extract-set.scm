@@ -13,4 +13,7 @@
                      (~a set-key))
             :args (list set-key set/l)))
 
-  (values (list->hashset set/l) set/l))
+  (define s (list->hashset set/l))
+  (define s* (and (not (null? s)) s))
+
+  (values s* set/l))

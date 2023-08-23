@@ -13,9 +13,11 @@
           cond
           define
           else
+          if
           let
           list?
           map
+          not
           pair?))
   (cond-expand
     (guile (import (only (guile) include-from-path))

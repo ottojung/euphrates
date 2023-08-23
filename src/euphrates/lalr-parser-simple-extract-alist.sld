@@ -22,6 +22,8 @@
           list
           list?
           map
+          not
+          null?
           pair?
           quote
           unless

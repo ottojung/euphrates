@@ -20,6 +20,7 @@
           list
           list?
           map
+          not
           pair?
           string-append))
   (cond-expand
