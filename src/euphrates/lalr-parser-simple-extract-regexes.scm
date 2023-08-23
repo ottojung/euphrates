@@ -39,7 +39,8 @@
         (re-terminal? x)))
 
   (define all-terminals
-    (filter terminal? all-expansion-terms))
+    (list-deduplicate
+     (filter terminal? all-expansion-terms)))
 
   (define (terminal->token t)
     (cond

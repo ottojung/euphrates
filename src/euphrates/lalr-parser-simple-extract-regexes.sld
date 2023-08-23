@@ -10,6 +10,9 @@
   (import (only (euphrates curry-if) curry-if))
   (import
     (only (euphrates list-collapse) list-collapse))
+  (import
+    (only (euphrates list-deduplicate)
+          list-deduplicate))
   (import (only (euphrates list-fold) list-fold))
   (import
     (only (euphrates list-intersperse)
