@@ -5,13 +5,17 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates assert) assert))
-  (import (only (euphrates debugs) debugs))
   (import (only (euphrates ignore) ignore))
+  (import
+    (only (euphrates lalr-parser-run-with-error-handler)
+          lalr-parser-run/with-error-handler))
+  (import
+    (only (euphrates lalr-parser-run)
+          lalr-parser-run))
   (import
     (only (euphrates lalr-parser)
           lalr-parser
           make-lexical-token))
-  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)

@@ -205,7 +205,9 @@
                    (newline)))
                 (start
                  (lambda ()
-                   (calc-parser (make-lexer errorp) errorp))))
+                   (lalr-parser-run/with-error-handler
+                    calc-parser errorp
+                    (make-lexer errorp)))))
      (display-prompt)
          (start))))))
 

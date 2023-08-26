@@ -17,12 +17,13 @@
   (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
+    (only (euphrates lalr-parser-run)
+          lalr-parser-run))
+  (import
     (only (euphrates lalr-parser)
           lalr-parser
           make-lexical-token))
-  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
-  (import (only (euphrates stringf) stringf))
   (import
     (only (euphrates with-benchmark-simple)
           with-benchmark/simple))

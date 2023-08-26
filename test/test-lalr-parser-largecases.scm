@@ -121,14 +121,9 @@
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
 
-  (define (error-procedure type message-fmt token)
-    (raisu* :type 'parse-error
-            :message (stringf message-fmt token)
-            :args (list type token)))
-
   (define result
     (with-string-as-input
-     "5+3" (parser (make-lexer) error-procedure)))
+     "5+3" (lalr-parser-run parser (make-lexer))))
 
   (assert= #t result))
 
@@ -150,7 +145,8 @@
 
   (define result
     (with-string-as-input
-     "5++" (parser (make-lexer) error-procedure)))
+     "5++" (lalr-parser-run/with-error-handler
+            parser error-procedure (make-lexer))))
 
   (assert= #f result))
 
@@ -167,18 +163,13 @@
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
 
-  (define (error-procedure type message-fmt token)
-    (raisu* :type 'parse-error
-            :message (stringf message-fmt token)
-            :args (list type token)))
-
   (define result
-    (parser (make-repeating-lexer
-             3
-             (list (make-lexical-token 'NUM #f "5")
-                   (make-lexical-token '+ #f "+")
-                   (make-lexical-token 'NUM #f "3")))
-             error-procedure))
+    (lalr-parser-run
+     parser
+     (make-repeating-lexer
+      3 (list (make-lexical-token 'NUM #f "5")
+              (make-lexical-token '+ #f "+")
+              (make-lexical-token 'NUM #f "3")))))
 
   (assert= #t result))
 
@@ -195,17 +186,12 @@
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
 
-  (define (error-procedure type message-fmt token)
-    (raisu* :type 'parse-error
-            :message (stringf message-fmt token)
-            :args (list type token)))
-
   (define result
-    (parser (make-repeating-lexer
-             9
-             (list (make-lexical-token 'NUM #f "5")
-                   (make-lexical-token '+ #f "+")))
-             error-procedure))
+    (lalr-parser-run
+     parser
+     (make-repeating-lexer
+      9 (list (make-lexical-token 'NUM #f "5")
+              (make-lexical-token '+ #f "+")))))
 
   (assert= #t result))
 
@@ -225,12 +211,13 @@
   (define error-procedure ignore)
 
   (define result
-    (parser (make-repeating-lexer
-             3
-             (list (make-lexical-token 'NUM #f "5")
-                   (make-lexical-token '+ #f "+")
-                   (make-lexical-token '+ #f "+")))
-             error-procedure))
+    (lalr-parser-run/with-error-handler
+     parser
+     error-procedure
+     (make-repeating-lexer
+      3 (list (make-lexical-token 'NUM #f "5")
+              (make-lexical-token '+ #f "+")
+              (make-lexical-token '+ #f "+")))))
 
   (assert= #f result))
 
@@ -250,17 +237,12 @@
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
 
-  (define (error-procedure type message-fmt token)
-    (raisu* :type 'parse-error
-            :message (stringf message-fmt token)
-            :args (list type token)))
-
   (define result
-    (parser (make-repeating-lexer
-             5
-             (list (make-lexical-token 'NUM #f "5")
-                   (make-lexical-token '+ #f "+")))
-             error-procedure))
+    (lalr-parser-run
+     parser
+     (make-repeating-lexer
+      5 (list (make-lexical-token 'NUM #f "5")
+              (make-lexical-token '+ #f "+")))))
 
   (assert (procedure? result))
   (assert (result 'get)))
@@ -279,13 +261,9 @@
         (add      (+) : (,save 'add $1))
         (term     (NUM) : (,save 'term $1))))))
 
-  (define (error-procedure type message-fmt token)
-    (raisu* :type 'parse-error
-            :message (stringf message-fmt token)
-            :args (list type token)))
-
   (define result
-    (parser (make-brackets-lexer 3) error-procedure))
+    (lalr-parser-run
+     parser (make-brackets-lexer 3)))
 
   (assert= #t result))
 
@@ -307,13 +285,9 @@
         (add      (+) : (,save 'add $1))
         (term     (NUM) : (,save 'term $1))))))
 
-  (define (error-procedure type message-fmt token)
-    (raisu* :type 'parse-error
-            :message (stringf message-fmt token)
-            :args (list type token)))
-
   (define result
-    (parser (make-brackets-lexer 3) error-procedure))
+    (lalr-parser-run
+     parser (make-brackets-lexer 3)))
 
   (assert (procedure? result))
   (assert (result 'get)))
@@ -342,17 +316,13 @@
           (add      (+) : (,save $1))
           (term     (NUM) : (,save $1))))))
 
-    (define (error-procedure type message-fmt token)
-      (raisu* :type 'parse-error
-              :message (stringf message-fmt token)
-              :args (list type token)))
-
     (define result
-      (parser (make-repeating-lexer
-               t1-input-size
-               (list (make-lexical-token 'NUM #f "5")
-                     (make-lexical-token '+ #f "+")))
-              error-procedure))
+      (lalr-parser-run
+       parser
+       (make-repeating-lexer
+        t1-input-size
+        (list (make-lexical-token 'NUM #f "5")
+              (make-lexical-token '+ #f "+")))))
 
     (assert= #t result))
 
@@ -375,17 +345,13 @@
           (add      (+) : (,save $1))
           (term     (NUM) : (,save $1))))))
 
-    (define (error-procedure type message-fmt token)
-      (raisu* :type 'parse-error
-              :message (stringf message-fmt token)
-              :args (list type token)))
-
     (define result
-      (parser (make-repeating-lexer
-               t2-input-size
-               (list (make-lexical-token 'NUM #f "5")
-                     (make-lexical-token '+ #f "+")))
-              error-procedure))
+      (lalr-parser-run
+       parser
+       (make-repeating-lexer
+        t2-input-size
+        (list (make-lexical-token 'NUM #f "5")
+              (make-lexical-token '+ #f "+")))))
 
     (assert (procedure? result))
     (assert (result 'get)))
@@ -408,13 +374,10 @@
           (add      (+) : (,save 'add $1))
           (term     (NUM) : (,save 'term $1))))))
 
-    (define (error-procedure type message-fmt token)
-      (raisu* :type 'parse-error
-              :message (stringf message-fmt token)
-              :args (list type token)))
-
     (define result
-      (parser (make-brackets-lexer t3-input-size) error-procedure))
+      (lalr-parser-run
+       parser
+       (make-brackets-lexer t3-input-size)))
 
     (assert= #t result))
 
@@ -436,13 +399,9 @@
           (add      (+) : (,save 'add $1))
           (term     (NUM) : (,save 'term $1))))))
 
-    (define (error-procedure type message-fmt token)
-      (raisu* :type 'parse-error
-              :message (stringf message-fmt token)
-              :args (list type token)))
-
     (define result
-      (parser (make-brackets-lexer t4-input-size) error-procedure))
+      (lalr-parser-run
+       parser (make-brackets-lexer t4-input-size)))
 
     (assert (procedure? result))
     (assert (result 'get))))

@@ -2166,11 +2166,7 @@
       (make-lalr-parser-struct
        results-mode driver-name tokens rules actions code))
 
-    (define ret
-      (lambda args
-        (apply lalr-parser-run/with-error-handler (cons struct args))))
-
-    ret)
+    struct)
 
   (define options
     (extract-arguments arguments))

@@ -47,28 +47,16 @@
                   c)
                  (loop))))))))
 
-(define (error-procedure type message-fmt token)
-  (raisu* :type 'parse-error
-          :message (stringf message-fmt token)
-          :args (list type token)))
-
 (define glr-parser?/p
   (make-parameter #f))
 
 (define (make-test-parser parser-rules)
-  (define parser0
-    (lalr-parser
-     `((driver: ,(if (glr-parser?/p) 'glr 'lr))
-       (results: ,(if (glr-parser?/p) 'all 'first))
-       (on-conflict: ,ignore)
-       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (rules: ,@parser-rules))))
-
-  (if (glr-parser?/p)
-      (lambda args
-        (define iter (apply parser0 args))
-        (collect-iterator iter))
-      parser0))
+  (lalr-parser
+   `((driver: ,(if (glr-parser?/p) 'glr 'lr))
+     (results: ,(if (glr-parser?/p) 'all 'first))
+     (on-conflict: ,ignore)
+     (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+     (rules: ,@parser-rules))))
 
 (define (also-test-respective-glr parser-rules input expected-output)
   (define conflicting-glr? #f)
@@ -110,7 +98,13 @@
 
 (define (run-input parser input)
   (with-string-as-input
-   input (parser (make-lexer) error-procedure)))
+   input
+
+   (if (glr-parser?/p)
+       (let ()
+         (define iter (lalr-parser-run parser (make-lexer)))
+         (collect-iterator iter))
+       (lalr-parser-run parser (make-lexer)))))
 
 (define save list)
 
@@ -586,7 +580,7 @@ idblb idclb longeridlb"
 
   (define result
     (with-string-as-input
-     "5+3" (parser (make-lexer) error-procedure)))
+     "5+3" (lalr-parser-run parser (make-lexer))))
 
   (assert= '(expr (expr (term 5)) (add "+") (term 3)) result))
 
@@ -611,7 +605,8 @@ idblb idclb longeridlb"
 
   (define result
     (with-string-as-input
-     "5+" (parser (make-lexer) errorp)))
+     "5+" (lalr-parser-run/with-error-handler
+           parser errorp (make-lexer))))
 
   (assert errored?)
   (assert= #f result))
@@ -638,7 +633,8 @@ idblb idclb longeridlb"
 
   (define result
     (with-string-as-input
-     "5+-" (parser (make-lexer) errorp)))
+     "5+-" (lalr-parser-run/with-error-handler
+            parser errorp (make-lexer))))
 
   (assert errored?)
   (assert= #f result))
@@ -660,7 +656,7 @@ idblb idclb longeridlb"
      (define input (stringf "5+~a" n))
      (define result
        (with-string-as-input
-        input (parser (make-lexer) error-procedure)))
+        input (lalr-parser-run parser (make-lexer))))
 
      (assert= `(expr (expr (term 5)) (add "+") (term ,n)) result))
    (iota 15)))
@@ -670,7 +666,7 @@ idblb idclb longeridlb"
 
   (for-each
    (lambda (n)
-     (define parser0
+     (define parser
        (lalr-parser
         `((driver: glr)
           (results: all)
@@ -681,15 +677,14 @@ idblb idclb longeridlb"
            (add      (+))
            (term     (NUM))))))
 
-     (define parser
-       (lambda args
-         (define iter (apply parser0 args))
-         (collect-iterator iter)))
-
      (define input (stringf "5+~a" n))
      (define result
        (with-string-as-input
-        input (parser (make-lexer) error-procedure)))
+        input
+        (let ()
+          (define iter
+            (lalr-parser-run parser (make-lexer)))
+          (collect-iterator iter))))
 
      (assert= `((expr (expr (term 5)) (add "+") (term ,n))) result))
    (iota 15)))

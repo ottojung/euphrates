@@ -12,14 +12,6 @@
         (loop (cons x buf))
         buf)))
 
-(define (syntax-error type msg . args)
-  (display msg (current-error-port))
-  (parameterize ((current-output-port (current-error-port)))
-    (for-each (cut stringf " ~A" <>) args))
-  (newline (current-error-port))
-  (raisu 'misc-error))
-
-
 (define (make-lexer words)
   (let ((phrase words))
     (lambda ()
@@ -56,7 +48,8 @@
 
 (define (test-1)
   (collect-iterator
-   (parser-1 (make-lexer *phrase-1*) syntax-error)))
+   (lalr-parser-run
+    parser-1 (make-lexer *phrase-1*))))
 
 
 ;;;
@@ -81,7 +74,8 @@
 
 (define (test-2)
   (collect-iterator
-   (parser-2 (make-lexer *phrase-2*) syntax-error)))
+   (lalr-parser-run
+    parser-2 (make-lexer *phrase-2*))))
 
 (define (assert-length l n test-name)
   (assert= (length l) n))

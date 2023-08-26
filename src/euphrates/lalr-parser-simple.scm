@@ -103,4 +103,5 @@
   (lambda (errorp input)
     (lalr-parser/simple-transform-result
      flattened joined skiped inlined transformed
-     (upstream (make-lexer input) errorp))))
+     (lalr-parser-run/with-error-handler
+      upstream errorp (make-lexer input)))))

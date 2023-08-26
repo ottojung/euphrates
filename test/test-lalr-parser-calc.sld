@@ -3,6 +3,9 @@
   (test-lalr-parser-calc)
   (import (only (euphrates assert-equal) assert=))
   (import
+    (only (euphrates lalr-parser-run-with-error-handler)
+          lalr-parser-run/with-error-handler))
+  (import
     (only (euphrates lalr-parser)
           lalr-parser
           lexical-token-category

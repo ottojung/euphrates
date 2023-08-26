@@ -17,14 +17,13 @@
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
+    (only (euphrates lalr-parser-run)
+          lalr-parser-run))
+  (import
     (only (euphrates lalr-parser) lalr-parser))
-  (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           begin
-          car
-          cdr
           define
           list
           quasiquote

@@ -11,9 +11,6 @@
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates fkeyword) fkeyword?))
   (import
-    (only (euphrates lalr-parser-run-with-error-handler)
-          lalr-parser-run/with-error-handler))
-  (import
     (only (euphrates lalr-parser-struct)
           make-lalr-parser-struct))
   (import

@@ -22,6 +22,9 @@
     (only (euphrates lalr-lexer-irregex)
           make-lalr-lexer/irregex-factory))
   (import
+    (only (euphrates lalr-parser-run-with-error-handler)
+          lalr-parser-run/with-error-handler))
+  (import
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
   (import

@@ -1,11 +1,6 @@
 
 (define make-lexer make-lalr-lexer/latin)
 
-(define (error-procedure type/subtype message-fmt token)
-  (raisu* :type (car type/subtype)
-          :message (stringf message-fmt token)
-          :args (list (cdr type/subtype) token)))
-
 (define (make-test-parser parser-rules)
    (lalr-parser
     `((tokens: ,@lalr-lexr/latin-tokens)
@@ -29,7 +24,7 @@
    (run-input parser input)))
 
 (define (run-input parser input)
-  (parser (make-lexer input) error-procedure))
+  (lalr-parser-run parser (make-lexer input)))
 
 (define save list)
 

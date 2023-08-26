@@ -6,5 +6,4 @@
   (define code (lalr-parser-struct:code parser-struct))
   (define actions (lalr-parser-struct:actions parser-struct))
   (define compiled (eval code (environment '(scheme base))))
-  ((compiled actions) errorp token-iterator))
-
+  ((compiled actions) token-iterator errorp))

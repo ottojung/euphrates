@@ -6,11 +6,6 @@
 (define (iterate-results iter)
   (let loop () (when (iter) (loop))))
 
-(define (error-procedure type message-fmt token)
-  (raisu* :type 'parse-error
-          :message (stringf message-fmt token)
-          :args (list type token)))
-
 (define (make-repeating-lexer for-how-long repeating-tokens)
   (define buf repeating-tokens)
   (define i for-how-long)
@@ -89,12 +84,16 @@
             (add      (+) : #t)
             (term     (NUM) : #t))))))
 
+  (define lexer
+    (make-repeating-lexer
+     seq-len
+     (list (make-lexical-token 'NUM #f "5")
+           (make-lexical-token '+ #f "+"))))
+
   (define result
-    (parser (make-repeating-lexer
-             seq-len
-             (list (make-lexical-token 'NUM #f "5")
-                   (make-lexical-token '+ #f "+")))
-            error-procedure))
+    (if load?
+        (parser lexer ignore)
+        (lalr-parser-run parser lexer)))
 
   (if (equal? driver "lr")
       (assert= #t result)
@@ -127,8 +126,11 @@
             (add      (+) : #t)
             (term     (NUM) : #t))))))
 
- (define result
-   (parser (make-brackets-lexer tree-depth) error-procedure))
+  (define result
+    (if load?
+        (parser (make-brackets-lexer tree-depth) ignore)
+        (lalr-parser-run
+         parser (make-brackets-lexer tree-depth))))
 
  (if (equal? driver "lr")
      (assert= #t result)
