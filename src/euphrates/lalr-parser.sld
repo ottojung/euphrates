@@ -11,6 +11,12 @@
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates fkeyword) fkeyword?))
   (import
+    (only (euphrates lalr-parser-run-with-error-handler)
+          lalr-parser-run/with-error-handler))
+  (import
+    (only (euphrates lalr-parser-struct)
+          make-lalr-parser-struct))
+  (import
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
@@ -106,7 +112,6 @@
           vector?
           when))
   (import (only (scheme cxr) caaar cadar caddr))
-  (import (only (scheme eval) environment eval))
   (import (only (scheme write) display))
   (cond-expand
     (guile (import

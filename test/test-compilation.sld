@@ -726,6 +726,12 @@
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
+    (only (euphrates lalr-parser-run-with-error-handler)
+          lalr-parser-run/with-error-handler))
+  (import
+    (only (euphrates lalr-parser-run)
+          lalr-parser-run))
+  (import
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
   (import
@@ -744,6 +750,12 @@
     (only (euphrates lalr-parser-simple-do-skips)
           lalr-parser/simple-do-skips))
   (import
+    (only (euphrates lalr-parser-simple-do-transform)
+          lalr-parser/simple-do-transform))
+  (import
+    (only (euphrates lalr-parser-simple-extract-alist)
+          lalr-parser/simple-extract-alist))
+  (import
     (only (euphrates lalr-parser-simple-extract-regexes)
           lalr-parser/simple-extract-regexes))
   (import
@@ -758,6 +770,16 @@
   (import
     (only (euphrates lalr-parser-simple)
           lalr-parser/simple))
+  (import
+    (only (euphrates lalr-parser-struct)
+          lalr-parser-struct:actions
+          lalr-parser-struct:code
+          lalr-parser-struct:driver
+          lalr-parser-struct:results
+          lalr-parser-struct:rules
+          lalr-parser-struct:tokens
+          lalr-parser-struct?
+          make-lalr-parser-struct))
   (import
     (only (euphrates lalr-parser)
           lalr-parser

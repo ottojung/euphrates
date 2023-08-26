@@ -2160,16 +2160,19 @@
         (output-table! options)
         (output-parser! options code)))
 
-    (define compiled (eval code (environment '(scheme base))))
     (define actions (list->vector (reverse actions-list)))
 
-    (compiled actions))
+    (define struct
+      (make-lalr-parser-struct
+       results-mode driver-name tokens rules actions code))
+
+    (define ret
+      (lambda args
+        (apply lalr-parser-run/with-error-handler (cons struct args))))
+
+    ret)
 
   (define options
     (extract-arguments arguments))
 
   (build-driver options))
-
-
-
-
