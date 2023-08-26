@@ -2135,6 +2135,7 @@
 
     (define gram/actions (gen-tables! tokens rules))
     (define goto-table (build-goto-table))
+    (define reduction-table (build-reduction-table gram/actions))
 
     (define driver-code
       (cond
@@ -2151,7 +2152,7 @@
          (define goto-table ,goto-table)
          (lambda (actions)
            (define (external index . args) (apply (vector-ref actions index) args))
-           (define reduction-table ,(build-reduction-table gram/actions))
+           (define reduction-table ,reduction-table)
            ,@driver-code)))
 
     (define _output
