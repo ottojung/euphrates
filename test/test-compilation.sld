@@ -726,6 +726,9 @@
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
+    (only (euphrates lalr-parser-load)
+          lalr-parser-load))
+  (import
     (only (euphrates lalr-parser-run-with-error-handler)
           lalr-parser-run/with-error-handler))
   (import
@@ -787,7 +790,8 @@
           lexical-token-source
           lexical-token-value
           lexical-token?
-          make-lexical-token))
+          make-lexical-token
+          serialized-parser-typetag))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))

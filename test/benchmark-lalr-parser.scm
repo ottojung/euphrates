@@ -67,9 +67,9 @@
     (if load?
         (cond
          ((equal? driver "lr")
-          (parser-repeating-lr (vector)))
+          (lalr-parser-load parser-repeating-lr))
          ((equal? driver "glr")
-          (parser-repeating-glr (vector)))
+          (lalr-parser-load parser-repeating-glr))
          (else
           (raisu 'bad-driver-type driver)))
 
@@ -91,9 +91,7 @@
            (make-lexical-token '+ #f "+"))))
 
   (define result
-    (if load?
-        (parser lexer ignore)
-        (lalr-parser-run parser lexer)))
+    (lalr-parser-run parser lexer))
 
   (if (equal? driver "lr")
       (assert= #t result)
@@ -108,9 +106,9 @@
     (if load?
         (cond
          ((equal? driver "lr")
-          (parser-branching-lr (vector)))
+          (lalr-parser-load parser-branching-lr))
          ((equal? driver "glr")
-          (parser-branching-glr (vector)))
+          (lalr-parser-load parser-branching-glr))
          (else
           (raisu 'bad-driver-type driver)))
 
@@ -127,10 +125,8 @@
             (term     (NUM) : #t))))))
 
   (define result
-    (if load?
-        (parser (make-brackets-lexer tree-depth) ignore)
-        (lalr-parser-run
-         parser (make-brackets-lexer tree-depth))))
+    (lalr-parser-run
+     parser (make-brackets-lexer tree-depth)))
 
  (if (equal? driver "lr")
      (assert= #t result)

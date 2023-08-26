@@ -23,6 +23,9 @@
 (define lexical-token-typetag
   '*lexical-token*)
 
+(define serialized-parser-typetag
+  '*serialized-lalr-scm-parser*)
+
 (define (make-lexical-token category source value)
   (vector lexical-token-typetag category source value))
 
@@ -2066,8 +2069,25 @@
   (define (output-parser! options code)
     (let ((option (assq-or 'output-code: options)))
       (if option
-          (let ((callback (car option)))
-            (callback code)))))
+          (let ()
+            (define callback (car option))
+            (define tokens (options-get-tokens options))
+            (define rules (options-get-rules options))
+            (define code-actions (get-code-actions))
+            (define code*
+              `(let ()
+                 (define maybefun0 ,code)
+                 (define code-actions ,code-actions)
+                 (define maybefun (maybefun0 code-actions))
+                 (vector (quote ,serialized-parser-typetag)
+                         (quote ,results-mode)
+                         (quote ,driver-name)
+                         (quote ,tokens)
+                         (quote ,rules)
+                         code-actions
+                         (quote ,code)
+                         maybefun)))
+            (callback code*)))))
 
   (define (output-table! options)
     (let ((option (assq-or 'output-table: options)))
@@ -2122,6 +2142,9 @@
         (grammar-error "Malformed lalr-parser form: ~s" lst)))))
 
 
+  (define (get-code-actions)
+    (list->vector (reverse actions-list)))
+
   (define (build-driver options)
     (define tokens (options-get-tokens options))
     (define rules (options-get-rules options))
@@ -2160,11 +2183,13 @@
         (output-table! options)
         (output-parser! options code)))
 
-    (define actions (list->vector (reverse actions-list)))
+    (define actions (get-code-actions))
+    (define maybefun #f)
 
     (define struct
       (make-lalr-parser-struct
-       results-mode driver-name tokens rules actions code))
+       results-mode driver-name tokens
+       rules actions code maybefun))
 
     struct)
 

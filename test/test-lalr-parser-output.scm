@@ -17,7 +17,7 @@
 
   (assert current-code)
   (assert (list? current-code))
-  (assert (list-length=<? 10 current-code)))
+  (assert (list-length=<? 5 current-code)))
 
 (let ()
   (define out (open-output-string))
@@ -62,4 +62,4 @@
   (assert (< 10 (string-length out-table)))
   (assert current-code)
   (assert (list? current-code))
-  (assert (list-length=<? 10 current-code)))
+  (assert (list-length=<? 5 current-code)))

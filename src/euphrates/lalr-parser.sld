@@ -4,6 +4,7 @@
   (export
     lalr-parser
     make-lexical-token
+    serialized-parser-typetag
     lexical-token?
     lexical-token-category
     lexical-token-value

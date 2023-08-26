@@ -8,7 +8,8 @@
   )
 
 (define files
-  (map car (directory-files "scripts/generated")))
+  (filter (lambda (s) (not (string-suffix? ".gitignore" s)))
+          (map car (directory-files "scripts/generated"))))
 
 (for-each
  (lambda (file)

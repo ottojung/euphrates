@@ -1,6 +1,6 @@
 
 (define-library
-  (benchmark-lalr-parser)
+  (test-lalr-parser-load)
   (import
     (only (data parser-branching-glr)
           parser-branching-glr))
@@ -13,9 +13,7 @@
   (import
     (only (data parser-repeating-lr)
           parser-repeating-lr))
-  (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates assert) assert))
-  (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates lalr-parser-load)
           lalr-parser-load))
@@ -23,50 +21,58 @@
     (only (euphrates lalr-parser-run)
           lalr-parser-run))
   (import
-    (only (euphrates lalr-parser)
-          lalr-parser
-          make-lexical-token))
+    (only (euphrates lalr-parser) make-lexical-token))
   (import (only (euphrates raisu) raisu))
   (import
-    (only (euphrates with-benchmark-simple)
-          with-benchmark/simple))
+    (only (euphrates source-location)
+          make-source-location))
+  (import (only (euphrates stringf) stringf))
+  (import
+    (only (euphrates with-string-as-input)
+          with-string-as-input))
   (import
     (only (scheme base)
           *
           +
           -
           /
-          <
           =
-          >
+          and
+          apply
           begin
-          car
-          cdr
+          char=?
+          char?
           cond
+          cons
           define
+          define-values
           else
+          eof-object?
           equal?
-          even?
+          for-each
           if
           lambda
           let
+          let*
+          letrec
           list
-          modulo
-          null?
+          or
+          pair?
+          peek-char
           procedure?
-          quasiquote
           quote
-          set!
-          string->symbol
-          unquote
-          vector-length
-          vector-ref
-          when))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) first)))
-    (else (import (only (srfi 1) first))))
+          read-char
+          reverse
+          string
+          string->number
+          values))
+  (import
+    (only (scheme char)
+          char-alphabetic?
+          char-numeric?
+          char-whitespace?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "benchmark-lalr-parser.scm")))
-    (else (include "benchmark-lalr-parser.scm"))))
+             (include-from-path "test-lalr-parser-load.scm")))
+    (else (include "test-lalr-parser-load.scm"))))

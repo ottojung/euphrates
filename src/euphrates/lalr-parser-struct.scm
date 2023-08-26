@@ -3,7 +3,7 @@
 
 (define-type9 <lalr-parser-struct>
   (make-lalr-parser-struct
-   results driver tokens rules actions code)
+   results driver tokens rules actions code maybefun)
 
   lalr-parser-struct?
 
@@ -13,4 +13,5 @@
   (rules       lalr-parser-struct:rules)
   (actions     lalr-parser-struct:actions)
   (code        lalr-parser-struct:code)
+  (maybefun    lalr-parser-struct:maybefun)
   )
