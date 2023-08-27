@@ -3,7 +3,11 @@
 
 (define (lalr-parser-run/with-error-handler
          parser-struct errorp token-iterator)
-  (define code (lalr-parser-struct:code parser-struct))
-  (define actions (lalr-parser-struct:actions parser-struct))
-  (define compiled (eval code (environment '(scheme base))))
-  ((compiled actions) token-iterator errorp))
+  (define maybefun (lalr-parser-struct:maybefun parser-struct))
+  (if maybefun
+      (maybefun token-iterator errorp)
+      (let ()
+        (define code (lalr-parser-struct:code parser-struct))
+        (define actions (lalr-parser-struct:actions parser-struct))
+        (define compiled (eval code (environment '(scheme base))))
+        ((compiled actions) token-iterator errorp))))

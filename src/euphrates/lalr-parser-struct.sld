@@ -9,7 +9,8 @@
     lalr-parser-struct:tokens
     lalr-parser-struct:rules
     lalr-parser-struct:actions
-    lalr-parser-struct:code)
+    lalr-parser-struct:code
+    lalr-parser-struct:maybefun)
   (import
     (only (euphrates define-type9) define-type9))
   (import (only (scheme base) begin))

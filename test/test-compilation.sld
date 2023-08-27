@@ -778,6 +778,7 @@
           lalr-parser-struct:actions
           lalr-parser-struct:code
           lalr-parser-struct:driver
+          lalr-parser-struct:maybefun
           lalr-parser-struct:results
           lalr-parser-struct:rules
           lalr-parser-struct:tokens
