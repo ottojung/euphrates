@@ -723,6 +723,9 @@
     (only (euphrates lalr-lexer-latin)
           make-lalr-lexer/latin))
   (import
+    (only (euphrates lalr-lexer-singlechar)
+          make-lalr-lexer/singlechar-factory))
+  (import
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
