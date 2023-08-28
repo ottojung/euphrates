@@ -3,6 +3,9 @@
   (test-lalr-lexer-singlechar)
   (import (only (euphrates assert-equal) assert=))
   (import
+    (only (euphrates assert-throw) assert-throw))
+  (import (only (euphrates hashset) make-hashset))
+  (import
     (only (euphrates lalr-lexer-singlechar)
           make-lalr-lexer/singlechar-factory))
   (import
@@ -31,6 +34,12 @@
           quasiquote
           quote
           vector))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) any)))
+    (else (import (only (srfi 1) any))))
+  (cond-expand
+    (guile (import (only (srfi srfi-64) test-error)))
+    (else (import (only (srfi 64) test-error))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
