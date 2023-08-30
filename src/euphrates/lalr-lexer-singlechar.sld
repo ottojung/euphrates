@@ -2,20 +2,40 @@
 (define-library
   (euphrates lalr-lexer-singlechar)
   (export make-lalr-lexer/singlechar-factory)
+  (import
+    (only (euphrates apply-until-fixpoint)
+          apply-until-fixpoint))
+  (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates comp) comp))
-  (import (only (euphrates fn-pair) fn-pair))
+  (import
+    (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates hashmap)
+          hashmap->alist
           hashmap-ref
           hashmap-set!
           make-hashmap))
-  (import (only (euphrates hashset) hashset->list))
+  (import
+    (only (euphrates hashset)
+          hashset->list
+          hashset-add!
+          hashset-has?
+          list->hashset
+          make-hashset))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates lalr-parser) make-lexical-token))
+  (import
+    (only (euphrates list-deduplicate)
+          list-deduplicate/reverse))
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates list-or-map) list-or-map))
+  (import
+    (only (euphrates list-singleton-q)
+          list-singleton?))
+  (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates source-location)
@@ -24,15 +44,19 @@
   (import
     (only (scheme base)
           +
+          <
+          =
           >=
           _
           and
           append
+          apply
           begin
           car
           cdr
           char?
           cond
+          cons
           define
           define-values
           else
@@ -46,7 +70,6 @@
           let
           list
           map
-          member
           not
           null?
           or
@@ -55,6 +78,7 @@
           quote
           read-char
           set!
+          string
           string->list
           string->symbol
           string-append

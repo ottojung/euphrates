@@ -14,6 +14,8 @@
           lexical-token-source
           lexical-token-value))
   (import
+    (only (euphrates pretty-print) pretty-print))
+  (import
     (only (euphrates source-location)
           source-location-column
           source-location-length
@@ -24,16 +26,26 @@
           with-string-as-input))
   (import
     (only (scheme base)
+          =
           begin
           cons
           current-input-port
           define
           equal?
+          for-each
           if
+          lambda
+          length
           let
+          list
+          newline
           quasiquote
           quote
-          vector))
+          string?
+          vector
+          vector-length
+          vector-ref
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-1) any)))
     (else (import (only (srfi 1) any))))
