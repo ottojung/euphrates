@@ -61,6 +61,9 @@
     (only (euphrates append-string-file)
           append-string-file))
   (import
+    (only (euphrates apply-until-fixpoint)
+          apply-until-fixpoint))
+  (import
     (only (euphrates assert-called-once)
           assert-called-once
           with-called-once-extent))
