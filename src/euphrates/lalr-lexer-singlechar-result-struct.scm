@@ -3,9 +3,15 @@
 
 (define-type9 lalr-lexer/singlechar-result-struct
   (make-lalr-lexer/singlechar-result-struct
-   continuation)
+   lexer input-type input)
 
   lalr-lexer/singlechar-result-struct?
 
-  (continuation
-   lalr-lexer/singlechar-result-struct:continuation))
+  (lexer
+   lalr-lexer/singlechar-result-struct:lexer)
+
+  (input-type
+   lalr-lexer/singlechar-result-struct:input-type)
+
+  (input
+   lalr-lexer/singlechar-result-struct:input))

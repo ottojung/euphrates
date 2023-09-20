@@ -4,7 +4,9 @@
   (export
     make-lalr-lexer/singlechar-result-struct
     lalr-lexer/singlechar-result-struct?
-    lalr-lexer/singlechar-result-struct:continuation)
+    lalr-lexer/singlechar-result-struct:lexer
+    lalr-lexer/singlechar-result-struct:input-type
+    lalr-lexer/singlechar-result-struct:input)
   (import
     (only (euphrates define-type9) define-type9))
   (import (only (scheme base) begin))

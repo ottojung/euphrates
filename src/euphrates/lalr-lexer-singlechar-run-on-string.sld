@@ -3,8 +3,8 @@
   (euphrates lalr-lexer-singlechar-run-on-string)
   (export lalr-lexer/singlechar:run-on-string)
   (import
-    (only (euphrates lalr-lexer-singlechar-start)
-          lalr-lexer/singlechar-start))
+    (only (euphrates lalr-lexer-singlechar-result-struct)
+          make-lalr-lexer/singlechar-result-struct))
   (import
     (only (scheme base) begin define quote string))
   (cond-expand

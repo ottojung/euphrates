@@ -734,7 +734,9 @@
           lalr-lexer/singlechar-result:as-iterator))
   (import
     (only (euphrates lalr-lexer-singlechar-result-struct)
-          lalr-lexer/singlechar-result-struct:continuation
+          lalr-lexer/singlechar-result-struct:input
+          lalr-lexer/singlechar-result-struct:input-type
+          lalr-lexer/singlechar-result-struct:lexer
           lalr-lexer/singlechar-result-struct?
           make-lalr-lexer/singlechar-result-struct))
   (import
@@ -744,9 +746,6 @@
   (import
     (only (euphrates lalr-lexer-singlechar-run-on-string)
           lalr-lexer/singlechar:run-on-string))
-  (import
-    (only (euphrates lalr-lexer-singlechar-start)
-          lalr-lexer/singlechar-start))
   (import
     (only (euphrates lalr-lexer-singlechar-struct)
           lalr-lexer/singlechar-struct:additional-grammar-rules
