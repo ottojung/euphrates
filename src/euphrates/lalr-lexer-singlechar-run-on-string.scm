@@ -3,6 +3,6 @@
 
 (define (lalr-lexer/singlechar:run-on-string this input-string)
   (define initializer
-    (lalr-lexer/singlechar-struct:lexer/string this))
+    (lalr-lexer/singlechar-start this 'string))
 
   (initializer input-string))

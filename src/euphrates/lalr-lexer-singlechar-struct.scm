@@ -4,8 +4,8 @@
 (define-type9 lalr-lexer/singlechar-struct
   (make-lalr-lexer/singlechar-struct
    additional-grammar-rules
-   lexer/port
-   lexer/string
+   categories
+   singleton-map
    )
 
   lalr-lexer/singlechar-struct?
@@ -13,8 +13,8 @@
   (additional-grammar-rules
    lalr-lexer/singlechar-struct:additional-grammar-rules)
 
-  (lexer/port
-   lalr-lexer/singlechar-struct:lexer/port)
+  (categories
+   lalr-lexer/singlechar-struct:categories)
 
-  (lexer/string
-   lalr-lexer/singlechar-struct:lexer/string))
+  (singleton-map
+   lalr-lexer/singlechar-struct:singleton-map))

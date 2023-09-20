@@ -202,6 +202,9 @@
     (only (euphrates cfg-strip-modifiers)
           CFG-strip-modifiers))
   (import
+    (only (euphrates char-nocase-alphabetic-huh)
+          char-nocase-alphabetic?))
+  (import
     (only (euphrates chibi-parser)
           char-hex-digit?
           char-octal-digit?
@@ -742,10 +745,13 @@
     (only (euphrates lalr-lexer-singlechar-run-on-string)
           lalr-lexer/singlechar:run-on-string))
   (import
+    (only (euphrates lalr-lexer-singlechar-start)
+          lalr-lexer/singlechar-start))
+  (import
     (only (euphrates lalr-lexer-singlechar-struct)
           lalr-lexer/singlechar-struct:additional-grammar-rules
-          lalr-lexer/singlechar-struct:lexer/port
-          lalr-lexer/singlechar-struct:lexer/string
+          lalr-lexer/singlechar-struct:categories
+          lalr-lexer/singlechar-struct:singleton-map
           lalr-lexer/singlechar-struct?
           make-lalr-lexer/singlechar-struct))
   (import

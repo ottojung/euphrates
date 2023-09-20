@@ -3,9 +3,10 @@
   (euphrates lalr-lexer-singlechar-run-on-string)
   (export lalr-lexer/singlechar:run-on-string)
   (import
-    (only (euphrates lalr-lexer-singlechar-struct)
-          lalr-lexer/singlechar-struct:lexer/string))
-  (import (only (scheme base) begin define))
+    (only (euphrates lalr-lexer-singlechar-start)
+          lalr-lexer/singlechar-start))
+  (import
+    (only (scheme base) begin define quote string))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

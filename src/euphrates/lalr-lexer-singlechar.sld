@@ -6,6 +6,9 @@
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
   (import (only (euphrates assq-or) assq-or))
+  (import
+    (only (euphrates char-nocase-alphabetic-huh)
+          char-nocase-alphabetic?))
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates define-pair) define-pair))
@@ -24,13 +27,8 @@
           make-hashset))
   (import (only (euphrates identity) identity))
   (import
-    (only (euphrates lalr-lexer-singlechar-result-struct)
-          make-lalr-lexer/singlechar-result-struct))
-  (import
     (only (euphrates lalr-lexer-singlechar-struct)
           make-lalr-lexer/singlechar-struct))
-  (import
-    (only (euphrates lalr-parser) make-lexical-token))
   (import
     (only (euphrates list-deduplicate)
           list-deduplicate/reverse))
@@ -43,17 +41,12 @@
           list-singleton?))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
-  (import
-    (only (euphrates source-location)
-          make-source-location))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           +
           <
           =
-          >=
-          _
           and
           append
           apply
@@ -66,9 +59,6 @@
           define
           define-values
           else
-          eof-object
-          eof-object?
-          eq?
           equal?
           for-each
           if
@@ -79,11 +69,8 @@
           not
           null?
           or
-          port?
           quasiquote
           quote
-          read-char
-          set!
           string
           string->list
           string->symbol
@@ -98,7 +85,6 @@
           when))
   (import
     (only (scheme char)
-          char-alphabetic?
           char-lower-case?
           char-numeric?
           char-upper-case?

@@ -107,11 +107,6 @@
   (define class-expressions
     (map (lambda (c) (list 'class c)) classes))
 
-  (define (is-nocase-alpha? c)
-    (and (char-alphabetic? c)
-         (not (char-upper-case? c))
-         (not (char-lower-case? c))))
-
   (define singleton-tokens-alist
     (hashmap->alist singleton-map))
 
@@ -120,7 +115,7 @@
 
   (define upcase-used (get-used-set char-upper-case?))
   (define lowercase-used (get-used-set char-lower-case?))
-  (define nocase-used (get-used-set is-nocase-alpha?))
+  (define nocase-used (get-used-set char-nocase-alphabetic?))
   (define numeric-used (get-used-set char-numeric?))
   (define whitespace-used (get-used-set char-whitespace?))
 
@@ -267,89 +262,15 @@
     (append additional-grammar-rules/singletons
             additional-grammar-rules/strings))
 
-  (define (factory input-type)
-    (define (initializer input)
-
-      (define offset 0)
-      (define linenum 0)
-      (define colnum 0)
-
-      (define (adjust-positions! c)
-        (set! offset (+ offset 1))
-
-        (define nl? (equal? c #\newline))
-        (when nl? (set! linenum (+ linenum 1)))
-        (set! colnum (if nl? 0 (+ 1 colnum))))
-
-      (define read-next-char
-        (cond
-         ((equal? 'string input-type)
-
-          (unless (string? input)
-            (raisu* :from "lalr-lexer/singlechar"
-                    :type 'bad-input-type
-                    :message "Singlechar lexer expected a string, but got some other type"
-                    :args (list input)))
-
-          (let ((input-length (string-length input)))
-            (lambda _
-              (if (>= offset input-length)
-                  (eof-object)
-                  (let ((c (string-ref input offset)))
-                    (adjust-positions! c)
-                    c)))))
-
-         ((equal? 'port input-type)
-
-          (unless (port? input)
-            (raisu* :from "lalr-lexer/singlechar"
-                    :type 'bad-input-type
-                    :message "Singlechar lexer expected a port, but got some other type"
-                    :args (list input)))
-
-          (lambda _
-            (let ((c (read-char input)))
-              (unless (eof-object? c)
-                (adjust-positions! c))
-              c)))
-
-         (else
-          (raisu* :from "lalr-lexer/singlechar"
-                  :type 'bad-input-type
-                  :message "Singlechar lexer expected a string or a port as input, but got some other type"
-                  :args (list input)))))
-
-      (define (wrap-return c category)
-        (define location
-          (make-source-location '*stdin* linenum colnum offset 1))
-        (make-lexical-token category location c))
-
-      (define (process-next . _)
-        (define c (read-next-char))
-        (if (eof-object? c) '*eoi*
-            (let ()
-              (define category
-                (or (hashmap-ref singleton-map c #f)
-                    (and (char-whitespace? c) category-whitespace)
-                    (and (char-numeric? c) category-numeric)
-                    (and (is-nocase-alpha? c) category-nocase)
-                    (and (char-lower-case? c) category-lowercase)
-                    (and (char-upper-case? c) category-upcase)
-                    category-any))
-
-              (when (eq? category most-default-category)
-                (raisu* :from "make-lalr-lexer/irregex-factory"
-                        :type 'unrecognized-character
-                        :message "Encountered a character that is not handled by any of the grammar rules"
-                        :args (list c)))
-
-              (wrap-return c category))))
-
-      (make-lalr-lexer/singlechar-result-struct process-next))
-
-    initializer)
+  (define categories
+    `((whitespace . ,category-whitespace)
+      (numeric . ,category-numeric)
+      (nocase . ,category-nocase)
+      (lowercase . ,category-lowercase)
+      (upcase . ,category-upcase)
+      (any . ,category-any)
+      (most-default . ,most-default-category)))
 
   (make-lalr-lexer/singlechar-struct
    additional-grammar-rules
-   (factory 'port)
-   (factory 'string)))
+   categories singleton-map))
