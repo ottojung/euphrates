@@ -726,8 +726,31 @@
     (only (euphrates lalr-lexer-latin)
           make-lalr-lexer/latin))
   (import
+    (only (euphrates
+            lalr-lexer-singlechar-result-as-iterator)
+          lalr-lexer/singlechar-result:as-iterator))
+  (import
+    (only (euphrates lalr-lexer-singlechar-result-struct)
+          lalr-lexer/singlechar-result-struct:continuation
+          lalr-lexer/singlechar-result-struct?
+          make-lalr-lexer/singlechar-result-struct))
+  (import
+    (only (euphrates
+            lalr-lexer-singlechar-run-on-char-port)
+          lalr-lexer/singlechar:run-on-char-port))
+  (import
+    (only (euphrates lalr-lexer-singlechar-run-on-string)
+          lalr-lexer/singlechar:run-on-string))
+  (import
+    (only (euphrates lalr-lexer-singlechar-struct)
+          lalr-lexer/singlechar-struct:additional-grammar-rules
+          lalr-lexer/singlechar-struct:lexer/port
+          lalr-lexer/singlechar-struct:lexer/string
+          lalr-lexer/singlechar-struct?
+          make-lalr-lexer/singlechar-struct))
+  (import
     (only (euphrates lalr-lexer-singlechar)
-          make-lalr-lexer/singlechar-factory))
+          make-lalr-lexer/singlechar))
   (import
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))

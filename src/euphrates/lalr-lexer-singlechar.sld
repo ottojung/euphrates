@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates lalr-lexer-singlechar)
-  (export make-lalr-lexer/singlechar-factory)
+  (export make-lalr-lexer/singlechar)
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
@@ -23,6 +23,12 @@
           list->hashset
           make-hashset))
   (import (only (euphrates identity) identity))
+  (import
+    (only (euphrates lalr-lexer-singlechar-result-struct)
+          make-lalr-lexer/singlechar-result-struct))
+  (import
+    (only (euphrates lalr-lexer-singlechar-struct)
+          make-lalr-lexer/singlechar-struct))
   (import
     (only (euphrates lalr-parser) make-lexical-token))
   (import

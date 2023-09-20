@@ -17,14 +17,23 @@
   (define taken
     (make-hashset))
 
-  (define lexer-factory
-    (make-lalr-lexer/singlechar-factory taken tokens-alist))
-
   (define lexer
-    (lexer-factory input))
+    (make-lalr-lexer/singlechar taken tokens-alist))
+
+  (define lexer-result
+    (cond
+     ((string? input)
+      (lalr-lexer/singlechar:run-on-string lexer input))
+     ((port? input)
+      (lalr-lexer/singlechar:run-on-char-port lexer input))
+     (else
+      (raisu 'bad-input-type input))))
+
+  (define lexer-iterator
+    (lalr-lexer/singlechar-result:as-iterator lexer-result))
 
   (define output
-    (collect lexer))
+    (collect lexer-iterator))
 
   (assert= (length output) (length expected-output))
 

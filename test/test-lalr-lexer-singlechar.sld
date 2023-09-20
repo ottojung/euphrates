@@ -6,15 +6,25 @@
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates hashset) make-hashset))
   (import
+    (only (euphrates
+            lalr-lexer-singlechar-result-as-iterator)
+          lalr-lexer/singlechar-result:as-iterator))
+  (import
+    (only (euphrates
+            lalr-lexer-singlechar-run-on-char-port)
+          lalr-lexer/singlechar:run-on-char-port))
+  (import
+    (only (euphrates lalr-lexer-singlechar-run-on-string)
+          lalr-lexer/singlechar:run-on-string))
+  (import
     (only (euphrates lalr-lexer-singlechar)
-          make-lalr-lexer/singlechar-factory))
+          make-lalr-lexer/singlechar))
   (import
     (only (euphrates lalr-parser)
           lexical-token-category
           lexical-token-source
           lexical-token-value))
-  (import
-    (only (euphrates pretty-print) pretty-print))
+  (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)
           source-location-column
@@ -28,24 +38,24 @@
     (only (scheme base)
           =
           begin
+          cond
           cons
           current-input-port
           define
+          else
           equal?
           for-each
           if
           lambda
           length
           let
-          list
-          newline
+          port?
           quasiquote
           quote
           string?
           vector
           vector-length
-          vector-ref
-          when))
+          vector-ref))
   (cond-expand
     (guile (import (only (srfi srfi-1) any)))
     (else (import (only (srfi 1) any))))
