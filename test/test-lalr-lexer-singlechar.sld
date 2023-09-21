@@ -7,6 +7,10 @@
   (import (only (euphrates hashset) make-hashset))
   (import
     (only (euphrates
+            lalr-lexer-singlechar-additional-grammar-rules)
+          lalr-lexer/singlechar:additional-grammar-rules))
+  (import
+    (only (euphrates
             lalr-lexer-singlechar-result-as-iterator)
           lalr-lexer/singlechar-result:as-iterator))
   (import

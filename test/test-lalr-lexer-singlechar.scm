@@ -13,12 +13,15 @@
                 (loop))))))
 
 
-(define (test/generic tokens-alist input expected-output)
+(define (test/generic tokens-alist input expected-output expected-additional-rules)
   (define taken
     (make-hashset))
 
   (define lexer
     (make-lalr-lexer/singlechar taken tokens-alist))
+
+  (define additional-grammar-rules
+    (lalr-lexer/singlechar:additional-grammar-rules lexer))
 
   (define lexer-result
     (cond
@@ -35,6 +38,8 @@
   (define output
     (collect lexer-iterator))
 
+  (assert= expected-additional-rules additional-grammar-rules)
+
   (assert= (length output) (length expected-output))
 
   (for-each
@@ -49,26 +54,28 @@
 
    output expected-output))
 
-(define (test/string tokens-alist input expected-output)
-  (test/generic tokens-alist input expected-output))
+(define (test/string tokens-alist input expected-output expected-additional-rules)
+  (test/generic tokens-alist input expected-output expected-additional-rules))
 
-(define (test/port tokens-alist input expected-output)
+(define (test/port tokens-alist input expected-output expected-additional-rules)
   (with-string-as-input
    input
-   (test/generic tokens-alist (current-input-port) expected-output)))
+   (test/generic tokens-alist (current-input-port) expected-output expected-additional-rules)))
 
-(define (test1 tokens-alist input expected-output)
-  (test/string tokens-alist input expected-output)
-  (test/port tokens-alist input expected-output))
+(define (test1 tokens-alist input expected-output expected-additional-rules)
+  (test/string tokens-alist input expected-output expected-additional-rules)
+  (test/port tokens-alist input expected-output expected-additional-rules))
 
 (define (test-error tokens-alist input expected-error-type)
-  (assert-throw
-   expected-error-type
-   (test/string tokens-alist input '()))
+  (define additional-grammar-rules 'whatever-ignore-it)
 
   (assert-throw
    expected-error-type
-   (test/port tokens-alist input '())))
+   (test/string tokens-alist input '() additional-grammar-rules))
+
+  (assert-throw
+   expected-error-type
+   (test/port tokens-alist input '() additional-grammar-rules)))
 
 
 ;;;;;;;;;
@@ -76,6 +83,661 @@
 ;; Start...
 ;;
 
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_9 . "9"))
+
+ "19371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(t_9 #\9 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '()
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (c_any class any))
+
+ "19371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c1_any #\9 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((c_any (t_3)
+          (t_0)
+          (t_4)
+          (t_6)
+          (t_2)
+          (t_1)
+          (t_7)
+          (t_8)
+          (t_5)
+          (c1_any)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_other class any))
+
+ "19371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_any #\9 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_other
+    (t_3)
+    (t_0)
+    (t_4)
+    (t_6)
+    (t_2)
+    (t_1)
+    (t_7)
+    (t_8)
+    (t_5)
+    (c_any)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_num class numeric))
+
+ "19371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_numeric #\9 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_num (t_3)
+          (t_0)
+          (t_4)
+          (t_6)
+          (t_2)
+          (t_1)
+          (t_7)
+          (t_8)
+          (t_5)
+          (c_numeric)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_? class alphabetic))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_alphabetic #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_? (c_alphabetic)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_? class alphanum))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_alphanum #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_? (t_3)
+        (t_0)
+        (t_4)
+        (t_6)
+        (t_2)
+        (t_1)
+        (t_7)
+        (t_8)
+        (t_5)
+        (c_alphanum)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_x class alphanum)
+   (t_a class alphabetic))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_alphabetic #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_x (t_a)
+        (t_3)
+        (t_0)
+        (t_4)
+        (t_6)
+        (t_2)
+        (t_1)
+        (t_7)
+        (t_8)
+        (t_5)
+        (c_alphanum))
+   (t_a (c_alphabetic)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_a class alphabetic)
+   (t_x class alphanum))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_alphabetic #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_x (t_a)
+        (t_3)
+        (t_0)
+        (t_4)
+        (t_6)
+        (t_2)
+        (t_1)
+        (t_7)
+        (t_8)
+        (t_5)
+        (c_alphanum))
+   (t_a (c_alphabetic)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_a class alphabetic)
+   (t_n class numeric)
+   (t_x class alphanum))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_alphabetic #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_x (t_a) (t_n) (c_alphanum))
+   (t_a (c_alphabetic))
+   (t_n (t_3)
+        (t_0)
+        (t_4)
+        (t_6)
+        (t_2)
+        (t_1)
+        (t_7)
+        (t_8)
+        (t_5)
+        (c_numeric)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_x . "x3")
+   (t_a class alphabetic)
+   (t_n class numeric)
+   (t_x class alphanum))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c_x #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_x (t_a) (t_n) (c_alphanum))
+   (t_a (c_x) (c_alphabetic))
+   (t_n (t_3)
+        (t_0)
+        (t_4)
+        (t_6)
+        (t_2)
+        (t_1)
+        (t_7)
+        (t_8)
+        (t_5)
+        (c_numeric))
+   (t_x (c_x c_3)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (c_x . "x3")
+   (t_a class alphabetic)
+   (t_n class numeric)
+   (t_x class alphanum))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(c1_x #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_x (t_a) (t_n) (c1_alphanum))
+   (t_a (c1_x) (c1_alphabetic))
+   (t_n (t_3)
+        (t_0)
+        (t_4)
+        (t_6)
+        (t_2)
+        (t_1)
+        (t_7)
+        (t_8)
+        (t_5)
+        (c1_numeric))
+   (c_x (c1_x c1_3)))
+ )
+
+
+
+(test1
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_12 . "12")
+   (t_num class numeric))
+
+ "1123412"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(t_1 #\1 0 2 2 1)
+   #(t_2 #\2 0 3 3 1)
+   #(t_3 #\3 0 4 4 1)
+   #(t_4 #\4 0 5 5 1)
+   #(t_1 #\1 0 6 6 1)
+   #(t_2 #\2 0 7 7 1))
+
+ '((t_num (t_3)
+          (t_0)
+          (t_4)
+          (t_6)
+          (t_2)
+          (t_1)
+          (t_7)
+          (t_8)
+          (t_5)
+          (c_numeric))
+   (t_12 (c_1 c_2)))
+ )
+
+
+
+(test1
+ '((t_1 . "1"))
+
+ ""
+
+ '()
+
+ '()
+ )
+
+
+
+(test1
+ '((t_A . "A") (t_B . "B"))
+
+ "AB"
+
+ '(#(t_A #\A 0 1 1 1) #(t_B #\B 0 2 2 1))
+
+ '()
+ )
+
+
+
+(test1
+ '((t_AB . "AB"))
+
+ "AB"
+
+ '(#(c_A #\A 0 1 1 1) #(c_B #\B 0 2 2 1))
+
+ '((t_AB (c_A c_B)))
+ )
+
+
+
+(test1
+ '((t_num class numeric))
+
+ "123"
+
+ '(#(c_numeric #\1 0 1 1 1)
+   #(c_numeric #\2 0 2 2 1)
+   #(c_numeric #\3 0 3 3 1))
+
+ '((t_num (c_numeric)))
+ )
+
+
+
+(test1
+ '((t_A . "A") (t_num class numeric))
+
+ "A1"
+
+ '(#(t_A #\A 0 1 1 1) #(c_numeric #\1 0 2 2 1))
+
+ '((t_num (c_numeric)))
+ )
+
+
+
+(test1
+ '((t_AB . "AB") (t_num class numeric))
+
+ "AB1"
+
+ '(#(c_A #\A 0 1 1 1)
+   #(c_B #\B 0 2 2 1)
+   #(c_numeric #\1 0 3 3 1))
+
+ '((t_num (c_numeric)) (t_AB (c_A c_B)))
+ )
+
+
+
+(test1
+ '((t_A . "A") (t_AB . "AB") (t_num class numeric))
+
+ "AAB1"
+
+ '(#(t_A #\A 0 1 1 1)
+   #(t_A #\A 0 2 2 1)
+   #(c_B #\B 0 3 3 1)
+   #(c_numeric #\1 0 4 4 1))
+
+ '((t_num (c_numeric)) (t_AB (c_A c_B)))
+ )
+
+
+
+(test1
+ '((t_A . "A"))
+
+ "AAA"
+
+ '(#(t_A #\A 0 1 1 1)
+   #(t_A #\A 0 2 2 1)
+   #(t_A #\A 0 3 3 1))
+
+ '()
+ )
+
+
+
+(test1
+ '((t_AB . "AB"))
+
+ "ABAB"
+
+ '(#(c_A #\A 0 1 1 1)
+   #(c_B #\B 0 2 2 1)
+   #(c_A #\A 0 3 3 1)
+   #(c_B #\B 0 4 4 1))
+
+ '((t_AB (c_A c_B)))
+ )
+
+
+
+(test1
+ '((t_num class numeric) (t_any class any))
+
+ "A1"
+
+ '(#(c_any #\A 0 1 1 1) #(c_numeric #\1 0 2 2 1))
+
+ '((t_any (t_num) (c_any)) (t_num (c_numeric)))
+ )
+
+
+
+(test1
+ '((t_AB1 . "AB1") (t_num class numeric))
+
+ "AB1"
+
+ '(#(c_A #\A 0 1 1 1)
+   #(c_B #\B 0 2 2 1)
+   #(c_1 #\1 0 3 3 1))
+
+ '((t_num (c_1) (c_numeric)) (t_AB1 (c_A c_B c_1)))
+ )
+
+
+
+(test1
+ '((t_A . "A") (t_any class any))
+
+ "A"
+
+ '(#(t_A #\A 0 1 1 1))
+
+ '((t_any (t_A) (c_any)))
+ )
+
+
+
+(test1
+ '((t_num class numeric))
+
+ "123"
+
+ '(#(c_numeric #\1 0 1 1 1)
+   #(c_numeric #\2 0 2 2 1)
+   #(c_numeric #\3 0 3 3 1))
+
+ '((t_num (c_numeric)))
+ )
+
+
+
+(test1
+ '((t_alpha class alphabetic))
+
+ "ABC"
+
+ '(#(c_alphabetic #\A 0 1 1 1)
+   #(c_alphabetic #\B 0 2 2 1)
+   #(c_alphabetic #\C 0 3 3 1))
+
+ '((t_alpha (c_alphabetic)))
+ )
+
+
+
+(test1
+ '((t_alnum class alphanum))
+
+ "A1"
+
+ '(#(c_alphanum #\A 0 1 1 1)
+   #(c_alphanum #\1 0 2 2 1))
+
+ '((t_alnum (c_alphanum)))
+ )
+
+
+
+;;;;;;;;
+;;
+;; Error cases
+;;
 
 
 (test-error
@@ -95,7 +757,6 @@
  'unrecognized-character
 
  )
-
 
 
 
@@ -133,456 +794,5 @@
 
 ;; 17. Middle Character Unrecognized
 (test-error `((t_A . "A")) "ABA" 'unrecognized-character)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_9 . "9"))
- "19371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(t_9 #\9 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (c_any class any))
- "19371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c1_any #\9 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_other class any))
- "19371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_any #\9 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_num class numeric))
- "19371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_numeric #\9 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_? class alphabetic))
- "1x371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_alphabetic #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_? class alphanum))
- "1x371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_alphanum #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_x class alphanum)
-   (t_a class alphabetic))
- "1x371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_alphabetic #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_a class alphabetic)
-   (t_x class alphanum))
- "1x371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_alphabetic #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_a class alphabetic)
-   (t_n class numeric)
-   (t_x class alphanum))
- "1x371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_alphabetic #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_x . "x3")
-   (t_a class alphabetic)
-   (t_n class numeric)
-   (t_x class alphanum))
- "1x371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c_x #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (c_x . "x3")
-   (t_a class alphabetic)
-   (t_n class numeric)
-   (t_x class alphanum))
- "1x371634"
- '(#(t_1 #\1 0 1 1 1)
-   #(c1_x #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1)))
-
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_12 . "12")
-   (t_num class numeric))
- "1123412"
- '(#(t_1 #\1 0 1 1 1)
-   #(t_1 #\1 0 2 2 1)
-   #(t_2 #\2 0 3 3 1)
-   #(t_3 #\3 0 4 4 1)
-   #(t_4 #\4 0 5 5 1)
-   #(t_1 #\1 0 6 6 1)
-   #(t_2 #\2 0 7 7 1)))
-
-
-
-
-(test1
- '((t_1 . "1")) "" '())
-
-
-
-
-(test1
- '((t_A . "A") (t_B . "B"))
- "AB"
- '(#(t_A #\A 0 1 1 1) #(t_B #\B 0 2 2 1)))
-
-
-
-
-(test1
- '((t_AB . "AB"))
- "AB"
- '(#(c_A #\A 0 1 1 1) #(c_B #\B 0 2 2 1)))
-
-
-
-
-(test1
- '((t_num class numeric))
- "123"
- '(#(c_numeric #\1 0 1 1 1)
-   #(c_numeric #\2 0 2 2 1)
-   #(c_numeric #\3 0 3 3 1)))
-
-
-
-
-(test1
- '((t_A . "A") (t_num class numeric))
- "A1"
- '(#(t_A #\A 0 1 1 1) #(c_numeric #\1 0 2 2 1)))
-
-
-
-
-(test1
- '((t_AB . "AB") (t_num class numeric))
- "AB1"
- '(#(c_A #\A 0 1 1 1)
-   #(c_B #\B 0 2 2 1)
-   #(c_numeric #\1 0 3 3 1)))
-
-
-
-
-(test1
- '((t_A . "A") (t_AB . "AB") (t_num class numeric))
- "AAB1"
- '(#(t_A #\A 0 1 1 1)
-   #(t_A #\A 0 2 2 1)
-   #(c_B #\B 0 3 3 1)
-   #(c_numeric #\1 0 4 4 1)))
-
-
-
-
-(test1
- '((t_A . "A"))
- "AAA"
- '(#(t_A #\A 0 1 1 1)
-   #(t_A #\A 0 2 2 1)
-   #(t_A #\A 0 3 3 1)))
-
-
-
-
-(test1
- '((t_AB . "AB"))
- "ABAB"
- '(#(c_A #\A 0 1 1 1)
-   #(c_B #\B 0 2 2 1)
-   #(c_A #\A 0 3 3 1)
-   #(c_B #\B 0 4 4 1)))
-
-
-
-
-(test1
- '((t_num class numeric) (t_any class any))
- "A1"
- '(#(c_any #\A 0 1 1 1) #(c_numeric #\1 0 2 2 1)))
-
-
-
-
-(test1
- '((t_AB1 . "AB1") (t_num class numeric))
- "AB1"
- '(#(c_A #\A 0 1 1 1)
-   #(c_B #\B 0 2 2 1)
-   #(c_1 #\1 0 3 3 1)))
-
-
-
-
-(test1
- '((t_A . "A") (t_any class any))
- "A"
- '(#(t_A #\A 0 1 1 1)))
-
-
-
-
-(test1
- '((t_num class numeric))
- "123"
- '(#(c_numeric #\1 0 1 1 1)
-   #(c_numeric #\2 0 2 2 1)
-   #(c_numeric #\3 0 3 3 1)))
-
-
-
-
-(test1
- '((t_alpha class alphabetic))
- "ABC"
- '(#(c_alphabetic #\A 0 1 1 1)
-   #(c_alphabetic #\B 0 2 2 1)
-   #(c_alphabetic #\C 0 3 3 1)))
-
-
-
-
-(test1
- '((t_alnum class alphanum))
- "A1"
- '(#(c_alphanum #\A 0 1 1 1)
-   #(c_alphanum #\1 0 2 2 1)))
-
-
 
 
