@@ -50,19 +50,6 @@
           (add-singleton-category c category)
           category)))
 
-  (define additional-grammar-rules/strings
-    (filter
-     identity
-     (map (lambda (p)
-            (define-pair (token expr) p)
-
-            (and (string? expr)
-                 (< 1 (string-length expr))
-                 (cons token
-                       (list (map get-singleton-token
-                                  (string->list expr))))))
-          tokens-alist)))
-
   (define (populate-singleton-categories p)
     (define-pair (category char) p)
     (add-singleton-category char category))
@@ -115,6 +102,19 @@
             tokens-alist)))
 
     (for-each populate-singleton-categories singleton-tokens-alist))
+
+  (define additional-grammar-rules/strings
+    (filter
+     identity
+     (map (lambda (p)
+            (define-pair (token expr) p)
+
+            (and (string? expr)
+                 (< 1 (string-length expr))
+                 (cons token
+                       (list (map get-singleton-token
+                                  (string->list expr))))))
+          tokens-alist)))
 
   (define (terminal->char t)
     (cond

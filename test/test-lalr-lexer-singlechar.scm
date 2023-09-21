@@ -449,7 +449,7 @@
         (t_8)
         (t_5)
         (c_numeric))
-   (t_x (c_x c_3)))
+   (t_x (c_x t_3)))
  )
 
 
@@ -492,7 +492,7 @@
         (t_8)
         (t_5)
         (c1_numeric))
-   (c_x (c1_x c1_3)))
+   (c_x (c1_x t_3)))
  )
 
 
@@ -530,7 +530,7 @@
           (t_8)
           (t_5)
           (c_numeric))
-   (t_12 (c_1 c_2)))
+   (t_12 (t_1 t_2)))
  )
 
 
@@ -621,7 +621,7 @@
    #(c_B #\B 0 3 3 1)
    #(c_numeric #\1 0 4 4 1))
 
- '((t_num (c_numeric)) (t_AB (c_A c_B)))
+ '((t_num (c_numeric)) (t_AB (t_A c_B)))
  )
 
 
