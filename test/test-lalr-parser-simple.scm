@@ -129,6 +129,125 @@
 
 
 
+;;;;;;;
+;;
+;; Multicharacter string usage
+;;
+
+
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "bbb" )
+
+ "aaa"
+ '(expr (choice+ (choice (t_aaa "a" "a" "a")))))
+
+
+
+
+
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "bbb" )
+
+ "aaabbbaaabbb"
+ '(expr (choice+
+         (choice (t_aaa "a" "a" "a"))
+         (choice+
+          (choice (t_bbb "b" "b" "b"))
+          (choice+
+           (choice (t_aaa "a" "a" "a"))
+           (choice+
+            (choice (t_bbb "b" "b" "b"))))))))
+
+
+
+
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "bbb" )
+
+ "aaabbbaaaaaa"
+ '(expr (choice+
+         (choice (t_aaa "a" "a" "a"))
+         (choice+
+          (choice (t_bbb "b" "b" "b"))
+          (choice+
+           (choice (t_aaa "a" "a" "a"))
+           (choice+ (choice (t_aaa "a" "a" "a"))))))))
+
+
+
+
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "b" )
+
+ "aaabbbaaabbaaa"
+ '(expr (choice+
+         (choice (t_aaa "a" "a" "a"))
+         (choice+
+          (choice "b")
+          (choice+
+           (choice "b")
+           (choice+
+            (choice "b")
+            (choice+
+             (choice (t_aaa "a" "a" "a"))
+             (choice+
+              (choice "b")
+              (choice+
+               (choice "b")
+               (choice+
+                (choice (t_aaa "a" "a" "a"))))))))))))
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num / "!"
+    num = dig+
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+ "42+8+!"
+
+ '(expr (term (num (dig+ (dig "4") (dig+ (dig "2"))))) (add "+") (expr (term (num (dig+ (dig "8")))) (add "+") (expr (term "!")))))
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num / "!42"
+    num = dig+
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+ "42+8+!42"
+
+ '(expr (term (num (dig+ (dig "4")
+                         (dig+ (dig "2")))))
+        (add "+")
+        (expr
+         (term (num (dig+ (dig "8"))))
+         (add "+")
+         (expr (term (t_!42 "!" "4"
+                            "2"))))))
+
+
+
+(assert-throw
+ 'parse-conflict
+
+ (lalr-parser/simple
+  `(:grammar
+
+    ( expr = term add expr / term
+      add = "+"
+      term = num / "42"
+      num = dig+
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"))))
+
 ;;;;;;;;;;;;;
 ;;
 ;; Single set cases
@@ -662,7 +781,10 @@
  '(expr (term "83712") (add "+") (expr (term "371673"))))
 
 
-
+;;;;;;
+;;
+;; Character classes
+;;
 
 
 (check-parser-result
@@ -701,6 +823,82 @@
 
  "  83712    + 371673    "
  '(expr (term "83712") "+" (expr (term "371673"))))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig+
+      dig = (class numeric) / (class alphabetic)
+      space = (class whitespace))
+
+    :inline (add num)
+    :join (num)
+    :flatten (term)
+    :skip (space)))
+
+ "  83712b2    + 0x371673    "
+ '(expr (term "83712b2") "+" (expr (term "0x371673"))))
+
+
+
+
+(assert-throw
+ 'parse-conflict
+
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig+
+      dig = (class numeric) / (class alphabetic) / (class alphanum)
+      space = (class whitespace))
+
+    :inline (add num)
+    :join (num)
+    :flatten (term)
+    :skip (space))))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig+
+      dig = (class alphanum)
+      space = (class whitespace))
+
+    :inline (add num)
+    :join (num)
+    :flatten (term)
+    :skip (space)))
+
+ "  83712b2    + 0x371673    "
+ '(expr (term "83712b2") "+" (expr (term "0x371673"))))
+
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;
+;;
+;; Final pretty examples
+;;
+
+
 
 
 (check-parser-result
