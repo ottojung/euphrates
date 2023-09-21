@@ -8,6 +8,8 @@
   (import
     (only (euphrates compose-under) compose-under))
   (import (only (euphrates curry-if) curry-if))
+  (import (only (euphrates hashset) list->hashset))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates list-collapse) list-collapse))
   (import

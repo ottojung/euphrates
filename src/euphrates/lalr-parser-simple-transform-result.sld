@@ -4,6 +4,9 @@
   (export lalr-parser/simple-transform-result)
   (import (only (euphrates comp) appcomp))
   (import
+    (only (euphrates lalr-parser-simple-do-char-to-string)
+          lalr-parser/simple-do-char->string))
+  (import
     (only (euphrates lalr-parser-simple-do-flatten)
           lalr-parser/simple-do-flatten))
   (import

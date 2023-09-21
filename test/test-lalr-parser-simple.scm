@@ -672,30 +672,8 @@
       add = "+" / space add / add space
       term = num / space term / term space
       num = dig+
-      dig = (re (or "0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
-      space = " ")
-
-    :inline (num)
-    :join (num)
-    :flatten (term)
-    :skip (space)))
-
- "  83712    + 371673    "
- '(expr (term "83712") (add "+") (expr (term "371673"))))
-
-
-
-
-
-(check-parser-result
- (lalr-parser/simple
-  `(:grammar
-    ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
-      num = dig+
-      dig = (re numeric)
-      space = (re whitespace))
+      dig = (class numeric)
+      space = (class whitespace))
 
     :inline (num)
     :join (num)
@@ -713,8 +691,8 @@
       add = "+" / space add / add space
       term = num / space term / term space
       num = dig+
-      dig = (re numeric)
-      space = (re whitespace))
+      dig = (class numeric)
+      space = (class whitespace))
 
     :inline (add num)
     :join (num)

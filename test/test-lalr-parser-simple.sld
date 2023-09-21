@@ -25,7 +25,6 @@
           let
           list
           list?
-          or
           quasiquote
           quote
           string->number

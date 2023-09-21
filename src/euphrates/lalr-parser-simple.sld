@@ -14,13 +14,31 @@
           generic-ebnf-tree->alist))
   (import
     (only (euphrates gkeyword) gkeyword->fkeyword))
-  (import (only (euphrates hashset) list->hashset))
+  (import
+    (only (euphrates hashset)
+          hashset->list
+          hashset-add!
+          hashset-delete!
+          hashset-foreach
+          hashset-has?
+          list->hashset))
   (import
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
-    (only (euphrates lalr-lexer-irregex)
-          make-lalr-lexer/irregex-factory))
+    (only (euphrates
+            lalr-lexer-singlechar-additional-grammar-rules)
+          lalr-lexer/singlechar:additional-grammar-rules))
+  (import
+    (only (euphrates
+            lalr-lexer-singlechar-result-as-iterator)
+          lalr-lexer/singlechar-result:as-iterator))
+  (import
+    (only (euphrates lalr-lexer-singlechar-run-on-string)
+          lalr-lexer/singlechar:run-on-string))
+  (import
+    (only (euphrates lalr-lexer-singlechar)
+          make-lalr-lexer/singlechar))
   (import
     (only (euphrates lalr-parser-run-with-error-handler)
           lalr-parser-run/with-error-handler))
@@ -54,17 +72,24 @@
     (only (scheme base)
           /
           =
+          append
           begin
           car
+          cond
           cons
           define
           define-values
+          for-each
           if
           lambda
+          let
           list
+          list?
           map
           memq
           quote
+          symbol?
+          unless
           when))
   (cond-expand
     (guile (import (only (guile) include-from-path))

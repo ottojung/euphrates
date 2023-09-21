@@ -44,16 +44,50 @@
   (define rules/1
     (ebnf-parser rules/0a))
 
-  (define non-terminals
-    (list->hashset (map car rules/1)))
-
-  (define-values (rules tokens-map)
+  (define-values (rules/2 taken-token-names-set tokens-map)
     (lalr-parser/simple-extract-regexes rules/1))
 
-  (define tokens (map car tokens-map))
+  (define lexer
+    (make-lalr-lexer/singlechar
+     taken-token-names-set tokens-map))
 
-  (define make-lexer
-    (make-lalr-lexer/irregex-factory tokens-map))
+  (define additional-grammar-rules
+    (lalr-lexer/singlechar:additional-grammar-rules lexer))
+
+  (define rules
+    (append rules/2 additional-grammar-rules))
+
+  (define non-terminals
+    (list->hashset (map car rules)))
+
+  (define (initialize-lexer input)
+    (define lexer-result
+      (lalr-lexer/singlechar:run-on-string lexer input))
+
+    (define lexer-iterator
+      (lalr-lexer/singlechar-result:as-iterator lexer-result))
+
+    lexer-iterator)
+
+  (define tokens/0
+    (map car tokens-map))
+
+  (define tokens
+    (let ((S (list->hashset tokens/0)))
+      (let loop ((term additional-grammar-rules))
+        (cond
+         ((list? term) (for-each loop term))
+         ((symbol? term)
+          (unless (hashset-has? non-terminals term)
+            (hashset-add! S term)))))
+
+      (hashset-foreach
+       (lambda (nt)
+         (when (hashset-has? S nt)
+           (hashset-delete! S nt)))
+       non-terminals)
+
+      (hashset->list S)))
 
   (when (assq-or 'tokens: options*)
     (raisu* :from "lalr-parser/simple"
@@ -104,4 +138,4 @@
     (lalr-parser/simple-transform-result
      flattened joined skiped inlined transformed
      (lalr-parser-run/with-error-handler
-      upstream errorp (make-lexer input)))))
+      upstream errorp (initialize-lexer input)))))

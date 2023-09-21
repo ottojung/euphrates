@@ -5,6 +5,7 @@
          flattened joined skiped inlined transformed
          result)
   (appcomp result
+           lalr-parser/simple-do-char->string
            (lalr-parser/simple-do-skips skiped)
            (lalr-parser/simple-do-flatten flattened)
            (lalr-parser/simple-do-transform transformed)

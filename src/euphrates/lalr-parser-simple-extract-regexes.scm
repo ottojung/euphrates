@@ -26,13 +26,16 @@
   (define all-expansion-terms
     (apply append (apply append rhss)))
 
+  (define taken-token-names-set
+    (list->hashset all-expansion-terms))
+
   (define (string-terminal? x)
     (string? x))
 
   (define (re-terminal? x)
     (and (list? x)
          (pair? x)
-         (equal? 're (car x))))
+         (equal? 'class (car x))))
 
   (define (terminal? x)
     (or (string-terminal? x)
@@ -54,15 +57,12 @@
                (list-intersperse "_" (map ~a t))))))
      (else (raisu 'impossible t))))
 
-  (define terminal->irregex
-    (curry-if re-terminal? cdr))
+  (define terminal->singlechar
+    (curry-if re-terminal? identity))
 
   (define tokens-map
-    (map (compose-under cons terminal->token terminal->irregex)
+    (map (compose-under cons terminal->token terminal->singlechar)
          all-terminals))
-
-  (define tokens
-    (map car tokens-map))
 
   (define (translate-terminal x)
     (string->symbol (string-append terminal-prefix x)))
@@ -76,4 +76,4 @@
     (bnf-alist:map-expansion-terms
      maybe-translate-terminal bnf-alist))
 
-  (values new-alist tokens-map))
+  (values new-alist taken-token-names-set tokens-map))
