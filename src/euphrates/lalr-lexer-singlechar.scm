@@ -4,6 +4,12 @@
 (define (make-lalr-lexer/singlechar
          taken-token-names-set tokens-alist)
 
+  (define classes
+    (list 'any 'alphanum 'alphabetic 'upcase 'lowercase 'nocase 'numeric 'whitespace))
+
+  (define class-expressions
+    (map (lambda (c) (list 'class c)) classes))
+
   (define safer-taken-names-list
     (let ((L (hashset->list taken-token-names-set)))
       (map ~a (append (map car tokens-alist) L))))
@@ -69,10 +75,43 @@
               (define-pair (token expr) p)
               (cond
                ((char? expr) p)
+
                ((and (string? expr)
                      (= 1 (string-length expr)))
                 (cons token (string-ref expr 0)))
-               (else #f)))
+
+               ((string? expr) #f)
+
+               ((and (pair? expr)
+                     (equal? 'class (car expr)))
+
+                (unless (list? expr)
+                  (raisu* :from "lalr-lexer/singlechar"
+                          :type 'bad-class-form
+                          :message "Class definition in singlechar lexer must be a list, but was not"
+                          :args (list expr)))
+
+                (unless (list-length= 2 expr)
+                  (raisu* :from "lalr-lexer/singlechar"
+                          :type 'bad-class-form-length
+                          :message "Class definition in singlechar lexer must have two components, but did not"
+                          :args (list expr)))
+
+                (unless (member (cadr expr) classes)
+                  (raisu* :from "lalr-lexer/singlechar"
+                          :type 'bad-class-name
+                          :message (stringf "Bad class name used in singlechar, must be one of ~a"
+                                            (words->string (map (compose ~s ~a) classes)))
+                          :args (list (cadr expr))))
+
+                #f)
+
+               (else
+                (raisu* :from "lalr-lexer/singlechar"
+                        :type 'bad-token-type
+                        :message (stringf "Unknown element of ~s in singlechar lexer" (~a (quote tokens-alist)))
+                        :args (list expr)))))
+
             tokens-alist)))
 
     (for-each populate-singleton-categories singleton-tokens-alist))
@@ -100,12 +139,6 @@
   (define (generate-new-name suffix)
     (string->symbol
      (string-append terminal-prefix (~a suffix))))
-
-  (define classes
-    (list 'any 'alphanum 'alphabetic 'upcase 'lowercase 'nocase 'numeric 'whitespace))
-
-  (define class-expressions
-    (map (lambda (c) (list 'class c)) classes))
 
   (define singleton-tokens-alist
     (hashmap->alist singleton-map))

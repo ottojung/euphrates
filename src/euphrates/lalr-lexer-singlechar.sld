@@ -10,6 +10,7 @@
     (only (euphrates char-nocase-alphabetic-huh)
           char-nocase-alphabetic?))
   (import (only (euphrates comp) comp))
+  (import (only (euphrates compose) compose))
   (import
     (only (euphrates define-pair) define-pair))
   (import
@@ -41,7 +42,11 @@
           list-singleton?))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
+  (import (only (euphrates tilda-s) ~s))
+  (import
+    (only (euphrates words-to-string) words->string))
   (import
     (only (scheme base)
           +
@@ -51,6 +56,7 @@
           append
           apply
           begin
+          cadr
           car
           cdr
           char?
@@ -65,10 +71,13 @@
           lambda
           let
           list
+          list?
           map
+          member
           not
           null?
           or
+          pair?
           quasiquote
           quote
           string

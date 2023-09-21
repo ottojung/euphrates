@@ -796,3 +796,21 @@
 (test-error `((t_A . "A")) "ABA" 'unrecognized-character)
 
 
+(test-error
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_x . (class bad-class-name))
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_9 . "9"))
+
+ "19371634"
+
+ 'bad-class-name
+
+ )
