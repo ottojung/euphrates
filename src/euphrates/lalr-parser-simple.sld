@@ -52,9 +52,6 @@
     (only (euphrates lalr-parser-simple-do-char-to-string)
           lalr-parser/simple-do-char->string))
   (import
-    (only (euphrates lalr-parser-simple-extract-alist)
-          lalr-parser/simple-extract-alist))
-  (import
     (only (euphrates lalr-parser-simple-extract-regexes)
           lalr-parser/simple-extract-regexes))
   (import

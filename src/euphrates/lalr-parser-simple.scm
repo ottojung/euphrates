@@ -101,12 +101,6 @@
     (lalr-parser/simple-check-set non-terminals set-list)
     (cons key ret))
 
-  (define (extract-alist+check key)
-    (define-values (ret set-list)
-      (lalr-parser/simple-extract-alist key options*))
-    (lalr-parser/simple-check-set non-terminals set-list)
-    (cons key ret))
-
   (define flattened (extract+check 'flatten:))
   (define joined  (extract+check 'join:))
   (define skiped (extract+check 'skip:))
