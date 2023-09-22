@@ -92,13 +92,11 @@
     (lalr-parser/simple-check-set non-terminals set-list)
     (and (not (null? ret)) (cons key ret)))
 
-  (define flattened (extract+check 'flatten:))
-  (define joined  (extract+check 'join:))
-  (define skiped (extract+check 'skip:))
-  (define inlined (extract+check 'inline:))
-
   (define transformations
-    (filter identity (list flattened joined skiped inlined)))
+    (filter
+     identity
+     (map extract+check
+          (list 'flatten: 'join: 'skip: 'inline:))))
 
   (define options-to-upstream
     (assq-set-value
