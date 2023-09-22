@@ -95,6 +95,9 @@
   (import
     (only (euphrates assq-set-value) assq-set-value))
   (import
+    (only (euphrates assq-unset-multiple-values)
+          assq-unset-multiple-values))
+  (import
     (only (euphrates assq-unset-value)
           assq-unset-value))
   (import
@@ -730,6 +733,10 @@
           make-lalr-lexer/latin))
   (import
     (only (euphrates
+            lalr-lexer-singlechar-additional-grammar-rules)
+          lalr-lexer/singlechar:additional-grammar-rules))
+  (import
+    (only (euphrates
             lalr-lexer-singlechar-result-as-iterator)
           lalr-lexer/singlechar-result:as-iterator))
   (import
@@ -775,6 +782,9 @@
     (only (euphrates lalr-parser-simple-check-set)
           lalr-parser/simple-check-set))
   (import
+    (only (euphrates lalr-parser-simple-do-char-to-string)
+          lalr-parser/simple-do-char->string))
+  (import
     (only (euphrates lalr-parser-simple-do-flatten)
           lalr-parser/simple-do-flatten))
   (import
@@ -801,6 +811,25 @@
   (import
     (only (euphrates lalr-parser-simple-flatten1)
           lalr-parser/simple-flatten1))
+  (import
+    (only (euphrates lalr-parser-simple-initialize-lexer)
+          lalr-parser/simple:initialize-lexer))
+  (import
+    (only (euphrates lalr-parser-simple-postprocess)
+          lalr-parser/simple:postprocess))
+  (import
+    (only (euphrates
+            lalr-parser-simple-run-with-error-handler)
+          lalr-parser/simple:run/with-error-handler))
+  (import
+    (only (euphrates lalr-parser-simple-run)
+          lalr-parser/simple:run))
+  (import
+    (only (euphrates lalr-parser-simple-struct)
+          lalr-parser/simple-struct:backend-parser
+          lalr-parser/simple-struct:lexer
+          lalr-parser/simple-struct:transformations
+          make-lalr-parser/simple-struct))
   (import
     (only (euphrates lalr-parser-simple-transform-result)
           lalr-parser/simple-transform-result))
