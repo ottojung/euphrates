@@ -14,8 +14,6 @@
           cond
           define
           else
-          if
-          let
           list
           list?
           map
