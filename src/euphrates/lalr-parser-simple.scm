@@ -99,13 +99,13 @@
     (define-values (ret set-list)
       (lalr-parser/simple-extract-set key options*))
     (lalr-parser/simple-check-set non-terminals set-list)
-    ret)
+    (cons key ret))
 
   (define (extract-alist+check key)
     (define-values (ret set-list)
       (lalr-parser/simple-extract-alist key options*))
     (lalr-parser/simple-check-set non-terminals set-list)
-    ret)
+    (cons key ret))
 
   (define flattened (extract+check 'flatten:))
   (define joined  (extract+check 'join:))
@@ -113,29 +113,29 @@
   (define inlined (extract+check 'inline:))
   (define transformed (extract-alist+check 'transform:))
 
-  (define options-to-upstream
-    (assq-unset-value
-     'transform:
-     (assq-unset-value
-      'inline:
-      (assq-unset-value
-       'skip:
-       (assq-unset-value
-        'join:
-        (assq-unset-value
-         'flatten:
-         (assq-unset-value
-          'grammar:
-          (assq-set-value
-           'rules: rules
-           (assq-set-value
-            'tokens: tokens
-            options*)))))))))
+  (define transformations
+    (list flattened joined skiped inlined transformed))
 
-  (define upstream (lalr-parser options-to-upstream))
+  (define options-to-upstream
+    (assq-set-value
+     'rules: rules
+     (assq-set-value
+      'tokens: tokens
+      (assq-unset-multiple-values
+       (list 'transform:
+             'inline:
+             'skip:
+             'join:
+             'flatten:
+             'grammar:)
+       options*))))
+
+  (define backend-parser
+    (lalr-parser options-to-upstream))
 
   (lambda (errorp input)
     (lalr-parser/simple-transform-result
-     flattened joined skiped inlined transformed
-     (lalr-parser-run/with-error-handler
-      upstream errorp (initialize-lexer input)))))
+     transformations
+     (lalr-parser/simple-do-char->string
+      (lalr-parser-run/with-error-handler
+       backend-parser errorp (initialize-lexer input))))))

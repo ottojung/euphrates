@@ -2,10 +2,8 @@
 (define-library
   (euphrates lalr-parser-simple-transform-result)
   (export lalr-parser/simple-transform-result)
+  (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates comp) appcomp))
-  (import
-    (only (euphrates lalr-parser-simple-do-char-to-string)
-          lalr-parser/simple-do-char->string))
   (import
     (only (euphrates lalr-parser-simple-do-flatten)
           lalr-parser/simple-do-flatten))
@@ -21,7 +19,7 @@
   (import
     (only (euphrates lalr-parser-simple-do-transform)
           lalr-parser/simple-do-transform))
-  (import (only (scheme base) begin define))
+  (import (only (scheme base) begin define quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

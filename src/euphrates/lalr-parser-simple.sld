@@ -6,8 +6,8 @@
   (import
     (only (euphrates assq-set-value) assq-set-value))
   (import
-    (only (euphrates assq-unset-value)
-          assq-unset-value))
+    (only (euphrates assq-unset-multiple-values)
+          assq-unset-multiple-values))
   (import (only (euphrates fn-pair) fn-pair))
   (import
     (only (euphrates generic-ebnf-tree-to-alist)
@@ -48,6 +48,9 @@
   (import
     (only (euphrates lalr-parser-simple-check-set)
           lalr-parser/simple-check-set))
+  (import
+    (only (euphrates lalr-parser-simple-do-char-to-string)
+          lalr-parser/simple-do-char->string))
   (import
     (only (euphrates lalr-parser-simple-extract-alist)
           lalr-parser/simple-extract-alist))
