@@ -22,6 +22,7 @@
           hashset-foreach
           hashset-has?
           list->hashset))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates keylist-to-alist)
           keylist->alist))
@@ -59,6 +60,7 @@
     (only (scheme base)
           /
           =
+          and
           append
           begin
           car
@@ -74,10 +76,15 @@
           list?
           map
           memq
+          not
+          null?
           quote
           symbol?
           unless
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

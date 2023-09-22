@@ -90,7 +90,7 @@
     (define-values (ret set-list)
       (lalr-parser/simple-extract-set key options*))
     (lalr-parser/simple-check-set non-terminals set-list)
-    (cons key ret))
+    (and (not (null? ret)) (cons key ret)))
 
   (define flattened (extract+check 'flatten:))
   (define joined  (extract+check 'join:))
@@ -98,7 +98,7 @@
   (define inlined (extract+check 'inline:))
 
   (define transformations
-    (list flattened joined skiped inlined))
+    (filter identity (list flattened joined skiped inlined)))
 
   (define options-to-upstream
     (assq-set-value
