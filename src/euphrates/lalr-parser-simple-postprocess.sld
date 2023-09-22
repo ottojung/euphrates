@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates lalr-parser-simple-common-run)
-  (export lalr-parser/simple:common-run)
+  (euphrates lalr-parser-simple-postprocess)
+  (export lalr-parser/simple:postprocess)
   (import
     (only (euphrates lalr-parser-simple-do-char-to-string)
           lalr-parser/simple-do-char->string))
@@ -16,5 +16,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/lalr-parser-simple-common-run.scm")))
-    (else (include "lalr-parser-simple-common-run.scm"))))
+               "euphrates/lalr-parser-simple-postprocess.scm")))
+    (else (include "lalr-parser-simple-postprocess.scm"))))

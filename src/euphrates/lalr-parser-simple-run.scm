@@ -11,7 +11,7 @@
     (lalr-parser/simple-struct:backend-parser
      parser-struct))
 
-  (lalr-parser/simple:common-run
+  (lalr-parser/simple:postprocess
    parser-struct
    (lalr-parser-run/with-error-handler
     backend-parser errorp lexer-iterator)))

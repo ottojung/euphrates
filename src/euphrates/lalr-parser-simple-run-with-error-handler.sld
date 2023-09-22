@@ -8,8 +8,8 @@
     (only (euphrates lalr-parser-run-with-error-handler)
           lalr-parser-run/with-error-handler))
   (import
-    (only (euphrates lalr-parser-simple-common-run)
-          lalr-parser/simple:common-run))
+    (only (euphrates lalr-parser-simple-postprocess)
+          lalr-parser/simple:postprocess))
   (import
     (only (euphrates lalr-parser-simple-initialize-lexer)
           lalr-parser/simple:initialize-lexer))
