@@ -897,6 +897,47 @@
 
 
 
+(assert-throw
+ 'parse-conflict
+
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig+
+      dig = (class numeric) / (class numeric)
+      space = (class whitespace))
+
+    :inline (num)
+    :join (num)
+    :flatten (term)
+    :skip (space))))
+
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig+
+      dig = (class numeric)
+      dig/unused = (class numeric)
+      space = (class whitespace))
+
+    :inline (num)
+    :join (num)
+    :flatten (term)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr (term "83712") (add "+") (expr (term "371673"))))
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;

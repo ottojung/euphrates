@@ -7,7 +7,11 @@
   (import
     (only (euphrates ebnf-tree-to-alist)
           ebnf-tree->alist))
-  (import (only (scheme base) * + / = begin quote))
+  (import
+    (only (euphrates generic-ebnf-tree-to-alist)
+          generic-ebnf-tree->alist))
+  (import
+    (only (scheme base) * + / = begin lambda quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

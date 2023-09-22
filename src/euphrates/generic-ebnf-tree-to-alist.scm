@@ -43,8 +43,7 @@
                   name)))))
 
     (define (do-custom t name)
-      (let ((name* (generate-name t name)))
-        (custom-transform yield name t)))
+      (custom-transform yield name t))
 
     (define (handle-term t)
       (define existing
