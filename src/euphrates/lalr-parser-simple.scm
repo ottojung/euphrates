@@ -60,15 +60,6 @@
   (define non-terminals
     (list->hashset (map car rules)))
 
-  (define (initialize-lexer input)
-    (define lexer-result
-      (lalr-lexer/singlechar:run-on-string lexer input))
-
-    (define lexer-iterator
-      (lalr-lexer/singlechar-result:as-iterator lexer-result))
-
-    lexer-iterator)
-
   (define tokens/0
     (map car tokens-map))
 
@@ -125,9 +116,5 @@
   (define backend-parser
     (lalr-parser options-to-upstream))
 
-  (lambda (errorp input)
-    (lalr-parser/simple-transform-result
-     transformations
-     (lalr-parser/simple-do-char->string
-      (lalr-parser-run/with-error-handler
-       backend-parser errorp (initialize-lexer input))))))
+  (make-lalr-parser/simple-struct
+   lexer backend-parser transformations))

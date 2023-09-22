@@ -5,6 +5,10 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
+    (only (euphrates
+            lalr-parser-simple-run-with-error-handler)
+          lalr-parser/simple:run/with-error-handler))
+  (import
     (only (euphrates lalr-parser-simple)
           lalr-parser/simple))
   (import

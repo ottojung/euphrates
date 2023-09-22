@@ -44,7 +44,8 @@
    (run-input parser input)))
 
 (define (run-input parser input)
-  (parser error-procedure input))
+  (lalr-parser/simple:run/with-error-handler
+   parser error-procedure input))
 
 ;;;;;;;;;;;;;;;;
 ;; TEST CASES ;;

@@ -30,18 +30,8 @@
             lalr-lexer-singlechar-additional-grammar-rules)
           lalr-lexer/singlechar:additional-grammar-rules))
   (import
-    (only (euphrates
-            lalr-lexer-singlechar-result-as-iterator)
-          lalr-lexer/singlechar-result:as-iterator))
-  (import
-    (only (euphrates lalr-lexer-singlechar-run-on-string)
-          lalr-lexer/singlechar:run-on-string))
-  (import
     (only (euphrates lalr-lexer-singlechar)
           make-lalr-lexer/singlechar))
-  (import
-    (only (euphrates lalr-parser-run-with-error-handler)
-          lalr-parser-run/with-error-handler))
   (import
     (only (euphrates lalr-parser-simple-check-options)
           lalr-parser/simple-check-options))
@@ -49,17 +39,14 @@
     (only (euphrates lalr-parser-simple-check-set)
           lalr-parser/simple-check-set))
   (import
-    (only (euphrates lalr-parser-simple-do-char-to-string)
-          lalr-parser/simple-do-char->string))
-  (import
     (only (euphrates lalr-parser-simple-extract-regexes)
           lalr-parser/simple-extract-regexes))
   (import
     (only (euphrates lalr-parser-simple-extract-set)
           lalr-parser/simple-extract-set))
   (import
-    (only (euphrates lalr-parser-simple-transform-result)
-          lalr-parser/simple-transform-result))
+    (only (euphrates lalr-parser-simple-struct)
+          make-lalr-parser/simple-struct))
   (import
     (only (euphrates lalr-parser) lalr-parser))
   (import (only (euphrates raisu-star) raisu*))
