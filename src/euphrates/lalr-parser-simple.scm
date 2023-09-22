@@ -115,4 +115,4 @@
     (lalr-parser options-to-upstream))
 
   (make-lalr-parser/simple-struct
-   lexer backend-parser transformations))
+   arguments lexer backend-parser transformations))

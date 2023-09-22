@@ -3,11 +3,14 @@
 
 (define-type9 lalr-parser/simple-struct
   (make-lalr-parser/simple-struct
+   arguments
    lexer
    backend-parser
    transformations)
 
   lalr-parser/simple-struct?
+
+  (arguments lalr-parser/simple-struct:arguments)
 
   (lexer lalr-parser/simple-struct:lexer)
 

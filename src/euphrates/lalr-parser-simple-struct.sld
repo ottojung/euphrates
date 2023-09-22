@@ -3,6 +3,8 @@
   (euphrates lalr-parser-simple-struct)
   (export
     make-lalr-parser/simple-struct
+    lalr-parser/simple-struct?
+    lalr-parser/simple-struct:arguments
     lalr-parser/simple-struct:lexer
     lalr-parser/simple-struct:backend-parser
     lalr-parser/simple-struct:transformations)
