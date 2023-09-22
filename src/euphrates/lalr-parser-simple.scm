@@ -111,10 +111,9 @@
   (define joined  (extract+check 'join:))
   (define skiped (extract+check 'skip:))
   (define inlined (extract+check 'inline:))
-  (define transformed (extract-alist+check 'transform:))
 
   (define transformations
-    (list flattened joined skiped inlined transformed))
+    (list flattened joined skiped inlined))
 
   (define options-to-upstream
     (assq-set-value
@@ -122,8 +121,7 @@
      (assq-set-value
       'tokens: tokens
       (assq-unset-multiple-values
-       (list 'transform:
-             'inline:
+       (list 'inline:
              'skip:
              'join:
              'flatten:

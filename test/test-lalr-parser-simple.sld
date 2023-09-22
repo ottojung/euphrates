@@ -4,7 +4,6 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
-  (import (only (euphrates comp) comp))
   (import
     (only (euphrates lalr-parser-simple)
           lalr-parser/simple))
@@ -27,7 +26,6 @@
           list?
           quasiquote
           quote
-          string->number
           string-append
           string?
           syntax-rules

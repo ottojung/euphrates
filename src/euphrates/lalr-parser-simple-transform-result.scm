@@ -8,11 +8,9 @@
   (define joined (assq-or 'join: transformations '()))
   (define skiped (assq-or 'skip: transformations '()))
   (define inlined (assq-or 'inline: transformations '()))
-  (define transformed (assq-or 'transform: transformations '()))
 
   (appcomp result
            (lalr-parser/simple-do-skips skiped)
            (lalr-parser/simple-do-flatten flattened)
-           (lalr-parser/simple-do-transform transformed)
            (lalr-parser/simple-do-join joined)
            (lalr-parser/simple-do-inline inlined)))

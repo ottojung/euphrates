@@ -512,23 +512,6 @@
 
 
 
-(check-parser-result
- (lalr-parser/simple
-  `(:grammar
-    ( expr = term add expr / term
-      add = "+"
-      term = num
-      num = dig num / dig
-      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
-
-    :transform ((dig ,string->number))))
-
- "5+3"
- '(expr (term (num 5)) (add "+") (expr (term (num 3)))))
-
-
-
-
 ;;;;;;;;;;;;;
 ;;
 ;; Multiple set cases
@@ -907,17 +890,35 @@
     ( expr = term add expr / term
       add = "+" / space add / add space
       term = num / space term / term space
-      num = num1
-      num1 = dig num1 / dig
-      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
-      space = " ")
+      num = dig+
+      dig = (class numeric)
+      space = (class whitespace))
 
-    :transform ((term ,(comp list-collapse (filter string?)
-                             (apply string-append) string->number)))
-    :join (add)
-    :inline (add)
-    :flatten (expr term)
+    :inline (term)
+    :join (num)
+    :flatten (term expr)
     :skip (space)))
 
  "  83712    + 371673    "
- '(expr 83712 "+" 371673))
+ '(expr (num "83712") (add "+") (num "371673")))
+
+
+
+
+(check-parser-result
+ (lalr-parser/simple
+  `(:grammar
+    ( expr = term add expr / term
+      add = "+" / space add / add space
+      term = num / space term / term space
+      num = dig+
+      dig = (class numeric)
+      space = (class whitespace))
+
+    :inline (num term add)
+    :join (num)
+    :flatten (term expr)
+    :skip (space)))
+
+ "  83712    + 371673    "
+ '(expr "83712" "+" "371673"))
