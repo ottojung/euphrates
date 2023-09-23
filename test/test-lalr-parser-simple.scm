@@ -793,6 +793,35 @@
 ;;
 
 
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num
+    num = dig+
+    dig = (class numeric))
+
+ "3+8"
+ '(expr (term (num (dig+ (dig (r_class_numeric "3")))))
+        (add "+")
+        (expr (term (num (dig+ (dig (r_class_numeric "8"))))))))
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+" / "1"
+    term = num
+    num = dig+
+    dig = (class numeric))
+
+ "3+8"
+ '(expr (term (num (dig+ (dig (r_class_numeric "3")))))
+        (add "+")
+        (expr (term (num (dig+ (dig (r_class_numeric "8"))))))))
+
+
+
+
 (check-parser-result
  (lalr-parser/simple
   `(:grammar
