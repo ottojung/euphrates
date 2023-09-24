@@ -6,6 +6,7 @@
    arguments
    lexer
    backend-parser
+   hidden-tree-labels
    transformations)
 
   lalr-parser/simple-struct?
@@ -15,6 +16,8 @@
   (lexer lalr-parser/simple-struct:lexer)
 
   (backend-parser lalr-parser/simple-struct:backend-parser)
+
+  (hidden-tree-labels lalr-parser/simple-struct:hidden-tree-labels)
 
   (transformations lalr-parser/simple-struct:transformations)
 

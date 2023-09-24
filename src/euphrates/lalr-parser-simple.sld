@@ -8,6 +8,7 @@
   (import
     (only (euphrates assq-unset-multiple-values)
           assq-unset-multiple-values))
+  (import (only (euphrates comp) appcomp))
   (import (only (euphrates fn-pair) fn-pair))
   (import
     (only (euphrates generic-ebnf-tree-to-alist)

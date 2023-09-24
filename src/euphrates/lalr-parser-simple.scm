@@ -57,6 +57,11 @@
   (define rules
     (append rules/2 additional-grammar-rules))
 
+  (define hidden-tree-labels
+    (appcomp (append additional-grammar-rules tokens-map)
+             (map car)
+             list->hashset))
+
   (define non-terminals
     (list->hashset (map car rules)))
 
@@ -115,4 +120,5 @@
     (lalr-parser options-to-upstream))
 
   (make-lalr-parser/simple-struct
-   arguments lexer backend-parser transformations))
+   arguments lexer backend-parser
+   hidden-tree-labels transformations))

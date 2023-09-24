@@ -7,6 +7,7 @@
     lalr-parser/simple-struct:arguments
     lalr-parser/simple-struct:lexer
     lalr-parser/simple-struct:backend-parser
+    lalr-parser/simple-struct:hidden-tree-labels
     lalr-parser/simple-struct:transformations)
   (import
     (only (euphrates define-type9) define-type9))

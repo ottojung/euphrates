@@ -141,7 +141,7 @@
     choice = "aaa" / "bbb" )
 
  "aaa"
- '(expr (choice+ (choice (t_aaa "a" "a" "a")))))
+ '(expr (choice+ (choice "aaa"))))
 
 
 
@@ -153,13 +153,13 @@
 
  "aaabbbaaabbb"
  '(expr (choice+
-         (choice (t_aaa "a" "a" "a"))
+         (choice "aaa")
          (choice+
-          (choice (t_bbb "b" "b" "b"))
+          (choice "bbb")
           (choice+
-           (choice (t_aaa "a" "a" "a"))
+           (choice "aaa")
            (choice+
-            (choice (t_bbb "b" "b" "b"))))))))
+            (choice "bbb")))))))
 
 
 
@@ -170,12 +170,12 @@
 
  "aaabbbaaaaaa"
  '(expr (choice+
-         (choice (t_aaa "a" "a" "a"))
+         (choice "aaa")
          (choice+
-          (choice (t_bbb "b" "b" "b"))
+          (choice "bbb")
           (choice+
-           (choice (t_aaa "a" "a" "a"))
-           (choice+ (choice (t_aaa "a" "a" "a"))))))))
+           (choice "aaa")
+           (choice+ (choice "aaa")))))))
 
 
 
@@ -186,7 +186,7 @@
 
  "aaabbbaaabbaaa"
  '(expr (choice+
-         (choice (t_aaa "a" "a" "a"))
+         (choice "aaa")
          (choice+
           (choice "b")
           (choice+
@@ -194,13 +194,13 @@
            (choice+
             (choice "b")
             (choice+
-             (choice (t_aaa "a" "a" "a"))
+             (choice "aaa")
              (choice+
               (choice "b")
               (choice+
                (choice "b")
                (choice+
-                (choice (t_aaa "a" "a" "a"))))))))))))
+                (choice "aaa")))))))))))
 
 
 
@@ -232,8 +232,7 @@
         (expr
          (term (num (dig+ (dig "8"))))
          (add "+")
-         (expr (term (t_!42 "!" "4"
-                            "2"))))))
+         (expr (term "!42")))))
 
 
 
@@ -801,9 +800,9 @@
     dig = (class numeric))
 
  "3+8"
- '(expr (term (num (dig+ (dig (r_class_numeric "3")))))
+ '(expr (term (num (dig+ (dig "3"))))
         (add "+")
-        (expr (term (num (dig+ (dig (r_class_numeric "8"))))))))
+        (expr (term (num (dig+ (dig "8")))))))
 
 
 
@@ -815,9 +814,9 @@
     dig = (class numeric))
 
  "3+8"
- '(expr (term (num (dig+ (dig (r_class_numeric "3")))))
+ '(expr (term (num (dig+ (dig "3"))))
         (add "+")
-        (expr (term (num (dig+ (dig (r_class_numeric "8"))))))))
+        (expr (term (num (dig+ (dig "8")))))))
 
 
 

@@ -7,6 +7,7 @@
           lalr-parser/simple-do-char->string))
   (import
     (only (euphrates lalr-parser-simple-struct)
+          lalr-parser/simple-struct:hidden-tree-labels
           lalr-parser/simple-struct:transformations))
   (import
     (only (euphrates lalr-parser-simple-transform-result)
