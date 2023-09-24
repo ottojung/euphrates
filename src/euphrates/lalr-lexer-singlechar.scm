@@ -7,9 +7,6 @@
   (define classes
     (list 'any 'alphanum 'alphabetic 'upcase 'lowercase 'nocase 'numeric 'whitespace))
 
-  (define class-expressions
-    (map (lambda (c) (list 'class c)) classes))
-
   (define safer-taken-names-list
     (let ((L (hashset->list taken-token-names-set)))
       (map ~a (append (map car tokens-alist) L))))
