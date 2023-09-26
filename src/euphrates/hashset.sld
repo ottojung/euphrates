@@ -5,6 +5,7 @@
     make-hashset
     list->hashset
     vector->hashset
+    hashset-null?
     hashset-length
     hashset->list
     hashset-equal?
@@ -40,6 +41,7 @@
   (import
     (only (scheme base)
           -
+          =
           >=
           _
           and

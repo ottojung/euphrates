@@ -33,6 +33,9 @@
      (else
       (raisu 'expected-list? collection))))))
 
+(define (hashset-null? S)
+  (= 0 (hashmap-count (hashset-value S))))
+
 (define (hashset-length S)
   (hashmap-count (hashset-value S)))
 
