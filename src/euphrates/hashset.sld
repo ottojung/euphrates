@@ -11,6 +11,7 @@
     hashset-has?
     hashset-ref
     hashset-add!
+    hashset-contains?
     hashset-difference
     hashset-intersection
     hashset-union

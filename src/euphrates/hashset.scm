@@ -74,6 +74,24 @@
 (define (hashset-add! H key)
   (hashmap-set! (hashset-value H) key #t))
 
+(define (hashset-contains? a b)
+  (define A (hashset-value a))
+  (define B (hashset-value b))
+  (define ret #t)
+
+  (and (>= (hashmap-count A)
+           (hashmap-count B))
+
+       (begin
+         ;; TODO: we may use continuation to escape early, but that might be unsafe
+         (hashmap-foreach
+          (lambda (key value)
+            (when ret
+              (unless (hashmap-ref A key #f)
+                (set! ret #f))))
+          B)
+         ret)))
+
 (define (hashset-difference a b)
   (define H (make-hashmap))
 
