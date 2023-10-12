@@ -11,6 +11,7 @@
           char-nocase-alphabetic?))
   (import (only (euphrates comp) comp))
   (import (only (euphrates compose) compose))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
   (import
@@ -28,8 +29,11 @@
           make-hashset))
   (import (only (euphrates identity) identity))
   (import
-    (only (euphrates parselynn-singlechar-struct)
-          make-parselynn/singlechar-struct))
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic::binding::make))
+  (import
+    (only (euphrates labelinglogic)
+          labelinglogic::init))
   (import
     (only (euphrates list-deduplicate)
           list-deduplicate/reverse))
@@ -41,7 +45,11 @@
     (only (euphrates list-singleton-q)
           list-singleton?))
   (import (only (euphrates negate) negate))
+  (import
+    (only (euphrates parselynn-singlechar-struct)
+          make-parselynn/singlechar-struct))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import (only (euphrates tilda-s) ~s))
@@ -94,6 +102,7 @@
           when))
   (import
     (only (scheme char)
+          char-alphabetic?
           char-lower-case?
           char-numeric?
           char-upper-case?

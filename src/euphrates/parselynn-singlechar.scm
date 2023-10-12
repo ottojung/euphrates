@@ -7,6 +7,49 @@
   (define classes
     (list 'any 'alphanum 'alphabetic 'upcase 'lowercase 'nocase 'numeric 'whitespace))
 
+  (define char-nocase?
+    '(lambda (c)
+       (and (char-alphabetic? c)
+            (not (char-upper-case? c))
+            (not (char-lower-case? c)))))
+
+  (define model
+    `((any union #f)
+      (alphanum union any)
+      (alphabetic union alphanum)
+      (upcase (r7rs char-upper-case?) alphabetic)
+      (lowercase (r7rs char-lower-case?) alphabetic)
+      (nocase (r7rs ,char-nocase?) alphabetic)
+      (numeric (r7rs char-numeric?) alphanum)
+      (whitespace (r7rs char-whitespace?) any)))
+
+  (debugs model)
+
+  (define (token-pair->binding p)
+    (define-pair (name value) p)
+    (define expr
+      (cond
+       ((char? value) (list '= value))
+       ((string? value) (raisu 'TODO:support-strings))
+       ((equal? 'class (car value)) value)
+       (else
+        (raisu* :from "parselynn/singlechar"
+                :type 'bad-token-type
+                :message (stringf "Unknown element of ~s in singlechar lexer" (~a (quote tokens-alist)))
+                :args (list expr)))))
+
+    (labelinglogic::binding::make name expr))
+
+  (define bindings
+    (map token-pair->binding tokens-alist))
+
+  (debugs bindings)
+
+  (define opt-model
+    (labelinglogic::init model bindings))
+
+  (debugs opt-model)
+
   (define safer-taken-names-list
     (let ((L (hashset->list taken-token-names-set)))
       (map ~a (append (map car tokens-alist) L))))
