@@ -133,7 +133,7 @@
                (let ((type (assoc/false 'type props)))
                  (when type
                    (newline)
-                   (display (pad-option 4 "type:"))
+                   (display (pad-option 4 "type: "))
                    (print-option-parts
                     (if (list? type)
                         (list-intersperse " | " (list-map/flatten show-type type))
@@ -146,7 +146,7 @@
                      ((#t) (display (pad-option 4 "default")))
                      ((#f) (display (pad-option 4 "not the default")))
                      (else
-                      (display (pad-option 4 "default:"))
+                      (display (pad-option 4 "default: "))
                       (print-option-parts (list-intersperse " " (string->words (~s (~a (car def))))))))))
 
                (newline)
