@@ -5,9 +5,11 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (cons
-   type
-   (map labelinglogic:expression:optimize args)))
+  (if (list-singleton? args)
+      (labelinglogic:expression:optimize (car args))
+      (cons
+       type
+       (map labelinglogic:expression:optimize args))))
 
 (define (labelinglogic:expression:optimize expr)
   (define type (labelinglogic:expression:type expr))

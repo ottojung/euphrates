@@ -19,14 +19,62 @@
    'model-type-error
    (labelinglogic:model:check model)))
 
+(define nocase?
+  '(lambda (c)
+     (and (char-alphabetic? c)
+          (not (char-upper-case? c))
+          (not (char-lower-case? c)))))
+
 (let ()
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
+      (alphabetic (or upcase lowercase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
 
-  (define nocase?
-    '(lambda (c)
-       (and (char-alphabetic? c)
-            (not (char-upper-case? c))
-            (not (char-lower-case? c)))))
+  (define bindings
+    `((t_an alphanum)
+      (t_3  (= #\3))))
 
+  (assert=
+
+   `((t_an (or (ref 0) t_3))
+     (t_3 (= #\3))
+     ((ref 0)
+      (r7rs (lambda (c)
+              (or (char-upper-case? c)
+                  (char-lower-case? c)
+                  (char-numeric? c))))))
+
+   (labelinglogic:init
+    model bindings)))
+
+(let ()
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
+      (alphabetic (or upcase lowercase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
+
+  (define bindings
+    `((t_an alphabetic)
+      (t_3  (= #\3))))
+
+  (assert=
+
+   `((t_an (r7rs (lambda (c) (or (char-upper-case? c) (char-lower-case? c)))))
+     (t_3 (= #\3)))
+
+   (labelinglogic:init
+    model bindings)))
+
+(let ()
   (define model
     `((any (or alphanum whitespace))
       (alphanum (or alphabetic numeric))

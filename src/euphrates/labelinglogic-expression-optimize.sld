@@ -13,13 +13,18 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates list-singleton-q)
+          list-singleton?))
+  (import
     (only (scheme base)
           begin
+          car
           cond
           cons
           define
           else
           equal?
+          if
           map
           or
           quote))
