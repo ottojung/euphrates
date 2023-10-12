@@ -719,6 +719,15 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
+    (only (euphrates labelinglogic-check-bindings)
+          labelinglogic::check-bindings))
+  (import
+    (only (euphrates labelinglogic-check-model)
+          labelinglogic::check-model))
+  (import
+    (only (euphrates labelinglogic)
+          make-labelinglogic))
+  (import
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import (only (euphrates lazy-monad) lazy-monad))
