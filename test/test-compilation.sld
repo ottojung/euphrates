@@ -714,142 +714,142 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
-    (only (euphrates lalr-lexer-irregex)
-          make-lalr-lexer/irregex-factory))
+    (only (euphrates parselynn-irregex)
+          make-parselynn/irregex-factory))
   (import
-    (only (euphrates lalr-lexer-latin-digits)
-          lalr-lexer/latin/digits))
+    (only (euphrates parselynn-latin-digits)
+          parselynn/latin/digits))
   (import
-    (only (euphrates lalr-lexer-latin-letters)
-          lalr-lexer/latin/letters))
+    (only (euphrates parselynn-latin-letters)
+          parselynn/latin/letters))
   (import
-    (only (euphrates lalr-lexer-latin-lowercases)
-          lalr-lexer/latin/lowercases))
+    (only (euphrates parselynn-latin-lowercases)
+          parselynn/latin/lowercases))
   (import
-    (only (euphrates lalr-lexer-latin-uppercases)
-          lalr-lexer/latin/uppercases))
+    (only (euphrates parselynn-latin-uppercases)
+          parselynn/latin/uppercases))
   (import
-    (only (euphrates lalr-lexer-latin)
-          make-lalr-lexer/latin))
-  (import
-    (only (euphrates
-            lalr-lexer-singlechar-additional-grammar-rules)
-          lalr-lexer/singlechar:additional-grammar-rules))
+    (only (euphrates parselynn-latin)
+          make-parselynn/latin))
   (import
     (only (euphrates
-            lalr-lexer-singlechar-result-as-iterator)
-          lalr-lexer/singlechar-result:as-iterator))
-  (import
-    (only (euphrates lalr-lexer-singlechar-result-struct)
-          lalr-lexer/singlechar-result-struct:input
-          lalr-lexer/singlechar-result-struct:input-type
-          lalr-lexer/singlechar-result-struct:lexer
-          lalr-lexer/singlechar-result-struct?
-          make-lalr-lexer/singlechar-result-struct))
+            parselynn-singlechar-additional-grammar-rules)
+          parselynn/singlechar:additional-grammar-rules))
   (import
     (only (euphrates
-            lalr-lexer-singlechar-run-on-char-port)
-          lalr-lexer/singlechar:run-on-char-port))
+            parselynn-singlechar-result-as-iterator)
+          parselynn/singlechar-result:as-iterator))
   (import
-    (only (euphrates lalr-lexer-singlechar-run-on-string)
-          lalr-lexer/singlechar:run-on-string))
+    (only (euphrates parselynn-singlechar-result-struct)
+          parselynn/singlechar-result-struct:input
+          parselynn/singlechar-result-struct:input-type
+          parselynn/singlechar-result-struct:lexer
+          parselynn/singlechar-result-struct?
+          make-parselynn/singlechar-result-struct))
   (import
-    (only (euphrates lalr-lexer-singlechar-struct)
-          lalr-lexer/singlechar-struct:additional-grammar-rules
-          lalr-lexer/singlechar-struct:categories
-          lalr-lexer/singlechar-struct:singleton-map
-          lalr-lexer/singlechar-struct?
-          make-lalr-lexer/singlechar-struct))
+    (only (euphrates
+            parselynn-singlechar-run-on-char-port)
+          parselynn/singlechar:run-on-char-port))
   (import
-    (only (euphrates lalr-lexer-singlechar)
-          make-lalr-lexer/singlechar))
+    (only (euphrates parselynn-singlechar-run-on-string)
+          parselynn/singlechar:run-on-string))
+  (import
+    (only (euphrates parselynn-singlechar-struct)
+          parselynn/singlechar-struct:additional-grammar-rules
+          parselynn/singlechar-struct:categories
+          parselynn/singlechar-struct:singleton-map
+          parselynn/singlechar-struct?
+          make-parselynn/singlechar-struct))
+  (import
+    (only (euphrates parselynn-singlechar)
+          make-parselynn/singlechar))
   (import
     (only (euphrates lalr-lexr-latin-tokens)
           lalr-lexr/latin-tokens))
   (import
-    (only (euphrates lalr-parser-load)
-          lalr-parser-load))
+    (only (euphrates parselynn-load)
+          parselynn-load))
   (import
-    (only (euphrates lalr-parser-run-with-error-handler)
-          lalr-parser-run/with-error-handler))
+    (only (euphrates parselynn-run-with-error-handler)
+          parselynn-run/with-error-handler))
   (import
-    (only (euphrates lalr-parser-run)
-          lalr-parser-run))
+    (only (euphrates parselynn-run)
+          parselynn-run))
   (import
-    (only (euphrates lalr-parser-simple-check-options)
-          lalr-parser/simple-check-options))
+    (only (euphrates parselynn-simple-check-options)
+          parselynn/simple-check-options))
   (import
-    (only (euphrates lalr-parser-simple-check-set)
-          lalr-parser/simple-check-set))
+    (only (euphrates parselynn-simple-check-set)
+          parselynn/simple-check-set))
   (import
-    (only (euphrates lalr-parser-simple-do-char-to-string)
-          lalr-parser/simple-do-char->string))
+    (only (euphrates parselynn-simple-do-char-to-string)
+          parselynn/simple-do-char->string))
   (import
-    (only (euphrates lalr-parser-simple-do-flatten)
-          lalr-parser/simple-do-flatten))
+    (only (euphrates parselynn-simple-do-flatten)
+          parselynn/simple-do-flatten))
   (import
-    (only (euphrates lalr-parser-simple-do-inline)
-          lalr-parser/simple-do-inline))
+    (only (euphrates parselynn-simple-do-inline)
+          parselynn/simple-do-inline))
   (import
-    (only (euphrates lalr-parser-simple-do-join)
-          lalr-parser/simple-do-join))
+    (only (euphrates parselynn-simple-do-join)
+          parselynn/simple-do-join))
   (import
-    (only (euphrates lalr-parser-simple-do-skips)
-          lalr-parser/simple-do-skips))
+    (only (euphrates parselynn-simple-do-skips)
+          parselynn/simple-do-skips))
   (import
-    (only (euphrates lalr-parser-simple-do-transform)
-          lalr-parser/simple-do-transform))
+    (only (euphrates parselynn-simple-do-transform)
+          parselynn/simple-do-transform))
   (import
-    (only (euphrates lalr-parser-simple-extract-alist)
-          lalr-parser/simple-extract-alist))
+    (only (euphrates parselynn-simple-extract-alist)
+          parselynn/simple-extract-alist))
   (import
-    (only (euphrates lalr-parser-simple-extract-regexes)
-          lalr-parser/simple-extract-regexes))
+    (only (euphrates parselynn-simple-extract-regexes)
+          parselynn/simple-extract-regexes))
   (import
-    (only (euphrates lalr-parser-simple-extract-set)
-          lalr-parser/simple-extract-set))
+    (only (euphrates parselynn-simple-extract-set)
+          parselynn/simple-extract-set))
   (import
-    (only (euphrates lalr-parser-simple-flatten1)
-          lalr-parser/simple-flatten1))
+    (only (euphrates parselynn-simple-flatten1)
+          parselynn/simple-flatten1))
   (import
-    (only (euphrates lalr-parser-simple-initialize-lexer)
-          lalr-parser/simple:initialize-lexer))
+    (only (euphrates parselynn-simple-initialize-lexer)
+          parselynn/simple:initialize-lexer))
   (import
-    (only (euphrates lalr-parser-simple-postprocess)
-          lalr-parser/simple:postprocess))
+    (only (euphrates parselynn-simple-postprocess)
+          parselynn/simple:postprocess))
   (import
     (only (euphrates
-            lalr-parser-simple-run-with-error-handler)
-          lalr-parser/simple:run/with-error-handler))
+            parselynn-simple-run-with-error-handler)
+          parselynn/simple:run/with-error-handler))
   (import
-    (only (euphrates lalr-parser-simple-run)
-          lalr-parser/simple:run))
+    (only (euphrates parselynn-simple-run)
+          parselynn/simple:run))
   (import
-    (only (euphrates lalr-parser-simple-struct)
-          lalr-parser/simple-struct:backend-parser
-          lalr-parser/simple-struct:lexer
-          lalr-parser/simple-struct:transformations
-          make-lalr-parser/simple-struct))
+    (only (euphrates parselynn-simple-struct)
+          parselynn/simple-struct:backend-parser
+          parselynn/simple-struct:lexer
+          parselynn/simple-struct:transformations
+          make-parselynn/simple-struct))
   (import
-    (only (euphrates lalr-parser-simple-transform-result)
-          lalr-parser/simple-transform-result))
+    (only (euphrates parselynn-simple-transform-result)
+          parselynn/simple-transform-result))
   (import
-    (only (euphrates lalr-parser-simple)
-          lalr-parser/simple))
+    (only (euphrates parselynn-simple)
+          parselynn/simple))
   (import
-    (only (euphrates lalr-parser-struct)
-          lalr-parser-struct:actions
-          lalr-parser-struct:code
-          lalr-parser-struct:driver
-          lalr-parser-struct:maybefun
-          lalr-parser-struct:results
-          lalr-parser-struct:rules
-          lalr-parser-struct:tokens
-          lalr-parser-struct?
-          make-lalr-parser-struct))
+    (only (euphrates parselynn-struct)
+          parselynn-struct:actions
+          parselynn-struct:code
+          parselynn-struct:driver
+          parselynn-struct:maybefun
+          parselynn-struct:results
+          parselynn-struct:rules
+          parselynn-struct:tokens
+          parselynn-struct?
+          make-parselynn-struct))
   (import
-    (only (euphrates lalr-parser)
-          lalr-parser
+    (only (euphrates parselynn)
+          parselynn
           lexical-token-category
           lexical-token-source
           lexical-token-value
