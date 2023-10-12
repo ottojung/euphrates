@@ -14,8 +14,8 @@
     (only (euphrates parselynn-latin)
           make-parselynn/latin))
   (import
-    (only (euphrates lalr-lexr-latin-tokens)
-          lalr-lexr/latin-tokens))
+    (only (euphrates parselynn-latin-tokens)
+          parselynn/latin-tokens))
   (import
     (only (euphrates parselynn-run)
           parselynn-run))

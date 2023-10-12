@@ -3,7 +3,7 @@
 
 (define (make-test-parser parser-rules)
    (parselynn
-    `((tokens: ,@lalr-lexr/latin-tokens)
+    `((tokens: ,@parselynn/latin-tokens)
       (rules: ,@parser-rules))))
 
 (define (test-parser parser-rules input expected-output)

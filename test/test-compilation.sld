@@ -727,9 +727,6 @@
   (import
     (only (euphrates labelinglogic)
           make-labelinglogic))
-  (import
-    (only (euphrates lalr-lexr-latin-tokens)
-          lalr-lexr/latin-tokens))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))
@@ -1100,6 +1097,9 @@
   (import
     (only (euphrates parselynn-latin-lowercases)
           parselynn/latin/lowercases))
+  (import
+    (only (euphrates parselynn-latin-tokens)
+          parselynn/latin-tokens))
   (import
     (only (euphrates parselynn-latin-uppercases)
           parselynn/latin/uppercases))

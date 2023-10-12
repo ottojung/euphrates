@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates lalr-lexr-latin-tokens)
-  (export lalr-lexr/latin-tokens)
+  (euphrates parselynn-latin-tokens)
+  (export parselynn/latin-tokens)
   (import
     (only (scheme base) <= begin define list quote))
   (cond-expand
@@ -11,5 +11,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/lalr-lexr-latin-tokens.scm")))
-    (else (include "lalr-lexr-latin-tokens.scm"))))
+               "euphrates/parselynn-latin-tokens.scm")))
+    (else (include "parselynn-latin-tokens.scm"))))
