@@ -15,11 +15,11 @@
           list->hashset
           make-hashset))
   (import
-    (only (euphrates labelinglogic-check-bindings)
-          labelinglogic::check-bindings))
+    (only (euphrates labelinglogic-bindings-check)
+          labelinglogic::bindings:check))
   (import
-    (only (euphrates labelinglogic-check-model)
-          labelinglogic::check-model))
+    (only (euphrates labelinglogic-model-check)
+          labelinglogic::model:check))
   (import (only (euphrates list-fold) list-fold))
   (import
     (only (euphrates list-length-eq) list-length=))

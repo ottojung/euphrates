@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates labelinglogic-check-model)
-  (export labelinglogic::check-model)
+  (euphrates labelinglogic-model-check)
+  (export labelinglogic::model:check)
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates define-tuple) define-tuple))
@@ -61,5 +61,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-check-model.scm")))
-    (else (include "labelinglogic-check-model.scm"))))
+               "euphrates/labelinglogic-model-check.scm")))
+    (else (include "labelinglogic-model-check.scm"))))

@@ -1,8 +1,8 @@
 
 (define-library
   (euphrates
-    labelinglogic-check-bindings)
-  (export labelinglogic::check-bindings)
+    labelinglogic-bindings-check)
+  (export labelinglogic::bindings:check)
   (import (only (euphrates compose) compose))
   (import
     (only (euphrates hashset)
@@ -51,6 +51,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-check-bindings.scm")))
+               "euphrates/labelinglogic-bindings-check.scm")))
     (else (include
-            "labelinglogic-check-bindings.scm"))))
+            "labelinglogic-bindings-check.scm"))))

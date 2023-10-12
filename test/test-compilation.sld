@@ -719,11 +719,11 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
-    (only (euphrates labelinglogic-check-bindings)
-          labelinglogic::check-bindings))
+    (only (euphrates labelinglogic-bindings-check)
+          labelinglogic::bindings:check))
   (import
-    (only (euphrates labelinglogic-check-model)
-          labelinglogic::check-model))
+    (only (euphrates labelinglogic-model-check)
+          labelinglogic::model:check))
   (import
     (only (euphrates labelinglogic)
           make-labelinglogic))

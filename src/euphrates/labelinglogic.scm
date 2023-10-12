@@ -6,13 +6,13 @@
 
   (define most-default-class #f)
 
-  (labelinglogic::check-model most-default-class model)
+  (labelinglogic::model:check most-default-class model)
 
   (define classes/s
     (list->hashset
      (map car model)))
 
-  (labelinglogic::check-bindings classes/s bindings)
+  (labelinglogic::bindings:check classes/s bindings)
 
   (define (binding:name binding)
     (list-ref binding 0))
