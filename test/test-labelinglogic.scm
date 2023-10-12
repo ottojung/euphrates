@@ -56,7 +56,7 @@
      (t_1 (= #\1) t_n)
      (t_0 (= #\0) t_n))
 
-   (make-labelinglogic
+   (labelinglogic::init
     model bindings))
 
   )

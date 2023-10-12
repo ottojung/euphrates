@@ -4,7 +4,7 @@
 (define (labelinglogic::bindings:check classes/s tokens-alist)
 
   (define (fail-tokens-check show args)
-    (raisu* :from "make-labelinglogic"
+    (raisu* :from "labelinglogic::init"
             :type 'tokens-alist-type-error
             :message (stringf "Type error in ~s: ~a." (quote tokens-alist) show)
             :args args))

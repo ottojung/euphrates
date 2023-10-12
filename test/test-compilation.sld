@@ -726,7 +726,7 @@
           labelinglogic::model:check))
   (import
     (only (euphrates labelinglogic)
-          make-labelinglogic))
+          labelinglogic::init))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))

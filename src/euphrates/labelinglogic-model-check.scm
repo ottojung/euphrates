@@ -4,7 +4,7 @@
 (define (labelinglogic::model:check
          most-default-class model)
   (define (fail-model-check show args)
-    (raisu* :from "make-labelinglogic"
+    (raisu* :from "labelinglogic::init"
             :type 'model-type-error
             :message (stringf "Type error in ~s: ~a." (quote model) show)
             :args args))

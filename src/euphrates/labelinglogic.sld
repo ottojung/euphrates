@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates labelinglogic)
-  (export make-labelinglogic)
+  (export labelinglogic::init)
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))

@@ -7,7 +7,7 @@
           char-nocase-alphabetic?))
   (import
     (only (euphrates labelinglogic)
-          make-labelinglogic))
+          labelinglogic::init))
   (import
     (only (scheme base)
           =
