@@ -5,6 +5,7 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import

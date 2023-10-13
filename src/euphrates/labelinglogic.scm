@@ -42,8 +42,12 @@
          (define name
            (labelinglogic::binding:name binding))
 
+         (debugs name)
+
          (define type
            (binding:type binding))
+
+         (debugs type)
 
          (cond
           ((equal? type 'class)
