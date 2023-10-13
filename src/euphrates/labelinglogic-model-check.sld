@@ -7,13 +7,13 @@
     (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates hashmap)
-          hashmap-ref
           hashmap-set!
           make-hashmap))
   (import
     (only (euphrates hashset)
           hashset->list
           hashset-difference
+          hashset-has?
           hashset-null?
           list->hashset
           make-hashset))
@@ -21,21 +21,22 @@
     (only (euphrates labelinglogic-expression-check)
           labelinglogic::expression::check))
   (import
+    (only (euphrates labelinglogic-expression-constants)
+          labelinglogic::expression:constants))
+  (import
     (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates make-unique) make-unique))
+  (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
           assq
           begin
           car
-          cond
           define
-          else
           equal?
           for-each
           lambda

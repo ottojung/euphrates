@@ -63,20 +63,14 @@
   (for-each
    (lambda (model-component)
      (define-tuple (class predicate) model-component)
-     (define super-predicate
-       (hashmap-ref class:predicate/h superclass default-key))
+     (define constants (labelinglogic::expression:constants predicate))
+     (define undefined-constants
+       (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
 
-       (when (equal? default-key super-predicate)
-         (fail-model-check
-          (stringf "element superclass must refer to other superclass, or be ~s"
-                   most-default-class)
-          (list class model-component)))
-
-       (unless (equal? 'union super-predicate)
-         (fail-model-check
-          (stringf "element superclass must refer to a ~s superclass"
-                   (~s 'union))
-          (list class model-component))))))
+     (unless (null? undefined-constants)
+       (fail-model-check
+        "element predicate references undefined classes"
+        (list class predicate undefined-constants))))
 
    model)
 
