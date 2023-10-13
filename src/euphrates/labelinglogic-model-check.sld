@@ -23,9 +23,6 @@
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
-    (only (euphrates list-singleton-q)
-          list-singleton?))
-  (import
     (only (euphrates make-unique) make-unique))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))

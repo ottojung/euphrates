@@ -45,17 +45,6 @@
 
    model)
 
-  (define falses
-    (filter
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (equal? class most-default-class))
-     model))
-
-  (unless (or (null? falses)
-              (list-singleton? falses))
-    (fail-model-check "only one class can have most-default-class as its superclass" (list falses)))
-
   (define classes/s
     (list->hashset (map car model)))
 
