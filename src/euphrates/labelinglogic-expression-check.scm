@@ -22,12 +22,12 @@
   (cond
    ((equal? type 'constant) 'ok)
    ((equal? 'or type)
-    (unless (list-length= 2 args)
+    (unless (< 1 (length args))
       (fail-expression-check
        (stringf
-        "Expression of type ~s must have exactly 2 arguments."
+        "Expression of type ~s must have at least 2 arguments."
         (~a 'or))
-       (list x))))
+       (list x (length args)))))
 
    ((equal? '= type)
     (unless (list-length= 1 args)

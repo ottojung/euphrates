@@ -99,6 +99,14 @@
   (define (class->binding class)
     (hashmap-ref class->binding/h class #f))
 
+  (define desugared-model
+    (map
+     (lambda (model-component)
+       (define-tuple (class predicate) model-component)
+       (list class (labelinglogic::expression:desugar predicate)))
+
+     model))
+
   (define renamed-model
     (map
      (lambda (model-component)
@@ -111,7 +119,7 @@
         class
         (labelinglogic::expression:replace-constants predicate replacer)))
 
-     model))
+     desugared-model))
 
   (define extended-model
     (list-fold
@@ -209,4 +217,13 @@
        (is-binding? class))
      transitive-model))
 
-  reachable-model)
+  (define sugar-model
+    (map
+     (lambda (model-component)
+       (define-tuple (class predicate) model-component)
+       (list class (labelinglogic::expression:sugarify predicate)))
+     reachable-model))
+
+  (debugs sugar-model)
+
+  sugar-model)

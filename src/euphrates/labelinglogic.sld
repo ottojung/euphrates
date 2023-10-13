@@ -5,6 +5,7 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -31,9 +32,15 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic::expression:args))
   (import
+    (only (euphrates labelinglogic-expression-desugar)
+          labelinglogic::expression:desugar))
+  (import
     (only (euphrates
             labelinglogic-expression-replace-constants)
           labelinglogic::expression:replace-constants))
+  (import
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic::expression:sugarify))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic::expression:type))

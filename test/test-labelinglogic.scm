@@ -57,18 +57,20 @@
 
    `((t_x (or t_a t_n))
      (t_a (or (r7rs char-upper-case?)
-              (or (or t_m (r7rs char-lower-case?))
-                  (r7rs ,nocase?))))
+              t_m
+              (r7rs char-lower-case?)
+              (r7rs ,nocase?)))
      (t_m (= #\m))
      (t_n (or t_0
-              (or t_1
-                  (or t_2
-                      (or t_3
-                          (or t_4
-                              (or t_5
-                                  (or t_6
-                                      (or t_7
-                                          (or t_8 (r7rs char-numeric?)))))))))))
+              t_1
+              t_2
+              t_3
+              t_4
+              t_5
+              t_6
+              t_7
+              t_8
+              (r7rs char-numeric?)))
      (t_8 (= #\8))
      (t_7 (= #\7))
      (t_6 (= #\6))

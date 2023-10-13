@@ -15,12 +15,14 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          <
           =
           begin
           cond
           define
           else
           equal?
+          length
           list
           list?
           or
