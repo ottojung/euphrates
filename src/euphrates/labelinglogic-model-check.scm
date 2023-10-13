@@ -66,6 +66,8 @@
     (let loop ((class class)
                (constants constants))
 
+      (stack-push! recursion-stack class)
+
       (when (hashset-has? recursion-hashset class)
         (let ()
           (define cycle
@@ -76,7 +78,6 @@
            (list class cycle))))
 
       (hashset-add! recursion-hashset class)
-      (stack-push! recursion-stack class)
 
       (for-each
        (lambda (constant)
