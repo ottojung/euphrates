@@ -21,14 +21,7 @@
 
   (cond
    ((equal? type 'constant) 'ok)
-   ((equal? 'or type)
-    (unless (< 1 (length args))
-      (fail-expression-check
-       (stringf
-        "Expression of type ~s must have at least 2 arguments."
-        (~a 'or))
-       (list x (length args)))))
-
+   ((equal? 'or type) 'ok) ;; any arity is ok.
    ((equal? '= type)
     (unless (list-length= 1 args)
       (fail-expression-check
