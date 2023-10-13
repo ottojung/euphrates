@@ -88,7 +88,8 @@
 
      (let ()
        (define-tuple (name expr) binding)
-       (define-tuple (expr:type expr:value) expr)
+       (define expr:type (labelinglogic::expression:type expr))
+       (define expr:value (labelinglogic::expression:args expr))
 
        (cond
 

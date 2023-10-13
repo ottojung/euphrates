@@ -24,6 +24,9 @@
     (only (euphrates labelinglogic-bindings-check)
           labelinglogic::bindings:check))
   (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic::expression:args))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic::expression:type))
   (import
