@@ -41,18 +41,19 @@
        (lambda (binding)
          (define name
            (labelinglogic::binding:name binding))
+         (define expr
+           (labelinglogic::binding:expr binding))
 
          (debugs name)
 
          (define type
-           (binding:type binding))
+           (labelinglogic::binding:expr expr))
 
          (debugs type)
 
          (cond
           ((equal? type 'constant)
-           (let ((target (class-binding:target binding)))
-             (hashset-add! S target)))
+           (hashset-add! S expr))
 
           ((equal? type '=)
            'pass)
