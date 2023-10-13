@@ -67,6 +67,9 @@
      (define undefined-constants
        (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
 
+     (let loop ((class class))
+       (
+
      (unless (null? undefined-constants)
        (fail-model-check
         "element predicate references undefined classes"

@@ -161,7 +161,7 @@
          (if (is-binding? constant)
              model-component
              (let ()
-               (define target-component (assq constant model))
+               (define target-component (assoc constant model))
                (define-tuple (target-class target-predicate) target-component)
                (list class target-predicate))))
 
