@@ -56,15 +56,28 @@
        model)
       H))
 
+  (for-each
+   (lambda (model-component)
+     (define-tuple (class predicate) model-component)
+     (define constants (labelinglogic::expression:constants predicate))
+     (define undefined-constants
+       (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
+
+     (unless (null? undefined-constants)
+       (fail-model-check
+        "element predicate references undefined classes"
+        (list class predicate undefined-constants))))
+
+   model)
+
   (define recursion-hashset
     (make-hashset))
 
-  (define (check-recursion class constants)
+  (define (check-recursion model-component)
     (hashset-clear! recursion-hashset)
     (define recursion-stack (stack-make))
 
-    (let loop ((class class)
-               (constants constants))
+    (let loop ((model-component))
 
       (stack-push! recursion-stack class)
 
@@ -79,27 +92,10 @@
 
       (hashset-add! recursion-hashset class)
 
-      (for-each
-       (lambda (constant)
-         (define-tuple (new-class predicate) (assoc constant model))
-         (define new-constants (labelinglogic::expression:constants predicate))
-         (loop new-class new-constants))
-       constants)))
+      (define-tuple (new-class predicate) (assoc class model))
+      (define constants (labelinglogic::expression:constants predicate))
+      (for-each loop constants)))
 
-  (for-each
-   (lambda (model-component)
-     (define-tuple (class predicate) model-component)
-     (define constants (labelinglogic::expression:constants predicate))
-     (define undefined-constants
-       (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
-
-     (check-recursion class constants)
-
-     (unless (null? undefined-constants)
-       (fail-model-check
-        "element predicate references undefined classes"
-        (list class predicate undefined-constants))))
-
-   model)
+  (for-each check-recursion model)
 
   )
