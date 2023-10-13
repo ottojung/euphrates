@@ -29,8 +29,12 @@
      (unless (list? model-component)
        (fail-model-check "element must be a list" (list model-component)))
 
-     (unless (list-length= 3 model-component)
-       (fail-model-check "element must have length = 3" (list model-component)))
+     (define expected-length 2)
+
+     (unless (list-length= expected-length model-component)
+       (fail-model-check
+        (stringf "element must have length = ~s" expected-length)
+        (list model-component)))
 
      (define-tuple (class predicate superclass) model-component)
 
