@@ -2,16 +2,18 @@
 (let ()
   (define model
     `((any (or alphanum whitespace))
-      (alphanum (or alphabetic numeric))
-      (alphabetic (or nocase (or lowercase nocase)))))
+      (alphanum alphabetic)
+      (alphabetic (or upcase (or upcase upcase)))
+      (upcase (r7rs char-upper-case?))))
 
   (labelinglogic::model:check model))
 
 (let ()
   (define model
     `((any (or alphanum whitespace))
-      (alphanum (or alphabetic numeric))
-      (alphabetic (or any (or lowercase nocase)))))
+      (alphanum alphabetic)
+      (alphabetic (or any (or upcase upcase)))
+      (upcase (r7rs char-upper-case?))))
 
   (assert-throw
    'model-type-error
