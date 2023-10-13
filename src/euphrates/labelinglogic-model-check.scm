@@ -77,7 +77,8 @@
     (hashset-clear! recursion-hashset)
     (define recursion-stack (stack-make))
 
-    (let loop ((model-component))
+    (let loop ((model-component model-component))
+      (define-tuple (class predicate) model-component)
 
       (stack-push! recursion-stack class)
 
