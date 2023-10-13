@@ -23,6 +23,10 @@
 (define (stack-empty? S)
   (null? (stack-lst S)))
 
+(define (stack-has? S x)
+  (let ((lst (stack-lst S)))
+    (if (member x S) #t #f)))
+
 (define (stack-push! S value)
   (set-stack-lst! S (cons value (stack-lst S))))
 
