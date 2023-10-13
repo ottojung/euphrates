@@ -46,6 +46,8 @@
 
          (debugs name)
 
+         (debugs expr)
+
          (define type
            (labelinglogic::binding:expr expr))
 
