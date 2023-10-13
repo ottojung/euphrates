@@ -11,7 +11,7 @@
   (define model
     `((any (or alphanum whitespace))
       (alphanum (or alphabetic numeric))
-      (alphabetic (or upcase lowercase nocase))
+      (alphabetic (or upcase (or lowercase nocase)))
       (upcase (r7rs char-upper-case?))
       (lowercase (r7rs char-lower-case?))
       (nocase (r7rs ,char-nocase-alphabetic?))
