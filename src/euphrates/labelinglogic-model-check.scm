@@ -67,9 +67,13 @@
                (constants constants))
 
       (when (hashset-has? recursion-hashset class)
-        (fail-model-check
-         "class references itself through the following cycle: ~s, this is not allowed"
-         (list class (reverse (stack->list recursion-stack)))))
+        (let ()
+          (define cycle
+            (reverse (stack->list recursion-stack)))
+
+          (fail-model-check
+           (stringf "class references itself through the following cycle: ~s, this is not allowed" cycle)
+           (list class cycle))))
 
       (hashset-add! recursion-hashset class)
       (stack-push! recursion-stack class)
