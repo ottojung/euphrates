@@ -81,6 +81,8 @@
     (eval (list code arg)
           (environment '(scheme base) '(scheme char))))
 
+  (debugs model)
+
   (define extended-model
     (list-fold
      (model model)
@@ -147,6 +149,8 @@
          (raisu 'unknown-expr-type binding))))))
 
   (debugs extended-model)
+
+  (exit 0)
 
   (define (connect-transitive-model-edges model)
     (map
