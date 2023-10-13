@@ -89,7 +89,7 @@
      (let ()
        (define-tuple (name expr) binding)
        (define expr:type (labelinglogic::expression:type expr))
-       (define expr:value (labelinglogic::expression:args expr))
+       (define expr:args (labelinglogic::expression:args expr))
 
        (cond
 
@@ -100,7 +100,7 @@
            (lambda (model-component)
              (define-tuple (class predicate superclass) model-component)
 
-             (if (not (equal? class (car expr:value)))
+             (if (not (equal? class (car expr:args)))
                  (list model-component)
                  (let ()
                    (define added
