@@ -14,14 +14,14 @@
 
   (labelinglogic::bindings:check classes/s bindings)
 
-  (define (expr:type expr)
+  (define (labelinglogic::expression:type expr)
     (list-ref expr 0))
 
   (define (binding:type binding)
     (define expr
       (labelinglogic::binding:expr binding))
 
-    (expr:type expr))
+    (labelinglogic::expression:type expr))
 
   (define (class-expr:target expr)
     (list-ref expr 1))
@@ -90,11 +90,11 @@
 
      (let ()
        (define-tuple (name expr) binding)
-       (define-tuple (expr:type expr:value) expr)
+       (define-tuple (labelinglogic::expression:type expr:value) expr)
 
        (cond
 
-        ((equal? 'class expr:type)
+        ((equal? 'class labelinglogic::expression:type)
          (apply
           append
           (map
@@ -113,7 +113,7 @@
                    (list added renamed-current))))
            model)))
 
-        ((equal? '= expr:type)
+        ((equal? '= labelinglogic::expression:type)
 
          (apply
           append
