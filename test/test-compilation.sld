@@ -740,6 +740,9 @@
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic::expression:constants))
   (import
+    (only (euphrates labelinglogic-expression-desugar)
+          labelinglogic::expression:desugar))
+  (import
     (only (euphrates labelinglogic-expression-huh)
           labelinglogic::expression?))
   (import
@@ -749,6 +752,9 @@
     (only (euphrates
             labelinglogic-expression-replace-constants)
           labelinglogic::expression:replace-constants))
+  (import
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic::expression:sugarify))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic::expression:type))

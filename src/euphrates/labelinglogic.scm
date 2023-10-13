@@ -224,6 +224,4 @@
        (list class (labelinglogic::expression:sugarify predicate)))
      reachable-model))
 
-  (debugs sugar-model)
-
   sugar-model)
