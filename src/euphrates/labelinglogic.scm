@@ -91,11 +91,11 @@
 
      (let ()
        (define-tuple (name expr) binding)
-       (define-tuple (labelinglogic::expression:type expr:value) expr)
+       (define-tuple (expr:type expr:value) expr)
 
        (cond
 
-        ((equal? 'class labelinglogic::expression:type)
+        ((equal? 'constant expr:type)
          (apply
           append
           (map
@@ -114,7 +114,7 @@
                    (list added renamed-current))))
            model)))
 
-        ((equal? '= labelinglogic::expression:type)
+        ((equal? '= expr:type)
 
          (apply
           append
