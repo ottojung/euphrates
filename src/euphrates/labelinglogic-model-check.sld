@@ -28,6 +28,7 @@
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates stack)
           stack->list
