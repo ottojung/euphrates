@@ -10,11 +10,8 @@
           make-hashmap))
   (import
     (only (euphrates hashset)
-          hashset-add!
-          hashset-clear!
           hashset-has?
-          list->hashset
-          make-hashset))
+          list->hashset))
   (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic::expression::check))
@@ -25,17 +22,13 @@
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
-  (import
-    (only (euphrates stack)
-          stack->list
-          stack-make
-          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           assoc
           begin
           car
+          cons
           define
           for-each
           lambda
@@ -43,6 +36,7 @@
           list
           list?
           map
+          member
           null?
           procedure?
           quote

@@ -70,32 +70,27 @@
 
    model)
 
-  (define recursion-hashset
-    (make-hashset))
-
   (define (check-recursion model-component)
-    (hashset-clear! recursion-hashset)
-    (define recursion-stack (stack-make))
+    (define stack (list))
 
-    (let loop ((model-component model-component))
+    (let loop ((model-component model-component)
+               (stack stack))
+
       (define-tuple (class predicate) model-component)
 
-      (stack-push! recursion-stack class)
+      (define new-stack (cons class stack))
 
-      (when (hashset-has? recursion-hashset class)
+      (when (member class stack)
         (let ()
-          (define cycle
-            (reverse (stack->list recursion-stack)))
+          (define cycle (reverse new-stack))
 
           (fail-model-check
            (stringf "class references itself through the following cycle: ~s, this is not allowed" cycle)
            (list class cycle))))
 
-      (hashset-add! recursion-hashset class)
-
       (define constants (labelinglogic::expression:constants predicate))
       (define referenced-models (map (lambda (c) (assoc c model)) constants))
-      (for-each loop referenced-models)))
+      (for-each (lambda (x) (loop x new-stack)) referenced-models)))
 
   (for-each check-recursion model)
 
