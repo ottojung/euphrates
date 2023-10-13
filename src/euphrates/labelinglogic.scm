@@ -91,6 +91,22 @@
        (define expr:type (labelinglogic::expression:type expr))
        (define expr:args (labelinglogic::expression:args expr))
 
+       (define (fork-current model-component)
+         (define-tuple (class predicate) model-component)
+
+         (define new-name (generate-new-class-name))
+
+         (define new-parent
+           (list class `(or ,name ,new-name)))
+
+         (define renamed-current
+           (list new-name predicate))
+
+         (define added
+           (list name expr))
+
+         (list new-parent renamed-current added))
+
        (cond
 
         ((equal? 'constant expr:type)
@@ -102,14 +118,7 @@
 
              (if (not (equal? class (car expr:args)))
                  (list model-component)
-                 (let ()
-                   (define new-parent
-                     (list class `(or ,name ,class)))
-
-                   (define added
-                     (list name expr))
-
-                   (list new-parent model-component added))))
+                 (fork-current model-component)))
            model)))
 
         ((equal? '= expr:type)
@@ -126,19 +135,7 @@
               ((equal? expr-type 'r7rs)
 
                (if (evaluate-predicate predicate (car expr:args))
-                   (let ()
-                     (define new-name (generate-new-class-name))
-
-                     (define new-parent
-                       (list class `(or ,name ,new-name)))
-
-                     (define renamed-current
-                       (list new-name predicate))
-
-                     (define added
-                       (list name expr))
-
-                     (list new-parent renamed-current added))
+                   (fork-current model-component)
                    (list model-component)))
 
               (else
