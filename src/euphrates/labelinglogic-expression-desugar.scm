@@ -15,11 +15,11 @@
       (define folded
         (let loop ((rest linearized))
           (cond
-           ((null? rest) rest)
-           ((null? (cdr rest)) rest)
-           ((null? (cddr rest))
+           ((or (null? rest)
+                (null? (cdr rest))
+                (null? (cddr rest)))
             (labelinglogic::expression::make
-             type (list (car rest) (cadr rest))))
+             type rest))
            (else
             (labelinglogic::expression::make
              type (list (car rest) (loop (cdr rest))))))))

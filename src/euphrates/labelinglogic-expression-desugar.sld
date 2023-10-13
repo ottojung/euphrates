@@ -17,7 +17,6 @@
   (import
     (only (scheme base)
           begin
-          cadr
           car
           cddr
           cdr
