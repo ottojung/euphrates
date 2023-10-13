@@ -12,7 +12,7 @@
 
   (assert-throw
    'kek
-   (labelinglogic::model:check model))
+   (labelinglogic::model:check model)))
 
 (let ()
 

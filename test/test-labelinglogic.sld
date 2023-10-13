@@ -3,8 +3,13 @@
   (test-labelinglogic)
   (import (only (euphrates assert-equal) assert=))
   (import
+    (only (euphrates assert-throw) assert-throw))
+  (import
     (only (euphrates char-nocase-alphabetic-huh)
           char-nocase-alphabetic?))
+  (import
+    (only (euphrates labelinglogic-model-check)
+          labelinglogic::model:check))
   (import
     (only (euphrates labelinglogic)
           labelinglogic::init))
