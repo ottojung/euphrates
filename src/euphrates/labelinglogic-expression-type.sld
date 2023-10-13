@@ -1,8 +1,16 @@
+
 (define-library
   (euphrates labelinglogic-expression-type)
   (export labelinglogic::expression:type)
   (import
-    (only (scheme base) begin define make-parameter))
+    (only (scheme base)
+          begin
+          cond
+          define
+          else
+          list-ref
+          quote
+          symbol?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
