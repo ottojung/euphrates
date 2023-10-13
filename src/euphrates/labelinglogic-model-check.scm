@@ -93,9 +93,9 @@
 
       (hashset-add! recursion-hashset class)
 
-      (define-tuple (new-class predicate) (assoc class model))
       (define constants (labelinglogic::expression:constants predicate))
-      (for-each loop constants)))
+      (define referenced-models (map (lambda (c) (assoc c model)) predicate))
+      (for-each loop referenced-models)))
 
   (for-each check-recursion model)
 
