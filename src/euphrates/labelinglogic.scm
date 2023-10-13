@@ -14,9 +14,6 @@
 
   (labelinglogic::bindings:check classes/s bindings)
 
-  (define (labelinglogic::expression:type expr)
-    (list-ref expr 0))
-
   (define (binding:type binding)
     (define expr
       (labelinglogic::binding:expr binding))
