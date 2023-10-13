@@ -3,6 +3,12 @@
   (euphrates labelinglogic-expression-check)
   (export labelinglogic::expression::check)
   (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic::expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic::expression:type))
+  (import
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
@@ -11,13 +17,10 @@
     (only (scheme base)
           =
           begin
-          car
-          cdr
           cond
           define
           else
           equal?
-          let
           list
           list?
           or

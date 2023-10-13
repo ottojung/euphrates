@@ -8,42 +8,44 @@
             :message (stringf "Type error: ~a." show)
             :args args))
 
+  (unless (or (symbol? x)
+              (list? x))
+    (fail-expression-check
+     "Must be either a symbol or a list." (list x)))
+
+  (define type
+    (labelinglogic::expression:type x))
+
+  (define args
+    (labelinglogic::expression:args x))
+
   (cond
-   ((symbol? x) 'ok)
-   ((list? x)
-    (let ()
-      (define type (car x))
-      (define args (cdr x))
-      (cond
-       ((equal? 'or type)
-        (unless (list-length= 2 args)
-          (fail-expression-check
-           (stringf
-            "Expression of type ~s must have exactly 2 arguments."
-            (~a 'or))
-           (list x))))
+   ((equal? type 'constant) 'ok)
+   ((equal? 'or type)
+    (unless (list-length= 2 args)
+      (fail-expression-check
+       (stringf
+        "Expression of type ~s must have exactly 2 arguments."
+        (~a 'or))
+       (list x))))
 
-       ((equal? '= type)
-        (unless (list-length= 1 args)
-          (fail-expression-check
-           (stringf
-            "Expression of type ~s must have exactly 1 argument."
-            (~a '=))
-           (list x))))
+   ((equal? '= type)
+    (unless (list-length= 1 args)
+      (fail-expression-check
+       (stringf
+        "Expression of type ~s must have exactly 1 argument."
+        (~a '=))
+       (list x))))
 
-       ((equal? 'r7rs type)
-        (unless (list-length= 1 args)
-          (fail-expression-check
-           (stringf
-            "Expression of type ~s must have exactly 1 argument."
-            (~a 'r7rs))
-           (list x))))
-
-       (else
-        (fail-expression-check
-         "Expression type unrecognized."
-         (list x))))))
+   ((equal? 'r7rs type)
+    (unless (list-length= 1 args)
+      (fail-expression-check
+       (stringf
+        "Expression of type ~s must have exactly 1 argument."
+        (~a 'r7rs))
+       (list x))))
 
    (else
     (fail-expression-check
-     "Must be either a symbol or a list." (list x)))))
+     "Expression type unrecognized."
+     (list x)))))
