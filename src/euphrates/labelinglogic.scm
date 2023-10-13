@@ -100,7 +100,7 @@
            (lambda (model-component)
              (define-tuple (class predicate superclass) model-component)
 
-             (if (not (equal? class expr:value))
+             (if (not (equal? class (car expr:value)))
                  (list model-component)
                  (let ()
                    (define added
