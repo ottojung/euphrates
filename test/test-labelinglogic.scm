@@ -3,6 +3,14 @@
   (define model
     `((any (or alphanum whitespace))
       (alphanum (or alphabetic numeric))
+      (alphabetic (or nocase (or lowercase nocase)))))
+
+  (labelinglogic::model:check model))
+
+(let ()
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
       (alphabetic (or any (or lowercase nocase)))))
 
   (assert-throw
