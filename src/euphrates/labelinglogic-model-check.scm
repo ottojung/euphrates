@@ -36,7 +36,7 @@
         (stringf "element must have length = ~s" expected-length)
         (list model-component)))
 
-     (define-tuple (class predicate superclass) model-component)
+     (define-tuple (class predicate) model-component)
 
      (unless (symbol? class)
        (fail-model-check "element class must be a symbol" (list class model-component)))
