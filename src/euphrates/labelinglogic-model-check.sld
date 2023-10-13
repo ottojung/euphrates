@@ -2,7 +2,6 @@
 (define-library
   (euphrates labelinglogic-model-check)
   (export labelinglogic::model:check)
-  (import (only (euphrates comp) comp))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -11,12 +10,8 @@
           make-hashmap))
   (import
     (only (euphrates hashset)
-          hashset->list
-          hashset-difference
           hashset-has?
-          hashset-null?
-          list->hashset
-          make-hashset))
+          list->hashset))
   (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic::expression::check))
@@ -29,24 +24,19 @@
     (only (euphrates make-unique) make-unique))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
-          assq
           begin
           car
           define
-          equal?
           for-each
           lambda
           let
           list
           list?
           map
-          not
           null?
-          or
           procedure?
           quote
           symbol?

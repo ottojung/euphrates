@@ -74,33 +74,4 @@
 
    model)
 
-  (define superclasss
-    (list->hashset
-     (filter
-      (comp (equal? most-default-class) not)
-      (map
-       (lambda (model-component)
-         (define-tuple (class predicate superclass) model-component)
-         superclass)
-       model))))
-
-  (define diff
-    (hashset-difference
-     superclasss classes/s))
-
-  (unless (hashset-null? diff)
-    (fail-model-check
-     "every superclass must be a class itself"
-     (list (hashset->list diff))))
-
-  (define (checkloop start-model-component)
-    (define S (make-hashset))
-    (let loop ((current start-model-component))
-      (define-tuple (class predicate superclass) current)
-      (unless (equal? superclass most-default-class)
-        (loop (or (assq superclass model)
-                  (raisu 'impossible-17237123))))))
-
-  (for-each checkloop model)
-
   )
