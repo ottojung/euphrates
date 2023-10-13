@@ -36,27 +36,7 @@
 
   (for-each
    (lambda (binding)
-     (unless (list? binding)
-       (raisu* :from "labelinglogic"
-               :type 'bad-binding
-               :message "Binding in labelinglogic must be a list, but was not"
-               :args (list binding)))
-
-     (unless (list-length= 2 binding)
-       (raisu* :from "labelinglogic"
-               :type 'bad-binding-length
-               :message "Binding in labelinglogic must have two components, but did not"
-               :args (list binding)))
-
-     (define-tuple (name expr) binding)
-
-     (unless (symbol? name)
-       (raisu* :from "labelinglogic"
-               :type 'bad-expr
-               :message "Expression in labelinglogic must be a list, but was not"
-               :args (list expr)))
-
-     (labelinglogic::expression::check expr)
+     (labelinglogic::binding::check binding)
 
      (define constants (labelinglogic::expression:constants expr))
 
