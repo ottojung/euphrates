@@ -10,4 +10,5 @@
           (define args (cdr expr))
           (cond
            ((equal? '= type) (list))
+           ((equal? 'r7rs type) (list))
            (else (apply append (map loop args))))))))
