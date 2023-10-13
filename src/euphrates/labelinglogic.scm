@@ -6,7 +6,7 @@
 
   (define most-default-class #f)
 
-  (labelinglogic::model:check most-default-class model)
+  (labelinglogic::model:check model)
 
   (define classes/s
     (list->hashset

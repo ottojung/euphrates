@@ -48,7 +48,7 @@
           _
           append
           apply
-          assq
+          assoc
           begin
           cadr
           car
