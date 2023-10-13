@@ -57,8 +57,8 @@
        model)
       H))
 
-  (define default-key
-    (make-unique))
+  (define recursion-hashset
+    (make-hashset))
 
   (for-each
    (lambda (model-component)

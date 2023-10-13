@@ -11,7 +11,8 @@
   (import
     (only (euphrates hashset)
           hashset-has?
-          list->hashset))
+          list->hashset
+          make-hashset))
   (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic::expression::check))
@@ -20,8 +21,6 @@
           labelinglogic::expression:constants))
   (import
     (only (euphrates list-length-eq) list-length=))
-  (import
-    (only (euphrates make-unique) make-unique))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
