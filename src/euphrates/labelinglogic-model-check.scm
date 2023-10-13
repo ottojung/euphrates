@@ -97,7 +97,7 @@
       (debugs class)
       (define constants (labelinglogic::expression:constants predicate))
       (debugs constants)
-      (define referenced-models (map (lambda (c) (assoc c model)) predicate))
+      (define referenced-models (map (lambda (c) (assoc-or c model 'impossible-71276363)) predicate))
       (debugs referenced-models)
       (debug "-------------")
       (for-each loop referenced-models)))

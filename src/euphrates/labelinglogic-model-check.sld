@@ -2,6 +2,7 @@
 (define-library
   (euphrates labelinglogic-model-check)
   (export labelinglogic::model:check)
+  (import (only (euphrates assoc-or) assoc-or))
   (import (only (euphrates debug) debug))
   (import (only (euphrates debugs) debugs))
   (import
@@ -35,7 +36,6 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
-          assoc
           begin
           car
           define
