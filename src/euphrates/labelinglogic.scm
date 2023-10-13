@@ -68,7 +68,7 @@
   (define generate-new-class-name
     (let ((counter 0))
       (lambda _
-        (define ret (list 'class counter))
+        (define ret (list 'ref counter))
         (set! counter (+ 1 counter))
         (hashset-add! generated-names ret)
         ret)))
