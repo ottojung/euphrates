@@ -48,7 +48,7 @@
   (define falses
     (filter
      (lambda (model-component)
-       (define-tuple (class predicate superclass) model-component)
+       (define-tuple (class predicate) model-component)
        (equal? class most-default-class))
      model))
 
