@@ -1,13 +1,16 @@
 
 (define-library
-  (euphrates
-    labelinglogic-bindings-check)
+  (euphrates labelinglogic-bindings-check)
   (export labelinglogic::bindings:check)
-  (import (only (euphrates compose) compose))
   (import
-    (only (euphrates hashset)
-          hashset->list
-          hashset-has?))
+    (only (euphrates define-tuple) define-tuple))
+  (import (only (euphrates hashset) hashset-has?))
+  (import
+    (only (euphrates labelinglogic-expression-check)
+          labelinglogic::expression::check))
+  (import
+    (only (euphrates labelinglogic-expression-constants)
+          labelinglogic::expression:constants))
   (import
     (only (euphrates list-and-map) list-and-map))
   (import
@@ -18,21 +21,11 @@
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-a) ~a))
-  (import (only (euphrates tilda-s) ~s))
-  (import
-    (only (euphrates words-to-string) words->string))
   (import
     (only (scheme base)
-          =
           begin
-          cadr
           car
-          cdr
-          cond
           define
-          else
-          equal?
           for-each
           lambda
           list
@@ -52,5 +45,4 @@
            (begin
              (include-from-path
                "euphrates/labelinglogic-bindings-check.scm")))
-    (else (include
-            "labelinglogic-bindings-check.scm"))))
+    (else (include "labelinglogic-bindings-check.scm"))))

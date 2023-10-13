@@ -39,52 +39,38 @@
      (unless (list? binding)
        (raisu* :from "labelinglogic"
                :type 'bad-binding
-               :message "Binding in pointwise lexer must be a list, but was not"
+               :message "Binding in labelinglogic must be a list, but was not"
                :args (list binding)))
 
-     (unless (list-length= 1 binding)
+     (unless (list-length= 2 binding)
        (raisu* :from "labelinglogic"
                :type 'bad-binding-length
-               :message "Binding in pointwise lexer must have two components, but did not"
+               :message "Binding in labelinglogic must have two components, but did not"
                :args (list binding)))
 
-     (define expr (car binding))
+     (define-tuple (name expr) binding)
 
-     (unless (list? expr)
+     (unless (symbol? name)
        (raisu* :from "labelinglogic"
                :type 'bad-expr
-               :message "Expression in pointwise lexer must be a list, but was not"
+               :message "Expression in labelinglogic must be a list, but was not"
                :args (list expr)))
 
-     (unless (list-length= 2 expr)
+     (labelinglogic::expression::check expr)
+
+     (define constants (labelinglogic::expression:constants expr))
+
+     (define undefined-constants
+       (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
+
+     (unless (null? undefined-constants)
        (raisu* :from "labelinglogic"
-               :type 'bad-expr-length
-               :message "Expression in pointwise lexer must have two components, but did not"
-               :args (list expr)))
+               :type 'bad-expr
+               :message "Binding references undefined class."
+               :args (list expr undefined-constants)))
 
-     (define expr-type (car expr))
+     )
 
-     (cond
-      ((equal? expr-type 'class)
-       (unless (hashset-has? classes/s (cadr expr))
-         (raisu* :from "labelinglogic"
-                 :type 'bad-class-name
-                 :message (stringf "Bad class name used in pointwise, must be one of ~a"
-                                   (words->string (map (compose ~s ~a) (hashset->list classes/s))))
-                 :args (list (cadr expr)))))
-
-      ((equal? (car expr) '=)
-       'pass)
-
-      (else
-       (raisu* :from "labelinglogic"
-               :type 'bad-expr-type
-               :message (stringf "Expression type in pointwise lexer must be one of ~s, but was not"
-                                 (list 'class 'point))
-               :args (list expr-type))))
-
-     (when #f #t))
-
-   (map cdr tokens-alist))
+   tokens-alist)
 
   (when #f #t))
