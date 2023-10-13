@@ -7,6 +7,9 @@
     (only (euphrates labelinglogic-binding-check)
           labelinglogic::binding::check))
   (import
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic::binding:expr))
+  (import
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic::expression:constants))
   (import

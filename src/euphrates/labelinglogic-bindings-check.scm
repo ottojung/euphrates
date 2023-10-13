@@ -38,6 +38,8 @@
    (lambda (binding)
      (labelinglogic::binding::check binding)
 
+     (define expr (labelinglogic::binding:expr binding))
+
      (define constants (labelinglogic::expression:constants expr))
 
      (define undefined-constants
