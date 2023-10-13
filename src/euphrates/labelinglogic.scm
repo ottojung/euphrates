@@ -14,9 +14,6 @@
 
   (labelinglogic::bindings:check classes/s bindings)
 
-  (define (binding:name binding)
-    (list-ref binding 0))
-
   (define (binding:expr binding)
     (list-ref binding 1))
 
@@ -39,7 +36,7 @@
     (class-expr:target expr))
 
   (define bindings-found
-    (list->hashset (map binding:name bindings)))
+    (list->hashset (map labelinglogic::binding:name bindings)))
 
   (define (is-binding? x)
     (hashset-has? bindings-found x))
@@ -49,7 +46,7 @@
       (for-each
        (lambda (binding)
          (define name
-           (binding:name binding))
+           (labelinglogic::binding:name binding))
 
          (define type
            (binding:type binding))
