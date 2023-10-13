@@ -3,12 +3,18 @@
 
 (define (labelinglogic::expression:constants expr)
   (let loop ((expr expr))
-    (if (symbol? expr)
-        (list expr)
-        (let ()
-          (define type (car expr))
-          (define args (cdr expr))
-          (cond
-           ((equal? '= type) (list))
-           ((equal? 'r7rs type) (list))
-           (else (apply append (map loop args))))))))
+    (define type
+      (labelinglogic::expression:type expr))
+
+    (cond
+     ((equal? 'constant type)
+      (list expr))
+
+     (else
+      (let ()
+        (define type (car expr))
+        (define args (cdr expr))
+        (cond
+         ((equal? '= type) (list))
+         ((equal? 'r7rs type) (list))
+         (else (apply append (map loop args)))))))))

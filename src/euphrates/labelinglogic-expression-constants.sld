@@ -3,6 +3,9 @@
   (euphrates labelinglogic-expression-constants)
   (export labelinglogic::expression:constants)
   (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic::expression:type))
+  (import
     (only (scheme base)
           =
           append
@@ -14,12 +17,10 @@
           define
           else
           equal?
-          if
           let
           list
           map
-          quote
-          symbol?))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
