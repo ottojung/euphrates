@@ -11,7 +11,7 @@
       (whitespace (r7rs char-whitespace?))))
 
   (assert-throw
-   'kek
+   'model-type-error
    (labelinglogic::model:check model)))
 
 (let ()
