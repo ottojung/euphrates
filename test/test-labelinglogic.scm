@@ -9,14 +9,14 @@
             (not (char-lower-case? c)))))
 
   (define model
-    `((any union #f)
-      (alphanum union any)
-      (alphabetic union alphanum)
-      (upcase (r7rs char-upper-case?) alphabetic)
-      (lowercase (r7rs char-lower-case?) alphabetic)
-      (nocase (r7rs ,char-nocase-alphabetic?) alphabetic)
-      (numeric (r7rs char-numeric?) alphanum)
-      (whitespace (r7rs char-whitespace?) any)))
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
+      (alphabetic (or upcase lowercase nocase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (nocase (r7rs ,char-nocase-alphabetic?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
 
   (define bindings
     '((t_0 (= #\0))
@@ -30,9 +30,9 @@
       (t_8 (= #\8))
       (t_m (= #\m))
       ;; (c_x (= #\x3))
-      (t_a (class alphabetic))
-      (t_n (class numeric))
-      (t_x (class alphanum))))
+      (t_a alphabetic)
+      (t_n numeric)
+      (t_x alphanum)))
 
   (assert=
 

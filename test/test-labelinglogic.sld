@@ -17,6 +17,7 @@
           lambda
           let
           not
+          or
           quasiquote
           quote
           unquote))
