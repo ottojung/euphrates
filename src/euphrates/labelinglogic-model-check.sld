@@ -2,8 +2,6 @@
 (define-library
   (euphrates labelinglogic-model-check)
   (export labelinglogic::model:check)
-  (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import

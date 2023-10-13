@@ -93,13 +93,8 @@
 
       (hashset-add! recursion-hashset class)
 
-      (debug "-------------")
-      (debugs class)
       (define constants (labelinglogic::expression:constants predicate))
-      (debugs constants)
       (define referenced-models (map (lambda (c) (assoc c model)) constants))
-      (debugs referenced-models)
-      (debug "-------------")
       (for-each loop referenced-models)))
 
   (for-each check-recursion model)
