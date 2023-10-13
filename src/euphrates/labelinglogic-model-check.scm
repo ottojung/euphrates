@@ -60,6 +60,28 @@
   (define recursion-hashset
     (make-hashset))
 
+  (define (check-recursion class constants)
+    (hashset-clear! recursion-hashset)
+    (define recursion-stack (stack-make))
+
+    (let loop ((class class)
+               (constants constants))
+
+      (when (hashset-has? recursion-hashset class)
+        (fail-model-check
+         "class references itself through the following cycle: ~s, this is not allowed"
+         (list class (reverse (stack->list recursion-stack)))))
+
+      (hashset-add! recursion-hashset class)
+      (stack-push! recursion-stack class)
+
+      (for-each
+       (lambda (constant)
+         (define-tuple (new-class predicate) (assoc model constant))
+         (define new-constants (labelinglogic::expression:constants predicate))
+         (loop new-class new-constants))
+       constants)))
+
   (for-each
    (lambda (model-component)
      (define-tuple (class predicate) model-component)
@@ -67,8 +89,7 @@
      (define undefined-constants
        (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
 
-     (let loop ((class class))
-       (
+     (check-recursion class constants)
 
      (unless (null? undefined-constants)
        (fail-model-check
