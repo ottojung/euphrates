@@ -5,6 +5,7 @@
     stack-make
     stack?
     stack-empty?
+    stack-has?
     stack-push!
     stack-pop!
     stack-peek
@@ -28,6 +29,7 @@
           define
           if
           let
+          member
           null?
           quote
           unless

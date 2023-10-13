@@ -36,55 +36,23 @@
 
   (for-each
    (lambda (binding)
-     (unless (list? binding)
-       (raisu* :from "labelinglogic"
-               :type 'bad-binding
-               :message "Binding in pointwise lexer must be a list, but was not"
-               :args (list binding)))
+     (labelinglogic::binding::check binding)
 
-     (unless (list-length= 1 binding)
-       (raisu* :from "labelinglogic"
-               :type 'bad-binding-length
-               :message "Binding in pointwise lexer must have two components, but did not"
-               :args (list binding)))
+     (define expr (labelinglogic::binding:expr binding))
 
-     (define expr (car binding))
+     (define constants (labelinglogic::expression:constants expr))
 
-     (unless (list? expr)
+     (define undefined-constants
+       (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
+
+     (unless (null? undefined-constants)
        (raisu* :from "labelinglogic"
                :type 'bad-expr
-               :message "Expression in pointwise lexer must be a list, but was not"
-               :args (list expr)))
+               :message "Binding references undefined class."
+               :args (list expr binding undefined-constants)))
 
-     (unless (list-length= 2 expr)
-       (raisu* :from "labelinglogic"
-               :type 'bad-expr-length
-               :message "Expression in pointwise lexer must have two components, but did not"
-               :args (list expr)))
+     )
 
-     (define expr-type (car expr))
-
-     (cond
-      ((equal? expr-type 'class)
-       (unless (hashset-has? classes/s (cadr expr))
-         (raisu* :from "labelinglogic"
-                 :type 'bad-class-name
-                 :message (stringf "Bad class name used in pointwise, must be one of ~a"
-                                   (words->string (map (compose ~s ~a) (hashset->list classes/s))))
-                 :args (list (cadr expr)))))
-
-      ((equal? (car expr) '=)
-       'pass)
-
-      (else
-       (raisu* :from "labelinglogic"
-               :type 'bad-expr-type
-               :message (stringf "Expression type in pointwise lexer must be one of ~s, but was not"
-                                 (list 'class 'point))
-               :args (list expr-type))))
-
-     (when #f #t))
-
-   (map cdr tokens-alist))
+   tokens-alist)
 
   (when #f #t))

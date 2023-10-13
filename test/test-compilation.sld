@@ -719,11 +719,42 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
+    (only (euphrates labelinglogic-binding-check)
+          labelinglogic::binding::check))
+  (import
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic::binding:expr))
+  (import
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic::binding:name))
+  (import
     (only (euphrates labelinglogic-bindings-check)
           labelinglogic::bindings:check))
   (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic::expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-check)
+          labelinglogic::expression::check))
+  (import
+    (only (euphrates labelinglogic-expression-constants)
+          labelinglogic::expression:constants))
+  (import
+    (only (euphrates labelinglogic-expression-huh)
+          labelinglogic::expression?))
+  (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic::expression::make))
+  (import
+    (only (euphrates
+            labelinglogic-expression-replace-constants)
+          labelinglogic::expression:replace-constants))
+  (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic::expression:type))
+  (import
     (only (euphrates labelinglogic-model-check)
-          labelinglogic::model:check))
+          labelinglogic::model::check))
   (import
     (only (euphrates labelinglogic)
           labelinglogic::init))
@@ -1819,6 +1850,7 @@
           stack->list
           stack-discard!
           stack-empty?
+          stack-has?
           stack-make
           stack-peek
           stack-pop!

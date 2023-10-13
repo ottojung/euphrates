@@ -8,33 +8,48 @@
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates hashset)
-          hashset->list
           hashset-add!
           hashset-has?
           list->hashset
           make-hashset))
   (import
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic::binding:expr))
+  (import
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic::binding:name))
+  (import
     (only (euphrates labelinglogic-bindings-check)
           labelinglogic::bindings:check))
   (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic::expression:args))
+  (import
+    (only (euphrates
+            labelinglogic-expression-replace-constants)
+          labelinglogic::expression:replace-constants))
+  (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic::expression:type))
+  (import
     (only (euphrates labelinglogic-model-check)
-          labelinglogic::model:check))
+          labelinglogic::model::check))
   (import (only (euphrates list-fold) list-fold))
-  (import
-    (only (euphrates list-length-eq) list-length=))
-  (import
-    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base)
           +
           =
           _
-          and
           append
           apply
-          assq
+          assoc
           begin
           cadr
           car
@@ -48,13 +63,14 @@
           let
           list
           list-ref
-          list?
           map
           not
           or
-          pair?
+          quasiquote
           quote
-          set!))
+          set!
+          unquote
+          when))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))

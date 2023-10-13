@@ -6,7 +6,7 @@
 
   (define most-default-class #f)
 
-  (labelinglogic::model:check most-default-class model)
+  (labelinglogic::model::check model)
 
   (define classes/s
     (list->hashset
@@ -14,32 +14,23 @@
 
   (labelinglogic::bindings:check classes/s bindings)
 
-  (define (binding:name binding)
-    (list-ref binding 0))
-
-  (define (binding:expr binding)
-    (list-ref binding 1))
-
-  (define (expr:type expr)
-    (list-ref expr 0))
-
   (define (binding:type binding)
     (define expr
-      (binding:expr binding))
+      (labelinglogic::binding:expr binding))
 
-    (expr:type expr))
+    (labelinglogic::expression:type expr))
 
   (define (class-expr:target expr)
     (list-ref expr 1))
 
   (define (class-binding:target binding)
     (define expr
-      (binding:expr binding))
+      (labelinglogic::binding:expr binding))
 
     (class-expr:target expr))
 
   (define bindings-found
-    (list->hashset (map binding:name bindings)))
+    (list->hashset (map labelinglogic::binding:name bindings)))
 
   (define (is-binding? x)
     (hashset-has? bindings-found x))
@@ -49,15 +40,16 @@
       (for-each
        (lambda (binding)
          (define name
-           (binding:name binding))
+           (labelinglogic::binding:name binding))
+         (define expr
+           (labelinglogic::binding:expr binding))
 
          (define type
-           (binding:type binding))
+           (labelinglogic::expression:type expr))
 
          (cond
-          ((equal? type 'class)
-           (let ((target (class-binding:target binding)))
-             (hashset-add! S target)))
+          ((equal? type 'constant)
+           (hashset-add! S expr))
 
           ((equal? type '=)
            'pass)
@@ -76,7 +68,7 @@
   (define generate-new-class-name
     (let ((counter 0))
       (lambda _
-        (define ret (list 'class counter))
+        (define ret (list 'ref counter))
         (set! counter (+ 1 counter))
         (hashset-add! generated-names ret)
         ret)))
@@ -89,34 +81,76 @@
     (eval (list code arg)
           (environment '(scheme base) '(scheme char))))
 
+  (define class->binding/h
+    (let ()
+      (define H (make-hashmap))
+      (for-each
+       (lambda (binding)
+         (define name (labelinglogic::binding:name binding))
+         (define expr (labelinglogic::binding:expr binding))
+         (define type (labelinglogic::expression:type expr))
+
+         (when (equal? type 'constant)
+           (hashmap-set! H expr name)))
+
+       bindings)
+      H))
+
+  (define (class->binding class)
+    (hashmap-ref class->binding/h class #f))
+
+  (define renamed-model
+    (map
+     (lambda (model-component)
+       (define-tuple (class predicate) model-component)
+
+       (define (replacer constant)
+         (or (class->binding constant) constant))
+
+       (list
+        class
+        (labelinglogic::expression:replace-constants predicate replacer)))
+
+     model))
+
   (define extended-model
     (list-fold
-     (model model)
+     (model renamed-model)
      (binding bindings)
 
      (let ()
        (define-tuple (name expr) binding)
-       (define-tuple (expr:type expr:value) expr)
+       (define expr:type (labelinglogic::expression:type expr))
+       (define expr:args (labelinglogic::expression:args expr))
+
+       (define (fork-current model-component)
+         (define-tuple (class predicate) model-component)
+
+         (define new-name (generate-new-class-name))
+
+         (define new-parent
+           (list class `(or ,name ,new-name)))
+
+         (define renamed-current
+           (list new-name predicate))
+
+         (define added
+           (list name expr))
+
+         (list new-parent renamed-current added))
 
        (cond
 
-        ((equal? 'class expr:type)
+        ((equal? 'constant expr:type)
          (apply
           append
           (map
            (lambda (model-component)
-             (define-tuple (class predicate superclass) model-component)
+             (define-tuple (class predicate) model-component)
 
-             (if (not (equal? class expr:value))
+             (if (not (equal? class expr))
                  (list model-component)
-                 (let ()
-                   (define added
-                     (list name 'union superclass))
-
-                   (define renamed-current
-                     (list class predicate name))
-
-                   (list added renamed-current))))
+                 (list binding model-component)))
            model)))
 
         ((equal? '= expr:type)
@@ -125,36 +159,20 @@
           append
           (map
            (lambda (model-component)
-             (define-tuple (class predicate superclass) model-component)
+             (define-tuple (class predicate) model-component)
+             (define expr-type
+               (labelinglogic::expression:type predicate))
 
              (cond
-              ((equal? 'union predicate)
-               (list model-component))
+              ((equal? expr-type 'r7rs)
 
-              ((and (list? predicate)
-                    (list-length= 2 predicate)
-                    (equal? (car predicate) 'r7rs))
-
-               (if (evaluate-predicate predicate expr:value)
-                   (let ()
-                     (define new-parent
-                       (list class 'union superclass))
-
-                     (define renamed-current
-                       (list (generate-new-class-name) predicate class))
-
-                     (define added
-                       (list name (list '= expr:value) class))
-
-                     (list new-parent renamed-current added))
+               (if (evaluate-predicate predicate (car expr:args))
+                   (fork-current model-component)
                    (list model-component)))
 
-              ((and (pair? predicate)
-                    (equal? '= (car predicate)))
-               (list model-component))
-
               (else
-               (raisu 'unknown-model-component-type-2 model-component))))
+               (list model-component))))
+
            model)))
 
         (else
@@ -163,15 +181,20 @@
   (define (connect-transitive-model-edges model)
     (map
      (lambda (model-component)
-       (define-tuple (class predicate superclass) model-component)
+       (define-tuple (class predicate) model-component)
 
-       (if (or (equal? most-default-class superclass)
-               (is-binding? superclass))
-           model-component
-           (let ()
-             (define superclass-component (assq superclass model))
-             (define-tuple (superclass:class superclass:predicate superclass:superclass) superclass-component)
-             (list class predicate superclass:superclass))))
+       (define (replacer constant)
+         (if (is-binding? constant)
+             constant
+             (let ()
+               (define target-component (assoc constant model))
+               (define-tuple (target-class target-predicate) target-component)
+               target-predicate)))
+
+       (list
+        class
+        (labelinglogic::expression:replace-constants predicate replacer)))
+
      model))
 
   (define transitive-model
@@ -179,47 +202,11 @@
      connect-transitive-model-edges
      extended-model))
 
-  (define (remove-empty-unions model)
-    (filter
-     (lambda (model-component)
-       (define-tuple (class predicate superclass) model-component)
-       (or (not (equal? 'union predicate))
-           (let ()
-             (define has-child?
-               (list-or-map
-                (lambda (child-model-component)
-                  (define-tuple (child-class child-predicate child-superclass) child-model-component)
-                  (equal? child-superclass class))
-                model))
-
-             has-child?)))
-     model))
-
-  (define non-empty-model
-    (apply-until-fixpoint
-     remove-empty-unions
-     transitive-model))
-
-  (define found-superclasss
-    (list->hashset
-     (map
-      (lambda (model-component)
-        (define-tuple (class predicate superclass) model-component)
-        superclass)
-      transitive-model)))
-
-  (define (superclass-found? x)
-    (hashset-has? found-superclasss x))
-
-  (define reachability-roots
-    (hashset->list bindings-found))
-
   (define reachable-model
     (filter
      (lambda (model-component)
-       (define-tuple (class predicate superclass) model-component)
-       (or (is-binding? class)
-           (is-binding? superclass)))
-     non-empty-model))
+       (define-tuple (class predicate) model-component)
+       (is-binding? class))
+     transitive-model))
 
   reachable-model)
