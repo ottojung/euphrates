@@ -44,14 +44,8 @@
          (define expr
            (labelinglogic::binding:expr binding))
 
-         (debugs name)
-
-         (debugs expr)
-
          (define type
            (labelinglogic::expression:type expr))
-
-         (debugs type)
 
          (cond
           ((equal? type 'constant)
