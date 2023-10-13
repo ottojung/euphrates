@@ -117,15 +117,12 @@
           append
           (map
            (lambda (model-component)
-             (define-tuple (class predicate superclass) model-component)
+             (define-tuple (class predicate) model-component)
+             (define expr-type
+               (labelinglogic::expression:type predicate))
 
              (cond
-              ((equal? 'union predicate)
-               (list model-component))
-
-              ((and (list? predicate)
-                    (list-length= 2 predicate)
-                    (equal? (car predicate) 'r7rs))
+              ((equal? expr-type 'r7rs)
 
                (if (evaluate-predicate predicate expr:value)
                    (let ()
@@ -141,12 +138,9 @@
                      (list new-parent renamed-current added))
                    (list model-component)))
 
-              ((and (pair? predicate)
-                    (equal? '= (car predicate)))
-               (list model-component))
-
               (else
-               (raisu 'unknown-model-component-type-2 model-component))))
+               (list model-component))))
+
            model)))
 
         (else

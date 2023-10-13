@@ -31,8 +31,6 @@
           labelinglogic::model:check))
   (import (only (euphrates list-fold) list-fold))
   (import
-    (only (euphrates list-length-eq) list-length=))
-  (import
     (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates raisu) raisu))
   (import
@@ -40,7 +38,6 @@
           +
           =
           _
-          and
           append
           apply
           assq
@@ -57,11 +54,9 @@
           let
           list
           list-ref
-          list?
           map
           not
           or
-          pair?
           quote
           set!))
   (import (only (scheme eval) environment eval))
