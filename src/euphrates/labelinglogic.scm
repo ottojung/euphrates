@@ -151,12 +151,18 @@
      (lambda (model-component)
        (define-tuple (class predicate) model-component)
 
-       (if (is-binding? superclass)
-           model-component
-           (let ()
-             (define superclass-component (assq superclass model))
-             (define-tuple (superclass:class superclass:predicate superclass:superclass) superclass-component)
-             (list class predicate superclass:superclass))))
+       (define (replacer constant)
+         (if (is-binding? constant)
+             model-component
+             (let ()
+               (define target-component (assq constant model))
+               (define-tuple (target-class target-predicate) target-component)
+               (list class target-predicate))))
+
+       (list
+        class
+        (labelinglogic::expression:replace-constants predicate replacer)))
+
      model))
 
   (define transitive-model

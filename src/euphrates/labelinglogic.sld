@@ -27,6 +27,10 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic::expression:args))
   (import
+    (only (euphrates
+            labelinglogic-expression-replace-constants)
+          labelinglogic::expression:replace-constants))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic::expression:type))
   (import
