@@ -98,18 +98,18 @@
           append
           (map
            (lambda (model-component)
-             (define-tuple (class predicate superclass) model-component)
+             (define-tuple (class predicate) model-component)
 
              (if (not (equal? class (car expr:args)))
                  (list model-component)
                  (let ()
+                   (define new-parent
+                     (list class `(or ,name ,class)))
+
                    (define added
-                     (list name 'union superclass))
+                     (list name expr))
 
-                   (define renamed-current
-                     (list class predicate name))
-
-                   (list added renamed-current))))
+                   (list new-parent model-component added))))
            model)))
 
         ((equal? '= expr:type)
@@ -130,7 +130,7 @@
                      (define new-name (generate-new-class-name))
 
                      (define new-parent
-                       (list class `(or name ,new-name)))
+                       (list class `(or ,name ,new-name)))
 
                      (define renamed-current
                        (list new-name predicate))
