@@ -126,14 +126,16 @@
 
                (if (evaluate-predicate predicate expr:value)
                    (let ()
+                     (define new-name (generate-new-class-name))
+
                      (define new-parent
-                       (list class 'union superclass))
+                       (list class `(or name ,new-name)))
 
                      (define renamed-current
-                       (list (generate-new-class-name) predicate class))
+                       (list new-name predicate))
 
                      (define added
-                       (list name (list '= expr:value) class))
+                       (list name expr))
 
                      (list new-parent renamed-current added))
                    (list model-component)))

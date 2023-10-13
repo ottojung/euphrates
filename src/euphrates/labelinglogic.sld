@@ -57,8 +57,10 @@
           map
           not
           or
+          quasiquote
           quote
-          set!))
+          set!
+          unquote))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
