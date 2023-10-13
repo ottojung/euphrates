@@ -5,6 +5,9 @@
   (export
     labelinglogic::expression:replace-constants)
   (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic::expression:type))
+  (import
     (only (scheme base)
           =
           begin
@@ -15,11 +18,9 @@
           define
           else
           equal?
-          if
           let
           map
-          quote
-          symbol?))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
