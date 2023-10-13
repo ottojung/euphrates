@@ -18,6 +18,9 @@
           list->hashset
           make-hashset))
   (import
+    (only (euphrates labelinglogic-expression-check)
+          labelinglogic::expression::check))
+  (import
     (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates list-singleton-q)
@@ -27,11 +30,9 @@
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-a) ~a))
   (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
-          and
           assq
           begin
           car

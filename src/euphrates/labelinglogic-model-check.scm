@@ -41,16 +41,7 @@
      (unless (symbol? class)
        (fail-model-check "element class must be a symbol" (list class model-component)))
 
-     (unless (or (equal? 'union predicate)
-                 (and (list? predicate)
-                      (list-length= 2 predicate)
-                      (equal? (car predicate) 'r7rs)
-                      (check-if-r7rs-code predicate)))
-       (fail-model-check (stringf "element predicate must be the symbol ~s or R7RS code like '(r7rs (lambda (x) (= x 1)))." (list (~a 'union)))
-                         (list predicate model-component)))
-
-     (unless (or (equal? most-default-class superclass) (symbol? superclass))
-       (fail-model-check "element superclass must be a symbol" (list superclass model-component))))
+     (labelinglogic::expression::check predicate))
 
    model)
 
