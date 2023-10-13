@@ -62,22 +62,9 @@
 
   (for-each
    (lambda (model-component)
-     (define-tuple (class predicate superclass) model-component)
+     (define-tuple (class predicate) model-component)
      (define super-predicate
        (hashmap-ref class:predicate/h superclass default-key))
-
-     (cond
-
-      ((equal? most-default-class class)
-       (unless (equal? most-default-class superclass)
-         (fail-model-check
-          "most default class cannot have any parent other than itself"
-          (list class model-component))))
-
-      ((equal? most-default-class superclass)
-       'pass)
-
-      (else
 
        (when (equal? default-key super-predicate)
          (fail-model-check
