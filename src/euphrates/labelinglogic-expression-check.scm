@@ -20,7 +20,15 @@
           (fail-expression-check
            (stringf
             "Expression of type ~s must have exactly 2 arguments."
-            'or)
+            (~a 'or))
+           (list x))))
+
+       ((equal? '= type)
+        (unless (list-length= 1 args)
+          (fail-expression-check
+           (stringf
+            "Expression of type ~s must have exactly 1 argument."
+            (~a '=))
            (list x))))
 
        (else
