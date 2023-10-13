@@ -16,8 +16,18 @@
       (define args (cdr x))
       (cond
        ((equal? 'or type)
-        (unless (list-length= 3 x)
-          0)))))
+        (unless (list-length= 2 args)
+          (fail-expression-check
+           (stringf
+            "Expression of type ~s must have exactly 2 arguments."
+            'or)
+           (list x))))
+
+       (else
+        (fail-expression-check
+         "Expression type unrecognized."
+         (list x))))))
+
    (else
     (fail-expression-check
      "Must be either a symbol or a list." (list x)))))
