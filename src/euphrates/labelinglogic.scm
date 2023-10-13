@@ -146,6 +146,8 @@
         (else
          (raisu 'unknown-expr-type binding))))))
 
+  (debugs extended-model)
+
   (define (connect-transitive-model-edges model)
     (map
      (lambda (model-component)
@@ -169,6 +171,8 @@
     (apply-until-fixpoint
      connect-transitive-model-edges
      extended-model))
+
+  (debugs transitive-model)
 
   (define (remove-empty-unions model)
     (filter
