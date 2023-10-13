@@ -50,7 +50,7 @@
          (debugs type)
 
          (cond
-          ((equal? type 'class)
+          ((equal? type 'constant)
            (let ((target (class-binding:target binding)))
              (hashset-add! S target)))
 
