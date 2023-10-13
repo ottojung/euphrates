@@ -3,12 +3,7 @@
   (define model
     `((any (or alphanum whitespace))
       (alphanum (or alphabetic numeric))
-      (alphabetic (or any (or lowercase nocase)))
-      (upcase (r7rs char-upper-case?))
-      (lowercase (r7rs char-lower-case?))
-      (nocase (r7rs ,char-nocase-alphabetic?))
-      (numeric (r7rs char-numeric?))
-      (whitespace (r7rs char-whitespace?))))
+      (alphabetic (or any (or lowercase nocase)))))
 
   (assert-throw
    'model-type-error
