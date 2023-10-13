@@ -1,7 +1,7 @@
 
 (let ()
   (define model
-    `((any (or alphanum whitespace))
+    `((any (or alphanum upcase))
       (alphanum alphabetic)
       (alphabetic (or upcase (or upcase upcase)))
       (upcase (r7rs char-upper-case?))))
@@ -10,7 +10,7 @@
 
 (let ()
   (define model
-    `((any (or alphanum whitespace))
+    `((any (or alphanum upcase))
       (alphanum alphabetic)
       (alphabetic (or any (or upcase upcase)))
       (upcase (r7rs char-upper-case?))))
