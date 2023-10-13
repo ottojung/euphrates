@@ -149,10 +149,9 @@
   (define (connect-transitive-model-edges model)
     (map
      (lambda (model-component)
-       (define-tuple (class predicate superclass) model-component)
+       (define-tuple (class predicate) model-component)
 
-       (if (or (equal? most-default-class superclass)
-               (is-binding? superclass))
+       (if (is-binding? superclass)
            model-component
            (let ()
              (define superclass-component (assq superclass model))
