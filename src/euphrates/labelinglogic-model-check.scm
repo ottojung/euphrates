@@ -77,7 +77,7 @@
 
       (for-each
        (lambda (constant)
-         (define-tuple (new-class predicate) (assoc model constant))
+         (define-tuple (new-class predicate) (assoc constant model))
          (define new-constants (labelinglogic::expression:constants predicate))
          (loop new-class new-constants))
        constants)))
