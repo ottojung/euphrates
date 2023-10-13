@@ -125,7 +125,7 @@
              (cond
               ((equal? expr-type 'r7rs)
 
-               (if (evaluate-predicate predicate expr:value)
+               (if (evaluate-predicate predicate (car expr:args))
                    (let ()
                      (define new-name (generate-new-class-name))
 
