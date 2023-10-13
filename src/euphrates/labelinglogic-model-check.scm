@@ -52,7 +52,7 @@
     (let ((H (make-hashmap)))
       (for-each
        (lambda (model-component)
-         (define-tuple (class predicate superclass) model-component)
+         (define-tuple (class predicate) model-component)
          (hashmap-set! H class predicate))
        model)
       H))
