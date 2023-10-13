@@ -49,7 +49,7 @@
          (debugs expr)
 
          (define type
-           (labelinglogic::binding:expr expr))
+           (labelinglogic::expression:type expr))
 
          (debugs type)
 
