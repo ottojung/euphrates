@@ -116,7 +116,7 @@
            (lambda (model-component)
              (define-tuple (class predicate) model-component)
 
-             (if (not (equal? class (car expr:args)))
+             (if (not (equal? class expr))
                  (list model-component)
                  (fork-current model-component)))
            model)))
