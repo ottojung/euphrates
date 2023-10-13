@@ -5,9 +5,11 @@
   (import
     (only (scheme base)
           begin
+          car
           cond
           define
           else
+          equal?
           list-ref
           quote
           symbol?))

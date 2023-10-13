@@ -4,4 +4,5 @@
 (define (labelinglogic::expression:type expr)
   (cond
    ((symbol? expr) 'constant)
+   ((equal? 'ref (car expr)) 'constant)
    (else (list-ref expr 0))))
