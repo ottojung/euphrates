@@ -1686,6 +1686,8 @@
   (import
     (only (euphrates random-choice) random-choice))
   (import
+    (only (euphrates random-float) random-float))
+  (import
     (only (euphrates random-variable-name)
           random-variable-name))
   (import (only (euphrates range) range))
