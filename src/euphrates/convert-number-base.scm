@@ -17,7 +17,7 @@
 
   (let ()
     (define-values (rwp0 rfp0)
-      (number->number-list outbase x))
+      (number->radix-list outbase x))
     (define rwp1 (map get-char rwp0))
     (define rwp (if (null? rwp1) (list #\0) rwp1))
     (define rfp (map get-char rfp0))
@@ -37,7 +37,7 @@
     (define fp1 (if (null? fp0) fp0 (cdr fp0)))
     (define wp (map alphanum/alphabet/index wp0))
     (define fp (map alphanum/alphabet/index fp1))
-    (define x (number-list->number inbase wp fp))
+    (define x (radix-list->number inbase wp fp))
     (convert-number-base/number/generic alphabet outbase x)))
 
 (define convert-number-base

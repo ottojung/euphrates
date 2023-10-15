@@ -4,16 +4,16 @@
 (define (radix3->string r3)
   (define basevector (radix3:basevector r3))
 
-  (define (number-list->string lst)
+  (define (radix-list->string lst)
     (apply
      string
      (map (lambda (c) (vector-ref basevector c)) lst)))
 
   (define sign (radix3:sign r3))
   (define prefix (if (> 0 sign) "-" ""))
-  (define integral (number-list->string (radix3:intpart r3)))
-  (define fractional (number-list->string (radix3:fracpart r3)))
-  (define period (number-list->string (radix3:period r3)))
+  (define integral (radix-list->string (radix3:intpart r3)))
+  (define fractional (radix-list->string (radix3:fracpart r3)))
+  (define period (radix-list->string (radix3:period r3)))
   (define after-dot
     (string-append
      fractional

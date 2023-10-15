@@ -1,11 +1,11 @@
 
 (define-library
-  (euphrates number-list)
+  (euphrates radix-list)
   (export
-    number-list->number
-    number->number-list
-    number->number-list:precision/p
-    number-list->number-list)
+    radix-list->number
+    number->radix-list
+    number->radix-list:precision/p
+    radix-list->radix-list)
   (import (only (euphrates fp) fp))
   (import
     (only (scheme base)
@@ -35,5 +35,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "euphrates/number-list.scm")))
-    (else (include "number-list.scm"))))
+             (include-from-path "euphrates/radix-list.scm")))
+    (else (include "radix-list.scm"))))

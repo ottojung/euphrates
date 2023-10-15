@@ -1,12 +1,12 @@
 
 (define-library
-  (test-number-list)
+  (test-radix-list)
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates fp) fp))
   (import
-    (only (euphrates number-list)
-          number->number-list
-          number-list->number))
+    (only (euphrates radix-list)
+          number->radix-list
+          radix-list->number))
   (import
     (only (scheme base)
           begin
@@ -18,5 +18,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "test-number-list.scm")))
-    (else (include "test-number-list.scm"))))
+             (include-from-path "test-radix-list.scm")))
+    (else (include "test-radix-list.scm"))))

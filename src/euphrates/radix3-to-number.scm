@@ -7,14 +7,14 @@
   (define r0 (vector-ref basevector 0))
   (define r9 (vector-ref basevector (- numbase 1)))
 
-  (define (number-list->string lst)
+  (define (radix-list->string lst)
     (apply
      string
      (map (lambda (c) (vector-ref basevector c)) lst)))
 
-  (define integral (number-list->string (radix3:intpart r3)))
-  (define fractional (number-list->string (radix3:fracpart r3)))
-  (define period (number-list->string (radix3:period r3)))
+  (define integral (radix-list->string (radix3:intpart r3)))
+  (define fractional (radix-list->string (radix3:fracpart r3)))
+  (define period (radix-list->string (radix3:period r3)))
 
   (define num
     (if (string-null? period)

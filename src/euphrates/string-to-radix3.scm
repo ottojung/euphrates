@@ -39,7 +39,7 @@
           (vector->list basevector)
           (iota (vector-length basevector)))))
 
-  (define (string->number-list str)
+  (define (string->radix-list str)
     (map
      (lambda (c)
        (hashmap-ref
@@ -51,8 +51,8 @@
      (string->list str)))
 
   (define sign (if (string-null? signstring) 1 -1))
-  (define intpart (string->number-list whole))
-  (define fracpart (string->number-list non-repeating))
-  (define period (string->number-list repeating))
+  (define intpart (string->radix-list whole))
+  (define fracpart (string->radix-list non-repeating))
+  (define period (string->radix-list repeating))
 
   (radix3-constructor sign intpart fracpart period basevector))

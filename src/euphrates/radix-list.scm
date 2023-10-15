@@ -1,10 +1,9 @@
 
 
 
-;; `number-list` is `base-q expansion` of a number.
-;; It does not support repeated fractions yet.
+;; `radix-list` is the `base-q expansion` of a number.
 
-(define (number-list->number base whole-part fractional-part)
+(define (radix-list->number base whole-part fractional-part)
   (+
    (let loop ((whole-part (reverse whole-part))
               (pow 1))
@@ -24,10 +23,10 @@
   (define whole-part (- x fractional-part))
   (values whole-part fractional-part))
 
-(define number->number-list:precision/p
+(define number->radix-list:precision/p
   (make-parameter 20))
 
-(define (number->number-list base x0)
+(define (number->radix-list base x0)
   (define x (inexact->exact x0))
 
   (define-values (whole-part fractional-part)
@@ -41,7 +40,7 @@
           (cons (remainder x base) buf))))
    (if (zero? fractional-part) '()
        (let loop ((x fractional-part)
-                  (i (number->number-list:precision/p)))
+                  (i (number->radix-list:precision/p)))
          (if (or (zero? x)
                  (zero? i))
              '()
@@ -50,9 +49,9 @@
                (define-values (wp fp) (number-parts mult))
                (cons wp (loop fp (- i 1)))))))))
 
-(define (number-list->number-list
+(define (radix-list->radix-list
          inbase outbase whole-part fractional-part)
-  (number->number-list
+  (number->radix-list
    outbase
-   (number-list->number inbase whole-part fractional-part)))
+   (radix-list->number inbase whole-part fractional-part)))
 

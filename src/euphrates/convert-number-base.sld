@@ -14,9 +14,9 @@
     (only (euphrates list-span-while)
           list-span-while))
   (import
-    (only (euphrates number-list)
-          number->number-list
-          number-list->number))
+    (only (euphrates radix-list)
+          number->radix-list
+          radix-list->number))
   (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base)
