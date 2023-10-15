@@ -145,6 +145,9 @@
   (import
     (only (euphrates big-random-int) big-random-int))
   (import
+    (only (euphrates binary-string-to-number)
+          binary-string->number))
+  (import
     (only (euphrates bnf-alist-map-expansion-terms)
           bnf-alist:map-expansion-terms))
   (import
@@ -291,6 +294,9 @@
   (import (only (euphrates debug) debug))
   (import (only (euphrates debugs) debugs))
   (import (only (euphrates debugv) debugv))
+  (import
+    (only (euphrates decimal-string-to-number)
+          decimal-string->number))
   (import
     (only (euphrates define-cli)
           define-cli:raisu/default-exit
@@ -649,6 +655,9 @@
           list->hashset
           make-hashset
           vector->hashset))
+  (import
+    (only (euphrates hexadecimal-string-to-number)
+          hexadecimal-string->number))
   (import
     (only (euphrates identity-monad) identity-monad))
   (import
@@ -1106,11 +1115,20 @@
     (only (euphrates number-to-decimal-string)
           number->decimal-string))
   (import
+    (only (euphrates number-to-hexadecimal-string)
+          number->hexadecimal-string))
+  (import
+    (only (euphrates number-to-octal-string)
+          number->octal-string))
+  (import
     (only (euphrates number-to-radix-string)
           number->radix-string))
   (import
     (only (euphrates number-to-radix3)
           number->radix3))
+  (import
+    (only (euphrates octal-string-to-number)
+          octal-string->number))
   (import
     (only (euphrates open-cond-obj)
           open-cond-constructor
@@ -1692,6 +1710,9 @@
           queue-rotate!
           queue-unload!
           queue?))
+  (import
+    (only (euphrates radix-string-to-number)
+          radix-string->number))
   (import
     (only (euphrates radix3-change-base)
           radix3:change-base))
