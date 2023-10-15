@@ -596,6 +596,9 @@
     (only (euphrates global-debug-mode-filter)
           global-debug-mode-filter))
   (import
+    (only (euphrates greatest-common-divisor)
+          greatest-common-divisor))
+  (import
     (only (euphrates group-by-sequential)
           group-by/sequential
           group-by/sequential*))
