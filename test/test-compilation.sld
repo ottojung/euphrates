@@ -515,8 +515,17 @@
   (import (only (euphrates fn) fn))
   (import (only (euphrates fp) fp))
   (import
+    (only (euphrates fraction-to-binary-string)
+          fraction->binary-string))
+  (import
     (only (euphrates fraction-to-decimal-string)
           fraction->decimal-string))
+  (import
+    (only (euphrates fraction-to-radix-string)
+          fraction->radix-string))
+  (import
+    (only (euphrates fraction-to-radix3)
+          fraction->radix3))
   (import
     (only (euphrates general-table) general-table))
   (import
@@ -1689,6 +1698,18 @@
           queue-rotate!
           queue-unload!
           queue?))
+  (import
+    (only (euphrates radix3-to-string)
+          radix3->string))
+  (import
+    (only (euphrates radix3)
+          radix3-constructor
+          radix3:basevector
+          radix3:fracpart
+          radix3:intpart
+          radix3:period
+          radix3:sign
+          radix3?))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
