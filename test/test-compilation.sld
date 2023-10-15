@@ -515,6 +515,9 @@
   (import (only (euphrates fn) fn))
   (import (only (euphrates fp) fp))
   (import
+    (only (euphrates fraction-to-decimal-string)
+          fraction->decimal-string))
+  (import
     (only (euphrates general-table) general-table))
   (import
     (only (euphrates generic-bnf-tree-to-alist)
