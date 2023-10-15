@@ -5,8 +5,7 @@
   (import (only (euphrates assert) assert))
   (import
     (only (euphrates fraction-to-decimal-string)
-          fraction->decimal-string
-          fraction->decimal-string/tuples))
+          fraction->decimal-string))
   (import
     (only (scheme base)
           *

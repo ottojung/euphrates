@@ -19,10 +19,9 @@
 (assert= (fraction->decimal-string 0.5) "0.5")
 (assert= (fraction->decimal-string -2) "-2")
 (assert= (fraction->decimal-string (* -1 (/ 314 100))) "-3.14")
-
-(assert= (fraction->decimal-string/tuples 1 2) "0.5")
-(assert= (fraction->decimal-string/tuples 2 4) "0.5")
-(assert= (fraction->decimal-string/tuples 10 355) "0.(02816901408450704225352112676056338)")
+(assert= (fraction->decimal-string 1/2) "0.5")
+(assert= (fraction->decimal-string 2/4) "0.5")
+(assert= (fraction->decimal-string 10/355) "0.(02816901408450704225352112676056338)")
 
 (assert (string-prefix? "0.3333" (fraction->decimal-string (exact->inexact (/ 1 3)))))
 (assert (string-prefix? "0.33" (fraction->decimal-string (string->number (number->string (exact->inexact (/ 1 3)))))))

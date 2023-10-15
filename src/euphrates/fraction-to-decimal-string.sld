@@ -1,40 +1,14 @@
 
 (define-library
   (euphrates fraction-to-decimal-string)
-  (export
-    fraction->decimal-string
-    fraction->decimal-string/tuples)
+  (export fraction->decimal-string)
   (import
-    (only (euphrates hashmap)
-          hashmap-ref
-          hashmap-set!
-          make-hashmap))
+    (only (euphrates fraction-to-radix3)
+          fraction->radix3))
   (import
-    (only (euphrates list-span-n) list-span-n))
-  (import
-    (only (scheme base)
-          *
-          -
-          abs
-          append
-          apply
-          begin
-          define
-          define-values
-          denominator
-          if
-          inexact?
-          length
-          let
-          list
-          null?
-          number->string
-          numerator
-          quotient
-          remainder
-          string-append
-          zero?))
-  (import (only (scheme r5rs) inexact->exact))
+    (only (euphrates radix3-to-string)
+          radix3->string))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
