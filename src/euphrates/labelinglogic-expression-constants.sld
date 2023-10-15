@@ -1,10 +1,10 @@
 
 (define-library
   (euphrates labelinglogic-expression-constants)
-  (export labelinglogic::expression:constants)
+  (export labelinglogic:expression:constants)
   (import
     (only (euphrates labelinglogic-expression-type)
-          labelinglogic::expression:type))
+          labelinglogic:expression:type))
   (import
     (only (scheme base)
           =

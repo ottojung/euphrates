@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates labelinglogic-model-check)
-  (export labelinglogic::model::check)
+  (export labelinglogic:model:check)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -14,10 +14,10 @@
           list->hashset))
   (import
     (only (euphrates labelinglogic-expression-check)
-          labelinglogic::expression::check))
+          labelinglogic:expression:check))
   (import
     (only (euphrates labelinglogic-expression-constants)
-          labelinglogic::expression:constants))
+          labelinglogic:expression:constants))
   (import
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates negate) negate))

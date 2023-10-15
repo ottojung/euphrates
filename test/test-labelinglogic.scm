@@ -6,7 +6,7 @@
       (alphabetic (or upcase (or upcase upcase)))
       (upcase (r7rs char-upper-case?))))
 
-  (labelinglogic::model::check model))
+  (labelinglogic:model:check model))
 
 (let ()
   (define model
@@ -17,7 +17,7 @@
 
   (assert-throw
    'model-type-error
-   (labelinglogic::model::check model)))
+   (labelinglogic:model:check model)))
 
 (let ()
 
@@ -81,7 +81,7 @@
      (t_1 (= #\1))
      (t_0 (= #\0)))
 
-   (labelinglogic::init
+   (labelinglogic:init
     model bindings))
 
   )

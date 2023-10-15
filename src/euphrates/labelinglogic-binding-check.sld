@@ -1,15 +1,15 @@
 
 (define-library
   (euphrates labelinglogic-binding-check)
-  (export labelinglogic::binding::check)
+  (export labelinglogic:binding:check)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates labelinglogic-expression-check)
-          labelinglogic::expression::check))
+          labelinglogic:expression:check))
   (import
     (only (euphrates labelinglogic-expression-type)
-          labelinglogic::expression:type))
+          labelinglogic:expression:type))
   (import
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-star) raisu*))

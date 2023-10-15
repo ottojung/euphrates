@@ -6,10 +6,10 @@
     (only (euphrates assert-throw) assert-throw))
   (import
     (only (euphrates labelinglogic-model-check)
-          labelinglogic::model::check))
+          labelinglogic:model:check))
   (import
     (only (euphrates labelinglogic)
-          labelinglogic::init))
+          labelinglogic:init))
   (import
     (only (scheme base)
           =

@@ -732,50 +732,50 @@
           keylist->alist))
   (import
     (only (euphrates labelinglogic-binding-check)
-          labelinglogic::binding::check))
+          labelinglogic:binding:check))
   (import
     (only (euphrates labelinglogic-binding-expr)
-          labelinglogic::binding:expr))
+          labelinglogic:binding:expr))
   (import
     (only (euphrates labelinglogic-binding-name)
-          labelinglogic::binding:name))
+          labelinglogic:binding:name))
   (import
     (only (euphrates labelinglogic-bindings-check)
-          labelinglogic::bindings:check))
+          labelinglogic:bindings:check))
   (import
     (only (euphrates labelinglogic-expression-args)
-          labelinglogic::expression:args))
+          labelinglogic:expression:args))
   (import
     (only (euphrates labelinglogic-expression-check)
-          labelinglogic::expression::check))
+          labelinglogic:expression:check))
   (import
     (only (euphrates labelinglogic-expression-constants)
-          labelinglogic::expression:constants))
+          labelinglogic:expression:constants))
   (import
     (only (euphrates labelinglogic-expression-desugar)
-          labelinglogic::expression:desugar))
+          labelinglogic:expression:desugar))
   (import
     (only (euphrates labelinglogic-expression-huh)
-          labelinglogic::expression?))
+          labelinglogic:expression?))
   (import
     (only (euphrates labelinglogic-expression-make)
-          labelinglogic::expression::make))
+          labelinglogic:expression:make))
   (import
     (only (euphrates
             labelinglogic-expression-replace-constants)
-          labelinglogic::expression:replace-constants))
+          labelinglogic:expression:replace-constants))
   (import
     (only (euphrates labelinglogic-expression-sugarify)
-          labelinglogic::expression:sugarify))
+          labelinglogic:expression:sugarify))
   (import
     (only (euphrates labelinglogic-expression-type)
-          labelinglogic::expression:type))
+          labelinglogic:expression:type))
   (import
     (only (euphrates labelinglogic-model-check)
-          labelinglogic::model::check))
+          labelinglogic:model:check))
   (import
     (only (euphrates labelinglogic)
-          labelinglogic::init))
+          labelinglogic:init))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))

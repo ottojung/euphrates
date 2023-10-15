@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates labelinglogic-binding-expr)
-  (export labelinglogic::binding:expr)
+  (export labelinglogic:binding:expr)
   (import
     (only (scheme base) begin define list-ref))
   (cond-expand

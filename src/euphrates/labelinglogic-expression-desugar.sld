@@ -1,19 +1,19 @@
 
 (define-library
   (euphrates labelinglogic-expression-desugar)
-  (export labelinglogic::expression:desugar)
+  (export labelinglogic:expression:desugar)
   (import
     (only (euphrates labelinglogic-expression-args)
-          labelinglogic::expression:args))
+          labelinglogic:expression:args))
   (import
     (only (euphrates labelinglogic-expression-make)
-          labelinglogic::expression::make))
+          labelinglogic:expression:make))
   (import
     (only (euphrates labelinglogic-expression-sugarify)
-          labelinglogic::expression:sugarify))
+          labelinglogic:expression:sugarify))
   (import
     (only (euphrates labelinglogic-expression-type)
-          labelinglogic::expression:type))
+          labelinglogic:expression:type))
   (import
     (only (scheme base)
           begin

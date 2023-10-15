@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates labelinglogic-expression-type)
-  (export labelinglogic::expression:type)
+  (export labelinglogic:expression:type)
   (import
     (only (scheme base)
           begin

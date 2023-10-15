@@ -1,16 +1,16 @@
 
 (define-library
   (euphrates labelinglogic-expression-sugarify)
-  (export labelinglogic::expression:sugarify)
+  (export labelinglogic:expression:sugarify)
   (import
     (only (euphrates labelinglogic-expression-args)
-          labelinglogic::expression:args))
+          labelinglogic:expression:args))
   (import
     (only (euphrates labelinglogic-expression-make)
-          labelinglogic::expression::make))
+          labelinglogic:expression:make))
   (import
     (only (euphrates labelinglogic-expression-type)
-          labelinglogic::expression:type))
+          labelinglogic:expression:type))
   (import
     (only (euphrates stack)
           stack->list

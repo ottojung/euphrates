@@ -1,17 +1,17 @@
 
 (define-library
   (euphrates labelinglogic-bindings-check)
-  (export labelinglogic::bindings:check)
+  (export labelinglogic:bindings:check)
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates labelinglogic-binding-check)
-          labelinglogic::binding::check))
+          labelinglogic:binding:check))
   (import
     (only (euphrates labelinglogic-binding-expr)
-          labelinglogic::binding:expr))
+          labelinglogic:binding:expr))
   (import
     (only (euphrates labelinglogic-expression-constants)
-          labelinglogic::expression:constants))
+          labelinglogic:expression:constants))
   (import
     (only (euphrates list-and-map) list-and-map))
   (import
