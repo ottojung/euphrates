@@ -1699,6 +1699,9 @@
           queue-unload!
           queue?))
   (import
+    (only (euphrates radix3-parse-basevector)
+          radix3:parse-basevector))
+  (import
     (only (euphrates radix3-to-string)
           radix3->string))
   (import
