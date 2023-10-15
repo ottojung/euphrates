@@ -22,6 +22,7 @@
           define-values
           denominator
           if
+          inexact?
           length
           let
           list
@@ -34,6 +35,7 @@
           string-append
           unless
           zero?))
+  (import (only (scheme r5rs) inexact->exact))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

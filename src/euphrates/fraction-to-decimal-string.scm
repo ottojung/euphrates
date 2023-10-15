@@ -4,6 +4,7 @@
 (define (fraction->decimal-string/tuples n d)
   ;; Calculate the decimal expansion of the fraction
   (define p (quotient n d))
+  (define integral (number->string p))
   (set! n (- n (* p d)))
   (define dec (list))
   (define dict (make-hashmap))
@@ -27,13 +28,15 @@
             (loop)))))
 
   ;; Returning the simplified fraction as string
-  (if (null? dec) (number->string p)
+  (if (null? dec) integral
       (string-append
-       (number->string p)
-       "."
-       (apply string-append dec))))
+       integral "." (apply string-append dec))))
 
 (define (fraction->decimal-string x)
-  (define n (numerator x))
-  (define d (denominator x))
-  (fraction->decimal-string/tuples n d))
+  (if (inexact? x)
+      (number->string x)
+      (let ()
+        (define e (inexact->exact x))
+        (define n (numerator e))
+        (define d (denominator e))
+        (fraction->decimal-string/tuples n d))))
