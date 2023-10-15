@@ -1,12 +1,12 @@
 
 (define (base10 x)
-  (fraction->radix-string 10 x))
+  (number->radix-string 10 x))
 
 (define (base2 x)
-  (fraction->radix-string 2 x))
+  (number->radix-string 2 x))
 
 (define (base2m x)
-  (fraction->radix-string (vector #\! #\@) x))
+  (number->radix-string (vector #\! #\@) x))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;;;; base 10

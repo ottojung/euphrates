@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates fraction-to-radix3)
-  (export fraction->radix3)
+  (euphrates number-to-radix3)
+  (export number->radix3)
   (import
     (only (euphrates hashmap)
           hashmap-ref
@@ -44,5 +44,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/fraction-to-radix3.scm")))
-    (else (include "fraction-to-radix3.scm"))))
+               "euphrates/number-to-radix3.scm")))
+    (else (include "number-to-radix3.scm"))))

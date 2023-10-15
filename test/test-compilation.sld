@@ -515,17 +515,17 @@
   (import (only (euphrates fn) fn))
   (import (only (euphrates fp) fp))
   (import
-    (only (euphrates fraction-to-binary-string)
-          fraction->binary-string))
+    (only (euphrates number-to-binary-string)
+          number->binary-string))
   (import
-    (only (euphrates fraction-to-decimal-string)
-          fraction->decimal-string))
+    (only (euphrates number-to-decimal-string)
+          number->decimal-string))
   (import
-    (only (euphrates fraction-to-radix-string)
-          fraction->radix-string))
+    (only (euphrates number-to-radix-string)
+          number->radix-string))
   (import
-    (only (euphrates fraction-to-radix3)
-          fraction->radix3))
+    (only (euphrates number-to-radix3)
+          number->radix3))
   (import
     (only (euphrates general-table) general-table))
   (import
@@ -1702,8 +1702,8 @@
     (only (euphrates radix3-parse-basevector)
           radix3:parse-basevector))
   (import
-    (only (euphrates radix3-to-fraction)
-          radix3->fraction))
+    (only (euphrates radix3-to-number)
+          radix3->number))
   (import
     (only (euphrates radix3-to-string)
           radix3->string))

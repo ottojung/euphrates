@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates radix3-to-fraction)
-  (export radix3->fraction)
+  (euphrates radix3-to-number)
+  (export radix3->number)
   (import
     (only (euphrates radix3)
           radix3:basevector
@@ -33,5 +33,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/radix3-to-fraction.scm")))
-    (else (include "radix3-to-fraction.scm"))))
+               "euphrates/radix3-to-number.scm")))
+    (else (include "radix3-to-number.scm"))))

@@ -1,11 +1,11 @@
 
 (define-library
-  (test-fraction-to-decimal-string)
+  (test-number-to-decimal-string)
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates assert) assert))
   (import
-    (only (euphrates fraction-to-decimal-string)
-          fraction->decimal-string))
+    (only (euphrates number-to-decimal-string)
+          number->decimal-string))
   (import
     (only (scheme base)
           *
@@ -21,5 +21,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-fraction-to-decimal-string.scm")))
-    (else (include "test-fraction-to-decimal-string.scm"))))
+               "test-number-to-decimal-string.scm")))
+    (else (include "test-number-to-decimal-string.scm"))))

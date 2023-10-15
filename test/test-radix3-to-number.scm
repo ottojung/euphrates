@@ -1,7 +1,7 @@
 
 (define (test10 expected str)
   (define r3 (string->radix3 10 str))
-  (assert= expected (radix3->fraction r3)))
+  (assert= expected (radix3->number r3)))
 
 (test10 314/100 "3.14")
 (test10 355/113 "3.(1415929203539823008849557522123893805309734513274336283185840707964601769911504424778761061946902654867256637168)")

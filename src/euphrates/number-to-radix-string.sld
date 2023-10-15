@@ -1,10 +1,10 @@
 
 (define-library
-  (euphrates fraction-to-radix-string)
-  (export fraction->radix-string)
+  (euphrates number-to-radix-string)
+  (export number->radix-string)
   (import
-    (only (euphrates fraction-to-radix3)
-          fraction->radix3))
+    (only (euphrates number-to-radix3)
+          number->radix3))
   (import
     (only (euphrates radix3-to-string)
           radix3->string))
@@ -13,5 +13,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/fraction-to-radix-string.scm")))
-    (else (include "fraction-to-radix-string.scm"))))
+               "euphrates/number-to-radix-string.scm")))
+    (else (include "number-to-radix-string.scm"))))

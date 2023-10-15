@@ -1,11 +1,11 @@
 
 (define-library
-  (test-fraction-to-radix-string)
+  (test-number-to-radix-string)
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates assert) assert))
   (import
-    (only (euphrates fraction-to-radix-string)
-          fraction->radix-string))
+    (only (euphrates number-to-radix-string)
+          number->radix-string))
   (import
     (only (scheme base)
           *
@@ -23,5 +23,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-fraction-to-radix-string.scm")))
-    (else (include "test-fraction-to-radix-string.scm"))))
+               "test-number-to-radix-string.scm")))
+    (else (include "test-number-to-radix-string.scm"))))
