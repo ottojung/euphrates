@@ -43,7 +43,7 @@ Here's a snapshot of what Euphrates offers:
 - Simple subprocesses `run-asyncproc.scm`
 - JSON parser `json-parse.scm`
 - Lots of list functions `list-*.scm`
-- Number conversions `convert-number-base.scm` and `number-list.scm`
+- Number conversions `convert-number-base.scm` and `*radix*.scm`
 - Various alphabets `*-alphabet.scm`
 
 ...and much more.
