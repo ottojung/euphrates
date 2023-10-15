@@ -1927,6 +1927,9 @@
     (only (euphrates string-to-numstring)
           string->numstring))
   (import
+    (only (euphrates string-to-radix3)
+          string->radix3))
+  (import
     (only (euphrates string-to-seconds-columned)
           string->seconds/columned))
   (import
