@@ -27,7 +27,6 @@
      (assert= (car p) (convert-number-base 2 10 (cdr p)))
      (assert= (cdr p) (convert-number-base 10 2 (car p))))
    (list
-    (cons (list #\9) (list #\1 #\0 #\0 #\1))
     (cons "9" "1001")
     (cons "8" "1000")
     (cons "0.375" "0.011")

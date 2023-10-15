@@ -1100,12 +1100,6 @@
           np-thread-global-yield
           np-thread-make-env))
   (import
-    (only (euphrates radix-list)
-          number->radix-list
-          number->radix-list:precision/p
-          radix-list->number
-          radix-list->radix-list))
-  (import
     (only (euphrates number-to-binary-string)
           number->binary-string))
   (import

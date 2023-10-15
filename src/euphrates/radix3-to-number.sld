@@ -3,8 +3,6 @@
   (euphrates radix3-to-number)
   (export radix3->number)
   (import
-    (only (euphrates radix-list) radix-list->number))
-  (import
     (only (euphrates radix3)
           radix3:basevector
           radix3:fracpart

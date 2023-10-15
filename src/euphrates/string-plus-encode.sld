@@ -32,7 +32,6 @@
           lambda
           let
           let*
-          list->string
           max
           set!
           string

@@ -40,10 +40,8 @@
                       (set! last-opened? #t)
                       (display open-char port)
                       (display
-                       (list->string
-                        (convert-number-base/generic
-                         alphabet alen
-                         (tointeger alphabet alen maxcode ch)))
+                       (convert-number-base/generic
+                        alphabet (tointeger alphabet alen maxcode ch))
                        port))))
               s)))
           s))

@@ -6,45 +6,18 @@
     convert-number-base/generic
     convert-number-base:default-max-base)
   (import
-    (only (euphrates alphanum-alphabet)
-          alphanum/alphabet
-          alphanum/alphabet/index))
-  (import (only (euphrates fp) fp))
+    (only (euphrates number-to-radix3)
+          number->radix3))
   (import
-    (only (euphrates list-span-while)
-          list-span-while))
+    (only (euphrates radix3-change-base)
+          radix3:change-base))
   (import
-    (only (euphrates radix-list)
-          number->radix-list
-          radix-list->number))
-  (import (only (euphrates raisu) raisu))
+    (only (euphrates radix3-to-string)
+          radix3->string))
   (import
-    (only (scheme base)
-          >
-          append
-          begin
-          cdr
-          cond
-          define
-          define-values
-          else
-          equal?
-          if
-          lambda
-          let
-          list
-          list->string
-          list?
-          map
-          max
-          not
-          null?
-          quote
-          string->list
-          string?
-          vector-length
-          vector-ref
-          when))
+    (only (euphrates string-to-radix3)
+          string->radix3))
+  (import (only (scheme base) begin define))
   (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
