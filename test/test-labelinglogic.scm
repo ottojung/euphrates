@@ -56,10 +56,13 @@
   (assert=
 
    `((t_x (or t_a t_n))
-     (t_a (or (r7rs char-upper-case?)
-              t_m
-              (r7rs char-lower-case?)
-              (r7rs ,nocase?)))
+     (t_a (or (r7rs (lambda (c)
+                      (or (char-upper-case? c)
+                          (char-lower-case? c)
+                          (and (char-alphabetic? c)
+                               (not (char-upper-case? c))
+                               (not (char-lower-case? c))))))
+              t_m))
      (t_m (= #\m))
      (t_n (or t_0
               t_1

@@ -3,19 +3,11 @@
   (euphrates labelinglogic-expression-sugarify)
   (export labelinglogic:expression:sugarify)
   (import
-    (only (euphrates labelinglogic-expression-args)
-          labelinglogic:expression:args))
-  (import
-    (only (euphrates labelinglogic-expression-make)
-          labelinglogic:expression:make))
+    (only (euphrates labelinglogic-expression-sugarify-or)
+          labelinglogic:expression:sugarify/or))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
-  (import
-    (only (euphrates stack)
-          stack->list
-          stack-make
-          stack-push!))
   (import
     (only (scheme base)
           begin
@@ -23,11 +15,8 @@
           define
           else
           equal?
-          for-each
-          let
           or
-          quote
-          reverse))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

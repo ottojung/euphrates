@@ -31,8 +31,15 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates
+            labelinglogic-expression-combine-recursively)
+          labelinglogic:expression:combine-recursively))
+  (import
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
+  (import
+    (only (euphrates labelinglogic-expression-optimize)
+          labelinglogic:expression:optimize))
   (import
     (only (euphrates
             labelinglogic-expression-replace-constants)

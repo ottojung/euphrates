@@ -224,4 +224,18 @@
        (list class (labelinglogic:expression:sugarify predicate)))
      reachable-model))
 
-  sugar-model)
+  (define combined-exprs-model
+    (map
+     (lambda (model-component)
+       (define-tuple (class predicate) model-component)
+       (list class (labelinglogic:expression:combine-recursively predicate)))
+     sugar-model))
+
+  (define opt-model
+    (map
+     (lambda (model-component)
+       (define-tuple (class predicate) model-component)
+       (list class (labelinglogic:expression:optimize predicate)))
+     combined-exprs-model))
+
+  opt-model)
