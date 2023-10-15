@@ -33,7 +33,8 @@
           substring
           unless
           vector->list
-          vector-length))
+          vector-length
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-1) iota)))
     (else (import (only (srfi 1) iota))))

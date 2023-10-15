@@ -1702,6 +1702,9 @@
     (only (euphrates radix3-parse-basevector)
           radix3:parse-basevector))
   (import
+    (only (euphrates radix3-to-fraction)
+          radix3->fraction))
+  (import
     (only (euphrates radix3-to-string)
           radix3->string))
   (import

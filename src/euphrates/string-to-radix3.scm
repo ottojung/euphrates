@@ -7,6 +7,12 @@
   (define-values (whole dot fract) (string-split-3 #\. nosign))
   (define-values (non-repeating lpr repeating+1) (string-split-3 #\( fract))
 
+  (when (string-null? s)
+    (raisu* :from "string->radix3"
+            :type 'empty-string
+            :message "Radix string cannot be empty"
+            :args (list s)))
+
   (unless (string-null? lpr)
     (unless (string-suffix? ")" s)
       (raisu* :from "string->radix3"
