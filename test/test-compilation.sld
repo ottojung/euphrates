@@ -515,18 +515,6 @@
   (import (only (euphrates fn) fn))
   (import (only (euphrates fp) fp))
   (import
-    (only (euphrates number-to-binary-string)
-          number->binary-string))
-  (import
-    (only (euphrates number-to-decimal-string)
-          number->decimal-string))
-  (import
-    (only (euphrates number-to-radix-string)
-          number->radix-string))
-  (import
-    (only (euphrates number-to-radix3)
-          number->radix3))
-  (import
     (only (euphrates general-table) general-table))
   (import
     (only (euphrates generic-bnf-tree-to-alist)
@@ -1118,6 +1106,18 @@
           number-list->number
           number-list->number-list))
   (import
+    (only (euphrates number-to-binary-string)
+          number->binary-string))
+  (import
+    (only (euphrates number-to-decimal-string)
+          number->decimal-string))
+  (import
+    (only (euphrates number-to-radix-string)
+          number->radix-string))
+  (import
+    (only (euphrates number-to-radix3)
+          number->radix3))
+  (import
     (only (euphrates open-cond-obj)
           open-cond-constructor
           open-cond-predicate
@@ -1698,6 +1698,9 @@
           queue-rotate!
           queue-unload!
           queue?))
+  (import
+    (only (euphrates radix3-change-base)
+          radix3:change-base))
   (import
     (only (euphrates radix3-parse-basevector)
           radix3:parse-basevector))
