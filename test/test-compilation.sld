@@ -770,6 +770,9 @@
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))
+  (import
+    (only (euphrates least-common-multiple)
+          least-common-multiple))
   (import (only (euphrates letin) letin))
   (import
     (only (euphrates lexical-scope-obj)
