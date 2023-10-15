@@ -14,6 +14,8 @@
 (assert= (fraction->decimal-string (/ 83 4)) "20.75")
 (assert= (fraction->decimal-string (/ 5 81)) "0.(061728395)")
 (assert= (fraction->decimal-string (/ 10 355)) "0.(02816901408450704225352112676056338)")
+(assert= (fraction->decimal-string 0) "0")
+(assert= (fraction->decimal-string 5) "5")
 
 (assert= (fraction->decimal-string/tuples 1 2) "0.5")
 (assert= (fraction->decimal-string/tuples 2 4) "0.5")

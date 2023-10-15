@@ -27,7 +27,11 @@
             (loop)))))
 
   ;; Returning the simplified fraction as string
-  (string-append (number->string p) "." (apply string-append dec)))
+  (if (null? dec) (number->string p)
+      (string-append
+       (number->string p)
+       "."
+       (apply string-append dec))))
 
 (define (fraction->decimal-string x)
   (define n (numerator x))

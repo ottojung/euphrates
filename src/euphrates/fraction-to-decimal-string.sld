@@ -25,6 +25,7 @@
           length
           let
           list
+          null?
           number->string
           numerator
           quotient
