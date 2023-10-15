@@ -26,6 +26,7 @@
           append
           begin
           cond
+          cons
           define
           define-values
           denominator
@@ -45,6 +46,7 @@
           quote
           quotient
           remainder
+          reverse
           values
           vector-copy
           vector-length

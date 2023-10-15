@@ -19,7 +19,9 @@
       (define n (numerator e))
       (define d (denominator e))
       (define p (quotient n d))
-      (define dict (make-hashmap))
+      (define dict
+        (if (integer? x) 'should-not-be-needed
+            (make-hashmap)))
 
       (define basevector
         (cond
@@ -67,21 +69,23 @@
       (define-values (fracpart period)
         (let loop ((n (abs (- n (* p d))))
                    (dec (list)))
-          (define index (hashmap-ref dict n #f))
-          (if (zero? n) (values dec '())
-              (if index
-                  (let ()
-                    (define-values (pref repeating)
-                      (list-span-n index dec))
-                    (values pref repeating))
 
-                  (let ()
-                    (hashmap-set! dict n (length dec))
-                    (define more-n (* n numbase))
-                    (define new-dec
-                      (append dec (list (quotient more-n d))))
-                    (define new-n (remainder more-n d))
-                    (loop new-n new-dec))))))
+          (if (zero? n) (values (reverse dec) '())
+              (let ()
+                (define index (hashmap-ref dict n #f))
+                (if index
+                    (let ()
+                      (define-values (pref repeating)
+                        (list-span-n index (reverse dec)))
+                      (values pref repeating))
+
+                    (let ()
+                      (define more-n (* n numbase))
+                      (define new-dec
+                        (cons (quotient more-n d) dec))
+                      (define new-n (remainder more-n d))
+                      (hashmap-set! dict n (length dec))
+                      (loop new-n new-dec)))))))
 
       (define ret
         (radix3-constructor
