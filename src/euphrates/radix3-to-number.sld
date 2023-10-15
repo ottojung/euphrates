@@ -7,9 +7,11 @@
           radix3:basevector
           radix3:fracpart
           radix3:intpart
-          radix3:period))
+          radix3:period
+          radix3:sign))
   (import
     (only (scheme base)
+          *
           -
           /
           apply

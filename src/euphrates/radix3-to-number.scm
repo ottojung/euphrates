@@ -30,4 +30,7 @@
           (make-string (string-length period) r9)
           (make-string (string-length fractional) r0)))))
 
-  (/ num den))
+  (define sign
+    (radix3:sign r3))
+
+  (* sign (/ num den)))
