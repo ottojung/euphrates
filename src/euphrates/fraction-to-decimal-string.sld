@@ -31,9 +31,7 @@
           numerator
           quotient
           remainder
-          set!
           string-append
-          unless
           zero?))
   (import (only (scheme r5rs) inexact->exact))
   (cond-expand

@@ -5,32 +5,33 @@
   ;; Calculate the decimal expansion of the fraction
   (define p (quotient n d))
   (define integral (number->string p))
-  (set! n (- n (* p d)))
-  (define dec (list))
   (define dict (make-hashmap))
 
-  ;; Until the numerator becomes 0
-  (let loop ()
-    (define index (hashmap-ref dict n #f))
-    (unless (zero? n)
-      ;; We have seen this numerator before
-      (if index
-          (let ()
-            (define-values (pref repeating)
-              (list-span-n index dec))
-            (set! dec (append pref (list "(") repeating (list ")"))))
-          ;; Continue the long division method
-          (begin
-            (hashmap-set! dict n (length dec))
-            (set! n (* n 10))
-            (set! dec (append dec (list (number->string (quotient n d)))))
-            (set! n (remainder n d))
-            (loop)))))
+  (define after-dot
+    (let loop ((n (- n (* p d)))
+               (dec (list)))
+      (define index (hashmap-ref dict n #f))
+      (if (zero? n) dec
+          ;; We have seen this numerator before
+          (if index
+              (let ()
+                (define-values (pref repeating)
+                  (list-span-n index dec))
+                (append pref (list "(") repeating (list ")")))
+              ;; Continue the long division method
+              (let ()
+                (hashmap-set! dict n (length dec))
+                (define more-n (* n 10))
+                (define new-dec
+                  (append dec (list (number->string (quotient more-n d)))))
+                (define new-n (remainder more-n d))
+                (loop new-n new-dec))))))
 
   ;; Returning the simplified fraction as string
-  (if (null? dec) integral
+  (if (null? after-dot) integral
       (string-append
-       integral "." (apply string-append dec))))
+       integral "."
+       (apply string-append after-dot))))
 
 (define (fraction->decimal-string x)
   (if (inexact? x)
