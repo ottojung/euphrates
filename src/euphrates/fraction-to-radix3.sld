@@ -13,8 +13,6 @@
   (import
     (only (euphrates list-span-n) list-span-n))
   (import
-    (only (euphrates list-take-n) list-take-n))
-  (import
     (only (euphrates radix3) radix3-constructor))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
@@ -35,10 +33,11 @@
           if
           inexact?
           integer?
+          lambda
           length
           let
           list
-          list->vector
+          make-vector
           not
           number?
           numerator
@@ -47,8 +46,10 @@
           quotient
           remainder
           values
-          vector->list
+          vector-copy
           vector-length
+          vector-ref
+          vector-set!
           vector?
           zero?))
   (import (only (scheme r5rs) inexact->exact))
