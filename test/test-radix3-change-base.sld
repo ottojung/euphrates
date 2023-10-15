@@ -8,6 +8,9 @@
     (only (euphrates radix3-change-base)
           radix3:change-base))
   (import
+    (only (euphrates radix3-to-number)
+          radix3->number))
+  (import
     (only (euphrates radix3-to-string)
           radix3->string))
   (import

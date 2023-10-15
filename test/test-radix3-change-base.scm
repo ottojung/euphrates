@@ -3,7 +3,10 @@
   (define ar3 (string->radix3 10 a))
   (define a2r3 (radix3:change-base ar3 16))
   (define a2r3s (radix3->string a2r3))
-  (assert= a2r3s b))
+  (define an (radix3->number ar3))
+  (define bn (radix3->number (string->radix3 16 b)))
+  (assert= a2r3s b)
+  (assert= an bn))
 
 (define (test-error type input)
   (assert-throw type (string->radix3 10 input)))

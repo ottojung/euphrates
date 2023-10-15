@@ -4,31 +4,31 @@
 (define (radix3->number r3)
   (define basevector (radix3:basevector r3))
   (define numbase (vector-length basevector))
-  (define r0 (vector-ref basevector 0))
-  (define r9 (vector-ref basevector (- numbase 1)))
 
-  (define (radix-list->string lst)
-    (apply
-     string
-     (map (lambda (c) (vector-ref basevector c)) lst)))
+  (define (radix-list->number lst)
+    (let loop ((ret 0)
+               (powmult 1)
+               (rest (reverse lst)))
+      (if (null? rest) ret
+          (loop (+ ret (* powmult (car rest)))
+                (* numbase powmult)
+                (cdr rest)))))
 
-  (define integral (radix-list->string (radix3:intpart r3)))
-  (define fractional (radix-list->string (radix3:fracpart r3)))
-  (define period (radix-list->string (radix3:period r3)))
+  (define integral (radix3:intpart r3))
+  (define fractional (radix3:fracpart r3))
+  (define period (radix3:period r3))
 
   (define num
-    (if (string-null? period)
-        (string->number (string-append integral fractional))
-        (- (string->number (string-append integral fractional period))
-           (string->number (string-append integral fractional)))))
+    (if (null? period)
+        (radix-list->number (append integral fractional))
+        (- (radix-list->number (append integral fractional period))
+           (radix-list->number (append integral fractional)))))
 
   (define den
-    (if (string-null? period)
-        (expt numbase (string-length fractional))
-        (string->number
-         (string-append
-          (make-string (string-length period) r9)
-          (make-string (string-length fractional) r0)))))
+    (if (null? period)
+        (expt numbase (length fractional))
+        (- (expt numbase (+ (length period) (length fractional)))
+           (expt numbase (length fractional)))))
 
   (define sign
     (radix3:sign r3))

@@ -3,6 +3,8 @@
   (euphrates radix3-to-number)
   (export radix3->number)
   (import
+    (only (euphrates radix-list) radix-list->number))
+  (import
     (only (euphrates radix3)
           radix3:basevector
           radix3:fracpart
@@ -12,25 +14,21 @@
   (import
     (only (scheme base)
           *
+          +
           -
           /
-          apply
+          append
           begin
+          car
+          cdr
           define
           expt
           if
-          lambda
-          make-string
-          map
-          string
-          string->number
-          string-append
-          string-length
-          vector-length
-          vector-ref))
-  (cond-expand
-    (guile (import (only (srfi srfi-13) string-null?)))
-    (else (import (only (srfi 13) string-null?))))
+          length
+          let
+          null?
+          reverse
+          vector-length))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
