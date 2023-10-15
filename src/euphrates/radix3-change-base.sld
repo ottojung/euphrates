@@ -13,7 +13,7 @@
           radix3->number))
   (import
     (only (euphrates radix3)
-          radix3-constructor
+          radix3:constructor
           radix3:basevector
           radix3:fracpart
           radix3:intpart

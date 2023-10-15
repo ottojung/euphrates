@@ -50,7 +50,7 @@
                   (loop new-n new-dec)))))))
 
   (define ret
-    (radix3-constructor
+    (radix3:constructor
      sign intpart fracpart period basevector))
 
   ret)

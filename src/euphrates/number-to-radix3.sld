@@ -13,7 +13,7 @@
     (only (euphrates radix3-parse-basevector)
           radix3:parse-basevector))
   (import
-    (only (euphrates radix3) radix3-constructor))
+    (only (euphrates radix3) radix3:constructor))
   (import
     (only (scheme base)
           *

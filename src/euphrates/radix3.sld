@@ -2,7 +2,7 @@
 (define-library
   (euphrates radix3)
   (export
-    radix3-constructor
+    radix3:constructor
     radix3?
     radix3:sign
     radix3:intpart

@@ -6,7 +6,7 @@
   (define new-basevector (radix3:parse-basevector new-base))
   (if (= (vector-length existing-basevector)
          (vector-length new-basevector))
-      (radix3-constructor
+      (radix3:constructor
        (radix3:sign r3)
        (radix3:intpart r3)
        (radix3:fracpart r3)

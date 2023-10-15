@@ -55,4 +55,4 @@
   (define fracpart (string->radix-list non-repeating))
   (define period (string->radix-list repeating))
 
-  (radix3-constructor sign intpart fracpart period basevector))
+  (radix3:constructor sign intpart fracpart period basevector))

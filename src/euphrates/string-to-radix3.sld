@@ -10,7 +10,7 @@
     (only (euphrates radix3-parse-basevector)
           radix3:parse-basevector))
   (import
-    (only (euphrates radix3) radix3-constructor))
+    (only (euphrates radix3) radix3:constructor))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates string-split-3) string-split-3))
