@@ -15,6 +15,7 @@
     (only (scheme base)
           *
           -
+          abs
           append
           apply
           begin

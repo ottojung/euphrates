@@ -6,9 +6,10 @@
   (define p (quotient n d))
   (define integral (number->string p))
   (define dict (make-hashmap))
+  (define base 10)
 
   (define after-dot
-    (let loop ((n (- n (* p d)))
+    (let loop ((n (abs (- n (* p d))))
                (dec (list)))
       (define index (hashmap-ref dict n #f))
       (if (zero? n) dec
@@ -21,7 +22,7 @@
               ;; Continue the long division method
               (let ()
                 (hashmap-set! dict n (length dec))
-                (define more-n (* n 10))
+                (define more-n (* n base))
                 (define new-dec
                   (append dec (list (number->string (quotient more-n d)))))
                 (define new-n (remainder more-n d))

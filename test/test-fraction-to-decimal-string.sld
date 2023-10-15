@@ -9,6 +9,7 @@
           fraction->decimal-string/tuples))
   (import
     (only (scheme base)
+          *
           /
           begin
           number->string

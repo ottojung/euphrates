@@ -17,6 +17,8 @@
 (assert= (fraction->decimal-string 0) "0")
 (assert= (fraction->decimal-string 5) "5")
 (assert= (fraction->decimal-string 0.5) "0.5")
+(assert= (fraction->decimal-string -2) "-2")
+(assert= (fraction->decimal-string (* -1 (/ 314 100))) "-3.14")
 
 (assert= (fraction->decimal-string/tuples 1 2) "0.5")
 (assert= (fraction->decimal-string/tuples 2 4) "0.5")
