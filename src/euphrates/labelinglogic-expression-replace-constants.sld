@@ -5,6 +5,11 @@
   (export
     labelinglogic:expression:replace-constants)
   (import
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -14,6 +19,8 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates make-unique) make-unique))
+  (import
     (only (scheme base)
           =
           begin
@@ -21,6 +28,7 @@
           define
           else
           equal?
+          if
           let
           map
           quote))
