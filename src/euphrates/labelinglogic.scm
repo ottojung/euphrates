@@ -238,4 +238,7 @@
        (list class (labelinglogic:expression:optimize predicate)))
      combined-exprs-model))
 
-  opt-model)
+  (define flat-model
+    (labelinglogic:model:factor-out-ors opt-model))
+
+  flat-model)

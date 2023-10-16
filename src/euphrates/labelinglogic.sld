@@ -53,6 +53,9 @@
   (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
+  (import
+    (only (euphrates labelinglogic-model-factor-out-ors)
+          labelinglogic:model:factor-out-ors))
   (import (only (euphrates list-fold) list-fold))
   (import (only (euphrates raisu) raisu))
   (import

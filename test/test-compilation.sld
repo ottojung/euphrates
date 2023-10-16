@@ -749,6 +749,17 @@
     (only (euphrates labelinglogic-expression-check)
           labelinglogic:expression:check))
   (import
+    (only (euphrates
+            labelinglogic-expression-combine-recursively-or)
+          labelinglogic:expression:combine-recursively/or))
+  (import
+    (only (euphrates
+            labelinglogic-expression-combine-recursively)
+          labelinglogic:expression:combine-recursively))
+  (import
+    (only (euphrates labelinglogic-expression-compare)
+          labelinglogic:expression:compare))
+  (import
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))
   (import
@@ -762,8 +773,18 @@
           labelinglogic:expression:make))
   (import
     (only (euphrates
+            labelinglogic-expression-optimize-r7rs)
+          labelinglogic:expression:optimize/r7rs))
+  (import
+    (only (euphrates labelinglogic-expression-optimize)
+          labelinglogic:expression:optimize))
+  (import
+    (only (euphrates
             labelinglogic-expression-replace-constants)
           labelinglogic:expression:replace-constants))
+  (import
+    (only (euphrates labelinglogic-expression-sugarify-or)
+          labelinglogic:expression:sugarify/or))
   (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
@@ -773,6 +794,9 @@
   (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
+  (import
+    (only (euphrates labelinglogic-model-factor-out-ors)
+          labelinglogic:model:factor-out-ors))
   (import
     (only (euphrates labelinglogic)
           labelinglogic:init))
@@ -1727,8 +1751,8 @@
           radix3->string))
   (import
     (only (euphrates radix3)
-          radix3:constructor
           radix3:basevector
+          radix3:constructor
           radix3:fracpart
           radix3:intpart
           radix3:period
