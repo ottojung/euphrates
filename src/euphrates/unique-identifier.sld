@@ -10,10 +10,13 @@
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates hashmap)
-          hashmap-count
           hashmap-ref
           hashmap-set!
           make-hashmap))
+  (import
+    (only (euphrates hashset)
+          hashset-foreach
+          hashset?))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -21,21 +24,34 @@
     (only (scheme base)
           +
           _
+          and
           begin
+          cond
           define
           define-syntax
+          else
+          for-each
           if
           lambda
           let
           list
+          list?
           make-parameter
           number->string
+          or
+          pair?
           parameterize
           quote
           set!
           string-append
           syntax-rules
-          unless))
+          unless
+          vector
+          vector-ref
+          vector-set!))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) count)))
+    (else (import (only (srfi 1) count))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

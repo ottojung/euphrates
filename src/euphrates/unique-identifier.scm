@@ -20,11 +20,50 @@
   (make-parameter #f))
 
 
-(define-syntax with-unique-identifier-context
+(define (add-additional H additional)
+  (cond
+   ((and (pair? additional)
+         (list? additional))
+
+    (for-each
+     (lambda (x)
+       (hashmap-set! H (~a x) 'taken))
+     additional))
+
+   ((hashset? additional)
+
+    (hashset-foreach
+     (lambda (x)
+       (hashmap-set! H (~a x) 'taken))
+     additional))
+
+   (else
+    (unless (list? additional)
+      (raisu* :from "unique-identifier"
+              :type 'bad-type-of-taken-names-list
+              :message (stringf "The value of ~s must be either a ~s or a ~s"
+                                (~a (quote :existing-names))
+                                (~a (quote list?))
+                                (~a (quote hashset?)))
+              :args (list additional))))))
+
+
+(define-syntax with-unique-identifier-context/helper
   (syntax-rules ()
+    ((_ additional . bodies)
+     (let ((H (make-hashmap)))
+       (parameterize ((unique-identifier:deserialize/p (vector 0 H)))
+         (add-additional H additional)
+         (let () . bodies))))))
+
+
+(define-syntax with-unique-identifier-context
+  (syntax-rules (:existing-names)
+    ((_ :existing-names additional . bodies)
+     (with-unique-identifier-context/helper additional . bodies))
+
     ((_ . bodies)
-     (parameterize ((unique-identifier:deserialize/p (make-hashmap)))
-       (let () . bodies)))))
+     (with-unique-identifier-context/helper '() . bodies))))
 
 
 (define (unique-identifier->string uid)
@@ -36,15 +75,25 @@
                               (~a (quote with-unique-identifier-context)))
             :args (list uid)))
 
-  (let ()
-    (define id (unique-identifier:id uid))
-    (define current (hashmap-ref p id #f))
+  (define last-free (vector-ref p 0))
+  (define H (vector-ref p 1))
 
-    (if current
-        (string-append
-         "uid_" (number->string current))
+  (define (tostr id)
+    (string-append
+     "uid_" (number->string id)))
+
+  (define id (unique-identifier:id uid))
+
+  (define (try! count)
+    (define str (tostr count))
+    (define current (hashmap-ref H str #f))
+    (if current #f
         (let ()
-          (define new-current (+ 1 (hashmap-count p)))
-          (hashmap-set! p id new-current)
-          (string-append
-           "uid_" (number->string new-current))))))
+          (hashmap-set! H id str)
+          (vector-set! p 0 count)
+          str)))
+
+  (or (hashmap-ref H id #f)
+      (let loop ((count (+ 1 last-free)))
+        (or (try! count)
+            (loop (+ 1 count))))))

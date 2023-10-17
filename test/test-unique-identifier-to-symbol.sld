@@ -12,7 +12,7 @@
           make-unique-identifier
           with-unique-identifier-context))
   (import
-    (only (scheme base) begin define let quote))
+    (only (scheme base) begin define let list quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
