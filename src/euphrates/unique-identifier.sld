@@ -5,7 +5,7 @@
     make-unique-identifier
     unique-identifier?
     with-unique-identifier-context
-    unique-identifier->list)
+    unique-identifier->string)
   (import
     (only (euphrates define-type9) define-type9))
   (import
@@ -29,9 +29,11 @@
           let
           list
           make-parameter
+          number->string
           parameterize
           quote
           set!
+          string-append
           syntax-rules
           unless))
   (cond-expand

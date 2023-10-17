@@ -27,7 +27,7 @@
        (let () . bodies)))))
 
 
-(define (unique-identifier->list uid)
+(define (unique-identifier->string uid)
   (define p (unique-identifier:deserialize/p))
   (unless p
     (raisu* :from "unique-identifier"
@@ -41,8 +41,10 @@
     (define current (hashmap-ref p id #f))
 
     (if current
-        (list 'uid current)
+        (string-append
+         "uid_" (number->string current))
         (let ()
           (define new-current (+ 1 (hashmap-count p)))
           (hashmap-set! p id new-current)
-          (list 'uid new-current)))))
+          (string-append
+           "uid_" (number->string new-current))))))

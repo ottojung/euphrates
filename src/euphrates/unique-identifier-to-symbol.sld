@@ -3,7 +3,7 @@
   (euphrates unique-identifier-to-symbol)
   (export unique-identifier->symbol)
   (import
-    (only (euphrates unique-identifier-to-string)
+    (only (euphrates unique-identifier)
           unique-identifier->string))
   (import
     (only (scheme base) begin define string->symbol))

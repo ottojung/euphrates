@@ -5,11 +5,9 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
-    (only (euphrates unique-identifier-to-string)
-          unique-identifier->string))
-  (import
     (only (euphrates unique-identifier)
           make-unique-identifier
+          unique-identifier->string
           with-unique-identifier-context))
   (import
     (only (scheme base) begin define let quote))
