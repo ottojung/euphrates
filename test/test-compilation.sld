@@ -2091,6 +2091,11 @@
           uni-spinlock-lock!
           uni-spinlock-unlock!))
   (import
+    (only (euphrates unique-identifier)
+          make-unique-identifier
+          unique-identifier->list
+          with-unique-identifier-context))
+  (import
     (only (euphrates unit-conversions)
           centi->centi/unit
           centi->day/unit
