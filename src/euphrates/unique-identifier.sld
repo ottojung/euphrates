@@ -3,6 +3,7 @@
   (euphrates unique-identifier)
   (export
     make-unique-identifier
+    unique-identifier?
     with-unique-identifier-context
     unique-identifier->list)
   (import

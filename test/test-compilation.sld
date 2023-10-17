@@ -2100,6 +2100,7 @@
     (only (euphrates unique-identifier)
           make-unique-identifier
           unique-identifier->list
+          unique-identifier?
           with-unique-identifier-context))
   (import
     (only (euphrates unit-conversions)
