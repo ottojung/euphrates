@@ -652,6 +652,7 @@
           hashset-null?
           hashset-ref
           hashset-union
+          hashset?
           list->hashset
           make-hashset
           vector->hashset))

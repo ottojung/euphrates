@@ -3,6 +3,7 @@
   (euphrates hashset)
   (export
     make-hashset
+    hashset?
     list->hashset
     vector->hashset
     hashset-null?
