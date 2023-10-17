@@ -798,6 +798,9 @@
     (only (euphrates labelinglogic-model-factor-out-ors)
           labelinglogic:model:factor-out-ors))
   (import
+    (only (euphrates labelinglogic-model-replace-constants)
+          labelinglogic:model:replace-constants))
+  (import
     (only (euphrates labelinglogic)
           labelinglogic:init))
   (import (only (euphrates lazy-monad) lazy-monad))
