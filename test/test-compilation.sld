@@ -2091,6 +2091,12 @@
           uni-spinlock-lock!
           uni-spinlock-unlock!))
   (import
+    (only (euphrates unique-identifier-to-string)
+          unique-identifier->string))
+  (import
+    (only (euphrates unique-identifier-to-symbol)
+          unique-identifier->symbol))
+  (import
     (only (euphrates unique-identifier)
           make-unique-identifier
           unique-identifier->list
