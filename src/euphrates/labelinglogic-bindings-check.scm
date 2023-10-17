@@ -21,13 +21,18 @@
   (define keys
     (map car tokens-alist))
 
-  (unless (list-and-map symbol? keys)
+  (unless (list-and-map
+           (compose-under or symbol? unique-identifier?)
+           keys)
     (fail-tokens-check
      "every key must be a symbol"
      (list (filter (negate symbol?) keys))))
 
   (define duplicates
-    (list-get-duplicates keys))
+    (list-get-duplicates
+     (filter
+      (negate unique-identifier?)
+      keys)))
 
   (unless (null? duplicates)
     (fail-tokens-check

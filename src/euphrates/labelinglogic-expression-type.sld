@@ -3,13 +3,14 @@
   (euphrates labelinglogic-expression-type)
   (export labelinglogic:expression:type)
   (import
+    (only (euphrates unique-identifier)
+          unique-identifier?))
+  (import
     (only (scheme base)
           begin
-          car
           cond
           define
           else
-          equal?
           list-ref
           quote
           symbol?))

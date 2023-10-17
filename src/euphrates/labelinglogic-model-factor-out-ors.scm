@@ -4,13 +4,6 @@
 (define (labelinglogic:model:factor-out-ors model)
   (define stack (stack-make))
 
-  (define generate-new-class-name
-    (let ((counter 0))
-      (lambda _
-        (define ret (list 'ref counter))
-        (set! counter (+ 1 counter))
-        ret)))
-
   (define (loop-expr expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
@@ -19,7 +12,7 @@
      ((equal? 'constant type) expr)
      (else
       (let ()
-        (define alias (generate-new-class-name))
+        (define alias (make-unique-identifier))
 
         (stack-push!
          stack

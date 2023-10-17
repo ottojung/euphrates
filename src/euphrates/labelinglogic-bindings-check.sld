@@ -2,6 +2,8 @@
 (define-library
   (euphrates labelinglogic-bindings-check)
   (export labelinglogic:bindings:check)
+  (import
+    (only (euphrates compose-under) compose-under))
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates labelinglogic-binding-check)
@@ -21,6 +23,9 @@
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import
+    (only (euphrates unique-identifier)
+          unique-identifier?))
+  (import
     (only (scheme base)
           begin
           car
@@ -31,6 +36,7 @@
           list?
           map
           null?
+          or
           pair?
           quote
           symbol?

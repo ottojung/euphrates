@@ -16,10 +16,13 @@
 
   (define-tuple (name expr) binding)
 
-  (unless (symbol? name)
+  (unless (or (symbol? name)
+              (unique-identifier? name))
     (raisu* :from "labelinglogic"
             :type 'bad-expr
-            :message "Binding name in labelinglogic must be a symbol, but was not"
+            :message
+            (stringf "Binding name in labelinglogic must be a symbol or a ~s, but was not"
+                     (~a (quote unique-identifier?)))
             :args (list name binding)))
 
   (labelinglogic:expression:check expr)

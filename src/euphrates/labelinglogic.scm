@@ -62,20 +62,6 @@
   (define (class-bound? class)
     (hashset-has? classes-bound class))
 
-  (define generated-names
-    (make-hashset))
-
-  (define generate-new-class-name
-    (let ((counter 0))
-      (lambda _
-        (define ret (list 'ref counter))
-        (set! counter (+ 1 counter))
-        (hashset-add! generated-names ret)
-        ret)))
-
-  (define (generated-name? x)
-    (hashset-has? generated-names x))
-
   (define (evaluate-predicate predicate arg)
     (define code (cadr predicate))
     (eval (list code arg)
@@ -134,7 +120,7 @@
        (define (fork-current model-component)
          (define-tuple (class predicate) model-component)
 
-         (define new-name (generate-new-class-name))
+         (define new-name (make-unique-identifier))
 
          (define new-parent
            (list class `(or ,name ,new-name)))
@@ -142,49 +128,40 @@
          (define renamed-current
            (list new-name predicate))
 
-         (define added
-           (list name expr))
-
-         (list new-parent renamed-current added))
+         (list new-parent renamed-current))
 
        (cond
 
-        ((equal? 'constant expr:type)
-         (apply
-          append
-          (map
-           (lambda (model-component)
-             (define-tuple (class predicate) model-component)
-
-             (if (not (equal? class expr))
-                 (list model-component)
-                 (list binding model-component)))
-           model)))
-
         ((equal? '= expr:type)
 
-         (apply
-          append
-          (map
-           (lambda (model-component)
-             (define-tuple (class predicate) model-component)
-             (define expr-type
-               (labelinglogic:expression:type predicate))
+         (let ()
+           (define leafs (labelinglogic:model:reduce-to-leafs model))
+           (define desc (labelinglogic:make-nondet-descriminator leafs))
+           (define containing-classes
+             (list->hashset (desc (car expr:args))))
 
-             (cond
-              ((equal? expr-type 'r7rs)
+           (apply
+            append
+            (map
+             (lambda (model-component)
+               (define-tuple (class predicate) model-component)
 
-               (if (evaluate-predicate predicate (car expr:args))
-                   (fork-current model-component)
-                   (list model-component)))
+               (cond
+                ((hashset-has? containing-classes class)
+                 (fork-current model-component))
 
-              (else
-               (list model-component))))
+                (else
+                 (list model-component))))
 
-           model)))
+             model))))
+
+        ((equal? 'constant expr:type) model)
 
         (else
          (raisu 'unknown-expr-type binding))))))
+
+  (define combined-model
+    (append extended-model bindings))
 
   (define (connect-transitive-model-edges model)
     (map
@@ -208,7 +185,7 @@
   (define transitive-model
     (apply-until-fixpoint
      connect-transitive-model-edges
-     extended-model))
+     combined-model))
 
   (define reachable-model
     (filter

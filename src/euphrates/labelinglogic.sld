@@ -51,18 +51,26 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates
+            labelinglogic-make-nondet-descriminator)
+          labelinglogic:make-nondet-descriminator))
+  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
     (only (euphrates labelinglogic-model-factor-out-ors)
           labelinglogic:model:factor-out-ors))
+  (import
+    (only (euphrates labelinglogic-model-reduce-to-leafs)
+          labelinglogic:model:reduce-to-leafs))
   (import (only (euphrates list-fold) list-fold))
   (import (only (euphrates raisu) raisu))
   (import
+    (only (euphrates unique-identifier)
+          make-unique-identifier))
+  (import
     (only (scheme base)
-          +
           =
-          _
           append
           apply
           assoc
@@ -80,11 +88,9 @@
           list
           list-ref
           map
-          not
           or
           quasiquote
           quote
-          set!
           unquote
           when))
   (import (only (scheme eval) environment eval))

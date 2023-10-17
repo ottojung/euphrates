@@ -13,6 +13,11 @@
   (import
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
+  (import
+    (only (euphrates unique-identifier)
+          unique-identifier?))
   (import
     (only (scheme base)
           =
@@ -21,6 +26,7 @@
           list
           list?
           member
+          or
           quote
           symbol?
           unless))

@@ -29,6 +29,97 @@
             (loop (+ index 1))
             prefix))))
 
+  (define char-nocase?
+    '(lambda (c)
+       (and (char-alphabetic? c)
+            (not (char-upper-case? c))
+            (not (char-lower-case? c)))))
+
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or numeric alphabetic))
+      (alphabetic (or upcase lowercase nocase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (nocase (r7rs ,char-nocase?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
+
+  (define bound-chars
+    (list->hashset
+     (list-map/flatten
+      (lambda (p)
+        (define-pair (name value) p)
+        (if (char? value)
+            (list value)
+            '()))
+      tokens-alist)))
+
+  (define (parse-token-pair stack p)
+    (define-pair (name value) p)
+    (define (yield name expr)
+      (stack-push!
+       stack
+       (labelinglogic:binding:make name expr)))
+
+    (cond
+     ((char? value)
+      (yield name (list '= value)))
+
+     ((string? value)
+      (string-for-each
+       (lambda (char)
+         (unless (hashset-has? bound-chars char)
+           (hashset-add! bound-chars char)
+           (yield (make-unique-identifier)
+                  (list '= char))))
+       value))
+
+     ((equal? 'class (car value))
+      (yield name (cadr value)))
+     ((equal? '= (car value))
+      (yield name value))
+     (else
+      (raisu* :from "parselynn/singlechar"
+              :type 'bad-token-type
+              :message (stringf "Unknown element of ~s in singlechar lexer" (~a (quote tokens-alist)))
+              :args (list value)))))
+
+  (define bindings
+    (let ()
+      (define stack (stack-make))
+      (for-each (comp (parse-token-pair stack)) tokens-alist)
+      (reverse (stack->list stack))))
+
+  (define opt-model
+    (labelinglogic:init model bindings))
+
+  (define renamed-model
+    (labelinglogic:model:alpha-rename
+     taken-token-names-set
+     opt-model))
+
+  (define singleton-map/2
+    (let ()
+      (define singleton-alist
+        (list-map/flatten
+         (lambda (model-component)
+           (define-tuple (class predicate) model-component)
+           (define type
+             (labelinglogic:expression:type predicate))
+           (define args
+             (labelinglogic:expression:args predicate))
+
+           (if (equal? type '=)
+               (let ()
+                 (define key (car args))
+                 (define value class)
+                 (list (cons key value)))
+               '()))
+         renamed-model))
+
+      (alist->hashmap singleton-alist)))
+
   (define singleton-categories
     (make-hashmap))
 

@@ -14,7 +14,10 @@
   (import
     (only (euphrates define-pair) define-pair))
   (import
+    (only (euphrates define-tuple) define-tuple))
+  (import
     (only (euphrates hashmap)
+          alist->hashmap
           hashmap->alist
           hashmap-ref
           hashmap-set!
@@ -28,23 +31,49 @@
           make-hashset))
   (import (only (euphrates identity) identity))
   (import
-    (only (euphrates parselynn-singlechar-struct)
-          make-parselynn/singlechar-struct))
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic:binding:make))
+  (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic:expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic:expression:type))
+  (import
+    (only (euphrates labelinglogic-model-alpha-rename)
+          labelinglogic:model:alpha-rename))
+  (import
+    (only (euphrates labelinglogic)
+          labelinglogic:init))
   (import
     (only (euphrates list-deduplicate)
           list-deduplicate/reverse))
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
+    (only (euphrates list-map-flatten)
+          list-map/flatten))
+  (import
     (only (euphrates list-or-map) list-or-map))
   (import
     (only (euphrates list-singleton-q)
           list-singleton?))
   (import (only (euphrates negate) negate))
+  (import
+    (only (euphrates parselynn-singlechar-struct)
+          make-parselynn/singlechar-struct))
   (import (only (euphrates raisu-star) raisu*))
+  (import
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import (only (euphrates tilda-s) ~s))
+  (import
+    (only (euphrates unique-identifier)
+          make-unique-identifier))
   (import
     (only (euphrates words-to-string) words->string))
   (import
@@ -80,10 +109,12 @@
           pair?
           quasiquote
           quote
+          reverse
           string
           string->list
           string->symbol
           string-append
+          string-for-each
           string-length
           string-ref
           string?
@@ -94,6 +125,7 @@
           when))
   (import
     (only (scheme char)
+          char-alphabetic?
           char-lower-case?
           char-numeric?
           char-upper-case?

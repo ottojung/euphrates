@@ -5,6 +5,9 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
+    (only (euphrates labelinglogic-model-alpha-rename)
+          labelinglogic:model:alpha-rename))
+  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import

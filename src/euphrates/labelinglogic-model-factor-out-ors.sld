@@ -16,9 +16,10 @@
           stack-make
           stack-push!))
   (import
+    (only (euphrates unique-identifier)
+          make-unique-identifier))
+  (import
     (only (scheme base)
-          +
-          _
           append
           begin
           cond
@@ -32,8 +33,7 @@
           map
           or
           quote
-          reverse
-          set!))
+          reverse))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
