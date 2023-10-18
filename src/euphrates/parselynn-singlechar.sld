@@ -5,6 +5,10 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
+  (import (only (euphrates assoc-or) assoc-or))
+  (import
+    (only (euphrates assoc-set-value)
+          assoc-set-value))
   (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates char-nocase-alphabetic-huh)
@@ -15,6 +19,7 @@
     (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates define-tuple) define-tuple))
+  (import (only (euphrates fn-cons) fn-cons))
   (import
     (only (euphrates hashmap)
           alist->hashmap
@@ -110,6 +115,7 @@
           quasiquote
           quote
           reverse
+          set!
           string
           string->list
           string->symbol

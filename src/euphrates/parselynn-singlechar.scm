@@ -45,35 +45,62 @@
       (numeric (r7rs char-numeric?))
       (whitespace (r7rs char-whitespace?))))
 
-  (define bound-chars
-    (list->hashset
+  (define bound-chars-names
+    (alist->hashmap
      (list-map/flatten
       (lambda (p)
         (define-pair (name value) p)
-        (if (char? value)
-            (list value)
-            '()))
+        (cond
+         ((char? value)
+          (list (cons value name)))
+
+         ((and (string? value)
+               (= 1 (string-length value)))
+          (list (cons (string-ref value 0) name)))
+
+         (else '())))
       tokens-alist)))
+
+  (define strings-tokens '())
 
   (define (parse-token-pair stack p)
     (define-pair (name value) p)
+
     (define (yield name expr)
       (stack-push!
        stack
        (labelinglogic:binding:make name expr)))
+
+    (define (bind-char-to-string! char cname name)
+      (define existing-mapping
+        (assoc-or name strings-tokens '()))
+      (define new-mapping
+        (cons cname existing-mapping))
+
+      (hashmap-set! bound-chars-names char cname)
+
+      (set! strings-tokens
+            (assoc-set-value
+             name new-mapping strings-tokens)))
+
+    (define (remember-string-char! char)
+      (define existing-name
+        (hashmap-ref bound-chars-names char #f))
+      (define cname
+        (or existing-name (make-unique-identifier)))
+
+      (bind-char-to-string! char cname name)
+
+      (unless existing-name
+        (yield cname (list '= char))))
 
     (cond
      ((char? value)
       (yield name (list '= value)))
 
      ((string? value)
-      (string-for-each
-       (lambda (char)
-         (unless (hashset-has? bound-chars char)
-           (hashset-add! bound-chars char)
-           (yield (make-unique-identifier)
-                  (list '= char))))
-       value))
+      (unless (= 1 (string-length value))
+        (string-for-each remember-string-char! value)))
 
      ((equal? 'class (car value))
       (yield name (cadr value)))
@@ -90,6 +117,9 @@
       (define stack (stack-make))
       (for-each (comp (parse-token-pair stack)) tokens-alist)
       (reverse (stack->list stack))))
+
+  (set! strings-tokens
+        (map (fn-cons identity reverse) strings-tokens))
 
   (define opt-model
     (labelinglogic:init model bindings))
@@ -119,6 +149,12 @@
          renamed-model))
 
       (alist->hashmap singleton-alist)))
+
+
+
+  ;;;;;;;;;;;;;;;;;;;;
+  ;; SPLIT
+  ;;;
 
   (define singleton-categories
     (make-hashmap))
