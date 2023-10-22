@@ -814,6 +814,10 @@
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
+    (only (euphrates
+            labelinglogic-model-calculate-biggest-universe)
+          labelinglogic:model:calculate-biggest-universe))
+  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
@@ -885,6 +889,9 @@
     (only (euphrates list-find-first)
           list-find-first))
   (import
+    (only (euphrates list-fold-semigroup)
+          list-fold/semigroup))
+  (import
     (only (euphrates list-fold-star) list-fold*))
   (import (only (euphrates list-fold) list-fold))
   (import
@@ -895,6 +902,9 @@
   (import (only (euphrates list-init) list-init))
   (import
     (only (euphrates list-insert-at) list-insert-at))
+  (import
+    (only (euphrates list-intersect-order-independent)
+          list-intersect/order-independent))
   (import
     (only (euphrates list-intersperse)
           list-intersperse))

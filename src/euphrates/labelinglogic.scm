@@ -44,18 +44,24 @@
          (define expr
            (labelinglogic:binding:expr binding))
 
-         (define type
-           (labelinglogic:expression:type expr))
+         (let loop ((expr expr))
+           (define type
+             (labelinglogic:expression:type expr))
+           (define args
+             (labelinglogic:expression:args expr))
 
-         (cond
-          ((equal? type 'constant)
-           (hashset-add! S expr))
+           (cond
+            ((equal? type 'constant)
+             (hashset-add! S expr))
 
-          ((equal? type '=)
-           'pass)
+            ((equal? type '=)
+             'pass)
 
-          (else
-           (raisu 'impossible-37163612384))))
+            ((equal? type 'or)
+             (for-each loop args))
+
+            (else
+             (raisu 'impossible-37163612384)))))
        bindings)
       S))
 
@@ -108,8 +114,12 @@
      desugared-model))
 
   (define extended-model
+    (append renamed-model
+            bindings))
+
+  (define referenced-model
     (list-fold
-     (model renamed-model)
+     (model extended-model)
      (binding bindings)
 
      (let ()
@@ -120,48 +130,69 @@
        (define (fork-current model-component)
          (define-tuple (class predicate) model-component)
 
-         (define new-name (make-unique-identifier))
+         (if (equal? class name)
+             (list model-component)
+             (let ()
 
-         (define new-parent
-           (list class `(or ,name ,new-name)))
+               (define new-name (make-unique-identifier))
 
-         (define renamed-current
-           (list new-name predicate))
+               (define new-parent
+                 (list class `(or ,name ,new-name)))
 
-         (list new-parent renamed-current))
+               (define renamed-current
+                 (list new-name predicate))
+
+               (list new-parent renamed-current))))
+
+       (define (try-to-add inputs)
+         (define leafs (labelinglogic:model:reduce-to-leafs model))
+         (define desc (labelinglogic:make-nondet-descriminator leafs))
+         (define containing-classes
+           (list->hashset
+            (list-fold/semigroup
+             list-intersect/order-independent
+             (map desc inputs))))
+
+         (if (null? containing-classes) '()
+             (apply
+              append
+              (map
+               (lambda (model-component)
+                 (define-tuple (class predicate) model-component)
+
+                 (cond
+                  ((hashset-has? containing-classes class)
+                   (fork-current model-component))
+
+                  (else
+                   (list model-component))))
+
+               model))))
 
        (cond
 
-        ((equal? '= expr:type)
+        ((or (equal? '= expr:type)
+             (equal? 'or expr:type)
+             (equal? 'constant expr:type)
+             (equal? 'r7rs expr:type)
+             )
 
          (let ()
-           (define leafs (labelinglogic:model:reduce-to-leafs model))
-           (define desc (labelinglogic:make-nondet-descriminator leafs))
-           (define containing-classes
-             (list->hashset (desc (car expr:args))))
+           (define biggest-universe
+             (catchu-case
+              (labelinglogic:model:calculate-biggest-universe model expr)
 
-           (apply
-            append
-            (map
-             (lambda (model-component)
-               (define-tuple (class predicate) model-component)
+              (('no-biggest-universe . args) '())))
 
-               (cond
-                ((hashset-has? containing-classes class)
-                 (fork-current model-component))
-
-                (else
-                 (list model-component))))
-
-             model))))
-
-        ((equal? 'constant expr:type) model)
+           (if (null? biggest-universe) model
+               (try-to-add biggest-universe))))
 
         (else
-         (raisu 'unknown-expr-type binding))))))
-
-  (define combined-model
-    (append extended-model bindings))
+         (raisu* :from "labelinglogic"
+                 :type 'unknown-expr-type
+                 :message (stringf "Expression type ~s not recognized"
+                                   (~a expr:type))
+                 :args (list expr:type binding)))))))
 
   (define (connect-transitive-model-edges model)
     (map
@@ -185,7 +216,7 @@
   (define transitive-model
     (apply-until-fixpoint
      connect-transitive-model-edges
-     combined-model))
+     referenced-model))
 
   (define reachable-model
     (filter
