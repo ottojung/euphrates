@@ -12,9 +12,6 @@
   (unless (list? tokens-alist)
     (fail-tokens-check "must be a list" (list tokens-alist)))
 
-  (when (null? tokens-alist)
-    (fail-tokens-check "must be non-empty" (list tokens-alist)))
-
   (unless (list-and-map pair? tokens-alist)
     (fail-tokens-check "must an alist" (list tokens-alist)))
 
