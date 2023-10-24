@@ -1,10 +1,12 @@
 
 (define-library
-  (euphrates labelinglogic-model-reduce-to-leafs)
-  (export labelinglogic:model:reduce-to-leafs)
+  (euphrates
+    labelinglogic-model-reduce-to-nonleafs)
+  (export labelinglogic:model:reduce-to-nonleafs)
   (import
     (only (euphrates labelinglogic-binding-leaf-huh)
           labelinglogic:binding:leaf?))
+  (import (only (euphrates negate) negate))
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
@@ -13,6 +15,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-model-reduce-to-leafs.scm")))
+               "euphrates/labelinglogic-model-reduce-to-nonleafs.scm")))
     (else (include
-            "labelinglogic-model-reduce-to-leafs.scm"))))
+            "labelinglogic-model-reduce-to-nonleafs.scm"))))

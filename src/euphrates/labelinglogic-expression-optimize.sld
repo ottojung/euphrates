@@ -13,10 +13,14 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates list-deduplicate)
+          list-deduplicate))
+  (import
     (only (euphrates list-singleton-q)
           list-singleton?))
   (import
     (only (scheme base)
+          =
           begin
           car
           cond
@@ -25,9 +29,14 @@
           else
           equal?
           if
+          length
+          let
           map
           or
           quote))
+  (cond-expand
+    (guile (import (only (srfi srfi-31) rec)))
+    (else (import (only (srfi 31) rec))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

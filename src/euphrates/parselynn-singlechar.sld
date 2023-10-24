@@ -5,24 +5,19 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
-  (import (only (euphrates assoc-or) assoc-or))
-  (import
-    (only (euphrates assoc-set-value)
-          assoc-set-value))
   (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates char-nocase-alphabetic-huh)
           char-nocase-alphabetic?))
   (import (only (euphrates comp) comp))
   (import (only (euphrates compose) compose))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates define-tuple) define-tuple))
-  (import (only (euphrates fn-cons) fn-cons))
   (import
     (only (euphrates hashmap)
-          alist->hashmap
           hashmap->alist
           hashmap-ref
           hashmap-set!
@@ -56,9 +51,6 @@
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
-    (only (euphrates list-map-flatten)
-          list-map/flatten))
-  (import
     (only (euphrates list-or-map) list-or-map))
   (import
     (only (euphrates list-singleton-q)
@@ -68,6 +60,7 @@
     (only (euphrates parselynn-singlechar-struct)
           make-parselynn/singlechar-struct))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates stack)
           stack->list
@@ -76,9 +69,6 @@
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import (only (euphrates tilda-s) ~s))
-  (import
-    (only (euphrates unique-identifier)
-          make-unique-identifier))
   (import
     (only (euphrates words-to-string) words->string))
   (import
@@ -114,13 +104,10 @@
           pair?
           quasiquote
           quote
-          reverse
-          set!
           string
           string->list
           string->symbol
           string-append
-          string-for-each
           string-length
           string-ref
           string?

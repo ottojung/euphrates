@@ -1,4 +1,10 @@
 
+(define nocase?
+  '(lambda (c)
+     (and (char-alphabetic? c)
+          (not (char-upper-case? c))
+          (not (char-lower-case? c)))))
+
 (let ()
   (define model
     `((any (or alphanum upcase))
@@ -18,12 +24,6 @@
   (assert-throw
    'model-type-error
    (labelinglogic:model:check model)))
-
-(define nocase?
-  '(lambda (c)
-     (and (char-alphabetic? c)
-          (not (char-upper-case? c))
-          (not (char-lower-case? c)))))
 
 (let ()
   (define model
@@ -93,10 +93,9 @@
   (assert=
 
    `((t_an (r7rs char-whitespace?))
-     (t_4 (or uid_1 uid_2))
+     (t_4 (or t_3 uid_1))
      (t_3 (= #\3))
-     (uid_1 (= #\3))
-     (uid_2 (= #\4)))
+     (uid_1 (= #\4)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init

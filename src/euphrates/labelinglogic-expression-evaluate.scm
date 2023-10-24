@@ -17,7 +17,7 @@
             :args (list expr)))
 
   (define-tuple (class predicate) reference)
-  (labelinglogic:expression:evaluate model expr input))
+  (labelinglogic:expression:evaluate model predicate input))
 
 (define (labelinglogic:expression:evaluate model expr input)
   (define type (labelinglogic:expression:type expr))

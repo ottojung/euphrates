@@ -45,81 +45,40 @@
       (numeric (r7rs char-numeric?))
       (whitespace (r7rs char-whitespace?))))
 
-  (define bound-chars-names
-    (alist->hashmap
-     (list-map/flatten
-      (lambda (p)
-        (define-pair (name value) p)
-        (cond
-         ((char? value)
-          (list (cons value name)))
-
-         ((and (string? value)
-               (= 1 (string-length value)))
-          (list (cons (string-ref value 0) name)))
-
-         (else '())))
-      tokens-alist)))
-
-  (define strings-tokens '())
-
-  (define (parse-token-pair stack p)
+  (define (parse-token-pair p)
     (define-pair (name value) p)
 
-    (define (yield name expr)
-      (stack-push!
-       stack
-       (labelinglogic:binding:make name expr)))
+    (define expr
+      (let loop ((value value))
 
-    (define (bind-char-to-string! char cname name)
-      (define existing-mapping
-        (assoc-or name strings-tokens '()))
-      (define new-mapping
-        (cons cname existing-mapping))
+        (cond
+         ((char? value)
+          (list '= value))
 
-      (hashmap-set! bound-chars-names char cname)
+         ((string? value)
+          (cons 'or (map loop (string->list value))))
 
-      (set! strings-tokens
-            (assoc-set-value
-             name new-mapping strings-tokens)))
+         ((equal? 'class (car value))
+          (cadr value))
 
-    (define (remember-string-char! char)
-      (define existing-name
-        (hashmap-ref bound-chars-names char #f))
-      (define cname
-        (or existing-name (make-unique-identifier)))
+         ((equal? '= (car value))
+          value)
 
-      (bind-char-to-string! char cname name)
+         (else
+          (raisu* :from "parselynn/singlechar"
+                  :type 'bad-token-type
+                  :message (stringf "Unknown element of ~s in singlechar lexer" (~a (quote tokens-alist)))
+                  :args (list value))))))
 
-      (unless existing-name
-        (yield cname (list '= char))))
+    (labelinglogic:binding:make
+     name expr))
 
-    (cond
-     ((char? value)
-      (yield name (list '= value)))
-
-     ((string? value)
-      (unless (= 1 (string-length value))
-        (string-for-each remember-string-char! value)))
-
-     ((equal? 'class (car value))
-      (yield name (cadr value)))
-     ((equal? '= (car value))
-      (yield name value))
-     (else
-      (raisu* :from "parselynn/singlechar"
-              :type 'bad-token-type
-              :message (stringf "Unknown element of ~s in singlechar lexer" (~a (quote tokens-alist)))
-              :args (list value)))))
+  (debugs tokens-alist)
 
   (define bindings
-    (let ()
-      (define stack (stack-make))
-      (for-each (comp (parse-token-pair stack)) tokens-alist)
-      (reverse (stack->list stack))))
+    (map parse-token-pair tokens-alist))
 
-  (set! strings-tokens
-        (map (fn-cons identity reverse) strings-tokens))
+  (debugs bindings)
 
   (define opt-model
     (labelinglogic:init model bindings))
@@ -130,27 +89,39 @@
      opt-model))
 
   (define singleton-map/2
-    (let ()
-      (define singleton-alist
-        (list-map/flatten
-         (lambda (model-component)
-           (define-tuple (class predicate) model-component)
-           (define type
-             (labelinglogic:expression:type predicate))
-           (define args
-             (labelinglogic:expression:args predicate))
+    (make-hashmap))
 
-           (if (equal? type '=)
-               (let ()
-                 (define key (car args))
-                 (define value class)
-                 (list (cons key value)))
-               '()))
-         renamed-model))
+  (define additional-grammar-rules/singletons/2/stack
+    (stack-make))
 
-      (alist->hashmap singleton-alist)))
+  (define categories-alist/stack
+    (stack-make))
 
+  (for-each
+   (lambda (model-component)
+     (define-tuple (class predicate) model-component)
+     (define type
+       (labelinglogic:expression:type predicate))
+     (define args
+       (labelinglogic:expression:args predicate))
 
+     (cond
+      ((equal? type '=)
+       (hashmap-set! singleton-map/2 (car args) class))
+      ((equal? type 'r7rs)
+       (stack-push! categories-alist/stack (cons (car args) class)))
+      ((equal? type 'or)
+       (stack-push! additional-grammar-rules/singletons/2/stack
+                    (cons class (map list args))))
+      (else
+       (raisu 'uknown-expr-type args))))
+   renamed-model)
+
+  (define categories-alist
+    (stack->list categories-alist/stack))
+
+  (define additional-grammar-rules/2
+    (stack->list additional-grammar-rules/singletons/2/stack))
 
   ;;;;;;;;;;;;;;;;;;;;
   ;; SPLIT
@@ -427,6 +398,10 @@
       (upcase . ,category-upcase)
       (any . ,category-any)
       (most-default . ,most-default-category)))
+
+  (debugs renamed-model)
+  (debugs singleton-map)
+  (debugs singleton-map/2)
 
   (make-parselynn/singlechar-struct
    additional-grammar-rules

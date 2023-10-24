@@ -424,7 +424,7 @@
    (t_x . "x3")
    (t_a class alphabetic)
    (t_n class numeric)
-   (t_x class alphanum))
+   (t_z class alphanum))
 
  "1x371634"
 
@@ -437,7 +437,7 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_x (t_a) (t_n) (c_alphanum))
+ '((t_z (t_a) (t_n) (c_alphanum))
    (t_a (c_x) (c_alphabetic))
    (t_n (t_3)
         (t_0)

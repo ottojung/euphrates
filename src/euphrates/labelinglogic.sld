@@ -24,6 +24,9 @@
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
   (import
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic:binding:make))
+  (import
     (only (euphrates labelinglogic-binding-name)
           labelinglogic:binding:name))
   (import
@@ -67,6 +70,13 @@
     (only (euphrates labelinglogic-model-factor-out-ors)
           labelinglogic:model:factor-out-ors))
   (import
+    (only (euphrates labelinglogic-model-map-expressions)
+          labelinglogic:model:map-expressions))
+  (import
+    (only (euphrates
+            labelinglogic-model-map-subexpressions)
+          labelinglogic:model:map-subexpressions))
+  (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
   (import
@@ -76,6 +86,8 @@
   (import
     (only (euphrates list-intersect-order-independent)
           list-intersect/order-independent))
+  (import
+    (only (euphrates list-map-first) list-map-first))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
@@ -86,6 +98,7 @@
   (import
     (only (scheme base)
           =
+          and
           append
           apply
           assoc
@@ -103,6 +116,7 @@
           list
           list-ref
           map
+          not
           null?
           or
           quasiquote

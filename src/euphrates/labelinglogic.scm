@@ -113,14 +113,23 @@
 
      desugared-model))
 
+  (define bindings/opt
+    (map
+     (lambda (binding)
+       (define name (labelinglogic:binding:name binding))
+       (define expr (labelinglogic:binding:expr binding))
+       (labelinglogic:binding:make
+        name (labelinglogic:expression:optimize expr)))
+     bindings))
+
   (define extended-model
     (append renamed-model
-            bindings))
+            bindings/opt))
 
-  (define referenced-model
+  (define duplicated-model
     (list-fold
      (model extended-model)
-     (binding bindings)
+     (binding extended-model)
 
      (let ()
        (define-tuple (name expr) binding)
@@ -195,28 +204,21 @@
                  :args (list expr:type binding)))))))
 
   (define (connect-transitive-model-edges model)
-    (map
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
+    (define (replacer constant)
+      (if (is-binding? constant)
+          constant
+          (let ()
+            (define target-component (assoc constant model))
+            (define-tuple (target-class target-predicate) target-component)
+            target-predicate)))
 
-       (define (replacer constant)
-         (if (is-binding? constant)
-             constant
-             (let ()
-               (define target-component (assoc constant model))
-               (define-tuple (target-class target-predicate) target-component)
-               target-predicate)))
-
-       (list
-        class
-        (labelinglogic:expression:replace-constants predicate replacer)))
-
-     model))
+    (labelinglogic:expression:replace-constants
+     model replacer))
 
   (define transitive-model
     (apply-until-fixpoint
      connect-transitive-model-edges
-     referenced-model))
+     duplicated-model))
 
   (define reachable-model
     (filter
@@ -226,27 +228,40 @@
      transitive-model))
 
   (define sugar-model
-    (map
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (list class (labelinglogic:expression:sugarify predicate)))
+    (labelinglogic:model:map-expressions
+     labelinglogic:expression:sugarify
      reachable-model))
 
   (define combined-exprs-model
-    (map
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (list class (labelinglogic:expression:combine-recursively predicate)))
+    (labelinglogic:model:map-expressions
+     labelinglogic:expression:combine-recursively
      sugar-model))
 
   (define opt-model
-    (map
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (list class (labelinglogic:expression:optimize predicate)))
+    (labelinglogic:model:map-expressions
+     labelinglogic:expression:optimize
      combined-exprs-model))
 
-  (define flat-model
-    (labelinglogic:model:factor-out-ors opt-model))
+  (define referenced-model
+    (labelinglogic:model:map-subexpressions
+     (lambda (o-class o-predicate)
+       (lambda (expr)
+         (list-map-first
+          (lambda (model-component)
+            (define-tuple (b-class b-predicate) model-component)
+            (and (not (equal? o-class b-class))
+                 (is-binding? b-class)
+                 (equal? expr b-predicate)
+                 b-class))
+          expr opt-model)))
+     opt-model))
 
-  flat-model)
+  (define flat-model
+    (labelinglogic:model:factor-out-ors referenced-model))
+
+  (define opt2-model
+    (labelinglogic:model:map-expressions
+     labelinglogic:expression:optimize
+     flat-model))
+
+  opt2-model)

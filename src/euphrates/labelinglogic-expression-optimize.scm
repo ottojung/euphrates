@@ -7,9 +7,16 @@
 
   (if (list-singleton? args)
       (labelinglogic:expression:optimize (car args))
-      (cons
-       type
-       (map labelinglogic:expression:optimize args))))
+       (let ()
+         (define rec
+           (map labelinglogic:expression:optimize args))
+         (define ded
+           (list-deduplicate rec))
+
+         (if (= (length rec) (length ded))
+             (cons type ded)
+             (labelinglogic:expression:optimize
+              (cons type ded))))))
 
 (define (labelinglogic:expression:optimize expr)
   (define type (labelinglogic:expression:type expr))
