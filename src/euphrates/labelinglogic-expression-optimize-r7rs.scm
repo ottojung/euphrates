@@ -46,7 +46,7 @@
 
      ((is-or? code)
       (let ()
-        (define sugared (labelinglogic:expression:sugarify/or code))
+        (define sugared (labelinglogic:expression:sugarify code))
         (assert (is-or? sugared))
         (define args (unpack-or sugared))
         (pack-or (map loop args))))

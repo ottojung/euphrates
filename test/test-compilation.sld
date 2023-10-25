@@ -801,9 +801,6 @@
             labelinglogic-expression-replace-constants)
           labelinglogic:expression:replace-constants))
   (import
-    (only (euphrates labelinglogic-expression-sugarify-or)
-          labelinglogic:expression:sugarify/or))
-  (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import

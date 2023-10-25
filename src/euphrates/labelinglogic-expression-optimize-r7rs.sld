@@ -13,8 +13,8 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-sugarify-or)
-          labelinglogic:expression:sugarify/or))
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic:expression:sugarify))
   (import
     (only (euphrates list-drop-n) list-drop-n))
   (import

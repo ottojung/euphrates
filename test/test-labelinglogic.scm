@@ -5,6 +5,11 @@
           (not (char-upper-case? c))
           (not (char-lower-case? c)))))
 
+
+
+
+
+
 (let ()
   (define model
     `((any (or alphanum upcase))
@@ -13,6 +18,11 @@
       (upcase (r7rs char-upper-case?))))
 
   (labelinglogic:model:check model))
+
+
+
+
+
 
 (let ()
   (define model
@@ -24,6 +34,12 @@
   (assert-throw
    'model-type-error
    (labelinglogic:model:check model)))
+
+
+
+
+
+
 
 (let ()
   (define model
@@ -51,6 +67,12 @@
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
+
+
+
+
+
+
 
 (let ()
   (define model
@@ -81,6 +103,11 @@
     '() (labelinglogic:init
          model bindings))))
 
+
+
+
+
+
 (let ()
   (define model
     `((whitespace (r7rs char-whitespace?))))
@@ -101,6 +128,12 @@
     '() (labelinglogic:init
          model bindings))))
 
+
+
+
+
+
+
 (let ()
   (define model
     `((whitespace (r7rs char-whitespace?))))
@@ -119,6 +152,12 @@
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
+
+
+
+
+
+
 
 (let ()
   (define model
@@ -139,6 +178,11 @@
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
+
+
+
+
+
 
 (let ()
   (define model
@@ -161,6 +205,11 @@
 
    (labelinglogic:init
     model bindings)))
+
+
+
+
+
 
 (let ()
   (define model
@@ -217,3 +266,33 @@
          model bindings)))
 
   )
+
+
+
+
+
+
+(let ()
+  (define model
+    `((none (r7rs (lambda _ #f)))))
+
+  (define bindings
+    `((t_an none)
+      (t_4  (or (= 0) (= 1)))))
+
+  (assert=
+
+   `((t_an (r7rs (lambda _ #f)))
+     (t_4 (or uid_1 uid_2))
+     (uid_1 (= 0))
+     (uid_2 (= 1)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
+
+
+
+
+
+

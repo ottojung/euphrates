@@ -16,6 +16,7 @@
   (import
     (only (scheme base)
           =
+          _
           and
           begin
           define
