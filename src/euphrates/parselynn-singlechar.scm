@@ -80,48 +80,48 @@
 
   (debugs bindings)
 
-  (define opt-model
-    (labelinglogic:init model bindings))
+  ;; (define opt-model
+  ;;   (labelinglogic:init model bindings))
 
-  (define renamed-model
-    (labelinglogic:model:alpha-rename
-     taken-token-names-set
-     opt-model))
+  ;; (define renamed-model
+  ;;   (labelinglogic:model:alpha-rename
+  ;;    taken-token-names-set
+  ;;    opt-model))
 
-  (define singleton-map/2
-    (make-hashmap))
+  ;; (define singleton-map/2
+  ;;   (make-hashmap))
 
-  (define additional-grammar-rules/singletons/2/stack
-    (stack-make))
+  ;; (define additional-grammar-rules/singletons/2/stack
+  ;;   (stack-make))
 
-  (define categories-alist/stack
-    (stack-make))
+  ;; (define categories-alist/stack
+  ;;   (stack-make))
 
-  (for-each
-   (lambda (model-component)
-     (define-tuple (class predicate) model-component)
-     (define type
-       (labelinglogic:expression:type predicate))
-     (define args
-       (labelinglogic:expression:args predicate))
+  ;; (for-each
+  ;;  (lambda (model-component)
+  ;;    (define-tuple (class predicate) model-component)
+  ;;    (define type
+  ;;      (labelinglogic:expression:type predicate))
+  ;;    (define args
+  ;;      (labelinglogic:expression:args predicate))
 
-     (cond
-      ((equal? type '=)
-       (hashmap-set! singleton-map/2 (car args) class))
-      ((equal? type 'r7rs)
-       (stack-push! categories-alist/stack (cons (car args) class)))
-      ((equal? type 'or)
-       (stack-push! additional-grammar-rules/singletons/2/stack
-                    (cons class (map list args))))
-      (else
-       (raisu 'uknown-expr-type args))))
-   renamed-model)
+  ;;    (cond
+  ;;     ((equal? type '=)
+  ;;      (hashmap-set! singleton-map/2 (car args) class))
+  ;;     ((equal? type 'r7rs)
+  ;;      (stack-push! categories-alist/stack (cons (car args) class)))
+  ;;     ((equal? type 'or)
+  ;;      (stack-push! additional-grammar-rules/singletons/2/stack
+  ;;                   (cons class (map list args))))
+  ;;     (else
+  ;;      (raisu 'uknown-expr-type args))))
+  ;;  renamed-model)
 
-  (define categories-alist
-    (stack->list categories-alist/stack))
+  ;; (define categories-alist
+  ;;   (stack->list categories-alist/stack))
 
-  (define additional-grammar-rules/2
-    (stack->list additional-grammar-rules/singletons/2/stack))
+  ;; (define additional-grammar-rules/2
+  ;;   (stack->list additional-grammar-rules/singletons/2/stack))
 
   ;;;;;;;;;;;;;;;;;;;;
   ;; SPLIT
@@ -399,9 +399,9 @@
       (any . ,category-any)
       (most-default . ,most-default-category)))
 
-  (debugs renamed-model)
-  (debugs singleton-map)
-  (debugs singleton-map/2)
+  ;; (debugs renamed-model)
+  ;; (debugs singleton-map)
+  ;; (debugs singleton-map/2)
 
   (make-parselynn/singlechar-struct
    additional-grammar-rules
