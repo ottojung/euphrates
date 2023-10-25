@@ -18,9 +18,13 @@
   (import
     (only (euphrates list-singleton-q)
           list-singleton?))
+  (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           =
+          and
           begin
           car
           cond
@@ -31,7 +35,9 @@
           if
           length
           let
+          list
           map
+          member
           or
           quote))
   (cond-expand

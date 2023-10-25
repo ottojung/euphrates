@@ -28,4 +28,18 @@
    ((equal? type 'or)
     (labelinglogic:expression:optimize/or expr))
 
-   (else expr)))
+   ((equal? type 'and)
+    expr)
+
+   ((equal? type 'seq)
+    expr)
+
+   ((member type (list '= 'constant))
+    expr)
+
+   (else
+    (raisu* :from "labelinglogic:expression:optimize"
+            :type 'unknown-expr-type
+            :message (stringf "Expression type ~s not recognized"
+                              (~a type))
+            :args (list type expr)))))

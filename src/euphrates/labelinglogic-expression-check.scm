@@ -22,12 +22,22 @@
   (cond
    ((equal? type 'constant) 'ok)
    ((equal? 'or type) 'ok) ;; any arity is ok.
+   ((equal? 'and type) 'ok) ;; any arity is ok.
+
+   ((equal? 'seq type)
+    (unless (list-length=<? 1 args)
+      (fail-expression-check
+       (stringf
+        "Expression of type ~s must have at least 1 argument."
+        (~a type))
+       (list x))))
+
    ((equal? '= type)
     (unless (list-length= 1 args)
       (fail-expression-check
        (stringf
         "Expression of type ~s must have exactly 1 argument."
-        (~a '=))
+        (~a type))
        (list x))))
 
    ((equal? 'r7rs type)
@@ -35,7 +45,7 @@
       (fail-expression-check
        (stringf
         "Expression of type ~s must have exactly 1 argument."
-        (~a 'r7rs))
+        (~a type))
        (list x))))
 
    (else

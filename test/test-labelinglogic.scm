@@ -103,6 +103,45 @@
 
 (let ()
   (define model
+    `((whitespace (r7rs char-whitespace?))))
+
+  (define bindings
+    `((t_an whitespace)
+      (t_4  (or (= #\3) (= #\4) (= #\3)))))
+
+  (assert=
+
+   `((t_an (r7rs char-whitespace?))
+     (t_4 (or uid_1 uid_2))
+     (uid_1 (= #\3))
+     (uid_2 (= #\4)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
+
+(let ()
+  (define model
+    `((whitespace (r7rs char-whitespace?))))
+
+  (define bindings
+    `((t_an whitespace)
+      (t_4  (seq (= #\3) (= #\4) (= #\3)))))
+
+  (assert=
+
+   `((t_an (r7rs char-whitespace?))
+     (t_4 (seq uid_1 uid_2 uid_3))
+     (uid_1 (= #\3))
+     (uid_2 (= #\4))
+     (uid_3 (= #\3)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
+
+(let ()
+  (define model
     `((any (or alphanum whitespace))
       (alphanum (or alphabetic numeric))
       (alphabetic (or upcase lowercase))

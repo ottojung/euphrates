@@ -21,6 +21,7 @@
   (import
     (only (scheme base)
           =
+          and
           begin
           define
           list

@@ -30,7 +30,7 @@
   (define expr-type
     (labelinglogic:expression:type expr))
 
-  (unless (member expr-type (list 'or 'constant '=))
+  (unless (member expr-type (list 'or 'and 'seq 'constant '=))
     (raisu* :from "labelinglogic"
             :type 'bad-expr
             :message "Binding in labelinglogic must evaluate refer a constant or a singleton set"

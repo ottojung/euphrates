@@ -738,6 +738,9 @@
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
   (import
+    (only (euphrates labelinglogic-binding-leaf-huh)
+          labelinglogic:binding:leaf?))
+  (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
   (import
@@ -821,11 +824,22 @@
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
-    (only (euphrates labelinglogic-model-factor-out-ors)
-          labelinglogic:model:factor-out-ors))
+    (only (euphrates labelinglogic-model-flatten)
+          labelinglogic:model:flatten))
+  (import
+    (only (euphrates labelinglogic-model-map-expressions)
+          labelinglogic:model:map-expressions))
+  (import
+    (only (euphrates
+            labelinglogic-model-map-subexpressions)
+          labelinglogic:model:map-subexpressions))
   (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
+  (import
+    (only (euphrates
+            labelinglogic-model-reduce-to-nonleafs)
+          labelinglogic:model:reduce-to-nonleafs))
   (import
     (only (euphrates labelinglogic-model-replace-constants)
           labelinglogic:model:replace-constants))

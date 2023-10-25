@@ -10,19 +10,21 @@
           labelinglogic:expression:type))
   (import
     (only (euphrates list-length-eq) list-length=))
+  (import
+    (only (euphrates list-length-geq-q)
+          list-length=<?))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
-          <
           =
+          and
           begin
           cond
           define
           else
           equal?
-          length
           list
           list?
           or

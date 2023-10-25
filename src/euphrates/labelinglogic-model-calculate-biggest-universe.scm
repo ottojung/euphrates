@@ -29,7 +29,9 @@
 
         (loop predicate)))
 
-     ((equal? type 'or)
+     ((or (equal? type 'or)
+          (equal? type 'seq))
+
       (apply
        append
        (map loop args)))

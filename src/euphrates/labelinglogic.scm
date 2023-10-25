@@ -57,7 +57,7 @@
             ((equal? type '=)
              'pass)
 
-            ((equal? type 'or)
+            ((member type (list 'or 'and 'seq))
              (for-each loop args))
 
             (else
@@ -178,30 +178,25 @@
 
                model))))
 
-       (cond
+       (if (member
+            expr:type
+            (list '= 'constant 'or 'and 'seq 'r7rs))
 
-        ((or (equal? '= expr:type)
-             (equal? 'or expr:type)
-             (equal? 'constant expr:type)
-             (equal? 'r7rs expr:type)
-             )
+           (let ()
+             (define biggest-universe
+               (catchu-case
+                (labelinglogic:model:calculate-biggest-universe model expr)
 
-         (let ()
-           (define biggest-universe
-             (catchu-case
-              (labelinglogic:model:calculate-biggest-universe model expr)
+                (('no-biggest-universe . args) '())))
 
-              (('no-biggest-universe . args) '())))
+             (if (null? biggest-universe) model
+                 (try-to-add biggest-universe)))
 
-           (if (null? biggest-universe) model
-               (try-to-add biggest-universe))))
-
-        (else
-         (raisu* :from "labelinglogic"
-                 :type 'unknown-expr-type
-                 :message (stringf "Expression type ~s not recognized"
-                                   (~a expr:type))
-                 :args (list expr:type binding)))))))
+           (raisu* :from "labelinglogic"
+                   :type 'unknown-expr-type
+                   :message (stringf "Expression type ~s not recognized"
+                                     (~a expr:type))
+                   :args (list expr:type binding))))))
 
   (define (connect-transitive-model-edges model)
     (define (replacer constant)
@@ -257,7 +252,7 @@
      opt-model))
 
   (define flat-model
-    (labelinglogic:model:factor-out-ors referenced-model))
+    (labelinglogic:model:flatten referenced-model))
 
   (define opt2-model
     (labelinglogic:model:map-expressions

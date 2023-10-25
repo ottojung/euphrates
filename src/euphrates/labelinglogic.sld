@@ -67,8 +67,8 @@
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
-    (only (euphrates labelinglogic-model-factor-out-ors)
-          labelinglogic:model:factor-out-ors))
+    (only (euphrates labelinglogic-model-flatten)
+          labelinglogic:model:flatten))
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
@@ -116,6 +116,7 @@
           list
           list-ref
           map
+          member
           not
           null?
           or
