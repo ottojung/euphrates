@@ -11,7 +11,8 @@
        (labelinglogic:expression:type expr))
      args))
 
-  (define (combine-r7rs/problematic left right)
+  ;; (define (combine-r7rs/problematic left right)
+  (define (combine-r7rs left right)
     (define-tuple (left-e)
       (labelinglogic:expression:args left))
     (define-tuple (right-e)
@@ -19,8 +20,8 @@
 
     (list 'r7rs `(lambda (c) (or (,left-e c) (,right-e c)))))
 
-  (define (combine-r7rs left right)
-    (list 'seq left right))
+  ;; (define (combine-r7rs left right)
+  ;;   (list 'seq left right))
 
   (define combined
     (apply
