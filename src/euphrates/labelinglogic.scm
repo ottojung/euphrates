@@ -14,71 +14,14 @@
 
   (labelinglogic:bindings:check classes/s bindings)
 
-  (define (binding:type binding)
-    (define expr
-      (labelinglogic:binding:expr binding))
-
-    (labelinglogic:expression:type expr))
-
-  (define (class-expr:target expr)
-    (list-ref expr 1))
-
-  (define (class-binding:target binding)
-    (define expr
-      (labelinglogic:binding:expr binding))
-
-    (class-expr:target expr))
-
   (define bindings-found
     (list->hashset (map labelinglogic:binding:name bindings)))
 
   (define (is-binding? x)
     (hashset-has? bindings-found x))
 
-  (define classes-bound
-    (let ((S (make-hashset)))
-      (for-each
-       (lambda (binding)
-         (define name
-           (labelinglogic:binding:name binding))
-         (define expr
-           (labelinglogic:binding:expr binding))
-
-         (let loop ((expr expr))
-           (define type
-             (labelinglogic:expression:type expr))
-           (define args
-             (labelinglogic:expression:args expr))
-
-           (cond
-            ((equal? type 'constant)
-             (hashset-add! S expr))
-
-            ((equal? type '=)
-             'pass)
-
-            ((member type (list 'or 'and 'seq))
-             (for-each loop args))
-
-            (else
-             (raisu 'impossible-37163612384)))))
-       bindings)
-      S))
-
-  (define (class-bound? class)
-    (hashset-has? classes-bound class))
-
-  (define bindings/opt
-    (map
-     (lambda (binding)
-       (define name (labelinglogic:binding:name binding))
-       (define expr (labelinglogic:binding:expr binding))
-       (labelinglogic:binding:make
-        name (labelinglogic:expression:optimize expr)))
-     bindings))
-
   (define extended-model
-    (labelinglogic:model:extend-with-bindings model bindings/opt))
+    (labelinglogic:model:extend-with-bindings model bindings))
 
   (define reachable-model
     (filter
