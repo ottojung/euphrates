@@ -222,41 +222,43 @@
        (is-binding? class))
      transitive-model))
 
-  (define sugar-model
-    (labelinglogic:model:map-expressions
-     labelinglogic:expression:sugarify
-     reachable-model))
+  (define (bigloop model0)
+    (define sugar-model
+      (labelinglogic:model:map-expressions
+       labelinglogic:expression:sugarify
+       model0))
 
-  (define combined-exprs-model
-    (labelinglogic:model:map-expressions
-     labelinglogic:expression:combine-recursively
-     sugar-model))
+    (define combined-exprs-model
+      (labelinglogic:model:map-expressions
+       labelinglogic:expression:combine-recursively
+       sugar-model))
+
+    (define opt-model
+      (labelinglogic:model:map-expressions
+       labelinglogic:expression:optimize
+       combined-exprs-model))
+
+    (define referenced-model
+      (labelinglogic:model:map-subexpressions
+       (lambda (o-class o-predicate)
+         (lambda (expr)
+           (list-map-first
+            (lambda (model-component)
+              (define-tuple (b-class b-predicate) model-component)
+              (and (not (equal? o-class b-class))
+                   (is-binding? b-class)
+                   (equal? expr b-predicate)
+                   b-class))
+            expr opt-model)))
+       opt-model))
+
+    referenced-model)
 
   (define opt-model
-    (labelinglogic:model:map-expressions
-     labelinglogic:expression:optimize
-     combined-exprs-model))
-
-  (define referenced-model
-    (labelinglogic:model:map-subexpressions
-     (lambda (o-class o-predicate)
-       (lambda (expr)
-         (list-map-first
-          (lambda (model-component)
-            (define-tuple (b-class b-predicate) model-component)
-            (and (not (equal? o-class b-class))
-                 (is-binding? b-class)
-                 (equal? expr b-predicate)
-                 b-class))
-          expr opt-model)))
-     opt-model))
+    (apply-until-fixpoint
+     bigloop reachable-model))
 
   (define flat-model
-    (labelinglogic:model:flatten referenced-model))
+    (labelinglogic:model:flatten opt-model))
 
-  (define opt2-model
-    (labelinglogic:model:map-expressions
-     labelinglogic:expression:optimize
-     flat-model))
-
-  opt2-model)
+  flat-model)
