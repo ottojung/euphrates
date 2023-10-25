@@ -52,3 +52,22 @@
    '(or a (or b z))
    (labelinglogic:expression:desugar
     '(or a (or b z) (or (or) (or) (or))))))
+
+;; Test with nested operations of different types
+(let ()
+  (assert=
+   '(seq a (seq b (seq (and c d) (seq (or f g) (seq h i)))))
+   (labelinglogic:expression:desugar
+    '(seq a b (and c d) (or f g) h i))))
+
+(let ()
+  (assert=
+   '(seq a (seq b (seq (and c (and d e)) (seq (or f g) (seq h i)))))
+   (labelinglogic:expression:desugar
+    '(seq a b (and c d e) (or f g) h i))))
+
+(let ()
+  (assert=
+   `(and a (and b (and (seq c (seq d e)) (and (or f g) (and h i)))))
+   (labelinglogic:expression:desugar
+    '(and a b (seq c d e) (or f g) h i))))
