@@ -14,59 +14,10 @@
 
   (labelinglogic:bindings:check classes/s bindings)
 
-  (define bindings-found
-    (list->hashset (map labelinglogic:binding:name bindings)))
-
-  (define (is-binding? x)
-    (hashset-has? bindings-found x))
-
   (define extended-model
     (labelinglogic:model:extend-with-bindings model bindings))
 
-  (define reachable-model
-    (filter
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (is-binding? class))
-     extended-model))
-
-  (define (bigloop model0)
-    (define sugar-model
-      (labelinglogic:model:map-expressions
-       labelinglogic:expression:sugarify
-       model0))
-
-    (define combined-exprs-model
-      (labelinglogic:model:map-expressions
-       labelinglogic:expression:combine-recursively
-       sugar-model))
-
-    (define opt-model
-      (labelinglogic:model:map-expressions
-       labelinglogic:expression:optimize
-       combined-exprs-model))
-
-    (define referenced-model
-      (labelinglogic:model:map-subexpressions
-       (lambda (o-class o-predicate)
-         (lambda (expr)
-           (list-map-first
-            (lambda (model-component)
-              (define-tuple (b-class b-predicate) model-component)
-              (and (not (equal? o-class b-class))
-                   (is-binding? b-class)
-                   (equal? expr b-predicate)
-                   b-class))
-            expr opt-model)))
-       opt-model))
-
-    referenced-model)
-
   (define opt-model
-    (apply-until-fixpoint
-     bigloop reachable-model))
+    (labelinglogic:model:optimize-to-bindings extended-model bindings))
 
-  (define flat-model
-    (labelinglogic:model:flatten opt-model))
-
-  flat-model)
+  opt-model)

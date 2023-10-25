@@ -821,6 +821,10 @@
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
+    (only (euphrates
+            labelinglogic-model-extend-with-bindings)
+          labelinglogic:model:extend-with-bindings))
+  (import
     (only (euphrates labelinglogic-model-flatten)
           labelinglogic:model:flatten))
   (import
@@ -830,6 +834,10 @@
     (only (euphrates
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
+  (import
+    (only (euphrates
+            labelinglogic-model-optimize-to-bindings)
+          labelinglogic:model:optimize-to-bindings))
   (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
