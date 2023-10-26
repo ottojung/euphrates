@@ -11,9 +11,10 @@
           char-nocase-alphabetic?))
   (import (only (euphrates comp) comp))
   (import (only (euphrates compose) compose))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
+  (import
+    (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates hashmap)
           hashmap->alist
@@ -32,6 +33,18 @@
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
   (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic:expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic:expression:type))
+  (import
+    (only (euphrates labelinglogic-model-alpha-rename)
+          labelinglogic:model:alpha-rename))
+  (import
+    (only (euphrates labelinglogic)
+          labelinglogic:init))
+  (import
     (only (euphrates list-deduplicate)
           list-deduplicate/reverse))
   (import
@@ -46,6 +59,12 @@
     (only (euphrates parselynn-singlechar-struct)
           make-parselynn/singlechar-struct))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates raisu) raisu))
+  (import
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import (only (euphrates tilda-s) ~s))

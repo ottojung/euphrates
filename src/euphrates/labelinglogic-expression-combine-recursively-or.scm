@@ -11,7 +11,6 @@
        (labelinglogic:expression:type expr))
      args))
 
-  ;; (define (combine-r7rs/problematic left right)
   (define (combine-r7rs left right)
     (define-tuple (left-e)
       (labelinglogic:expression:args left))
