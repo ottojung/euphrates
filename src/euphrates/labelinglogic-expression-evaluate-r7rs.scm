@@ -9,4 +9,5 @@
     (lambda (model expr input)
       (define args (labelinglogic:expression:args expr))
       (define code (car args))
-      (eval (list code input) env))))
+      (define fun (eval code env))
+      (fun input))))

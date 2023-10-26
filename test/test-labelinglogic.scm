@@ -1,12 +1,15 @@
 
 (define nocase?
   '(lambda (c)
-     (and (char-alphabetic? c)
+     (and (char? c)
+          (char-alphabetic? c)
           (not (char-upper-case? c))
           (not (char-lower-case? c)))))
 
-
-
+(define numeric?
+  `(lambda (c)
+     (and (char? c)
+          (char-numeric? c))))
 
 
 
@@ -159,27 +162,6 @@
 
 
 
-(let ()
-  (define model
-    `((whitespace (r7rs char-whitespace?))))
-
-  (define bindings
-    `((t_an whitespace)
-      (t_4  (seq (= #\3) (= #\4) (= #\3)))))
-
-  (assert=
-
-   `((t_an (r7rs char-whitespace?))
-     (t_4 (seq uid_1 uid_2 uid_3))
-     (uid_1 (= #\3))
-     (uid_2 (= #\4))
-     (uid_3 (= #\3)))
-
-   (labelinglogic:model:alpha-rename
-    '() (labelinglogic:init
-         model bindings))))
-
-
 
 
 
@@ -256,38 +238,19 @@
      (uid_1 (r7rs (lambda (c)
                     (or (char-upper-case? c)
                         (char-lower-case? c)
-                        (and (char-alphabetic? c)
+                        (and (char? c)
+                             (char-alphabetic? c)
                              (not (char-upper-case? c))
                              (not (char-lower-case? c)))))))
      (uid_2 (r7rs char-numeric?))
      (uid_3 (r7rs (lambda (c)
                     (or (char-upper-case? c)
                         (char-lower-case? c)
-                        (and (char-alphabetic? c)
+                        (and (char? c)
+                             (char-alphabetic? c)
                              (not (char-upper-case? c))
                              (not (char-lower-case? c)))
                         (char-numeric? c))))))
-
-   ;; `((t_0 (= #\0))
-   ;;   (t_1 (= #\1))
-   ;;   (t_2 (= #\2))
-   ;;   (t_3 (= #\3))
-   ;;   (t_4 (= #\4))
-   ;;   (t_5 (= #\5))
-   ;;   (t_6 (= #\6))
-   ;;   (t_7 (= #\7))
-   ;;   (t_8 (= #\8))
-   ;;   (t_m (= #\m))
-   ;;   (t_a (or uid_1 t_m))
-   ;;   (t_n (or t_0 t_1 t_2 t_3 t_4 t_5 t_6 t_7 t_8 uid_2))
-   ;;   (t_x (or t_a t_n))
-   ;;   (uid_1 (r7rs (lambda (c)
-   ;;                  (or (char-upper-case? c)
-   ;;                      (char-lower-case? c)
-   ;;                      (and (char-alphabetic? c)
-   ;;                           (not (char-upper-case? c))
-   ;;                           (not (char-lower-case? c)))))))
-   ;;   (uid_2 (r7rs char-numeric?)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
@@ -321,6 +284,69 @@
 
 
 
+(let ()
+  (define model `())
+
+  (define bindings
+    `((t_4  (or (= 0) (= 1)))))
+
+  (assert=
+
+   `((t_4 (or uid_1 uid_2))
+     (uid_1 (= 0))
+     (uid_2 (= 1)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
 
 
 
+
+
+
+
+(let ()
+  (define model
+    `((numeric (r7rs ,numeric?))))
+
+  (define bindings
+    `((t_n numeric)
+      (t_4  (seq (= #\a) (= #\b) (= #\c)))))
+
+  (assert=
+
+   `((t_n (r7rs ,numeric?))
+     (t_4 (seq uid_1 uid_2 uid_3))
+     (uid_1 (= #\a))
+     (uid_2 (= #\b))
+     (uid_3 (= #\c)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
+
+
+
+
+(let ()
+  (define model
+    `((numeric (r7rs ,numeric?))))
+
+  (define bindings
+    `((t_n numeric)
+      (t_4  (seq (= #\3) (= #\4) (= #\3)))))
+
+  (assert=
+
+   `((t_n (r7rs (lambda (c)
+                  (and (char? c)
+                       (char-numeric? c)))))
+     (t_4 (seq uid_1 uid_2 uid_3))
+     (uid_1 (= #\3))
+     (uid_2 (= #\4))
+     (uid_3 (= #\3)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))

@@ -29,21 +29,42 @@
             (loop (+ index 1))
             prefix))))
 
-  (define char-nocase?
+  (define nocase?
     '(lambda (c)
-       (and (char-alphabetic? c)
+       (and (char? c)
+            (char-alphabetic? c)
             (not (char-upper-case? c))
             (not (char-lower-case? c)))))
+
+  (define upper-case?
+    `(lambda (c)
+       (and (char? c)
+            (char-upper-case? c))))
+
+  (define lower-case?
+    `(lambda (c)
+       (and (char? c)
+            (char-lower-case? c))))
+
+  (define numeric?
+    `(lambda (c)
+       (and (char? c)
+            (char-numeric? c))))
+
+  (define whitespace?
+    `(lambda (c)
+       (and (char? c)
+            (char-whitespace? c))))
 
   (define model
     `((any (or alphanum whitespace))
       (alphanum (or numeric alphabetic))
       (alphabetic (or upcase lowercase nocase))
-      (upcase (r7rs char-upper-case?))
-      (lowercase (r7rs char-lower-case?))
-      (nocase (r7rs ,char-nocase?))
-      (numeric (r7rs char-numeric?))
-      (whitespace (r7rs char-whitespace?))))
+      (upcase (r7rs ,upper-case?))
+      (lowercase (r7rs ,lower-case?))
+      (nocase (r7rs ,nocase?))
+      (numeric (r7rs ,numeric?))
+      (whitespace (r7rs ,whitespace?))))
 
   (define (parse-token-pair p)
     (define-pair (name value) p)

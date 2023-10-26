@@ -29,9 +29,7 @@
 
         (loop predicate)))
 
-     ((or (equal? type 'or)
-          (equal? type 'seq))
-
+     ((equal? type 'or)
       (apply
        append
        (map loop args)))
@@ -40,6 +38,9 @@
       (list-fold/semigroup
        list-intersect/order-independent
        (map loop args)))
+
+     ((equal? type 'seq)
+      (list (map loop args)))
 
      ((equal? type 'r7rs)
       (raisu* :from "labelinglogic:model:calculate-biggest-universe"

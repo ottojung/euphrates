@@ -19,6 +19,7 @@
           _
           and
           begin
+          char?
           define
           lambda
           let

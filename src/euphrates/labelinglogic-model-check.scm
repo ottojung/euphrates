@@ -11,9 +11,6 @@
   (unless (list? model)
     (fail-model-check "must be a list" (list model)))
 
-  (when (null? model)
-    (fail-model-check "must be non-empty" (list model)))
-
   (define (check-if-r7rs-code x)
     (when (symbol? x)
       (unless (procedure? (eval x (environment '(scheme base) '(scheme char))))

@@ -13,7 +13,6 @@
           define
           lambda
           let
-          list
           quote))
   (import (only (scheme eval) environment eval))
   (cond-expand
