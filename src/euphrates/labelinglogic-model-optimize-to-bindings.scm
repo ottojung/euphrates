@@ -43,6 +43,7 @@
                    (is-binding? b-class)
                    (equal? expr b-predicate)
                    b-class))
+
             expr opt-model)))
        opt-model))
 

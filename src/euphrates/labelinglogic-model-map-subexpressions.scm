@@ -13,12 +13,20 @@
          (define args (labelinglogic:expression:args expr))
 
          (cond
-          ((member type (list 'or 'and 'not))
+          ((member type (list 'or 'and 'not 'seq))
            (initialized-fun
             (cons type (map loop args))))
 
+          ((member type (list '= 'constant 'r7rs))
+           (initialized-fun expr))
+
           (else
-           (initialized-fun expr)))))
+           (raisu* :from "labelinglogic:model:map-subexpressions"
+                   :type 'unknown-expr-type
+                   :message (stringf "Expression type ~s not recognized"
+                                     (~a type))
+                   :args (list type expr))))))
+
 
      (labelinglogic:binding:make class new))
 
