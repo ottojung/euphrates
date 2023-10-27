@@ -20,26 +20,7 @@
 
     #t)
 
-  (for-each
-   (lambda (model-component)
-     (unless (list? model-component)
-       (fail-model-check "element must be a list" (list model-component)))
-
-     (define expected-length 2)
-
-     (unless (list-length= expected-length model-component)
-       (fail-model-check
-        (stringf "element must have length = ~s" expected-length)
-        (list model-component)))
-
-     (define-tuple (class predicate) model-component)
-
-     (unless (symbol? class)
-       (fail-model-check "element class must be a symbol" (list class model-component)))
-
-     (labelinglogic:expression:check predicate))
-
-   model)
+  (for-each labelinglogic:binding:check model)
 
   (define classes/s
     (list->hashset (map car model)))

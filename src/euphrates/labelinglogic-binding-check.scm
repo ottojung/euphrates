@@ -19,21 +19,12 @@
   (unless (or (symbol? name)
               (unique-identifier? name))
     (raisu* :from "labelinglogic"
-            :type 'bad-expr
+            :type 'bad-binding-class
             :message
             (stringf "Binding name in labelinglogic must be a symbol or a ~s, but was not"
                      (~a (quote unique-identifier?)))
             :args (list name binding)))
 
   (labelinglogic:expression:check expr)
-
-  (define expr-type
-    (labelinglogic:expression:type expr))
-
-  (unless (member expr-type (list 'or 'and 'seq 'constant '=))
-    (raisu* :from "labelinglogic"
-            :type 'bad-expr
-            :message "Binding in labelinglogic must evaluate refer a constant or a singleton set"
-            :args (list expr binding)))
 
   )

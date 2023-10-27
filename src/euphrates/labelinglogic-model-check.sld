@@ -13,13 +13,11 @@
           hashset-has?
           list->hashset))
   (import
-    (only (euphrates labelinglogic-expression-check)
-          labelinglogic:expression:check))
+    (only (euphrates labelinglogic-binding-check)
+          labelinglogic:binding:check))
   (import
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))
-  (import
-    (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
