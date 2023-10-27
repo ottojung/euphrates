@@ -19,17 +19,17 @@
   (define (bigloop model0)
     (define sugar-model
       (labelinglogic:model:map-expressions
-       labelinglogic:expression:sugarify
+       (const labelinglogic:expression:sugarify)
        model0))
 
     (define combined-exprs-model
       (labelinglogic:model:map-expressions
-       labelinglogic:expression:combine-recursively
+       (const labelinglogic:expression:combine-recursively)
        sugar-model))
 
     (define opt-model
       (labelinglogic:model:map-expressions
-       labelinglogic:expression:optimize
+       (const labelinglogic:expression:optimize)
        combined-exprs-model))
 
     (define referenced-model

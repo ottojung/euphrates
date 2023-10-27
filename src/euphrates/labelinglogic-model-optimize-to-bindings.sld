@@ -6,6 +6,7 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
+  (import (only (euphrates const) const))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import

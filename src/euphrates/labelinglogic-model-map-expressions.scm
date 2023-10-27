@@ -5,6 +5,6 @@
   (map
    (lambda (model-component)
      (define-tuple (class predicate) model-component)
-     (define new (fun predicate))
+     (define new ((fun class predicate) predicate))
      (labelinglogic:binding:make class new))
    model))
