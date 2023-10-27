@@ -849,6 +849,9 @@
     (only (euphrates labelinglogic-model-rename-constants)
           labelinglogic:model:rename-constants))
   (import
+    (only (euphrates labelinglogic-model-replace-constants)
+          labelinglogic:model:replace-constants))
+  (import
     (only (euphrates labelinglogic)
           labelinglogic:init))
   (import (only (euphrates lazy-monad) lazy-monad))
