@@ -15,7 +15,7 @@
   (with-unique-identifier-context
    :existing-names all-taken-names
 
-   (labelinglogic:model:replace-constants
+   (labelinglogic:model:rename-constants
     model
     (lambda (constant)
       (if (unique-identifier? constant)

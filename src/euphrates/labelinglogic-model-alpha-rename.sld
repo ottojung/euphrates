@@ -7,8 +7,8 @@
   (import
     (only (euphrates hashset) hashset->list hashset?))
   (import
-    (only (euphrates labelinglogic-model-replace-constants)
-          labelinglogic:model:replace-constants))
+    (only (euphrates labelinglogic-model-rename-constants)
+          labelinglogic:model:rename-constants))
   (import
     (only (euphrates unique-identifier-to-symbol)
           unique-identifier->symbol))

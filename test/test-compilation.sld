@@ -846,8 +846,8 @@
             labelinglogic-model-reduce-to-nonleafs)
           labelinglogic:model:reduce-to-nonleafs))
   (import
-    (only (euphrates labelinglogic-model-replace-constants)
-          labelinglogic:model:replace-constants))
+    (only (euphrates labelinglogic-model-rename-constants)
+          labelinglogic:model:rename-constants))
   (import
     (only (euphrates labelinglogic)
           labelinglogic:init))
