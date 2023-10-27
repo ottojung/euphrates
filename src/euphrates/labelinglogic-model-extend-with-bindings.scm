@@ -101,7 +101,7 @@
             target-predicate)))
 
     (labelinglogic:expression:replace-constants
-     model replacer))
+     replacer model))
 
   (define transitive-model
     (apply-until-fixpoint

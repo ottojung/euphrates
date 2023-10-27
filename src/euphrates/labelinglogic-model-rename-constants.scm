@@ -30,5 +30,5 @@
      (define-tuple (class predicate) model-component)
      (list (cached-renamer class)
            (labelinglogic:expression:replace-constants
-            predicate cached-renamer)))
+            cached-renamer predicate)))
    model))
