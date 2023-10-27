@@ -92,15 +92,16 @@
                    :args (list expr:type binding))))))
 
   (define (connect-transitive-model-edges model)
-    (define (replacer constant)
-      (if (is-binding? constant)
-          constant
-          (let ()
-            (define target-component (assoc constant model))
-            (define-tuple (target-class target-predicate) target-component)
-            target-predicate)))
+    (define (replacer class)
+      (lambda (constant)
+        (if (is-binding? constant)
+            constant
+            (let ()
+              (define target-component (assoc constant model))
+              (define-tuple (target-class target-predicate) target-component)
+              target-predicate))))
 
-    (labelinglogic:expression:replace-constants
+    (labelinglogic:model:replace-constants
      replacer model))
 
   (define transitive-model

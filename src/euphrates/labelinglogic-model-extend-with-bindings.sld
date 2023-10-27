@@ -21,10 +21,6 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates
-            labelinglogic-expression-replace-constants)
-          labelinglogic:expression:replace-constants))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -38,6 +34,9 @@
   (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
+  (import
+    (only (euphrates labelinglogic-model-replace-constants)
+          labelinglogic:model:replace-constants))
   (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))

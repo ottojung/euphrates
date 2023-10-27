@@ -8,6 +8,9 @@
           hashmap-set!
           make-hashmap))
   (import
+    (only (euphrates labelinglogic-expression-check)
+          labelinglogic:expression:check))
+  (import
     (only (euphrates
             labelinglogic-expression-replace-constants)
           labelinglogic:expression:replace-constants))

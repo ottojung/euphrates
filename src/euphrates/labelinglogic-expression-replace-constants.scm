@@ -12,6 +12,7 @@
     (if (equal? existing default-key)
         (let ()
           (define new (replacer-fun constant))
+          (labelinglogic:expression:check new)
           (hashmap-set! memory constant new)
           new)
         existing))
