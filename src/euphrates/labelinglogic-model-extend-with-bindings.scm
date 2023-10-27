@@ -9,8 +9,32 @@
   (define (is-binding? name)
     (hashset-has? bindings-set name))
 
+  (define renamings
+    (let ()
+      (define H (make-hashmap))
+      (for-each
+       (lambda (model-component)
+         (define-tuple (class predicate) model-component)
+         (define type (labelinglogic:expression:type predicate))
+         (when (equal? type 'constant)
+           (hashmap-set! H predicate class)))
+       bindings)
+      H))
+
+  (define replaced-model
+    (labelinglogic:model:replace-constants
+     (lambda (class)
+       (lambda (constant)
+         (define renamed
+           (hashmap-ref renamings constant #f))
+         (if (and renamed (not (equal? renamed class)))
+             renamed
+             constant ;; in the renaming thingy
+             )))
+     model))
+
   (define extended-model
-    (append model bindings))
+    (append replaced-model bindings))
 
   (define initial-names-set
     (list->hashset

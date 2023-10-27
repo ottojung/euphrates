@@ -234,7 +234,7 @@
      (t_m (= #\m))
      (t_a (or uid_1 t_m))
      (t_n (or t_0 t_1 t_2 t_3 t_4 t_5 t_6 t_7 t_8 uid_2))
-     (t_x (or uid_3 t_m t_0 t_1 t_2 t_3 t_4 t_5 t_6 t_7 t_8))
+     (t_x (or t_a t_n))
      (uid_1 (r7rs (lambda (c)
                     (or (char-upper-case? c)
                         (char-lower-case? c)
@@ -242,15 +242,7 @@
                              (char-alphabetic? c)
                              (not (char-upper-case? c))
                              (not (char-lower-case? c)))))))
-     (uid_2 (r7rs char-numeric?))
-     (uid_3 (r7rs (lambda (c)
-                    (or (char-upper-case? c)
-                        (char-lower-case? c)
-                        (and (char? c)
-                             (char-alphabetic? c)
-                             (not (char-upper-case? c))
-                             (not (char-lower-case? c)))
-                        (char-numeric? c))))))
+     (uid_2 (r7rs char-numeric?)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init

@@ -11,6 +11,11 @@
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates hashset)
           hashset-has?
           list->hashset))
@@ -62,17 +67,20 @@
           define
           else
           equal?
+          for-each
           if
           lambda
           let
           list
           map
           member
+          not
           null?
           or
           quasiquote
           quote
-          unquote))
+          unquote
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))
