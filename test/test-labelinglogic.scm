@@ -436,3 +436,57 @@
   (assert= universe '(3 4))
   )
 
+
+
+
+
+(let ()
+  (define model
+    (labelinglogic:model:alpha-rename
+     '() (labelinglogic:init
+          '((a (or (= 3) (= 4) (= 3)))
+            (b (or (= 5) (= 3) (= 4))))
+          `((c (tuple a b))))))
+
+  (define universe
+    (labelinglogic:model:calculate-biggest-universe/typed
+     model 'c))
+
+  (assert=
+   universe
+   `(#(tuple 3 5)
+     #(tuple 3 3)
+     #(tuple 3 4)
+     #(tuple 4 5)
+     #(tuple 4 3)
+     #(tuple 4 4)))
+
+  )
+
+
+
+
+(let ()
+  (define model
+    (labelinglogic:model:alpha-rename
+     '() (labelinglogic:init
+          '((a (or (= 3) (= 4)))
+            (b (or (= 5) (= 3))))
+          `((c (tuple a b a))))))
+
+  (define universe
+    (labelinglogic:model:calculate-biggest-universe/typed
+     model 'c))
+
+  (assert=
+   universe
+   `(#(tuple 3 5 3)
+     #(tuple 3 5 4)
+     #(tuple 3 3 3)
+     #(tuple 3 3 4)
+     #(tuple 4 5 3)
+     #(tuple 4 5 4)
+     #(tuple 4 3 3)
+     #(tuple 4 3 4)))
+
+  )

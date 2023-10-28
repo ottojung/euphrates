@@ -750,6 +750,16 @@
     (only (euphrates labelinglogic-bindings-check)
           labelinglogic:bindings:check))
   (import
+    (only (euphrates labelinglogic-citizen-r7rs)
+          labelinglogic:citizen:r7rs:code
+          labelinglogic:citizen:r7rs:make
+          labelinglogic:citizen:r7rs?))
+  (import
+    (only (euphrates labelinglogic-citizen-tuple)
+          labelinglogic:citizen:members
+          labelinglogic:citizen:tuple:make
+          labelinglogic:citizen:tuple?))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -813,6 +823,10 @@
   (import
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
+  (import
+    (only (euphrates
+            labelinglogic-model-calculate-biggest-universe-typed)
+          labelinglogic:model:calculate-biggest-universe/typed))
   (import
     (only (euphrates
             labelinglogic-model-calculate-biggest-universe)
