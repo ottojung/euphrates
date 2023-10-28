@@ -38,7 +38,7 @@
   (define output
     (collect lexer-iterator))
 
-  ;; nochecking ;; DEBUG
+  ;; NOTE: this is too specific to test. Let the parser test generated grammar.
   ;; (assert= expected-additional-rules additional-grammar-rules)
 
   (assert= (length output) (length expected-output))
