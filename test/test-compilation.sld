@@ -911,6 +911,9 @@
     (only (euphrates list-find-first)
           list-find-first))
   (import
+    (only (euphrates list-fold-right-semigroup)
+          list-fold/right/semigroup))
+  (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import
