@@ -18,21 +18,6 @@
   (define categories
     (parselynn/singlechar-struct:categories this))
 
-  (define category-whitespace
-    (assq-or 'whitespace categories #f))
-  (define category-numeric
-    (assq-or 'numeric categories #f))
-  (define category-nocase
-    (assq-or 'nocase categories #f))
-  (define category-lowercase
-    (assq-or 'lowercase categories #f))
-  (define category-upcase
-    (assq-or 'upcase categories #f))
-  (define category-any
-    (assq-or 'any categories #f))
-  (define most-default-category
-    (assq-or 'most-default categories #f))
-
   (define offset 0)
   (define linenum 0)
   (define colnum 0)
@@ -87,24 +72,24 @@
       (make-source-location '*stdin* linenum colnum offset 1))
     (make-lexical-token category location c))
 
+  (define desc
+    (labelinglogic:make-nondet-descriminator categories))
+
+  (define (desc1 input)
+    (define all (desc input))
+    (and (not (null? all)) (car all)))
+
   (define (process-next . _)
     (define c (read-next-char))
     (if (eof-object? c) '*eoi*
         (let ()
           (define category
             (or (hashmap-ref singleton-map c #f)
-                (and (char-whitespace? c) category-whitespace)
-                (and (char-numeric? c) category-numeric)
-                (and (char-nocase-alphabetic? c) category-nocase)
-                (and (char-lower-case? c) category-lowercase)
-                (and (char-upper-case? c) category-upcase)
-                category-any))
-
-          (when (eq? category most-default-category)
-            (raisu* :from "make-parselynn/irregex-factory"
-                    :type 'unrecognized-character
-                    :message "Encountered a character that is not handled by any of the grammar rules"
-                    :args (list c)))
+                (desc1 c)
+                (raisu* :from "make-parselynn/irregex-factory"
+                        :type 'unrecognized-character
+                        :message "Encountered a character that is not handled by any of the grammar rules"
+                        :args (list c))))
 
           (wrap-return c category))))
 

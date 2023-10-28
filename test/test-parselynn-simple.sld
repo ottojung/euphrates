@@ -5,14 +5,14 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
+    (only (euphrates list-collapse) list-collapse))
+  (import
     (only (euphrates
             parselynn-simple-run-with-error-handler)
           parselynn/simple:run/with-error-handler))
   (import
     (only (euphrates parselynn-simple)
           parselynn/simple))
-  (import
-    (only (euphrates list-collapse) list-collapse))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import

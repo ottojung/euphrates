@@ -3,11 +3,11 @@
   (euphrates
     parselynn-singlechar-result-as-iterator)
   (export parselynn/singlechar-result:as-iterator)
-  (import (only (euphrates assq-or) assq-or))
-  (import
-    (only (euphrates char-nocase-alphabetic-huh)
-          char-nocase-alphabetic?))
   (import (only (euphrates hashmap) hashmap-ref))
+  (import
+    (only (euphrates
+            labelinglogic-make-nondet-descriminator)
+          labelinglogic:make-nondet-descriminator))
   (import
     (only (euphrates parselynn-singlechar-result-struct)
           parselynn/singlechar-result-struct:input
@@ -30,17 +30,19 @@
           _
           and
           begin
+          car
           cond
           define
           else
           eof-object
           eof-object?
-          eq?
           equal?
           if
           lambda
           let
           list
+          not
+          null?
           or
           port?
           quote
@@ -52,15 +54,6 @@
           string?
           unless
           when))
-  (import
-    (only (scheme char)
-          char-lower-case?
-          char-numeric?
-          char-upper-case?
-          char-whitespace?))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) any)))
-    (else (import (only (srfi 1) any))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -28,13 +28,6 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
-    (only (euphrates
-            parselynn-singlechar-additional-grammar-rules)
-          parselynn/singlechar:additional-grammar-rules))
-  (import
-    (only (euphrates parselynn-singlechar)
-          make-parselynn/singlechar))
-  (import
     (only (euphrates parselynn-simple-check-options)
           parselynn/simple-check-options))
   (import
@@ -50,7 +43,13 @@
     (only (euphrates parselynn-simple-struct)
           make-parselynn/simple-struct))
   (import
-    (only (euphrates parselynn) parselynn))
+    (only (euphrates
+            parselynn-singlechar-additional-grammar-rules)
+          parselynn/singlechar:additional-grammar-rules))
+  (import
+    (only (euphrates parselynn-singlechar)
+          make-parselynn/singlechar))
+  (import (only (euphrates parselynn) parselynn))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates semis-ebnf-tree-to-ebnf-tree)
