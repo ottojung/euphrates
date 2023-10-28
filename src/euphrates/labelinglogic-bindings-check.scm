@@ -49,7 +49,7 @@
 
      (unless (null? undefined-constants)
        (raisu* :from "labelinglogic"
-               :type 'bad-expr
+               :type 'undefined-reference-in-binding
                :message "Binding references undefined class."
                :args (list expr binding undefined-constants)))
 

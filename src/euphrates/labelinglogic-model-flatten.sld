@@ -2,14 +2,24 @@
 (define-library
   (euphrates labelinglogic-model-flatten)
   (export labelinglogic:model:flatten)
+  (import (only (euphrates const) const))
   (import
-    (only (euphrates define-tuple) define-tuple))
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
+  (import
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic:binding:make))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates labelinglogic-model-map-expressions)
+          labelinglogic:model:map-expressions))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -32,7 +42,6 @@
           define
           else
           equal?
-          lambda
           let
           list
           map
@@ -40,7 +49,8 @@
           not
           or
           quote
-          reverse))
+          reverse
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -327,7 +327,7 @@
 
   (define bindings
     `((t_n numeric)
-      (t_4  (seq (= #\3) (= #\4) (= #\3)))))
+      (t_4  (seq (= #\3) (= #\4) (= #\5)))))
 
   (assert=
 
@@ -337,7 +337,31 @@
      (t_4 (seq uid_1 uid_2 uid_3))
      (uid_1 (= #\3))
      (uid_2 (= #\4))
-     (uid_3 (= #\3)))
+     (uid_3 (= #\5)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
+
+
+
+
+(let ()
+  (define model
+    `((numeric (r7rs ,numeric?))))
+
+  (define bindings
+    `((t_n numeric)
+      (t_4  (seq (= #\3) (= #\4) (= #\3)))))
+
+  (assert=
+
+   `((t_n (r7rs (lambda (c)
+                  (and (char? c)
+                       (char-numeric? c)))))
+     (t_4 (seq uid_1 uid_2 uid_1))
+     (uid_1 (= #\3))
+     (uid_2 (= #\4)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init

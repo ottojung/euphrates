@@ -4,8 +4,6 @@
 (define (labelinglogic:init
          model bindings)
 
-  (define most-default-class #f)
-
   (labelinglogic:model:check model)
 
   (define classes/s

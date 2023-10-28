@@ -16,6 +16,15 @@
        (lambda (model-component)
          (define-tuple (class predicate) model-component)
          (define type (labelinglogic:expression:type predicate))
+         (define existing (hashmap-ref H predicate #f))
+
+         (when existing
+           (raisu* :from "labelinglogic:model:extend-with-bindings"
+                   :type 'duplicated-token
+                   :message (stringf "Two names ~s for the same expression ~s"
+                                     (list existing class) (list predicate))
+                   :args (list class predicate existing)))
+
          (when (equal? type 'constant)
            (hashmap-set! H predicate class)))
        bindings)
