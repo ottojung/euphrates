@@ -304,12 +304,12 @@
 
   (define bindings
     `((t_n numeric)
-      (t_4  (seq (= #\a) (= #\b) (= #\c)))))
+      (t_4  (tuple (= #\a) (= #\b) (= #\c)))))
 
   (assert=
 
    `((t_n (r7rs ,numeric?))
-     (t_4 (seq uid_1 uid_2 uid_3))
+     (t_4 (tuple uid_1 uid_2 uid_3))
      (uid_1 (= #\a))
      (uid_2 (= #\b))
      (uid_3 (= #\c)))
@@ -327,14 +327,14 @@
 
   (define bindings
     `((t_n numeric)
-      (t_4  (seq (= #\3) (= #\4) (= #\5)))))
+      (t_4  (tuple (= #\3) (= #\4) (= #\5)))))
 
   (assert=
 
    `((t_n (r7rs (lambda (c)
                   (and (char? c)
                        (char-numeric? c)))))
-     (t_4 (seq uid_1 uid_2 uid_3))
+     (t_4 (tuple uid_1 uid_2 uid_3))
      (uid_1 (= #\3))
      (uid_2 (= #\4))
      (uid_3 (= #\5)))
@@ -352,17 +352,87 @@
 
   (define bindings
     `((t_n numeric)
-      (t_4  (seq (= #\3) (= #\4) (= #\3)))))
+      (t_4  (tuple (= #\3) (= #\4) (= #\3)))))
 
   (assert=
 
    `((t_n (r7rs (lambda (c)
                   (and (char? c)
                        (char-numeric? c)))))
-     (t_4 (seq uid_1 uid_2 uid_1))
+     (t_4 (tuple uid_1 uid_2 uid_1))
      (uid_1 (= #\3))
      (uid_2 (= #\4)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
+
+
+
+
+
+(let ()
+  (define model
+    `((numeric (r7rs ,numeric?))))
+
+  (define bindings
+    `((t_n numeric)
+      (t_4  (or (= #\3) (= #\4) (= #\3)))))
+
+  (define opt
+    (labelinglogic:model:alpha-rename
+     '() (labelinglogic:init
+          model bindings)))
+
+  (define universe
+    (labelinglogic:model:calculate-biggest-universe
+     opt 't_4))
+
+  (assert= universe '(#\3 #\4))
+  )
+
+
+(let ()
+  (define model
+    `((a (or (= 3) (= 4) (= 3)))
+      (b (or (= 5) (= 3) (= 4)))))
+
+  (define universe
+    (labelinglogic:model:calculate-biggest-universe
+     model '(or a b)))
+
+  (assert= universe '(3 4 5))
+  )
+
+
+(let ()
+  (define model
+    (labelinglogic:model:alpha-rename
+     '() (labelinglogic:init
+          '()
+          `((a (or (= 3) (= 4) (= 3)))
+            (b (or (= 5) (= 3) (= 4)))))))
+
+  (define universe
+    (labelinglogic:model:calculate-biggest-universe
+     model '(and a b)))
+
+  (assert= universe '(3 4))
+  )
+
+
+(let ()
+  (define model
+    (labelinglogic:model:alpha-rename
+     '() (labelinglogic:init
+          '((a (or (= 3) (= 4) (= 3)))
+            (b (or (= 5) (= 3) (= 4))))
+          `((c (and a b))))))
+
+  (define universe
+    (labelinglogic:model:calculate-biggest-universe
+     model 'c))
+
+  (assert= universe '(3 4))
+  )
+

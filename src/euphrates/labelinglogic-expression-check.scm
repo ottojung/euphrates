@@ -24,7 +24,7 @@
    ((equal? 'or type) 'ok) ;; any arity is ok.
    ((equal? 'and type) 'ok) ;; any arity is ok.
 
-   ((equal? 'seq type)
+   ((equal? 'tuple type)
     (unless (list-length=<? 1 args)
       (fail-expression-check
        (stringf

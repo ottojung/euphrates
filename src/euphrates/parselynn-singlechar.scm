@@ -52,7 +52,7 @@
           (list '= value))
 
          ((string? value)
-          (cons 'seq (map loop (string->list value))))
+          (cons 'tuple (map loop (string->list value))))
 
          ((equal? 'class (car value))
           (cadr value))
@@ -105,7 +105,7 @@
       ((equal? type 'or)
        (stack-push! additional-grammar-rules/singletons/stack
                     (cons class (map list args))))
-      ((equal? type 'seq)
+      ((equal? type 'tuple)
        (stack-push! additional-grammar-rules/singletons/stack
                     (cons class (list args))))
       (else

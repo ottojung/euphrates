@@ -20,7 +20,7 @@
     (list 'r7rs `(lambda (c) (or (,left-e c) (,right-e c)))))
 
   ;; (define (combine-r7rs left right)
-  ;;   (list 'seq left right))
+  ;;   (list 'tuple left right))
 
   (define combined
     (apply

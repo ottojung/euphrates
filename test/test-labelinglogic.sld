@@ -8,6 +8,10 @@
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
+    (only (euphrates
+            labelinglogic-model-calculate-biggest-universe)
+          labelinglogic:model:calculate-biggest-universe))
+  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import

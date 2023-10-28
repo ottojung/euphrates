@@ -39,7 +39,7 @@
    ((equal? type 'or)
     (labelinglogic:expression:optimize/or expr))
 
-   ((member type (list 'and 'seq))
+   ((member type (list 'and 'tuple))
     (labelinglogic:expression:optimize/singletons
      (labelinglogic:expression:optimize/recurse-on-args expr)))
 

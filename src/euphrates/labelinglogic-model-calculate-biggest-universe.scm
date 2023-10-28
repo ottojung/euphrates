@@ -6,51 +6,52 @@
 (define (labelinglogic:model:calculate-biggest-universe
          model expression)
 
-  (let loop ((expression expression))
+  (list-deduplicate
+   (let loop ((expression expression))
 
-    (define type (labelinglogic:expression:type expression))
-    (define args (labelinglogic:expression:args expression))
+     (define type (labelinglogic:expression:type expression))
+     (define args (labelinglogic:expression:args expression))
 
-    (cond
+     (cond
 
-     ((equal? type '=)
-      (list (car args)))
+      ((equal? type '=)
+       (list (car args)))
 
-     ((equal? type 'constant)
-      (let ()
-        (define target (assoc (car args) model))
-        (unless target
-          (raisu* :from "labelinglogic:model:calculate-biggest-universe"
-                  :type 'undefined-reference
-                  :message "Pointer to undefined model-component"
-                  :args (list expression)))
+      ((equal? type 'constant)
+       (let ()
+         (define target (assoc (car args) model))
+         (unless target
+           (raisu* :from "labelinglogic:model:calculate-biggest-universe"
+                   :type 'undefined-reference
+                   :message "Pointer to undefined model-component"
+                   :args (list expression)))
 
-        (define-tuple (class predicate) target)
+         (define-tuple (class predicate) target)
 
-        (loop predicate)))
+         (loop predicate)))
 
-     ((equal? type 'or)
-      (apply
-       append
-       (map loop args)))
+      ((equal? type 'or)
+       (apply
+        append
+        (map loop args)))
 
-     ((equal? type 'and)
-      (list-fold/semigroup
-       list-intersect/order-independent
-       (map loop args)))
+      ((equal? type 'and)
+       (list-fold/semigroup
+        list-intersect/order-independent
+        (map loop args)))
 
-     ((equal? type 'seq)
-      (list (map loop args)))
+      ((equal? type 'tuple)
+       (list (map loop args)))
 
-     ((equal? type 'r7rs)
-      (raisu* :from "labelinglogic:model:calculate-biggest-universe"
-              :type 'no-biggest-universe
-              :message "Expression does not define a close universe"
-              :args (list expression)))
+      ((equal? type 'r7rs)
+       (raisu* :from "labelinglogic:model:calculate-biggest-universe"
+               :type 'no-biggest-universe
+               :message "Expression does not define a close universe"
+               :args (list expression)))
 
-     (else
-      (raisu* :from "labelinglogic:model:calculate-biggest-universe"
-              :type 'unknown-expr-type
-              :message (stringf "Expression type ~s not recognized"
-                                (~a type))
-              :args (list type expression))))))
+      (else
+       (raisu* :from "labelinglogic:model:calculate-biggest-universe"
+               :type 'unknown-expr-type
+               :message (stringf "Expression type ~s not recognized"
+                                 (~a type))
+               :args (list type expression)))))))

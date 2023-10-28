@@ -13,6 +13,9 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates list-deduplicate)
+          list-deduplicate))
+  (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import

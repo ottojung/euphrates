@@ -8,7 +8,7 @@
       (labelinglogic:expression:type expr))
 
     (cond
-     ((member type (list 'or 'and 'seq))
+     ((member type (list 'or 'and 'tuple))
       (let ()
         (define linearized
           (map

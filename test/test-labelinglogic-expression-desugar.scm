@@ -56,18 +56,18 @@
 ;; Test with nested operations of different types
 (let ()
   (assert=
-   '(seq a (seq b (seq (and c d) (seq (or f g) (seq h i)))))
+   '(tuple a (tuple b (tuple (and c d) (tuple (or f g) (tuple h i)))))
    (labelinglogic:expression:desugar
-    '(seq a b (and c d) (or f g) h i))))
+    '(tuple a b (and c d) (or f g) h i))))
 
 (let ()
   (assert=
-   '(seq a (seq b (seq (and c (and d e)) (seq (or f g) (seq h i)))))
+   '(tuple a (tuple b (tuple (and c (and d e)) (tuple (or f g) (tuple h i)))))
    (labelinglogic:expression:desugar
-    '(seq a b (and c d e) (or f g) h i))))
+    '(tuple a b (and c d e) (or f g) h i))))
 
 (let ()
   (assert=
-   `(and a (and b (and (seq c (seq d e)) (and (or f g) (and h i)))))
+   `(and a (and b (and (tuple c (tuple d e)) (and (or f g) (and h i)))))
    (labelinglogic:expression:desugar
-    '(and a b (seq c d e) (or f g) h i))))
+    '(and a b (tuple c d e) (or f g) h i))))

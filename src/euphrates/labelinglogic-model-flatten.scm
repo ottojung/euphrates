@@ -32,7 +32,7 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((member type (list 'or 'and 'seq 'not))
+     ((member type (list 'or 'and 'tuple 'not))
       (cons type (map loop-expr args)))
 
      ((member type (list '= 'constant 'r7rs))
