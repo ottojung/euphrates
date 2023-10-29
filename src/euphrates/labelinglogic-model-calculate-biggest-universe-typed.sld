@@ -10,9 +10,6 @@
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
-    (only (euphrates labelinglogic-citizen-r7rs)
-          labelinglogic:citizen:r7rs:make))
-  (import
     (only (euphrates labelinglogic-citizen-tuple)
           labelinglogic:citizen:tuple:make))
   (import
@@ -54,6 +51,7 @@
           let
           list
           map
+          member
           or
           quote
           reverse

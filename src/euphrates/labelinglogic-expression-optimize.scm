@@ -12,22 +12,23 @@
   (define args (labelinglogic:expression:args expr))
   (cons type (map labelinglogic:expression:optimize args)))
 
-(define (labelinglogic:expression:optimize/or expr)
+(define (labelinglogic:expression:optimize/and+or expr)
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (if (list-singleton? args)
-      (labelinglogic:expression:optimize (car args))
-       (let ()
-         (define rec
-           (map labelinglogic:expression:optimize args))
-         (define ded
-           (list-deduplicate rec))
+  (labelinglogic:expression:optimize/singletons
+   (let ()
+     (define rec
+       (map labelinglogic:expression:optimize args))
 
-         (if (= (length rec) (length ded))
-             (cons type ded)
-             (labelinglogic:expression:optimize
-              (cons type ded))))))
+     (define dedup
+       (list-deduplicate rec))
+
+     (define new
+       (labelinglogic:expression:make type dedup))
+
+     (if (= (length rec) (length dedup)) new
+         (labelinglogic:expression:optimize new)))))
 
 (define (labelinglogic:expression:optimize expr)
   (define type (labelinglogic:expression:type expr))
@@ -36,12 +37,15 @@
    ((equal? type 'r7rs)
     (labelinglogic:expression:optimize/r7rs expr))
 
-   ((equal? type 'or)
-    (labelinglogic:expression:optimize/or expr))
+   ((equal? type 'not)
+    (labelinglogic:expression:move-nots-down expr))
 
-   ((member type (list 'and 'tuple))
+   ((equal? type 'tuple)
     (labelinglogic:expression:optimize/singletons
      (labelinglogic:expression:optimize/recurse-on-args expr)))
+
+   ((member type (list 'and 'or))
+    (labelinglogic:expression:optimize/and+or expr))
 
    ((member type (list '= 'constant))
     expr)

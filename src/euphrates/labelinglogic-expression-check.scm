@@ -32,6 +32,14 @@
         (~a type))
        (list x))))
 
+   ((equal? 'not type)
+    (unless (list-length= 1 args)
+      (fail-expression-check
+       (stringf
+        "Expression of type ~s must have exactly 1 argument."
+        (~a type))
+       (list x))))
+
    ((equal? '= type)
     (unless (list-length= 1 args)
       (fail-expression-check

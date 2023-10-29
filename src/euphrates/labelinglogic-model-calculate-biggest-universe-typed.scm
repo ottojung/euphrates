@@ -4,62 +4,65 @@
 (define (labelinglogic:model:calculate-biggest-universe/typed
          model expression)
 
-  (let loop ((expression expression))
+  (let dloop ((expression expression))
+    ;; (define expression/d
+    ;;   (labelinglogic:expression:desugar expression))
 
-    (define type (labelinglogic:expression:type expression))
-    (define args (labelinglogic:expression:args expression))
+    (define expression/d expression)
 
-    (cond
+    (let loop ((expression expression/d))
 
-     ((equal? type '=)
-      (list (car args)))
+      (define type (labelinglogic:expression:type expression))
+      (define args (labelinglogic:expression:args expression))
 
-     ((equal? type 'constant)
-      (let ()
-        (define target (assoc (car args) model))
-        (unless target
-          (raisu* :from "labelinglogic:model:calculate-biggest-universe"
-                  :type 'undefined-reference
-                  :message "Pointer to undefined model-component"
-                  :args (list expression)))
+      (cond
 
-        (define-tuple (class predicate) target)
+       ((member type (list '= 'r7rs))
+        (list expression))
 
-        (loop predicate)))
+       ((equal? type 'constant)
+        (let ()
+          (define target (assoc (car args) model))
+          (unless target
+            (raisu* :from "labelinglogic:model:calculate-biggest-universe"
+                    :type 'undefined-reference
+                    :message "Pointer to undefined model-component"
+                    :args (list expression)))
 
-     ((equal? type 'or)
-      (list-deduplicate
-       (apply
-        append
-        (map loop args))))
+          (define-tuple (class predicate) target)
 
-     ((equal? type 'and)
-      (list-fold/semigroup
-       list-intersect/order-independent
-       (map loop args)))
+          (dloop predicate)))
 
-     ((equal? type 'tuple)
-      (let ()
-        (define rec (map loop args))
-        (define rev (reverse rec))
-        (define revp
-          (cons (map list (car rev))
-                (cdr rev)))
-        (define revrevp (reverse revp))
+       ((equal? type 'or)
+        (list-deduplicate
+         (apply
+          append
+          (map loop args))))
 
-        (define collected
-          (list-fold/right/semigroup
-           cartesian-product
-           revrevp))
+       ((equal? type 'and)
+        (list-fold/semigroup
+         list-intersect/order-independent
+         (map loop args)))
 
-        (map labelinglogic:citizen:tuple:make collected)))
+       ((equal? type 'tuple)
+        (let ()
+          (define rec (map loop args))
+          (define rev (reverse rec))
+          (define revp
+            (cons (map list (car rev))
+                  (cdr rev)))
+          (define revrevp (reverse revp))
 
-     ((equal? type 'r7rs)
-      (labelinglogic:citizen:r7rs:make (car args)))
+          (define collected
+            (list-fold/right/semigroup
+             cartesian-product
+             revrevp))
 
-     (else
-      (raisu* :from "labelinglogic:model:calculate-biggest-universe/typed"
-              :type 'unknown-expr-type
-              :message (stringf "Expression type ~s not recognized"
-                                (~a type))
-              :args (list type expression))))))
+          (map labelinglogic:citizen:tuple:make collected)))
+
+       (else
+        (raisu* :from "labelinglogic:model:calculate-biggest-universe/typed"
+                :type 'unknown-expr-type
+                :message (stringf "Expression type ~s not recognized"
+                                  (~a type))
+                :args (list type expression)))))))

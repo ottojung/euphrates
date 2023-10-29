@@ -1,23 +1,24 @@
 
 (define-library
-  (euphrates labelinglogic-expression-check)
-  (export labelinglogic:expression:check)
+  (euphrates
+    labelinglogic-expression-to-simplified-mod2-expression)
+  (export
+    labelinglogic:expression->simplified-mod2-expression)
+  (import
+    (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
-  (import
-    (only (euphrates list-length-eq) list-length=))
-  (import
-    (only (euphrates list-length-geq-q)
-          list-length=<?))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          *
+          +
           =
           and
           begin
@@ -25,16 +26,23 @@
           define
           else
           equal?
+          let
           list
-          list?
+          map
+          member
           not
           or
+          quasiquote
           quote
-          symbol?
-          unless))
+          unquote
+          unquote-splicing))
+  (cond-expand
+    (guile (import (only (srfi srfi-31) rec)))
+    (else (import (only (srfi 31) rec))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-check.scm")))
-    (else (include "labelinglogic-expression-check.scm"))))
+               "euphrates/labelinglogic-expression-to-simplified-mod2-expression.scm")))
+    (else (include
+            "labelinglogic-expression-to-simplified-mod2-expression.scm"))))
