@@ -42,7 +42,10 @@
            (labelinglogic:expression:make
             'or (cons current rest)))))))
 
-     ((member type (list '+ '= 'tuple 'r7rs 'constant))
+     ((equal? type 'tuple)
+      (cons 'tuple (map loop args)))
+
+     ((member type (list '+ '= 'r7rs 'constant))
       expr)
 
      (else
