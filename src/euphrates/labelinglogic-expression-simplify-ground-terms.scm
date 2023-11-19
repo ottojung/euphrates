@@ -48,7 +48,7 @@
    ((member type (list 'tuple 'not))
     (for-each ensure-ground args))
 
-   ((member type (list '= 'r7rs 'constant 'not 'tuple))
+   ((member type (list '= 'r7rs 'constant))
     expr)
 
    (else
