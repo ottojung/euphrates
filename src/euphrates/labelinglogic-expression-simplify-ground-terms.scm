@@ -82,7 +82,7 @@
              (member A-type (list '= 'r7rs 'tuple)))
 
         (if (equal? A-expr B-expr) A-expr
-            (labelinglogic:expression:make 'or '())))
+            expr))
 
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
