@@ -61,7 +61,7 @@
              (equal? B-type '=))
 
         (if (labelinglogic:expression:evaluate/r7rs A-expr (car B-args))
-            A-expr expr))
+            A-expr #f))
 
        ((and (equal? A-type '=)
              (equal? B-type 'r7rs))
