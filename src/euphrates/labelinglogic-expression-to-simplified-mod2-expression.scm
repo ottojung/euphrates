@@ -25,11 +25,11 @@
        ((equal? type 'or)
         (let ()
           (define-tuple (A B) args)
-          (define-values (A-1 B-1) (values (loop A) (loop B)))
+          (define-values (A2 B2) (values (loop A) (loop B)))
 
           (define A+B
             (labelinglogic:expression:simplify-ground-terms
-             (labelinglogic:expression:make 'xor A B)))
+             (labelinglogic:expression:make 'xor A2 B2)))
 
           
 
