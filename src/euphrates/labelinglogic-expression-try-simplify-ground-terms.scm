@@ -84,9 +84,9 @@
 
         (if (equal? A-expr B-expr)
             (labelinglogic:expression:make 'or '())
-            expr))
+            #f))
 
-       (else expr))))
+       (else #f))))
 
 
    (else
