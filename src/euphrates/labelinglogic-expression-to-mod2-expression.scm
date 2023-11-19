@@ -41,7 +41,7 @@
 
           (define B (loop (cadr args)))
           (define rest (cddr args))
-          (define current `(xor ,@A1 ,B (* ,A2 ,B)))
+          (define current `(xor ,@A1 ,B (and ,A2 ,B)))
           (loop
            (labelinglogic:expression:make
             'or (cons current rest)))))))

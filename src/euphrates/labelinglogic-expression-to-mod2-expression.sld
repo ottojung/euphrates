@@ -20,7 +20,6 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
-          *
           =
           and
           begin
