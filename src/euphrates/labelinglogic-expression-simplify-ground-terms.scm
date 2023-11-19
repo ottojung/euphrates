@@ -38,11 +38,13 @@
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
 
-       ((and (equal? A-type '=)
+       ((and (equal? A-type 'r7rs)
              (equal? B-type 'r7rs))
 
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
+
+       
 
    ((equal? type 'or)
     (let ()
