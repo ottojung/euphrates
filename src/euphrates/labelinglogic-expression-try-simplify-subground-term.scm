@@ -68,7 +68,10 @@
 
        ((and (equal? A-type '=)
              (equal? B-type 'r7rs))
-        (loop (list B-expr A-expr)))
+
+        (if (labelinglogic:expression:evaluate/r7rs B-expr (car A-args))
+            B-expr
+            (labelinglogic:expression:make 'xor args)))
 
        (else #f))))
 
