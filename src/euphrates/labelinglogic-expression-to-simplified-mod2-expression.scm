@@ -22,27 +22,9 @@
         `(+ 1 ,rec)))
 
      ((equal? type 'or)
-      (cond
-       ((equal? (length args) 0) '(+))
-       ((equal? (length args) 1) (loop (car args)))
-       (else
-        (let ()
-          (define-values (A1 A2)
-            (let ()
-              (define pre-A (car args))
-              (if (and (pair? pre-A)
-                       (equal? '+ (car pre-A)))
-                  (values (cdr pre-A) pre-A)
-                  (let ()
-                    (define rec (loop pre-A))
-                    (values (list rec) rec)))))
-
-          (define B (loop (cadr args)))
-          (define rest (cddr args))
-          (define current `(+ ,@A1 ,B (* ,A2 ,B)))
-          (loop
-           (labelinglogic:expression:make
-            'or (cons current rest)))))))
+      (let ()
+        (define-tuple (A B) args)
+        0))
 
      ((equal? type 'tuple)
       (cons 'tuple (map loop args)))
