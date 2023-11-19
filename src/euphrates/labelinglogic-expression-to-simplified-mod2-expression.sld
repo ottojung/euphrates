@@ -13,6 +13,13 @@
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
+    (only (euphrates
+            labelinglogic-expression-simplify-ground-terms)
+          labelinglogic:expression:simplify-ground-terms))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import (only (euphrates raisu-star) raisu*))

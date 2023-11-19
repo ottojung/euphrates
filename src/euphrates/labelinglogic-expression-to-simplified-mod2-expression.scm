@@ -26,9 +26,11 @@
         (let ()
           (define-tuple (A B) args)
 
-          ;; (define A+B
-          ;;   (labelinglogic:expression:simplify-ground-terms
-             
+          (define A+B
+            (labelinglogic:expression:simplify-ground-terms
+             (labelinglogic:expression:make 'xor A B)))
+
+          
 
           0))
 
