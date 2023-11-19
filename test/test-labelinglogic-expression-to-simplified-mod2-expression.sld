@@ -9,6 +9,10 @@
             labelinglogic-expression-to-mod2-expression)
           labelinglogic:expression->mod2-expression))
   (import
+    (only (euphrates
+            labelinglogic-expression-to-simplified-mod2-expression)
+          labelinglogic:expression->simplified-mod2-expression))
+  (import
     (only (scheme base)
           *
           +
