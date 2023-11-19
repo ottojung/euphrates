@@ -19,7 +19,7 @@
    ((equal? type 'tuple)
     (cons 'tuple (map loop args)))
 
-   ((member type (list '= 'r7rs 'constant 'not))
+   ((member type (list '= 'r7rs 'constant 'not 'tuple))
     expr)
 
    (else
