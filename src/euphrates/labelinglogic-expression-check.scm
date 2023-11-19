@@ -23,6 +23,7 @@
    ((equal? type 'constant) 'ok)
    ((equal? 'or type) 'ok) ;; any arity is ok.
    ((equal? 'and type) 'ok) ;; any arity is ok.
+   ((equal? 'xor type) 'ok) ;; any arity is ok.
 
    ((equal? 'tuple type)
     (unless (list-length=<? 1 args)
