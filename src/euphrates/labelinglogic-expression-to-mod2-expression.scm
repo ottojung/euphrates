@@ -20,8 +20,8 @@
         (labelinglogic:expression:make
          'xor
          (list
-          (labelinglogic:expression:make 'and '()))
-          rec)))
+          (labelinglogic:expression:make 'and '())
+          rec))))
 
      ((equal? type 'or)
       (cond
