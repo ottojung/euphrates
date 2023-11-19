@@ -3,12 +3,6 @@
   (test-labelinglogic-expression-to-simplified-mod2-expression)
   (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-throw) assert-throw))
-  (import
-    (only (euphrates
-            labelinglogic-expression-to-mod2-expression)
-          labelinglogic:expression->mod2-expression))
-  (import
     (only (euphrates
             labelinglogic-expression-to-simplified-mod2-expression)
           labelinglogic:expression->simplified-mod2-expression))
@@ -16,11 +10,9 @@
     (only (scheme base)
           *
           +
-          =
           and
           begin
           define
-          not
           or
           quote))
   (cond-expand
