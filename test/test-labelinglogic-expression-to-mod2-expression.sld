@@ -10,8 +10,6 @@
           labelinglogic:expression->mod2-expression))
   (import
     (only (scheme base)
-          *
-          +
           =
           and
           begin
