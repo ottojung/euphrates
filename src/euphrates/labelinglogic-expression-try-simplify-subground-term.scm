@@ -57,21 +57,21 @@
 
         (if (equal? A-expr B-expr)
             A-expr
-            (labelinglogic:expression:make 'xor args)))
+            #f))
 
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
 
         (if (labelinglogic:expression:evaluate/r7rs A-expr (car B-args))
             A-expr
-            (labelinglogic:expression:make 'xor args)))
+            #f))
 
        ((and (equal? A-type '=)
              (equal? B-type 'r7rs))
 
         (if (labelinglogic:expression:evaluate/r7rs B-expr (car A-args))
             B-expr
-            (labelinglogic:expression:make 'xor args)))
+            #f))
 
        (else #f))))
 
