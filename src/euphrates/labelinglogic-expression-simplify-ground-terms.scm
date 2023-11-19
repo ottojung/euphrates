@@ -27,7 +27,9 @@
       (define-tuple (A-expr B-expr) args)
 
       (define A-type (labelinglogic:expression:type A-expr))
-      (define A-args (labelinglogic:expression:args B-expr))
+      (define A-args (labelinglogic:expression:args A-expr))
+      (define B-type (labelinglogic:expression:type B-expr))
+      (define B-args (labelinglogic:expression:args B-expr))
 
       
 
