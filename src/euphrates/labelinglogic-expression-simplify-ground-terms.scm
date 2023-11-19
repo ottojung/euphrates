@@ -123,9 +123,7 @@
 
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
-
-        (if (labelinglogic:expression:evaluate/r7rs A-expr (car B-args))
-            A-expr expr))
+        expr)
 
        ((and (equal? A-type '=)
              (equal? B-type 'r7rs))
