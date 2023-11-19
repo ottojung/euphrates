@@ -10,9 +10,11 @@
     (only (scheme base)
           *
           +
+          =
           and
           begin
           define
+          not
           or
           quote))
   (cond-expand
