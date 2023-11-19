@@ -21,7 +21,6 @@
   (import
     (only (scheme base)
           *
-          +
           =
           and
           begin
