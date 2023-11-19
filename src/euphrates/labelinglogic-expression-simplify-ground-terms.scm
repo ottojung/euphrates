@@ -19,7 +19,8 @@
     expr)
 
    ((member type (list 'tuple 'not))
-    (for-each ensure-ground args))
+    (for-each ensure-ground args)
+    expr)
 
    ((equal? type 'and)
     (let ()
