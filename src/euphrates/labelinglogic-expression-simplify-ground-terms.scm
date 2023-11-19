@@ -14,9 +14,13 @@
                                 (~a expr))
               :args (list expr expr0))))
 
-  (for-each ensure-ground args)
-
   (cond
+   ((member type (list '= 'r7rs 'constant))
+    expr)
+
+   ((member type (list 'tuple 'not))
+    (for-each ensure-ground args))
+
    ((equal? type 'and)
     (let ()
       (define rec (map loop args))
@@ -29,12 +33,6 @@
       
 
       0))
-
-   ((member type (list '= 'r7rs 'constant))
-    expr)
-
-   ((member type (list 'tuple 'not))
-    expr)
 
    (else
     (raisu* :from "labelinglogic:expression:simplify-ground-terms"
