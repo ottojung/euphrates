@@ -6,7 +6,7 @@
     (define env
       (environment '(scheme base) '(scheme char)))
 
-    (lambda (model expr input)
+    (lambda (expr input)
       (define args (labelinglogic:expression:args expr))
       (define code (car args))
       (define fun (eval code env))

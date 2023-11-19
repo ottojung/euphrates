@@ -24,7 +24,7 @@
 
   (cond
    ((equal? type 'r7rs)
-    (labelinglogic:expression:evaluate/r7rs model expr input))
+    (labelinglogic:expression:evaluate/r7rs expr input))
 
    ((equal? type '=)
     (labelinglogic:expression:evaluate/equal model expr input))
