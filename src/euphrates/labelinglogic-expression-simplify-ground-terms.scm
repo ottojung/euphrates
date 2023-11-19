@@ -14,6 +14,8 @@
                                 (~a expr))
               :args (list expr expr0))))
 
+  (for-each ensure-ground args)
+
   (cond
    ((equal? type 'and)
     (let ()
@@ -28,10 +30,10 @@
 
       0))
 
-   ((member type (list 'tuple 'not))
-    (for-each ensure-ground args))
-
    ((member type (list '= 'r7rs 'constant))
+    expr)
+
+   ((member type (list 'tuple 'not))
     expr)
 
    (else
