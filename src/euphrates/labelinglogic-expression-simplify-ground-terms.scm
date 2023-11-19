@@ -97,6 +97,43 @@
        (else (not-allowed)))))
 
 
+   ((equal? type 'xor)
+    (let loop ((args args))
+      (define-tuple (A-expr B-expr) args)
+
+      (define (not-allowed)
+        (raisu* :from "labelinglogic:expression:simplify-ground-terms"
+                :type 'unexpected-expressions-in-or
+                :message (stringf "Expressions of types ~s, ~s not allowed here"
+                                  (~a A-type) (~a B-type))
+                :args (list expr)))
+
+      (define A-type (labelinglogic:expression:type A-expr))
+      (define A-args (labelinglogic:expression:args A-expr))
+      (define B-type (labelinglogic:expression:type B-expr))
+      (define B-args (labelinglogic:expression:args B-expr))
+
+      (cond
+       ((and (equal? A-type B-type)
+             (member A-type (list '= 'r7rs 'tuple)))
+
+        (if (equal? A-expr B-expr)
+            (labelinglogic:expression:make 'or '())
+            expr))
+
+       ((and (equal? A-type 'r7rs)
+             (equal? B-type '=))
+
+        (if (labelinglogic:expression:evaluate/r7rs A-expr (car B-args))
+            A-expr expr))
+
+       ((and (equal? A-type '=)
+             (equal? B-type 'r7rs))
+        (loop (list B-expr A-expr)))
+
+       (else (not-allowed)))))
+
+
    (else
     (raisu* :from "labelinglogic:expression:simplify-ground-terms"
             :type 'unknown-expr-type
