@@ -17,8 +17,8 @@
           labelinglogic:expression:make))
   (import
     (only (euphrates
-            labelinglogic-expression-simplify-ground-terms)
-          labelinglogic:expression:simplify-ground-terms))
+            labelinglogic-expression-simplify-subground-term)
+          labelinglogic:expression:simplify-subground-term))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))

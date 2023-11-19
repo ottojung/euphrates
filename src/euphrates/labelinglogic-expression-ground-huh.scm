@@ -17,7 +17,7 @@
       #f)
 
      (else
-      (raisu* :from "labelinglogic:expression:simplify-ground-terms"
+      (raisu* :from "labelinglogic:expression:simplify-subground-term"
               :type 'unknown-expr-type
               :message (stringf "Expression type ~s not recognized"
                                 (~a type))

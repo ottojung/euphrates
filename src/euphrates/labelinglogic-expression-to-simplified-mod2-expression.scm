@@ -28,11 +28,11 @@
           (define-values (A2 B2) (values (loop A) (loop B)))
 
           (define A+B
-            (labelinglogic:expression:simplify-ground-terms
+            (labelinglogic:expression:simplify-subground-term
              (labelinglogic:expression:make 'xor (list A2 B2))))
 
           (define A*B
-            (labelinglogic:expression:simplify-ground-terms
+            (labelinglogic:expression:simplify-subground-term
              (labelinglogic:expression:make 'and (list A2 B2))))
 
           
