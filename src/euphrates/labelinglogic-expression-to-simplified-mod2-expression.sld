@@ -10,8 +10,8 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-desugar)
-          labelinglogic:expression:desugar))
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic:expression:sugarify))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
