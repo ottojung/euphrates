@@ -17,11 +17,11 @@
       (let ()
         (define-tuple (arg) args)
         (define rec (loop arg))
-        `(+ 1 ,rec)))
+        `(xor (and) ,rec)))
 
      ((equal? type 'or)
       (cond
-       ((equal? (length args) 0) '(+))
+       ((equal? (length args) 0) '(xor))
        ((equal? (length args) 1) (loop (car args)))
        (else
         (let ()
@@ -29,7 +29,7 @@
             (let ()
               (define pre-A (car args))
               (if (and (pair? pre-A)
-                       (equal? '+ (car pre-A)))
+                       (equal? 'xor (car pre-A)))
                   (values (cdr pre-A) pre-A)
                   (let ()
                     (define rec (loop pre-A))
@@ -37,7 +37,7 @@
 
           (define B (loop (cadr args)))
           (define rest (cddr args))
-          (define current `(+ ,@A1 ,B (* ,A2 ,B)))
+          (define current `(xor ,@A1 ,B (* ,A2 ,B)))
           (loop
            (labelinglogic:expression:make
             'or (cons current rest)))))))
@@ -45,7 +45,7 @@
      ((equal? type 'tuple)
       (cons 'tuple (map loop args)))
 
-     ((member type (list '+ '= 'r7rs 'constant))
+     ((member type (list 'xor '= 'r7rs 'constant))
       expr)
 
      (else
