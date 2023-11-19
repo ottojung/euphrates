@@ -35,6 +35,7 @@
           cond
           cons
           define
+          define-values
           else
           equal?
           let
@@ -46,7 +47,8 @@
           quasiquote
           quote
           unquote
-          unquote-splicing))
+          unquote-splicing
+          values))
   (cond-expand
     (guile (import (only (srfi srfi-31) rec)))
     (else (import (only (srfi 31) rec))))
