@@ -31,9 +31,18 @@
       (define B-type (labelinglogic:expression:type B-expr))
       (define B-args (labelinglogic:expression:args B-expr))
 
-      
+      (cond
+       ((and (equal? A-type '=)
+             (equal? B-type '=))
 
-      `(* ,@rec)))
+        (if (equal? A-expr B-expr) A-expr
+            (labelinglogic:expression:make 'or '())))
+
+       ((and (equal? A-type '=)
+             (equal? B-type 'r7rs))
+
+        (if (equal? A-expr B-expr) A-expr
+            (labelinglogic:expression:make 'or '())))
 
    ((equal? type 'or)
     (let ()
