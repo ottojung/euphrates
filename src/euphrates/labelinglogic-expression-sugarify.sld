@@ -33,6 +33,7 @@
           let
           list
           member
+          not
           or
           quote
           reverse))
