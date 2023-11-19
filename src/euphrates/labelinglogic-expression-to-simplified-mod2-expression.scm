@@ -25,7 +25,7 @@
        ((equal? type 'or)
         (let ()
           (define-tuple (A B) args)
-          `(+ ,A ,B (* A, B,))))
+          `(+ ,A ,B (* ,A ,B))))
 
        ((equal? type 'tuple)
         (cons 'tuple (map loop args)))
