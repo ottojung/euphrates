@@ -40,6 +40,10 @@
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
 
+       ((and (member A-type (list 'constant))
+             (equal? A-expr B-expr))
+        A-expr)
+
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
 
