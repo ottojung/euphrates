@@ -24,7 +24,13 @@
 
    ((equal? type 'and)
     (let ()
-      (define rec (map loop args))
+      (define-tuple (A-expr B-expr) args)
+
+      (define A-type (labelinglogic:expression:type A-expr))
+      (define A-args (labelinglogic:expression:args B-expr))
+
+      
+
       `(* ,@rec)))
 
    ((equal? type 'or)

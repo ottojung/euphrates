@@ -31,7 +31,6 @@
           for-each
           let
           list
-          map
           member
           not
           or
