@@ -26,7 +26,9 @@
         (let ()
           (define-tuple (A B) args)
 
-          
+          ;; (define A+B
+          ;;   (labelinglogic:expression:simplify-ground-terms
+             
 
           0))
 
