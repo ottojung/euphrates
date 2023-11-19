@@ -34,10 +34,15 @@
       (cond
        ((and (equal? A-type B-type)
              (member A-type (list '= 'r7rs 'tuple)))
-        ;; TODO: maybe can handle constants similarly?
 
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
+
+       ((and (equal? A-type B-type)
+             (equal? A-type 'constant))
+
+        (if (equal? A-expr B-expr) A-expr
+            
 
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
