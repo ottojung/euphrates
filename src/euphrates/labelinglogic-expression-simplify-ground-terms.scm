@@ -23,7 +23,7 @@
     expr)
 
    ((equal? type 'and)
-    (let ()
+    (let loop ((args args))
       (define-tuple (A-expr B-expr) args)
 
       (define A-type (labelinglogic:expression:type A-expr))
@@ -46,6 +46,10 @@
         (if (labelinglogic:expression:evaluate/r7rs A-expr (car B-args))
             A-expr
             (labelinglogic:expression:evaluate/r7rs 'or '())))
+
+       ((and (equal? A-type '=)
+             (equal? B-type 'r7rs))
+        (loop (list B-expr A-expr)))
 
        (raisu* :from "labelinglogic:expression:simplify-ground-terms"
                :type 'unknown-expr-type
