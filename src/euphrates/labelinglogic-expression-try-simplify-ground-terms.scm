@@ -40,7 +40,7 @@
              (equal? B-type 'r7rs))
         (loop (list B-expr A-expr)))
 
-       (else expr))))
+       (else #f))))
 
 
    ((equal? type 'or)
