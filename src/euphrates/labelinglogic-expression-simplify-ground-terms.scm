@@ -18,9 +18,11 @@
    ((member type (list '= 'r7rs 'constant))
     expr)
 
+
    ((member type (list 'tuple 'not))
     (for-each ensure-ground args)
     expr)
+
 
    ((equal? type 'and)
     (let loop ((args args))
@@ -63,6 +65,7 @@
         (loop (list B-expr A-expr)))
 
        (else (not-allowed)))))
+
 
    ((equal? type 'or)
     (let ()
