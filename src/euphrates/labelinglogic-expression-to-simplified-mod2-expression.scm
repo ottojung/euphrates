@@ -27,6 +27,11 @@
           (define-tuple (A B) args)
           `(+ ,A ,B (* ,A ,B))))
 
+       ((equal? type 'xor)
+        (let ()
+          (define-tuple (A B) args)
+          `(+ ,A ,B)))
+
        ((equal? type 'tuple)
         (cons 'tuple (map loop args)))
 
