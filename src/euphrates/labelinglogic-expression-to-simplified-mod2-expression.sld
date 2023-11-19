@@ -10,6 +10,12 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-desugar)
+          labelinglogic:expression:desugar))
+  (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import (only (euphrates raisu-star) raisu*))
@@ -22,20 +28,30 @@
           =
           and
           begin
+          cadr
+          car
+          cddr
+          cdr
           cond
+          cons
           define
+          define-values
           else
           equal?
+          if
+          length
           let
           list
           map
           member
           not
           or
+          pair?
           quasiquote
           quote
           unquote
-          unquote-splicing))
+          unquote-splicing
+          values))
   (cond-expand
     (guile (import (only (srfi srfi-31) rec)))
     (else (import (only (srfi 31) rec))))
