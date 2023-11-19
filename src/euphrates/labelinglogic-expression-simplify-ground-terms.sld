@@ -12,7 +12,6 @@
   (import
     (only (scheme base)
           *
-          +
           =
           and
           begin
@@ -29,7 +28,6 @@
           or
           quasiquote
           quote
-          unquote
           unquote-splicing))
   (cond-expand
     (guile (import (only (srfi srfi-31) rec)))

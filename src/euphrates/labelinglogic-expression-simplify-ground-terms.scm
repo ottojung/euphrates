@@ -8,12 +8,6 @@
       (define rec (map loop args))
       `(* ,@rec)))
 
-   ((equal? type 'not)
-    (let ()
-      (define-tuple (arg) args)
-      (define rec (loop arg))
-      `(+ 1 ,rec)))
-
    ((equal? type 'or)
     (let ()
       (define-tuple (A B) args)
@@ -25,7 +19,7 @@
    ((equal? type 'tuple)
     (cons 'tuple (map loop args)))
 
-   ((member type (list '= 'r7rs 'constant))
+   ((member type (list '= 'r7rs 'constant 'not))
     expr)
 
    (else
