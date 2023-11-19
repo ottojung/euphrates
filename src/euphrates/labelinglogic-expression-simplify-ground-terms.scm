@@ -43,8 +43,9 @@
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
 
-        (if (equal? A-expr B-expr) A-expr
-            (labelinglogic:expression:make 'or '())))
+        (if (labelinglogic:expression:evaluate/r7rs A-expr (car B-args))
+            A-expr
+            (labelinglogic:expression:evaluate/r7rs 'or '())))
 
        (raisu* :from "labelinglogic:expression:simplify-ground-terms"
                :type 'unknown-expr-type

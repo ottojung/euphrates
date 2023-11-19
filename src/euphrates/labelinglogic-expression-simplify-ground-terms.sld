@@ -10,6 +10,10 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates
+            labelinglogic-expression-evaluate-r7rs)
+          labelinglogic:expression:evaluate/r7rs))
+  (import
     (only (euphrates labelinglogic-expression-ground-huh)
           labelinglogic:expression:ground?))
   (import
@@ -26,6 +30,7 @@
           =
           and
           begin
+          car
           cond
           define
           else
