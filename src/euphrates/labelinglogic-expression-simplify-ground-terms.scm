@@ -47,12 +47,6 @@
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
 
-       ((and (equal? A-type B-type)
-             (equal? A-type 'constant))
-
-        (if (equal? A-expr B-expr) A-expr
-            (not-allowed)))
-
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
 
