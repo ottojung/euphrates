@@ -11,13 +11,17 @@
      ((equal? type 'and)
       (let ()
         (define rec (map loop args))
-        `(and ,@rec)))
+        (labelinglogic:expression:make type rec)))
 
      ((equal? type 'not)
       (let ()
         (define-tuple (arg) args)
         (define rec (loop arg))
-        `(xor (and) ,rec)))
+        (labelinglogic:expression:make
+         'xor
+         (list
+          (labelinglogic:expression:make 'and '()))
+          rec)))
 
      ((equal? type 'or)
       (cond
