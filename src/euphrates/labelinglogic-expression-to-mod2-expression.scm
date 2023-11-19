@@ -11,7 +11,7 @@
      ((equal? type 'and)
       (let ()
         (define rec (map loop args))
-        `(* ,@rec)))
+        `(and ,@rec)))
 
      ((equal? type 'not)
       (let ()
