@@ -52,10 +52,10 @@
         (loop (list B-expr A-expr)))
 
        (raisu* :from "labelinglogic:expression:simplify-ground-terms"
-               :type 'unknown-expr-type
-               :message (stringf "Expression type ~s not recognized"
-                                 (~a type))
-               :args (list type expr)))))
+               :type 'unexpected-expressions-in-and
+               :message (stringf "Expressions of types ~s, ~s not allowed here"
+                                 (~a A-type) (~a B-type))
+               :args (list expr)))))
 
 
    ((equal? type 'or)
