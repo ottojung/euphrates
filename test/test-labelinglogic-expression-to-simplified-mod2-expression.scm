@@ -1,6 +1,6 @@
 
 (define (test-eq output input)
-  (assert= output (labelinglogic:expression->mod2-expression input)))
+  (assert= output (labelinglogic:expression->simplified-mod2-expression input)))
 
 ;; Test an AND expression conversion.
 (test-eq '(* x y) '(and x y))
