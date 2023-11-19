@@ -33,7 +33,7 @@
 
       (cond
        ((and (equal? A-type B-type)
-             (member A-type (list '= 'r7rs)))
+             (member A-type (list '= 'r7rs 'tuple)))
         ;; TODO: maybe can handle constants similarly?
 
         (if (equal? A-expr B-expr) A-expr
