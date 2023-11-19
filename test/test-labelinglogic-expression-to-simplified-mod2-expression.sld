@@ -8,8 +8,6 @@
           labelinglogic:expression->simplified-mod2-expression))
   (import
     (only (scheme base)
-          *
-          +
           =
           and
           begin
