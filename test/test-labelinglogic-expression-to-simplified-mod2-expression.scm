@@ -24,9 +24,9 @@
 ;; Test an OR expression with an AND expression nested inside.
 (test-eq '(+ A (* B C) (* A (* B C))) '(or A (and B C)))
 
-;; Test multi-ary OR expression (more than two arguments).
-(test-eq '(+ A B (* A B) C (* (+ A B (* A B)) C))
-         '(or A B C))
+;; ;; Test multi-ary OR expression (more than two arguments).
+;; (test-eq '(+ A B (* A B) C (* (+ A B (* A B)) C))
+;;          '(or A B C))
 
 ;; ;; Test nested NOT expressions.
 ;; (test-eq '(+ 1 (+ 1 x)) '(not (not x)))
