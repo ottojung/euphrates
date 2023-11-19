@@ -7,15 +7,12 @@
   (define args (labelinglogic:expression:args expr))
 
   (define (ensure-ground expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
     (unless (labelinglogic:expression:ground? expr)
       (raisu* :from "labelinglogic:expression:simplify-ground-terms"
               :type 'not-a-ground-term
-              :message (stringf "Expression type ~s is not a ground term"
-                                (~a type))
-              :args (list type expr expr0))))
+              :message (stringf "Expression ~s is not a ground term"
+                                (~a expr))
+              :args (list expr expr0))))
 
   (cond
    ((equal? type 'and)
