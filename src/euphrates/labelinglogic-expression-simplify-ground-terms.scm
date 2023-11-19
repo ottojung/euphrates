@@ -64,7 +64,7 @@
 
       (cond
        ((and (equal? A-type B-type)
-             (member A-type (list '= 'r7rs 'tuple)))
+             (member A-type (list '= 'r7rs 'tuple 'constant)))
 
         (if (equal? A-expr B-expr) A-expr
             expr))
