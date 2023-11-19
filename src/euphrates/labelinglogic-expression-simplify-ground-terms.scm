@@ -32,19 +32,25 @@
       (define B-args (labelinglogic:expression:args B-expr))
 
       (cond
-       ((and (equal? A-type '=)
-             (equal? B-type '=))
+       ((or (and (equal? A-type '=)
+                 (equal? B-type '=))
+            (and (equal? A-type 'r7rs)
+                 (equal? B-type 'r7rs)))
 
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
 
        ((and (equal? A-type 'r7rs)
-             (equal? B-type 'r7rs))
+             (equal? B-type '=))
 
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
 
-       
+       (raisu* :from "labelinglogic:expression:simplify-ground-terms"
+               :type 'unknown-expr-type
+               :message (stringf "Expression type ~s not recognized"
+                                 (~a type))
+               :args (list type expr)))))
 
    ((equal? type 'or)
     (let ()

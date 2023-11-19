@@ -13,6 +13,9 @@
     (only (euphrates labelinglogic-expression-ground-huh)
           labelinglogic:expression:ground?))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import (only (euphrates raisu-star) raisu*))
@@ -20,7 +23,6 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
-          *
           =
           and
           begin
@@ -29,18 +31,14 @@
           else
           equal?
           for-each
+          if
           let
           list
           member
           not
           or
-          quasiquote
           quote
-          unless
-          unquote-splicing))
-  (cond-expand
-    (guile (import (only (srfi srfi-31) rec)))
-    (else (import (only (srfi 31) rec))))
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
