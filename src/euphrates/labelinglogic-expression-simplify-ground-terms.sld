@@ -14,9 +14,6 @@
             labelinglogic-expression-evaluate-r7rs)
           labelinglogic:expression:evaluate/r7rs))
   (import
-    (only (euphrates labelinglogic-expression-ground-huh)
-          labelinglogic:expression:ground?))
-  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
@@ -35,15 +32,13 @@
           define
           else
           equal?
-          for-each
           if
           let
           list
           member
           not
           or
-          quote
-          unless))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
