@@ -5,39 +5,42 @@
   (define desugared
     (labelinglogic:expression:desugar expr))
 
-  (let loop ((expr desugared))
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
+  (define translated
+    (let loop ((expr desugared))
+      (define type (labelinglogic:expression:type expr))
+      (define args (labelinglogic:expression:args expr))
 
-    (cond
-     ((equal? type 'and)
-      (let ()
-        (define rec (map loop args))
-        `(* ,@rec)))
+      (cond
+       ((equal? type 'and)
+        (let ()
+          (define rec (map loop args))
+          `(* ,@rec)))
 
-     ((equal? type 'not)
-      (let ()
-        (define-tuple (arg) args)
-        (define rec (loop arg))
-        `(+ 1 ,rec)))
+       ((equal? type 'not)
+        (let ()
+          (define-tuple (arg) args)
+          (define rec (loop arg))
+          `(+ 1 ,rec)))
 
-     ((equal? type 'or)
-      (let ()
-        (define-tuple (A B) args)
+       ((equal? type 'or)
+        (let ()
+          (define-tuple (A B) args)
 
-        
+          
 
-        0))
+          0))
 
-     ((equal? type 'tuple)
-      (cons 'tuple (map loop args)))
+       ((equal? type 'tuple)
+        (cons 'tuple (map loop args)))
 
-     ((member type (list '+ '= 'r7rs 'constant))
-      expr)
+       ((member type (list '+ '= 'r7rs 'constant))
+        expr)
 
-     (else
-      (raisu* :from "labelinglogic:expression->mod2-expression"
-              :type 'unknown-expr-type
-              :message (stringf "Expression type ~s not recognized"
-                                (~a type))
-              :args (list type expr))))))
+       (else
+        (raisu* :from "labelinglogic:expression->mod2-expression"
+                :type 'unknown-expr-type
+                :message (stringf "Expression type ~s not recognized"
+                                  (~a type))
+                :args (list type expr))))))
+
+  translated)
