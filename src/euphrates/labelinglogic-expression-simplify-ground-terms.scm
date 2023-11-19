@@ -32,10 +32,8 @@
       (define B-args (labelinglogic:expression:args B-expr))
 
       (cond
-       ((or (and (equal? A-type '=)
-                 (equal? B-type '=))
-            (and (equal? A-type 'r7rs)
-                 (equal? B-type 'r7rs)))
+       ((and (equal? A-type B-type)
+             (member A-type (list '= 'r7rs 'constant)))
 
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
