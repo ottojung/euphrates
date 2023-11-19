@@ -32,6 +32,7 @@
           list
           map
           member
+          not
           null?
           or
           quote))
