@@ -25,19 +25,7 @@
        ((equal? type 'or)
         (let ()
           (define-tuple (A B) args)
-          (define-values (A2 B2) (values (loop A) (loop B)))
-
-          (define A+B
-            (labelinglogic:expression:simplify-subground-term
-             (labelinglogic:expression:make 'xor (list A2 B2))))
-
-          (define A*B
-            (labelinglogic:expression:simplify-subground-term
-             (labelinglogic:expression:make 'and (list A2 B2))))
-
-          
-
-          0))
+          `(+ ,A ,B (* A, B,))))
 
        ((equal? type 'tuple)
         (cons 'tuple (map loop args)))

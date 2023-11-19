@@ -13,13 +13,6 @@
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
   (import
-    (only (euphrates labelinglogic-expression-make)
-          labelinglogic:expression:make))
-  (import
-    (only (euphrates
-            labelinglogic-expression-simplify-subground-term)
-          labelinglogic:expression:simplify-subground-term))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import (only (euphrates raisu-star) raisu*))
@@ -35,7 +28,6 @@
           cond
           cons
           define
-          define-values
           else
           equal?
           let
@@ -47,8 +39,7 @@
           quasiquote
           quote
           unquote
-          unquote-splicing
-          values))
+          unquote-splicing))
   (cond-expand
     (guile (import (only (srfi srfi-31) rec)))
     (else (import (only (srfi 31) rec))))
