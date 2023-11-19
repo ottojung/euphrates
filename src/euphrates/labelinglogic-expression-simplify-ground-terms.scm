@@ -26,6 +26,13 @@
     (let loop ((args args))
       (define-tuple (A-expr B-expr) args)
 
+      (define (not-allowed)
+        (raisu* :from "labelinglogic:expression:simplify-ground-terms"
+                :type 'unexpected-expressions-in-and
+                :message (stringf "Expressions of types ~s, ~s not allowed here"
+                                  (~a A-type) (~a B-type))
+                :args (list expr)))
+
       (define A-type (labelinglogic:expression:type A-expr))
       (define A-args (labelinglogic:expression:args A-expr))
       (define B-type (labelinglogic:expression:type B-expr))
@@ -42,7 +49,7 @@
              (equal? A-type 'constant))
 
         (if (equal? A-expr B-expr) A-expr
-            
+            (not-allowed)))
 
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
@@ -55,12 +62,7 @@
              (equal? B-type 'r7rs))
         (loop (list B-expr A-expr)))
 
-       (raisu* :from "labelinglogic:expression:simplify-ground-terms"
-               :type 'unexpected-expressions-in-and
-               :message (stringf "Expressions of types ~s, ~s not allowed here"
-                                 (~a A-type) (~a B-type))
-               :args (list expr)))))
-
+       (else (not-allowed)))))
 
    ((equal? type 'or)
     (let ()
