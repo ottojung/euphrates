@@ -8,7 +8,7 @@
   (define translated
     (let loop ((expr sugarified))
       (define type (labelinglogic:expression:type expr))
-      (define args0 (labelinglogic:expression:args expr))
+      (define args (labelinglogic:expression:args expr))
 
       (cond
        ((equal? type 'and)
