@@ -1,10 +1,10 @@
+
 (define-library
   (euphrates
     labelinglogic-expression-simplify-ground-terms)
   (export
     labelinglogic:expression:simplify-ground-terms)
-  (import
-    (only (scheme base) begin define make-parameter))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
