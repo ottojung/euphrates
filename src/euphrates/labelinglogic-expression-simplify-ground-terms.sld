@@ -6,6 +6,12 @@
     labelinglogic:expression:simplify-ground-terms)
   (import
     (only (euphrates define-tuple) define-tuple))
+  (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic:expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic:expression:type))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -16,10 +22,10 @@
           and
           begin
           cond
-          cons
           define
           else
           equal?
+          for-each
           let
           list
           map

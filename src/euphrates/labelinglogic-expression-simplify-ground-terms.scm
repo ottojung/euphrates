@@ -10,14 +10,18 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((equal? type (list 'and 'or))
-      0)
-
      ((member type (list 'tuple 'not))
       (for-each ensure-ground args))
 
      ((member type (list '= 'r7rs 'constant 'not 'tuple))
-      expr)
+      'ok)
+
+     ((equal? type (list 'and 'or))
+      (raisu* :from "labelinglogic:expression:simplify-ground-terms"
+              :type 'not-a-ground-term
+              :message (stringf "Expression type ~s is not a ground term"
+                                (~a type))
+              :args (list type expr)))
 
      (else
       (raisu* :from "labelinglogic:expression:simplify-ground-terms"
