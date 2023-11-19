@@ -55,7 +55,9 @@
        ((and (equal? A-type B-type)
              (member A-type (list '= 'r7rs 'tuple 'constant)))
 
-        (if (equal? A-expr B-expr) A-expr #f))
+        (if (equal? A-expr B-expr)
+            A-expr
+            (labelinglogic:expression:make 'xor args)))
 
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
