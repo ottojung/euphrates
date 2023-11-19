@@ -52,6 +52,7 @@
                                  (~a type))
                :args (list type expr)))))
 
+
    ((equal? type 'or)
     (let ()
       (define-tuple (A B) args)
