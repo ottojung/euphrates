@@ -55,8 +55,7 @@
        ((and (equal? A-type B-type)
              (member A-type (list '= 'r7rs 'tuple 'constant)))
 
-        (if (equal? A-expr B-expr) A-expr
-            expr))
+        (if (equal? A-expr B-expr) A-expr #f))
 
        ((and (equal? A-type 'r7rs)
              (equal? B-type '=))
@@ -68,7 +67,7 @@
              (equal? B-type 'r7rs))
         (loop (list B-expr A-expr)))
 
-       (else expr))))
+       (else #f))))
 
 
    ((equal? type 'xor)
