@@ -23,6 +23,7 @@
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
+  (import (only (euphrates queue) make-queue))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
