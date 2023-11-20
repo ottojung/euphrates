@@ -58,10 +58,8 @@
 
   (cond
    ((equal? type 'tuple)
-    (if (list-length= 1 args)
-        (labelinglogic:expression:sugarify (car args))
-        (labelinglogic:expression:make
-         type (map labelinglogic:expression:sugarify args))))
+    (labelinglogic:expression:sugarify/unwrap
+     (labelinglogic:expression:sugarify/children expr)))
 
    ((labelinglogic:expression:type:associative? type)
     (labelinglogic:expression:sugarify/unwrap
