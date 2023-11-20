@@ -14,7 +14,7 @@
            (list-length= 1 args))
       (loop (car args)))
 
-     ((labelinglogic:expression:type:associative? expr)
+     ((labelinglogic:expression:type:associative? type)
       (let ()
         (define linearized
           (map
