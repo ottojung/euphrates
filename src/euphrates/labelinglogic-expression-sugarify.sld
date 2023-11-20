@@ -28,7 +28,6 @@
   (import
     (only (scheme base)
           =
-          and
           begin
           car
           cond
@@ -39,6 +38,7 @@
           if
           let
           list
+          map
           member
           quote
           reverse))
