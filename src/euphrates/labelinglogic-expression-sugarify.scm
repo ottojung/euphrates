@@ -31,9 +31,10 @@
 
 (define (labelinglogic:expression:sugarify/unwrap expr)
   (define args (labelinglogic:expression:args expr))
-    (if (list-length= 1 args)
-        (car args)
-        expr))
+  (if (list-length= 1 args)
+      (labelinglogic:expression:sugarify (car args))
+      (labelinglogic:expression:make
+       type (map labelinglogic:expression:sugarify args))))
 
 (define (labelinglogic:expression:sugarify expr)
   (define type (labelinglogic:expression:type expr))
