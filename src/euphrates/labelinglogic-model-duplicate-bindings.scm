@@ -83,32 +83,4 @@
                                      (~a expr:type))
                    :args (list expr:type binding))))))
 
-  (define (connect-transitive-model-edges model)
-    (define (replacer class)
-      (lambda (constant)
-        (if (is-binding? constant)
-            constant
-            (let ()
-              (define target-component (assoc constant model))
-              (define-tuple (target-class target-predicate) target-component)
-              target-predicate))))
-
-    (labelinglogic:model:replace-constants
-     replacer model))
-
-  (define transitive-model
-    (apply-until-fixpoint
-     connect-transitive-model-edges
-     duplicated-model))
-
-  (define reduced-model
-    (labelinglogic:model:reduce-to-bindings
-     transitive-model bindings))
-
-  (define flat-model
-    (labelinglogic:model:flatten
-     (labelinglogic:model:map-expressions
-      (const labelinglogic:expression:sugarify)
-      reduced-model)))
-
-  flat-model)
+  duplicated-model)
