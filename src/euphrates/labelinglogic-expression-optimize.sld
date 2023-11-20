@@ -46,6 +46,7 @@
           map
           member
           not
+          null?
           or
           quote))
   (cond-expand

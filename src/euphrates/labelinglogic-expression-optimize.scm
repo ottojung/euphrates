@@ -43,14 +43,18 @@
        (equal? '= (labelinglogic:expression:type expr)))
      args))
 
-  (labelinglogic:expression:make
-   type
-   (cons
-    (labelinglogic:expression:make
-     'xor
-     (assq-or #t grouped '()))
-    (assq-or #f grouped '()))))
+  (define singletons
+    (assq-or #t grouped '()))
 
+
+  (if (null? singletons)
+      expr
+      (labelinglogic:expression:make
+       type
+       (cons
+        (labelinglogic:expression:make
+         'xor singletons)
+        (assq-or #f grouped '())))))
 
 
 (define (labelinglogic:expression:optimize/xor expr)
