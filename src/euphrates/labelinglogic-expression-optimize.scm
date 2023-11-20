@@ -37,24 +37,26 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (define grouped
-    (list-group-by
-     (lambda (expr)
-       (equal? '= (labelinglogic:expression:type expr)))
-     args))
+  expr)
+  ;; DEBUG ;; nocheckin
+  ;; (define grouped
+  ;;   (list-group-by
+  ;;    (lambda (expr)
+  ;;      (equal? '= (labelinglogic:expression:type expr)))
+  ;;    args))
 
-  (define singletons
-    (assq-or #t grouped '()))
+  ;; (define singletons
+  ;;   (assq-or #t grouped '()))
 
 
-  (if (null? singletons)
-      expr
-      (labelinglogic:expression:make
-       type
-       (cons
-        (labelinglogic:expression:make
-         'xor singletons)
-        (assq-or #f grouped '())))))
+  ;; (if (null? singletons)
+  ;;     expr
+  ;;     (labelinglogic:expression:make
+  ;;      type
+  ;;      (cons
+  ;;       (labelinglogic:expression:make
+  ;;        'xor singletons)
+  ;;       (assq-or #f grouped '())))))
 
 
 (define (labelinglogic:expression:optimize/xor expr)
