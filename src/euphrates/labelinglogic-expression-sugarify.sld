@@ -11,6 +11,8 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -24,6 +26,7 @@
           =
           and
           begin
+          car
           cond
           define
           else
