@@ -2,7 +2,6 @@
 (define-library
   (euphrates labelinglogic)
   (export labelinglogic:init)
-  (import (only (euphrates debugs) debugs))
   (import (only (euphrates hashset) list->hashset))
   (import
     (only (euphrates labelinglogic-bindings-check)

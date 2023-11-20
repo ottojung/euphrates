@@ -12,23 +12,23 @@
 
   (labelinglogic:bindings:check classes/s bindings)
 
-  (debugs bindings)
-  (debugs model)
+  ;; (debugs bindings)
+  ;; (debugs model)
 
   (define extended-model
     (labelinglogic:model:extend-with-bindings model bindings))
 
-  (debugs extended-model)
+  ;; (debugs extended-model)
 
   (define opt-model
     (labelinglogic:model:optimize-to-bindings extended-model bindings))
 
-  (debugs opt-model)
+  ;; (debugs opt-model)
 
   (define duplicated-model
     (labelinglogic:model:duplicate-bindings opt-model bindings))
 
-  (debugs duplicated-model)
+  ;; (debugs duplicated-model)
 
   (define reduced-model
     (labelinglogic:model:reduce-to-bindings duplicated-model bindings))
