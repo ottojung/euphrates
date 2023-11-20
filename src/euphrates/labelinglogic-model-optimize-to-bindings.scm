@@ -46,7 +46,4 @@
     (apply-until-fixpoint
      bigloop model))
 
-  (define flat-model
-    (labelinglogic:model:flatten opt-model))
-
-  flat-model)
+  opt-model)
