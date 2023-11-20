@@ -12,6 +12,10 @@
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
+    (only (euphrates
+            labelinglogic-expression-type-associative-huh)
+          labelinglogic:expression:type:associative?))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -35,7 +39,6 @@
           list
           map
           member
-          not
           null?
           or
           quote))
