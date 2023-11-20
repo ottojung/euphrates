@@ -28,6 +28,7 @@
   (import
     (only (scheme base)
           =
+          and
           begin
           car
           cond
@@ -40,6 +41,8 @@
           list
           map
           member
+          not
+          or
           quote
           reverse))
   (cond-expand

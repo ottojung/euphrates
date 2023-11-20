@@ -34,11 +34,23 @@
 
 (define (labelinglogic:expression:sugarify/unwrap expr)
   (define type (labelinglogic:expression:type expr))
-  (define children (labelinglogic:expression:map-children expr))
+  (define args (labelinglogic:expression:type args))
 
-  (if (list-length= 1 args)
-      (car args)
-      expr))
+  (cond
+   ((member type (list 'tuple 'and 'or 'not 'xor))
+    (labelinglogic:expression:make
+     type (map labelinglogic:expression:sugarify args)))
+
+   ((member type (list '= 'constant 'r7rs))
+    expr)
+
+   (else
+    (raisu* :from "labelinglogic:expression:sugarify"
+            :type 'unknown-expr-type
+            :message (stringf "Expression type ~s not recognized"
+                              (~a type))
+            :args (list type expr)))))
+
 
 (define (labelinglogic:expression:sugarify expr)
   (define type (labelinglogic:expression:type expr))
