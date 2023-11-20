@@ -4,7 +4,6 @@
 (define (labelinglogic:model:flatten model)
   (define H (make-hashmap))
   (define stack (stack-make))
-  (define todo (make-queue))
 
   (define (loop-expr expr)
     (define type (labelinglogic:expression:type expr))
