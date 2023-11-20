@@ -6,15 +6,11 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
-  (import (only (euphrates assert) assert))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
-  (import
-    (only (euphrates labelinglogic-expression-sugarify)
-          labelinglogic:expression:sugarify))
   (import
     (only (euphrates list-drop-n) list-drop-n))
   (import
