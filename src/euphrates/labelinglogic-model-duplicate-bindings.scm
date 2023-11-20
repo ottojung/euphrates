@@ -96,9 +96,17 @@
     (labelinglogic:model:replace-constants
      replacer model))
 
+  (debugs duplicated-model)
+
   (define transitive-model
     (apply-until-fixpoint
      connect-transitive-model-edges
      duplicated-model))
+
+  (debugs transitive-model)
+  (debug "")
+  (debug "")
+  (debug "")
+  (debug "")
 
   transitive-model)
