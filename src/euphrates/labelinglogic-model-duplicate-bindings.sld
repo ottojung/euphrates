@@ -35,6 +35,10 @@
     (only (euphrates labelinglogic-model-flatten)
           labelinglogic:model:flatten))
   (import
+    (only (euphrates
+            labelinglogic-model-reduce-to-bindings)
+          labelinglogic:model:reduce-to-bindings))
+  (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
   (import
@@ -77,9 +81,6 @@
           quasiquote
           quote
           unquote))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

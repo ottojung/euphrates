@@ -110,11 +110,8 @@
   ;; (debug "")
 
   (define reduced-model
-    (filter
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (is-binding? class))
-     transitive-model))
+    (labelinglogic:model:reduce-to-bindings
+     transitive-model bindings))
 
   (define flat-model
     (labelinglogic:model:flatten reduced-model))
