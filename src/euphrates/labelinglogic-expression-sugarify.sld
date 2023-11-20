@@ -9,6 +9,10 @@
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
+    (only (euphrates
+            labelinglogic-expression-type-associative-huh)
+          labelinglogic:expression:type:associative?))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -36,8 +40,6 @@
           let
           list
           member
-          not
-          or
           quote
           reverse))
   (cond-expand
