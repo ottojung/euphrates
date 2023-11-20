@@ -46,6 +46,7 @@
 
      ;; ((is-or? code)
      ;;  (let ()
+     ;;    ;; FIXME: this actually does not work.
      ;;    (define sugared (labelinglogic:expression:sugarify code))
      ;;    (assert (is-or? sugared))
      ;;    (define args (unpack-or sugared))
