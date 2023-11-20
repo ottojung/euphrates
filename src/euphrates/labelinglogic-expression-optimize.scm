@@ -33,10 +33,6 @@
          (labelinglogic:expression:optimize new)))))
 
 
-(define (labelinglogic:expression:optimize/xor expr)
-  (
-
-
 (define (labelinglogic:expression:optimize expr)
   (define type (labelinglogic:expression:type expr))
 
