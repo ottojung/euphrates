@@ -43,6 +43,9 @@
       ((equal? type 'tuple)
        (list (map loop args)))
 
+      ((equal? type 'xor)
+       (list (map loop args)))
+
       ((equal? type 'r7rs)
        (raisu* :from "labelinglogic:model:calculate-biggest-universe"
                :type 'no-biggest-universe
