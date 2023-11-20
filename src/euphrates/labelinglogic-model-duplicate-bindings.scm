@@ -109,4 +109,18 @@
   (debug "")
   (debug "")
 
-  transitive-model)
+  (define bindings-set
+    (list->hashset
+     (map labelinglogic:binding:name bindings)))
+
+  (define (is-binding? name)
+    (hashset-has? bindings-set name))
+
+  (define reduced-model
+    (filter
+     (lambda (model-component)
+       (define-tuple (class predicate) model-component)
+       (is-binding? class))
+     transitive-model))
+
+  reduced-model)

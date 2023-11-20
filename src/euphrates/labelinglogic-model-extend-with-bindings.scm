@@ -38,22 +38,4 @@
   (define extended-model
     (append replaced-model bindings))
 
-  (define bindings-set
-    (list->hashset
-     (map labelinglogic:binding:name bindings)))
-
-  (define (is-binding? name)
-    (hashset-has? bindings-set name))
-
-  (define transitive-model
-    (labelinglogic:model:duplicate-bindings
-     extended-model bindings))
-
-  (define reduced-model
-    (filter
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (is-binding? class))
-     transitive-model))
-
-  reduced-model)
+  extended-model)

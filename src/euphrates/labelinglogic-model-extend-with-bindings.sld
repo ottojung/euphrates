@@ -11,19 +11,8 @@
           hashmap-set!
           make-hashmap))
   (import
-    (only (euphrates hashset)
-          hashset-has?
-          list->hashset))
-  (import
-    (only (euphrates labelinglogic-binding-name)
-          labelinglogic:binding:name))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
-  (import
-    (only (euphrates
-            labelinglogic-model-duplicate-bindings)
-          labelinglogic:model:duplicate-bindings))
   (import
     (only (euphrates labelinglogic-model-replace-constants)
           labelinglogic:model:replace-constants))
@@ -41,13 +30,9 @@
           lambda
           let
           list
-          map
           not
           quote
           when))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
