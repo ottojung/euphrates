@@ -24,7 +24,7 @@
   (labelinglogic:expression:make
    type0 linearized))
 
-(define (labelinglogic:expression:sugarify/children expr)
+(define (labelinglogic:expression:sugarify/unwrap expr)
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
@@ -32,7 +32,7 @@
       (car args)
       expr))
 
-(define (labelinglogic:expression:sugarify/unwrap expr)
+(define (labelinglogic:expression:sugarify/children expr)
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:type args))
 
@@ -64,7 +64,9 @@
          type (map labelinglogic:expression:sugarify args))))
 
    ((labelinglogic:expression:type:associative? type)
-    (labelinglogic:expression:sugarify/functor expr))
+    (labelinglogic:expression:sugarify/unwrap
+     (labelinglogic:expression:sugarify/children
+      (labelinglogic:expression:sugarify/functor expr))))
 
    ((member type (list '= 'constant 'r7rs)) expr)
 
