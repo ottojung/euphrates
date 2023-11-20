@@ -77,6 +77,10 @@
     (labelinglogic:expression:optimize/singletons
      (labelinglogic:expression:optimize/recurse-on-args expr)))
 
+   ((equal? type 'or)
+    (labelinglogic:expression:or->xor
+     (labelinglogic:expression:optimize/and+or expr)))
+
    ((member type (list 'and 'or))
     (labelinglogic:expression:optimize/and+or expr))
 
