@@ -26,7 +26,6 @@
   (import
     (only (scheme base)
           =
-          and
           begin
           car
           cddr
@@ -35,6 +34,7 @@
           define
           else
           equal?
+          if
           let
           list
           map

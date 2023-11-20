@@ -10,9 +10,11 @@
       (labelinglogic:expression:args expr))
 
     (cond
-     ((and (equal? type 'tuple)
-           (list-length= 1 args))
-      (loop (car args)))
+     ((equal? type 'tuple)
+      (if (list-length= 1 args)
+          (loop (car args))
+          (labelinglogic:expression:make
+           type (map loop args))))
 
      ((labelinglogic:expression:type:associative? type)
       (let ()
