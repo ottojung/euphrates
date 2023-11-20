@@ -118,6 +118,8 @@
   (define additional-grammar-rules
     (stack->list additional-grammar-rules/singletons/stack))
 
+  (debugs additional-grammar-rules)
+
   (make-parselynn/singlechar-struct
    additional-grammar-rules
    categories singleton-map))
