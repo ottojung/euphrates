@@ -101,13 +101,15 @@
 
   (assert=
 
-   `((t_an (or uid_1 t_3 t_4))
-     (t_3 (= #\3))
-     (t_4 (= #\4))
-     (uid_1 (r7rs (lambda (c)
-                    (or (or (char-upper-case? c)
-                            (char-lower-case? c))
-                        (char-numeric? c))))))
+   0
+
+   ;; `((t_an (or uid_1 t_3 t_4))
+   ;;   (t_3 (= #\3))
+   ;;   (t_4 (= #\4))
+   ;;   (uid_1 (r7rs (lambda (c)
+   ;;                  (or (or (char-upper-case? c)
+   ;;                          (char-lower-case? c))
+   ;;                      (char-numeric? c))))))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
