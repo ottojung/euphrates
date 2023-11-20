@@ -11,6 +11,10 @@
           labelinglogic:model:check))
   (import
     (only (euphrates
+            labelinglogic-model-duplicate-bindings)
+          labelinglogic:model:duplicate-bindings))
+  (import
+    (only (euphrates
             labelinglogic-model-extend-with-bindings)
           labelinglogic:model:extend-with-bindings))
   (import

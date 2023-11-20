@@ -15,7 +15,10 @@
   (define extended-model
     (labelinglogic:model:extend-with-bindings model bindings))
 
+  (define duplicated-model
+    (labelinglogic:model:duplicate-bindings extended-model bindings))
+
   (define opt-model
-    (labelinglogic:model:optimize-to-bindings extended-model bindings))
+    (labelinglogic:model:optimize-to-bindings duplicated-model bindings))
 
   opt-model)
