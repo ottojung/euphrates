@@ -34,7 +34,7 @@
 
 (define (labelinglogic:expression:sugarify/unwrap expr)
   (define type (labelinglogic:expression:type expr))
-  (define args (labelinglogic:expression:args expr))
+  (define children (labelinglogic:expression:map-children expr))
 
   (if (list-length= 1 args)
       (car args)
