@@ -17,18 +17,18 @@
    (labelinglogic:expression:sugarify
     '(or a (or (and b c d) (or e f))))))
 
-;; ;; Test nested expressions that needs to be flattened
-;; (let ()
-;;   (assert=
-;;    '(tuple a b c d e)
-;;    (labelinglogic:expression:sugarify
-;;     '(tuple a (tuple b (tuple c (tuple d e)))))))
+;; Test nested expressions that needs to be flattened
+(let ()
+  (assert=
+   '(tuple a (tuple b (tuple c (tuple d e))))
+   (labelinglogic:expression:sugarify
+    '(tuple a (tuple b (tuple c (tuple d e)))))))
 
-;; (let ()
-;;   (assert=
-;;    '(tuple a b (or c d) e f)
-;;    (labelinglogic:expression:sugarify
-;;     '(tuple a (tuple b (or c d) (tuple e f))))))
+(let ()
+  (assert=
+   '(tuple a (tuple b (or c d) (tuple e f)))
+   (labelinglogic:expression:sugarify
+    '(tuple a (tuple b (or c d) (tuple e f))))))
 
 ;; Test expressions that does not need to be flattened
 (let ()
