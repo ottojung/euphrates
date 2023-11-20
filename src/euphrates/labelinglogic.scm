@@ -12,8 +12,8 @@
 
   (labelinglogic:bindings:check classes/s bindings)
 
-  ;; (debugs bindings)
-  ;; (debugs model)
+  (debugs bindings)
+  (debugs model)
 
   (define extended-model
     (labelinglogic:model:extend-with-bindings model bindings))
@@ -32,5 +32,7 @@
 
   (define reduced-model
     (labelinglogic:model:reduce-to-bindings duplicated-model bindings))
+
+  (debugs reduced-model)
 
   reduced-model)
