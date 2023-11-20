@@ -48,7 +48,6 @@
 
   (let loop ((model model))
     (stack-unload! stack)
-    (debugs model)
 
     (define maped-model
       (labelinglogic:model:map-expressions
@@ -61,6 +60,6 @@
        (reverse
         (stack->list stack))))
 
-    (debugs complete-model)
-
-    complete-model))
+    (if (stack-empty? stack)
+        complete-model
+        (loop complete-model))))
