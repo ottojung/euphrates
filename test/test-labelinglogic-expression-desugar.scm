@@ -13,7 +13,7 @@
 
 (let ()
   (assert=
-   '(or a)
+   'a
    (labelinglogic:expression:desugar
     '(or a))))
 
