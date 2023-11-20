@@ -108,13 +108,6 @@
      (uid_2 (r7rs char-lower-case?))
      (uid_3 (or (r7rs char-numeric?) t_3)))
 
-   ;; `((t_an (or uid_1 uid_2 t_3 t_4 uid_3))
-   ;;   (t_3 (= #\3))
-   ;;   (t_4 (= #\4))
-   ;;   (uid_1 (r7rs char-upper-case?))
-   ;;   (uid_2 (r7rs char-lower-case?))
-   ;;   (uid_3 (r7rs char-numeric?)))
-
    ;; `((t_an (or uid_1 t_3 t_4))
    ;;   (t_3 (= #\3))
    ;;   (t_4 (= #\4))
