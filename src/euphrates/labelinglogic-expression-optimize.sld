@@ -2,6 +2,7 @@
 (define-library
   (euphrates labelinglogic-expression-optimize)
   (export labelinglogic:expression:optimize)
+  (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -18,6 +19,8 @@
   (import
     (only (euphrates list-deduplicate)
           list-deduplicate))
+  (import
+    (only (euphrates list-group-by) list-group-by))
   (import
     (only (euphrates list-singleton-q)
           list-singleton?))
@@ -36,6 +39,7 @@
           else
           equal?
           if
+          lambda
           length
           let
           list

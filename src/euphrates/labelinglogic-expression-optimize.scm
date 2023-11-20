@@ -33,6 +33,26 @@
          (labelinglogic:expression:optimize new)))))
 
 
+(define (labelinglogic:expression:or->xor expr)
+  (define type (labelinglogic:expression:type expr))
+  (define args (labelinglogic:expression:args expr))
+
+  (define grouped
+    (list-group-by
+     (lambda (expr)
+       (equal? '= (labelinglogic:expression:type expr)))
+     args))
+
+  (labelinglogic:expression:make
+   type
+   (cons
+    (labelinglogic:expression:make
+     'xor
+     (assq-or #t grouped '()))
+    (assq-or #f grouped '()))))
+
+
+
 (define (labelinglogic:expression:optimize/xor expr)
   ;; TODO: some optis.
   expr)
