@@ -21,22 +21,12 @@
        (define expr:type (labelinglogic:expression:type expr))
        (define expr:args (labelinglogic:expression:args expr))
 
-       (define (fork-current model-component)
+       (define (fork-current model-component new-expr)
          (define-tuple (class predicate) model-component)
 
          (if (equal? class name)
              (list model-component)
-             (let ()
-
-               (define new-name (make-unique-identifier))
-
-               (define new-parent
-                 (list class `(or ,name ,new-name)))
-
-               (define renamed-current
-                 (list new-name predicate))
-
-               (list new-parent renamed-current))))
+             (list class new-expr)))
 
        (define (try-to-add inputs)
          (define leafs (labelinglogic:model:reduce-to-leafs model))
@@ -53,16 +43,26 @@
               (map
                (lambda (model-component)
                  (define-tuple (class predicate) model-component)
+                 (define type (labelinglogic:expression:type predicate))
+                 (define args (labelinglogic:expression:args predicate))
+                 (define new-args
+                   (if (equal? type 'or)
+                       (append args (list name))
+                       (list predicate name)))
+                 (define new-expr
+                   (labelinglogic:expression:make
+                    'or new-args))
 
                  (cond
                   ((hashset-has? containing-classes class)
-                   (fork-current model-component))
+                   (fork-current model-component new-expr))
 
                   (else
                    (list model-component))))
 
                model))))
 
+       ;; FIXME: REMOVE
        (if (member
             expr:type
             (list '= 'constant 'or 'and 'tuple 'not 'xor 'r7rs))

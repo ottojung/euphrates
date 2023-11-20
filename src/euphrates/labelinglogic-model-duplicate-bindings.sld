@@ -18,6 +18,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -42,9 +45,6 @@
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
-    (only (euphrates unique-identifier)
-          make-unique-identifier))
-  (import
     (only (scheme base)
           =
           and
@@ -64,9 +64,7 @@
           not
           null?
           or
-          quasiquote
-          quote
-          unquote))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
