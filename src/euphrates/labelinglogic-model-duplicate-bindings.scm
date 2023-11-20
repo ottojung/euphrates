@@ -9,12 +9,12 @@
   (define (is-binding? name)
     (hashset-has? bindings-set name))
 
-  (define extended-model model)
+  (debugs model)
 
   (define duplicated-model
     (list-fold
-     (model extended-model)
-     (binding extended-model)
+     (model model)
+     (binding model)
 
      (let ()
        (define-tuple (name expr) binding)
@@ -82,5 +82,7 @@
                    :message (stringf "Expression type ~s not recognized"
                                      (~a expr:type))
                    :args (list expr:type binding))))))
+
+  (debugs duplicated-model)
 
   duplicated-model)
