@@ -197,8 +197,13 @@
 
   (assert=
 
-   `((t_an (r7rs (lambda (c) (or (char-upper-case? c) (char-lower-case? c)))))
-     (t_3 (= #\3)))
+   `((t_an (or uid_1 uid_2))
+     (t_3 (= #\3))
+     (uid_1 (r7rs char-upper-case?))
+     (uid_2 (r7rs char-lower-case?)))
+
+   ;; `((t_an (r7rs (lambda (c) (or (char-upper-case? c) (char-lower-case? c)))))
+   ;;   (t_3 (= #\3)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
