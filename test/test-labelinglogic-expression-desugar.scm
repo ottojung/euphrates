@@ -66,8 +66,8 @@
 ;;    (labelinglogic:expression:desugar
 ;;     '(tuple a b (and c d e) (or f g) h i))))
 
-;; (let ()
-;;   (assert=
-;;    `(and a (and b (and (tuple c (tuple d e)) (and (or f g) (and h i)))))
-;;    (labelinglogic:expression:desugar
-;;     '(and a b (tuple c d e) (or f g) h i))))
+(let ()
+  (assert=
+   `(and a (and b (and (tuple c (tuple d e)) (and (or f g) (and h i)))))
+   (labelinglogic:expression:desugar
+    '(and a b (tuple c (tuple d e)) (or f g) h i))))
