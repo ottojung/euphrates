@@ -33,7 +33,8 @@
 
     (cond
      ((member type (list 'or 'and 'tuple 'not))
-      (cons type (map loop-expr args)))
+      (labelinglogic:expression:make
+       type (map loop-expr args)))
 
      ((member type (list '= 'constant 'r7rs))
       expr)

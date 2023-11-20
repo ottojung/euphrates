@@ -15,6 +15,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -38,7 +41,6 @@
           append
           begin
           cond
-          cons
           define
           else
           equal?
