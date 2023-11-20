@@ -34,7 +34,7 @@
 
 (define (labelinglogic:expression:sugarify/children expr)
   (define type (labelinglogic:expression:type expr))
-  (define args (labelinglogic:expression:type expr))
+  (define args (labelinglogic:expression:args expr))
 
   (cond
    ((member type (list 'tuple 'and 'or 'not 'xor))
