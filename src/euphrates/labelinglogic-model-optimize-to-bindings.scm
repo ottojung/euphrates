@@ -9,13 +9,6 @@
   (define (is-binding? x)
     (hashset-has? bindings-found x))
 
-  (define reachable-model
-    (filter
-     (lambda (model-component)
-       (define-tuple (class predicate) model-component)
-       (is-binding? class))
-     model))
-
   (define (bigloop model0)
     (define sugar-model
       (labelinglogic:model:map-expressions
@@ -51,7 +44,7 @@
 
   (define opt-model
     (apply-until-fixpoint
-     bigloop reachable-model))
+     bigloop model))
 
   (define flat-model
     (labelinglogic:model:flatten opt-model))
