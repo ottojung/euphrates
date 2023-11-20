@@ -7,10 +7,12 @@
       (car args)
       expr))
 
+
 (define (labelinglogic:expression:optimize/recurse-on-args expr)
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
   (cons type (map labelinglogic:expression:optimize args)))
+
 
 (define (labelinglogic:expression:optimize/and+or expr)
   (define type (labelinglogic:expression:type expr))
@@ -30,6 +32,11 @@
      (if (= (length rec) (length dedup)) new
          (labelinglogic:expression:optimize new)))))
 
+
+(define (labelinglogic:expression:optimize/xor expr)
+  (
+
+
 (define (labelinglogic:expression:optimize expr)
   (define type (labelinglogic:expression:type expr))
 
@@ -47,6 +54,10 @@
 
    ((member type (list 'and 'or))
     (labelinglogic:expression:optimize/and+or expr))
+
+   ((member type (list 'xor))
+    ;; TODO: some optis.
+    expr)
 
    ((member type (list '= 'constant))
     expr)
