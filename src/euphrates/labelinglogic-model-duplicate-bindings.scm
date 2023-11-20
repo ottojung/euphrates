@@ -116,4 +116,7 @@
        (is-binding? class))
      transitive-model))
 
-  reduced-model)
+  (define flat-model
+    (labelinglogic:model:flatten reduced-model))
+
+  flat-model)
