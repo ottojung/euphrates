@@ -60,13 +60,6 @@
 
   (assert=
 
-   ;; `((t_an (or uid_1 t_3))
-   ;;   (t_3 (= #\3))
-   ;;   (uid_1 (r7rs (lambda (c)
-   ;;                  (or (char-upper-case? c)
-   ;;                      (char-lower-case? c)
-   ;;                      (char-numeric? c))))))
-
    `((t_an (or uid_1 t_3))
      (t_3 (= #\3))
      (uid_1
