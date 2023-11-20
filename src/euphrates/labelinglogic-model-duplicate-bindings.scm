@@ -106,8 +106,9 @@
      transitive-model bindings))
 
   (define flat-model
-    (labelinglogic:model:map-expressions
-     (const labelinglogic:expression:sugarify)
-     (labelinglogic:model:flatten reduced-model)))
+    (labelinglogic:model:flatten
+     (labelinglogic:model:map-expressions
+      (const labelinglogic:expression:sugarify)
+      reduced-model)))
 
   flat-model)
