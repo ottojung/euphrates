@@ -6,8 +6,14 @@
 
     (define type
       (labelinglogic:expression:type expr))
+    (define args
+      (labelinglogic:expression:args expr))
 
     (cond
+     ((and (equal? type 'tuple)
+           (list-length= 1 args))
+      (loop (car args)))
+
      ((member type (list 'or 'and 'tuple 'not))
       (let ()
         (define linearized
