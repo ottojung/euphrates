@@ -13,7 +13,7 @@
          (define args (labelinglogic:expression:args expr))
 
          (cond
-          ((member type (list 'or 'and 'not 'tuple))
+          ((member type (list 'or 'and 'not 'xor 'tuple))
            (initialized-fun
             (cons type (map loop args))))
 
