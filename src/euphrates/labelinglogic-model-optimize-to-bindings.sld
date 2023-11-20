@@ -27,6 +27,9 @@
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
+    (only (euphrates labelinglogic-model-flatten)
+          labelinglogic:model:flatten))
+  (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
   (import
@@ -34,14 +37,24 @@
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
   (import
+    (only (euphrates
+            labelinglogic-model-reduce-to-bindings)
+          labelinglogic:model:reduce-to-bindings))
+  (import
+    (only (euphrates labelinglogic-model-replace-constants)
+          labelinglogic:model:replace-constants))
+  (import
     (only (euphrates list-map-first) list-map-first))
   (import
     (only (scheme base)
           and
+          assoc
           begin
           define
           equal?
+          if
           lambda
+          let
           map
           not))
   (cond-expand

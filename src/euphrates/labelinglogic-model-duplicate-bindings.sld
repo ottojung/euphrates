@@ -4,11 +4,7 @@
     labelinglogic-model-duplicate-bindings)
   (export labelinglogic:model:duplicate-bindings)
   (import
-    (only (euphrates apply-until-fixpoint)
-          apply-until-fixpoint))
-  (import
     (only (euphrates catchu-case) catchu-case))
-  (import (only (euphrates const) const))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -22,9 +18,6 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-sugarify)
-          labelinglogic:expression:sugarify))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -36,21 +29,8 @@
             labelinglogic-model-calculate-biggest-universe)
           labelinglogic:model:calculate-biggest-universe))
   (import
-    (only (euphrates labelinglogic-model-flatten)
-          labelinglogic:model:flatten))
-  (import
-    (only (euphrates labelinglogic-model-map-expressions)
-          labelinglogic:model:map-expressions))
-  (import
-    (only (euphrates
-            labelinglogic-model-reduce-to-bindings)
-          labelinglogic:model:reduce-to-bindings))
-  (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
-  (import
-    (only (euphrates labelinglogic-model-replace-constants)
-          labelinglogic:model:replace-constants))
   (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
@@ -70,7 +50,6 @@
           and
           append
           apply
-          assoc
           begin
           cond
           define
