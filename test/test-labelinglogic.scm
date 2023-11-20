@@ -397,7 +397,8 @@
 
    `((t_n (or (r7rs (lambda (c)
                       (and (char? c)
-                           (char-numeric? c)))) uid_1))
+                           (char-numeric? c))))
+              uid_1))
      (t_4 (tuple uid_1 uid_2 uid_3))
      (uid_1 (= #\3))
      (uid_2 (= #\4))
