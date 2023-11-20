@@ -6,17 +6,12 @@
   (define stack (stack-make))
 
   (let loop ((expr expr))
-
-    (define type
-      (labelinglogic:expression:type expr))
-
-    (define args
-      (labelinglogic:expression:args expr))
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
 
     (cond
      ((equal? type type0) (for-each loop args))
-     (else
-      (stack-push! stack expr))))
+     (else (stack-push! stack expr))))
 
   (define linearized
     (reverse (stack->list stack)))
