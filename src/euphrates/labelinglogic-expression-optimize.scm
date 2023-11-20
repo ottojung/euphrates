@@ -33,6 +33,11 @@
          (labelinglogic:expression:optimize new)))))
 
 
+(define (labelinglogic:expression:optimize/xor expr)
+  ;; TODO: some optis.
+  expr)
+
+
 (define (labelinglogic:expression:optimize expr)
   (define type (labelinglogic:expression:type expr))
 
@@ -52,8 +57,7 @@
     (labelinglogic:expression:optimize/and+or expr))
 
    ((member type (list 'xor))
-    ;; TODO: some optis.
-    expr)
+    (labelinglogic:expression:optimize/xor expr))
 
    ((member type (list '= 'constant))
     expr)
