@@ -5,14 +5,7 @@
   (import
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
-  (import
-    (only (scheme base)
-          and
-          begin
-          let
-          or
-          quasiquote
-          quote))
+  (import (only (scheme base) begin let or quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
