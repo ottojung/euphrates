@@ -65,7 +65,7 @@
 
        (if (member
             expr:type
-            (list '= 'constant 'or 'and 'tuple 'not 'r7rs))
+            (list '= 'constant 'or 'and 'tuple 'not 'xor 'r7rs))
 
            (let ()
              (define biggest-universe
