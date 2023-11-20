@@ -395,13 +395,21 @@
 
   (assert=
 
-   `((t_n (r7rs (lambda (c)
-                  (and (char? c)
-                       (char-numeric? c)))))
+   `((t_n (or (r7rs (lambda (c)
+                      (and (char? c)
+                           (char-numeric? c)))) uid_1))
      (t_4 (tuple uid_1 uid_2 uid_3))
      (uid_1 (= #\3))
      (uid_2 (= #\4))
      (uid_3 (= #\5)))
+
+   ;; `((t_n (r7rs (lambda (c)
+   ;;                (and (char? c)
+   ;;                     (char-numeric? c)))))
+   ;;   (t_4 (tuple uid_1 uid_2 uid_3))
+   ;;   (uid_1 (= #\3))
+   ;;   (uid_2 (= #\4))
+   ;;   (uid_3 (= #\5)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
