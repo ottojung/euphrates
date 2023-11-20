@@ -17,26 +17,29 @@
            type (map loop args))))
 
      ((labelinglogic:expression:type:associative? type)
-      (let ()
-        (define linearized
-          (map
-           loop
-           (labelinglogic:expression:args
-            (labelinglogic:expression:sugarify expr))))
+      (if (list-length= 1 args)
+          (loop (car args))
 
-        (define folded
-          (let loop ((rest linearized))
-            (cond
-             ((or (null? rest)
-                  (null? (cdr rest))
-                  (null? (cddr rest)))
-              (labelinglogic:expression:make
-               type rest))
-             (else
-              (labelinglogic:expression:make
-               type (list (car rest) (loop (cdr rest))))))))
+          (let ()
+            (define linearized
+              (map
+               loop
+               (labelinglogic:expression:args
+                (labelinglogic:expression:sugarify expr))))
 
-        folded))
+            (define folded
+              (let loop ((rest linearized))
+                (cond
+                 ((or (null? rest)
+                      (null? (cdr rest))
+                      (null? (cddr rest)))
+                  (labelinglogic:expression:make
+                   type rest))
+                 (else
+                  (labelinglogic:expression:make
+                   type (list (car rest) (loop (cdr rest))))))))
+
+            folded)))
 
      ((member type (list '= 'constant 'r7rs))
       expr)
