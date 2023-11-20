@@ -30,4 +30,7 @@
 
   (debugs duplicated-model)
 
-  duplicated-model)
+  (define reduced-model
+    (labelinglogic:model:reduce-to-bindings duplicated-model bindings))
+
+  reduced-model)

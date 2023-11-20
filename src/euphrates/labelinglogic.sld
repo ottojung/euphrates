@@ -23,6 +23,10 @@
             labelinglogic-model-optimize-to-bindings)
           labelinglogic:model:optimize-to-bindings))
   (import
+    (only (euphrates
+            labelinglogic-model-reduce-to-bindings)
+          labelinglogic:model:reduce-to-bindings))
+  (import
     (only (scheme base) begin car define map))
   (cond-expand
     (guile (import (only (guile) include-from-path))
