@@ -21,6 +21,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-desugar)
+          labelinglogic:expression:desugar))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -34,6 +37,9 @@
   (import
     (only (euphrates labelinglogic-model-flatten)
           labelinglogic:model:flatten))
+  (import
+    (only (euphrates labelinglogic-model-map-expressions)
+          labelinglogic:model:map-expressions))
   (import
     (only (euphrates
             labelinglogic-model-reduce-to-bindings)

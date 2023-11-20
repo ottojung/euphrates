@@ -106,6 +106,8 @@
      transitive-model bindings))
 
   (define flat-model
-    (labelinglogic:model:flatten reduced-model))
+    (labelinglogic:model:map-expressions
+     labelinglogic:expression:desugar
+     (labelinglogic:model:flatten reduced-model)))
 
   flat-model)
