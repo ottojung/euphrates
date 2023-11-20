@@ -36,8 +36,12 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
+  (debugs expr)
+  (debugs args)
+
   (cond
    ((member type (list 'tuple 'and 'or 'not 'xor))
+    (debugs "HERE!!!")
     (labelinglogic:expression:make
      type (map labelinglogic:expression:sugarify args)))
 
