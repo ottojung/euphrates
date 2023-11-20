@@ -14,7 +14,7 @@
            (list-length= 1 args))
       (loop (car args)))
 
-     ((member type (list 'or 'and 'tuple 'not))
+     ((member type (list 'or 'and 'not))
       (let ()
         (define linearized
           (map
