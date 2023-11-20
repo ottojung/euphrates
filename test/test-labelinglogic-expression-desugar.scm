@@ -19,6 +19,18 @@
 
 (let ()
   (assert=
+   'a
+   (labelinglogic:expression:desugar
+    '(tuple a))))
+
+(let ()
+  (assert=
+   'a
+   (labelinglogic:expression:desugar
+    '(or (tuple a)))))
+
+(let ()
+  (assert=
    '(or)
    (labelinglogic:expression:desugar
     '(or))))
