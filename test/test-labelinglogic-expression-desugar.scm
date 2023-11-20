@@ -45,6 +45,12 @@
   (assert=
    '(or a (or b (or z c)))
    (labelinglogic:expression:desugar
+    '(or a (or (tuple b) z) c))))
+
+(let ()
+  (assert=
+   '(or a (or b (or z c)))
+   (labelinglogic:expression:desugar
     '(or a (or b z) (or c)))))
 
 (let ()
