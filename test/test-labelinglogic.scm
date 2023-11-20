@@ -99,8 +99,8 @@
      (t_3 (= #\3))
      (t_4 (= #\4))
      (uid_1 (r7rs (lambda (c)
-                    (or (char-upper-case? c)
-                        (char-lower-case? c)
+                    (or (or (char-upper-case? c)
+                            (char-lower-case? c))
                         (char-numeric? c))))))
 
    (labelinglogic:model:alpha-rename
