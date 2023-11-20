@@ -8,14 +8,6 @@
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
-    (only (euphrates
-            labelinglogic-model-calculate-biggest-universe-typed)
-          labelinglogic:model:calculate-biggest-universe/typed))
-  (import
-    (only (euphrates
-            labelinglogic-model-calculate-biggest-universe)
-          labelinglogic:model:calculate-biggest-universe))
-  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
@@ -43,7 +35,6 @@
           char-numeric?
           char-upper-case?
           char-whitespace?))
-  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (srfi srfi-1) any)))
     (else (import (only (srfi 1) any))))
