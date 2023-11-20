@@ -2,7 +2,6 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:sugarify/functor expr)
-  (debugs (list "FUNCTOR" expr))
   (define type0 (labelinglogic:expression:type expr))
   (define stack (stack-make))
 
@@ -16,8 +15,6 @@
 
   (define linearized
     (reverse (stack->list stack)))
-
-  (debugs linearized)
 
   (labelinglogic:expression:make
    type0 linearized))
@@ -34,12 +31,8 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (debugs expr)
-  (debugs args)
-
   (cond
    ((member type (list 'tuple 'and 'or 'not 'xor))
-    (debugs "HERE!!!")
     (labelinglogic:expression:make
      type (map labelinglogic:expression:sugarify args)))
 

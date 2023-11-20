@@ -2,7 +2,6 @@
 (define-library
   (euphrates labelinglogic-expression-sugarify)
   (export labelinglogic:expression:sugarify)
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
