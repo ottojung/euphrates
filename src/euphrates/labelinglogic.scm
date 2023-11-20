@@ -21,4 +21,4 @@
   (define duplicated-model
     (labelinglogic:model:duplicate-bindings opt-model bindings))
 
-  reduced-model)
+  duplicated-model)
