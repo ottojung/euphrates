@@ -3,6 +3,7 @@
   (euphrates labelinglogic-model-flatten)
   (export labelinglogic:model:flatten)
   (import (only (euphrates const) const))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
           hashmap-ref
@@ -23,13 +24,13 @@
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
-  (import (only (euphrates queue) make-queue))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
           stack->list
           stack-make
-          stack-push!))
+          stack-push!
+          stack-unload!))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import

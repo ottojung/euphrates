@@ -46,15 +46,21 @@
                                 (~a type))
               :args (list type expr)))))
 
-  (define maped-model
-    (labelinglogic:model:map-expressions
-     (const factor-out-expr)
-     model))
+  (let loop ((model model))
+    (stack-unload! stack)
+    (debugs model)
 
-  (define complete-model
-    (append
-     maped-model
-     (reverse
-      (stack->list stack))))
+    (define maped-model
+      (labelinglogic:model:map-expressions
+       (const factor-out-expr)
+       model))
 
-  complete-model)
+    (define complete-model
+      (append
+       maped-model
+       (reverse
+        (stack->list stack))))
+
+    (debugs complete-model)
+
+    complete-model))
