@@ -3,6 +3,8 @@
   (test-labelinglogic-expression-sugarify)
   (import (only (euphrates assert-equal) assert=))
   (import
+    (only (euphrates assert-throw) assert-throw))
+  (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
