@@ -26,7 +26,7 @@
 
          (if (equal? class name)
              (list model-component)
-             (list class new-expr)))
+             (list (labelinglogic:binding:make class new-expr))))
 
        (define (try-to-add inputs)
          (define leafs (labelinglogic:model:reduce-to-leafs model))

@@ -13,6 +13,9 @@
           hashset-has?
           list->hashset))
   (import
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic:binding:make))
+  (import
     (only (euphrates labelinglogic-binding-name)
           labelinglogic:binding:name))
   (import
