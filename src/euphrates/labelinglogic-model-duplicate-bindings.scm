@@ -107,7 +107,7 @@
 
   (define flat-model
     (labelinglogic:model:map-expressions
-     (const labelinglogic:expression:desugar)
+     (const labelinglogic:expression:sugarify)
      (labelinglogic:model:flatten reduced-model)))
 
   flat-model)
