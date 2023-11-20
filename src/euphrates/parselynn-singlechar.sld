@@ -2,7 +2,6 @@
 (define-library
   (euphrates parselynn-singlechar)
   (export make-parselynn/singlechar)
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
   (import
