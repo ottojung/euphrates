@@ -8,6 +8,8 @@
           apply-until-fixpoint))
   (import
     (only (euphrates catchu-case) catchu-case))
+  (import (only (euphrates debug) debug))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
