@@ -101,14 +101,6 @@
      connect-transitive-model-edges
      duplicated-model))
 
-
-  ;; (debugs duplicated-model)
-  ;; (debugs transitive-model)
-  ;; (debug "")
-  ;; (debug "")
-  ;; (debug "")
-  ;; (debug "")
-
   (define reduced-model
     (labelinglogic:model:reduce-to-bindings
      transitive-model bindings))
