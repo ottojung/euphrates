@@ -16,12 +16,7 @@
     (cond
      ((equal? type type0) (for-each loop args))
      (else
-      (stack-push!
-       stack
-
-       (if (labelinglogic:expression:type:associative? type)
-           (labelinglogic:expression:sugarify expr)
-           expr)))))
+      (stack-push! stack expr))))
 
   (define linearized
     (reverse (stack->list stack)))
@@ -29,14 +24,21 @@
   (labelinglogic:expression:make
    type0 linearized))
 
+(define (labelinglogic:expression:sugarify/children expr)
+  (define type (labelinglogic:expression:type expr))
+  (define args (labelinglogic:expression:args expr))
+
+  (if (list-length= 1 args)
+      (car args)
+      expr))
+
 (define (labelinglogic:expression:sugarify/unwrap expr)
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
   (if (list-length= 1 args)
-      (labelinglogic:expression:sugarify (car args))
-      (labelinglogic:expression:make
-       type (map labelinglogic:expression:sugarify args))))
+      (car args)
+      expr))
 
 (define (labelinglogic:expression:sugarify expr)
   (define type (labelinglogic:expression:type expr))
