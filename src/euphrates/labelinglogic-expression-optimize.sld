@@ -13,10 +13,6 @@
             labelinglogic-expression-move-nots-down)
           labelinglogic:expression:move-nots-down))
   (import
-    (only (euphrates
-            labelinglogic-expression-optimize-r7rs)
-          labelinglogic:expression:optimize/r7rs))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import

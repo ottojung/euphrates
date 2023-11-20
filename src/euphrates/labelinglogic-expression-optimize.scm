@@ -34,8 +34,8 @@
   (define type (labelinglogic:expression:type expr))
 
   (cond
-   ((equal? type 'r7rs)
-    (labelinglogic:expression:optimize/r7rs expr))
+   ;; ((equal? type 'r7rs)
+   ;;  (labelinglogic:expression:optimize/r7rs expr))
 
    ((equal? type 'not)
     (labelinglogic:expression:move-nots-down expr))
