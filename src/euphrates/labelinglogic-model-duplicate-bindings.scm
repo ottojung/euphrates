@@ -9,7 +9,7 @@
   (define (is-binding? name)
     (hashset-has? bindings-set name))
 
-  ;; (debugs model)
+  (debugs model)
 
   (define duplicated-model
     (list-fold
@@ -82,5 +82,7 @@
                    :message (stringf "Expression type ~s not recognized"
                                      (~a expr:type))
                    :args (list expr:type binding))))))
+
+  (debugs duplicated-model)
 
   duplicated-model)

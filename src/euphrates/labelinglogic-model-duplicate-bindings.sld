@@ -5,6 +5,7 @@
   (export labelinglogic:model:duplicate-bindings)
   (import
     (only (euphrates catchu-case) catchu-case))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import

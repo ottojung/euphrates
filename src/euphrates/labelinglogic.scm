@@ -27,6 +27,6 @@
     (labelinglogic:model:flatten
      duplicated-model))
 
-  ;; (debugs flat-model)
+  (debugs flat-model)
 
   flat-model)
