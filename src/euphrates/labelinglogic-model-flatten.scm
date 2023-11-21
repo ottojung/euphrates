@@ -58,8 +58,8 @@
 
   ;; Just to remember the current aliases.
   (labelinglogic:model:map-expressions
-   (lambda (class)
-     (lambda (predicate)
+   (lambda (class predicate)
+     (lambda (expr)
        (hashmap-set! H predicate class)))
    model)
 
