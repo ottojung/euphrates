@@ -23,14 +23,16 @@
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
+  (import
+    (only (euphrates
+            labelinglogic-model-map-subexpressions)
+          labelinglogic:model:map-subexpressions))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
           stack->list
-          stack-empty?
           stack-make
-          stack-push!
-          stack-unload!))
+          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -46,7 +48,6 @@
           define
           else
           equal?
-          if
           let
           list
           map

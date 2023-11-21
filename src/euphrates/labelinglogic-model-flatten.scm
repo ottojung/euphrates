@@ -51,20 +51,15 @@
    (const factor-out-expr)
    model)
 
-  (let loop ((model model))
-    (stack-unload! stack)
+  (define maped-model
+    (labelinglogic:model:map-subexpressions
+     (const factor-out-expr)
+     model))
 
-    (define maped-model
-      (labelinglogic:model:map-expressions
-       (const factor-out-expr)
-       model))
+  (define complete-model
+    (append
+     maped-model
+     (reverse
+      (stack->list stack))))
 
-    (define complete-model
-      (append
-       maped-model
-       (reverse
-        (stack->list stack))))
-
-    (if (stack-empty? stack)
-        complete-model
-        (loop complete-model))))
+  complete-model)
