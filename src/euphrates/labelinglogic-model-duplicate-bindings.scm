@@ -24,6 +24,8 @@
        (define (fork-current model-component new-expr)
          (define-tuple (class predicate) model-component)
 
+         (debugs new-expr)
+
          (if (equal? class name)
              (list model-component)
              (list (labelinglogic:binding:make class new-expr))))
