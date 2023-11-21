@@ -15,7 +15,8 @@
          (cond
           ((member type (list 'or 'and 'not 'xor 'tuple))
            (initialized-fun
-            (cons type (map loop args))))
+            (labelinglogic:expression:make
+             type (map loop args))))
 
           ((member type (list '= 'constant 'r7rs))
            (initialized-fun expr))

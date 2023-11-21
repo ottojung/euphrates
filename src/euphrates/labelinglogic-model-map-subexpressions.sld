@@ -12,6 +12,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import (only (euphrates raisu-star) raisu*))
@@ -23,7 +26,6 @@
           and
           begin
           cond
-          cons
           define
           else
           lambda
