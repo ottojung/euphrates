@@ -58,7 +58,7 @@
 
   ;; Just to remember the current aliases.
   (labelinglogic:model:map-expressions
-   (const factor-out-expr)
+   (const loop-expr)
    model)
 
   (stack-unload! stack)
