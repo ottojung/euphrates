@@ -36,6 +36,9 @@
             labelinglogic-model-calculate-biggest-universe)
           labelinglogic:model:calculate-biggest-universe))
   (import
+    (only (euphrates labelinglogic-model-flatten)
+          labelinglogic:model:flatten))
+  (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
   (import

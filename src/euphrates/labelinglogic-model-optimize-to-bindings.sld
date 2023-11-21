@@ -27,9 +27,6 @@
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
-    (only (euphrates labelinglogic-model-flatten)
-          labelinglogic:model:flatten))
-  (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
   (import
