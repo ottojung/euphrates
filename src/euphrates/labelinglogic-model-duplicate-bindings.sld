@@ -37,9 +37,6 @@
             labelinglogic-model-calculate-biggest-universe)
           labelinglogic:model:calculate-biggest-universe))
   (import
-    (only (euphrates labelinglogic-model-reduce-to-leafs)
-          labelinglogic:model:reduce-to-leafs))
-  (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import (only (euphrates list-fold) list-fold))

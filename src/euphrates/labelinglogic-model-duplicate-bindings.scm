@@ -29,8 +29,8 @@
              (list (labelinglogic:binding:make class new-expr))))
 
        (define (try-to-add inputs)
-         (define leafs (labelinglogic:model:reduce-to-leafs model))
-         (define desc (labelinglogic:make-nondet-descriminator leafs))
+         ;; (define leafs (labelinglogic:model:reduce-to-leafs model))
+         (define desc (labelinglogic:make-nondet-descriminator model))
          (define containing-classes
            (list->hashset
             (list-fold/semigroup
