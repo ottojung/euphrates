@@ -90,7 +90,13 @@
     (let ()
       (define S (make-hashset))
       (labelinglogic:model:map-subexpressions
-       (const (lambda (expr) (hashset-add! S expr) expr))
+       (const
+        (lambda (expr)
+          (define type (labelinglogic:expression:type expr))
+          (define args (labelinglogic:expression:args expr))
+          (when (equal? type '=)
+            (hashset-add! S (car args)))
+          expr))
        model)
       (hashset->list S)))
 
@@ -104,7 +110,7 @@
 
      (cond
       ((and (equal? type 'r7rs)
-            (labelinglogic:expression:evaluate/r7rs expr )
+            (labelinglogic:expression:evaluate/r7rs expr binding)
 
 
   (define duplicated-model
