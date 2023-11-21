@@ -93,9 +93,8 @@
        (const
         (lambda (expr)
           (define type (labelinglogic:expression:type expr))
-          (define args (labelinglogic:expression:args expr))
           (when (equal? type '=)
-            (hashset-add! S (car args)))
+            (hashset-add! S expr))
           expr))
        model)
       (hashset->list S)))
@@ -106,17 +105,20 @@
 
     (list-fold
      (acc expr)
-     (binding to-duplicate)
+     (to-add to-duplicate)
+
+     (define value
+       (car (labelinglogic:expression:args to-add)))
 
      (cond
       ((and (equal? type 'r7rs)
-            (labelinglogic:expression:evaluate/r7rs expr binding)
-
+            (labelinglogic:expression:evaluate/r7rs expr value))
+       (labelinglogic:expression:make 'or (list expr to-add)))
+      (else expr))))
 
   (define duplicated-model
     (labelinglogic:model:map-subexpressions
-     (const mapper)
-     model))
+     (const mapper) model))
 
   (debugs duplicated-model)
 
