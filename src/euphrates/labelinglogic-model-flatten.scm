@@ -46,6 +46,11 @@
                                 (~a type))
               :args (list type expr)))))
 
+  ;; Just to remember the current aliases.
+  (labelinglogic:model:map-expressions
+   (const factor-out-expr)
+   model)
+
   (let loop ((model model))
     (stack-unload! stack)
 
