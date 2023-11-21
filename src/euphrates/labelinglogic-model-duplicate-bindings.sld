@@ -9,12 +9,7 @@
     (only (euphrates hashset)
           hashset->list
           hashset-add!
-          hashset-has?
-          list->hashset
           make-hashset))
-  (import
-    (only (euphrates labelinglogic-binding-name)
-          labelinglogic:binding:name))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -46,7 +41,6 @@
           lambda
           let
           list
-          map
           or
           quote
           when))
