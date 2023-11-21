@@ -17,6 +17,9 @@
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
+    (only (euphrates unique-identifier)
+          unique-identifier?))
+  (import
     (only (scheme base)
           =
           and
