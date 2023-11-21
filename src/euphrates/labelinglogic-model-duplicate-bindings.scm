@@ -11,80 +11,97 @@
 
   (debugs model)
 
+  ;; (define duplicated-model
+  ;;   (list-fold
+  ;;    (model model)
+  ;;    (binding model)
+
+  ;;    (let ()
+  ;;      (define-tuple (name expr) binding)
+  ;;      (define expr:type (labelinglogic:expression:type expr))
+  ;;      (define expr:args (labelinglogic:expression:args expr))
+
+  ;;      (define (fork-current model-component new-expr)
+  ;;        (define-tuple (class predicate) model-component)
+
+  ;;        (if (equal? class name)
+  ;;            (list model-component)
+  ;;            (list (labelinglogic:binding:make class new-expr))))
+
+  ;;      (define (try-to-add inputs)
+  ;;        ;; (define leafs (labelinglogic:model:reduce-to-leafs model))
+  ;;        (define desc (labelinglogic:make-nondet-descriminator model))
+  ;;        (define containing-classes
+  ;;          (list->hashset
+  ;;           (list-fold/semigroup
+  ;;            list-intersect/order-independent
+  ;;            (map desc inputs))))
+
+  ;;        (if (null? containing-classes) '()
+  ;;            (apply
+  ;;             append
+  ;;             (map
+  ;;              (lambda (model-component)
+  ;;                (define-tuple (class predicate) model-component)
+  ;;                (define type (labelinglogic:expression:type predicate))
+  ;;                (define args (labelinglogic:expression:args predicate))
+  ;;                (define new-args
+  ;;                  (if (equal? type 'or)
+  ;;                      (append args (list name))
+  ;;                      (list predicate name)))
+  ;;                (define new-expr
+  ;;                  (labelinglogic:expression:make
+  ;;                   'or new-args))
+
+  ;;                (cond
+  ;;                 ((hashset-has? containing-classes class)
+  ;;                  (fork-current model-component new-expr))
+
+  ;;                 (else
+  ;;                  (list model-component))))
+
+  ;;              model))))
+
+  ;;      ;; FIXME: REMOVE
+  ;;      (if (member
+  ;;           expr:type
+  ;;           (list '= 'constant 'or 'and 'tuple 'not 'xor 'r7rs))
+
+  ;;          (let ()
+  ;;            (define biggest-universe
+  ;;              (catchu-case
+  ;;               (labelinglogic:model:calculate-biggest-universe model expr)
+
+  ;;               (('no-biggest-universe . args) '())))
+
+  ;;            (debugs binding)
+  ;;            (debugs biggest-universe)
+
+  ;;            (if (null? biggest-universe) model
+  ;;                (try-to-add biggest-universe)))
+
+  ;;          (raisu* :from "labelinglogic"
+  ;;                  :type 'unknown-expr-type
+  ;;                  :message (stringf "Expression type ~s not recognized"
+  ;;                                    (~a expr:type))
+  ;;                  :args (list expr:type binding))))))
+
+
   (define duplicated-model
-    (list-fold
-     (model model)
-     (binding model)
+    (labelinglogic:model:map-subexpressions
+     (const
+      (lambda (expr)
+        (define type (labelinglogic:expression:type expr))
+        (define args (labelinglogic:expression:args expr))
 
-     (let ()
-       (define-tuple (name expr) binding)
-       (define expr:type (labelinglogic:expression:type expr))
-       (define expr:args (labelinglogic:expression:args expr))
+        (list-fold
+         (acc expr)
+         (binding model)
+         
 
-       (define (fork-current model-component new-expr)
-         (define-tuple (class predicate) model-component)
-
-         (if (equal? class name)
-             (list model-component)
-             (list (labelinglogic:binding:make class new-expr))))
-
-       (define (try-to-add inputs)
-         ;; (define leafs (labelinglogic:model:reduce-to-leafs model))
-         (define desc (labelinglogic:make-nondet-descriminator model))
-         (define containing-classes
-           (list->hashset
-            (list-fold/semigroup
-             list-intersect/order-independent
-             (map desc inputs))))
-
-         (if (null? containing-classes) '()
-             (apply
-              append
-              (map
-               (lambda (model-component)
-                 (define-tuple (class predicate) model-component)
-                 (define type (labelinglogic:expression:type predicate))
-                 (define args (labelinglogic:expression:args predicate))
-                 (define new-args
-                   (if (equal? type 'or)
-                       (append args (list name))
-                       (list predicate name)))
-                 (define new-expr
-                   (labelinglogic:expression:make
-                    'or new-args))
-
-                 (cond
-                  ((hashset-has? containing-classes class)
-                   (fork-current model-component new-expr))
-
-                  (else
-                   (list model-component))))
-
-               model))))
-
-       ;; FIXME: REMOVE
-       (if (member
-            expr:type
-            (list '= 'constant 'or 'and 'tuple 'not 'xor 'r7rs))
-
-           (let ()
-             (define biggest-universe
-               (catchu-case
-                (labelinglogic:model:calculate-biggest-universe model expr)
-
-                (('no-biggest-universe . args) '())))
-
-             (debugs binding)
-             (debugs biggest-universe)
-
-             (if (null? biggest-universe) model
-                 (try-to-add biggest-universe)))
-
-           (raisu* :from "labelinglogic"
-                   :type 'unknown-expr-type
-                   :message (stringf "Expression type ~s not recognized"
-                                     (~a expr:type))
-                   :args (list expr:type binding))))))
+        (cond
+         ((and (equal? type 'r7rs)
+               (labelinglogic:expression:evaluate/r7rs expr )
 
   (debugs duplicated-model)
 
