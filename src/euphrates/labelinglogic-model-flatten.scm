@@ -35,7 +35,7 @@
 
         (debug "DONE")
 
-        alias))))
+        (labelinglogic:expression:make 'constant alias)))))
 
   (define (factor-out-expr expr)
     (define type (labelinglogic:expression:type expr))
