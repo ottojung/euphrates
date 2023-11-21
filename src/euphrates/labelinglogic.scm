@@ -21,6 +21,8 @@
   (define duplicated-model
     (labelinglogic:model:duplicate-bindings opt-model bindings))
 
+  (debugs duplicated-model)
+
   (define flat-model
     (labelinglogic:model:flatten
      duplicated-model))
