@@ -374,14 +374,23 @@
 
   (assert=
 
-   `((t_n (or (r7rs (lambda (c)
-                      (and (char? c)
-                           (char-numeric? c))))
-              uid_1))
-     (t_4 (tuple uid_1 uid_2 uid_3))
-     (uid_1 (= #\3))
-     (uid_2 (= #\4))
-     (uid_3 (= #\5)))
+   `((t_n (or uid_1 uid_2))
+     (t_4 (tuple uid_2 uid_3 uid_4))
+     (uid_1 (r7rs (lambda (c)
+                    (and (char? c)
+                         (char-numeric? c)))))
+     (uid_2 (= #\3))
+     (uid_3 (= #\4))
+     (uid_4 (= #\5)))
+
+   ;; `((t_n (or (r7rs (lambda (c)
+   ;;                    (and (char? c)
+   ;;                         (char-numeric? c))))
+   ;;            uid_1))
+   ;;   (t_4 (tuple uid_1 uid_2 uid_3))
+   ;;   (uid_1 (= #\3))
+   ;;   (uid_2 (= #\4))
+   ;;   (uid_3 (= #\5)))
 
    ;; `((t_n (r7rs (lambda (c)
    ;;                (and (char? c)
