@@ -37,9 +37,6 @@
              list-intersect/order-independent
              (map desc inputs))))
 
-         (debugs inputs)
-         (debugs (hashset->list containing-classes))
-
          (if (null? containing-classes) '()
              (apply
               append
