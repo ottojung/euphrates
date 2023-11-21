@@ -9,7 +9,7 @@
   (define (is-binding? name)
     (hashset-has? bindings-set name))
 
-  (debugs model)
+  ;; (debugs model)
 
   (define duplicated-model
     (list-fold

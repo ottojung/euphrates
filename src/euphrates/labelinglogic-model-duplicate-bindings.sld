@@ -5,7 +5,6 @@
   (export labelinglogic:model:duplicate-bindings)
   (import
     (only (euphrates catchu-case) catchu-case))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -35,9 +34,6 @@
     (only (euphrates
             labelinglogic-model-calculate-biggest-universe)
           labelinglogic:model:calculate-biggest-universe))
-  (import
-    (only (euphrates labelinglogic-model-flatten)
-          labelinglogic:model:flatten))
   (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
