@@ -83,10 +83,4 @@
                                      (~a expr:type))
                    :args (list expr:type binding))))))
 
-  (define flat-model
-    (labelinglogic:model:flatten
-     duplicated-model))
-
-  (debugs flat-model)
-
-  flat-model)
+  duplicated-model)

@@ -18,6 +18,9 @@
             labelinglogic-model-extend-with-bindings)
           labelinglogic:model:extend-with-bindings))
   (import
+    (only (euphrates labelinglogic-model-flatten)
+          labelinglogic:model:flatten))
+  (import
     (only (euphrates
             labelinglogic-model-optimize-to-bindings)
           labelinglogic:model:optimize-to-bindings))
