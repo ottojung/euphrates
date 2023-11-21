@@ -59,7 +59,7 @@
   ;; Just to remember the current aliases.
   (labelinglogic:model:map-expressions
    (lambda (class predicate)
-     (hashmap-set! predicate class))
+     (hashmap-set! H predicate class))
    model)
 
   (debugs H)
