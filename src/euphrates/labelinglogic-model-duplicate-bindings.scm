@@ -90,24 +90,27 @@
     (let ()
       (define S (make-hashset))
       (labelinglogic:model:map-subexpressions
-       (const hashset-add!)
+       (const (lambda (expr) (hashset-add! S expr) expr))
        model)
       (hashset->list S)))
 
+  (define (mapper expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
+    (list-fold
+     (acc expr)
+     (binding to-duplicate)
+
+     (cond
+      ((and (equal? type 'r7rs)
+            (labelinglogic:expression:evaluate/r7rs expr )
+
+
   (define duplicated-model
     (labelinglogic:model:map-subexpressions
-     (const
-      (lambda (expr)
-        (define type (labelinglogic:expression:type expr))
-        (define args (labelinglogic:expression:args expr))
-
-        (list-fold
-         (acc expr)
-         (binding to-duplicate)
-
-         (cond
-          ((and (equal? type 'r7rs)
-                (labelinglogic:expression:evaluate/r7rs expr )
+     (const mapper)
+     model))
 
   (debugs duplicated-model)
 
