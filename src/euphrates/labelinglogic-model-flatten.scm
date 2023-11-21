@@ -6,8 +6,12 @@
   (define stack (stack-make))
 
   (define (loop-expr expr)
+    (debugs expr)
+
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
+
+    (debugs type)
 
     (cond
      ((equal? 'constant type) expr)
