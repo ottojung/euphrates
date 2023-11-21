@@ -105,9 +105,10 @@
    `((t_an (or uid_1 uid_2 uid_3))
      (t_3 (= #\3))
      (t_4 (= #\4))
+     (uid_4 (r7rs char-numeric?))
      (uid_1 (r7rs char-upper-case?))
      (uid_2 (r7rs char-lower-case?))
-     (uid_3 (or (r7rs char-numeric?) t_3)))
+     (uid_3 (or uid_4 t_3)))
 
    ;; `((t_an (or uid_1 t_3 t_4))
    ;;   (t_3 (= #\3))
