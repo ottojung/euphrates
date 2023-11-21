@@ -20,8 +20,12 @@
         (define existing
           (hashmap-ref H expr #f))
 
+        (debugs existing)
+
         (define alias
           (or existing (make-unique-identifier)))
+
+        (debugs alias)
 
         (unless existing
           (hashmap-set! H expr alias)
