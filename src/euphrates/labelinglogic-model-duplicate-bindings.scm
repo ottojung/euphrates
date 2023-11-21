@@ -24,8 +24,6 @@
        (define (fork-current model-component new-expr)
          (define-tuple (class predicate) model-component)
 
-         (debugs new-expr)
-
          (if (equal? class name)
              (list model-component)
              (list (labelinglogic:binding:make class new-expr))))
@@ -38,6 +36,9 @@
             (list-fold/semigroup
              list-intersect/order-independent
              (map desc inputs))))
+
+         (debugs inputs)
+         (debugs containing-classes)
 
          (if (null? containing-classes) '()
              (apply
