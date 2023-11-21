@@ -3,6 +3,7 @@
   (euphrates labelinglogic-model-flatten)
   (export labelinglogic:model:flatten)
   (import (only (euphrates const) const))
+  (import (only (euphrates debug) debug))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)

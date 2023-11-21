@@ -33,6 +33,8 @@
            stack
            (labelinglogic:binding:make alias expr)))
 
+        (debug "DONE")
+
         alias))))
 
   (define (factor-out-expr expr)
