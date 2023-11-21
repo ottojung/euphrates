@@ -86,6 +86,13 @@
   ;;                                    (~a expr:type))
   ;;                  :args (list expr:type binding))))))
 
+  (define to-duplicate
+    (let ()
+      (define S (make-hashset))
+      (labelinglogic:model:map-subexpressions
+       (const hashset-add!)
+       model)
+      (hashset->list S)))
 
   (define duplicated-model
     (labelinglogic:model:map-subexpressions
@@ -96,12 +103,11 @@
 
         (list-fold
          (acc expr)
-         (binding model)
-         
+         (binding to-duplicate)
 
-        (cond
-         ((and (equal? type 'r7rs)
-               (labelinglogic:expression:evaluate/r7rs expr )
+         (cond
+          ((and (equal? type 'r7rs)
+                (labelinglogic:expression:evaluate/r7rs expr )
 
   (debugs duplicated-model)
 
