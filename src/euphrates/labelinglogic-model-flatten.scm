@@ -6,12 +6,8 @@
   (define stack (stack-make))
 
   (define (loop-expr expr)
-    (debugs expr)
-
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-
-    (debugs type)
 
     (cond
      ((equal? 'constant type) expr)
@@ -20,20 +16,14 @@
         (define existing
           (hashmap-ref H expr #f))
 
-        (debugs existing)
-
         (define alias
           (or existing (make-unique-identifier)))
-
-        (debugs alias)
 
         (unless existing
           (hashmap-set! H expr alias)
           (stack-push!
            stack
            (labelinglogic:binding:make alias expr)))
-
-        (debug "DONE")
 
         alias))))
 
@@ -62,8 +52,6 @@
      (lambda (expr)
        (hashmap-set! H predicate class)))
    model)
-
-  (debugs H)
 
   (define maped-model
     (labelinglogic:model:map-subexpressions
