@@ -74,6 +74,9 @@
 
                 (('no-biggest-universe . args) '())))
 
+             (debugs binding)
+             (debugs biggest-universe)
+
              (if (null? biggest-universe) model
                  (try-to-add biggest-universe)))
 
