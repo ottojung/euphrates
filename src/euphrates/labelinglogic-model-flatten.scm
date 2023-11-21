@@ -32,11 +32,11 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((member type (list 'or 'and 'tuple 'not 'xor))
+     ((member type (list '= 'r7rs 'or 'and 'tuple 'not 'xor))
       (labelinglogic:expression:make
        type (map loop-expr args)))
 
-     ((member type (list '= 'constant 'r7rs))
+     ((member type (list 'constant))
       expr)
 
      (else
