@@ -38,7 +38,7 @@
              (map desc inputs))))
 
          (debugs inputs)
-         (debugs containing-classes)
+         (debugs (hashset->list containing-classes))
 
          (if (null? containing-classes) '()
              (apply

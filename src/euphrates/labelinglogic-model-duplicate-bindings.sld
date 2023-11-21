@@ -10,6 +10,7 @@
     (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates hashset)
+          hashset->list
           hashset-has?
           list->hashset))
   (import
