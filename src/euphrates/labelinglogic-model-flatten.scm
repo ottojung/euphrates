@@ -9,6 +9,8 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
+    (debugs expr)
+
     (cond
      ((equal? 'constant type) expr)
      (else
@@ -18,6 +20,8 @@
 
         (define alias
           (or existing (make-unique-identifier)))
+
+        (debugs alias)
 
         (unless existing
           (hashmap-set! H expr alias)
