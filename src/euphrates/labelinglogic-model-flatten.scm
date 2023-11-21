@@ -51,6 +51,8 @@
    (const factor-out-expr)
    model)
 
+  (stack-unload! stack)
+
   (define maped-model
     (labelinglogic:model:map-subexpressions
      (const factor-out-expr)

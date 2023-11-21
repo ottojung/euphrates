@@ -32,7 +32,8 @@
     (only (euphrates stack)
           stack->list
           stack-make
-          stack-push!))
+          stack-push!
+          stack-unload!))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
