@@ -34,8 +34,7 @@
     (only (euphrates stack)
           stack->list
           stack-make
-          stack-push!
-          stack-unload!))
+          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -51,6 +50,7 @@
           define
           else
           equal?
+          lambda
           let
           list
           map

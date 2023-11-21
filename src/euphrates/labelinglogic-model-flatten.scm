@@ -58,10 +58,9 @@
 
   ;; Just to remember the current aliases.
   (labelinglogic:model:map-expressions
-   (const loop-expr)
+   (lambda (class predicate)
+     (hashmap-set! predicate class))
    model)
-
-  (stack-unload! stack)
 
   (debugs H)
 
