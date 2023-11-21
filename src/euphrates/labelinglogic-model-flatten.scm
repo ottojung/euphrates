@@ -47,7 +47,7 @@
        type (map loop-expr args)))
 
      ((member type (list '= 'constant 'r7rs))
-      (loop-expr expr))
+      expr)
 
      (else
       (raisu* :from "labelinglogic:model:flatten"
