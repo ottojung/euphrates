@@ -21,12 +21,12 @@
   (define duplicated-model
     (labelinglogic:model:duplicate-bindings opt-model bindings))
 
-  (debugs duplicated-model)
+  ;; (debugs duplicated-model)
 
   (define flat-model
     (labelinglogic:model:flatten
      duplicated-model))
 
-  (debugs flat-model)
+  ;; (debugs flat-model)
 
   flat-model)
