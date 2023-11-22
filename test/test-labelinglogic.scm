@@ -445,8 +445,8 @@
      (uid_1 (r7rs (lambda (c)
                     (and (char? c)
                          (char-numeric? c)))))
-     (uid_2 (= 0))
-     (uid_3 (= 1)))
+     (uid_2 (= #\0))
+     (uid_3 (= #\1)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
