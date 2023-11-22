@@ -441,7 +441,13 @@
 
   (assert=
 
-   0
+   `((t_q (and uid_1 uid_2 uid_3))
+     (uid_4 (r7rs (lambda (c)
+                    (and (char? c)
+                         (char-numeric? c)))))
+     (uid_3 (= #\1))
+     (uid_1 (or uid_4 uid_3))
+     (uid_2 (= #\0)))
 
    ;; `((t_q (and uid_1 uid_2 uid_3))
    ;;   (uid_1 (r7rs (lambda (c)
