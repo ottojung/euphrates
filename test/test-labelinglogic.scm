@@ -437,7 +437,7 @@
 
   ;; ( (Σ - "\"" - "\\") + ("\\" . Σ) )
   (define bindings
-    `((t_q (and numeric (not (= 0)) (not (= 1))))))
+    `((t_q (and numeric (not (= #\0)) (not (= #\1))))))
 
   (assert=
 
