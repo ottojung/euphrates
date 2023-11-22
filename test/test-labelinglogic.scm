@@ -426,3 +426,36 @@
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
+
+
+
+
+
+(let ()
+  (define model
+    `((numeric (r7rs ,numeric?))))
+
+  ;; ( (Σ - "\"" - "\\") + ("\\" . Σ) )
+  (define bindings
+    `((t_q (and numeric (not (= 0)) (not (= 1))))))
+
+  (assert=
+
+   `((t_n (or uid_1 uid_2))
+     (t_4 (tuple uid_2 uid_3 uid_2))
+     (uid_1 (r7rs (lambda (c)
+                    (and (char? c)
+                         (char-numeric? c)))))
+     (uid_2 (= #\3))
+     (uid_3 (= #\4)))
+
+   ;; `((t_n (r7rs (lambda (c)
+   ;;                (and (char? c)
+   ;;                     (char-numeric? c)))))
+   ;;   (t_4 (tuple uid_1 uid_2 uid_1))
+   ;;   (uid_1 (= #\3))
+   ;;   (uid_2 (= #\4)))
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
