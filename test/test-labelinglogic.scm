@@ -468,56 +468,52 @@
 
 (dprintln "hello")
 
-(define (to-dnf expr)
-  (define expr*
+(define (to-dnf expr-0)
+  (define expr
     (labelinglogic:expression:desugar
-     (labelinglogic:expression:move-nots-down expr)))
+     (labelinglogic:expression:move-nots-down expr-0)))
 
-  (debugs expr*)
-
-  (to-dnf-recursive expr*))
-
-(define (to-dnf-recursive expr)
   (define (make type args)
     (labelinglogic:expression:make type args))
 
-  (cond
-   ;; If it's a literal (a variable or its negation), it's already in DNF
-   ((or (boolean? expr) (variable? expr)) expr)
+  (let loop ((expr expr))
+    (cond
+     ;; If it's a literal (a variable or its negation), it's already in DNF
+     ((or (boolean? expr) (variable? expr)) expr)
 
-   ;; Should be already moved down
-   ((not? expr) expr)
+     ;; Should be already moved down
+     ((not? expr) expr)
 
-   ((or? expr)
-    (let ()
-      (define type (labelinglogic:expression:type expr))
-      (define args (labelinglogic:expression:args expr))
-      `(or ,@(map to-dnf-recursive args))))
+     ((or? expr)
+      (let ()
+        (define type (labelinglogic:expression:type expr))
+        (define args (labelinglogic:expression:args expr))
+        `(or ,@(map loop args))))
 
-   ((and? expr)
-    (let loop ((expr expr))
-      (define type (labelinglogic:expression:type expr))
-      (define args (labelinglogic:expression:args expr))
-      (if (null? args) expr
-          (let ()
-            (define c (car args))
-            (define rest (cdr args))
-            (if (null? rest) expr
-                (let ()
-                  (define next (car rest))
-                  (define next-type (labelinglogic:expression:type next))
-                  (define next-args (labelinglogic:expression:args next))
-                  (cond
-                   ((equal? next-type 'or)
-                    (make 'or
-                      (map
-                       (lambda (x)
-                         (make 'and (loop (list c x)))) next-args)))
-                   (else
-                    (make 'and (list c (loop next)))))))))))
+     ((and? expr)
+      (let loop ((expr expr))
+        (define type (labelinglogic:expression:type expr))
+        (define args (labelinglogic:expression:args expr))
+        (if (null? args) expr
+            (let ()
+              (define c (car args))
+              (define rest (cdr args))
+              (if (null? rest) expr
+                  (let ()
+                    (define next (car rest))
+                    (define next-type (labelinglogic:expression:type next))
+                    (define next-args (labelinglogic:expression:args next))
+                    (cond
+                     ((equal? next-type 'or)
+                      (make 'or
+                        (map
+                         (lambda (x)
+                           (make 'and (loop (list c x)))) next-args)))
+                     (else
+                      (make 'and (list c (loop next)))))))))))
 
-   (else
-    (error "Unrecognized expression" expr))))
+     (else
+      (error "Unrecognized expression" expr)))))
 
 (define (and? expr)
   (and (pair? expr) (eq? (car expr) 'and)))
