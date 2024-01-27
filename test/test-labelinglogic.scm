@@ -483,8 +483,7 @@
     (cond
      ((equal? type 'constant) expr)
      ((equal? type 'not) expr)
-     ((or? expr)
-      (make type (map loop args)))
+     ((equal? type 'or) (make type (map loop args)))
      ((and? expr)
       (if (null? args) expr
           (let ()
