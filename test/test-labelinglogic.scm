@@ -481,9 +481,6 @@
   (define (make type args)
     (labelinglogic:expression:make type args))
 
-  (define type (labelinglogic:expression:type expr))
-  (define args (labelinglogic:expression:args expr))
-
   (cond
    ;; If it's a literal (a variable or its negation), it's already in DNF
    ((or (boolean? expr) (variable? expr)) expr)
@@ -496,6 +493,8 @@
 
    ((and? expr)
     (let loop ((expr expr))
+      (define type (labelinglogic:expression:type expr))
+      (define args (labelinglogic:expression:args expr))
       (if (null? args) expr
           (let ()
             (define c (car args))
