@@ -491,16 +491,17 @@
     `(or ,@(map to-dnf (cdr expr))))
 
    ((and? expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-    (define distributed-args
-      (map
-       (lambda (x)
-         (labelinglogic:expression:make
-          'and x))))
+    (let ()
+      (define type (labelinglogic:expression:type expr))
+      (define args (labelinglogic:expression:args expr))
+      (define distributed-args
+        (map
+         (lambda (x)
+           (labelinglogic:expression:make
+            'and x))))
 
-    (labelinglogic:expression:make
-     'or distributed-args))
+      (labelinglogic:expression:make
+       'or distributed-args)))
 
    (else
     (error "Unrecognized expression" expr))))
