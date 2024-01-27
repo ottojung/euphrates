@@ -500,9 +500,12 @@
            (labelinglogic:expression:make
             'and x))
          args))
+      (define ret
+        (if (equal? 'constant (labelinglogic:expression:type distributed-args))
+            (list distributed-args)
+            distributed-args))
 
-      (labelinglogic:expression:make
-       'or distributed-args)))
+      (labelinglogic:expression:make 'or ret)))
 
    (else
     (error "Unrecognized expression" expr))))
