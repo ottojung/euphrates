@@ -497,8 +497,7 @@
       (define distributed-args
         (map
          (lambda (x)
-           (labelinglogic:expression:make
-            'and x))
+           (labelinglogic:expression:make 'and x))
          args))
       (define ret
         (if (equal? 'constant (labelinglogic:expression:type distributed-args))
