@@ -95,3 +95,9 @@
    '(or a (or (not b) (or c d)))
    (labelinglogic:expression:desugar
     '(or a (not b) c d))))
+
+(let ()
+  (assert=
+   '(or a (or (not (or b (or c d))) e))
+   (labelinglogic:expression:desugar
+    '(or a (not (or b c d)) e))))
