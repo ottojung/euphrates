@@ -478,11 +478,9 @@
     (to-dnf (labelinglogic:expression:move-nots-down expr)))
     )
 
-   ;; If the expression is an 'and', recursively convert all operands to DNF
    ((or? expr)
     `(or ,@(map to-dnf (cdr expr))))
 
-   ;; If the expression is an 'or', apply distributive law and convert to DNF
    ((and? expr)
     (let ((operands (map to-dnf (cdr expr))))
       (apply-distributive-law operands)))
