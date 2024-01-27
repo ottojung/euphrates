@@ -17,6 +17,9 @@
             labelinglogic-expression-move-nots-down)
           labelinglogic:expression:move-nots-down))
   (import
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic:expression:sugarify))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
