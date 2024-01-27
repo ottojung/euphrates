@@ -31,7 +31,8 @@
           member
           not
           or
-          quote))
+          quote
+          symbol?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
