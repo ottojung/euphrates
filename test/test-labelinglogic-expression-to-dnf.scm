@@ -46,8 +46,8 @@
 
 ; Test for distributive law with nested ORs inside ANDs
 (test
- '(and (or a b) (or c d))
- '(or (and c a) (and c b) (and d a) (and d b)))
+ '(or (and c a) (and c b) (and d a) (and d b))
+ '(and (or a b) (or c d)))
 
 ;; ; Test for distributive law with nested ANDs inside ORs
 ;; (test
