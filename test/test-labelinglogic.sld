@@ -43,8 +43,7 @@
           or
           pair?
           quote
-          symbol?
-          unquote-splicing))
+          symbol?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
