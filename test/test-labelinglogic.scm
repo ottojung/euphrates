@@ -515,6 +515,8 @@
                       (define looped
                         (loop result))
 
+                      (debug "~s: ~s" result looped)
+
                       result))
                    ((equal? c-type 'or)
                     (loop (make type (list next c))))
