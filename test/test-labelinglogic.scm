@@ -473,6 +473,8 @@
     (labelinglogic:expression:sugarify
      (labelinglogic:expression:move-nots-down expr)))
 
+  (debugs expr*)
+
   (to-dnf-recursive expr*))
 
 (define (to-dnf-recursive expr)
