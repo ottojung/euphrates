@@ -31,8 +31,8 @@
 
 ; Test for double negation
 (test
- '(not (not x))
- 'x)
+ 'x
+ '(not (not x)))
 
 ; Test for distributive law conversion to DNF
 (test
