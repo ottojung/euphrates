@@ -52,14 +52,18 @@
   (define args (labelinglogic:expression:args expr))
 
   (cond
-   ((labelinglogic:expression:type:associative? type)
-    (labelinglogic:expression:sugarify/unwrap
-     (labelinglogic:expression:sugarify/children
-      (labelinglogic:expression:sugarify/functor expr))))
+   ((equal? type 'not)
+    (labelinglogic:expression:make
+     type (map labelinglogic:expression:sugarify args)))
 
    ((equal? type 'tuple)
     (labelinglogic:expression:sugarify/unwrap
      (labelinglogic:expression:sugarify/children expr)))
+
+   ((labelinglogic:expression:type:associative? type)
+    (labelinglogic:expression:sugarify/unwrap
+     (labelinglogic:expression:sugarify/children
+      (labelinglogic:expression:sugarify/functor expr))))
 
    ((member type (list '= 'constant 'r7rs)) expr)
 
