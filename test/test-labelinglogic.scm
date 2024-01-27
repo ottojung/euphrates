@@ -502,9 +502,10 @@
                   (define next (car rest))
                   (define next-type (labelinglogic:expression:type next))
                   (define next-args (labelinglogic:expression:args next))
-                  (if (equal? next-type 'or)
-                      (make 'or (map (lambda (x) (make 'and (list c x)))))
-                      
+                  (cond
+                   ((equal? next-type 'or)
+                    (make 'or (map (lambda (x) (make 'and (list c x))))))
+                   (else expr))))))))
 
    (else
     (error "Unrecognized expression" expr))))
