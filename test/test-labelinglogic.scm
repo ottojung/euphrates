@@ -489,7 +489,10 @@
    ((not? expr) expr)
 
    ((or? expr)
-    `(or ,@(map to-dnf-recursive args)))
+    (let ()
+      (define type (labelinglogic:expression:type expr))
+      (define args (labelinglogic:expression:args expr))
+      `(or ,@(map to-dnf-recursive args))))
 
    ((and? expr)
     (let loop ((expr expr))
