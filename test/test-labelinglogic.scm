@@ -515,9 +515,9 @@
   result)
 
 (define (distribute expr1 expr2)
-  ;; (if (or? expr2)
-  ;;     (distribute expr2 expr1)
-  `(or ,expr1 ,expr2))
+  (if (or? expr2)
+      (distribute expr2 expr1)
+      `(or ,expr1 ,expr2)))
 
 (define (and? expr)
   (and (pair? expr) (eq? (car expr) 'and)))
