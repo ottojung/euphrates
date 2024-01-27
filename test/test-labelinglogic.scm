@@ -481,15 +481,10 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ;; If it's a literal (a variable or its negation), it's already in DNF
      ((or (boolean? expr) (variable? expr)) expr)
-
-     ;; Should be already moved down
      ((not? expr) expr)
-
      ((or? expr)
       (make type (map loop args)))
-
      ((and? expr)
       (if (null? args) expr
           (let ()
