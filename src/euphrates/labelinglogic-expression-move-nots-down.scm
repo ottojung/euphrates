@@ -13,6 +13,9 @@
     (define type (labelinglogic:expression:type expression))
     (define args (labelinglogic:expression:args expression))
 
+    (debugs type)
+    (debugs expression)
+
     (cond
      ((member type (list 'r7rs '= 'constant))
       (labelinglogic:expression:make
