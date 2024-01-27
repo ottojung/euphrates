@@ -508,7 +508,8 @@
                       (make 'or
                         (map
                          (lambda (x)
-                           (make 'and (loop (list c x)))) next-args)))
+                           (loop
+                            (make 'and (list c x)))) next-args)))
                      (else
                       (make 'and (list c (loop next)))))))))))
 
