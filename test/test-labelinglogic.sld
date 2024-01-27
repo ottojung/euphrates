@@ -2,7 +2,6 @@
 (define-library
   (test-labelinglogic)
   (import (only (euphrates assert-equal) assert=))
-  (import (only (euphrates debugs) debugs))
   (import (only (euphrates dprintln) dprintln))
   (import
     (only (euphrates labelinglogic-expression-args)
