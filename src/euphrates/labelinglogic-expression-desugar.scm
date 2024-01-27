@@ -16,6 +16,9 @@
           (labelinglogic:expression:make
            type (map loop args))))
 
+     ((equal? type 'not)
+      (loop (car args)))
+
      ((labelinglogic:expression:type:associative? type)
       (if (list-length= 1 args)
           (loop (car args))
