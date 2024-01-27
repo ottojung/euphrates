@@ -477,6 +477,9 @@
     (labelinglogic:expression:make type args))
 
   (let loop ((expr expr))
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
     (cond
      ;; If it's a literal (a variable or its negation), it's already in DNF
      ((or (boolean? expr) (variable? expr)) expr)
@@ -485,33 +488,27 @@
      ((not? expr) expr)
 
      ((or? expr)
-      (let ()
-        (define type (labelinglogic:expression:type expr))
-        (define args (labelinglogic:expression:args expr))
-        (make type (map loop args))))
+      (make type (map loop args)))
 
      ((and? expr)
-      (let ()
-        (define type (labelinglogic:expression:type expr))
-        (define args (labelinglogic:expression:args expr))
-        (if (null? args) expr
-            (let ()
-              (define c (car args))
-              (define rest (cdr args))
-              (if (null? rest) expr
-                  (let ()
-                    (define next (car rest))
-                    (define next-type (labelinglogic:expression:type next))
-                    (define next-args (labelinglogic:expression:args next))
-                    (cond
-                     ((equal? next-type 'or)
-                      (loop
-                       (make 'or
-                         (map
-                          (lambda (x) (make 'and (list c x)))
-                          next-args))))
-                     (else
-                      (make 'and (map loop args))))))))))
+      (if (null? args) expr
+          (let ()
+            (define c (car args))
+            (define rest (cdr args))
+            (if (null? rest) expr
+                (let ()
+                  (define next (car rest))
+                  (define next-type (labelinglogic:expression:type next))
+                  (define next-args (labelinglogic:expression:args next))
+                  (cond
+                   ((equal? next-type 'or)
+                    (loop
+                     (make 'or
+                       (map
+                        (lambda (x) (make 'and (list c x)))
+                        next-args))))
+                   (else
+                    (make 'and (map loop args)))))))))
 
      (else
       (error "Unrecognized expression" expr)))))
