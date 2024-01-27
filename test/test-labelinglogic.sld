@@ -32,7 +32,6 @@
           cond
           define
           else
-          eq?
           equal?
           error
           if
@@ -40,13 +39,10 @@
           let
           list
           map
-          member
           not
           null?
           or
-          pair?
-          quote
-          symbol?))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
