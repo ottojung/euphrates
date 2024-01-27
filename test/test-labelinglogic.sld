@@ -7,6 +7,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates
             labelinglogic-expression-move-nots-down)
           labelinglogic:expression:move-nots-down))
