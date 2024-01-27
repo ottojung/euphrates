@@ -9,7 +9,13 @@
     (only (euphrates labelinglogic-expression-to-dnf)
           labelinglogic:expression:to-dnf))
   (import
-    (only (scheme base) and begin not or quote))
+    (only (scheme base)
+          and
+          begin
+          define
+          not
+          or
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
