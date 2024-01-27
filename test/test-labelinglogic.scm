@@ -489,7 +489,7 @@
    ((not? expr) expr)
 
    ((or? expr)
-    `(or ,@(map to-dnf-recursive (cdr expr))))
+    `(or ,@(map to-dnf-recursive args)))
 
    ((and? expr)
     (let loop ((expr expr))
