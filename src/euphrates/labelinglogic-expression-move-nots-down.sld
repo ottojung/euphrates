@@ -3,7 +3,6 @@
   (euphrates
     labelinglogic-expression-move-nots-down)
   (export labelinglogic:expression:move-nots-down)
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -31,8 +30,7 @@
           member
           not
           or
-          quote
-          symbol?))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
