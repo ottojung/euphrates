@@ -498,6 +498,7 @@
     (error "Unrecognized expression" expr))))
 
 (define (apply-distributive-law operands)
+  (debugs operands)
   (if (null? operands)
       '()
       (let ((first (car operands))
