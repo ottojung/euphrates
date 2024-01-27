@@ -505,10 +505,10 @@
                     (define next-args (labelinglogic:expression:args next))
                     (cond
                      ((equal? next-type 'or)
-                      (make 'or
-                        (map
-                         (lambda (x)
-                           (loop
+                      (loop
+                       (make 'or
+                         (map
+                          (lambda (x)
                             (make 'and (list c x)))) next-args)))
                      (else
                       (make 'and (list c (loop next)))))))))))
