@@ -501,7 +501,6 @@
                   (define next-type (labelinglogic:expression:type next))
                   (define next-args (labelinglogic:expression:args next))
                   (define c-type (labelinglogic:expression:type c))
-                  (debugs c-type)
                   (cond
                    ((equal? next-type 'or)
                     (loop
