@@ -484,7 +484,7 @@
      ((equal? type 'constant) expr)
      ((equal? type 'not) expr)
      ((equal? type 'or) (make type (map loop args)))
-     ((and? expr)
+     ((equal? type 'and)
       (if (null? args) expr
           (let ()
             (define args* (map loop args))
@@ -509,7 +509,11 @@
                     (make 'and args*))))))))
 
      (else
-      (error "Unrecognized expression" expr)))))
+      (raisu* :from "labelinglogic:expression:to-dnf"
+              :type 'unknown-expr-type
+              :message (stringf "Expression type ~s not recognized"
+                                (~a type))
+              :args (list type expr))))))
 
 (assert=
  'kek

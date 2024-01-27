@@ -22,18 +22,19 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           and
           begin
-          boolean?
           car
           cdr
           cond
           define
           else
           equal?
-          error
           if
           lambda
           let
