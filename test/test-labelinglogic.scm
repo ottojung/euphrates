@@ -498,7 +498,8 @@
         (map
          (lambda (x)
            (labelinglogic:expression:make
-            'and x))))
+            'and x))
+         args))
 
       (labelinglogic:expression:make
        'or distributed-args)))
