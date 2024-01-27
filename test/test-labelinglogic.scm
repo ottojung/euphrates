@@ -470,7 +470,7 @@
 
 (define (to-dnf expr)
   (define expr*
-    (labelinglogic:expression:sugarify
+    (labelinglogic:expression:desugar
      (labelinglogic:expression:move-nots-down expr)))
 
   (debugs expr*)
