@@ -491,7 +491,7 @@
         (make type (map loop args))))
 
      ((and? expr)
-      (let loop ((expr expr))
+      (let ()
         (define type (labelinglogic:expression:type expr))
         (define args (labelinglogic:expression:args expr))
         (if (null? args) expr
