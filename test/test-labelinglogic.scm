@@ -470,7 +470,8 @@
 
 (define (to-dnf expr)
   (define expr*
-    (labelinglogic:expression:move-nots-down expr))
+    (labelinglogic:expression:sugarify
+     (labelinglogic:expression:move-nots-down expr)))
 
   (to-dnf-recursive expr*))
 
