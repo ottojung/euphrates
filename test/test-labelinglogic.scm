@@ -468,7 +468,7 @@
 
 (dprintln "hello")
 
-(define (to-dnf expr-0)
+(define (labelinglogic:expression:to-dnf expr-0)
   (define expr
     (labelinglogic:expression:desugar
      (labelinglogic:expression:move-nots-down expr-0)))
