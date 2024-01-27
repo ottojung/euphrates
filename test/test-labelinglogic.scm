@@ -489,15 +489,16 @@
     `(or ,@(map to-dnf-recursive (cdr expr))))
 
    ((and? expr)
-    (let ()
+    (let loop ((expr expr))
       (define type (labelinglogic:expression:type expr))
       (define args (labelinglogic:expression:args expr))
-      (define c (car args))
-      (define rest (cdr args))
-      (define distributed-args
-        (map (lambda (x) (make 'and (list c x))) rest))
-      (debugs distributed-args)
-      (make 'or distributed-args)))
+      (if (null? args) expr
+          (let ()
+            (define c (car args))
+            (define rest (cdr args))
+            (if (null? rest) expr
+                (let ()
+                  0))))))
 
    (else
     (error "Unrecognized expression" expr))))
