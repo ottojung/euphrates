@@ -497,7 +497,10 @@
       (map
        (lambda (x)
          (labelinglogic:expression:make
-          'or 
+          'and x))))
+
+    (labelinglogic:expression:make
+     'or distributed-args))
 
    (else
     (error "Unrecognized expression" expr))))
