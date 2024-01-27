@@ -471,7 +471,7 @@
 (define (labelinglogic:expression:to-dnf expr)
   (define expr*
     (labelinglogic:expression:desugar
-     (labelinglogic:expression:move-nots-down expr-0)))
+     (labelinglogic:expression:move-nots-down expr)))
 
   (define (make type args)
     (labelinglogic:expression:make type args))
