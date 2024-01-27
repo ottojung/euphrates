@@ -32,6 +32,7 @@
           if
           lambda
           let
+          list
           map
           member
           not
