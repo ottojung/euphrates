@@ -481,8 +481,8 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((or (boolean? expr) (variable? expr)) expr)
-     ((not? expr) expr)
+     ((equal? type 'constant) expr)
+     ((equal? type 'not) expr)
      ((or? expr)
       (make type (map loop args)))
      ((and? expr)
