@@ -476,20 +476,15 @@
    ((not? expr)
     (let ()
       (define type (labelinglogic:expression:type expr))
-      (debugs type)
       (define args (labelinglogic:expression:args expr))
-      (debugs args)
       (define body (car args))
-      (debugs body)
       (define recurse
         (to-dnf
          (labelinglogic:expression:move-nots-down body)))
-      (debugs recurse)
       (define ret
         (if (equal? 'constant (labelinglogic:expression:type recurse))
             (list recurse)
             recurse))
-      (debugs ret)
       (labelinglogic:expression:make type ret)))
 
    ((or? expr)
