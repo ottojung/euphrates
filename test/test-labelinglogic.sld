@@ -42,7 +42,6 @@
           null?
           or
           pair?
-          quasiquote
           quote
           symbol?
           unquote-splicing))
