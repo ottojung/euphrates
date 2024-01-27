@@ -485,7 +485,12 @@
         (to-dnf
          (labelinglogic:expression:move-nots-down body)))
       (debugs recurse)
-      (labelinglogic:expression:make type recurse)))
+      (define ret
+        (if (equal? 'constant (labelinglogic:expression:type recurse))
+            (list recurse)
+            recurse))
+      (debugs ret)
+      (labelinglogic:expression:make type ret)))
 
    ((or? expr)
     `(or ,@(map to-dnf (cdr expr))))
