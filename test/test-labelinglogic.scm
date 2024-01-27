@@ -474,7 +474,8 @@
    ((or (boolean? expr) (variable? expr)) expr)
 
    ((not? expr)
-    
+    (let ((recurse
+    (to-dnf (labelinglogic:expression:move-nots-down expr)))
     )
 
    ;; If the expression is an 'and', recursively convert all operands to DNF
