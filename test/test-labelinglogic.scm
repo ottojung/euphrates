@@ -469,6 +469,11 @@
 (dprintln "hello")
 
 (define (to-dnf expr)
+  (define (make type args)
+    (define type (labelinglogic:expression:type expr))
+    (if (equal? type 'constant)
+        (list args) args))
+
   (cond
    ;; If it's a literal (a variable or its negation), it's already in DNF
    ((or (boolean? expr) (variable? expr)) expr)
@@ -481,11 +486,7 @@
       (define recurse
         (to-dnf
          (labelinglogic:expression:move-nots-down body)))
-      (define ret
-        (if (equal? 'constant (labelinglogic:expression:type recurse))
-            (list recurse)
-            recurse))
-      (labelinglogic:expression:make type ret)))
+      (make type recurse)))
 
    ((or? expr)
     `(or ,@(map to-dnf (cdr expr))))
@@ -495,16 +496,8 @@
       (define type (labelinglogic:expression:type expr))
       (define args (labelinglogic:expression:args expr))
       (define distributed-args
-        (map
-         (lambda (x)
-           (labelinglogic:expression:make 'and x))
-         args))
-      (define ret
-        (if (equal? 'constant (labelinglogic:expression:type distributed-args))
-            (list distributed-args)
-            distributed-args))
-
-      (labelinglogic:expression:make 'or ret)))
+        (map (lambda (x) (make 'and x)) args))
+      (make 'or distributed-args)))
 
    (else
     (error "Unrecognized expression" expr))))
