@@ -512,18 +512,6 @@
      (else
       (error "Unrecognized expression" expr)))))
 
-(define (and? expr)
-  (and (pair? expr) (eq? (car expr) 'and)))
-
-(define (or? expr)
-  (and (pair? expr) (eq? (car expr) 'or)))
-
-(define (not? expr)
-  (and (pair? expr) (eq? (car expr) 'not)))
-
-(define (variable? expr)
-  (and (symbol? expr) (not (member expr '(and or not)))))
-
 (assert=
  'kek
  (labelinglogic:expression:sugarify
