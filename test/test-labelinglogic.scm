@@ -510,12 +510,12 @@
                            (lambda (x) (make 'and (list c x)))
                            next-args)))
 
-                      (debug "~s: ~s" expr result)
+                      (debug "~s: ~s\n" expr result)
 
                       (define looped
                         (loop result))
 
-                      (debug "~s: ~s" result looped)
+                      (debug "~s: ~s\n" result looped)
 
                       result))
                    ((equal? c-type 'or)
