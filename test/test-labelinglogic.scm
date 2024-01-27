@@ -479,7 +479,7 @@
       (debugs type)
       (define args (labelinglogic:expression:args expr))
       (debugs args)
-      (define body (car args))
+      (define body (list (car args)))
       (debugs body)
       (define recurse
         (to-dnf
