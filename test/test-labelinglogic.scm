@@ -459,3 +459,10 @@
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
+
+
+
+;;;;;;;;;;;
+;; TEST
+;;;;;;;;;;;
+
