@@ -28,10 +28,12 @@
           define
           else
           eq?
+          equal?
           error
           if
           lambda
           let
+          list
           map
           member
           not
