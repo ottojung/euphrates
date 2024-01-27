@@ -473,6 +473,7 @@
     (define args-type (labelinglogic:expression:type expr))
     (define new-args (if (equal? args-type 'constant)
                          (list args) args))
+    (debugs new-args)
     (define result
       (labelinglogic:expression:make type new-args))
     (debugs result)
