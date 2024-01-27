@@ -10,10 +10,8 @@
             :args (list type expression)))
 
   (define (move-down-by-1 expression)
-    (debugs expression)
     (define type (labelinglogic:expression:type expression))
     (define args (labelinglogic:expression:args expression))
-    (debugs type)
 
     (cond
      ((member type (list 'r7rs '= 'constant))
@@ -39,7 +37,9 @@
       (unknown-expr-type type expression))))
 
   (define (loop expression)
+    (debugs expression)
     (define type (labelinglogic:expression:type expression))
+    (debugs type)
     (define args (labelinglogic:expression:args expression))
 
     (cond
