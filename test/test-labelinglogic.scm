@@ -478,14 +478,6 @@
 
    ;; Should be already moved down
    ((not? expr) expr)
-    (let ()
-      (define type (labelinglogic:expression:type expr))
-      (define args (labelinglogic:expression:args expr))
-      (define body (car args))
-      (define recurse
-        (to-dnf
-         (labelinglogic:expression:move-nots-down body)))
-      (make type (list recurse))))
 
    ((or? expr)
     `(or ,@(map to-dnf (cdr expr))))
