@@ -495,8 +495,9 @@
      ((and? expr)
       (if (null? args) expr
           (let ()
-            (define c (car args))
-            (define rest (cdr args))
+            (define args* (map loop args))
+            (define c (car args*))
+            (define rest (cdr args*))
             (if (null? rest) expr
                 (let ()
                   (define next (car rest))
@@ -523,7 +524,7 @@
                    ((equal? c-type 'or)
                     (loop (make type (list next c))))
                    (else
-                    (make 'and (map loop args)))))))))
+                    (make 'and args*))))))))
 
      (else
       (error "Unrecognized expression" expr)))))
