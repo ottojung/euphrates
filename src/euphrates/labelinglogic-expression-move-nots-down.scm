@@ -37,10 +37,7 @@
       (unknown-expr-type type expression))))
 
   (define (loop expression)
-    (debugs expression)
-    (debugs (symbol? expression))
     (define type (labelinglogic:expression:type expression))
-    (debugs type)
     (define args (labelinglogic:expression:args expression))
 
     (cond
