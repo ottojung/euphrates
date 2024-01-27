@@ -493,9 +493,11 @@
    ((and? expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    
-    
-      (apply-distributive-law operands)))
+    (define distributed-args
+      (map
+       (lambda (x)
+         (labelinglogic:expression:make
+          'or 
 
    (else
     (error "Unrecognized expression" expr))))
