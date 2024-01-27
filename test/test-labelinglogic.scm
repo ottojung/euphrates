@@ -468,53 +468,6 @@
 
 (dprintln "hello")
 
-(define (labelinglogic:expression:to-dnf expr)
-  (define expr*
-    (labelinglogic:expression:desugar
-     (labelinglogic:expression:move-nots-down expr)))
-
-  (define (make type args)
-    (labelinglogic:expression:make type args))
-
-  (let loop ((expr expr*))
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
-    (cond
-     ((equal? type 'constant) expr)
-     ((equal? type 'not) expr)
-     ((equal? type 'or) (make type (map loop args)))
-     ((equal? type 'and)
-      (if (null? args) expr
-          (let ()
-            (define args* (map loop args))
-            (define c (car args*))
-            (define rest (cdr args*))
-            (if (null? rest) expr
-                (let ()
-                  (define next (car rest))
-                  (define next-type (labelinglogic:expression:type next))
-                  (define next-args (labelinglogic:expression:args next))
-                  (define c-type (labelinglogic:expression:type c))
-                  (cond
-                   ((equal? next-type 'or)
-                    (loop
-                     (make 'or
-                       (map
-                        (lambda (x) (make 'and (list c x)))
-                        next-args))))
-                   ((equal? c-type 'or)
-                    (loop (make type (list next c))))
-                   (else
-                    (make 'and args*))))))))
-
-     (else
-      (raisu* :from "labelinglogic:expression:to-dnf"
-              :type 'unknown-expr-type
-              :message (stringf "Expression type ~s not recognized"
-                                (~a type))
-              :args (list type expr))))))
-
 (assert=
  '(or (and x (not y) x) (and x (not y) y))
  (labelinglogic:expression:sugarify
