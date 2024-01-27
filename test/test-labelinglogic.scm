@@ -468,15 +468,15 @@
 
 (dprintln "hello")
 
-(define (labelinglogic:expression:to-dnf expr-0)
-  (define expr
+(define (labelinglogic:expression:to-dnf expr)
+  (define expr*
     (labelinglogic:expression:desugar
      (labelinglogic:expression:move-nots-down expr-0)))
 
   (define (make type args)
     (labelinglogic:expression:make type args))
 
-  (let loop ((expr expr))
+  (let loop ((expr expr*))
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
