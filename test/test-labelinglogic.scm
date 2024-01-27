@@ -491,6 +491,7 @@
     `(or ,@(map to-dnf (cdr expr))))
 
    ((and? expr)
+    (debugs expr)
     (let ((operands (map to-dnf (cdr expr))))
       (apply-distributive-law operands)))
 
