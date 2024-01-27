@@ -52,6 +52,10 @@
   (define args (labelinglogic:expression:args expr))
 
   (cond
+   ((equal? type 'not)
+    (labelinglogic:expression:make
+     type (map labelinglogic:expression:sugarify args)))
+
    ((equal? type 'tuple)
     (labelinglogic:expression:sugarify/unwrap
      (labelinglogic:expression:sugarify/children expr)))
