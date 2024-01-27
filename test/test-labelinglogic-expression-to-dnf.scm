@@ -54,10 +54,10 @@
  '(or (and a b) (and c d))
  '(or (and a b) (and c d)))
 
-;; ; Test with nested NOT expressions
-;; (test
-;;  '(not (or (not x) y))
-;;  '(and x (not y)))
+; Test with nested NOT expressions
+(test
+ '(and x (not y))
+ '(not (or (not x) y)))
 
 ;; ; Test with nested ANDs and ORs
 ;; (test
