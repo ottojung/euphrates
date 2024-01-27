@@ -471,9 +471,12 @@
 (define (to-dnf expr)
   (define (make type args)
     (define args-type (labelinglogic:expression:type expr))
-    (labelinglogic:expression:make
-     type (if (equal? args-type 'constant)
-              (list args) args)))
+    (define new-args (if (equal? args-type 'constant)
+                         (list args) args))
+    (define result
+      (labelinglogic:expression:make type new-args))
+    (debugs result)
+    result)
 
   (cond
    ;; If it's a literal (a variable or its negation), it's already in DNF
