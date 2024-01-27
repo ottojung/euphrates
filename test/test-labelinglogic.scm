@@ -514,7 +514,7 @@
                        (lambda (x)
                          (make 'and (loop (list c x)))) next-args)))
                    (else
-                    (make 'and c (loop next))))))))))
+                    (make 'and (list c (loop next)))))))))))
 
    (else
     (error "Unrecognized expression" expr))))
