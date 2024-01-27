@@ -470,20 +470,24 @@
 
 (define (to-dnf expr)
   (cond
-    ;; If it's a literal (a variable or its negation), it's already in DNF
-    ((or (boolean? expr) (variable? expr)) expr)
+   ;; If it's a literal (a variable or its negation), it's already in DNF
+   ((or (boolean? expr) (variable? expr)) expr)
 
-    ;; If the expression is an 'and', recursively convert all operands to DNF
-    ((and? expr)
-      `(and ,@(map to-dnf (cdr expr))))
+   ((not? expr)
+    
+    )
 
-    ;; If the expression is an 'or', apply distributive law and convert to DNF
-    ((or? expr)
-     (let ((operands (map to-dnf (cdr expr))))
-       (apply-distributive-law operands)))
+   ;; If the expression is an 'and', recursively convert all operands to DNF
+   ((and? expr)
+    `(and ,@(map to-dnf (cdr expr))))
 
-    (else
-      (error "Unrecognized expression" expr))))
+   ;; If the expression is an 'or', apply distributive law and convert to DNF
+   ((or? expr)
+    (let ((operands (map to-dnf (cdr expr))))
+      (apply-distributive-law operands)))
+
+   (else
+    (error "Unrecognized expression" expr))))
 
 (define (apply-distributive-law operands)
   (if (null? operands)
