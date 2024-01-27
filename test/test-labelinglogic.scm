@@ -495,6 +495,7 @@
       (define args (labelinglogic:expression:args expr))
       (define distributed-args
         (map (lambda (x) (make 'and x)) args))
+      (debugs distributed-args)
       (make 'or distributed-args)))
 
    (else
