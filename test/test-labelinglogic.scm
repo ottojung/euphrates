@@ -516,5 +516,4 @@
 (define (variable? expr)
   (and (symbol? expr) (not (member expr '(and or not)))))
 
-
 (assert= 'kek (to-dnf '(and x (not y) (or x y))))
