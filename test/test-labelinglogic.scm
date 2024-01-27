@@ -503,11 +503,19 @@
                   (define c-type (labelinglogic:expression:type c))
                   (cond
                    ((equal? next-type 'or)
-                    (loop
-                     (make 'or
-                       (map
-                        (lambda (x) (make 'and (list c x)))
-                        next-args))))
+                    (let ()
+                      (define result
+                        (make 'or
+                          (map
+                           (lambda (x) (make 'and (list c x)))
+                           next-args)))
+
+                      (debug "~s: ~s" expr result)
+
+                      (define looped
+                        (loop result))
+
+                      result))
                    ((equal? c-type 'or)
                     (loop (make type (list next c))))
                    (else
