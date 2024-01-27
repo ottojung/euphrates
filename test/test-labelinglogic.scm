@@ -479,11 +479,11 @@
     )
 
    ;; If the expression is an 'and', recursively convert all operands to DNF
-   ((and? expr)
-    `(and ,@(map to-dnf (cdr expr))))
+   ((or? expr)
+    `(or ,@(map to-dnf (cdr expr))))
 
    ;; If the expression is an 'or', apply distributive law and convert to DNF
-   ((or? expr)
+   ((and? expr)
     (let ((operands (map to-dnf (cdr expr))))
       (apply-distributive-law operands)))
 
