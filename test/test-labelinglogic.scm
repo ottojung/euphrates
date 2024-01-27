@@ -468,6 +468,12 @@
 
 (dprintln "hello")
 
+(define (to-dnf expr)
+  (define expr*
+    (labelinglogic:expression:move-nots-down expr))
+
+  (to-dnf-recursive expr*))
+
 (define (to-dnf-recursive expr)
   (define (make type args)
     (labelinglogic:expression:make type args))
@@ -480,7 +486,7 @@
    ((not? expr) expr)
 
    ((or? expr)
-    `(or ,@(map to-dnf (cdr expr))))
+    `(or ,@(map to-dnf-recursive (cdr expr))))
 
    ((and? expr)
     (let ()
