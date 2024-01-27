@@ -515,4 +515,5 @@
 (assert=
  'kek
  (labelinglogic:expression:sugarify
-  (to-dnf '(and x (not y) (or x y)))))
+  (labelinglogic:expression:to-dnf
+   '(and x (not y) (or x y)))))
