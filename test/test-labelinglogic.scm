@@ -480,8 +480,6 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (debugs expr)
-
     (cond
      ;; If it's a literal (a variable or its negation), it's already in DNF
      ((or (boolean? expr) (variable? expr)) expr)
