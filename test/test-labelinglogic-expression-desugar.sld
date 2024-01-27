@@ -10,6 +10,7 @@
           and
           begin
           let
+          not
           or
           quasiquote
           quote))

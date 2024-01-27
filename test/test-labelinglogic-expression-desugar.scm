@@ -89,3 +89,9 @@
    `(and a (and b (and (tuple c (tuple d e)) (and (or f g) (and h i)))))
    (labelinglogic:expression:desugar
     '(and a b (tuple c (tuple d e)) (or f g) h i))))
+
+(let ()
+  (assert=
+   '(or a (or (not b) (or c d)))
+   (labelinglogic:expression:desugar
+    '(or a (not b) c d))))
