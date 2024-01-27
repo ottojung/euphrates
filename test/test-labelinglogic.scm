@@ -500,14 +500,19 @@
 
 (define (apply-distributive-law operands)
   (debugs operands)
-  (if (null? operands)
-      '()
-      (let ((first (car operands))
-            (rest (cdr operands)))
-        (if (null? rest)
-            first
-            (distribute
-             first (apply-distributive-law rest))))))
+  (define result
+    (if (null? operands)
+        '()
+        (let ((first (car operands))
+              (rest (cdr operands)))
+          (if (null? rest)
+              first
+              (distribute
+               first (apply-distributive-law rest))))))
+
+  (debugs result)
+
+  result)
 
 (define (distribute expr1 expr2)
   ;; (if (or? expr2)
