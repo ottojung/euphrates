@@ -512,14 +512,9 @@
             (distribute first (apply-distributive-law rest))))))
 
 (define (distribute expr1 expr2)
-  (if (and? expr1)
-      (let ((first (car (cdr expr1)))
-            (rest (cdr (cdr expr1))))
-        `(or ,(distribute first expr2)
-             ,@(map (lambda (e) (distribute e expr2)) rest)))
-      (if (or? expr2)
-          (distribute expr2 expr1)
-          `(and ,expr1 ,expr2))))
+  (if (or? expr2)
+      (distribute expr2 expr1)
+      `(and ,expr1 ,expr2)))
 
 (define (and? expr)
   (and (pair? expr) (eq? (car expr) 'and)))
