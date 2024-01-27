@@ -468,5 +468,53 @@
 
 (dprintln "hello")
 
+(define (to-dnf expr)
+  (cond
+    ;; If it's a literal (a variable or its negation), it's already in DNF
+    ((or (boolean? expr) (variable? expr)) expr)
+
+    ;; If the expression is an 'and', recursively convert all operands to DNF
+    ((and? expr)
+      `(and ,@(map to-dnf (cdr expr))))
+
+    ;; If the expression is an 'or', apply distributive law and convert to DNF
+    ((or? expr)
+     (let ((operands (map to-dnf (cdr expr))))
+       (apply-distributive-law operands)))
+
+    (else
+      (error "Unrecognized expression" expr))))
+
+(define (apply-distributive-law operands)
+  (if (null? operands)
+      '()
+      (let ((first (car operands))
+            (rest (cdr operands)))
+        (if (null? rest)
+            first
+            (distribute first (apply-distributive-law rest))))))
+
+(define (distribute expr1 expr2)
+  (if (and? expr1)
+      (let ((first (car (cdr expr1)))
+            (rest (cdr (cdr expr1))))
+        `(or ,(distribute first expr2)
+             ,@(map (lambda (e) (distribute e expr2)) rest)))
+      (if (or? expr2)
+          (distribute expr2 expr1)
+          `(and ,expr1 ,expr2))))
+
+(define (and? expr)
+  (and (pair? expr) (eq? (car expr) 'and)))
+
+(define (or? expr)
+  (and (pair? expr) (eq? (car expr) 'or)))
+
+(define (not? expr)
+  (and (pair? expr) (eq? (car expr) 'not)))
+
+(define (variable? expr)
+  (and (symbol? expr) (not (member expr '(and or not)))))
 
 
+(assert= 'kek (to-dnf '(and x (not y) (or x y))))
