@@ -491,8 +491,10 @@
     `(or ,@(map to-dnf (cdr expr))))
 
    ((and? expr)
-    (debugs expr)
-    (let ((operands (map to-dnf (cdr expr))))
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    
+    
       (apply-distributive-law operands)))
 
    (else
