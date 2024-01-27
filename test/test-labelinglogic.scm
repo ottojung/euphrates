@@ -470,7 +470,7 @@
 
 (define (to-dnf expr)
   (define (make type args)
-    (labelinglogic:expression:make type (list args)))
+    (labelinglogic:expression:make type args))
 
   (cond
    ;; If it's a literal (a variable or its negation), it's already in DNF
@@ -484,7 +484,7 @@
       (define recurse
         (to-dnf
          (labelinglogic:expression:move-nots-down body)))
-      (make type recurse)))
+      (make type (list recurse))))
 
    ((or? expr)
     `(or ,@(map to-dnf (cdr expr))))
