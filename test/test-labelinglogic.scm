@@ -504,7 +504,8 @@
             (rest (cdr operands)))
         (if (null? rest)
             first
-            (distribute first (apply-distributive-law rest))))))
+            (distribute
+             first (apply-distributive-law rest))))))
 
 (define (distribute expr1 expr2)
   (if (or? expr2)
