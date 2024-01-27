@@ -26,8 +26,8 @@
 
 ; Test for De Morgan's laws
 (test
- '(not (and x y))
- '(or (not x) (not y)))
+ '(or (not x) (not y))
+ '(not (and x y)))
 
 ; Test for double negation
 (test
