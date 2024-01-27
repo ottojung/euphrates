@@ -27,9 +27,7 @@
           define
           else
           eq?
-          equal?
           error
-          if
           lambda
           let
           list
