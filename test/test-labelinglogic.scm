@@ -474,9 +474,14 @@
    ((or (boolean? expr) (variable? expr)) expr)
 
    ((not? expr)
-    (let ((recurse
-    (to-dnf (labelinglogic:expression:move-nots-down expr)))
-    )
+    (let ()
+      (define type (labelinglogic:expression:type expr))
+      (define args (labelinglogic:expression:args expr))
+      (define body (car args))
+      (define recurse
+        (to-dnf
+         (labelinglogic:expression:move-nots-down body)))
+      (labelinglogic:expression:make type recurse)))
 
    ((or? expr)
     `(or ,@(map to-dnf (cdr expr))))
