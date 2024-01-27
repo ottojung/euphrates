@@ -500,8 +500,15 @@
                   (define next (car rest))
                   (define next-type (labelinglogic:expression:type next))
                   (define next-args (labelinglogic:expression:args next))
+                  (define c-type (labelinglogic:expression:type c))
                   (cond
                    ((equal? next-type 'or)
+                    (loop
+                     (make 'or
+                       (map
+                        (lambda (x) (make 'and (list c x)))
+                        next-args))))
+                   ((equal? c-type 'or)
                     (loop
                      (make 'or
                        (map
