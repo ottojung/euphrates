@@ -476,7 +476,8 @@
    ;; If it's a literal (a variable or its negation), it's already in DNF
    ((or (boolean? expr) (variable? expr)) expr)
 
-   ((not? expr)
+   ;; Should be already moved down
+   ((not? expr) expr)
     (let ()
       (define type (labelinglogic:expression:type expr))
       (define args (labelinglogic:expression:args expr))
