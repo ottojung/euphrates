@@ -468,7 +468,7 @@
 
 (dprintln "hello")
 
-(define (to-dnf expr)
+(define (to-dnf-recursive expr)
   (define (make type args)
     (labelinglogic:expression:make type args))
 
