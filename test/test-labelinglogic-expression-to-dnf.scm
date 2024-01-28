@@ -61,7 +61,7 @@
 
 ; Test with nested ANDs and ORs
 (test
- '(and (or a (not b)) (or c d))
+ '(or (and c a) (and c (not b)) (and d a) (and d (not b)))
  '(and (or a (not b)) (or c d)))
 
 ;; ; Test that ensures idempotence (x OR x = x) and (x AND x = x)
