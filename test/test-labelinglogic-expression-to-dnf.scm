@@ -59,10 +59,10 @@
  '(and x (not y))
  '(not (or (not x) y)))
 
-;; ; Test with nested ANDs and ORs
-;; (test
-;;  '(and (or a (not b)) (or c d))
-;;  '(and (or a (not b)) (or c d)))
+; Test with nested ANDs and ORs
+(test
+ '(and (or a (not b)) (or c d))
+ '(and (or a (not b)) (or c d)))
 
 ;; ; Test that ensures idempotence (x OR x = x) and (x AND x = x)
 ;; (test
