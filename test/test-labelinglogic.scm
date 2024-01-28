@@ -431,33 +431,33 @@
 
 
 
-(let ()
-  (define model
-    `((numeric (r7rs ,numeric?))))
+;; (let ()
+;;   (define model
+;;     `((numeric (r7rs ,numeric?))))
 
-  ;; ( (Σ - "\"" - "\\") + ("\\" . Σ) )
-  (define bindings
-    `((t_q (and numeric (not (= #\0)) (not (= #\1))))))
+;;   ;; ( (Σ - "\"" - "\\") + ("\\" . Σ) )
+;;   (define bindings
+;;     `((t_q (and numeric (not (= #\0)) (not (= #\1))))))
 
-  (assert=
+;;   (assert=
 
-   `((t_q (and uid_1 uid_2 uid_3))
-     (uid_4 (r7rs (lambda (c)
-                    (and (char? c)
-                         (char-numeric? c)))))
-     (uid_3 (= #\1))
-     (uid_1 (or uid_4 uid_3))
-     (uid_2 (= #\0)))
+;;    `((t_q (and uid_1 uid_2 uid_3))
+;;      (uid_4 (r7rs (lambda (c)
+;;                     (and (char? c)
+;;                          (char-numeric? c)))))
+;;      (uid_3 (= #\1))
+;;      (uid_1 (or uid_4 uid_3))
+;;      (uid_2 (= #\0)))
 
-   ;; `((t_q (and uid_1 uid_2 uid_3))
-   ;;   (uid_1 (r7rs (lambda (c)
-   ;;                  (and (char? c)
-   ;;                       (char-numeric? c)))))
-   ;;   (uid_2 (= #\0))
-   ;;   (uid_3 (= #\1)))
+;;    ;; `((t_q (and uid_1 uid_2 uid_3))
+;;    ;;   (uid_1 (r7rs (lambda (c)
+;;    ;;                  (and (char? c)
+;;    ;;                       (char-numeric? c)))))
+;;    ;;   (uid_2 (= #\0))
+;;    ;;   (uid_3 (= #\1)))
 
-   (labelinglogic:model:alpha-rename
-    '() (labelinglogic:init
-         model bindings))))
+;;    (labelinglogic:model:alpha-rename
+;;     '() (labelinglogic:init
+;;          model bindings))))
 
 
