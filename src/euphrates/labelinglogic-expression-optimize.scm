@@ -33,32 +33,6 @@
          (labelinglogic:expression:optimize new)))))
 
 
-(define (labelinglogic:expression:or->xor expr)
-  (define type (labelinglogic:expression:type expr))
-  (define args (labelinglogic:expression:args expr))
-
-  expr)
-  ;; DEBUG ;; nocheckin
-  ;; (define grouped
-  ;;   (list-group-by
-  ;;    (lambda (expr)
-  ;;      (equal? '= (labelinglogic:expression:type expr)))
-  ;;    args))
-
-  ;; (define singletons
-  ;;   (assq-or #t grouped '()))
-
-
-  ;; (if (null? singletons)
-  ;;     expr
-  ;;     (labelinglogic:expression:make
-  ;;      type
-  ;;      (cons
-  ;;       (labelinglogic:expression:make
-  ;;        'xor singletons)
-  ;;       (assq-or #f grouped '())))))
-
-
 (define (labelinglogic:expression:optimize/xor expr)
   ;; TODO: some optis.
   expr)
@@ -80,8 +54,7 @@
      (labelinglogic:expression:optimize/recurse-on-args expr)))
 
    ((equal? type 'or)
-    (labelinglogic:expression:or->xor
-     (labelinglogic:expression:optimize/and+or expr)))
+    (labelinglogic:expression:optimize/and+or expr))
 
    ((member type (list 'and 'or))
     (labelinglogic:expression:optimize/and+or expr))
