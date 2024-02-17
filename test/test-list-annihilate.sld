@@ -17,7 +17,6 @@
           abs
           and
           begin
-          char=?
           cons
           define
           equal?
