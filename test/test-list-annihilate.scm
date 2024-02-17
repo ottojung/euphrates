@@ -13,15 +13,17 @@
 ;;                           'c (list 1 2 'c 4 5))
 ;;          '(c c c c c))
 
-;; ;; Collapse
+;; ;; Collapse.
 ;; (assert= (list-annihilate (lambda (x y) (equal? x 2))
 ;;                           'c (list 1 2 3 4 5))
 ;;          '(c c c c c))
 
-;; Collapse
-(assert= (list-annihilate (lambda (x y) (equal? x 2))
-                          'c (list 1 2 3 4 5))
-         '(c c c c c))
+;; Non recursive.
+(assert= (list-annihilate
+          (lambda (x y)
+            (or (equal? x y)))
+          'c (list 1 2 1 4 1))
+         (list 'c 2 'c 4 'c))
 
 (exit 0)
 

@@ -23,6 +23,7 @@
           list
           modulo
           number?
+          or
           quote
           string=?))
   (import (only (scheme process-context) exit))
