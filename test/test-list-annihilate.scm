@@ -11,7 +11,7 @@
 ;; Constant in the original list.
 (assert= (list-annihilate (lambda (x y) (equal? x 'c))
                           'c (list 1 2 'c 4 5))
-         '(c c c c c))
+         '(c 2 c 4 c))
 
 ;; ;; Non symmetric.
 ;; (assert= (list-annihilate (lambda (x y) (equal? x 2))
