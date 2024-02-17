@@ -47,8 +47,8 @@
 (assert= (list-annihilate equal? 'sublist (list (list 1 2) (list 3 4) (list 1 2)))
          (list 'sublist (list 3 4) 'sublist))
 
-;; Test with elements of different data types using `eqv?` predicate
-(assert= (list-annihilate eqv? 'type-mismatch (list 1 'a 2 'b))
+;; Test with elements of different data types using `equal?` predicate
+(assert= (list-annihilate equal? 'type-mismatch (list 1 'a 2 'b))
          (list 1 'a 2 'b))
 
 ;; Test with custom complex predicate
@@ -89,5 +89,5 @@
          (list 'approx-eq 'approx-eq 1.002))
 
 ;; Test with a mix of symbols and numbers
-(assert= (list-annihilate eq? 'symbol (list 'foo 42 'foo 13))
+(assert= (list-annihilate equal? 'symbol (list 'foo 42 'foo 13))
          (list 'symbol 42 'symbol 13))

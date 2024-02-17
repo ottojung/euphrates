@@ -20,9 +20,7 @@
           char=?
           cons
           define
-          eq?
           equal?
-          eqv?
           even?
           lambda
           list
