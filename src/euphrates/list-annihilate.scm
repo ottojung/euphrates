@@ -17,19 +17,14 @@
   ;; (list 'c 2 'c 4 'c)
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
-  (define (replace-annihilated-elements elements predicted)
-    (map (lambda (el)
-           (if (list-or-map (lambda (matched) (pred matched el)) predicted)
-               constant
-               el))
-         elements))
+  (define n (length lst))
+  (define output (make-vector n #f))
 
-  ;; Loop definition with an accumulator for result and a list of annihilated elements
-  (let loop ((rest lst) (result '()) (predicted '()))
-    (cond
-     ((null? rest)
-      (reverse (replace-annihilated-elements result predicted)))
-     ((list-or-map (lambda (x) (pred x (car rest))) result)
-      (loop (cdr rest) (cons constant result) (cons (car rest) predicted)))
-     (else
-      (loop (cdr rest) (cons (car rest) result) predicted)))))
+  (let loop ((x 0) (y 0))
+    (when (< x n)
+
+      (if (< y (- n 1))
+          (loop x (+ 1 y))
+          (loop (+ 1 x) 0))))
+
+  (vector->list output))
