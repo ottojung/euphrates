@@ -2,8 +2,6 @@
 (define-library
   (euphrates list-annihilate)
   (export list-annihilate)
-  (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (scheme base)
           +

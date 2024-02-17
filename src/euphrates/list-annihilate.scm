@@ -27,11 +27,6 @@
       (when (< x y)
         (when (pred (vector-ref input x)
                     (vector-ref input y))
-          (debugs output)
-          (debug "~s, ~s"
-                 (vector-ref input x)
-                 (vector-ref input y))
-
           (vector-set! output x constant)
           (vector-set! output y constant)))
 
