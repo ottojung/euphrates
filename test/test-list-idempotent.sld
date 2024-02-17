@@ -9,13 +9,28 @@
           list-idempotent))
   (import
     (only (scheme base)
+          *
+          -
+          <
           =
+          >
+          abs
+          and
           begin
+          car
+          cdr
+          char=?
+          cons
+          eq?
           equal?
           lambda
           list
           or
-          remainder))
+          quote
+          remainder
+          string-length
+          string=?))
+  (import (only (scheme char) string-ci=?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
