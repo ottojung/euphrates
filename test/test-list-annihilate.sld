@@ -15,6 +15,7 @@
           lambda
           list
           or
+          quote
           remainder))
   (cond-expand
     (guile (import (only (guile) include-from-path))
