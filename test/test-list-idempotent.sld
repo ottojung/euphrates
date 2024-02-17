@@ -25,6 +25,7 @@
           equal?
           lambda
           list
+          modulo
           or
           quote
           remainder

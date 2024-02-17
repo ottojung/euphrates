@@ -32,7 +32,7 @@
          (list "hello" "world"))
 
 ;; Test Case 6: Test with modulo predicate
-(assert= (list-idempotent (lambda (x y) (= (mod x 10) (mod y 10)))
+(assert= (list-idempotent (lambda (x y) (= (modulo x 10) (modulo y 10)))
                           (list 12 22 45 35 88 78))
          (list 12 45 88))
 
