@@ -13,14 +13,15 @@
           and
           begin
           char=?
+          cons
           define
           equal?
           even?
           lambda
           list
+          or
           quote
           string=?))
-  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

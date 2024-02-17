@@ -23,21 +23,19 @@
                           'c (list 7 8 9 6 5))
          '(c c c 6 5))
 
-(exit 0)
+;; Non recursive.
+(assert= (list-annihilate
+          (lambda (x y)
+            (or (equal? x y)
+                (equal? x 'c)
+                (equal? y 'c)))
 
-;; ;; Non recursive.
-;; (assert= (list-annihilate
-;;           (lambda (x y)
-;;             (or (equal? x y)
-;;                 (equal? x 'c)
-;;                 (equal? y 'c)))
+          'c (list 1 2 1 4 1))
+         (list 'c 2 1 4 1))
 
-;;           'c (list 1 2 1 4 1))
-;;          (list 'c 2 1 4 1))
-
-;; ;; Test with pairs (cons cells) and equal?
-;; (assert= (list-annihilate equal? 'same (list (cons 1 2) (cons 1 2) (cons 3 4)))
-;;          (list 'same 'same (cons 3 4)))
+;; Test with pairs (cons cells) and equal?
+(assert= (list-annihilate equal? 'same (list (cons 1 2) (cons 1 2) (cons 3 4)))
+         (list 'same 'same (cons 3 4)))
 
 ;; Test with an empty list
 (assert= (list-annihilate equal? 'c '())
