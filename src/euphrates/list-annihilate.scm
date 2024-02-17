@@ -23,7 +23,9 @@
   (let loop ((x 0) (y 0))
     (when (< x n)
 
-      
+      (unless (= x y)
+        
+        )
 
       (if (< y (- n 1))
           (loop x (+ 1 y))
