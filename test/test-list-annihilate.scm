@@ -51,6 +51,7 @@
 ;; Test list with non-numeric elements
 (assert= (list-annihilate equal? 'same (list 'a 'b 'c 'd))
          (list 'a 'b 'c 'd))
+
 ;; Test with different types in one list
 (assert= (list-annihilate equal? 'different (list 1 'a 1.0 "string"))
          (list 1 'a 1.0 "string"))
