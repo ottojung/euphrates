@@ -3,9 +3,9 @@
   (euphrates list-annihilate)
   (export list-annihilate)
   (import
+    (only (euphrates list-or-map) list-or-map))
+  (import
     (only (scheme base)
-          _
-          and
           begin
           car
           cdr
@@ -15,12 +15,11 @@
           else
           if
           lambda
-          letrec
+          let
           map
-          not
           null?
-          or
-          quote))
+          quote
+          reverse))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
