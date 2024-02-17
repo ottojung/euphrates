@@ -60,8 +60,8 @@
          (list 0 3 0 5 0))
 
 ;; Test with strings using `string=?` predicate
-(assert= (list-annihilate string=? "same" (list "apple" "banana" "apple" "cherry"))
-         (list "same" "banana" "same" "cherry"))
+(assert= (list-annihilate string=? 'same (list "apple" "banana" "apple" "cherry"))
+         (list 'same "banana" 'same "cherry"))
 
 ;; Test list containing sublists
 (assert= (list-annihilate equal? 'sublist (list (list 1 2) (list 3 4) (list 1 2)))
