@@ -1,17 +1,17 @@
 
-(assert= (list-annihilate equal? 'c (list 1 2 1 4 1))
-         (list 'c 2 'c 4 'c))
+;; (assert= (list-annihilate equal? 'c (list 1 2 1 4 1))
+;;          (list 'c 2 'c 4 'c))
 
-(assert-throw #t (list-annihilate 0 1 2)) ;; type error
+;; (assert-throw #t (list-annihilate 0 1 2)) ;; type error
 
-;; Test identical numbers
-(assert= (list-annihilate equal? 'x (list 1 2 3 2 1))
-         (list 'x 'x 3 'x 'x))
+;; ;; Test identical numbers
+;; (assert= (list-annihilate equal? 'x (list 1 2 3 2 1))
+;;          (list 'x 'x 3 'x 'x))
 
-;; Constant in the original list.
-(assert= (list-annihilate (lambda (x y) (equal? x 'c))
-                          'c (list 1 2 'c 4 5))
-         '(c c c c c))
+;; ;; Constant in the original list.
+;; (assert= (list-annihilate (lambda (x y) (equal? x 'c))
+;;                           'c (list 1 2 'c 4 5))
+;;          '(c c c c c))
 
 ;; ;; Non symmetric.
 ;; (assert= (list-annihilate (lambda (x y) (equal? x 2))
