@@ -15,6 +15,13 @@
                           'c (list 1 2 'c 4 5 1 'c 1 7 8))
          '(c c c c c c c c c c))
 
+;; Non recursive.
+(assert= (list-annihilate (lambda (x y)
+                            (debug "p: ~s, ~s" x y)
+                            (equal? x 'c))
+                          'c (list 1 2 'c 4 5 1 'c 1 7 8))
+         '(c c c c c c c c c c))
+
 (exit 0)
 
 ;; Test with pairs (cons cells) and equal?
