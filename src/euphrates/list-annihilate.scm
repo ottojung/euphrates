@@ -23,6 +23,8 @@
   (let loop ((x 0) (y 0))
     (when (< x n)
 
+      
+
       (if (< y (- n 1))
           (loop x (+ 1 y))
           (loop (+ 1 x) 0))))
