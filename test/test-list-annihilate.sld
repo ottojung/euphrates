@@ -19,7 +19,6 @@
           even?
           lambda
           list
-          or
           quote
           string=?))
   (cond-expand
