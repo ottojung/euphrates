@@ -10,12 +10,6 @@
   ;; removing all subsequent elements that satisfy the predicate `pred` with respect to any previously encountered element.
   ;; The result list preserves the order of first occurrence of each unique element as they originally appear in `lst`.
   ;;
-  ;; Formally:
-  ;; Given `pred' = R, and assume idempotence, i.e:
-  ;;    (pred x x) <=> x
-  ;; Then:
-  ;;    (list-and-map R lst) <=> (list-and-map R (list-idempotent lst))
-  ;;
   ;; This operation is related to the mathematical concept of idempotence in the context of set operations.
   ;; In set theory, idempotent operations such as union, intersection, or function composition do not change
   ;; the output upon repeated application. Similarly, `list-idempotent` will ensure that applying the same function
