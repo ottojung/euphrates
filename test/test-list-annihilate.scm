@@ -17,7 +17,7 @@
 (assert= (list-annihilate (lambda (x y)
                             (or (equal? x 'c)
                                 (equal? x 2)))
-                          'c (list 1 2 'c 4 5))
+                          'c (list 1 2 3 4 5))
          '(c c c c c))
 
 (exit 0)
