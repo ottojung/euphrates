@@ -9,6 +9,7 @@
           +
           -
           <
+          >
           begin
           define
           if
