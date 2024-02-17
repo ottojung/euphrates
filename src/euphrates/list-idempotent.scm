@@ -12,7 +12,7 @@
   ;;
   ;; Formally:
   ;; Given `pred' = R, and assume idempotence, i.e:
-  ;;    R(x, x) <=> x
+  ;;    (pred x x) <=> x
   ;; Then:
   ;;    (list-and-map R lst) <=> (list-and-map R (list-idempotent lst))
   ;;
