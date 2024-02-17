@@ -11,7 +11,7 @@
   ;; The result list preserves the order of first occurrence of each unique element as they originally appear in `lst`.
   ;;
   ;; Formally:
-  ;; Given `pred` = R, and assume idempotence, i.e:
+  ;; Given `pred' = R, and assume idempotence, i.e:
   ;;    R(x, y) <=> R(x, x) <=> R(y, y).
   ;; Then:
   ;;    (list-and-map R lst) <=> (list-and-map R (list-idempotent lst))
