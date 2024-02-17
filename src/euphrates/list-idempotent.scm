@@ -26,7 +26,7 @@
   ;; (list 1 2 4)
   ;; keeping only the first appearance of each number.
   ;;
-  ;; Note: this function is actually the same as `list-deduplicate'.
+  ;; Note: this function is `list-deduplicate', but with a binary `pred' instead of a unary `identity'.
 
   (let loop ((rest lst) (result '()))
     (cond
