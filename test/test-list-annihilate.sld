@@ -5,8 +5,8 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
-    (only (euphrates list-idempotent)
-          list-idempotent))
+    (only (euphrates list-annihilate)
+          list-annihilate))
   (import
     (only (scheme base)
           =
