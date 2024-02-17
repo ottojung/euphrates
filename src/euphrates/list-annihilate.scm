@@ -18,8 +18,8 @@
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
   (define input (list->vector lst))
+  (define output (copy-vector input))
   (define n (vector-length input))
-  (define output (make-vector n #f))
 
   (let loop ((x 0) (y 0))
     (when (< x n)
