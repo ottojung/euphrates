@@ -2,6 +2,8 @@
 (define-library
   (test-list-annihilate)
   (import (only (euphrates assert-equal) assert=))
+  (import
+    (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates list-annihilate)
@@ -26,7 +28,6 @@
           or
           quote
           string=?))
-  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
