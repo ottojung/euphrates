@@ -18,8 +18,6 @@
                           'c (list 7 8 9 6 5))
          '(7 8 c c c))
 
-(exit 0)
-
 ;; ;; Non recursive.
 ;; (assert= (list-annihilate
 ;;           (lambda (x y)
