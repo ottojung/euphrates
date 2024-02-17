@@ -9,10 +9,7 @@
           list-annihilate))
   (import
     (only (scheme base)
-          -
-          <
           =
-          abs
           and
           begin
           cons

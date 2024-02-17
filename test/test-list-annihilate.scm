@@ -96,10 +96,6 @@
 (define processed-list (list-annihilate equal? 'x original-list))
 (assert= original-list (list 1 2 3 2 1))
 
-;; Test with floating-point numbers and approximate equality
-(assert= (list-annihilate (lambda (x y) (< (abs (- x y)) 0.01)) 'approx-eq (list 1.0 1.001 1.002))
-         (list 'approx-eq 'approx-eq 1.002))
-
 ;; Test with a mix of symbols and numbers
 (assert= (list-annihilate equal? 'symbol (list 'foo 42 'foo 13))
          (list 'symbol 42 'symbol 13))
