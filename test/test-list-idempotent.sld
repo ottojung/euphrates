@@ -5,7 +5,15 @@
   (import
     (only (euphrates list-idempotent)
           list-idempotent))
-  (import (only (scheme base) begin equal? list))
+  (import
+    (only (scheme base)
+          =
+          and
+          begin
+          equal?
+          lambda
+          list
+          remainder))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
