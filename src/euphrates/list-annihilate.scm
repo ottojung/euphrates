@@ -25,9 +25,10 @@
     (when (< x n)
 
       (unless (= x y)
-        (if (pred (vector-ref input x)
-                  (vector-ref input y))
-            
+        (when (pred (vector-ref input x)
+                    (vector-ref input y))
+          (vector-set! output x constant)
+          (vector-set! output y constant)))
 
       (if (< y (- n 1))
           (loop x (+ 1 y))

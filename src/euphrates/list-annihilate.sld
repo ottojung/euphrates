@@ -7,13 +7,18 @@
           +
           -
           <
+          =
           begin
           define
           if
-          length
           let
-          make-vector
+          list->vector
+          unless
           vector->list
+          vector-copy
+          vector-length
+          vector-ref
+          vector-set!
           when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
