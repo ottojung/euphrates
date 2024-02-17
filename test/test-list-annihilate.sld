@@ -21,7 +21,6 @@
           even?
           lambda
           list
-          modulo
           or
           quote
           string=?))

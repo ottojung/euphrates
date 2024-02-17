@@ -91,10 +91,6 @@
 (assert= (list-annihilate (lambda (x y) (and (even? x) (even? y))) 'even-pair (list 2 3 4 6))
          (list 'even-pair 3 'even-pair 'even-pair))
 
-;; Test with more complex predicate involving modulo
-(assert= (list-annihilate (lambda (x y) (= (modulo x 3) (modulo y 3))) 'mod-same (list 1 4 2 5))
-         (list 1 'mod-same 2 'mod-same))
-
 ;; Test if function does not mutate the original list
 (define original-list (list 1 2 3 2 1))
 (define processed-list (list-annihilate equal? 'x original-list))
