@@ -2,7 +2,6 @@
 (define-library
   (test-list-idempotent)
   (import (only (euphrates assert-equal) assert=))
-  (import (only (euphrates debug) debug))
   (import
     (only (euphrates list-idempotent)
           list-idempotent))
