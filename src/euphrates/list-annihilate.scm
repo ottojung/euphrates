@@ -12,9 +12,9 @@
   ;; The result list maintains the original structure but with elements replaced by `constant` as defined by the predicate.
   ;;
   ;; Example usage:
-  ;; (list-annihilate equal? 'c (list 'a 'b 'a 'd 'a))
+  ;; (list-annihilate equal? 'c (list 1 2 1 4 1))
   ;; will return
-  ;; (list 'c 'b 'c 'd 'c)
+  ;; (list 'c 2 'c 4 'c)
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
   (define (replace-annihilated-elements elements predicted)
