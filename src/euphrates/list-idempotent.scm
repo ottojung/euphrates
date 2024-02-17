@@ -7,7 +7,7 @@
   ;;   lst: a list of elements to be processed
   ;;
   ;; It returns a new list that contains the first occurrence of each element in `lst`,
-  ;; removing all subsequent duplicates that satisfy the predicate `pred` with respect to any previously encountered element.
+  ;; removing all subsequent elements that satisfy the predicate `pred` with respect to any previously encountered element.
   ;; The result list preserves the order of first occurrence of each unique element as they originally appear in `lst`.
   ;;
   ;; This operation is related to the mathematical concept of idempotence in the context of set operations.
