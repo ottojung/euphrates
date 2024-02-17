@@ -24,11 +24,12 @@
   (let loop ((x 0) (y 0))
     (when (< x n)
 
-      (debugs output)
-
       (unless (= x y)
         (when (pred (vector-ref input x)
                     (vector-ref input y))
+          (debugs output)
+          (debug "~s, ~s" x y)
+
           (vector-set! output x constant)
           (vector-set! output y constant)))
 
