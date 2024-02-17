@@ -4,11 +4,32 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
+  (import (only (euphrates comp) comp))
   (import
     (only (euphrates list-annihilate)
           list-annihilate))
   (import
-    (only (scheme base) begin cons equal? list quote))
+    (only (scheme base)
+          -
+          <
+          =
+          >
+          abs
+          and
+          begin
+          char=?
+          cons
+          define
+          eq?
+          equal?
+          eqv?
+          even?
+          lambda
+          list
+          modulo
+          number?
+          quote
+          string=?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
