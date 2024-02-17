@@ -17,15 +17,17 @@
   ;; (list 'c 2 'c 4 'c)
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
-  (define n (length lst))
+  (define input (list->vector lst))
+  (define n (vector-length input))
   (define output (make-vector n #f))
 
   (let loop ((x 0) (y 0))
     (when (< x n)
 
       (unless (= x y)
-        
-        )
+        (if (pred (vector-ref input x)
+                  (vector-ref input y))
+            
 
       (if (< y (- n 1))
           (loop x (+ 1 y))
