@@ -21,7 +21,10 @@
 ;; Non recursive.
 (assert= (list-annihilate
           (lambda (x y)
-            (or (equal? x y)))
+            (or (equal? x y)
+                (equal? x 'c)
+                (equal? y 'c)))
+
           'c (list 1 2 1 4 1))
          (list 'c 2 'c 4 'c))
 
