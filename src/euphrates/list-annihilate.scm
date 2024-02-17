@@ -8,19 +8,27 @@
   ;;   lst: a list of elements to be processed
   ;;
   ;; It returns a new list where, starting from the head of the list,
-  ;; every time an element satisfies the predicate `pred` with any preceding element, it is replaced by `constant`.
-  ;; The result list maintains the original order of the first occurrence of each non-annihilated element.
+  ;; every time an element satisfies the predicate `pred` with any preceding element, both get replaced by `constant`.
+  ;; The result list maintains the original structure but with elements replaced by `constant` as defined by the predicate.
   ;;
   ;; Example usage:
   ;; (list-annihilate equal? 'c (list 'a 'b 'a 'd 'a))
   ;; will return
-  ;; (list 'a 'b 'c 'd 'c)
-  ;; replacing subsequent appearances of previously encountered elements (according to `pred`) with 'c.
+  ;; (list 'c 'b 'c 'd 'c)
+  ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
-  (let loop ((rest lst) (result '()))
+  (define (replace-annihilated-elements elements predicted)
+    (map (lambda (el)
+           (if (list-or-map (lambda (matched) (pred matched el)) predicted)
+               constant
+               el))
+         elements))
+
+  ;; Loop definition with an accumulator for result and a list of annihilated elements
+  (let loop ((rest lst) (result '()) (predicted '()))
     (cond
-     ((null? rest) (reverse result))
+     ((null? rest) (reverse (replace-annihilated-elements result predicted)))
      ((list-or-map (lambda (x) (pred x (car rest))) result)
-      (loop (cdr rest) (cons constant result)))
+      (loop (cdr rest) (cons constant result) (cons (car rest) predicted)))
      (else
-      (loop (cdr rest) (cons (car rest) result))))))
+      (loop (cdr rest) (cons (car rest) result) predicted)))))
