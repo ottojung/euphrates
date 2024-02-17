@@ -31,7 +31,7 @@
                 (equal? y 'c)))
 
           'c (list 1 2 1 4 1))
-         (list 'c 2 1 4 1))
+         (list 'c 2 'c 4 'c))
 
 ;; Test with pairs (cons cells) and equal?
 (assert= (list-annihilate equal? 'same (list (cons 1 2) (cons 1 2) (cons 3 4)))
