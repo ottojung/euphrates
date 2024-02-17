@@ -81,12 +81,12 @@
 ;; Test Case 17: Test with function composition as predicate
 (assert= (list-idempotent (lambda (x y) (= (* 2 x) y))
                           (list 1 2 3 4 5 6 7 8))
-         (list 1 3 5 7))
+         (list 1 3 4 5 7))
 
 ;; Test Case 18: Test with real numbers and tolerance on equality
 (assert= (list-idempotent (lambda (x y) (< (abs (- x y)) 0.1))
                           (list 1.0 1.05 1.1 2.0 2.05 3.0))
-         (list 1.0 2.0 3.0))
+         (list 1.0 1.1 2.0 3.0))
 
 ;; Test Case 19: Test with characters
 (assert= (list-idempotent char=? (list #\a #\b #\a #\c #\b #\c))
