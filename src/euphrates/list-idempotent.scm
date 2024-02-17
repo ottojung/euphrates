@@ -25,6 +25,8 @@
   ;; will return
   ;; (list 1 2 4)
   ;; keeping only the first appearance of each number.
+  ;;
+  ;; Note: this function is actually the same as `list-deduplicate'.
 
   (let loop ((rest lst) (result '()))
     (cond
