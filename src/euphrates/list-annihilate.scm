@@ -27,7 +27,8 @@
   ;; Loop definition with an accumulator for result and a list of annihilated elements
   (let loop ((rest lst) (result '()) (predicted '()))
     (cond
-     ((null? rest) (reverse (replace-annihilated-elements result predicted)))
+     ((null? rest)
+      (reverse (replace-annihilated-elements result predicted)))
      ((list-or-map (lambda (x) (pred x (car rest))) result)
       (loop (cdr rest) (cons constant result) (cons (car rest) predicted)))
      (else
