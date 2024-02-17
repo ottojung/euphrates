@@ -18,6 +18,13 @@
                           'c (list 7 8 9 6 5))
          '(7 8 c c c))
 
+;; Non symmetric [2].
+(assert= (list-annihilate (lambda (x y) (equal? 9 y))
+                          'c (list 7 8 9 6 5))
+         '(c c c 6 5))
+
+(exit 0)
+
 ;; ;; Non recursive.
 ;; (assert= (list-annihilate
 ;;           (lambda (x y)
