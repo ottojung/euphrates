@@ -9,7 +9,6 @@
           +
           -
           <
-          =
           begin
           define
           if
