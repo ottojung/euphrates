@@ -4,7 +4,6 @@
 
 ;; Constant in the originl list.
 (assert= (list-annihilate (lambda (x y)
-                            (debug "p: ~s, ~s" x y)
                             (equal? y 'c))
                           'c (list 1 2 'c 4 5 1 'c 1 7 8))
          (list 1 2 'c 4 5 1 'c 1 7 8))
