@@ -12,9 +12,6 @@
 (assert= (list-annihilate equal? 'same (list (cons 1 2) (cons 1 2) (cons 3 4)))
          (list 'same 'same (cons 3 4)))
 
-
-
-
 ;; Test with an empty list
 (assert= (list-annihilate equal? 'c '())
          '())
