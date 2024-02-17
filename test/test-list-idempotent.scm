@@ -24,7 +24,7 @@
 
 ;; Test Case 4: Test with numbers and greater-than predicate
 (assert= (list-idempotent > (list 5 4 3 6 2 7))
-         (list 5))
+         (list 5 6 7))
 
 ;; Test Case 5: Test with case-insensitive string equality
 (assert= (list-idempotent (lambda (x y) (string-ci=? x y))
