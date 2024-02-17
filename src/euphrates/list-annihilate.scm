@@ -24,7 +24,7 @@
   (let loop ((x 0) (y 0))
     (when (< x n)
 
-      (unless (>= x y)
+      (when (< x y)
         (when (pred (vector-ref input x)
                     (vector-ref input y))
           (debugs output)

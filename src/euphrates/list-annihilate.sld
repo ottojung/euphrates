@@ -9,13 +9,11 @@
           +
           -
           <
-          >
           begin
           define
           if
           let
           list->vector
-          unless
           vector->list
           vector-copy
           vector-length
