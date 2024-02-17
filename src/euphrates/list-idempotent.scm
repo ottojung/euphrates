@@ -22,7 +22,9 @@
   ;;
   ;; Example usage:
   ;; (list-idempotent equal? (list 1 2 1 4 1))
-  ;; will return (list 1 2 4), keeping only the first appearance of each number.
+  ;; will return
+  ;; (list 1 2 4)
+  ;; keeping only the first appearance of each number.
 
   (let loop ((rest lst) (result '()))
     (cond
