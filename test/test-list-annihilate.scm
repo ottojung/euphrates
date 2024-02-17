@@ -14,9 +14,9 @@
          '(1 2 c c c))
 
 ;; Non symmetric.
-(assert= (list-annihilate (lambda (x y) (equal? x 3))
-                          'c (list 1 2 3 4 5))
-         '(1 2 c c c))
+(assert= (list-annihilate (lambda (x y) (equal? x 9))
+                          'c (list 7 8 9 6 5))
+         '(7 8 c c c))
 
 (exit 0)
 
