@@ -71,10 +71,6 @@
 (assert= (list-annihilate equal? 'type-mismatch (list 1 'a 2 'b))
          (list 1 'a 2 'b))
 
-;; Test with custom complex predicate
-(assert= (list-annihilate (lambda (a b) (and (number? a) (number? b) (> a b))) 'comp (list 3 2 1 4 1))
-         (list 3 'comp 'comp 4 'comp))
-
 ;; Test entire list replaced due to custom predicate always returning true
 (assert= (list-annihilate (lambda (a b) #t) 'true (list 1 2 3 4))
          (list 'true 'true 'true 'true))

@@ -4,7 +4,6 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
-  (import (only (euphrates comp) comp))
   (import
     (only (euphrates list-annihilate)
           list-annihilate))
@@ -13,7 +12,6 @@
           -
           <
           =
-          >
           abs
           and
           begin
@@ -24,7 +22,6 @@
           lambda
           list
           modulo
-          number?
           or
           quote
           string=?))
