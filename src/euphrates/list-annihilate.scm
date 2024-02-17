@@ -21,7 +21,7 @@
   (define output (vector-copy input))
   (define n (vector-length input))
 
-  (let loop ((x 0) (y 1))
+  (let loop ((x 0) (y 0))
     (when (< x n)
 
       (unless (< x y)
