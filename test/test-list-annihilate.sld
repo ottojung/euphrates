@@ -8,7 +8,7 @@
     (only (euphrates list-annihilate)
           list-annihilate))
   (import
-    (only (scheme base) begin equal? list quote))
+    (only (scheme base) begin cons equal? list quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
