@@ -18,7 +18,7 @@
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
   (define input (list->vector lst))
-  (define output (copy-vector input))
+  (define output (vector-copy input))
   (define n (vector-length input))
 
   (let loop ((x 0) (y 0))
