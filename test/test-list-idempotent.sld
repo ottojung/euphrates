@@ -8,11 +8,11 @@
   (import
     (only (scheme base)
           =
-          and
           begin
           equal?
           lambda
           list
+          or
           remainder))
   (cond-expand
     (guile (import (only (guile) include-from-path))
