@@ -5,6 +5,7 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates comp) comp))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates list-annihilate)
           list-annihilate))
