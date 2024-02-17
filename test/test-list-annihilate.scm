@@ -28,6 +28,11 @@
 (assert= (list-annihilate equal? 'n (list 1 2 3 4))
          (list 1 2 3 4))
 
+;; Constant in the originl list.
+(assert= (list-annihilate (lambda (x y) (equal? y 'c'))
+                          'c (list 1 2 'c 4 5 1 'c 1 7 8))
+         (list 1 'c 'c 4 5 'c 'c 1 7 8))
+
 ;; Test list with non-numeric elements
 (assert= (list-annihilate equal? 'same (list 'a 'b 'c 'd))
          (list 'a 'b 'c 'd))
