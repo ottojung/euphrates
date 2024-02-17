@@ -11,13 +11,13 @@
 ;;          (list 1 2 'c 4 5 1 'c 1 7 8))
 ;;          ;; (list 1 'c 'c 4 5 'c 'c 1 7 8))
 
-(exit 0)
-
 (assert-throw #t (list-annihilate 0 1 2)) ;; type error
 
 ;; Test identical numbers
 (assert= (list-annihilate equal? 'x (list 1 2 3 2 1))
          (list 'x 'x 3 'x 'x))
+
+(exit 0)
 
 ;; Test with pairs (cons cells) and equal?
 (assert= (list-annihilate equal? 'same (list (cons 1 2) (cons 1 2) (cons 3 4)))
