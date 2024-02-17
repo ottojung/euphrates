@@ -76,7 +76,7 @@
          (list 'true 'true 'true 'true))
 
 ;; Test with characters
-(assert= (list-annihilate equal? 'char-same (list #\a #\b #\a))
+(assert= (list-annihilate char=? 'char-same (list #\a #\b #\a))
          (list 'char-same #\b 'char-same))
 
 ;; Test with vectors
