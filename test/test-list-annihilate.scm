@@ -8,12 +8,12 @@
 ;; (assert= (list-annihilate equal? 'x (list 1 2 3 2 1))
 ;;          (list 'x 'x 3 'x 'x))
 
-;; ;; Constant in the originl list.
+;; ;; Constant in the original list.
 ;; (assert= (list-annihilate (lambda (x y) (equal? x 'c))
 ;;                           'c (list 1 2 'c 4 5))
 ;;          '(c c c c c))
 
-;; Non recursive.
+;; Collapse
 (assert= (list-annihilate (lambda (x y) (equal? x 2))
                           'c (list 1 2 3 4 5))
          '(c c c c c))
