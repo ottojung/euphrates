@@ -18,7 +18,7 @@
     (appcomp expr
              (list-idempotent equal?)
              (list-annihilate opposite-exprs? bottom)
-             )))
+             ))
 
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
