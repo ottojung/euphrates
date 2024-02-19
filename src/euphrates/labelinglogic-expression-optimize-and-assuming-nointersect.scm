@@ -23,7 +23,8 @@
         (define-tuple (inner) (labelinglogic:expression:args type-b))
         (labelinglogic:expression:syntactic-equal? expr-a inner)))
 
-     (else (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))))
+     (else
+      (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
