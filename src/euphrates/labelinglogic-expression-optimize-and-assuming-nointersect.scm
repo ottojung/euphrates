@@ -11,17 +11,30 @@
     (define args-a (labelinglogic:expression:args expr-a))
     (define args-b (labelinglogic:expression:args expr-b))
 
+    (define negative-a?
+      (equal? type-a 'not))
+
+    (define negative-b?
+      (equal? type-b 'not))
+
     (define unwrapped-a
-      (if (equal? type-a 'not)
+      (if negative-a?
           (car (labelinglogic:expression:args expr-a))
           expr-a))
 
     (define unwrapped-b
-      (if (equal? type-b 'not)
+      (if negative-b?
           (car (labelinglogic:expression:args expr-b))
           expr-b))
 
-    
+    (define utype-a (labelinglogic:expression:type unwrapped-a))
+    (define utype-b (labelinglogic:expression:type unwrapped-b))
+
+    (cond
+     ((and (equal? utype-a 'r7rs)
+           (equal? utype-b 'r7rs))
+
+      (
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
