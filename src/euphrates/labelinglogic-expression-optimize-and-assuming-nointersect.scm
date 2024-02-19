@@ -5,14 +5,20 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
+  (define (opposite-exprs? expr-a expr-b)
+    0)
+
+  (define bottom
+    (labelinglogic:expression:make 'or '()))
+
   (define (optimize expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
     (appcomp expr
              (list-idempotent equal?)
-             
-             ))
+             (list-annihilate opposite-exprs? bottom)
+             )))
 
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
