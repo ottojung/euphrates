@@ -14,8 +14,7 @@
 
       0)
 
-     (else
-      
+     (else (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
