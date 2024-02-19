@@ -59,4 +59,4 @@
                               (~a type))
             :args (list type expr)))
 
-  (apply-until-fixpoint optimize))
+  (apply-until-fixpoint optimize expr))
