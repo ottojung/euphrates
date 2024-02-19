@@ -13,11 +13,15 @@
             labelinglogic-expression-move-nots-down)
           labelinglogic:expression:move-nots-down))
   (import
+    (only (euphrates
+            labelinglogic-expression-syntactic-equal-huh)
+          labelinglogic:expression:syntactic-equal?))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates list-deduplicate)
-          list-deduplicate))
+    (only (euphrates list-idempotent)
+          list-idempotent))
   (import
     (only (euphrates list-singleton-q)
           list-singleton?))
