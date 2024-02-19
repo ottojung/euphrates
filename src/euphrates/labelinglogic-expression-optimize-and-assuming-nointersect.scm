@@ -28,6 +28,19 @@
   (define bottom
     (labelinglogic:expression:make 'or '()))
 
+  (define (is-bottom? expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (and (equal? type 'or)
+         (null? args)))
+
+  (define (explode-bottom expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (if (list-or-map is-bottom? args)
+        bottom
+        expr))
+
   (define (optimize expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
@@ -35,6 +48,7 @@
     (appcomp expr
              (list-idempotent equal?)
              (list-annihilate opposite-exprs? bottom)
+             (list-collapse 
              ))
 
   (unless (equal? type 'and)
