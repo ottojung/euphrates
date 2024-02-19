@@ -5,6 +5,9 @@
   (export
     labelinglogic:expression:optimize/and-assuming-nointersect)
   (import
+    (only (euphrates apply-until-fixpoint)
+          apply-until-fixpoint))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
