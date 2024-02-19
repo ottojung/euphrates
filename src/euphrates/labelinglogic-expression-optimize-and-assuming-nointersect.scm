@@ -16,12 +16,12 @@
      ((equal? type-a 'not)
       (let ()
         (define-tuple (inner) (labelinglogic:expression:args type-a))
-        (not (labelinglogic:expression:syntactic-equal? inner expr-b))
+        (labelinglogic:expression:syntactic-equal? inner expr-b)))
 
-     ((equal? type-a 'not)
+     ((equal? type-b 'not)
       (let ()
-        (define-tuple (inner) (labelinglogic:expression:args type-a))
-        (not (labelinglogic:expression:syntactic-equal? inner expr-b))
+        (define-tuple (inner) (labelinglogic:expression:args type-b))
+        (labelinglogic:expression:syntactic-equal? expr-a inner)))
 
      (else (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))))
 

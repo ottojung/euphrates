@@ -9,11 +9,17 @@
           apply-until-fixpoint))
   (import (only (euphrates comp) appcomp))
   (import
+    (only (euphrates define-tuple) define-tuple))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
+  (import
+    (only (euphrates
+            labelinglogic-expression-syntactic-equal-huh)
+          labelinglogic:expression:syntactic-equal?))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
@@ -30,9 +36,13 @@
     (only (scheme base)
           and
           begin
+          cond
           define
+          else
           equal?
+          let
           list
+          not
           or
           quote
           unless))
