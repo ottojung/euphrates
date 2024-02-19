@@ -8,6 +8,8 @@
   (define (opposite-exprs? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
+    (define args-a (labelinglogic:expression:args expr-a))
+    (define args-b (labelinglogic:expression:args expr-b))
 
     (define unwrapped-a
       (if (equal? type-a 'not)
