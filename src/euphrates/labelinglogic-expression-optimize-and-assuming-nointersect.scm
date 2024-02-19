@@ -10,7 +10,9 @@
     (define type-b (labelinglogic:expression:type expr-b))
     (cond
      ((or (equal? type-a 'not)
-          (equal? type-b 'not)))
+          (equal? type-b 'not))
+
+      0)
 
      (else
       
