@@ -7,12 +7,16 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
+  (import (only (euphrates comp) appcomp))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates list-idempotent)
+          list-idempotent))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))

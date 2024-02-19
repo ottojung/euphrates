@@ -9,9 +9,9 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    
-
-    0)
+    (appcomp expr
+             (list-idempotent equal?)
+             ))
 
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
