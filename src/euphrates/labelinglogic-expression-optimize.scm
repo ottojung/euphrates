@@ -24,7 +24,7 @@
        (map labelinglogic:expression:optimize args))
 
      (define dedup
-       (list-deduplicate rec))
+       (list-idempotent rec))
 
      (define new
        (labelinglogic:expression:make type dedup))
