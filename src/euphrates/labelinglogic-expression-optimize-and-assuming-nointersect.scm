@@ -6,7 +6,14 @@
   (define args (labelinglogic:expression:args expr))
 
   (define (opposite-exprs? expr-a expr-b)
-    0)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+    (cond
+     ((or (equal? type-a 'not)
+          (equal? type-b 'not)))
+
+     (else
+      
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
