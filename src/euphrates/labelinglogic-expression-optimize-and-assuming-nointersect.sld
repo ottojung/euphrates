@@ -29,6 +29,8 @@
   (import
     (only (euphrates list-idempotent)
           list-idempotent))
+  (import
+    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -40,9 +42,11 @@
           define
           else
           equal?
+          if
           let
           list
           not
+          null?
           or
           quote
           unless))

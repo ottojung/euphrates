@@ -48,7 +48,7 @@
     (appcomp expr
              (list-idempotent equal?)
              (list-annihilate opposite-exprs? bottom)
-             (list-collapse 
+             explode-bottom
              ))
 
   (unless (equal? type 'and)
