@@ -11,6 +11,7 @@
 
     (appcomp expr
              (list-idempotent equal?)
+             
              ))
 
   (unless (equal? type 'and)
