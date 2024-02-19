@@ -9,10 +9,19 @@
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
     (cond
-     ((or (equal? type-a 'not)
-          (equal? type-b 'not))
+     ((and (equal? type-a 'not)
+           (equal? type-b 'not))
+      (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))
 
-      0)
+     ((equal? type-a 'not)
+      (let ()
+        (define-tuple (inner) (labelinglogic:expression:args type-a))
+        (not (labelinglogic:expression:syntactic-equal? inner expr-b))
+
+     ((equal? type-a 'not)
+      (let ()
+        (define-tuple (inner) (labelinglogic:expression:args type-a))
+        (not (labelinglogic:expression:syntactic-equal? inner expr-b))
 
      (else (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))))
 
