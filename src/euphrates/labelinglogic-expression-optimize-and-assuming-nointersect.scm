@@ -5,6 +5,12 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
+  (define (optimize expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
+    0)
+
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
             :type 'unknown-expr-type
@@ -12,6 +18,4 @@
                               (~a type))
             :args (list type expr)))
 
-  
-
-  0)
+  (apply-until-fixpoint optimize))
