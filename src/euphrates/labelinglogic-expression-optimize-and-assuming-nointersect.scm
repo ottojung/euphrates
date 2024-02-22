@@ -31,10 +31,13 @@
     (define utype-b (labelinglogic:expression:type unwrapped-b))
 
     (cond
-     ((and (equal? utype-a 'r7rs)
+     (
+     ((equal? negative-a? negative-b?)
+      (cond
+             ((and (equal? utype-a 'r7rs)
            (equal? utype-b 'r7rs))
 
-      (
+
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
