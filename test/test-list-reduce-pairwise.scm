@@ -33,7 +33,7 @@
 
 ;; Test list containing sublists
 (assert= (list-reduce/pairwise 'default (lambda (x y) (if (equal? x y) 'hit 'default)) '((1 2) (3 4) (1 2)))
-         (list 'hit (cons 3 4)))
+         (list 'hit (list 3 4)))
 
 ;; ;; Test with elements of different data types
 ;; (assert= (list-reduce/pairwise 'default (lambda (x y) (if (char-alphabetic? x) 'yes 'default)) '(#\a 2 #\b "string" 3.14159 (2 . 3)))
