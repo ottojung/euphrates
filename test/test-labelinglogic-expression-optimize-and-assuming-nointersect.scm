@@ -280,10 +280,16 @@
   '(and (= 2) (r7rs even?) (tuple (= 2) (r7rs even?)))))
 
 ;; Case with '((and))'
-(assert=
- '(and)
+(assert-throw
+ 'bad-expr-type
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((and))))
+
+;; Case with numbers
+(assert-throw
+ 'bad-expr-type
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and 1 2 3)))
 
 (exit 0)
 
