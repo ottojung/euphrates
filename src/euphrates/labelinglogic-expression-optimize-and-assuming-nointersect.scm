@@ -144,6 +144,7 @@
      explode-bottom
      remove-tops))
 
+  (labelinglogic:expression:check expr)
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
             :type 'bad-expr-type
