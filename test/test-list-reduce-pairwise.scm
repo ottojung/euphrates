@@ -36,7 +36,7 @@
          (list 'hit (list 3 4)))
 
 ;; Test with elements of different data types
-(assert= (list-reduce/pairwise 'default (lambda (x y) (if (char-alphabetic? x) 'yes 'default)) '(#\a 2 #\b "string" 3.14159 (2 . 3)))
+(assert= (list-reduce/pairwise 'default (lambda (x y) (if (char? x) 'yes 'default)) '(#\a 2 #\b "string" 3.14159 (2 . 3)))
          (list 'yes 2 #\b "string" 3.14159 (cons 2  3)))
 
 ;; Test with a list of different types of pairs and `equal` predicate
