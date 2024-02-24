@@ -8,7 +8,8 @@
     (only (euphrates
             labelinglogic-expression-optimize-and-assuming-nointersect)
           labelinglogic:expression:optimize/and-assuming-nointersect))
-  (import (only (scheme base) and begin or quote))
+  (import
+    (only (scheme base) = and begin or quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
