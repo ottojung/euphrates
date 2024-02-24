@@ -11,10 +11,10 @@
   ;;   - Detection and handling of 'or' expressions without arguments
   ;;   - Removal of parts that cannot intersect because they are of the same type or of different types
   ;;
-  ;; It assumes the input expression is of 'and' type, and throws an error if it's not.
-  ;;
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
-
+  ;;
+  ;; It assumes the input expression is of 'and' type, and throws an error if it's not.
+  ;; 
 
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
