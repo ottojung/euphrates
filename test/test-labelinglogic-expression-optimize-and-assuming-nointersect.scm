@@ -302,17 +302,17 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((or))))
 
+;; Case with '((tuple))'
+(assert-throw
+ 'expression-type-error
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '((tuple))))
+
 ;; More complex case
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs positive?) (not (= 2)) (tuple (= 2) (r7rs odd?)))))
-
-;; Case with '((tuple))'
-(assert=
- '(and (tuple))
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '((tuple))))
 
 ;; Complex case with '((tuple))' and '((or))'
 (assert=
