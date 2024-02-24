@@ -8,36 +8,24 @@
   (define (opposite-exprs? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
-    (define args-a (labelinglogic:expression:args expr-a))
-    (define args-b (labelinglogic:expression:args expr-b))
-
-    (define negative-a?
-      (equal? type-a 'not))
-
-    (define negative-b?
-      (equal? type-b 'not))
-
-    (define unwrapped-a
-      (if negative-a?
-          (car (labelinglogic:expression:args expr-a))
-          expr-a))
-
-    (define unwrapped-b
-      (if negative-b?
-          (car (labelinglogic:expression:args expr-b))
-          expr-b))
-
-    (define utype-a (labelinglogic:expression:type unwrapped-a))
-    (define utype-b (labelinglogic:expression:type unwrapped-b))
 
     (cond
-     (
-     ((equal? negative-a? negative-b?)
-      (cond
-             ((and (equal? utype-a 'r7rs)
-           (equal? utype-b 'r7rs))
+     ((and (equal? type-a 'not)
+           (equal? type-b 'not))
+      (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))
 
+     ((equal? type-a 'not)
+      (let ()
+        (define-tuple (inner) (labelinglogic:expression:args type-a))
+        (labelinglogic:expression:syntactic-equal? inner expr-b)))
 
+     ((equal? type-b 'not)
+      (let ()
+        (define-tuple (inner) (labelinglogic:expression:args type-b))
+        (labelinglogic:expression:syntactic-equal? expr-a inner)))
+
+     (else
+      (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
