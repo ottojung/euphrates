@@ -16,8 +16,7 @@
                         (vector-ref input y)))
 
           (unless (equal? result default-value)
-            (vector-set! output x constant)
-            (vector-set! output y constant))))
+            (vector-set! output x result))))
 
       (if (< y (- n 1))
           (loop x (+ 1 y))
