@@ -296,11 +296,9 @@
  'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect 812312))
 
-(exit 0)
-
 ;; Case with '((or))'
 (assert=
- '(or)
+ 'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((or))))
 
