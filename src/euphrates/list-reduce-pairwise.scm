@@ -5,18 +5,21 @@
   (define input (list->vector lst))
   (define output (vector-copy input))
   (define n (vector-length input))
+  (define ignored (make-hashset))
 
   (let loop ((x 0) (y 0))
     (when (< x n)
 
       (when (< x y)
-        (let ()
-          (define result
-            (projection (vector-ref input x)
-                        (vector-ref input y)))
+        (unless (hashset-has? ignored y)
+          (let ()
+            (define result
+              (projection (vector-ref input x)
+                          (vector-ref input y)))
 
-          (unless (equal? result default-value)
-            (vector-set! output x result))))
+            (unless (equal? result default-value)
+              (vector-set! output x result)
+              (hashset-add! ignored y)))))
 
       (if (< y (- n 1))
           (loop x (+ 1 y))

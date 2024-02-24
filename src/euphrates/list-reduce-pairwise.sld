@@ -3,6 +3,11 @@
   (euphrates list-reduce-pairwise)
   (export list-reduce/pairwise)
   (import
+    (only (euphrates hashset)
+          hashset-add!
+          hashset-has?
+          make-hashset))
+  (import
     (only (scheme base)
           +
           -
