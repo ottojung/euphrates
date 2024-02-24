@@ -57,6 +57,8 @@
         ))
 
   (define (null-exprs? expr-a expr-b)
+    (check-type expr-a)
+    (check-type expr-b)
     (or (opposite-exprs? expr-a expr-b)
         (obviously-nonintersect? expr-a expr-b)))
 
