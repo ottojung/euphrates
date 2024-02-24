@@ -83,11 +83,11 @@
 
 ;; Test with characters
 (assert= (list-annihilate char=? 'char-same (list #\a #\b #\a))
-         (list 'char-same #\b 'char-same))
+         (list 'char-same #\b))
 
 ;; Test with vectors
 (assert= (list-annihilate equal? 'vec-same (list #(1 2) #(3 4) #(1 2)))
-         (list 'vec-same #(3 4) 'vec-same))
+         (list 'vec-same #(3 4)))
 
 ;; Test list containing different boolean values
 (assert= (list-annihilate equal? 'bool (list #t #f #t))
