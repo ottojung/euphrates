@@ -14,7 +14,7 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and a b)))
 
-(assert-throw
+(assert=
  '(and (= 0))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 0) (= 0))))
