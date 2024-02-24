@@ -14,10 +14,10 @@
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
   ;;
   ;; It assumes the input expression is of 'and' type, and all of its elements are of types:
-  ;;   - =
-  ;;   - r7rs
-  ;;   - not
-  ;;   - tuple
+  ;;   - '=
+  ;;   - 'r7rs
+  ;;   - 'not
+  ;;   - 'tuple
   ;; Or, in other words, ground terms + negated ground terms.
   ;;
 
