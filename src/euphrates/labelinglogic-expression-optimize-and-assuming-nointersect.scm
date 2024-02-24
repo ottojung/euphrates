@@ -9,7 +9,9 @@
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
 
-    0)
+    (and (equal? type-a 'constant)
+         (equal? type-b 'constant)
+         (not (labelinglogic:expression:syntactic-equal? expr-a expr-b))))
 
   (define (opposite-exprs? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
