@@ -72,7 +72,8 @@
     (check-type expr-b)
 
     (or (opposite-exprs? expr-a expr-b)
-        (same-type-nonintersect? expr-a expr-b)))
+        (same-type-nonintersect? expr-a expr-b)
+        (different-type-nonintersect? expr-a expr-b)))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
