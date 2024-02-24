@@ -14,7 +14,6 @@
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
   ;;
   ;; It assumes the input expression is of 'and' type, and throws an error if it's not.
-  ;; 
 
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
