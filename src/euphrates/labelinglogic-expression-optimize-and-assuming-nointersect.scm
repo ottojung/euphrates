@@ -133,8 +133,8 @@
   (define (remove-idempotent expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (labelinglogic:expression:make
-     type (list-idempotent labelinglogic:expression:syntactic-equal? args)))
+    (define new-args (list-idempotent labelinglogic:expression:syntactic-equal? args))
+    (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)
     (define type (labelinglogic:expression:type expr))
