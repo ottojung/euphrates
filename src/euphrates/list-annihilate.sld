@@ -3,21 +3,12 @@
   (euphrates list-annihilate)
   (export list-annihilate)
   (import
-    (only (scheme base)
-          +
-          -
-          <
-          begin
-          define
-          if
-          let
-          list->vector
-          vector->list
-          vector-copy
-          vector-length
-          vector-ref
-          vector-set!
-          when))
+    (only (euphrates list-reduce-pairwise)
+          list-reduce/pairwise))
+  (import
+    (only (euphrates make-unique) make-unique))
+  (import
+    (only (scheme base) begin define if lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

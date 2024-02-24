@@ -17,21 +17,12 @@
   ;; (list 'c 2 'c 4 'c)
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
-  (define input (list->vector lst))
-  (define output (vector-copy input))
-  (define n (vector-length input))
+  (define default-value (make-unique))
 
-  (let loop ((x 0) (y 0))
-    (when (< x n)
-
-      (when (< x y)
-        (when (pred (vector-ref input x)
-                    (vector-ref input y))
-          (vector-set! output x constant)
-          (vector-set! output y constant)))
-
-      (if (< y (- n 1))
-          (loop x (+ 1 y))
-          (loop (+ 1 x) (+ 1 x)))))
-
-  (vector->list output))
+  (list-reduce/pairwise
+   default-value
+   (lambda (x y)
+     (if (pred x y)
+         constant
+         default-value))
+   lst))
