@@ -19,6 +19,7 @@
   ;;   - not
   ;;   - tuple
   ;; Or, in other words, ground terms + negated ground terms.
+  ;;
 
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
