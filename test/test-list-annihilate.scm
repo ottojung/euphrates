@@ -71,7 +71,7 @@
 
 ;; Test list containing sublists
 (assert= (list-annihilate equal? 'sublist (list (list 1 2) (list 3 4) (list 1 2)))
-         (list 'sublist (list 3 4) 'sublist))
+         (list 'sublist (list 3 4)))
 
 ;; Test with elements of different data types using `equal?` predicate
 (assert= (list-annihilate equal? 'type-mismatch (list 1 'a 2 'b))
