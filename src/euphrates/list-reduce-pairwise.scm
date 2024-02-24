@@ -12,14 +12,15 @@
 
       (when (< x y)
         (unless (hashset-has? ignored y)
-          (let ()
-            (define result
-              (projection (vector-ref input x)
-                          (vector-ref input y)))
+          (unless (hashset-has? ignored x)
+            (let ()
+              (define result
+                (projection (vector-ref input x)
+                            (vector-ref input y)))
 
-            (unless (equal? result default-value)
-              (vector-set! output x result)
-              (hashset-add! ignored y)))))
+              (unless (equal? result default-value)
+                (vector-set! output x result)
+                (hashset-add! ignored y))))))
 
       (if (< y (- n 1))
           (loop x (+ 1 y))
