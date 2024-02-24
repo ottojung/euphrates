@@ -2,8 +2,8 @@
 (assert= (list-reduce/pairwise 'not-found (lambda (x y) (if (equal? x y) 'found 'not-found)) '(a a b b))
          (list 'found 'found))
 
-(assert= (list-reduce/pairwise 'default (lambda (x y) (if (> x 3) 'hit 'default)) '(1 2 3 4 5 6))
-         (list 1 2 3 'hit 6))
+(assert= (list-reduce/pairwise 'default (lambda (x y) (if (> x 2) 'hit 'default)) '(1 2 3 4 5 6 7))
+         (list 1 2 'hit 'hit 7))
 
 ;; (assert= (list-reduce/pairwise 'missing (lambda (x y) (if (string=? x "hello") 'present 'missing)) '("apple" "banana" "cherry" "hello" "apple"))
 ;;          (list 'present "hello" "apple"))
