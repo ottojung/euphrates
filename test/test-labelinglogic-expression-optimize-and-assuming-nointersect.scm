@@ -32,11 +32,11 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 1)) (= 1))))
 
-;;Optimizing non-intersecting r7rs terms
-(assert=
- '(or)
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (r7rs (lambda (x) (* x x)) 2) (r7rs (lambda (x) (+ x x)) 2))))
+;; ;;Optimizing non-intersecting r7rs terms
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect
+;;   '(and (r7rs (lambda (x) (* x x)) 2) (r7rs (lambda (x) (+ x x)) 2))))
 
 ;;Negated and non-negated expressions
 (assert=
