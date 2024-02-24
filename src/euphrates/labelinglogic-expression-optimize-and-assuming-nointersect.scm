@@ -59,6 +59,12 @@
   (define (different-type-nonintersect? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
+    (define args-a (labelinglogic:expression:args expr-a))
+    (define args-b (labelinglogic:expression:args expr-b))
+    (define negated-a? (equal? 'not type-a))
+    (define negated-b? (equal? 'not type-b))
+    (define inner-a (if negated-a? (car args-a) expr-a))
+    (define inner-b (if negated-b? (car args-b) expr-b))
 
     (raise 'TODO 'FIXME))
 
