@@ -5,14 +5,6 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (define (different-constants? expr-a expr-b)
-    (define type-a (labelinglogic:expression:type expr-a))
-    (define type-b (labelinglogic:expression:type expr-b))
-
-    (and (equal? type-a 'constant)
-         (equal? type-b 'constant)
-         (not (labelinglogic:expression:syntactic-equal? expr-a expr-b))))
-
   (define (different-equals? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
@@ -65,8 +57,7 @@
                                 (~a type-b))
               :args (list type-b expr)))
 
-    (or (different-constants? expr-a expr-b)
-        (different-equals? expr-a expr-b)
+    (or (different-equals? expr-a expr-b)
         (different-r7rs? expr-a expr-b)
         (different-tuples? expr-a expr-b)))
 
