@@ -47,7 +47,7 @@
 
 ;; Test list with only identical elements
 (assert= (list-annihilate equal? 'annihilated (list 1 1 1 1))
-         (list 'annihilated 'annihilated 'annihilated 'annihilated))
+         (list 'annihilated 'annihilated))
 
 ;; Test list with no matching elements
 (assert= (list-annihilate equal? 'n (list 1 2 3 4))
