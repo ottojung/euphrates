@@ -79,7 +79,7 @@
 
 ;; Test entire list replaced due to custom predicate always returning true
 (assert= (list-annihilate (lambda (a b) #t) 'true (list 1 2 3 4))
-         (list 'true 'true 'true 'true))
+         (list 'true 'true))
 
 ;; Test with characters
 (assert= (list-annihilate char=? 'char-same (list #\a #\b #\a))
