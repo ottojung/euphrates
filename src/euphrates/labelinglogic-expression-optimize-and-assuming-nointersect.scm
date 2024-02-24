@@ -132,11 +132,8 @@
         expr
         (labelinglogic:expression:make type new-args)))
 
-  (define (optimize expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
-    (appcomp expr
+  (define (optimize args)
+    (appcomp args
              (list-idempotent labelinglogic:expression:syntactic-equal?)
              (list-annihilate null-exprs? bottom)
              explode-bottom
@@ -149,4 +146,5 @@
             :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
             :args (list type expr)))
 
-  (apply-until-fixpoint optimize expr))
+  (labelinglogic:expression:make
+   type (apply-until-fixpoint optimize args)))
