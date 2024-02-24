@@ -19,13 +19,13 @@
 ;; (assert= (list-reduce/pairwise 'nil (lambda (x y) (if (and (number? x) (number? y)) x 'nil)) '(1 2 "three" 4))
 ;;          (list 1 "three" 4))
 
-;; ;; Test with an empty list
-;; (assert= (list-reduce/pairwise 'none found? '())
-;;          (list))
+;; Test with an empty list
+(assert= (list-reduce/pairwise 'none (const #t) '())
+         (list))
 
-;; ;; Test list with a single element
-;; (assert= (list-reduce/pairwise 'empty found? (list 'only-ele))
-;;          (list 'only-ele))
+;; Test list with a single element
+(assert= (list-reduce/pairwise 'empty (const #t) (list 'only-ele))
+         (list 'only-ele))
 
 ;; Test list with duplicates
 (assert= (list-reduce/pairwise 'missing (lambda (x y) (if (equal? x y) 'found 'missing)) '(1 2 2 3 3 4 4))
