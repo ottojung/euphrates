@@ -137,7 +137,7 @@
   (define (handle-nulls expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (define new-args (list-annihilate null-exprs? bottom))
+    (define new-args (list-annihilate null-exprs? bottom args))
     (labelinglogic:expression:make type new-args))
 
   (define optimize
