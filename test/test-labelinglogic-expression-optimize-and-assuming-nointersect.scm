@@ -18,3 +18,8 @@
  '(and (= 0))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 0) (= 0))))
+
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 0) (= 1))))
