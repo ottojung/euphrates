@@ -13,6 +13,7 @@
           +
           -
           <
+          and
           begin
           define
           equal?
@@ -22,7 +23,6 @@
           list->vector
           map
           not
-          unless
           vector-copy
           vector-length
           vector-ref
