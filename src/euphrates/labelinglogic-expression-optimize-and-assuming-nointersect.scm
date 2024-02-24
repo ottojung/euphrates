@@ -58,6 +58,15 @@
         ;; NOTE: there is no similar check for 'tuple because those can contain arbitrary (non-normalized) expressions as args.
         ))
 
+  (define (different-type-nonintersect? expr-a expr-b)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+
+    (or (different-values-of-same-type? '= expr-a expr-b)
+        (different-values-of-same-type? 'r7rs expr-a expr-b)
+        ;; NOTE: there is no similar check for 'tuple because those can contain arbitrary (non-normalized) expressions as args.
+        ))
+
   (define (null-exprs? expr-a expr-b)
     (check-type expr-a)
     (check-type expr-b)
