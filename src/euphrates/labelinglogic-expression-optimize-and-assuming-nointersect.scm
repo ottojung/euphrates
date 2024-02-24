@@ -24,13 +24,11 @@
         (define-tuple (inner) (labelinglogic:expression:args type-b))
         (labelinglogic:expression:syntactic-equal? expr-a inner)))
 
-     ;; ((equal? type-b 'not)
-     ;;  (let ()
-     ;;    (define-tuple (inner) (labelinglogic:expression:args type-b))
-     ;;    (labelinglogic:expression:syntactic-equal? expr-a inner)))
-
      (else
       #f)))
+
+
+  (define (null-exprs?
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
@@ -53,8 +51,8 @@
     (define args (labelinglogic:expression:args expr))
 
     (appcomp expr
-             (list-idempotent equal?)
-             (list-annihilate null-expr?? bottom)
+             (list-idempotent labelinglogic:expression:syntactic-equal?)
+             (list-annihilate null-exprs? bottom)
              explode-bottom
              ))
 
