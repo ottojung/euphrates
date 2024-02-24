@@ -66,6 +66,7 @@
               :args (list type-b expr)))
 
     (or (different-constants? expr-a expr-b)
+        (different-equals? expr-a expr-b)
         (different-r7rs? expr-a expr-b)
         (different-tuples? expr-a expr-b)))
 
