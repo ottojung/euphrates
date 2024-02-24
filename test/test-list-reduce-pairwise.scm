@@ -23,13 +23,13 @@
 ;; (assert= (list-reduce/pairwise 'none found? '())
 ;;          (list))
 
-;; ;; Test list with a single element
-;; (assert= (list-reduce/pairwise 'empty found? (list 'only-ele))
-;;          (list 'only-ele))
+;; Test list with a single element
+(assert= (list-reduce/pairwise 'empty found? (list 'only-ele))
+         (list 'only-ele))
 
-;; ;; Test list with duplicates
-;; (assert= (list-reduce/pairwise 'missing (lambda (x y) (if (equal? x y) 'found 'missing)) '(1 2 2 3 3 4 4))
-;;          (list 'found 'found 'found))
+;; Test list with duplicates
+(assert= (list-reduce/pairwise 'missing (lambda (x y) (if (equal? x y) 'found 'missing)) '(1 2 2 3 3 4 4))
+         (list 'found 'found 'found))
 
 ;; Test list containing sublists
 (assert= (list-reduce/pairwise 'default (lambda (x y) (if (equal? x y) 'hit 'default)) '((1 2) (3 4) (1 2)))
