@@ -9,4 +9,4 @@
 
 (assert-throw
  'bad-sub-expr-type
- (labelinglogic:expression:optimize/and-assuming-nointersect '(and (or))))
+ (labelinglogic:expression:optimize/and-assuming-nointersect '(and a b)))
