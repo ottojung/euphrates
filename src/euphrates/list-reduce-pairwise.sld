@@ -3,9 +3,6 @@
   (euphrates list-reduce-pairwise)
   (export list-reduce/pairwise)
   (import
-    (only (euphrates list-annihilate)
-          list-annihilate))
-  (import
     (only (scheme base)
           +
           -
