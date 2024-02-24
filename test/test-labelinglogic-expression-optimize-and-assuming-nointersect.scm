@@ -71,11 +71,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple 1 2) (tuple 1 2) (or))))
 
-
-
-
-
-
 ;; A complex case combining '=' and 'r7rs [1]
 (assert=
  '(or)
