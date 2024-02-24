@@ -22,8 +22,6 @@
     (define negated-b? (equal? 'not type-b))
     (define inner-a (if negated-a? (car args-a) expr-a))
     (define inner-b (if negated-b? (car args-b) expr-b))
-    (define inner-type-a (labelinglogic:expression:type inner-a))
-    (define inner-type-b (labelinglogic:expression:type inner-b))
 
     (and (not (equal? negated-a? negated-b?))
          (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
