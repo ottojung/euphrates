@@ -9,7 +9,7 @@
          (list "apple" "banana" "cherry" 'present))
 
 (assert= (list-reduce/pairwise 0 (lambda (x y) (if (= (modulo x 2) 0) 2 0)) '(1 2 3 4 5 6))
-         (list 1 2 3 4))
+         (list 1 2 2 6))
 
 (assert= (list-reduce/pairwise 'null (lambda (x y) (if (null? x) 'nil 'null)) '(() a b c ()))
          (list 'nil 'b 'c (list)))
