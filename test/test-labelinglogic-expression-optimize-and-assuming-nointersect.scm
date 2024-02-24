@@ -148,4 +148,3 @@
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1) (r7rs odd?)) (not (= 1)) (not (r7rs odd?)))))
-
