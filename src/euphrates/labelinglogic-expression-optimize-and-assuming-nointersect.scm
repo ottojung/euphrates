@@ -14,7 +14,7 @@
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
   ;;
   ;; It assumes the input expression is of 'and' type, and all of its elements are of types:
-  ;;   - '=
+  ;;   - 'constant
   ;;   - 'r7rs
   ;;   - 'not
   ;;   - 'tuple
@@ -48,7 +48,7 @@
   (define (check-type expr)
     (define type (labelinglogic:expression:type expr))
 
-    (unless (or (equal? type '=)
+    (unless (or (equal? type 'constant)
                 (equal? type 'r7rs)
                 (equal? type 'not)
                 (equal? type 'tuple)
@@ -60,7 +60,7 @@
               :args (list type expr))))
 
   (define (same-type-nonintersect? expr-a expr-b)
-    (or (different-values-of-same-type? '= expr-a expr-b)
+    (or (different-values-of-same-type? 'constant expr-a expr-b)
         (different-values-of-same-type? 'r7rs expr-a expr-b)
         ;; NOTE: there is no similar check for 'tuple because those can contain arbitrary (non-normalized) expressions as args.
         ;; TODO: add a similar check for 'tuple type.
@@ -83,7 +83,7 @@
     (or (not (equal? inner-tuple-a? inner-tuple-b?))
 
         (and (equal? type-a 'r7rs)
-             (equal? type-b '=)
+             (equal? type-b 'constant)
              (not
               (labelinglogic:expression:evaluate/r7rs
                expr-a (car args-b))))
