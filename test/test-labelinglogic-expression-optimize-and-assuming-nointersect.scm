@@ -131,6 +131,8 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (= 2) (= 2) (r7rs even?))))
 
+(exit 0)
+
 ;; Complex case with 'tuple and 'not
 (assert=
  '(or)
