@@ -9,9 +9,11 @@
           <
           begin
           define
+          equal?
           if
           let
           list->vector
+          unless
           vector->list
           vector-copy
           vector-length

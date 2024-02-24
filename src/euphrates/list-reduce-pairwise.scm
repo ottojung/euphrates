@@ -10,10 +10,14 @@
     (when (< x n)
 
       (when (< x y)
-        (when (pred (vector-ref input x)
-                    (vector-ref input y))
-          (vector-set! output x constant)
-          (vector-set! output y constant)))
+        (let ()
+          (define result
+            (projection (vector-ref input x)
+                        (vector-ref input y)))
+
+          (unless (equal? result default-value)
+            (vector-set! output x constant)
+            (vector-set! output y constant))))
 
       (if (< y (- n 1))
           (loop x (+ 1 y))
