@@ -11,13 +11,13 @@
 ;; (assert= (list-reduce/pairwise 0 (lambda (x y) (if (= (modulo x 2) 0) 2 0)) '(1 2 3 4 5 6))
 ;;          (list 1 2 3 4))
 
-;; (assert= (list-reduce/pairwise 'null (lambda (x y) (if (null? x) 'nil 'null)) '(() a b c ()))
-;;          (list 'nil a b c))
+(assert= (list-reduce/pairwise 'null (lambda (x y) (if (null? x) 'nil 'null)) '(() a b c ()))
+         (list 'nil 'a 'b 'c))
 
 (assert-throw #t (list-reduce/pairwise 0 (lambda (x y) (+ x y)) 0)) ;; type error
 
-;; (assert= (list-reduce/pairwise 'nil (lambda (x y) (if (and (number? x) (number? y)) x 'nil)) '(1 2 "three" 4))
-;;          (list 1 "three" 4))
+(assert= (list-reduce/pairwise 'nil (lambda (x y) (if (and (number? x) (number? y)) x 'nil)) '(1 2 "three" 4))
+         (list 1 "three" 4))
 
 ;; Test with an empty list
 (assert= (list-reduce/pairwise 'none (const #t) '())

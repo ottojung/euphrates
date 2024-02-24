@@ -12,12 +12,15 @@
     (only (scheme base)
           +
           >
+          and
           begin
           cons
           equal?
           if
           lambda
           list
+          null?
+          number?
           quote
           string=?))
   (cond-expand
