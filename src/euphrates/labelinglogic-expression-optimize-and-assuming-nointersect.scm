@@ -40,7 +40,9 @@
 
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
-                (equal? type 'tuple))
+                (equal? type 'tuple)
+                (is-bottom? expr)
+                (is-top? expr))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
               :type 'bad-expr-type
               :message (stringf "Expression type ~s not permitted here."
