@@ -71,15 +71,15 @@
 
 
 
-;; A complex case combining '=' and 'r7rs
+;; A complex case combining '=' and 'r7rs [1]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 3))))
 
-;; A complex case combining '=' and 'r7rs
+;; A complex case combining '=' and 'r7rs [2]
 (assert=
- '(or)
+ '(and (r7rs even?) (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 2))))
 
