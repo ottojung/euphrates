@@ -105,4 +105,4 @@
 
 ;; Test with a mix of symbols and numbers
 (assert= (list-annihilate equal? 'symbol (list 'foo 42 'foo 13))
-         (list 'symbol 42 'symbol 13))
+         (list 'symbol 42 13))
