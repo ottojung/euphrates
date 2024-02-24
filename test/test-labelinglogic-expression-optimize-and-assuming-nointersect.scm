@@ -201,8 +201,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (r7rs positive?) (r7rs integer?))))
 
-(exit 0)
-
 ;; Case with '= and 'tuple
 (assert=
  '(or)
@@ -211,7 +209,7 @@
 
 ;; Case with '= and complex 'tuple
 (assert=
- '(and (= 2) (tuple (r7rs even?) (= 3)))
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (tuple (r7rs even?) (= 3)))))
 
@@ -244,6 +242,8 @@
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (tuple (= 1))) (r7rs odd?))))
+
+(exit 0)
 
 ;; Case with 'tuple, 'not, '= and 'r7rs values
 (assert=
