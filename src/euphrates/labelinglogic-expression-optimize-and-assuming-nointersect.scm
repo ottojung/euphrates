@@ -5,6 +5,11 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
+  (define (different-
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+  
+
   (define (opposite-exprs? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
@@ -27,11 +32,21 @@
      (else
       #f)))
 
-  (define (null-exprs? expr-a expr-b)
-    (or (opposite-exprs? expr-a expr-b)
-        (different-constants? expr-a expr-b)
+  (define (obviously-nonintersect? expr-a expr-b)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+
+    (unless (or (equal? type-a 'constant)
+                (equal? type-a 'r7rs)
+                (equal? type-a '=))
+    
+    (or (different-constants? expr-a expr-b)
         (different-r7rs? expr-a expr-b)
         (different-tuples? expr-a expr-b)))
+
+  (define (null-exprs? expr-a expr-b)
+    (or (opposite-exprs? expr-a expr-b)
+        (obviously-nonintersect? expr-a expr-b)))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
