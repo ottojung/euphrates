@@ -90,9 +90,10 @@
   (define (remove-tops expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (if (list-or-map is-bottom? args)
-        bottom
-        expr))
+    (define new-args (filter (negate is-top?) args))
+    (if (= (length args) (length new-args))
+        expr
+        (labelinglogic:expression:make type new-args)))
 
   (define (optimize expr)
     (define type (labelinglogic:expression:type expr))
