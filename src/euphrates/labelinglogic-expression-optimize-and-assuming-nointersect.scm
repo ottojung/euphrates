@@ -49,7 +49,7 @@
                                 (~a type))
               :args (list type expr))))
 
-  (define (obviously-nonintersect? expr-a expr-b)
+  (define (same-type-nonintersect? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
 
@@ -63,7 +63,7 @@
     (check-type expr-b)
 
     (or (opposite-exprs? expr-a expr-b)
-        (obviously-nonintersect? expr-a expr-b)))
+        (same-type-nonintersect? expr-a expr-b)))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
