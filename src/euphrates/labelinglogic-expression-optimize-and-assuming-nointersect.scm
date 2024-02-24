@@ -103,6 +103,7 @@
              (list-idempotent labelinglogic:expression:syntactic-equal?)
              (list-annihilate null-exprs? bottom)
              explode-bottom
+             remove-tops
              ))
 
   (unless (equal? type 'and)
