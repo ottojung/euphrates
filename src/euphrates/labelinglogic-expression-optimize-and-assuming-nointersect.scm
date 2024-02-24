@@ -69,8 +69,6 @@
               (labelinglogic:expression:evaluate/r7rs
                expr-a (car args-b))))
 
-        
-
         #f))
 
   (define (different-type-nonintersect? expr-a expr-b)
