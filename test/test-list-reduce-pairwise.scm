@@ -12,7 +12,7 @@
 ;;          (list 1 2 3 4))
 
 (assert= (list-reduce/pairwise 'null (lambda (x y) (if (null? x) 'nil 'null)) '(() a b c ()))
-         (list 'nil 'a 'b 'c))
+         (list 'nil 'b 'c (list)))
 
 (assert-throw #t (list-reduce/pairwise 0 (lambda (x y) (+ x y)) 0)) ;; type error
 
