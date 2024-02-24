@@ -6,7 +6,7 @@
 
 ;; Test identical numbers
 (assert= (list-annihilate equal? 'x (list 1 2 3 2 1))
-         (list 'x 'x 3 'x 'x))
+         (list 'x 'x 3))
 
 ;; Constant in the original list.
 (assert= (list-annihilate (lambda (x y) (equal? x 'c))
