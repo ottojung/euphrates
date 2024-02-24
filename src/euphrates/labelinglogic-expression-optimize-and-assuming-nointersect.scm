@@ -1,8 +1,8 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (labelinglogic:expression:optimize/DNF-assuming-nointersect expr)
-  ;; This function optimizes a DNF expression by removing contradicting, redundant and non-intersecting components.
+(define (labelinglogic:expression:optimize/and-assuming-nointersect expr)
+  ;; This function optimizes an and expression by removing contradicting, redundant and non-intersecting components.
   ;;
   ;; The optimization process includes:
   ;;   - Removal of duplicate parts of the expression
@@ -13,7 +13,12 @@
   ;;
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
   ;;
-  ;; It assumes the input expression is of 'and' type, and throws an error if it's not.
+  ;; It assumes the input expression is of 'and' type, and all of its elements are of types:
+  ;;   - =
+  ;;   - r7rs
+  ;;   - not
+  ;;   - tuple
+  ;; Or, in other words, ground terms + negated ground terms.
 
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
