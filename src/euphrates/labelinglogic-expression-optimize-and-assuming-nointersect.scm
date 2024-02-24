@@ -35,27 +35,21 @@
      (else
       #f)))
 
+  (define (check-type expr)
+    (define type (labelinglogic:expression:type expr))
+
+    (unless (or (equal? type '=)
+                (equal? type 'r7rs)
+                (equal? type 'tuple))
+      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
+              :type 'bad-expr-type
+              :message (stringf "Expression type ~s not permitted here."
+                                (~a type))
+              :args (list type expr))))
+
   (define (obviously-nonintersect? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
-
-    (unless (or (equal? type-a '=)
-                (equal? type-a 'r7rs)
-                (equal? type-a 'tuple))
-      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
-              :type 'bad-expr-type
-              :message (stringf "Expression type ~s not permitted here."
-                                (~a type-a))
-              :args (list type-a expr)))
-
-    (unless (or (equal? type-b '=)
-                (equal? type-b 'r7rs)
-                (equal? type-b 'tuple))
-      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
-              :type 'bad-expr-type
-              :message (stringf "Expression type ~s not permitted here."
-                                (~a type-b))
-              :args (list type-b expr)))
 
     (or (different-values-of-same-type? '= expr-a expr-b)
         (different-values-of-same-type? 'r7rs expr-a expr-b)
