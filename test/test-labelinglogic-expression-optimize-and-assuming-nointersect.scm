@@ -291,6 +291,11 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and 1 2 3)))
 
+;; Case with bad-expr
+(assert-throw
+ 'expression-type-error
+ (labelinglogic:expression:optimize/and-assuming-nointersect 812312))
+
 (exit 0)
 
 ;; Case with '((or))'
