@@ -45,5 +45,5 @@
 
 ;; Test with a list of different types of pairs and `equal` predicate
 (assert= (list-reduce/pairwise 'mismatch (lambda (x y) (if (equal? x y) 'match 'mismatch)) '((1 . 2) "pair" (1 . 2) "not pair" (1 . 2)))
-         (list 'match "pair" "not pair"))
+         (list 'match "pair" "not pair" (cons 1 2)))
 

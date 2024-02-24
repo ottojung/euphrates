@@ -12,6 +12,7 @@
           +
           >
           begin
+          cons
           equal?
           if
           lambda
