@@ -46,7 +46,7 @@
          (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
   (define (check-type expr)
-    (debugs expr)
+    (labelinglogic:expression:check expr)
     (define type (labelinglogic:expression:type expr))
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
