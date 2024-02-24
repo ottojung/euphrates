@@ -40,6 +40,7 @@
 
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
+                (equal? type 'not)
                 (equal? type 'tuple)
                 (is-bottom? expr)
                 (is-top? expr))
