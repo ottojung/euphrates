@@ -149,4 +149,6 @@
             :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
             :args (list type expr)))
 
+  (for-each check-type args)
+
   (apply-until-fixpoint optimize expr))

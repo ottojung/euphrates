@@ -45,6 +45,7 @@
           car
           define
           equal?
+          for-each
           if
           list
           not
