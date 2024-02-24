@@ -11,8 +11,8 @@
     (when (< x n)
 
       (if (and (< x y)
-               (hashset-has? ignored y)
-               (hashset-has? ignored x))
+               (not (hashset-has? ignored y))
+               (not (hashset-has? ignored x)))
           (let ()
             (define result
               (projection (vector-ref input x)
