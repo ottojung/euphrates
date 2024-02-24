@@ -20,6 +20,7 @@
 
               (unless (equal? result default-value)
                 (vector-set! output x result)
+                (hashset-add! ignored x)
                 (hashset-add! ignored y))))))
 
       (if (< y (- n 1))
