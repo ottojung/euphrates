@@ -188,9 +188,16 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs positive?) (r7rs negative?))))
 
-;; Testing mixture of '= and 'r7rs expression with a common numeric value
+;; Test nonintersect assumption on r7rs.
 (assert=
- '(and (= 2) (r7rs positive?) (r7rs integer?))
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs positive?) (r7rs integer?))))
+
+;; Testing mixture of '= and 'r7rs expression with a common numeric value.
+;; Note that r7rs assumed to nonintersect.
+(assert=
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (r7rs positive?) (r7rs integer?))))
 
