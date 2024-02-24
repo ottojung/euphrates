@@ -18,5 +18,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-list-reduce/pairwise.scm")))
-    (else (include "test-list-reduce/pairwise.scm"))))
+               "test-list-reduce-pairwise.scm")))
+    (else (include "test-list-reduce-pairwise.scm"))))
