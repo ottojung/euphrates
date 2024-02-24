@@ -281,7 +281,7 @@
 
 ;; Case with '((and))'
 (assert-throw
- 'bad-expr-type
+ 'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((and))))
 
@@ -291,7 +291,7 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and 1 2 3)))
 
-;; Case with bad-expr
+;; Case with top number
 (assert-throw
  'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect 812312))
