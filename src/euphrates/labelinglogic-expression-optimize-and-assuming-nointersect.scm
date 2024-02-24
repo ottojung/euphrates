@@ -46,6 +46,7 @@
          (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
   (define (check-type expr)
+    (debugs expr)
     (define type (labelinglogic:expression:type expr))
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
@@ -113,7 +114,6 @@
     (if (list-or-map is-bottom? args) bottom expr))
 
   (define (is-top? expr)
-    (debugs expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
     (and (equal? type 'and)
