@@ -10,13 +10,12 @@
           labelinglogic:expression:optimize/and-assuming-nointersect))
   (import
     (only (scheme base)
-          *
-          +
           =
           and
           begin
-          lambda
+          even?
           not
+          odd?
           or
           quote))
   (cond-expand

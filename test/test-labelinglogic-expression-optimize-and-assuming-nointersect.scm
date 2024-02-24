@@ -24,8 +24,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 0) (= 1))))
 
-
-
 ;;Optimizing non-intersecting negated ground terms
 (assert=
  '(or)
@@ -36,7 +34,7 @@
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (r7rs (lambda (x) (* x x)) 2) (r7rs (lambda (x) (+ x x)) 2))))
+  '(and (r7rs even?) (r7rs odd?))))
 
 ;;Negated and non-negated expressions
 (assert=
@@ -67,21 +65,3 @@
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple 1 2) (tuple 1 2) (or))))
-
-;; ;;Same type r7rs expressions with different arguments
-;; (assert=
-;;  '(and (r7rs (lambda (x) (* x x)) 2) (r7rs (lambda (x) (* x x)) 3))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (r7rs (lambda (x) (* x x)) 2) (r7rs (lambda (x) (* x x)) 3))))
-
-;; ;;Different type r7rs and '=' expressions with intersecting arguments
-;; (assert=
-;;  '(and (r7rs (lambda (x) (* x x)) 2) (= 4))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (r7rs (lambda (x) (* x x)) 2) (= 4))))
-
-;; ;;Different type r7rs and '=' expressions with non intersecting arguments
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (r7rs (lambda (x) (* x x)) 2) (= 5))))
