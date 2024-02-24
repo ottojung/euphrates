@@ -154,7 +154,7 @@
 
 ;; Testing with null values
 (assert=
- '(and)
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 0) (not (= 0)))))
 
