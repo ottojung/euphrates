@@ -287,7 +287,7 @@
 
 ;; Case with numbers
 (assert-throw
- 'bad-expr-type
+ 'bad-sub-expr-type
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and 1 2 3)))
 
