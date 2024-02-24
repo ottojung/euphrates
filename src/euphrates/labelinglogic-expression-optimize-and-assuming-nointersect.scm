@@ -39,7 +39,12 @@
     (unless (or (equal? type-a 'constant)
                 (equal? type-a 'r7rs)
                 (equal? type-a '=))
-    
+      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
+              :type 'bad-expr-type
+              :message (stringf "Expression type ~s not permitted here."
+                                (~a type))
+              :args (list type expr)))
+
     (or (different-constants? expr-a expr-b)
         (different-r7rs? expr-a expr-b)
         (different-tuples? expr-a expr-b)))
