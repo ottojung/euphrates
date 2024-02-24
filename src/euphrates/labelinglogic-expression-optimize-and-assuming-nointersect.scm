@@ -7,8 +7,8 @@
   ;; The optimization process includes:
   ;;   - Removal of duplicate parts of the expression
   ;;   - Removal of parts that are negation of each other
-  ;;   - Detection and handling of 'and' expressions without arguments
-  ;;   - Detection and handling of 'or' expressions without arguments
+  ;;   - Detection and handling of bottom expressions
+  ;;   - Detection and handling of top expressions
   ;;   - Removal of parts that cannot intersect because they are of the same type or of different types
   ;;
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
