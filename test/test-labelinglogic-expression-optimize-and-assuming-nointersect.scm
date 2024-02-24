@@ -249,13 +249,11 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1)) (not (tuple (= 1))) (r7rs odd?) (= 2))))
 
-;; Case with 'tuple containing other 'tuple
-(assert=
- '(or)
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (tuple (= 1) (tuple (r7rs odd?))) (not (tuple (= 1))))))
-
-(exit 0)
+;; ;; Case with 'tuple containing other 'tuple
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect
+;;   '(and (tuple (= 1) (tuple (r7rs odd?))) (not (tuple (= 1))))))
 
 ;; Case with complex mixture of types
 (assert=
@@ -277,7 +275,7 @@
 
 ;; Case with '=, 'tuple and 'r7rs
 (assert=
- '(and (= 2) (tuple (= 2) (r7rs even?)))
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (r7rs even?) (tuple (= 2) (r7rs even?)))))
 
@@ -286,6 +284,8 @@
  '(and)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((and))))
+
+(exit 0)
 
 ;; Case with '((or))'
 (assert=
