@@ -4,16 +4,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and)))
 
-(assert-throw
- 'bad-expr-type
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(or)))
-
-(assert-throw
- 'bad-sub-expr-type
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and a b)))
-
 (assert=
  '(and (= 0))
  (labelinglogic:expression:optimize/and-assuming-nointersect
@@ -293,6 +283,16 @@
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (r7rs even?) (= 2)) (r7rs positive?))))
+
+(assert-throw
+ 'bad-expr-type
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(or)))
+
+(assert-throw
+ 'bad-sub-expr-type
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and a b)))
 
 ;; Case with '((and))'
 (assert-throw
