@@ -14,6 +14,10 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates
+            labelinglogic-expression-evaluate-r7rs)
+          labelinglogic:expression:evaluate/r7rs))
+  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import

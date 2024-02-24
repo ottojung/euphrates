@@ -71,6 +71,14 @@
     (or (and (equal? inner-type-a 'tuple)
              (not (equal? inner-type-b 'tuple)))
 
+        (and (equal? type-a 'r7rs)
+             (equal? type-b '=)
+             (not
+              (labelinglogic:expression:evaluate/r7rs
+               expr-a (car (args-b)))))
+
+        
+
         #f))
 
   (define (different-type-nonintersect? expr-a expr-b)
