@@ -95,8 +95,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (r7rs even?) (= 3))))
 
-(exit 0)
-
 ;; Checking negation of 'r7rs
 (assert=
  '(or)
