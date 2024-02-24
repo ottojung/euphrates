@@ -39,7 +39,7 @@
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
 
-    (unless (or (equal? type-a 'constant)
+    (unless (or (equal? type-a 'tuple)
                 (equal? type-a 'r7rs)
                 (equal? type-a '=))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
@@ -48,8 +48,8 @@
                                 (~a type-a))
               :args (list type-a expr)))
 
-    (unless (or (equal? type-b 'constant)
-                (equal? type-b 'r7rs)
+    (unless (or (equal? type-b 'r7rs)
+                (equal? type-b 'tuple)
                 (equal? type-b '=))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
               :type 'bad-expr-type
