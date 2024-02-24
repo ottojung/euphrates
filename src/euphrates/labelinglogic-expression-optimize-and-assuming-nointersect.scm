@@ -113,6 +113,7 @@
     (if (list-or-map is-bottom? args) bottom expr))
 
   (define (is-top? expr)
+    (debugs expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
     (and (equal? type 'and)
