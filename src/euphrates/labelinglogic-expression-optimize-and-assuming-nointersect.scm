@@ -5,10 +5,11 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (define (different-
+  (define (different-constants? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
-  
+
+    0)
 
   (define (opposite-exprs? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
