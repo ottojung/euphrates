@@ -8,13 +8,13 @@
   ;;   lst: a list of elements to be processed
   ;;
   ;; It returns a new list where, starting from the head of the list,
-  ;; every time an element satisfies the predicate `pred` with any preceding element, both get replaced by `constant`.
+  ;; every time an element satisfies the predicate `pred` with any preceding element, first get replaced by `constant`, and the second one gets removed.
   ;; The result list maintains the original structure but with elements replaced by `constant` as defined by the predicate.
   ;;
   ;; Example usage:
   ;; (list-annihilate equal? 'c (list 1 2 1 4 1))
   ;; will return
-  ;; (list 'c 2 'c 4 'c)
+  ;; (list 'c 2 4 1)
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
   (define default-value (make-unique))
