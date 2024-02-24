@@ -128,17 +128,27 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
     (define new-args (filter (negate is-top?) args))
-    (if (= (length args) (length new-args))
-        expr
-        (labelinglogic:expression:make type new-args)))
+    (labelinglogic:expression:make type new-args))
+
+  (define (remove-idempotent expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (labelinglogic:expression:make
+     type (list-idempotent labelinglogic:expression:syntactic-equal? args)))
+
+  (define (handle-nulls expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (define new-args (list-annihilate null-exprs? bottom))
+    (labelinglogic:expression:make type new-args))
 
   (define (optimize expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
     (appcomp expr
-             (list-idempotent labelinglogic:expression:syntactic-equal?)
-             (list-annihilate null-exprs? bottom)
+             remove-idempotent
+             handle-nulls
              explode-bottom
              remove-tops
              ))

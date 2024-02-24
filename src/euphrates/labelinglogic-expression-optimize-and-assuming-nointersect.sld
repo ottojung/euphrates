@@ -46,7 +46,6 @@
           define
           equal?
           if
-          length
           list
           not
           null?
