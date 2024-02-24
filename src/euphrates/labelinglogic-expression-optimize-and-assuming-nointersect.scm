@@ -66,7 +66,7 @@
              (equal? type-b '=)
              (not
               (labelinglogic:expression:evaluate/r7rs
-               expr-a (car (args-b)))))
+               expr-a (car args-b))))
 
         
 
