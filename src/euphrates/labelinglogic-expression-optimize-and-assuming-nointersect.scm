@@ -62,7 +62,7 @@
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
 
-    (raise 'TODO!!! 'FIXME))
+    (raise 'TODO 'FIXME))
 
   (define (null-exprs? expr-a expr-b)
     (check-type expr-a)
