@@ -46,7 +46,6 @@
          (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
   (define (check-type expr)
-    (labelinglogic:expression:check expr)
     (define type (labelinglogic:expression:type expr))
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
@@ -95,9 +94,6 @@
         (different-type-nonintersect?/body expr-b expr-a)))
 
   (define (null-exprs? expr-a expr-b)
-    (check-type expr-a)
-    (check-type expr-b)
-
     (or (opposite-exprs? expr-a expr-b)
         (same-type-nonintersect? expr-a expr-b)
         (different-type-nonintersect? expr-a expr-b)))
