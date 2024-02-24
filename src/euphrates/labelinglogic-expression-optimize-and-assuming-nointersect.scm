@@ -68,9 +68,10 @@
     (define inner-type-a (labelinglogic:expression:type inner-a))
     (define inner-type-b (labelinglogic:expression:type inner-b))
 
-    ;; (or (and (equal? inner-type-a
+    (or (and (equal? inner-type-a 'tuple)
+             (not (equal? inner-type-b 'tuple)))
 
-    0)
+        #f))
 
   (define (different-type-nonintersect? expr-a expr-b)
     (or (different-type-nonintersect?/body expr-a expr-b)
