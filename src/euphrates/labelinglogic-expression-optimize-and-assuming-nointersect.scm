@@ -48,6 +48,7 @@
   (define (check-type expr)
     (define type (labelinglogic:expression:type expr))
 
+    (labelinglogic:expression:check expr)
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
                 (equal? type 'not)
