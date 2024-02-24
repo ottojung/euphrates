@@ -2,6 +2,20 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:optimize/and-assuming-nointersect expr)
+  ;; This function optimizes an 'and' expression by removing contradicting, redundant and non-intersecting components.
+  ;;
+  ;; The optimization process includes:
+  ;;   - Removal of duplicate parts of the expression
+  ;;   - Removal of parts that are negation of each other
+  ;;   - Detection and handling of 'and' expressions without arguments
+  ;;   - Detection and handling of 'or' expressions without arguments
+  ;;   - Removal of parts that cannot intersect because they are of the same type or of different types
+  ;;
+  ;; It assumes the input expression is of 'and' type, and throws an error if it's not.
+  ;;
+  ;; The function keeps applying these transformations until the expression cannot be further optimized.
+
+
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
