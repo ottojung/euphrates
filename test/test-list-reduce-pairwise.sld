@@ -3,10 +3,13 @@
   (test-list-reduce/pairwise)
   (import (only (euphrates assert-equal) assert=))
   (import
+    (only (euphrates assert-throw) assert-throw))
+  (import
     (only (euphrates list-reduce-pairwise)
           list-reduce/pairwise))
   (import
     (only (scheme base)
+          +
           >
           begin
           equal?

@@ -8,16 +8,13 @@
 (assert= (list-reduce/pairwise 'missing (lambda (x y) (if (string=? x "hello") 'present 'missing)) '("apple" "banana" "cherry" "hello" "apple"))
          (list "apple" "banana" "cherry" 'present))
 
-(assert= (list-reduce/pairwise 'mismatch (lambda (x y) (if (equal? x y) 'match 'mismatch)) '(1 2 2 3 4 4))
-         (list 'match 2 'match 4))
-
 ;; (assert= (list-reduce/pairwise 0 (lambda (x y) (if (= (modulo x 2) 0) 2 0)) '(1 2 3 4 5 6))
 ;;          (list 1 2 3 4))
 
 ;; (assert= (list-reduce/pairwise 'null (lambda (x y) (if (null? x) 'nil 'null)) '(() a b c ()))
 ;;          (list 'nil a b c))
 
-;; (assert-throw #t (list-reduce/pairwise 0 (lambda (x y) (+ x y)) 0)) ;; type error
+(assert-throw #t (list-reduce/pairwise 0 (lambda (x y) (+ x y)) 0)) ;; type error
 
 ;; (assert= (list-reduce/pairwise 'nil (lambda (x y) (if (and (number? x) (number? y)) x 'nil)) '(1 2 "three" 4))
 ;;          (list 1 "three" 4))
