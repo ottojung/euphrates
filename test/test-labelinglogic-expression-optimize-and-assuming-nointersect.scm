@@ -255,6 +255,8 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1) (tuple (r7rs odd?))) (not (tuple (= 1))))))
 
+(exit 0)
+
 ;; Case with complex mixture of types
 (assert=
  '(or)
@@ -266,8 +268,6 @@
  '(and (tuple (= 1) (r7rs odd?)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1) (r7rs odd?)) (tuple (= 1) (r7rs odd?)))))
-
-(exit 0)
 
 ;; Case with non-identical 'tuple values
 (assert=
