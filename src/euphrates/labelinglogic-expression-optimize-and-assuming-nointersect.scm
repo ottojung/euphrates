@@ -39,18 +39,18 @@
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
 
-    (unless (or (equal? type-a 'r7rs)
-                (equal? type-a 'tuple)
-                (equal? type-a '=))
+    (unless (or (equal? type-a '=)
+                (equal? type-a 'r7rs)
+                (equal? type-a 'tuple))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
               :type 'bad-expr-type
               :message (stringf "Expression type ~s not permitted here."
                                 (~a type-a))
               :args (list type-a expr)))
 
-    (unless (or (equal? type-b 'r7rs)
-                (equal? type-b 'tuple)
-                (equal? type-b '=))
+    (unless (or (equal? type-b '=)
+                (equal? type-b 'r7rs)
+                (equal? type-b 'tuple))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
               :type 'bad-expr-type
               :message (stringf "Expression type ~s not permitted here."
