@@ -11,17 +11,17 @@
 ;; Constant in the original list.
 (assert= (list-annihilate (lambda (x y) (equal? x 'c))
                           'c (list 1 2 'c 4 5))
-         '(1 2 c c c))
+         '(1 2 c 5))
 
 ;; Non symmetric [1].
 (assert= (list-annihilate (lambda (x y) (equal? x 9))
                           'c (list 7 8 9 6 5))
-         '(7 8 c c c))
+         '(7 8 c 5))
 
 ;; Non symmetric [2].
 (assert= (list-annihilate (lambda (x y) (equal? 9 y))
                           'c (list 7 8 9 6 5))
-         '(c c c 6 5))
+         '(c 8 6 5))
 
 ;; Non recursive.
 (assert= (list-annihilate
