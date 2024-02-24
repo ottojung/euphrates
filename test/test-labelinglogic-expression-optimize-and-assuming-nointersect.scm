@@ -143,8 +143,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1)) (r7rs even?))))
 
-(exit 0)
-
 ;; Case with 'tuple and 'not with multiple types
 (assert=
  '(or)
