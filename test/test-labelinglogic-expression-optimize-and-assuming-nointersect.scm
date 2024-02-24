@@ -322,13 +322,13 @@
 
 ;; Complex case with 'tuple, 'not and 'r7rs
 (assert=
- '(and (tuple (r7rs even?)) (= 2))
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (r7rs even?)) (= 2) (not (r7rs odd?)))))
 
 ;; Complex case with complex 'tuple
 (assert=
- '(and (tuple (r7rs even?) (= 2)) (r7rs positive?))
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (r7rs even?) (= 2)) (r7rs positive?))))
 
