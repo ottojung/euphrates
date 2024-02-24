@@ -9,15 +9,7 @@
             labelinglogic-expression-optimize-and-assuming-nointersect)
           labelinglogic:expression:optimize/and-assuming-nointersect))
   (import
-    (only (scheme base)
-          *
-          =
-          and
-          begin
-          lambda
-          not
-          or
-          quote))
+    (only (scheme base) = and begin not or quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
