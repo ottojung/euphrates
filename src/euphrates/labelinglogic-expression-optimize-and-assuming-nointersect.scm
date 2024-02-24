@@ -24,6 +24,11 @@
         (define-tuple (inner) (labelinglogic:expression:args type-b))
         (labelinglogic:expression:syntactic-equal? expr-a inner)))
 
+     ;; ((equal? type-b 'not)
+     ;;  (let ()
+     ;;    (define-tuple (inner) (labelinglogic:expression:args type-b))
+     ;;    (labelinglogic:expression:syntactic-equal? expr-a inner)))
+
      (else
       #f)))
 
@@ -49,7 +54,7 @@
 
     (appcomp expr
              (list-idempotent equal?)
-             (list-annihilate opposite-exprs? bottom)
+             (list-annihilate null-expr?? bottom)
              explode-bottom
              ))
 
