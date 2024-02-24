@@ -13,6 +13,14 @@
          (equal? type-b '=)
          (not (labelinglogic:expression:syntactic-equal? expr-a expr-b))))
 
+  (define (different-r7rs? expr-a expr-b)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+
+    (and (equal? type-a 'r7rs)
+         (equal? type-b 'r7rs)
+         (not (labelinglogic:expression:syntactic-equal? expr-a expr-b))))
+
   (define (opposite-exprs? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
