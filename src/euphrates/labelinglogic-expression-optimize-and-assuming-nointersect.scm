@@ -16,24 +16,17 @@
   (define (opposite-exprs? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
+    (define args-a (labelinglogic:expression:args expr-a))
+    (define args-b (labelinglogic:expression:args expr-b))
+    (define negated-a? (equal? 'not type-a))
+    (define negated-b? (equal? 'not type-b))
+    (define inner-a (if negated-a? (car args-a) expr-a))
+    (define inner-b (if negated-b? (car args-b) expr-b))
+    (define inner-type-a (labelinglogic:expression:type inner-a))
+    (define inner-type-b (labelinglogic:expression:type inner-b))
 
-    (cond
-     ((and (equal? type-a 'not)
-           (equal? type-b 'not))
-      #f)
-
-     ((equal? type-a 'not)
-      (let ()
-        (define-tuple (inner) (labelinglogic:expression:args type-a))
-        (labelinglogic:expression:syntactic-equal? inner expr-b)))
-
-     ((equal? type-b 'not)
-      (let ()
-        (define-tuple (inner) (labelinglogic:expression:args type-b))
-        (labelinglogic:expression:syntactic-equal? expr-a inner)))
-
-     (else
-      #f)))
+    (and (not (equal? negated-a? negated-b?))
+         (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
   (define (check-type expr)
     (define type (labelinglogic:expression:type expr))

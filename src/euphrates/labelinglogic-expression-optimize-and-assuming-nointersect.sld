@@ -9,8 +9,6 @@
           apply-until-fixpoint))
   (import (only (euphrates comp) appcomp))
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -45,13 +43,10 @@
           and
           begin
           car
-          cond
           define
-          else
           equal?
           if
           length
-          let
           list
           not
           null?
