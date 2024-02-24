@@ -7,6 +7,7 @@
           hashset-add!
           hashset-has?
           make-hashset))
+  (import (only (euphrates range) range))
   (import
     (only (scheme base)
           +
@@ -16,15 +17,20 @@
           define
           equal?
           if
+          lambda
           let
           list->vector
+          map
+          not
           unless
-          vector->list
           vector-copy
           vector-length
           vector-ref
           vector-set!
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
