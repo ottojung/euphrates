@@ -27,8 +27,11 @@
      (else
       #f)))
 
-
-  (define (null-exprs?
+  (define (null-exprs? expr-a expr-b)
+    (or (opposite-exprs? expr-a expr-b)
+        (different-constants? expr-a expr-b)
+        (different-r7rs? expr-a expr-b)
+        (different-tuples? expr-a expr-b)))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
