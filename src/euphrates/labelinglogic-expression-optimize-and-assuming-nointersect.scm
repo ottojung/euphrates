@@ -56,7 +56,7 @@
         ;; TODO: add a similar check for 'tuple type.
         ))
 
-  (define (different-type-nonintersect? expr-a expr-b)
+  (define (different-type-nonintersect?/body expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
     (define args-a (labelinglogic:expression:args expr-a))
@@ -65,8 +65,16 @@
     (define negated-b? (equal? 'not type-b))
     (define inner-a (if negated-a? (car args-a) expr-a))
     (define inner-b (if negated-b? (car args-b) expr-b))
+    (define inner-type-a (labelinglogic:expression:type inner-a))
+    (define inner-type-b (labelinglogic:expression:type inner-b))
 
-    (raise 'TODO 'FIXME))
+    ;; (or (and (equal? inner-type-a
+
+    0)
+
+  (define (different-type-nonintersect? expr-a expr-b)
+    (or (different-type-nonintersect?/body expr-a expr-b)
+        (different-type-nonintersect?/body expr-b expr-a)))
 
   (define (null-exprs? expr-a expr-b)
     (check-type expr-a)

@@ -53,7 +53,6 @@
           null?
           or
           quote
-          raise
           unless))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
