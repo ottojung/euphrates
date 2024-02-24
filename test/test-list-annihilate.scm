@@ -90,12 +90,12 @@
          (list 'vec-same #(3 4)))
 
 ;; Test list containing different boolean values
-(assert= (list-annihilate equal? (list #t #f #t))
+(assert= (list-annihilate equal? 'bool (list #t #f #t))
          (list 'bool #f))
 
 ;; Test using a predicate that checks for even numbers
 (assert= (list-annihilate (lambda (x y) (and (even? x) (even? y))) 'even-pair (list 2 3 4 6))
-         (list 'even-pair 3 'even-pair 'even-pair))
+         (list 'even-pair 3 6))
 
 ;; Test if function does not mutate the original list
 (define original-list (list 1 2 3 2 1))
