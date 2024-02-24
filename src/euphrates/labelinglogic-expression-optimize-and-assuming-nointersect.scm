@@ -55,7 +55,7 @@
                 (is-bottom? expr)
                 (is-top? expr))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
-              :type 'bad-expr-type
+              :type 'bad-sub-expr-type
               :message (stringf "Expression type ~s not permitted here." (~a type))
               :args (list type expr))))
 
@@ -145,8 +145,8 @@
 
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
-            :type 'unknown-expr-type
-            :message (stringf "Expression type ~s not recognized" (~a type))
+            :type 'bad-expr-type
+            :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
             :args (list type expr)))
 
   (apply-until-fixpoint optimize expr))
