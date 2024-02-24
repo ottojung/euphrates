@@ -85,7 +85,7 @@
     (and (equal? type 'and)
          (null? args)))
 
-  (define (explode-bottom expr)
+  (define (remove-tops expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
     (if (list-or-map is-bottom? args)
