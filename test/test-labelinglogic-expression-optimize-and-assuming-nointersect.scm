@@ -315,7 +315,7 @@
   '(and (r7rs positive?) (not (= 2)) (tuple (= 2) (r7rs odd?)))))
 
 ;; Complex case with '((tuple))' and '((or))'
-(assert=
+(assert-throw
  'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((tuple) (or))))
