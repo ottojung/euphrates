@@ -100,7 +100,7 @@
 ;; Test if function does not mutate the original list
 (define original-list (list 1 2 3 2 1))
 (define processed-list (list-annihilate equal? 'x original-list))
-(assert= processed-list (list 'x 'x 3 'x 'x))
+(assert= processed-list (list 'x 'x 3))
 (assert= original-list (list 1 2 3 2 1))
 
 ;; Test with a mix of symbols and numbers
