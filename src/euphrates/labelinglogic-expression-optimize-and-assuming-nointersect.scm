@@ -5,20 +5,12 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (define (different-equals? expr-a expr-b)
+  (define (different-values-of-same-type? target-type expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
 
-    (and (equal? type-a '=)
-         (equal? type-b '=)
-         (not (labelinglogic:expression:syntactic-equal? expr-a expr-b))))
-
-  (define (different-r7rs? expr-a expr-b)
-    (define type-a (labelinglogic:expression:type expr-a))
-    (define type-b (labelinglogic:expression:type expr-b))
-
-    (and (equal? type-a 'r7rs)
-         (equal? type-b 'r7rs)
+    (and (equal? type-a target-type)
+         (equal? type-b target-type)
          (not (labelinglogic:expression:syntactic-equal? expr-a expr-b))))
 
   (define (opposite-exprs? expr-a expr-b)
@@ -65,9 +57,9 @@
                                 (~a type-b))
               :args (list type-b expr)))
 
-    (or (different-equals? expr-a expr-b)
-        (different-r7rs? expr-a expr-b)
-        (different-tuples? expr-a expr-b)))
+    (or (different-values-of-same-type? '= expr-a expr-b)
+        (different-values-of-same-type? 'r7rs expr-a expr-b)
+        (different-values-of-same-type? 'tuple expr-a expr-b)))
 
   (define (null-exprs? expr-a expr-b)
     (or (opposite-exprs? expr-a expr-b)
