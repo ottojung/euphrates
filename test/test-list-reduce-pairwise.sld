@@ -13,7 +13,8 @@
           if
           lambda
           list
-          quote))
+          quote
+          string=?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
