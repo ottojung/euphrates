@@ -45,8 +45,7 @@
                 (is-top? expr))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
               :type 'bad-expr-type
-              :message (stringf "Expression type ~s not permitted here."
-                                (~a type))
+              :message (stringf "Expression type ~s not permitted here." (~a type))
               :args (list type expr))))
 
   (define (same-type-nonintersect? expr-a expr-b)
