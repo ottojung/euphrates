@@ -81,7 +81,7 @@
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (r7rs even?) (= 3))))
+  '(and (r7rs even?) (= 2))))
 
 (exit 0)
 
