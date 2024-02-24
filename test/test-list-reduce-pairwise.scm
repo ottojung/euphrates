@@ -35,13 +35,9 @@
 (assert= (list-reduce/pairwise 'default (lambda (x y) (if (equal? x y) 'hit 'default)) '((1 2) (3 4) (1 2)))
          (list 'hit (list 3 4)))
 
-;; ;; Test with elements of different data types
-;; (assert= (list-reduce/pairwise 'default (lambda (x y) (if (char-alphabetic? x) 'yes 'default)) '(#\a 2 #\b "string" 3.14159 (2 . 3)))
-;;          (list 'yes 2 #\b "string" 3.14159 (2 . 3)))
-
-;; ;; Test with a list of different types of pairs
-;; (assert= (list-reduce/pairwise 'no-match (lambda (x y) (if (equal? x y) 'match 'no-match)) '((1 . "one") (1 . 2) (1 . "one") (2 . "two") (1 . 2)))
-;;          (list 'match (1 . 2) 'match (2 . "two")))
+;; Test with elements of different data types
+(assert= (list-reduce/pairwise 'default (lambda (x y) (if (char-alphabetic? x) 'yes 'default)) '(#\a 2 #\b "string" 3.14159 (2 . 3)))
+         (list 'yes 2 #\b "string" 3.14159 (2 . 3)))
 
 ;; Test with a list of different types of pairs and `equal` predicate
 (assert= (list-reduce/pairwise 'mismatch (lambda (x y) (if (equal? x y) 'match 'mismatch)) '((1 . 2) "pair" (1 . 2) "not pair" (1 . 2)))

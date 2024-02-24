@@ -25,6 +25,7 @@
           number?
           quote
           string=?))
+  (import (only (scheme char) char-alphabetic?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
