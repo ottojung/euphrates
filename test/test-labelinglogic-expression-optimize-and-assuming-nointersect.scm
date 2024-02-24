@@ -316,7 +316,7 @@
 
 ;; Complex case with '((tuple))' and '((or))'
 (assert=
- '(or)
+ 'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((tuple) (or))))
 
