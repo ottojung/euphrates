@@ -66,6 +66,12 @@
   (define bottom
     (labelinglogic:expression:make 'or '()))
 
+  (define (is-top? expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (and (equal? type 'and)
+         (null? args)))
+
   (define (is-bottom? expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
