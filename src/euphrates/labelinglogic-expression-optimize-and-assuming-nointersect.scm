@@ -12,7 +12,7 @@
     (cond
      ((and (equal? type-a 'not)
            (equal? type-b 'not))
-      (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))
+      #f)
 
      ((equal? type-a 'not)
       (let ()
@@ -25,7 +25,7 @@
         (labelinglogic:expression:syntactic-equal? expr-a inner)))
 
      (else
-      (not (labelinglogic:expression:syntactic-equal? expr-a expr-b)))))
+      #f)))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
