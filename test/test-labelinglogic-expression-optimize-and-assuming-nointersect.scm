@@ -148,3 +148,169 @@
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1) (r7rs odd?)) (not (= 1)) (not (r7rs odd?)))))
+
+
+
+
+;; Testing with null values
+(assert=
+ '(and)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 0) (not (= 0)))))
+
+;; Testing single tuple optimization
+(assert=
+ '(and (tuple (= 2)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 2)) (tuple (= 2)))))
+
+;; Testing with multiple 'r7rs expressions
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs even?) (r7rs odd?) (r7rs zero?))))
+
+;; Testing with a mix of '= and 'r7rs, but they do intersect
+(assert=
+ '(and (= 2) (r7rs even?))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (r7rs even?))))
+
+;; Testing with negated and non-negated 'r7rs expressions
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs even?) (not (r7rs even?)))))
+
+;; Testing with opposite 'r7rs expression
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs positive?) (r7rs negative?))))
+
+;; Testing mixture of '= and 'r7rs expression with a common numeric value
+(assert=
+ '(and (= 2) (r7rs positive?) (r7rs integer?))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (r7rs positive?) (r7rs integer?))))
+
+;; Case with '= and 'tuple
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (tuple (= 1)))))
+
+;; Case with '= and complex 'tuple
+(assert=
+ '(and (= 2) (tuple (r7rs even?) (= 3)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (tuple (r7rs even?) (= 3)))))
+
+;; Case with 'not and 'tuple
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (= 2)) (tuple (= 2)))))
+
+;; Case with 'not and complex 'tuple
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (r7rs even?)) (tuple (r7rs even?) (= 3)))))
+
+;; Case with '= and negated 'tuple
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (not (tuple (= 2))))))
+
+;; Case with 'not and negated 'tuple
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (= 2)) (not (tuple (= 2))))))
+
+;; Case with negated 'tuple and 'r7rs
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (tuple (= 1))) (r7rs odd?))))
+
+;; Case with 'tuple, 'not, '= and 'r7rs values
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1)) (not (tuple (= 1))) (r7rs odd?) (= 2))))
+
+;; Case with 'tuple containing other 'tuple
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1) (tuple (r7rs odd?))) (not (tuple (= 1))))))
+
+;; Case with complex mixture of types
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs odd?) (not (= 1)) (not (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
+
+;; Case with identical 'tuple values
+(assert=
+ '(and (tuple (= 1) (r7rs odd?)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1) (r7rs odd?)) (tuple (= 1) (r7rs odd?)))))
+
+;; Case with non-identical 'tuple values
+(assert=
+ '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
+
+;; Case with '=, 'tuple and 'r7rs
+(assert=
+ '(and (= 2) (tuple (= 2) (r7rs even?)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (r7rs even?) (tuple (= 2) (r7rs even?)))))
+
+;; Case with '((and))'
+(assert=
+ '(and)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '((and))))
+
+;; Case with '((or))'
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '((or))))
+
+;; More complex case
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs positive?) (not (= 2)) (tuple (= 2) (r7rs odd?)))))
+
+;; Case with '((tuple))'
+(assert=
+ '(and (tuple))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '((tuple))))
+
+;; Complex case with '((tuple))' and '((or))'
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '((tuple) (or))))
+
+;; Complex case with 'tuple, 'not and 'r7rs
+(assert=
+ '(and (tuple (r7rs even?)) (= 2))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (r7rs even?)) (= 2) (not (r7rs odd?)))))
+
+;; Complex case with complex 'tuple
+(assert=
+ '(and (tuple (r7rs even?) (= 2)) (r7rs positive?))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (r7rs even?) (= 2)) (r7rs positive?))))
+

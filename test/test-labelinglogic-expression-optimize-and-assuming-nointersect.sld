@@ -14,10 +14,14 @@
           and
           begin
           even?
+          integer?
+          negative?
           not
           odd?
           or
-          quote))
+          positive?
+          quote
+          zero?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
