@@ -59,7 +59,8 @@
 
     (or (different-values-of-same-type? '= expr-a expr-b)
         (different-values-of-same-type? 'r7rs expr-a expr-b)
-        (different-values-of-same-type? 'tuple expr-a expr-b)))
+        ;; NOTE: there is no similar check for 'tuple because those can contain arbitrary (non-normalized) expressions as args.
+        ))
 
   (define (null-exprs? expr-a expr-b)
     (or (opposite-exprs? expr-a expr-b)
