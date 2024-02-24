@@ -11,6 +11,7 @@
   (import
     (only (scheme base)
           +
+          =
           >
           and
           begin
@@ -19,6 +20,7 @@
           if
           lambda
           list
+          modulo
           null?
           number?
           quote
