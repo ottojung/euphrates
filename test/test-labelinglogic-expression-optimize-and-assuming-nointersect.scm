@@ -139,7 +139,7 @@
 
 ;; Case with 'tuple and 'r7rs
 (assert=
- '(and (tuple (= 1)) (r7rs even?))
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1)) (r7rs even?))))
 
