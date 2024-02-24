@@ -116,8 +116,7 @@
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
             :type 'unknown-expr-type
-            :message (stringf "Expression type ~s not recognized"
-                              (~a type))
+            :message (stringf "Expression type ~s not recognized" (~a type))
             :args (list type expr)))
 
   (apply-until-fixpoint optimize expr))
