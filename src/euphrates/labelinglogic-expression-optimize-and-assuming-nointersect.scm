@@ -142,16 +142,12 @@
     (define new-args (list-annihilate null-exprs? bottom))
     (labelinglogic:expression:make type new-args))
 
-  (define (optimize expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
-    (appcomp expr
-             remove-idempotent
-             handle-nulls
-             explode-bottom
-             remove-tops
-             ))
+  (define optimize
+    (compose
+     remove-idempotent
+     handle-nulls
+     explode-bottom
+     remove-tops))
 
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
