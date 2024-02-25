@@ -50,6 +50,7 @@
 
 (assert= (list-reduce/pairwise (lambda (d x y) (if (and (equal? d 'forward) (> x 2)) (values 'hit) (values))) '(1 2 3 4 5 6 7))
          (list 1 2 'hit 'hit 7))
+
 (define (agrees fun input)
   (assert= (list-reduce/pairwise/left fun input)
            (list-reduce/pairwise (lambda (d x y) (if (equal? d 'forward) (fun x y) (values))) input)))
