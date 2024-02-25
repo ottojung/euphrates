@@ -177,8 +177,8 @@
 
   (define optimize
     (compose
-     narrow
      remove-idempotent
+     narrow
      handle-nulls
      explode-bottom
      remove-tops
