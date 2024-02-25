@@ -1,53 +1,53 @@
 
-;; (define (equalp x y)
-;;   (if (equal? x y) 'left 'skip))
+(define (equalp x y)
+  (if (equal? x y) 'left 'skip))
 
-;; (define (greaterp x y)
-;;   (if (> x y) 'left 'skip))
+(define (greaterp x y)
+  (if (> x y) 'left 'skip))
 
-;; (define (string-ci=p x y)
-;;   (if (string-ci=? x y) 'left 'skip))
+(define (string-ci=p x y)
+  (if (string-ci=? x y) 'left 'skip))
 
-;; (assert= (list-idempotent equalp (list 1 2 1 4 1))
-;;          (list 1 2 4 1))
+(assert= (list-idempotent equalp (list 1 2 1 4 1))
+         (list 1 2 4 1))
 
-;; (assert= (list-idempotent (lambda (x y)
-;;                             (if (or (= (remainder x y) 0)
-;;                                     (= (remainder y x) 0))
-;;                                 'left
-;;                                 'skip))
-;;                           (list 2 5 4 3 10 15 7))
-;;          (list 2 5 3 7))
+(assert= (list-idempotent (lambda (x y)
+                            (if (or (= (remainder x y) 0)
+                                    (= (remainder y x) 0))
+                                'left
+                                'skip))
+                          (list 2 5 4 3 10 15 7))
+         (list 2 5 3 7))
 
-;; (assert-throw #t (list-idempotent 0 1)) ;; type error
+(assert-throw #t (list-idempotent 0 1)) ;; type error
 
-;; (assert= (list-idempotent
-;;           (lambda (x y)
-;;             (if (< x y) 'left 'right))
-;;           (list 1 2))
-;;          (list 1))
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (< x y) 'left 'right))
+          (list 1 2))
+         (list 1))
 
-;; (assert= (list-idempotent
-;;           (lambda (x y)
-;;             (if (< x y) 'right 'left))
-;;           (list 1 2))
-;;          (list 2))
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (< x y) 'right 'left))
+          (list 1 2))
+         (list 2))
 
-;; (assert= (list-idempotent
-;;           (lambda (x y)
-;;             (if (< x y) 'right 'left))
-;;           (list 1 2 3 4 5))
-;;          (list 2 4 5))
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (< x y) 'right 'left))
+          (list 1 2 3 4 5))
+         (list 2 4 5))
 
-;; (assert= (list-idempotent
-;;           (lambda (x y)
-;;             (if (and (number? x) (number? y)
-;;                      (< x y))
-;;                 'left
-;;                 'skip))
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (and (number? x) (number? y)
+                     (< x y))
+                'left
+                'skip))
 
-;;           '(a b 2 c d 3 e f))
-;;          '(a b 2 c d e f))
+          '(a b 2 c d 3 e f))
+         '(a b 2 c d e f))
 
 (assert= (list-idempotent
           (lambda (x y)
