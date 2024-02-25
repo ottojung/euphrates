@@ -1,22 +1,11 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define list-reduce/pairwise/p
-  (make-parameter #f))
-
-(define-type9 list-reduce/pairwise/return-value
-  (make-list-reduce/pairwise/return-value left? value)
-  list-reduce/pairwise/return-value?
-
-  (left? list-reduce/pairwise/return-value:left?)
-  (value list-reduce/pairwise/return-value:value)
-  )
-
 (define-type9 list-reduce/pairwise/return
-  (make-list-reduce/pairwise/return token value)
+  (make-list-reduce/pairwise/return left? value)
   list-reduce/pairwise/return?
 
-  (token list-reduce/pairwise/return:token)
+  (left? list-reduce/pairwise/return:left?)
   (value list-reduce/pairwise/return:value)
   )
 
@@ -30,7 +19,7 @@
   (define left? #t)
   (make-list-reduce/pairwise/return
    token
-   (make-list-reduce/pairwise/return-value
+   (make-list-reduce/pairwise/return
     left? value)))
 
 (define (list-reduce/pairwise/return-right value)
@@ -38,7 +27,7 @@
   (define left? #f)
   (make-list-reduce/pairwise/return
    token
-   (make-list-reduce/pairwise/return-value
+   (make-list-reduce/pairwise/return
     left? value)))
 
 
@@ -81,8 +70,8 @@
 
         (let ()
           (define val (list-reduce/pairwise/return:value result))
-          (values (list-reduce/pairwise/return-value:left? val)
-                  (list-reduce/pairwise/return-value:value val)))
+          (values (list-reduce/pairwise/return:left? val)
+                  (list-reduce/pairwise/return:value val)))
 
         (let ()
           (define left? #t)
