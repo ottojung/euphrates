@@ -29,6 +29,7 @@
           null?
           number?
           quote
+          reverse
           string=?
           values))
   (import (only (scheme process-context) exit))
