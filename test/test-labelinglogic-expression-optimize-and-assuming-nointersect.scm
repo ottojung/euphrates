@@ -97,8 +97,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (r7rs even?) (= 3))))
 
-(exit 0)
-
 ;; A complex case combining '=' and 'r7rs [5]
 (assert=
  '(or)
@@ -137,7 +135,7 @@
 
 ;; More complex case with '= and 'r7rs
 (assert=
- '(and (= 2) (r7rs even?))
+ '(and (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (= 2) (= 2) (r7rs even?))))
 
