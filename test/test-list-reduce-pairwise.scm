@@ -14,11 +14,11 @@
 (assert= (list-reduce/pairwise (lambda (d x y) (if (and (equal? d 'reverse) (> x 2)) (values 'hit) (values))) '(1 2 3 4 5 6 7))
          (list 'hit 'hit 'hit 7))
 
-(assert= (list-reduce/pairwise (lambda (d x y) (if (string=? x "hello") (values 'present) (values))) '("apple" "banana" "cherry" "hello" "apple"))
+(assert= (list-reduce/pairwise (lambda (d x y) (if (string=? x "hello") 'present (values))) '("apple" "banana" "cherry" "hello" "apple"))
          (list 'present "banana" "cherry" "apple"))
 
-(assert= (list-reduce/pairwise (lambda (d x y) (if (= (modulo (+ x y) 2) 0) (values 2) (values))) '(1 2 3 4 5 6))
-         (list 2 2 5 6))
+(assert= (list-reduce/pairwise (lambda (d x y) (if (= (modulo (+ x y) 2) 0) 0 (values))) '(1 2 3 4 5 6))
+         (list 0 0 5 6))
 
 (exit 0)
 
