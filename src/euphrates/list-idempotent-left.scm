@@ -23,7 +23,7 @@
   ;; Example usage:
   ;; (list-idempotent/left equal? (list 1 2 1 4 1))
   ;; will return
-  ;; (list 1 2 4)
+  ;; (list 1 2 4 1)
   ;; keeping only the first appearance of each number.
   ;;
   ;; Note: this function is `list-deduplicate', but with a binary `pred' instead of a unary `identity'.
