@@ -6,17 +6,23 @@
   ;;   projection: a binary function applied to each pair of elements in the list
   ;;   lst: a list of elements to process.
   ;;
-  ;; This function returns a new list, where each element is the result of applying the `projection` function to a pair of elements from the original list.
-  ;; The function is applied in a pairwise manner from left to right, meaning the first element is compared to the second, then the second to the third and so on.
+  ;; This function returns a new list, where each element is the result of applying the `projection` function to a pair of elements from the original list, including a direction argument.
+  ;; The function is applied in a pairwise manner from left to right and right to left, meaning the first element is compared to the second, then the second to the third and so on.
+  ;;
   ;; The pairwise processing is interrupted immediately when an element in the pair has already been "processed" by the `projection` function, that is the element is in the `ignored` set.
-  ;; If the `projection` function a single values `x`, then the left element of the pair is replaced by `x`, and the right one is removed from the list.
-  ;; If the `projection` function returns `(values)`, it skips the pair and moves to the next.
-  ;; If the `projection` function returns a tuple `(values left? x)`, then depending on the (boolean) value of `left?`, either the left element of the pair is replaced by `x`, and the right is removed, or the right is replaced by `x` and the left is removed.
+  ;; If the `projection` function returns a tuple of `(values)`, it disregards this pair and moves to the next.
+  ;; If it returns a tuple of `(values x)`, where x is not a null value, 
+  ;; the function applies the `projection` value to the first element of the pair in the 'forward' direction or the second element of the pair in the 'reverse' direction,
+  ;; effectively replacing the specified element in the output list, and adds the pair to the `ignored` set.
+  ;;
+  ;; During this process, elements are never removed from the list, only replaced.
+  ;; The processed values are stored in the 'taken' set.
   ;;
   ;; Note that the list provided as input is retained, and a new list is returned as output.
+  ;; Additionally, the function is optimized for large lists by using vectors and hash sets to efficiently store and retrieve data.
   ;;
   ;; For example:
-  ;; (list-reduce/pairwise (lambda (direction x y) (if (equal? x y) 'c)) (list 'a 'a 'b 'b))
+  ;; (list-reduce/pairwise (lambda (direction x y) (if (equal? x y) (values 'c) (values))) (list 'a 'a 'b 'b))
   ;; will return
   ;; (list 'c 'c), where 'c' replaces both 'a' and first 'b', and second 'b' is ignored.
   ;;
