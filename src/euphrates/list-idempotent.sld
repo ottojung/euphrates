@@ -16,7 +16,6 @@
           equal?
           if
           lambda
-          length
           list
           quote
           reverse

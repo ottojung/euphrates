@@ -29,6 +29,7 @@
   ;; Note: this function is `list-deduplicate', but with a binary `pred' instead of a unary `identity'.
 
   (list-reduce/pairwise
+
    (lambda (direction x y)
      (define result (pred x y))
      (cond
@@ -45,9 +46,9 @@
       ((equal? result 'skip) 0)
 
       (else
-       (raisu* :from "list-reduce/pairwise"
-               :type 'bad-number-of-values
-               :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
-               :args (list result x y lst)))))
+       (raisu* :from "list-idempotent"
+               :type 'bad-pred-value
+               :message (stringf "Expected either 'left, 'right, or 'skip, but got '~a." result)
+               :args (list result lst)))))
 
    lst))
