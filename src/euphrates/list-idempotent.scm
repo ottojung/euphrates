@@ -40,12 +40,12 @@
      (cond
       ((equal? result 'left)
        (if (equal? direction 'forward)
-           x
+           x*
            (values)))
 
       ((equal? result 'right)
        (if (equal? direction 'reverse)
-           x
+           y*
            (values)))
 
       ((equal? result 'skip)
