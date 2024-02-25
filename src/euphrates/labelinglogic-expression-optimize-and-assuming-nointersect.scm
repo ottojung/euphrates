@@ -195,8 +195,8 @@
 
     (define (fun direction expr-a expr-b)
       (cond
-       ((to-be-consumed? expr-a expr-b) expr-a)
-       ((to-be-consumed? expr-b expr-a) expr-b)
+       ;; ((to-be-consumed? expr-a expr-b) expr-a)
+       ;; ((to-be-consumed? expr-b expr-a) expr-b)
        (else (values))))
 
     (define new-args (list-reduce/pairwise fun args))
