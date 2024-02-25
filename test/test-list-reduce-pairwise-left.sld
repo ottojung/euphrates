@@ -4,7 +4,6 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
-  (import (only (euphrates const) const))
   (import
     (only (euphrates list-reduce-pairwise-left)
           list-reduce/pairwise/left))
@@ -13,6 +12,7 @@
           +
           =
           >
+          _
           and
           begin
           char?
