@@ -79,3 +79,6 @@
 ;; Test Case 14: Test where the predicate is always true
 (assert= (list-idempotent (lambda (x y) 'left) (list 1 2 3 1 2 3))
          (list 1 3 2))
+
+(assert= (list-idempotent (lambda (x y) 'right) (list 1 2 3 1 2 3))
+         (list 1 3 2))
