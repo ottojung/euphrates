@@ -15,6 +15,9 @@
   ;; will return
   ;; (list 2 4 1)
   ;; removing all appearances of the elements that have been "annihilated".
+  ;;
+  ;; Best used together with `apply-until-fixpoint`.
+  ;;
 
   (define unique (make-unique))
   (define replaced
