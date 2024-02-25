@@ -69,6 +69,11 @@
   (define ignored (make-hashset))
   (define token (make-unique))
 
+  (define (is-default? result)
+    (and (list-reduce/pairwise/return? result)
+         (equal? token (list-reduce/pairwise/return:token result))
+         (equal? #f (list-reduce/pairwise/return:value result))))
+
   (let loop ((x 0) (y 0))
     (when (< x n)
 
