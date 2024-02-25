@@ -201,7 +201,7 @@
 
 ;; Testing mixture of '= and 'r7rs expression with a common numeric value.
 (assert
- (let ()
+ (let ((x 2))
    (define result
      (labelinglogic:expression:optimize/and-assuming-nointersect
       '(and (= 2) (r7rs positive?) (r7rs integer?))))
