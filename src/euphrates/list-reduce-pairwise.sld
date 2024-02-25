@@ -28,6 +28,7 @@
           list->vector
           map
           not
+          null?
           values
           vector-copy
           vector-length

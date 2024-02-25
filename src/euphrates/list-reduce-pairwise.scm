@@ -64,7 +64,7 @@
               (unwrap-value result))
 
             (cond
-             ((is-default? result)
+             ((null? result)
               (if (< y (- n 1))
                   (loop x (+ 1 y))
                   (loop (+ 1 x) (+ 1 x))))
