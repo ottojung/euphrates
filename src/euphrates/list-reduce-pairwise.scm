@@ -6,6 +6,7 @@
 
 (define (list-reduce/pairwise/no-return)
   (define ctx (list-reduce/pairwise/p))
+  
   TODO)
 
 (define (list-reduce/pairwise/return-left value)
