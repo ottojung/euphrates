@@ -32,7 +32,8 @@
        (stringf
         "Expression of type ~s must have at least 1 argument."
         (~a type))
-       (list x))))
+       (list x)))
+    (for-each labelinglogic:expression:check args))
 
    ((equal? 'not type)
     (unless (list-length= 1 args)

@@ -28,6 +28,7 @@
           define
           else
           equal?
+          for-each
           list
           list?
           not
