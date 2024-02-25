@@ -4,6 +4,7 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
+  (import (only (euphrates assert) assert))
   (import
     (only (euphrates
             labelinglogic-expression-optimize-and-assuming-nointersect)
@@ -13,8 +14,11 @@
           =
           and
           begin
+          define
+          equal?
           even?
           integer?
+          let
           negative?
           not
           odd?

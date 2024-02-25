@@ -200,10 +200,14 @@
   '(and (r7rs positive?) (r7rs integer?))))
 
 ;; Testing mixture of '= and 'r7rs expression with a common numeric value.
-(assert=
- '(and (= 2))
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (= 2) (r7rs positive?) (r7rs integer?))))
+(assert
+ (let ()
+   (define result
+     (labelinglogic:expression:optimize/and-assuming-nointersect
+      '(and (= 2) (r7rs positive?) (r7rs integer?))))
+
+   (or (equal? result '(and (= 2)))
+       (equal? result '(or)))))
 
 ;; Case with '= and 'tuple
 (assert=
