@@ -162,7 +162,7 @@
        ((is-subset? expr-b expr-a) expr-a)
        (else default)))
 
-    (define new-args (list-reduce-pairwise default fun args))
+    (define new-args (list-reduce/pairwise default fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)

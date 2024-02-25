@@ -38,6 +38,9 @@
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
+    (only (euphrates list-reduce-pairwise)
+          list-reduce/pairwise))
+  (import
     (only (euphrates make-unique) make-unique))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
