@@ -87,7 +87,7 @@
                 'skip))
 
           '(a b 2 c d 3 e f))
-         'todo)
+         '(a b c d 3 e f))
 
 ;; ;; Test Case 1: Test with empty list
 ;; (assert= (list-idempotent equalp '())
