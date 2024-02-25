@@ -35,6 +35,7 @@
           map
           not
           null?
+          or
           quote
           reverse
           vector-copy

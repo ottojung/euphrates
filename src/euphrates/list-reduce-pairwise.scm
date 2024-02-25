@@ -79,7 +79,9 @@
 
   (let ()
     (define indexes
-      (filter (lambda (i) (hashset-has? taken i))
+      (filter (lambda (i)
+                (or (hashset-has? taken i)
+                    (not (hashset-has? ignored i))))
               (range n)))
 
     (map (lambda (i) (vector-ref output i)) indexes)))
