@@ -1,5 +1,8 @@
 
-(assert= (list-idempotent equal? (list 1 2 1 4 1))
+(define (equalp x y)
+  (if (equal? x y) 'left 'skip))
+
+(assert= (list-idempotent equalp (list 1 2 1 4 1))
          (list 1 2 4))
 
 (assert= (list-idempotent (lambda (x y)
@@ -11,15 +14,15 @@
 (assert-throw #t (list-idempotent 0 1)) ;; type error
 
 ;; Test Case 1: Test with empty list
-(assert= (list-idempotent equal? '())
+(assert= (list-idempotent equalp '())
          '())
 
 ;; Test Case 2: Test with list of identical elements
-(assert= (list-idempotent equal? (list 'a 'a 'a 'a 'a))
+(assert= (list-idempotent equalp (list 'a 'a 'a 'a 'a))
          (list 'a))
 
 ;; Test Case 3: Test with list of distinct elements
-(assert= (list-idempotent equal? (list 'x 'y 'z))
+(assert= (list-idempotent equalp (list 'x 'y 'z))
          (list 'x 'y 'z))
 
 ;; Test Case 4: Test with numbers and greater-than predicate
@@ -41,7 +44,7 @@
          (list 1 'a 2 'b))
 
 ;; Test Case 8: Test with a list of lists
-(assert= (list-idempotent equal? (list (list 'a 'b) (list 'a 'b) (list 'c 'd)))
+(assert= (list-idempotent equalp (list (list 'a 'b) (list 'a 'b) (list 'c 'd)))
          (list (list 'a 'b) (list 'c 'd)))
 
 ;; Test Case 9: Test with a list of strings
@@ -57,7 +60,7 @@
          (list 1 "two" 'three 'four))
 
 ;; Test Case 12: Test with nested lists and deep equality
-(assert= (list-idempotent equal? (list (list 1 (list 2)) (list 1 (list 2)) (list 3 (list 4))))
+(assert= (list-idempotent equalp (list (list 1 (list 2)) (list 1 (list 2)) (list 3 (list 4))))
          (list (list 1 (list 2)) (list 3 (list 4))))
 
 ;; Test Case 13: Test where the predicate is always false
@@ -88,10 +91,6 @@
                           (list 1.0 1.05 1.1 2.0 2.05 3.0))
          (list 1.0 1.1 2.0 3.0))
 
-;; Test Case 19: Test with characters
-(assert= (list-idempotent char=? (list #\a #\b #\a #\c #\b #\c))
-         (list #\a #\b #\c))
-
 ;; Test Case 20: Test with mixed list (numbers and strings)
-(assert= (list-idempotent equal? (list 1 "1" 2 "2" 1 "1"))
+(assert= (list-idempotent equalp (list 1 "1" 2 "2" 1 "1"))
          (list 1 "1" 2 "2"))

@@ -19,10 +19,11 @@
           begin
           car
           cdr
-          char=?
           cons
+          define
           eq?
           equal?
+          if
           lambda
           list
           modulo
