@@ -1,32 +1,6 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-type9 list-reduce/pairwise/return
-  (make-list-reduce/pairwise/return left? value)
-  list-reduce/pairwise/return?
-
-  (left? list-reduce/pairwise/return:left?)
-  (value list-reduce/pairwise/return:value)
-  )
-
-(define (list-reduce/pairwise/no-return)
-  (define token (list-reduce/pairwise/p))
-  (define value #f)
-  (make-list-reduce/pairwise/return token value))
-
-(define (list-reduce/pairwise/return-left value)
-  (define token (list-reduce/pairwise/p))
-  (define left? #t)
-  (make-list-reduce/pairwise/return
-   left? value))
-
-(define (list-reduce/pairwise/return-right value)
-  (define token (list-reduce/pairwise/p))
-  (define left? #f)
-  (make-list-reduce/pairwise/return
-   left? value))
-
-
 (define (list-reduce/pairwise projection lst)
   ;; The `list-reduce/pairwise` function takes three arguments:
   ;;   default-value: a unique value not expected to be in the list or result from the projection function

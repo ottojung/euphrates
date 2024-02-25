@@ -3,8 +3,6 @@
   (euphrates list-reduce-pairwise)
   (export list-reduce/pairwise)
   (import
-    (only (euphrates define-type9) define-type9))
-  (import
     (only (euphrates hashset)
           hashset-add!
           hashset-has?
