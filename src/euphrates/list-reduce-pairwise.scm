@@ -63,7 +63,7 @@
               (if (< y (- n 1))
                   (loop x (+ 1 y))
                   (loop (+ 1 x) (+ 1 x))))
-             (left?
+             ((equal? direction 'forward)
               (vector-set! output x value)
               (hashset-add! ignored y)
               (loop (+ 1 x) (+ 1 x)))
