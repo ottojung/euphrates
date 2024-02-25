@@ -9,10 +9,10 @@
   ;; This function returns a new list, where each element is the result of applying the `projection` function to a pair of elements from the original list.
   ;; The function is applied in a pairwise manner from left to right, meaning the first element is compared to the second, then the second to the third and so on.
   ;; The pairwise processing is interrupted immediately when an element in the pair has already been "processed" by the `projection` function, that is the element is in the `ignored` set.
-  ;; If the `projection` function returns a tuple `(values left? x)`, where `left?` is a predicate that if true applies the transformation `x` to the first element of the pair and if false to the second.
+  ;; If the `projection` function a single values `x`, then the left element of the pair is replaced by `x`, and the right one is removed from the list.
+  ;; If the `projection` function returns `(values)`, it skips the pair and moves to the next.
+  ;; If the `projection` function returns a tuple `(values left? x)`, then depending on the (boolean) value of `left?`, either the left element of the pair is replaced by `x`, and the right is removed, or the right is replaced by `x` and the left is removed.
   ;; If it effectively replaces the specified element in the output list and adds the other element to the `ignored` set.
-  ;; If it returns `(values)`, it disregards this pair and moves to the next.
-  ;; During this process, elements are never removed from the list, only replaced.
   ;;
   ;; Note that the list provided as input is retained, and a new list is returned as output.
   ;; Additionally, the function is optimized for large lists by using vectors and hash sets to efficiently store and retrieve data.
