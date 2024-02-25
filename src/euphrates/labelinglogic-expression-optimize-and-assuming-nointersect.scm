@@ -199,9 +199,9 @@
       (cond
        ((to-be-consumed? expr-a expr-b) expr-a)
        ((to-be-consumed? expr-b expr-a) expr-b)
-       (else default)))
+       (else (values))))
 
-    (define new-args (list-reduce/pairwise default fun args))
+    (define new-args (list-reduce/pairwise fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)

@@ -61,7 +61,8 @@
           null?
           or
           quote
-          unless))
+          unless
+          values))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))
