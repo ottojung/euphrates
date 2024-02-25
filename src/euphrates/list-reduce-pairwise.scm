@@ -34,17 +34,7 @@
          (equal? #f (list-reduce/pairwise/return:value result))))
 
   (define (unwrap-value result)
-    (if (and (list-reduce/pairwise/return? result)
-             (equal? token (list-reduce/pairwise/return:token result)))
-
-        (let ()
-          (define val (list-reduce/pairwise/return:value result))
-          (values (list-reduce/pairwise/return:left? val)
-                  (list-reduce/pairwise/return:value val)))
-
-        (let ()
-          (define left? #t)
-          (values left? result))))
+    (if (null? result) (values #f #f) (apply values result)))
 
   (let loop ((x 0) (y 0))
     (when (< x n)

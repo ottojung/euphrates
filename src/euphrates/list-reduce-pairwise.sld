@@ -14,6 +14,7 @@
           -
           <
           and
+          apply
           begin
           call-with-values
           cond
