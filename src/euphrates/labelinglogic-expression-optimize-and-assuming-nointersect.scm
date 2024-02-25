@@ -184,4 +184,6 @@
 
   (for-each check-type args)
 
+  (debugs expr)
+
   (apply-until-fixpoint optimize expr))
