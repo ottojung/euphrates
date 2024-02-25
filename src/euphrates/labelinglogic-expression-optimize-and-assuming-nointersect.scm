@@ -121,12 +121,12 @@
              (labelinglogic:expression:evaluate/r7rs
               expr-a (car args-b)))
 
-        (and (equal? type-a 'r7rs)
-             (equal? type-b 'not)
-             (equal? inner-type-b '=)
+        (and (equal? type-b 'r7rs)
+             (equal? type-a 'not)
+             (equal? inner-type-a '=)
              (not
               (labelinglogic:expression:evaluate/r7rs
-               expr-a (car inner-args-b))))))
+               expr-b (car inner-args-a))))))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
