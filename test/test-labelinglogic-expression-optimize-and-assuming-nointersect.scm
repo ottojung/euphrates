@@ -330,7 +330,7 @@
   '((tuple) (or))))
 
 ;; Bad tuples.
-(assert=
+(assert-throw
  'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple 1 2))))
