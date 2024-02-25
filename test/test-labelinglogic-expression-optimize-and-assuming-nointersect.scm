@@ -115,6 +115,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (not (= 3)))))
 
+;; A complex case combining 'not =' and 'r7rs [3]
+(assert=
+ '(and (r7rs even?))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (= 3) (r7rs even?)))))
+
 ;; Checking negation of 'r7rs
 (assert=
  '(or)
