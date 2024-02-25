@@ -43,9 +43,6 @@
                 (projection (vector-ref input x)
                             (vector-ref input y))))
 
-            (define-values (left? value)
-              (unwrap-value result))
-
             (cond
              ((null? result)
               (if (< y (- n 1))

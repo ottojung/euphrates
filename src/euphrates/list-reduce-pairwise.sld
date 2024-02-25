@@ -20,7 +20,6 @@
           call-with-values
           cond
           define
-          define-values
           else
           if
           lambda
