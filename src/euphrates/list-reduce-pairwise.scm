@@ -27,13 +27,19 @@
 
 (define (list-reduce/pairwise/return-left value)
   (define token (list-reduce/pairwise/p))
-  (define void? #f)
-  (make-list-reduce/pairwise/return token void? value))
+  (define left? #t)
+  (make-list-reduce/pairwise/return
+   token
+   (make-list-reduce/pairwise/return-value
+    left? value)))
 
 (define (list-reduce/pairwise/return-right value)
   (define token (list-reduce/pairwise/p))
-  (define void? #f)
-  (make-list-reduce/pairwise/return token void? value))
+  (define left? #f)
+  (make-list-reduce/pairwise/return
+   token
+   (make-list-reduce/pairwise/return-value
+    left? value)))
 
 (define (list-reduce/pairwise default-value projection lst)
   ;; The `list-reduce/pairwise` function takes three arguments:
