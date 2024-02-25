@@ -67,13 +67,13 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 3))))
 
-(exit 0)
-
 ;; A complex case combining '=' and 'r7rs [2]
 (assert=
  '(and (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 2))))
+
+(exit 0)
 
 ;; A complex case combining '=' and 'r7rs [3]
 (assert=
