@@ -5,6 +5,9 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
+    (only (euphrates list-idempotent-left)
+          list-idempotent/left))
+  (import
     (only (euphrates list-idempotent)
           list-idempotent))
   (import
@@ -19,6 +22,7 @@
           begin
           car
           cdr
+          char=?
           cons
           define
           eq?
@@ -33,7 +37,6 @@
           string-length
           string=?))
   (import (only (scheme char) string-ci=?))
-  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
