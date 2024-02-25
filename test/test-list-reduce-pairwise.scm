@@ -1,4 +1,7 @@
 
+(assert= (list-reduce/pairwise (lambda (d x y) (if (equal? x y) 'found (values))) '(a a b b))
+         (list 'found 'found))
+
 (exit 0)
 
 (assert= (list-reduce/pairwise 'not-found (lambda (x y) (if (equal? x y) 'found 'not-found)) '(a a b b))
