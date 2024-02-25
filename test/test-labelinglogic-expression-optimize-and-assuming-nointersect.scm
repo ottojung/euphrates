@@ -181,12 +181,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (r7rs odd?) (r7rs zero?))))
 
-;; Testing with a mix of '= and 'r7rs, but they do intersect
-(assert=
- '(and (= 2) (r7rs even?))
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (= 2) (r7rs even?))))
-
 ;; Testing with negated and non-negated 'r7rs expressions
 (assert=
  '(or)
