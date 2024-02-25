@@ -91,7 +91,7 @@
          (list (cons 'a 1) (cons 'b 2)))
 
 ;; Test Case 17: Test with function composition as predicate
-(assert= (list-idempotent (lambda (x y) (= (* 2 x) y))
+(assert= (list-idempotent (lambda (x y) (if (= (* 2 x) y) 'left 'skip))
                           (list 1 2 3 4 5 6 7 8))
          (list 1 3 4 5 7))
 
