@@ -34,8 +34,8 @@
      (define result (pred x y))
      (define forward? (equal? direction 'forward))
      (define reverse? (equal? direction 'reverse))
-     (define x* (if forward? x y))
-     (define y* (if forward? x y))
+     (define right-element (if forward? x y))
+     (define left-element (if forward? x y))
 
      (cond
       ((equal? result 'left)
