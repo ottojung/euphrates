@@ -174,10 +174,10 @@
   (define optimize
     (compose
      remove-idempotent
-     narrow
      handle-nulls
      explode-bottom
      remove-tops
+     narrow
      ))
 
   (unless (equal? type 'and)
