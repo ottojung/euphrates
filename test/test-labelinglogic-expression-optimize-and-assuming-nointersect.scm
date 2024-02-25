@@ -139,6 +139,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (= 2) (= 2) (r7rs even?))))
 
+;; More complex case with '= and 'r7rs
+(assert=
+ '(and (= 2))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (= 2) (= 2) (r7rs even?) (= 2) (= 2))))
+
 ;; Complex case with 'tuple and 'not
 (assert=
  '(or)
