@@ -129,7 +129,7 @@
 
 ;; A complex case combining 'not =' and 'r7rs [3]
 (assert=
- '(or)
+ '(and (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 3)) (r7rs even?) (not (= 2)))))
 
