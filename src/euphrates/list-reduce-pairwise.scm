@@ -14,7 +14,6 @@
   ;; If the `projection` function returns a tuple `(values left? x)`, then depending on the (boolean) value of `left?`, either the left element of the pair is replaced by `x`, and the right is removed, or the right is replaced by `x` and the left is removed.
   ;;
   ;; Note that the list provided as input is retained, and a new list is returned as output.
-  ;; Additionally, the function is optimized for large lists by using vectors and hash sets to efficiently store and retrieve data.
   ;;
   ;; For example:
   ;; (list-reduce/pairwise (lambda (x y) (if (equal? x y) 'c)) (list 'a 'a 'b 'b))
