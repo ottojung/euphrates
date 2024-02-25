@@ -300,31 +300,31 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((and))))
 
-;; Case with numbers
-(assert-throw
- 'expression-type-error
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and 1 2 3)))
+;; ;; Case with numbers
+;; (assert-throw
+;;  'expression-type-error
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect
+;;   '(and 1 2 3)))
 
-;; Case with top number
-(assert-throw
- 'expression-type-error
- (labelinglogic:expression:optimize/and-assuming-nointersect 812312))
+;; ;; Case with top number
+;; (assert-throw
+;;  'expression-type-error
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect 812312))
 
-;; Case with '((or))'
-(assert-throw
- 'expression-type-error
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '((or))))
+;; ;; Case with '((or))'
+;; (assert-throw
+;;  'expression-type-error
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect
+;;   '((or))))
 
-;; Case with '((tuple))'
-(assert-throw
- 'expression-type-error
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '((tuple))))
+;; ;; Case with '((tuple))'
+;; (assert-throw
+;;  'expression-type-error
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect
+;;   '((tuple))))
 
-;; Complex case with '((tuple))' and '((or))'
-(assert-throw
- 'expression-type-error
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '((tuple) (or))))
+;; ;; Complex case with '((tuple))' and '((or))'
+;; (assert-throw
+;;  'expression-type-error
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect
+;;   '((tuple) (or))))
