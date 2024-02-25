@@ -186,7 +186,7 @@
         (if (equal? direction 'forward)
             expr-b (values)))
        ((is-subset? expr-b expr-a)
-        (if (equal? direction 'forward)
+        (if (equal? direction 'reverse)
             expr-a (values)))
        (else (values))))
 
