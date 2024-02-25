@@ -18,7 +18,6 @@
   ;; The processed values are stored in the 'taken' set.
   ;;
   ;; Note that the list provided as input is retained, and a new list is returned as output.
-  ;; Additionally, the function is optimized for large lists by using vectors and hash sets to efficiently store and retrieve data.
   ;;
   ;; For example:
   ;; (list-reduce/pairwise (lambda (direction x y) (if (equal? x y) (values 'c) (values))) (list 'a 'a 'b 'b))
