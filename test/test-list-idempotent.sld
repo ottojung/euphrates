@@ -8,16 +8,12 @@
   (import
     (only (scheme base)
           <
-          =
           and
           begin
           if
           lambda
-          list
-          modulo
           number?
           quote))
-  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
