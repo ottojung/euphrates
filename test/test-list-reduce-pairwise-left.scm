@@ -14,7 +14,7 @@
 (assert= (list-reduce/pairwise/left (lambda (x y) (if (null? x) 'nil (values))) '(() a b c ()))
          (list 'nil 'b 'c (list)))
 
-(assert-throw #t (list-reduce/pairwise/left (lambda (x y) (+ xy))) 0) ;; type error
+(assert-throw #t (list-reduce/pairwise/left (lambda (x y) (+ x y))) 0) ;; type error
 
 (assert= (list-reduce/pairwise/left (lambda (x y) (if (and (number? x) (number? y)) x (values))) '(1 2 "three" 4))
          (list 1 "three" 4))
