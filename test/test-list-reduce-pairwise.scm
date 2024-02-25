@@ -34,7 +34,6 @@
 ;; Test with a list of different types of pairs and `equal` predicate
 (agrees (lambda (x y) (if (equal? x y) 'match (values))) '((1 . 2) "pair" (1 . 2) "not pair" (1 . 2)))
 
-
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (equal? x y) (values 'found) (values))) '(a a b b))
          (list 'found 'found))
 
