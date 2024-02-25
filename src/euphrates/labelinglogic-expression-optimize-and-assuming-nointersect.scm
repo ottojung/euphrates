@@ -181,6 +181,7 @@
     (define args (labelinglogic:expression:args expr))
 
     (define (fun expr-a expr-b)
+      (debug "~s, ~s" expr-a expr-b)
       (cond
        ((is-subset? expr-a expr-b) 'right)
        ((is-subset? expr-b expr-a) 'left)
