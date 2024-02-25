@@ -180,21 +180,19 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (define default (make-unique))
     (define (fun expr-a expr-b)
       (cond
        ((is-subset? expr-a expr-b) expr-b)
        ((is-subset? expr-b expr-a) expr-a)
-       (else default)))
+       (else (values))))
 
-    (define new-args (list-reduce/pairwise default fun args))
+    (define new-args (list-reduce/pairwise fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (define default (make-unique))
     (define (fun expr-a expr-b)
       (cond
        ((to-be-consumed? expr-a expr-b) expr-a)
