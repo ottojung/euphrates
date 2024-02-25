@@ -37,9 +37,9 @@
   (let loop ((x 0) (y 0))
     (when (< x n)
 
-      (if (and (not (= x y))
-               (not (hashset-has? ignored y))
-               (not (hashset-has? ignored x)))
+      (when (and (not (= x y))
+                 (not (hashset-has? ignored y))
+                 (not (hashset-has? ignored x)))
 
           (let ()
             (define direction
@@ -74,11 +74,11 @@
               (vector-set! output y value)
               (hashset-add! taken y)
               (hashset-add! ignored x)
-              (hashset-add! ignored y))))
+              (hashset-add! ignored y)))))
 
-          (if (< y (- n 1))
-              (loop x (+ 1 y))
-              (loop (+ 1 x) 0)))))
+      (if (< y (- n 1))
+          (loop x (+ 1 y))
+          (loop (+ 1 x) 0))))
 
   (let ()
     (define indexes
