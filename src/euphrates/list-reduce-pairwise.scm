@@ -51,7 +51,7 @@
                 (raisu* :from "list-reduce/pairwise"
                         :type 'bad-number-of-values
                         :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
-                        :args (list result x y)))))
+                        :args (list result lst x y)))))
 
             (cond
              ((null? result)
