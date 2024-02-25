@@ -5,6 +5,9 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
+    (only (euphrates list-reduce-pairwise-left)
+          list-reduce/pairwise/left))
+  (import
     (only (euphrates list-reduce-pairwise)
           list-reduce/pairwise))
   (import
@@ -12,10 +15,12 @@
           +
           =
           >
+          _
           and
           begin
           char?
           cons
+          define
           equal?
           if
           lambda
