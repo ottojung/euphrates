@@ -7,6 +7,7 @@
   ;;   lst: a list of elements to be processed
   ;;
   ;; It compares each pair of elements `x, y` in `lst` and only keeps `x` if `(pred x y)` is true.
+  ;; Otherwise it keeps both `x` and `y`.
   ;;
   ;; This operation is related to the mathematical concept of idempotence in the context of set operations.
   ;; In set theory, idempotent operations such as union, intersection, or function composition do not change
