@@ -121,12 +121,28 @@
          (labelinglogic:expression:evaluate/r7rs
           expr-a (car args-b))))
 
-        (and (equal? type-b 'r7rs)
-             (equal? type-a 'not)
-             (equal? inner-type-a '=)
-             (not
-              (labelinglogic:expression:evaluate/r7rs
-               expr-b (car inner-args-a))))))
+  (define (to-be-consumed? expr-a expr-b)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+    (define args-a (labelinglogic:expression:args expr-a))
+    (define args-b (labelinglogic:expression:args expr-b))
+    (define negated-a? (equal? 'not type-a))
+    (define negated-b? (equal? 'not type-b))
+    (define inner-a (if negated-a? (car args-a) expr-a))
+    (define inner-b (if negated-b? (car args-b) expr-b))
+    (define inner-type-a (labelinglogic:expression:type inner-a))
+    (define inner-type-b (labelinglogic:expression:type inner-b))
+    (define inner-args-a (labelinglogic:expression:args inner-a))
+    (define inner-args-b (labelinglogic:expression:args inner-b))
+    (define inner-tuple-a? (equal? 'tuple inner-type-a))
+    (define inner-tuple-b? (equal? 'tuple inner-type-b))
+
+    (and (equal? type-b 'r7rs)
+         (equal? type-a 'not)
+         (equal? inner-type-a '=)
+         (not
+          (labelinglogic:expression:evaluate/r7rs
+           expr-b (car inner-args-a)))))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
