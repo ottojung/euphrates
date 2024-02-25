@@ -197,8 +197,8 @@
     (define default (make-unique))
     (define (fun expr-a expr-b)
       (cond
-       ((to-be-consumed? expr-a expr-b) expr-b)
-       ((to-be-consumed? expr-b expr-a) expr-a)
+       ((to-be-consumed? expr-a expr-b) expr-a)
+       ((to-be-consumed? expr-b expr-a) expr-b)
        (else default)))
 
     (define new-args (list-reduce/pairwise default fun args))
