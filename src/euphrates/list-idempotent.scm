@@ -43,7 +43,8 @@
            y
            (values)))
 
-      ((equal? result 'skip) 0)
+      ((equal? result 'skip)
+       (values))
 
       (else
        (raisu* :from "list-idempotent"
