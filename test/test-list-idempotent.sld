@@ -19,6 +19,7 @@
           if
           lambda
           list
+          modulo
           number?
           or
           quote
