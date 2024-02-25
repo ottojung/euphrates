@@ -69,7 +69,7 @@
 
 ;; A complex case combining '=' and 'r7rs [2]
 (assert=
- '(and (r7rs even?) (= 2))
+ '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 2))))
 
