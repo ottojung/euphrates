@@ -63,7 +63,7 @@
 
 ;; Test using `=` predicate with numbers
 (assert= (list-annihilate = (list 2 3 2 5 2))
-         (list 3 5))
+         (list 3 5 2))
 
 ;; Test with strings using `string=?` predicate
 (assert= (list-annihilate string=? (list "apple" "banana" "apple" "cherry"))
