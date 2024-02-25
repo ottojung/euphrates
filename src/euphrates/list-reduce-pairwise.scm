@@ -83,7 +83,7 @@
 
           (if (< y (- n 1))
               (loop x (+ 1 y))
-              (loop (+ 1 x) (+ 1 x))))))
+              (loop (+ 1 x) 0)))))
 
   (let ()
     (define indexes
