@@ -32,7 +32,7 @@
   (let loop ((x 0) (y 0))
     (when (< x n)
 
-      (if (and (< x y)
+      (if (and (not (= x y))
                (not (hashset-has? ignored y))
                (not (hashset-has? ignored x)))
 

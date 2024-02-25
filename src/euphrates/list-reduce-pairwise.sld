@@ -13,6 +13,7 @@
           +
           -
           <
+          =
           and
           apply
           begin
