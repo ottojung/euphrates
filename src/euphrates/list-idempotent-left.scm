@@ -28,10 +28,6 @@
   ;;
   ;; Note: this function is `list-deduplicate', but with a binary `pred' instead of a unary `identity'.
 
-  (let loop ((rest lst) (result '()))
-    (cond
-     ((null? rest) (reverse result))
-     ((list-or-map (lambda (x) (pred x (car rest))) result)
-      (loop (cdr rest) result))
-     (else
-      (loop (cdr rest) (cons (car rest) result))))))
+  (list-reduce/pairwise/left
+   (lambda (x y) (if (pred x y) x (values)))
+   lst))
