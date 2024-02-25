@@ -180,18 +180,13 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (define (fun direction expr-a expr-b)
-      (debug "~s, ~s" expr-a expr-b)
+    (define (fun expr-a expr-b)
       (cond
-       ;; ((is-subset? expr-a expr-b)
-       ;;  (if (equal? direction 'reverse)
-       ;;      expr-b (values)))
-       ;; ((is-subset? expr-b expr-a)
-       ;;  (if (equal? direction 'forward)
-       ;;      expr-a (values)))
-       (else (values))))
+       ((is-subset? expr-a expr-b) 'right)
+       ((is-subset? expr-b expr-a) 'left)
+       (else 'skip)))
 
-    (define new-args (list-reduce/pairwise fun args))
+    (define new-args (list-idempotent fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (consume-subsets expr)
