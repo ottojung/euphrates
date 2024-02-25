@@ -63,7 +63,7 @@
           (lambda (x y)
             (if (and (number? x) (number? y)
                      (< x y))
-                'right
+                'left
                 'skip))
 
           '(a b 2 c d 3 e f))
