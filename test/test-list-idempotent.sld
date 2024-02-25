@@ -5,9 +5,6 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
-    (only (euphrates list-idempotent-left)
-          list-idempotent/left))
-  (import
     (only (euphrates list-idempotent)
           list-idempotent))
   (import
