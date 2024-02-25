@@ -37,6 +37,8 @@
      (define left-element (if forward? x y))
      (define right-element (if forward? y x))
 
+     (debugs reverse?)
+
      (cond
       ((equal? result 'left)
        (if forward? left-element (values)))
