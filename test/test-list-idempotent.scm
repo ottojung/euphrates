@@ -31,7 +31,7 @@
           (lambda (x y)
             (if (< x y) 'right 'left))
           (list 1 2))
-         (list 1))
+         (list 1 2))
 
 ;; Test Case 1: Test with empty list
 (assert= (list-idempotent equalp '())
