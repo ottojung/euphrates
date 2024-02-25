@@ -14,9 +14,10 @@
   )
 
 (define (list-reduce/pairwise/no-return)
-  (define ctx (list-reduce/pairwise/p))
-  
-  TODO)
+  (define token (list-reduce/pairwise/p))
+  (define void? #t)
+  (define value #f)
+  (make-list-reduce/pairwise/return token void? value))
 
 (define (list-reduce/pairwise/return-left value)
   TODO)
