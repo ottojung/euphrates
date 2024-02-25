@@ -180,7 +180,7 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (define (fun expr-a expr-b)
+    (define (fun direction expr-a expr-b)
       (cond
        ((is-subset? expr-a expr-b) expr-b)
        ((is-subset? expr-b expr-a) expr-a)
@@ -193,7 +193,7 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (define (fun expr-a expr-b)
+    (define (fun direction expr-a expr-b)
       (cond
        ((to-be-consumed? expr-a expr-b) expr-a)
        ((to-be-consumed? expr-b expr-a) expr-b)
