@@ -43,10 +43,11 @@
 
             (define result
               (call-with-values
-                  list
-                (projection direction
-                            (vector-ref input x)
-                            (vector-ref input y))))
+                  (lambda _
+                    (projection direction
+                                (vector-ref input x)
+                                (vector-ref input y)))
+                list))
 
             (define value
               (cond
