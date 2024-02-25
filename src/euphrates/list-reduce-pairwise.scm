@@ -100,11 +100,18 @@
                 (projection (vector-ref input x)
                             (vector-ref input y)))
 
+              (define-values (left? value)
+                (unwrap-value result))
+
               (cond
                ((is-default? result)
                 (if (< y (- n 1))
                     (loop x (+ 1 y))
                     (loop (+ 1 x) (+ 1 x))))
+               (left?
+                (vector-set! output x result)
+                (hashset-add! ignored y)
+                (loop (+ 1 x) (+ 1 x)))
                (else
                 (vector-set! output x result)
                 (hashset-add! ignored y)

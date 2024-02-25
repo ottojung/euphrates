@@ -21,6 +21,7 @@
           begin
           cond
           define
+          define-values
           else
           equal?
           if
