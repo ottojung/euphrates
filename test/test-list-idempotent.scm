@@ -31,7 +31,7 @@
           (lambda (x y)
             (if (< x y) 'right 'left))
           (list 1 2))
-         (list 1 2))
+         (list 2))
 
 (assert= (list-idempotent
           (lambda (x y)
