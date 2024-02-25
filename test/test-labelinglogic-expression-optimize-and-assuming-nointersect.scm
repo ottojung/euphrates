@@ -17,8 +17,6 @@
 ;;  (labelinglogic:expression:optimize/and-assuming-nointersect
 ;;   '(and (r7rs even?) (= 2) (= 4))))
 
-(exit 0)
-
 (assert=
  '(and)
  (labelinglogic:expression:optimize/and-assuming-nointersect
