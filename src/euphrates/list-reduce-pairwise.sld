@@ -30,6 +30,7 @@
           make-parameter
           map
           not
+          parameterize
           values
           vector-copy
           vector-length
