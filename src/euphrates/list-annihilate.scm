@@ -13,7 +13,7 @@
   ;; Example usage:
   ;; (list-annihilate equal? 'c (list 1 2 1 4 1))
   ;; will return
-  ;; (list 'c 2 4 1)
+  ;; (list 2 4 1)
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
   (define unique (make-unique))
