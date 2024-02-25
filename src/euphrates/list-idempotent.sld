@@ -4,8 +4,8 @@
   (export list-idempotent)
   (import (only (euphrates debug) debug))
   (import
-    (only (euphrates list-reduce-pairwise)
-          list-reduce/pairwise))
+    (only (euphrates list-reduce-pairwise-left)
+          list-reduce/pairwise/left))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))

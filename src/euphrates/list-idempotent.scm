@@ -28,9 +28,10 @@
   ;; Best used together with `apply-until-fixpoint`.
   ;;
 
-  (list-reduce/pairwise
+  (list-reduce/pairwise/left
 
-   (lambda (direction x y)
+   (lambda (x y)
+     (define direction 'forward)
      (define result (pred x y))
      (define forward? (equal? direction 'forward))
      (define reverse? (equal? direction 'reverse))
