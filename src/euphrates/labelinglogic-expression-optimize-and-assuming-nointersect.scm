@@ -190,6 +190,20 @@
     (define new-args (list-reduce/pairwise default fun args))
     (labelinglogic:expression:make type new-args))
 
+  (define (consume-subsets expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
+    (define default (make-unique))
+    (define (fun expr-a expr-b)
+      (cond
+       ((to-be-consumed? expr-a expr-b) expr-b)
+       ((to-be-consumed? expr-b expr-a) expr-a)
+       (else default)))
+
+    (define new-args (list-reduce/pairwise default fun args))
+    (labelinglogic:expression:make type new-args))
+
   (define (handle-nulls expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
@@ -200,6 +214,7 @@
     (compose
      remove-idempotent
      narrow
+     consume-subsets
      handle-nulls
      explode-bottom
      remove-tops
