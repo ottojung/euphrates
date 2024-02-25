@@ -180,12 +180,16 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (define (fun expr-a expr-b)
-      (debug "~s, ~s" expr-a expr-b)
+    (define (base expr-a expr-b)
       (cond
        ((is-subset? expr-a expr-b) 'right)
        ((is-subset? expr-b expr-a) 'left)
        (else 'skip)))
+
+    (define (fun expr-a expr-b)
+      (define result (base expr-a expr-b))
+      (debug "~s, ~s -> ~s" expr-a expr-b result)
+      result)
 
     (define new-args (list-idempotent fun args))
     (labelinglogic:expression:make type new-args))
