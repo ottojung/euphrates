@@ -181,6 +181,8 @@
     (define args (labelinglogic:expression:args expr))
 
     (define (fun direction expr-a expr-b)
+      (debugs expr-a)
+      (debugs expr-b)
       (cond
        ((is-subset? expr-a expr-b)
         (if (equal? direction 'forward)
