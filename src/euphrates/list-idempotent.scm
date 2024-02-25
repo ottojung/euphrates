@@ -41,7 +41,7 @@
 
      (cond
       ((equal? result 'left)
-       (if forward? left-element (values)))
+       (if forward? left-element right-element))
       ((equal? result 'right)
        (if reverse? left-element (values)))
       ((equal? result 'skip) (values))
