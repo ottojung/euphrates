@@ -1,0 +1,29 @@
+
+(define-library
+  (euphrates list-idempotent-left)
+  (export list-idempotent/left)
+  (import
+    (only (euphrates list-idempotent)
+          list-idempotent))
+  (import
+    (only (euphrates list-or-map) list-or-map))
+  (import
+    (only (scheme base)
+          begin
+          car
+          cdr
+          cond
+          cons
+          define
+          else
+          lambda
+          let
+          null?
+          quote
+          reverse))
+  (cond-expand
+    (guile (import (only (guile) include-from-path))
+           (begin
+             (include-from-path
+               "euphrates/list-idempotent-left.scm")))
+    (else (include "list-idempotent-left.scm"))))
