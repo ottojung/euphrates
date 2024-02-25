@@ -27,7 +27,7 @@
 (assert= (list-reduce/pairwise
           (lambda (d x y) (if (string=? x "hello") 'present (values)))
           '("apple" "banana" "cherry" "hello" "apple"))
-         ' (        "banana" "cherry" present "apple"))
+         '(         "banana" "cherry" present "apple"))
 
 (assert= (list-reduce/pairwise (lambda (d x y) (if (= (modulo (+ x y) 2) 0) 0 (values))) '(1 2 3 4 5 6))
          (list 0 0 5 6))
