@@ -32,6 +32,11 @@
 
    (lambda (direction x y)
      (define result (pred x y))
+     (define forward? (equal? direction 'forward))
+     (define reverse? (equal? direction 'reverse))
+     (define x* (if forward? x y))
+     (define y* (if forward? x y))
+
      (cond
       ((equal? result 'left)
        (if (equal? direction 'forward)
