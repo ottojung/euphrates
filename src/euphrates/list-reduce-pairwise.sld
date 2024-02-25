@@ -21,6 +21,7 @@
           lambda
           let
           list->vector
+          make-parameter
           map
           not
           vector-copy
