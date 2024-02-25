@@ -31,9 +31,6 @@
   (define ignored (make-hashset))
   (define taken (make-hashset))
 
-  (define (unwrap-value result)
-    (if (null? result) (values #f #f) (apply values result)))
-
   (let loop ((x 0) (y 0))
     (when (< x n)
 

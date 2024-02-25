@@ -18,7 +18,6 @@
           =
           _
           and
-          apply
           begin
           call-with-values
           car
@@ -38,7 +37,6 @@
           null?
           quote
           reverse
-          values
           vector-copy
           vector-length
           vector-ref
