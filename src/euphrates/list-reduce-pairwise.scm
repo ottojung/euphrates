@@ -64,22 +64,17 @@
                         :args (list result x y lst)))))
 
             (cond
-             ((null? result)
-              (if (< y (- n 1))
-                  (loop x (+ 1 y))
-                  (loop (+ 1 x) (+ 1 x))))
+             ((null? result) 'pass)
              ((equal? direction 'forward)
               (vector-set! output x value)
               (hashset-add! taken x)
               (hashset-add! ignored x)
-              (hashset-add! ignored y)
-              (loop (+ 1 x) 0))
+              (hashset-add! ignored y))
              (else
               (vector-set! output y value)
               (hashset-add! taken y)
               (hashset-add! ignored x)
-              (hashset-add! ignored y)
-              (loop (+ 1 x) 0))))
+              (hashset-add! ignored y))))
 
           (if (< y (- n 1))
               (loop x (+ 1 y))
