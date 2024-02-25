@@ -6,11 +6,7 @@
   ;;   pred: a binary predicate function that defines an equivalence relation on the elements of `lst`
   ;;   lst: a list of elements to be processed
   ;;
-  ;; It compares each pair of elements `x, y` in `lst` and only keeps `x`, `y` or both of them,
-  ;; depending on the result of `pred`.
-  ;; If `(pred x y)` returns `'left`, then `x` is kept.
-  ;; If `(pred x y)` returns `'right`, then `y` is kept.
-  ;; If `(pred x y)` returns `'ski`, then both are kept.
+  ;; It compares each pair of elements `x, y` in `lst` and only keeps `x` if `(pred x y)` is true.
   ;;
   ;; This operation is related to the mathematical concept of idempotence in the context of set operations.
   ;; In set theory, idempotent operations such as union, intersection, or function composition do not change
