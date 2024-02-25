@@ -3,9 +3,6 @@
   (euphrates list-idempotent-left)
   (export list-idempotent/left)
   (import
-    (only (euphrates list-idempotent)
-          list-idempotent))
-  (import
     (only (euphrates list-or-map) list-or-map))
   (import
     (only (scheme base)
