@@ -38,19 +38,9 @@
      (define right-element (if forward? y x))
 
      (cond
-      ((equal? result 'left)
-       (if (equal? direction 'forward)
-           left-element
-           (values)))
-
-      ((equal? result 'right)
-       (if (equal? direction 'reverse)
-           right-element
-           (values)))
-
-      ((equal? result 'skip)
-       (values))
-
+      ((equal? result 'left) left-element)
+      ((equal? result 'right) right-element)
+      ((equal? result 'skip) (values))
       (else
        (raisu* :from "list-idempotent"
                :type 'bad-pred-value
