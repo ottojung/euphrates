@@ -187,8 +187,8 @@
       (cond
        ((is-subset? expr-a expr-b) 'right)
        ((is-subset? expr-b expr-a) 'left)
-       ((to-be-consumed? expr-a expr-b) expr-a)
-       ((to-be-consumed? expr-b expr-a) expr-b)
+       ((to-be-consumed? expr-a expr-b) 'left)
+       ((to-be-consumed? expr-b expr-a) 'right)
        (else 'skip)))
 
     (define (fun expr-a expr-b)
