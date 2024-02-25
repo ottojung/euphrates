@@ -65,11 +65,13 @@
                   (loop (+ 1 x) (+ 1 x))))
              ((equal? direction 'forward)
               (vector-set! output x value)
+              (hashset-add! ignored x)
               (hashset-add! ignored y)
               (loop (+ 1 x) (+ 1 x)))
              (else
               (vector-set! output y value)
               (hashset-add! ignored x)
+              (hashset-add! ignored y)
               (loop (+ 1 x) (+ 1 x)))))
 
           (if (< y (- n 1))
