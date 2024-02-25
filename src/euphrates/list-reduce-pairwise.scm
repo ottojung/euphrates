@@ -12,7 +12,6 @@
   ;; If the `projection` function a single values `x`, then the left element of the pair is replaced by `x`, and the right one is removed from the list.
   ;; If the `projection` function returns `(values)`, it skips the pair and moves to the next.
   ;; If the `projection` function returns a tuple `(values left? x)`, then depending on the (boolean) value of `left?`, either the left element of the pair is replaced by `x`, and the right is removed, or the right is replaced by `x` and the left is removed.
-  ;; If it effectively replaces the specified element in the output list and adds the other element to the `ignored` set.
   ;;
   ;; Note that the list provided as input is retained, and a new list is returned as output.
   ;; Additionally, the function is optimized for large lists by using vectors and hash sets to efficiently store and retrieve data.
