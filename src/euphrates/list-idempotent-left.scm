@@ -8,6 +8,9 @@
   ;;
   ;; It compares each pair of elements `x, y` in `lst` and only keeps `x`, `y` or both of them,
   ;; depending on the result of `pred`.
+  ;; If `(pred x y)` returns `'left`, then `x` is kept.
+  ;; If `(pred x y)` returns `'right`, then `y` is kept.
+  ;; If `(pred x y)` returns `'ski`, then both are kept.
   ;;
   ;; This operation is related to the mathematical concept of idempotence in the context of set operations.
   ;; In set theory, idempotent operations such as union, intersection, or function composition do not change
@@ -25,7 +28,7 @@
   ;; (list 1 2 4 1)
   ;; keeping only the first appearance of each number.
   ;;
-  ;; Note: this function is `list-deduplicate', but with a binary `pred' instead of a unary `identity'.
+  ;; Note: this function is `list-deduplicate', but with a binary `pred' instead of a unary `identity', and working one step at a time.
 
   (list-reduce/pairwise/left
    (lambda (x y) (if (pred x y) x (values)))
