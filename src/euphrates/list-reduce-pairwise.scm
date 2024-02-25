@@ -87,11 +87,6 @@
           (define left? #t)
           (values left? result))))
 
-  (define (is-right? result)
-    (and (list-reduce/pairwise/return? result)
-         (equal? token (list-reduce/pairwise/return:token result))
-         (equal? #f (list-reduce/pairwise/return:value result))))
-
   (parameterize ((list-reduce/pairwise/p token))
     (let loop ((x 0) (y 0))
       (when (< x n)
@@ -106,7 +101,7 @@
                             (vector-ref input y)))
 
               (cond
-               ((equal? result default-value)
+               ((is-default? result)
                 (if (< y (- n 1))
                     (loop x (+ 1 y))
                     (loop (+ 1 x) (+ 1 x))))
