@@ -171,10 +171,6 @@
     (define new-args (list-annihilate null-exprs? bottom args))
     (labelinglogic:expression:make type new-args))
 
-  (define (debugprint expr)
-    (debugs expr)
-    expr)
-
   (define optimize
     (compose
      remove-idempotent
@@ -182,7 +178,6 @@
      handle-nulls
      explode-bottom
      remove-tops
-     debugprint
      ))
 
   (unless (equal? type 'and)
