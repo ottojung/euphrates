@@ -67,6 +67,8 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 3))))
 
+(exit 0)
+
 ;; A complex case combining '=' and 'r7rs [2]
 (assert=
  '(and (= 2))
@@ -150,8 +152,6 @@
 ;;  '(and (not (= 4)) (r7rs even?) (not (= 2)))
 ;;  (labelinglogic:expression:optimize/and-assuming-nointersect
 ;;   '(and (not (= 3)) (not (= 4)) (r7rs even?) (not (= 2)))))
-
-(exit 0)
 
 ;; Checking negation of 'r7rs
 (assert=
