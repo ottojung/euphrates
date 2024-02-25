@@ -11,8 +11,7 @@
   ;;
   ;; The pairwise processing is interrupted immediately when an element in the pair has already been "processed" by the `projection` function, that is the element is in the `ignored` set.
   ;; If the `projection` function returns a tuple of `(values)`, it disregards this pair and moves to the next.
-  ;; If it returns a tuple of `(values x)`, where x is not a null value,
-  ;; the function applies the `projection` value to the first element of the pair in the 'forward' direction or the second element of the pair in the 'reverse' direction,
+  ;; If it returns just a single value `x`, he function applies the `projection` value to the first element of the pair in the 'forward' direction or the second element of the pair in the 'reverse' direction,
   ;; effectively replacing the specified element in the output list, and adds the pair to the `ignored` set.
   ;;
   ;; During this process, elements are never removed from the list, only replaced.
