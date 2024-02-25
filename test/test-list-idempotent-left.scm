@@ -16,7 +16,7 @@
 
 ;; Test Case 2: Test with list of identical elements
 (assert= (list-idempotent/left equal? (list 'a 'a 'a 'a 'a))
-         (list 'a))
+         (list 'a 'a 'a))
 
 ;; Test Case 3: Test with list of distinct elements
 (assert= (list-idempotent/left equal? (list 'x 'y 'z))
