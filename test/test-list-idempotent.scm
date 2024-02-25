@@ -2,6 +2,9 @@
 (define (equalp x y)
   (if (equal? x y) 'left 'skip))
 
+(define (greaterp x y)
+  (if (> x y) 'left 'skip))
+
 (assert= (list-idempotent equalp (list 1 2 1 4 1))
          (list 1 2 4 1))
 
@@ -26,7 +29,7 @@
          (list 'x 'y 'z))
 
 ;; Test Case 4: Test with numbers and greater-than predicate
-(assert= (list-idempotent > (list 5 4 3 6 2 7))
+(assert= (list-idempotent greaterp (list 5 4 3 6 2 7))
          (list 5 6 7))
 
 ;; Test Case 5: Test with case-insensitive string equality
