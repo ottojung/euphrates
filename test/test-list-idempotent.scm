@@ -27,6 +27,12 @@
           (list 1 2))
          (list 1))
 
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (< x y) 'right 'left))
+          (list 1 2))
+         (list 1))
+
 ;; Test Case 1: Test with empty list
 (assert= (list-idempotent equalp '())
          '())
