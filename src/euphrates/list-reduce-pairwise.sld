@@ -35,6 +35,7 @@
           not
           null?
           quote
+          reverse
           values
           vector-copy
           vector-length

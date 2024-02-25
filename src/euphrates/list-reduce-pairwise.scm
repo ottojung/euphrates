@@ -37,10 +37,14 @@
                (not (hashset-has? ignored x)))
 
           (let ()
+            (define direction
+              (if (< x y) 'forward 'reverse))
+
             (define result
               (call-with-values
                   list
-                (projection (vector-ref input x)
+                (projection direction
+                            (vector-ref input x)
                             (vector-ref input y))))
 
             (define value
