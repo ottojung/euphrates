@@ -11,7 +11,7 @@
   ;; The result list maintains the original structure but with some elements removed.
   ;;
   ;; Example usage:
-  ;; (list-annihilate equal? 'c (list 1 2 1 4 1))
+  ;; (list-annihilate equal? (list 1 2 1 4 1))
   ;; will return
   ;; (list 2 4 1)
   ;; removing all appearances of the elements that have been "annihilated".
