@@ -37,7 +37,17 @@
            x
            (values)))
 
-      
-     0)
+      ((equal? result 'right)
+       (if (equal? direction 'reverse)
+           x
+           (values)))
+
+      ((equal? result 'skip) 0)
+
+      (else
+       (raisu* :from "list-reduce/pairwise"
+               :type 'bad-number-of-values
+               :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
+               :args (list result x y lst)))))
 
    lst))

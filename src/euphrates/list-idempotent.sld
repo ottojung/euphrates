@@ -3,21 +3,24 @@
   (euphrates list-idempotent)
   (export list-idempotent)
   (import
-    (only (euphrates list-or-map) list-or-map))
+    (only (euphrates list-reduce-pairwise)
+          list-reduce/pairwise))
+  (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           begin
-          car
-          cdr
           cond
-          cons
           define
           else
+          equal?
+          if
           lambda
-          let
-          null?
+          length
+          list
           quote
-          reverse))
+          reverse
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
