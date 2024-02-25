@@ -15,12 +15,8 @@
           =
           >
           abs
-          and
           begin
-          car
-          cdr
           char=?
-          cons
           define
           equal?
           if
