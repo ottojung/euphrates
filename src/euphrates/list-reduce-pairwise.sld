@@ -5,7 +5,6 @@
   (import
     (only (euphrates hashset)
           hashset-add!
-          hashset-delete!
           hashset-has?
           make-hashset))
   (import (only (euphrates raisu-star) raisu*))
