@@ -18,7 +18,7 @@
   ;; repeatedly will yield the same list after the first application, as duplicate elements will have been removed.
   ;;
   ;; Example usage:
-  ;; (list-idempotent equal? (list 1 2 1 4 1))
+  ;; (list-idempotent (lambda (x y) (if (equal? x y) 'left 'skip)) (list 1 2 1 4 1))
   ;; will return
   ;; (list 1 2 4 1)
   ;; keeping only the first appearance of each number.
