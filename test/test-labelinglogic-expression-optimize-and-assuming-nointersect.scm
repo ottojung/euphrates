@@ -7,7 +7,7 @@
 
 ;; A complex case combining '=' and 'r7rs [6]
 (assert=
- '(or)
+ '(and (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (r7rs even?))))
 
