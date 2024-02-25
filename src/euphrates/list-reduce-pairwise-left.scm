@@ -22,6 +22,7 @@
   ;; (list-reduce/pairwise 'd (lambda (x y) (if (equal? x y) 'c 'd)) (list 'a 'a 'b 'b))
   ;; will return
   ;; (list 'c 'c), where 'c' replaces both 'a' and first 'b', and second 'b' is ignored.
+  ;;
 
   (define input (list->vector lst))
   (define output (vector-copy input))
