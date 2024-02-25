@@ -6,7 +6,14 @@
     (only (euphrates list-idempotent)
           list-idempotent))
   (import
-    (only (scheme base) < begin if lambda list quote))
+    (only (scheme base)
+          <
+          and
+          begin
+          if
+          lambda
+          number?
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
