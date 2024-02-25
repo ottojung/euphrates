@@ -5,6 +5,9 @@
 (define (greaterp x y)
   (if (> x y) 'left 'skip))
 
+(define (string-ci=p x y)
+  (if (string-ci=? x y) 'left 'skip))
+
 (assert= (list-idempotent equalp (list 1 2 1 4 1))
          (list 1 2 4 1))
 
@@ -34,11 +37,8 @@
 (assert= (list-idempotent greaterp (list 5 4 3 6 2 7))
          (list 5 3 6 7))
 
-(exit 0)
-
 ;; Test Case 5: Test with case-insensitive string equality
-(assert= (list-idempotent (lambda (x y) (string-ci=? x y))
-                          (list "hello" "HELLO" "world" "WORLD" "hello"))
+(assert= (list-idempotent string-ci=p (list "hello" "HELLO" "world" "WORLD" "hello"))
          (list "hello" "world" "hello"))
 
 ;; Test Case 6: Test with modulo predicate
