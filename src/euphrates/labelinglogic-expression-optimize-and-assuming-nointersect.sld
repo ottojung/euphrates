@@ -7,6 +7,8 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
+  (import
+    (only (euphrates cartesian-any-q) cartesian-any?))
   (import (only (euphrates compose) compose))
   (import
     (only (euphrates labelinglogic-expression-args)
@@ -28,9 +30,6 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
-  (import
-    (only (euphrates list-annihilate)
-          list-annihilate))
   (import
     (only (euphrates list-idempotent)
           list-idempotent))

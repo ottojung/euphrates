@@ -207,8 +207,9 @@
   (define (handle-nulls expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (define new-args (list-annihilate null-exprs? bottom args))
-    (labelinglogic:expression:make type new-args))
+    (if (cartesian-any? null-exprs? args args)
+        (labelinglogic:expression:make type (list bottom))
+        expr))
 
   (define optimize
     (compose
