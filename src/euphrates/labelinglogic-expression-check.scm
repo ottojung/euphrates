@@ -61,6 +61,15 @@
        (stringf
         "Expression of type ~s must have exactly 1 argument."
         (~a type))
+       (list x)))
+
+    (unless (procedure?
+             (labelinglogic:expression:compile/r7rs
+              (car args)))
+      (fail-expression-check
+       (stringf
+        "Expression of type ~s must compile to a R7RS scheme procedure."
+        (~a type))
        (list x))))
 
    (else
