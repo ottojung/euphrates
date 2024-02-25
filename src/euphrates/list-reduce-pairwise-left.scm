@@ -36,8 +36,7 @@
             (define result
               (call-with-values
                   (lambda _
-                    (projection direction
-                                (vector-ref input x)
+                    (projection (vector-ref input x)
                                 (vector-ref input y)))
                 list))
 
