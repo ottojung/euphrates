@@ -9,8 +9,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 0) (= 0))))
 
-(exit 0)
-
 (assert=
  '(and (= 0))
  (labelinglogic:expression:optimize/and-assuming-nointersect
@@ -330,3 +328,9 @@
  'expression-type-error
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '((tuple) (or))))
+
+;; Bad tuples.
+(assert=
+ 'expression-type-error
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple 1 2) (tuple 3 4))))
