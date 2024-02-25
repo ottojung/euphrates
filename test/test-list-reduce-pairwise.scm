@@ -8,7 +8,7 @@
          (list 'hit 'hit 'hit 7))
 
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (string=? x "hello") (values 'present) (values))) '("apple" "banana" "cherry" "hello" "apple"))
-         (list "apple" "banana" "cherry" 'present))
+         (list 'present "banana" "cherry" "apple"))
 
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (= (modulo x 2) 0) (values 2) (values))) '(1 2 3 4 5 6))
          (list 1 2 2 6))
