@@ -39,9 +39,9 @@
 
 ;; Different non-intersecting tuples
 (assert=
- '(and (tuple (= 1) (= 2)) (tuple 3 4))
+ '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (tuple (= 1) (= 2)) (tuple 3 4))))
+  '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))))
 
 ;; The same tuples
 (assert=
