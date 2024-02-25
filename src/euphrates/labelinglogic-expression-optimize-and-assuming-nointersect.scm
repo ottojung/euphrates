@@ -177,11 +177,11 @@
 
   (define optimize
     (compose
+     narrow
      remove-idempotent
      handle-nulls
      explode-bottom
      remove-tops
-     narrow
      debugprint
      ))
 
