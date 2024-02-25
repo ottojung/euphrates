@@ -40,7 +40,7 @@
 
       ((equal? result 'right)
        (if (equal? direction 'reverse)
-           x
+           y
            (values)))
 
       ((equal? result 'skip) 0)
