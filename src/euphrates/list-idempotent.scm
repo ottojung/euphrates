@@ -49,7 +49,7 @@
       (else
        (raisu* :from "list-idempotent"
                :type 'bad-pred-value
-               :message (stringf "Expected either 'left, 'right, or 'skip, but got '~a." result)
+               :message (stringf "Expected either 'left, 'right, or 'skip, but got ~s." (~a result))
                :args (list result direction x y lst)))))
 
    lst))
