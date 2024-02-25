@@ -188,10 +188,7 @@
        ((to-be-consumed? expr-b expr-a) 'right)
        (else 'skip)))
 
-    (debugs args)
     (define new-args (list-idempotent fun args))
-    (debugs new-args)
-
     (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)
