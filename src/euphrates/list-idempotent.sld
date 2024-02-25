@@ -2,7 +2,7 @@
 (define-library
   (euphrates list-idempotent)
   (export list-idempotent)
-  (import (only (euphrates debugs) debugs))
+  (import (only (euphrates debug) debug))
   (import
     (only (euphrates list-reduce-pairwise)
           list-reduce/pairwise))

@@ -37,7 +37,7 @@
      (define left-element (if forward? x y))
      (define right-element (if forward? y x))
 
-     (debugs reverse?)
+     (debug "x: ~s, y: ~s, rev: ~s" x y reverse?)
 
      (cond
       ((equal? result 'left)
