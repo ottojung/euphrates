@@ -5,8 +5,6 @@
 (assert= (list-idempotent equalp (list 1 2 1 4 1))
          (list 1 2 4 1))
 
-(exit 0)
-
 (assert= (list-idempotent (lambda (x y)
                             (or (= (remainder x y) 0)
                                 (= (remainder y x) 0)))
