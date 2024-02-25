@@ -25,7 +25,8 @@
           null?
           number?
           quote
-          string=?))
+          string=?
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
