@@ -18,17 +18,13 @@
   (define token (list-reduce/pairwise/p))
   (define left? #t)
   (make-list-reduce/pairwise/return
-   token
-   (make-list-reduce/pairwise/return
-    left? value)))
+   left? value))
 
 (define (list-reduce/pairwise/return-right value)
   (define token (list-reduce/pairwise/p))
   (define left? #f)
   (make-list-reduce/pairwise/return
-   token
-   (make-list-reduce/pairwise/return
-    left? value)))
+   left? value))
 
 
 (define (list-reduce/pairwise projection lst)
