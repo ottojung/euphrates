@@ -32,12 +32,12 @@
      (cond
       ((equal? result 'left)
        (if (equal? direction 'forward)
-           y
+           x
            (values)))
 
       ((equal? result 'right)
        (if (equal? direction 'reverse)
-           y
+           x
            (values)))
 
       ((equal? result 'skip)
