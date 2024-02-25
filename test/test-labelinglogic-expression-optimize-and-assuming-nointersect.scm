@@ -105,7 +105,7 @@
 
 ;; A complex case combining 'not =' and 'r7rs [1]
 (assert=
- '(or)
+ '(and (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (not (= 2)))))
 
