@@ -66,9 +66,8 @@
               (loop x (+ 1 y))
               (loop (+ 1 x) (+ 1 x))))))
 
-  (let ()
-    (define indexes
-      (filter (lambda (i) (not (hashset-has? ignored i)))
-              (range n)))
+  (define indexes
+    (filter (lambda (i) (not (hashset-has? ignored i)))
+            (range n)))
 
-    (map (lambda (i) (vector-ref output i)) indexes)))
+  (map (lambda (i) (vector-ref output i)) indexes))
