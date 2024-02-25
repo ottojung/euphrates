@@ -12,6 +12,7 @@
           <
           =
           >
+          and
           begin
           define
           equal?
@@ -19,6 +20,7 @@
           lambda
           list
           modulo
+          number?
           or
           quote
           remainder))

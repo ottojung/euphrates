@@ -39,6 +39,16 @@
           (list 1 2 3 4 5))
          (list 2 4 5))
 
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (and (number? x) (number? y)
+                     (< x y))
+                'left
+                'skip))
+
+          (list 1 2 3 4 5))
+         (list 2 4 5))
+
 ;; Test Case 1: Test with empty list
 (assert= (list-idempotent equalp '())
          '())
