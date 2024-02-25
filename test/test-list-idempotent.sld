@@ -22,7 +22,6 @@
           char=?
           cons
           define
-          eq?
           equal?
           if
           lambda
@@ -31,8 +30,7 @@
           or
           quote
           remainder
-          string-length
-          string=?))
+          string-length))
   (import (only (scheme char) string-ci=?))
   (cond-expand
     (guile (import (only (guile) include-from-path))

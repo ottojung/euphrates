@@ -57,15 +57,15 @@
          (list (list 'a 'b) (list 'c 'd)))
 
 ;; Test Case 9: Test with a list of strings
-(assert= (list-idempotent string=? (list "foo" "bar" "foo" "baz"))
+(assert= (list-idempotent string-ci=p (list "foo" "bar" "foo" "baz"))
          (list "foo" "bar" "baz"))
 
 ;; Test Case 10: Test with a list of booleans
-(assert= (list-idempotent eq? (list #t #t #f #f #t))
+(assert= (list-idempotent equalp (list #t #t #f #f #t))
          (list #t #f #t))
 
 ;; Test Case 11: Test with many different types in the list
-(assert= (list-idempotent eq? (list 1 "two" 'three 1 "two" 'three 'four))
+(assert= (list-idempotent equalp (list 1 "two" 'three 1 "two" 'three 'four))
          (list 1 "two" 'three 'four))
 
 ;; Test Case 12: Test with nested lists and deep equality
@@ -86,7 +86,7 @@
          (list "hi" "there" "bye" "world"))
 
 ;; Test Case 16: Test with custom comparator for pairs
-(assert= (list-idempotent (lambda (x y) (and (eq? (car x) (car y)) (eq? (cdr x) (cdr y))))
+(assert= (list-idempotent (lambda (x y) (and (equalp (car x) (car y)) (equalp (cdr x) (cdr y))))
                           (list (cons 'a 1) (cons 'b 2) (cons 'a 1)))
          (list (cons 'a 1) (cons 'b 2)))
 
