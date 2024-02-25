@@ -74,10 +74,18 @@
          (equal? token (list-reduce/pairwise/return:token result))
          (equal? #f (list-reduce/pairwise/return:value result))))
 
-  (define (is-left? result)
-    (and (list-reduce/pairwise/return? result)
-         (equal? token (list-reduce/pairwise/return:token result))
-         (equal? #f (list-reduce/pairwise/return:value result))))
+  (define (unwrap-value result)
+    (if (and (list-reduce/pairwise/return? result)
+             (equal? token (list-reduce/pairwise/return:token result)))
+
+        (let ()
+          (define val (list-reduce/pairwise/return:value result))
+          (values (list-reduce/pairwise/return-value:left? val)
+                  (list-reduce/pairwise/return-value:value val)))
+
+        (let ()
+          (define left? #t)
+          (values left? result))))
 
   (define (is-right? result)
     (and (list-reduce/pairwise/return? result)
