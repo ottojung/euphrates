@@ -35,8 +35,8 @@
 
 (assert= (list-idempotent
           (lambda (x y)
-            (if (< y x) 'left 'right))
-          (list 1 2))
+            (if (< x y) 'right 'left))
+          (list 1 2 3))
          (list 1 2))
 
 ;; Test Case 1: Test with empty list
