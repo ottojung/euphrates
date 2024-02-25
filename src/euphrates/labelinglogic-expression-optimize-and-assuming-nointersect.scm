@@ -184,10 +184,10 @@
       (debug "~s, ~s" expr-a expr-b)
       (cond
        ((is-subset? expr-a expr-b)
-        (if (equal? direction 'forward)
+        (if (equal? direction 'reverse)
             expr-b (values)))
        ((is-subset? expr-b expr-a)
-        (if (equal? direction 'reverse)
+        (if (equal? direction 'forward)
             expr-a (values)))
        (else (values))))
 
