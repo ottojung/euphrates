@@ -39,9 +39,11 @@
 
      (cond
       ((equal? result 'left)
-       (if forward? left-element (values)))
+       left-element)
+       ;; (if forward? left-element (values)))
       ((equal? result 'right)
-       (if forward? right-element (values)))
+       right-element)
+       ;; (if forward? right-element (values)))
       ((equal? result 'skip) (values))
       (else
        (raisu* :from "list-idempotent"
