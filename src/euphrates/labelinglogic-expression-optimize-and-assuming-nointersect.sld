@@ -40,9 +40,6 @@
           list-idempotent))
   (import
     (only (euphrates list-or-map) list-or-map))
-  (import
-    (only (euphrates list-reduce-pairwise)
-          list-reduce/pairwise))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
@@ -64,8 +61,7 @@
           null?
           or
           quote
-          unless
-          values))
+          unless))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))

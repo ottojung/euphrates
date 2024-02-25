@@ -177,6 +177,9 @@
     (labelinglogic:expression:make type new-args))
 
   (define (narrow expr)
+    expr)
+
+  (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
@@ -184,6 +187,8 @@
       (cond
        ((is-subset? expr-a expr-b) 'right)
        ((is-subset? expr-b expr-a) 'left)
+       ((to-be-consumed? expr-a expr-b) expr-a)
+       ((to-be-consumed? expr-b expr-a) expr-b)
        (else 'skip)))
 
     (define (fun expr-a expr-b)
@@ -195,19 +200,6 @@
     (define new-args (list-idempotent fun args))
     (debugs new-args)
 
-    (labelinglogic:expression:make type new-args))
-
-  (define (consume-subsets expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
-    (define (fun direction expr-a expr-b)
-      (cond
-       ((to-be-consumed? expr-a expr-b) expr-a)
-       ((to-be-consumed? expr-b expr-a) expr-b)
-       (else (values))))
-
-    (define new-args (list-reduce/pairwise fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)
