@@ -46,8 +46,8 @@
                 'left
                 'skip))
 
-          (list 1 2 3 4 5))
-         (list 2 4 5))
+          '(a b 2 c d 3 e f))
+         '(2 4 5))
 
 ;; Test Case 1: Test with empty list
 (assert= (list-idempotent equalp '())
