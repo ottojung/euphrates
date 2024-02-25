@@ -4,12 +4,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and)))
 
-(exit 0)
-
 (assert=
  '(and (= 0))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 0) (= 0))))
+
+(exit 0)
 
 (assert=
  '(and (= 0))
