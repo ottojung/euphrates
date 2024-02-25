@@ -17,12 +17,15 @@
   ;; (list 'c 2 4 1)
   ;; replacing all appearances of the elements that have been "annihilated" with 'c.
 
-  (define default-value (make-unique))
-
-  (list-reduce/pairwise
-   default-value
-   (lambda (x y)
-     (if (pred x y)
-         constant
-         default-value))
-   lst))
+  (define unique (make-unique))
+  (define replaced
+    (list-reduce/pairwise/left
+     (lambda (x y)
+       (if (pred x y)
+           unique
+           (values)))
+     lst))
+  (define filtered
+    (filter (lambda (x) (not (equal? x unique)))
+            replaced))
+  filtered)
