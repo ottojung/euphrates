@@ -27,11 +27,11 @@
 ;;           (list 1 2))
 ;;          (list 1))
 
-;; (assert= (list-idempotent
-;;           (lambda (x y)
-;;             (if (< x y) 'right 'left))
-;;           (list 1 2))
-;;          (list 2))
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (< x y) 'right 'left))
+          (list 1 2))
+         (list 2))
 
 ;; (assert= (list-idempotent
 ;;           (lambda (x y)
@@ -57,7 +57,7 @@
 ;;                 'skip))
 
 ;;           '(a b 2 c d 3 e f))
-;;          '())
+;;          'todo)
 
 ;; ;; Test Case 1: Test with empty list
 ;; (assert= (list-idempotent equalp '())
