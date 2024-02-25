@@ -191,7 +191,10 @@
       (debug "~s, ~s -> ~s" expr-a expr-b result)
       result)
 
+    (debugs args)
     (define new-args (list-idempotent fun args))
+    (debugs new-args)
+
     (labelinglogic:expression:make type new-args))
 
   (define (consume-subsets expr)
