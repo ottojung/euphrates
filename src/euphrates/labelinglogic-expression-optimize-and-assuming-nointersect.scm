@@ -154,7 +154,15 @@
   (define (narrow expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (define new-args (list-reduce-pairwise #f narrow/reduce args))
+
+    (define default (make-unique))
+    (define (fun expr-a expr-b)
+      (cond
+       ((is-subset? expr-a expr-b) expr-b)
+       ((is-subset? expr-b expr-a) expr-a)
+       (else default)))
+
+    (define new-args (list-reduce-pairwise default fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)

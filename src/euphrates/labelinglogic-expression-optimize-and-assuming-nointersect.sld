@@ -37,6 +37,8 @@
           list-idempotent))
   (import
     (only (euphrates list-or-map) list-or-map))
+  (import
+    (only (euphrates make-unique) make-unique))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
@@ -47,7 +49,9 @@
           and
           begin
           car
+          cond
           define
+          else
           equal?
           for-each
           if
