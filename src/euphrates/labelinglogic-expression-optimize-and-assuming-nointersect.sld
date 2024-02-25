@@ -60,7 +60,6 @@
           null?
           or
           quote
-          reverse
           unless
           values))
   (cond-expand

@@ -183,12 +183,12 @@
     (define (fun direction expr-a expr-b)
       (debug "~s, ~s" expr-a expr-b)
       (cond
-       ((is-subset? expr-a expr-b)
-        (if (equal? direction 'reverse)
-            expr-b (values)))
-       ((is-subset? expr-b expr-a)
-        (if (equal? direction 'forward)
-            expr-a (values)))
+       ;; ((is-subset? expr-a expr-b)
+       ;;  (if (equal? direction 'reverse)
+       ;;      expr-b (values)))
+       ;; ((is-subset? expr-b expr-a)
+       ;;  (if (equal? direction 'forward)
+       ;;      expr-a (values)))
        (else (values))))
 
     (define new-args (list-reduce/pairwise fun args))
