@@ -1,16 +1,4 @@
 
-;; ;; A complex case combining '=' and 'r7rs [5]
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (r7rs even?) (= 2) (= 4))))
-
-;; ;; A complex case combining '=' and 'r7rs [6]
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (r7rs even?) (= 2) (= 4))))
-
 (assert=
  '(and)
  (labelinglogic:expression:optimize/and-assuming-nointersect
@@ -102,6 +90,12 @@
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 2) (= 4))))
+
+;; A complex case combining '=' and 'r7rs [5]
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 4) (r7rs even?) (= 2))))
 
 ;; Checking negation of 'r7rs
 (assert=
