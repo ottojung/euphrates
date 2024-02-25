@@ -29,7 +29,7 @@
 ;; Test Case 5: Test with case-insensitive string equality
 (assert= (list-idempotent/left (lambda (x y) (string-ci=? x y))
                           (list "hello" "HELLO" "world" "WORLD" "hello"))
-         (list "hello" "world"))
+         (list "hello" "world" "hello"))
 
 ;; Test Case 6: Test with modulo predicate
 (assert= (list-idempotent/left (lambda (x y) (= (modulo x 10) (modulo y 10)))
