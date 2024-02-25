@@ -79,28 +79,3 @@
 ;; Test Case 14: Test where the predicate is always true
 (assert= (list-idempotent (lambda (x y) 'left) (list 1 2 3 1 2 3))
          (list 1 3 2))
-
-(exit 0)
-
-;; Test Case 15: Test with custom predicate comparing lengths of strings
-(assert= (list-idempotent (lambda (x y) (= (string-length x) (string-length y)))
-                          (list "hi" "there" "hello" "bye" "world"))
-         (list "hi" "there" "bye" "world"))
-
-;; Test Case 17: Test with function composition as predicate
-(assert= (list-idempotent (lambda (x y) (if (= (* 2 x) y) 'left 'skip))
-                          (list 1 2 3 4 5 6 7 8))
-         (list 1 3 4 5 7))
-
-;; Test Case 18: Test with real numbers and tolerance on equality
-(assert= (list-idempotent (lambda (x y) (< (abs (- x y)) 0.1))
-                          (list 1.0 1.05 1.1 2.0 2.05 3.0))
-         (list 1.0 1.1 2.0 3.0))
-
-;; Test Case 19: Test with characters
-(assert= (list-idempotent char=? (list #\a #\b #\a #\c #\b #\c))
-         (list #\a #\b #\c))
-
-;; Test Case 20: Test with mixed list (numbers and strings)
-(assert= (list-idempotent equalp (list 1 "1" 2 "2" 1 "1"))
-         (list 1 "1" 2 "2"))

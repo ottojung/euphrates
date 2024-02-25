@@ -9,14 +9,9 @@
           list-idempotent))
   (import
     (only (scheme base)
-          *
-          -
-          <
           =
           >
-          abs
           begin
-          char=?
           define
           equal?
           if
@@ -25,10 +20,8 @@
           modulo
           or
           quote
-          remainder
-          string-length))
+          remainder))
   (import (only (scheme char) string-ci=?))
-  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
