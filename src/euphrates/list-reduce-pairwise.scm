@@ -68,12 +68,14 @@
               (hashset-add! ignored x)
               (hashset-add! ignored y)
               (hashset-add! taken x)
+              (hashset-delete! taken y)
               (loop (+ 1 x) (+ 1 x)))
              (else
               (vector-set! output y value)
               (hashset-add! ignored x)
               (hashset-add! ignored y)
               (hashset-add! taken y)
+              (hashset-delete! taken x)
               (loop (+ 1 x) (+ 1 x)))))
 
           (if (< y (- n 1))
