@@ -7,7 +7,9 @@
           hashset-add!
           hashset-has?
           make-hashset))
+  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates range) range))
+  (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           +
@@ -19,17 +21,20 @@
           begin
           call-with-values
           car
+          cdr
           cond
           define
           else
           if
           lambda
+          length
           let
           list
           list->vector
           map
           not
           null?
+          quote
           values
           vector-copy
           vector-length

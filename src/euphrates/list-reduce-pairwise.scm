@@ -43,7 +43,15 @@
                 (projection (vector-ref input x)
                             (vector-ref input y))))
 
-            (define value (if (null? result) #f (car result)))
+            (define value
+              (cond
+               ((null? result) #f)
+               ((null? (cdr result)) (car result))
+               (else
+                (raisu* :from "list-reduce/pairwise"
+                        :type 'bad-number-of-values
+                        :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
+                        :args (list result)))))
 
             (cond
              ((null? result)
