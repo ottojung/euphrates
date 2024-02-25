@@ -18,6 +18,7 @@
           apply
           begin
           call-with-values
+          car
           cond
           define
           else

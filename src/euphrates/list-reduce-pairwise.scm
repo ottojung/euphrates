@@ -43,17 +43,19 @@
                 (projection (vector-ref input x)
                             (vector-ref input y))))
 
+            (define value (if (null? result) #f (car result)))
+
             (cond
              ((null? result)
               (if (< y (- n 1))
                   (loop x (+ 1 y))
                   (loop (+ 1 x) (+ 1 x))))
              (left?
-              (vector-set! output x result)
+              (vector-set! output x value)
               (hashset-add! ignored y)
               (loop (+ 1 x) (+ 1 x)))
              (else
-              (vector-set! output y result)
+              (vector-set! output y value)
               (hashset-add! ignored x)
               (loop (+ 1 x) (+ 1 x)))))
 
