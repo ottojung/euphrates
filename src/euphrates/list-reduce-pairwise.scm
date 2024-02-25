@@ -28,11 +28,6 @@
   (define n (vector-length input))
   (define ignored (make-hashset))
 
-  (define (is-default? result)
-    (and (list-reduce/pairwise/return? result)
-         (equal? token (list-reduce/pairwise/return:token result))
-         (equal? #f (list-reduce/pairwise/return:value result))))
-
   (define (unwrap-value result)
     (if (null? result) (values #f #f) (apply values result)))
 

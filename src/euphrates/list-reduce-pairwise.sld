@@ -21,7 +21,6 @@
           define
           define-values
           else
-          equal?
           if
           lambda
           let
