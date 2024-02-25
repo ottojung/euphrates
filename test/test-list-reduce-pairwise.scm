@@ -4,13 +4,8 @@
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (equal? x y) (values 'found) (values))) '(a a b b))
          (list 'found 'found))
 
-(assert= (list-reduce/pairwise (lambda (direction x y) (if (and (equal? direction 'forward) (> x 2)) (values 'hit) (values))) '(1 2 3 4 5 6 7))
-         (list 1 2 'hit 'hit 7))
-
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (> x 2) (values 'hit) (values))) '(1 2 3 4 5 6 7))
          (list 'hit 'hit 'hit 7))
-
-(exit 0)
 
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (string=? x "hello") (values 'present) (values))) '("apple" "banana" "cherry" "hello" "apple"))
          (list "apple" "banana" "cherry" 'present))
@@ -49,3 +44,6 @@
 ;; Test with a list of different types of pairs and `equal` predicate
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (equal? x y) (values 'match) (values))) '((1 . 2) "pair" (1 . 2) "not pair" (1 . 2)))
          (list 'match "pair" "not pair" (cons 1 2)))
+
+(assert= (list-reduce/pairwise (lambda (direction x y) (if (and (equal? direction 'forward) (> x 2)) (values 'hit) (values))) '(1 2 3 4 5 6 7))
+         (list 1 2 'hit 'hit 7))
