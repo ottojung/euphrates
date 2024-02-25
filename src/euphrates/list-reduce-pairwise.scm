@@ -41,6 +41,7 @@
    (make-list-reduce/pairwise/return-value
     left? value)))
 
+
 (define (list-reduce/pairwise projection lst)
   ;; The `list-reduce/pairwise` function takes three arguments:
   ;;   default-value: a unique value not expected to be in the list or result from the projection function
