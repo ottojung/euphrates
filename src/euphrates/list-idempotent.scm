@@ -32,7 +32,7 @@
      (cond
       ((equal? result 'left)
        (if (equal? direction 'forward)
-           x
+           y
            (values)))
 
       ((equal? result 'right)
