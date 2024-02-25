@@ -53,6 +53,26 @@
           (lambda (x y)
             (if (and (number? x) (number? y)
                      (< x y))
+                'left
+                'skip))
+
+          '(2 x 3))
+         '(2 x))
+
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (and (number? x) (number? y)
+                     (< x y))
+                'right
+                'skip))
+
+          '(a b 2 c d 3 e f))
+         '(a b 2 c d e f))
+
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (and (number? x) (number? y)
+                     (< x y))
                 'right
                 'skip))
 
