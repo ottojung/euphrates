@@ -57,7 +57,7 @@
                 'skip))
 
           '(2 x 3))
-         'todo)
+         '(x 3))
 
 ;; (assert= (list-idempotent
 ;;           (lambda (x y)
