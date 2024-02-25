@@ -34,8 +34,22 @@
                (not (hashset-has? ignored x)))
           (let ()
             (define result
-              (projection (vector-ref input x)
-                          (vector-ref input y)))
+              (call-with-values
+                  (lambda _
+                    (projection direction
+                                (vector-ref input x)
+                                (vector-ref input y)))
+                list))
+
+            (define value
+              (cond
+               ((null? result) #f)
+               ((null? (cdr result)) (car result))
+               (else
+                (raisu* :from "list-reduce/pairwise"
+                        :type 'bad-number-of-values
+                        :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
+                        :args (list result x y lst)))))
 
             (if (equal? result default-value)
                 (if (< y (- n 1))
