@@ -18,7 +18,7 @@
   ;; Additionally, the function is optimized for large lists by using vectors and hash sets to efficiently store and retrieve data.
   ;;
   ;; For example:
-  ;; (list-reduce/pairwise (lambda (x y) (if (equal? x y) (values #f 'c))) (list 'a 'a 'b 'b))
+  ;; (list-reduce/pairwise (lambda (x y) (if (equal? x y) 'c)) (list 'a 'a 'b 'b))
   ;; will return
   ;; (list 'c 'c), where 'c' replaces both 'a' and first 'b', and second 'b' is ignored.
   ;;
