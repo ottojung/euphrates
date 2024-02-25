@@ -41,7 +41,7 @@
       ((equal? result 'left)
        (if forward? left-element (values)))
       ((equal? result 'right)
-       (if reverse? right-element (values)))
+       (if forward? right-element (values)))
       ((equal? result 'skip) (values))
       (else
        (raisu* :from "list-idempotent"
