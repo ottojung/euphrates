@@ -151,10 +151,10 @@
     (define new-args (list-idempotent labelinglogic:expression:syntactic-equal? args))
     (labelinglogic:expression:make type new-args))
 
-  (define (consume-subsets expr)
+  (define (narrow expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (define new-args (list-idempotent is-subset? args))
+    (define new-args (list-reduce-pairwise #f narrow/reduce args))
     (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)
@@ -170,7 +170,7 @@
   (define optimize
     (compose
      remove-idempotent
-     consume-subsets
+     narrow
      handle-nulls
      explode-bottom
      remove-tops
