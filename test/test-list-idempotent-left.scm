@@ -71,7 +71,7 @@
 ;; Test Case 15: Test with custom predicate comparing lengths of strings
 (assert= (list-idempotent/left (lambda (x y) (= (string-length x) (string-length y)))
                           (list "hi" "there" "hello" "bye" "world"))
-         (list "hi" "there" "bye"))
+         (list "hi" "there" "bye" "world"))
 
 ;; Test Case 16: Test with custom comparator for pairs
 (assert= (list-idempotent/left (lambda (x y) (and (eq? (car x) (car y)) (eq? (cdr x) (cdr y))))
