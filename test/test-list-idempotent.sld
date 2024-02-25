@@ -9,6 +9,7 @@
           list-idempotent))
   (import
     (only (scheme base)
+          <
           =
           >
           begin

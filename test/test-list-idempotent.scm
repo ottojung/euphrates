@@ -21,6 +21,12 @@
 
 (assert-throw #t (list-idempotent 0 1)) ;; type error
 
+(assert= (list-idempotent
+          (lambda (x y)
+            (if (< x y) 'left 'right))
+          (list 1 2 1 4 1))
+         (list 1 2 4 1))
+
 ;; Test Case 1: Test with empty list
 (assert= (list-idempotent equalp '())
          '())
