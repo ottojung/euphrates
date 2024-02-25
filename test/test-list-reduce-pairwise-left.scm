@@ -24,7 +24,7 @@
          (list))
 
 ;; Test list with a single element
-(assert= (list-reduce/pairwise/left (lambda _ (values)) (list'only-ele))
+(assert= (list-reduce/pairwise/left (lambda _ (values)) (list 'only-ele))
          (list 'only-ele))
 
 ;; Test list with duplicates
