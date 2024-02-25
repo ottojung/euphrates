@@ -7,9 +7,6 @@
           hashset-add!
           hashset-has?
           make-hashset))
-  (import
-    (only (euphrates list-reduce-pairwise)
-          list-reduce/pairwise))
   (import (only (euphrates range) range))
   (import
     (only (scheme base)
