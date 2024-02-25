@@ -20,6 +20,8 @@
   ;; will return
   ;; (list 'c 'c), where 'c' replaces both 'a' and first 'b', and second 'b' is ignored.
   ;;
+  ;; Best used together with `apply-until-fixpoint`.
+  ;;
 
   (define input (list->vector lst))
   (define output (vector-copy input))
