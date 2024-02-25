@@ -75,19 +75,21 @@
       (if (and (< x y)
                (not (hashset-has? ignored y))
                (not (hashset-has? ignored x)))
+
           (let ()
             (define result
               (projection (vector-ref input x)
                           (vector-ref input y)))
 
-            (if (equal? result default-value)
-                (if (< y (- n 1))
-                    (loop x (+ 1 y))
-                    (loop (+ 1 x) (+ 1 x)))
-                (begin
-                  (vector-set! output x result)
-                  (hashset-add! ignored y)
-                  (loop (+ 1 x) (+ 1 x)))))
+            (cond
+             ((equal? result default-value)
+              (if (< y (- n 1))
+                  (loop x (+ 1 y))
+                  (loop (+ 1 x) (+ 1 x)))
+              (else
+               (vector-set! output x result)
+               (hashset-add! ignored y)
+               (loop (+ 1 x) (+ 1 x))))))
 
           (if (< y (- n 1))
               (loop x (+ 1 y))

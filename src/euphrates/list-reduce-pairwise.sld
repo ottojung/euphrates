@@ -19,7 +19,9 @@
           <
           and
           begin
+          cond
           define
+          else
           equal?
           if
           lambda
