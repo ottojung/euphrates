@@ -1,19 +1,7 @@
 
 (define-library
   (test-list-idempotent)
-  (import (only (euphrates assert-equal) assert=))
-  (import
-    (only (euphrates list-idempotent)
-          list-idempotent))
-  (import
-    (only (scheme base)
-          <
-          and
-          begin
-          if
-          lambda
-          number?
-          quote))
+  (import (only (scheme base) begin))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
