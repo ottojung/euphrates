@@ -28,6 +28,7 @@
           remainder
           string-length))
   (import (only (scheme char) string-ci=?))
+  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

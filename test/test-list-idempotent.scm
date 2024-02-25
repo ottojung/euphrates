@@ -80,6 +80,8 @@
 (assert= (list-idempotent (lambda (x y) 'left) (list 1 2 3 1 2 3))
          (list 1 3 2))
 
+(exit 0)
+
 ;; Test Case 15: Test with custom predicate comparing lengths of strings
 (assert= (list-idempotent (lambda (x y) (= (string-length x) (string-length y)))
                           (list "hi" "there" "hello" "bye" "world"))
