@@ -41,7 +41,7 @@
    (make-list-reduce/pairwise/return-value
     left? value)))
 
-(define (list-reduce/pairwise default-value projection lst)
+(define (list-reduce/pairwise projection lst)
   ;; The `list-reduce/pairwise` function takes three arguments:
   ;;   default-value: a unique value not expected to be in the list or result from the projection function
   ;;   projection: a binary function applied to each pair of elements in the list
@@ -67,6 +67,7 @@
   (define output (vector-copy input))
   (define n (vector-length input))
   (define ignored (make-hashset))
+  (define token (make-unique))
 
   (let loop ((x 0) (y 0))
     (when (< x n)

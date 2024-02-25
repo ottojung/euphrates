@@ -9,6 +9,8 @@
           hashset-add!
           hashset-has?
           make-hashset))
+  (import
+    (only (euphrates make-unique) make-unique))
   (import (only (euphrates range) range))
   (import
     (only (scheme base)
