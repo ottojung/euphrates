@@ -57,7 +57,6 @@
   (define output (vector-copy input))
   (define n (vector-length input))
   (define ignored (make-hashset))
-  (define token (make-unique))
 
   (define (is-default? result)
     (and (list-reduce/pairwise/return? result)
@@ -77,39 +76,38 @@
           (define left? #t)
           (values left? result))))
 
-  (parameterize ((list-reduce/pairwise/p token))
-    (let loop ((x 0) (y 0))
-      (when (< x n)
+  (let loop ((x 0) (y 0))
+    (when (< x n)
 
-        (if (and (< x y)
-                 (not (hashset-has? ignored y))
-                 (not (hashset-has? ignored x)))
+      (if (and (< x y)
+               (not (hashset-has? ignored y))
+               (not (hashset-has? ignored x)))
 
-            (let ()
-              (define result
-                (projection (vector-ref input x)
-                            (vector-ref input y)))
+          (let ()
+            (define result
+              (projection (vector-ref input x)
+                          (vector-ref input y)))
 
-              (define-values (left? value)
-                (unwrap-value result))
+            (define-values (left? value)
+              (unwrap-value result))
 
-              (cond
-               ((is-default? result)
-                (if (< y (- n 1))
-                    (loop x (+ 1 y))
-                    (loop (+ 1 x) (+ 1 x))))
-               (left?
-                (vector-set! output x result)
-                (hashset-add! ignored y)
-                (loop (+ 1 x) (+ 1 x)))
-               (else
-                (vector-set! output y result)
-                (hashset-add! ignored x)
-                (loop (+ 1 x) (+ 1 x)))))
+            (cond
+             ((is-default? result)
+              (if (< y (- n 1))
+                  (loop x (+ 1 y))
+                  (loop (+ 1 x) (+ 1 x))))
+             (left?
+              (vector-set! output x result)
+              (hashset-add! ignored y)
+              (loop (+ 1 x) (+ 1 x)))
+             (else
+              (vector-set! output y result)
+              (hashset-add! ignored x)
+              (loop (+ 1 x) (+ 1 x)))))
 
-            (if (< y (- n 1))
-                (loop x (+ 1 y))
-                (loop (+ 1 x) (+ 1 x)))))))
+          (if (< y (- n 1))
+              (loop x (+ 1 y))
+              (loop (+ 1 x) (+ 1 x))))))
 
   (define indexes
     (filter (lambda (i) (not (hashset-has? ignored i)))

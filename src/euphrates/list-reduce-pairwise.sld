@@ -9,8 +9,6 @@
           hashset-add!
           hashset-has?
           make-hashset))
-  (import
-    (only (euphrates make-unique) make-unique))
   (import (only (euphrates range) range))
   (import
     (only (scheme base)
@@ -28,10 +26,8 @@
           lambda
           let
           list->vector
-          make-parameter
           map
           not
-          parameterize
           values
           vector-copy
           vector-length
