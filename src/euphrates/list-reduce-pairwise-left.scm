@@ -51,12 +51,12 @@
                         :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
                         :args (list result x y lst)))))
 
-            (if (equal? result default-value)
+            (if (null? result)
                 (if (< y (- n 1))
                     (loop x (+ 1 y))
                     (loop (+ 1 x) (+ 1 x)))
                 (begin
-                  (vector-set! output x result)
+                  (vector-set! output x value)
                   (hashset-add! ignored y)
                   (loop (+ 1 x) (+ 1 x)))))
 
