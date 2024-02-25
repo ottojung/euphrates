@@ -20,11 +20,14 @@
   (define args
     (labelinglogic:expression:args x))
 
+  (define (recurse args)
+    (for-each labelinglogic:expression:check args))
+
   (cond
    ((equal? type 'constant) 'ok)
-   ((equal? 'or type) 'ok) ;; any arity is ok.
-   ((equal? 'and type) 'ok) ;; any arity is ok.
-   ((equal? 'xor type) 'ok) ;; any arity is ok.
+   ((equal? 'or type) (recurse args)) ;; any arity is ok.
+   ((equal? 'and type) (recurse args)) ;; any arity is ok.
+   ((equal? 'xor type) (recurse args)) ;; any arity is ok.
 
    ((equal? 'tuple type)
     (unless (list-length=<? 1 args)
@@ -33,7 +36,7 @@
         "Expression of type ~s must have at least 1 argument."
         (~a type))
        (list x)))
-    (for-each labelinglogic:expression:check args))
+    (recurse args))
 
    ((equal? 'not type)
     (unless (list-length= 1 args)
@@ -42,7 +45,7 @@
         "Expression of type ~s must have exactly 1 argument."
         (~a type))
        (list x)))
-    (for-each labelinglogic:expression:check args))
+    (recurse args))
 
    ((equal? '= type)
     (unless (list-length= 1 args)
