@@ -3,28 +3,21 @@
   (test-list-idempotent)
   (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates assert-throw) assert-throw))
-  (import
     (only (euphrates list-idempotent)
           list-idempotent))
   (import
     (only (scheme base)
           <
           =
-          >
           and
           begin
-          define
-          equal?
           if
           lambda
           list
           modulo
           number?
-          or
-          quote
-          remainder))
-  (import (only (scheme char) string-ci=?))
+          quote))
+  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
