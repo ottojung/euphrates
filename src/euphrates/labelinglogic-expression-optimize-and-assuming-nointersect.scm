@@ -116,10 +116,10 @@
     (define inner-tuple-a? (equal? 'tuple inner-type-a))
     (define inner-tuple-b? (equal? 'tuple inner-type-b))
 
-    (or (and (equal? type-a 'r7rs)
-             (equal? type-b '=)
-             (labelinglogic:expression:evaluate/r7rs
-              expr-a (car args-b)))
+    (and (equal? type-a 'r7rs)
+         (equal? type-b '=)
+         (labelinglogic:expression:evaluate/r7rs
+          expr-a (car args-b))))
 
         (and (equal? type-b 'r7rs)
              (equal? type-a 'not)
