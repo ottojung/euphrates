@@ -1,3 +1,4 @@
+
 (assert= (list-reduce/pairwise (lambda (direction x y) (if (equal? x y) (values 'found) (values))) '(a a b b))
          (list 'found 'found))
 
