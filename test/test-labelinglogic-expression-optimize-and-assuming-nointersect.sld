@@ -18,7 +18,6 @@
           equal?
           even?
           integer?
-          let
           negative?
           not
           odd?
