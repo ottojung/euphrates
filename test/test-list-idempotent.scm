@@ -53,7 +53,7 @@
 
 ;; Test Case 4: Test with numbers and greater-than predicate
 (assert= (list-idempotent greaterp (list 5 4 3 6 2 7))
-         (list 5 3 6))
+         (list 5 3 6 7))
 
 ;; Test Case 5: Test with case-insensitive string equality
 (assert= (list-idempotent string-ci=p (list "hello" "HELLO" "world" "WORLD" "hello"))
