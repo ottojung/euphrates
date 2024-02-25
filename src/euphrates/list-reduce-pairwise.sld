@@ -15,6 +15,7 @@
           <
           and
           begin
+          call-with-values
           cond
           define
           define-values
@@ -23,6 +24,7 @@
           if
           lambda
           let
+          list
           list->vector
           map
           not

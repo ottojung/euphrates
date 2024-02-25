@@ -55,8 +55,10 @@
 
           (let ()
             (define result
-              (projection (vector-ref input x)
-                          (vector-ref input y)))
+              (call-with-values
+                  list
+                (projection (vector-ref input x)
+                            (vector-ref input y))))
 
             (define-values (left? value)
               (unwrap-value result))
