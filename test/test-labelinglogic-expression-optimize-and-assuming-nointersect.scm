@@ -119,7 +119,7 @@
 (assert=
  '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (not (= 3) (r7rs even?)))))
+  '(and (not (= 3)) (r7rs even?))))
 
 ;; Checking negation of 'r7rs
 (assert=
