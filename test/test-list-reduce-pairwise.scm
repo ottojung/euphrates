@@ -20,10 +20,10 @@
 (assert= (list-reduce/pairwise (lambda (d x y) (if (= (modulo (+ x y) 2) 0) 0 (values))) '(1 2 3 4 5 6))
          (list 0 0 5 6))
 
-(exit 0)
-
 (assert= (list-reduce/pairwise (lambda (d x y) (if (null? x) (values 'nil) (values))) '(() a b c ()))
          (list 'nil 'b 'c (list)))
+
+(exit 0)
 
 (assert-throw #t (list-reduce/pairwise (lambda (d x y) (+ x y)) 0)) ;; type error
 
