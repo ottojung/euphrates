@@ -4,6 +4,15 @@
 (define list-reduce/pairwise/p
   (make-parameter #f))
 
+(define-type9 list-reduce/pairwise/return
+  (make-list-reduce/pairwise/return token void? value)
+  list-reduce/pairwise/return?
+
+  (token list-reduce/pairwise/return:token)
+  (void? list-reduce/pairwise/return:void?)
+  (value list-reduce/pairwise/return:value)
+  )
+
 (define (list-reduce/pairwise/no-return)
   (define ctx (list-reduce/pairwise/p))
   
