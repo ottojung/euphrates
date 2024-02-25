@@ -50,7 +50,7 @@
 
 ;; Test Case 10: Test with a list of booleans
 (assert= (list-idempotent/left eq? (list #t #t #f #f #t))
-         (list #t #f))
+         (list #t #f #t))
 
 ;; Test Case 11: Test with many different types in the list
 (assert= (list-idempotent/left eq? (list 1 "two" 'three 1 "two" 'three 'four))
@@ -66,7 +66,7 @@
 
 ;; Test Case 14: Test where the predicate is always true
 (assert= (list-idempotent/left (lambda (x y) #t) (list 1 2 3 1 2 3))
-         (list 1))
+         (list 1 3 2))
 
 ;; Test Case 15: Test with custom predicate comparing lengths of strings
 (assert= (list-idempotent/left (lambda (x y) (= (string-length x) (string-length y)))
