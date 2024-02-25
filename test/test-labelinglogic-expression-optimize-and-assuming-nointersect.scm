@@ -1,79 +1,77 @@
 
-;; (assert=
-;;  '(and)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and)))
+(assert=
+ '(and)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and)))
 
-;; (assert=
-;;  '(and (= 0))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (= 0) (= 0))))
+(assert=
+ '(and (= 0))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 0) (= 0))))
 
-;; (assert=
-;;  '(and (= 0))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (= 0) (= 0) (= 0) (= 0) (= 0))))
+(assert=
+ '(and (= 0))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 0) (= 0) (= 0) (= 0) (= 0))))
 
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (= 0) (= 1))))
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 0) (= 1))))
 
-;; ;; Optimizing non-intersecting negated ground terms
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (not (= 1)) (= 1))))
+;; Optimizing non-intersecting negated ground terms
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (= 1)) (= 1))))
 
-;; ;; Optimizing non-intersecting r7rs terms
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (r7rs even?) (r7rs odd?))))
+;; Optimizing non-intersecting r7rs terms
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs even?) (r7rs odd?))))
 
-;; ;; Negated and non-negated expressions
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (= 1) (not (= 1)))))
+;; Negated and non-negated expressions
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 1) (not (= 1)))))
 
-;; ;; Different non-intersecting tuples
-;; (assert=
-;;  '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))))
+;; Different non-intersecting tuples
+(assert=
+ '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))))
 
-;; ;; The same tuples
-;; (assert=
-;;  '(and (tuple (= 1) (= 2)))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)))))
+;; The same tuples
+(assert=
+ '(and (tuple (= 1) (= 2)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)))))
 
-;; ;; Tuples with top expressions
-;; (assert=
-;;  '(and (tuple (= 1) (= 2)))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
+;; Tuples with top expressions
+(assert=
+ '(and (tuple (= 1) (= 2)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
 
-;; ;; Tuples with bottom expressions
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (or))))
+;; Tuples with bottom expressions
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (or))))
 
-;; ;; A complex case combining '=' and 'r7rs [1]
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (r7rs even?) (= 3))))
+;; A complex case combining '=' and 'r7rs [1]
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs even?) (= 3))))
 
 ;; A complex case combining '=' and 'r7rs [2]
 (assert=
  '(and (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (= 2))))
-
-(exit 0)
 
 ;; A complex case combining '=' and 'r7rs [3]
 (assert=
@@ -147,11 +145,11 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 4)) (r7rs even?) (not (= 2)) (not (= 3)))))
 
-;; ;; A complex case combining 'not =' and 'r7rs [7]
-;; (assert=
-;;  '(and (not (= 4)) (r7rs even?) (not (= 2)))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect
-;;   '(and (not (= 3)) (not (= 4)) (r7rs even?) (not (= 2)))))
+;; A complex case combining 'not =' and 'r7rs [7]
+(assert=
+ '(and (not (= 4)) (r7rs even?) (not (= 2)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (= 3)) (not (= 4)) (r7rs even?) (not (= 2)))))
 
 ;; Checking negation of 'r7rs
 (assert=
