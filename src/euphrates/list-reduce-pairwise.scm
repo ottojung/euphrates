@@ -65,14 +65,9 @@
 
             (cond
              ((null? result) 'pass)
-             ((equal? direction 'forward)
+             (else
               (vector-set! output x value)
               (hashset-add! taken x)
-              (hashset-add! ignored x)
-              (hashset-add! ignored y))
-             (else
-              (vector-set! output y value)
-              (hashset-add! taken y)
               (hashset-add! ignored x)
               (hashset-add! ignored y)))))
 

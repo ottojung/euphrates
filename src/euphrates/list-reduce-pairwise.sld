@@ -25,7 +25,6 @@
           cond
           define
           else
-          equal?
           if
           lambda
           length
