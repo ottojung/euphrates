@@ -127,13 +127,13 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 3)) (r7rs even?) (not (= 3)) (not (= 3)))))
 
-;; A complex case combining 'not =' and 'r7rs [3]
+;; A complex case combining 'not =' and 'r7rs [4]
 (assert=
  '(and (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 3)) (r7rs even?) (not (= 2)))))
 
-;; A complex case combining 'not =' and 'r7rs [3]
+;; A complex case combining 'not =' and 'r7rs [5]
 (assert=
  '(and (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
