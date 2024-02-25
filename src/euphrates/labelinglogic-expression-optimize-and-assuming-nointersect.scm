@@ -169,12 +169,13 @@
 
   (define optimize
     (compose
-     debugprint
      remove-idempotent
      consume-subsets
      handle-nulls
      explode-bottom
-     remove-tops))
+     remove-tops
+     debugprint
+     ))
 
   (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
