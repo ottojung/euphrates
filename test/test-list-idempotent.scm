@@ -42,12 +42,14 @@
          (list "hello" "world" "hello"))
 
 ;; Test Case 6: Test with modulo predicate
-(assert= (list-idempotent (lambda (x y) (= (modulo x 10) (modulo y 10)))
+(assert= (list-idempotent (lambda (x y)
+                            (if (= (modulo x 10) (modulo y 10))
+                                'left 'skip))
                           (list 12 22 45 35 88 78))
          (list 12 45 88))
 
 ;; Test Case 7: Test with a list containing multiple types (numbers and symbols)
-(assert= (list-idempotent eq? (list 1 'a 2 'b 1 'a 2))
+(assert= (list-idempotent equalp (list 1 'a 2 'b 1 'a 2))
          (list 1 'a 2 'b))
 
 ;; Test Case 8: Test with a list of lists
