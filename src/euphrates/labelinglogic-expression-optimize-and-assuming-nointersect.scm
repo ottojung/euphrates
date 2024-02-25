@@ -182,7 +182,6 @@
      handle-nulls
      explode-bottom
      remove-tops
-     debugprint
      ))
 
   (unless (equal? type 'and)
