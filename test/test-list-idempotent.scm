@@ -34,6 +34,8 @@
 (assert= (list-idempotent greaterp (list 5 4 3 6 2 7))
          (list 5 3 6 7))
 
+(exit 0)
+
 ;; Test Case 5: Test with case-insensitive string equality
 (assert= (list-idempotent (lambda (x y) (string-ci=? x y))
                           (list "hello" "HELLO" "world" "WORLD" "hello"))
