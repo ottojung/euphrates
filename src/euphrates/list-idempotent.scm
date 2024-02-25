@@ -43,7 +43,7 @@
       ((equal? result 'left)
        (if forward? left-element (values)))
       ((equal? result 'right)
-       (if forward? (values) right-element))
+       (if reverse? right-element (values)))
        ;; (values))
       ((equal? result 'skip) (values))
       (else
