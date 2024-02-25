@@ -17,11 +17,6 @@
   ;; the output upon repeated application. Similarly, `list-idempotent` will ensure that applying the same function
   ;; repeatedly will yield the same list after the first application, as duplicate elements will have been removed.
   ;;
-  ;; It is also connected to the concept of equivalence relations and equivalence classes. A relation `R` on a set `A`
-  ;; is defined as an equivalence relation if it is reflexive, symmetric, and transitive. As such, `R` partitions `A` into
-  ;; equivalence classes where all elements related by `R` are considered equivalent. `list-idempotent` saves only the first
-  ;; representative of each equivalence class according to `pred` and removes the rest.
-  ;;
   ;; Example usage:
   ;; (list-idempotent equal? (list 1 2 1 4 1))
   ;; will return
