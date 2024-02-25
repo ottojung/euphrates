@@ -26,7 +26,6 @@
           let
           list
           list->vector
-          make-parameter
           map
           not
           null?
