@@ -31,11 +31,11 @@
   (list-reduce/pairwise
 
    (lambda (direction x y)
-     (define result (pred x y))
      (define forward? (equal? direction 'forward))
      (define reverse? (equal? direction 'reverse))
      (define left-element (if forward? x y))
      (define right-element (if forward? y x))
+     (define result (pred left-element right-element))
 
      (debug "x: ~s, y: ~s, res: ~s, rev: ~s" x y result reverse?)
 
