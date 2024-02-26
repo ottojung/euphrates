@@ -17,6 +17,8 @@
   ;;                      your list. For instance, if your list is composed of
   ;;                      integers, your `equality-tester` could be
   ;;                      a simple `equal?` function.
+  ;;                      In fact, `equality-tester` must be a restriction of
+  ;;                      the function `equal?`.
   ;;
   ;; - `join-function`: This is a function that produces either a common
   ;;                    successor of two list elements (also known as a join
@@ -25,6 +27,8 @@
   ;;                    point. For example, if you're working with a list of
   ;;                    integers, you might use the `greatest-common-divisor`
   ;;                    function as your `join-function`.
+  ;;                    The join function must return the same value for any two
+  ;;                    equal inputs, as determined by `equality-tester`.
   ;;
   ;; - `lst`: This is the list of elements you want to transform. The type of
   ;;          list elements can be flexible, with the condition that the
@@ -59,9 +63,6 @@
   ;;
   ;; - If `lst` contains elements that cannot be processed by `equality-tester`
   ;;   or `join-function`, an error will be raised.
-  ;;
-  ;; - If `join-function` returns multiple join points for
-  ;;   the same pair of nodes, an error will be triggered.
   ;;
   ;; Performance Considerations:
   ;;
