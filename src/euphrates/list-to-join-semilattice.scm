@@ -43,6 +43,7 @@
 
   (define (add-join-point! node-x node-y value)
     (define existing (find-existing-node value))
+    (define to-add (or existing (make-olnode value)))
     TODO)
 
   (define (join! node-x node-y)

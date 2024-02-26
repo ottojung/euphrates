@@ -31,6 +31,7 @@
           list
           map
           null?
+          or
           quote
           unless
           when))
