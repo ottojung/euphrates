@@ -3,7 +3,9 @@
 
 (define (list->join-semilattice equality-tester join-function lst)
   ;;
-  ;; The `list->join-semilattice` function generates a join semilattice graph from a given list. A semilattice is a partially ordered set with a function operation – known as the join – which finds the smallest common successor for any pair of elements. This function is useful in understanding the properties and relationships between elements of a list.
+  ;; The `list->join-semilattice` function generates a join semilattice graph from a given list.
+  ;; A semilattice is a partially ordered set with a function operation - known as the join - which
+  ;; finds the smallest common successor for any pair of elements. This function is useful in understanding the properties and relationships between elements of a list.
   ;;
   ;; Parameters:
   ;;
