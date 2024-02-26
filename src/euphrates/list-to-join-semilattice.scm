@@ -54,6 +54,7 @@
     (or existing (make-new-node! value)))
 
   (define (add-join-point! node-x node-y value)
+    (define to-add (make-join-node! value))
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
     (values))
