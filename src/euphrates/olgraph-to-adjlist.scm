@@ -6,13 +6,12 @@
   (define ret (stack-make))
 
   (let loop ((olnode olnode))
-    (define children (olnode:children olnode))
-    (for-each
-     (lambda (child)
-       (define key (cons olnode child))
-       (unless (hashset-has? H key)
-         (let ()
-           (loop child (cons (olnode:id child) ancestors)))))
-     children))
+    (define key (olnode:id olnode))
+    (unless (hashmap-has? H key)
+      (let ()
+        (define children (olnode:children olnode))
+        (hashmap-set! H key children)
+        (stack-push! key)
+        (for-each loop children))))
 
   (reverse (stack->list ret)))
