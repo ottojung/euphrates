@@ -29,8 +29,7 @@
   ;; - `lst`: This is the list of elements you want to transform. The type of
   ;;          list elements can be flexible, with the condition that the
   ;;          `equality-tester` and `join-function` can handle such type.
-  ;;          For example, this could be a list of integers,
-  ;;          such as `(1 2 3 4 5)`.
+  ;;          For example, this could be a list of integers `(1 2 3 4 5)`.
   ;;
   ;; The result of `list->join-semilattice` is a list of sublists
   ;; where each sublist represents a node in the graph and its direct
