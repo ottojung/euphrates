@@ -46,8 +46,7 @@
       (cartesian-each
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
-           
-           0))
+           (add-new! x y)))
        current-layer
        current-layer)))
 
