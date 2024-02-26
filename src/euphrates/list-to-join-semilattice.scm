@@ -37,12 +37,13 @@
      #f all-nodes))
 
   (define (prepend-node! parent child)
-    (unless
-        (list-or-map
-         (lambda (other)
-           (equal? (olnode:id child)
-                   (olnode:id other)))
-         (olnode:children parent))
+    (define (equal-to-child? other)
+      (equal? (olnode:id child)
+              (olnode:id other)))
+
+    (unless (list-or-map
+             equal-to-child?
+             (olnode:children parent))
       (olnode:prepend-child! parent child)))
 
   (define (make-new-node! value)
