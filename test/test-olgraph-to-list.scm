@@ -42,7 +42,7 @@
 ;; Test case: Empty graph
 (let ((empty-graph (make-olgraph '())))
   (assert=
-   (olnode->list (olgraph:initial empty-graph))
+   (map olnode->list (olgraph:initial empty-graph))
    '())) ; an empty graph
 
 ;; Additional test may be conducted if the assumed non-recursion
