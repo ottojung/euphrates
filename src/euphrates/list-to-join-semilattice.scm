@@ -8,11 +8,11 @@
   ;;
   ;;
   ;;
-  ;; Let X : Type
+  ;; Let U : Type
   ;; Then
-  ;; join-function: \forall x,y,z \in x, y -> Union[z, void]
-  ;; lst: List[X]
-  ;; equality-tester: X, X -> boolean
+  ;; join-function: \forall x,y,z \in U, y -> Union[z, void]
+  ;; lst: List[U]
+  ;; equality-tester: U, U -> boolean
   ;; list->join-semilattice: ... -> olgraph[z]
   ;;
   ;; Where `void` is the type of `(values)` expression.
