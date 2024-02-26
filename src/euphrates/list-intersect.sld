@@ -1,6 +1,6 @@
 
 (define-library
-  (euphrates list-intersect-order-independent)
+  (euphrates list-intersect)
   (export list-intersect)
   (import
     (only (scheme base)
@@ -19,5 +19,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/list-intersect-order-independent.scm")))
-    (else (include "list-intersect-order-independent.scm"))))
+               "euphrates/list-intersect.scm")))
+    (else (include "list-intersect.scm"))))

@@ -942,8 +942,8 @@
   (import
     (only (euphrates list-insert-at) list-insert-at))
   (import
-    (only (euphrates list-intersect-order-independent)
-          list-intersect/order-independent))
+    (only (euphrates list-intersect)
+          list-intersect))
   (import
     (only (euphrates list-intersperse)
           list-intersperse))

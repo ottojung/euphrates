@@ -19,7 +19,7 @@
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import
-    (only (euphrates list-intersect-order-independent)
+    (only (euphrates list-intersect)
           list-intersect))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
