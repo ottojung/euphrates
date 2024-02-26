@@ -4,6 +4,6 @@
 (define-record-type olgraph
   (make-olgraph value children meta) olgraph?
   (value olgraph:value)
-  (children olgraph:children)
-  (meta olgraph:meta)
+  (children olgraph:children olgraph:children:set!)
+  (meta olgraph:meta olgraph:meta:set!)
   )
