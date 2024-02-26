@@ -5,7 +5,7 @@
     make-olgraph
     olgraph:children
     olgraph:children:set!
-    olgraph:id
+    olgraph:eq?
     olgraph:meta)
   (import
     (only (scheme base)
