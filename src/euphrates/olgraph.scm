@@ -31,7 +31,7 @@
 ;; OLNODE
 
 ;; Each OLNode represents a node in the graph, and includes several properties:
-;; * ID: A unique identifier for the node. This is used for efficient strong-equality (think eq? and hash-eq).
+;; * ID: A unique identifier for the node. This is used for efficient strong equality (think eq? and hash-eq).
 ;; * Value: This represents the value or data held in the node.
 ;; * Children: List of OLNodes, representing outgoing connections (edges) from the node.
 ;; * Meta: A placeholder for additional information associated with the node,
