@@ -39,7 +39,9 @@
   ;;
   ;; Example:
   ;;
-  ;; (list->join-semilattice equal? (lambda (x y) (greatest-common-divisor x y)) '(1 2 3 4 5))
+  ;; (list->join-semilattice
+  ;;   equal? greatest-common-divisor
+  ;;   '(1 2 3 4 5))
   ;;
   ;; produces the graph `((1) (2 1) (3 1) (4 2) (5 1))` (adjacency list notation).
   ;;
