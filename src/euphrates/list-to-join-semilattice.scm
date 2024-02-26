@@ -35,7 +35,7 @@
   ;; where each node represents a node in the graph and its direct
   ;; successors. A sublist starts with a node's value and following
   ;; elements are its direct successors. Note that if a successor appears
-  ;; in multiple sublist, it means it is a common successor of different  nodes.
+  ;; in multiple sublist, it means it is a common successor of different nodes.
   ;;
   ;; Example:
   ;;
