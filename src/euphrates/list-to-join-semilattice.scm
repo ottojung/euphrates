@@ -36,6 +36,14 @@
         (olnode:value other)))
      #f all-nodes))
 
+  (define (prepend-node! parent child)
+    (unless
+        (list-or-map
+         (lambda (other)
+           (equal? (olnode:id child)
+                   (olnode:id other))))
+      (
+
   (define (add-join-point! node-x node-y value)
     (define existing (find-existing-node value))
     (define to-add (or existing (make-olnode value)))
