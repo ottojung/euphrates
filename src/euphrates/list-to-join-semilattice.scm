@@ -45,7 +45,6 @@
   ;;
   ;; |> olgraph->adjlist
   ;;
-  ;;
   ;; produces the list `((1) (2 1) (3 1) (4 2) (5 1))`
   ;;
   ;; In this case, for instance, elements `2` and `3`
