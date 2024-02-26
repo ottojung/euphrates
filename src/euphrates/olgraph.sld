@@ -8,6 +8,7 @@
     olgraph:initial:set!
     olgraph:prepend-initial!
     make-olnode
+    make-olnode/full
     olnode?
     olnode:id
     olnode:value
