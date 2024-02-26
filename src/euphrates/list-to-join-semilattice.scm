@@ -33,8 +33,13 @@
 
   (define all-nodes initial-nodes)
 
-  (define (find-existing-node needle)
+  (define (find-existing-node needle-value)
     (list-find-first
+     (lambda (other)
+       (equality-tester
+        needle-value
+        (olnode:value other)))
+     #f all-nodes))
 
   (let loop ((current-layer initial-nodes))
     (cartesian-each
