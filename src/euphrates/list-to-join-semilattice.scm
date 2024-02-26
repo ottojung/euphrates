@@ -26,9 +26,6 @@
   (define graph
     (make-olgraph initial-nodes))
 
-  (debugs graph)
-  (debug "THAT INITIAL GRAPH")
-
   (define all-nodes initial-nodes)
   (define current-layer initial-nodes)
 
