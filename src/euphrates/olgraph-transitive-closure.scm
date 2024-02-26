@@ -11,6 +11,7 @@
        (define key (cons olnode child))
        (unless (hashset-has? ret key)
          (hashset-add! ret key)
-         (loop child)))))
+         (loop child)))
+     children))
 
   ret)
