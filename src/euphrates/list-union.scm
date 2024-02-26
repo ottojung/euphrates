@@ -3,12 +3,13 @@
 
 (define (list-union source-list filter-list)
   (define hash-a (list->hashset source-list))
-  (append source-list
-          (let loop ((buf filter-list) (ret '()))
-            (if (null? buf)
-                (reverse ret)
-                (let ()
-                  (define x (car buf))
-                  (if (not (hashset-has? hash-a x))
-                      (loop (cdr buf) (cons x ret))
-                      (loop (cdr buf) ret)))))))
+  (append
+   source-list
+   (let loop ((buf filter-list) (ret '()))
+     (if (null? buf)
+         (reverse ret)
+         (let ()
+           (define x (car buf))
+           (if (not (hashset-has? hash-a x))
+               (loop (cdr buf) (cons x ret))
+               (loop (cdr buf) ret)))))))
