@@ -9,7 +9,7 @@
   (import
     (only (scheme base)
           +
-          >
+          >=
           begin
           cons
           define

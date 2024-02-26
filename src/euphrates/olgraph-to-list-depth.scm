@@ -16,6 +16,6 @@
           (children (olnode:children olnode)))
 
       (cons value
-            (if (> level levels) '()
+            (if (>= level levels) '()
                 (map (lambda (c) (loop (+ 1 level) c))
                      children))))))
