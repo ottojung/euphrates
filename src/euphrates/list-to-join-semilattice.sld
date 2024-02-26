@@ -4,7 +4,7 @@
   (export list->join-semilattice)
   (import
     (only (euphrates cartesian-each) cartesian-each))
-  (import (only (euphrates debugs) debugs))
+  (import (only (euphrates debug) debug))
   (import
     (only (euphrates list-find-first)
           list-find-first))
@@ -23,6 +23,7 @@
   (import
     (only (scheme base)
           _
+          and
           begin
           call-with-values
           car
@@ -40,7 +41,8 @@
           quote
           set!
           unless
-          values))
+          values
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
