@@ -9,6 +9,7 @@
           make-hashset))
   (import
     (only (euphrates olgraph)
+          olgraph:initial
           olnode:children
           olnode:id
           olnode:value))
@@ -19,6 +20,8 @@
           stack-push!))
   (import
     (only (scheme base)
+          append
+          apply
           begin
           cons
           define
