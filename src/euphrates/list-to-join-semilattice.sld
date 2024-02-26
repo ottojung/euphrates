@@ -11,6 +11,7 @@
           begin
           define
           lambda
+          let
           map
           quote))
   (cond-expand

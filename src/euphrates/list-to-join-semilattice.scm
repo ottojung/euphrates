@@ -31,4 +31,9 @@
   (define graph
     (make-olgraph initial-nodes))
 
+  (let loop ((current-layer initial-nodes))
+    
+    
+    0)
+
   graph)
