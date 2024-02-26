@@ -14,7 +14,7 @@
 
 ;; OLGRAPH
 
-;; OLgraph is a list of initial Olnodes, which serves as the 'root' or starting point
+;; OLgraph is a list of initial OLNodes, which serves as the 'root' or starting point
 ;; of graph exploration.
 
 
@@ -26,14 +26,14 @@
 
 ;; OLNODE
 
-;; Each Olnode represents a node in the graph, and includes several properties:
+;; Each OLNode represents a node in the graph, and includes several properties:
 ;; * ID: A unique identifier for the node. This is used for efficient equality checks.
 ;; * Value: This represents the value or data held in the node.
-;; * Children: List of Olnodes, representing outgoing connections (edges) from the node.
+;; * Children: List of OLNodes, representing outgoing connections (edges) from the node.
 ;; * Meta: A placeholder for additional information associated with the node,
 ;;   this should not be considered part of the node itself.
 
-;; Olnode utilizes a counter to ensure each node has a unique ID. This counter is incremented
+;; OLNode utilizes a counter to ensure each node has a unique ID. This counter is incremented
 ;; for each new node created.
 
 
