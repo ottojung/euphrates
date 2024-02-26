@@ -4,6 +4,8 @@
   (export olgraph-remove-transitive-edges)
   (import (only (euphrates hashset) hashset-has?))
   (import
+    (only (euphrates list-and-map) list-and-map))
+  (import
     (only (euphrates olgraph-remove-edges-generic)
           olgraph-remove-edges/generic
           olnode-remove-edges/generic))

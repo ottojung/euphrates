@@ -3,13 +3,16 @@
 
 
 (define (make-check closure)
-  (lambda (child)
-    (lambda (other)
-      (or (olnode-eq? other child)
-          (let ()
-            (define key (cons (olnode:id other)
-                              (olnode:id child)))
-            (not (hashset-has? closure key)))))))
+  (lambda (old-children)
+    (lambda (child)
+      (list-and-map
+       (lambda (other)
+         (or (olnode-eq? other child)
+             (let ()
+               (define key (cons (olnode:id other)
+                                 (olnode:id child)))
+               (not (hashset-has? closure key)))))
+       old-children))))
 
 
 (define (olnode-remove-transitive-edges olnode)
