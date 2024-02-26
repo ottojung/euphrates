@@ -18,8 +18,3 @@
       (define id counter)
       (set! counter (+ 1 counter))
       (olgraph-constructor id value children meta))))
-
-
-(define (olgraph-eq? left right)
-  (equal? (olgraph:id left)
-          (olgraph:id right)))
