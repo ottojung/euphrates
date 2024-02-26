@@ -1,8 +1,9 @@
+
 (define-library
   (euphrates olgraph)
   (export olgraph)
   (import
-    (only (scheme base) begin define make-parameter))
+    (only (scheme base) begin define-record-type))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
