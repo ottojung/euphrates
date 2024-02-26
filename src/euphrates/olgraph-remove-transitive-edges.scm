@@ -46,4 +46,5 @@
              old-children))
 
           (olnode:children:set! ret new-children)
+
           ret))))
