@@ -3,7 +3,7 @@
 
 ;; Ordered List Graph Data Structure
 
-;; A file implementing the OLgraph. An OLgraph (Ordered List Graph) is a representation
+;; An OLgraph (Ordered List Graph) is a representation
 ;; of a directed graph using ordered edge lists. The graph is made up of "initial" nodes
 ;; (olgraph) which may have any number of "children" nodes (olnodes).
 
