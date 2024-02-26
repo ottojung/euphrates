@@ -31,10 +31,7 @@
 ;; Use graph built above for this test
 (assert=
  (map olnode->list (olgraph:initial olgraph-test))
- '(1   ; root node
-   (2) ; 1st child
-   (3   ; 2nd child
-    (4)))) ; child of 2nd child
+ '((1 (3 (4)) (2))))
 
 ;; Test case: Leaf node (no branches)
 (let ((node1 (make-olnode 1)))
