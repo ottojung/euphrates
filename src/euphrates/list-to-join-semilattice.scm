@@ -145,4 +145,5 @@
 
       (loop)))
 
+  (olgraph-reverse-children-inplace! graph)
   (olgraph-remove-transitive-edges graph))
