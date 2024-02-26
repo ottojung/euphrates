@@ -39,7 +39,8 @@
              (lambda (current)
                (define is-transitive
                  (list-or-map
-                  (contains-current? current)))
+                  (contains-current? current)
+                  old-children))
                (not is-transitive))
              old-children))
 
