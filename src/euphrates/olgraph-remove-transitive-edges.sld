@@ -3,10 +3,13 @@
   (euphrates olgraph-remove-transitive-edges)
   (export olnode-remove-transitive-edges)
   (import
+    (only (euphrates hashmap)
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates hashset)
-          hashset-add!
           hashset-has?
-          make-hashset))
+          hashset-ref))
   (import
     (only (euphrates list-and-map) list-and-map))
   (import (only (euphrates negate) negate))
@@ -34,8 +37,8 @@
           let
           map
           not
-          quote
-          unless))
+          or
+          quote))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))

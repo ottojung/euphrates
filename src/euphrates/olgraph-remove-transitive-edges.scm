@@ -8,39 +8,41 @@
   (define ret
     (make-olnode (olnode:value olnode)))
 
-  (define H (make-hashset))
+  (define H (make-hashmap))
 
   (let loop ((olnode olnode))
-    (unless (hashset-has? H (olnode:id olnode))
-      (hashset-add! H (olnode:id olnode))
-      (let ()
-        (define ret
-          (make-olnode/full
-           (olnode:value olnode)
-           '()
-           (olnode:meta olnode)))
+    (define existing (hashset-ref H (olnode:id olnode)))
+    (or existing
+        (let ()
+          (define ret
+            (make-olnode/full
+             (olnode:value olnode)
+             '()
+             (olnode:meta olnode)))
 
-        (define old-children
-          (olnode:children olnode))
+          (hashmap-set! H (olnode:id olnode) ret)
 
-        (define (contains-current? current)
-          (lambda (child)
-            (and (not (olnode-eq? child current))
-                 (let ()
-                   (define key (cons (olnode:id child)
-                                     (olnode:id current)))
-                   (not (hashset-has? key))))))
+          (define old-children
+            (olnode:children olnode))
 
-        (define filtered
-          (filter
-           (lambda (current)
-             (list-and-map
-              (negate (contains-current? current))
-              old-children))
-           old-children))
+          (define recursed
+            (map loop old-children))
 
-        (define new-children
-          (map loop filtered))
+          (define (contains-current? current)
+            (lambda (child)
+              (and (not (olnode-eq? child current))
+                   (let ()
+                     (define key (cons (olnode:id child)
+                                       (olnode:id current)))
+                     (not (hashset-has? key))))))
 
-        (olnode:children:set! ret new-children)
-        ret))))
+          (define new-children
+            (filter
+             (lambda (current)
+               (list-and-map
+                (negate (contains-current? current))
+                old-children))
+             old-children))
+
+          (olnode:children:set! ret new-children)
+          ret))))
