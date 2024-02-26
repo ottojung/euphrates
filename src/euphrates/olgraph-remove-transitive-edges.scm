@@ -37,11 +37,9 @@
           (define filtered
             (filter
              (lambda (child)
-               (define is-transitive
-                 (list-or-map
-                  (contains-child? child)
-                  old-children))
-               (not is-transitive))
+               (list-and-map
+                (negate (contains-child? child))
+                old-children))
              old-children))
 
           (define new-children
