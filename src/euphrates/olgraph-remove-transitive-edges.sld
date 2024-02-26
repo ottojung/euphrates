@@ -19,7 +19,12 @@
           olnode:meta
           olnode:value))
   (import
-    (only (scheme base) begin define let unless))
+    (only (scheme base)
+          begin
+          define
+          let
+          quote
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

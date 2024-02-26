@@ -20,7 +20,7 @@
         (define ret
           (make-olnode/full
            (olnode:value olnode)
-           new-children
+           '()
            (olnode:meta olnode)))
 
         (define new-children
