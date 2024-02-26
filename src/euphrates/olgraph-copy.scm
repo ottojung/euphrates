@@ -16,7 +16,13 @@
           (define _182313
             (hashmap-set! H (olnode:id olnode) ret))
 
-          (olnode:children:set! ret (olnode:children olnode))
+          (define old-children
+            (olnode:children olnode))
+
+          (define new-children
+            (map loop old-children))
+
+          (olnode:children:set! ret new-children)
 
           ret))))
 
