@@ -8,7 +8,9 @@
           hashset-has?
           make-hashset))
   (import
-    (only (euphrates olgraph) olnode:children))
+    (only (euphrates olgraph)
+          olnode:children
+          olnode:id))
   (import
     (only (scheme base)
           begin
