@@ -48,7 +48,8 @@
     (define existing (find-existing-node value))
     (define to-add (or existing (make-olnode value)))
     (prepend-node! node-x to-add)
-    (prepend-node! node-y to-add))
+    (prepend-node! node-y to-add)
+    (values))
 
   (define (join! node-x node-y)
     (define join-result
