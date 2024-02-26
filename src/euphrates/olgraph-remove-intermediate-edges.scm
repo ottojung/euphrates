@@ -4,13 +4,13 @@
 
 (define (make-check closure)
   (lambda (old-children)
-    (lambda (current)
+    (lambda (child)
       (list-and-map
-       (lambda (child)
-         (or (olnode-eq? child current)
+       (lambda (other)
+         (or (olnode-eq? other child)
              (let ()
-               (define key (cons (olnode:id child)
-                                 (olnode:id current)))
+               (define key (cons (olnode:id other)
+                                 (olnode:id child)))
                (hashset-has? closure key))))
        old-children))))
 
