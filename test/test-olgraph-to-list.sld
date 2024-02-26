@@ -1,6 +1,7 @@
 
 (define-library
   (test-olgraph-to-list)
+  (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates olgraph-to-list) olnode->list))
   (import
