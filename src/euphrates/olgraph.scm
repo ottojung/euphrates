@@ -54,13 +54,19 @@
 ;; for each new node created.
 
 
-(define make-olnode
+(define make-olnode/full
   (let ()
     (define counter 0)
     (lambda (value children meta)
       (define id counter)
       (set! counter (+ 1 counter))
       (olnode-constructor id value children meta))))
+
+
+(define (make-olnode value)
+  (define children '())
+  (define meta #f)
+  (make-olnode/full value children meta))
 
 
 (define (olnode:prepend-child! parent child)
