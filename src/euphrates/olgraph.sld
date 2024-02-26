@@ -4,7 +4,8 @@
   (export
     make-olgraph
     olgraph?
-    olgraph:roots
+    olgraph:initial
+    olgraph:initial:set!
     make-olnode
     olnode?
     olnode:id
