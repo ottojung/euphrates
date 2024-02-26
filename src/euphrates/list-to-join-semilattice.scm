@@ -61,8 +61,8 @@
   ;;
   ;; - If `lst` is an empty list, the function will return an empty graph.
   ;;
-  ;; - If `lst` contains elements that cannot be processed by `equality-tester`
-  ;;   or `join-function`, an error will be raised.
+  ;; - Disjoint subgraphs are supported, even though they are not formally
+  ;;   lattices.
   ;;
   ;; Performance Considerations:
   ;;
