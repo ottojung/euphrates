@@ -3,7 +3,14 @@
   (euphrates olgraph)
   (export olgraph)
   (import
-    (only (scheme base) begin define-record-type))
+    (only (scheme base)
+          +
+          begin
+          define
+          define-record-type
+          lambda
+          let
+          set!))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
