@@ -9,8 +9,8 @@
 (assert= '(1 2 3 1 2 3) (list-union '(1 2 3 1 2 3) '(1 2 3))) ; List A contains repetitions of B
 (assert= '(1 2 3) (list-union '(1 2 3) '(1 2 3 1 2 3))) ; List A contains repetitions of B
 (assert= '(1 2 3 1 2 3) (list-union '(1 2 3 1 2 3) '(1 2 3 1 2 3))) ; Both lists contain identical repetitions
-(assert= '() (list-union '() '(1 2 3))) ; List A is empty
-(assert= '() (list-union '(1 2 3) '())) ; List B is empty
+(assert= '(1 2 3) (list-union '() '(1 2 3))) ; List A is empty
+(assert= '(1 2 3) (list-union '(1 2 3) '())) ; List B is empty
 (assert= '() (list-union '() '())) ; Both lists are empty
 
 ;; Test case: Invalid inputs
