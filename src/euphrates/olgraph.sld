@@ -13,6 +13,7 @@
           begin
           define
           define-record-type
+          equal?
           lambda
           let
           set!))
