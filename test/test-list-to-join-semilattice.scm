@@ -10,8 +10,6 @@
     (map (lambda (node) (olnode->list/depth 1 node))
          (olgraph:initial result)))
 
-  (debugs actual)
-
   (assert= actual expected))
 
 
