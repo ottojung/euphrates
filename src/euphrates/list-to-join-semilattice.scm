@@ -14,5 +14,8 @@
   ;;
   ;; Where `void` is the type of `(values)` expression.
   ;;
+  ;; Join returns either the join point of the two nodes,
+  ;; or void in case there is no join between them.
+  ;;
 
   0)
