@@ -27,7 +27,7 @@
       (3    ; child of 2nd node
        )))))
 
-;; TEST case: Multiple branches
+;; Test case: Multiple branches
 ;; Use graph built above for this test
 (assert=
  (olnode->list (olgraph:initial olgraph-test))
