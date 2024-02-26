@@ -24,9 +24,13 @@
           begin
           define
           equal?
+          if
           lambda
+          let
           map
-          quote))
+          null?
+          quote
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
