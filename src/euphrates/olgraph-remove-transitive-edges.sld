@@ -7,11 +7,13 @@
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
-          hashmap->alist
           hashmap-ref
           hashmap-set!
           make-hashmap))
-  (import (only (euphrates hashset) hashset-has?))
+  (import
+    (only (euphrates hashset)
+          hashset->list
+          hashset-has?))
   (import
     (only (euphrates list-and-map) list-and-map))
   (import (only (euphrates negate) negate))
