@@ -25,8 +25,7 @@
 
         (define (contains-current? current)
           (lambda (child)
-            (if (and (not (equal? (olnode:id child)
-                                  (olnode:id current)))
+            (if (and (not (olnode-eq? child current))
                      
 
         (define filtered
