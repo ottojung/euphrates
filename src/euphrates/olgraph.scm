@@ -3,8 +3,8 @@
 
 
 (define-type9 olgraph
-  (olgraph-constructor nodes) olgraph?
-  (nodes olgraph:nodes)
+  (olgraph-constructor roots) olgraph?
+  (roots olgraph:roots) ;; Actually a superset of all root (source) nodes. The only guaranteed property is that we can get all nodes by traversing these "roots".
   )
 
 
@@ -24,6 +24,3 @@
       (define id counter)
       (set! counter (+ 1 counter))
       (olnode-constructor id value children meta))))
-
-
-(define 
