@@ -3,10 +3,10 @@
   (euphrates olgraph-to-adjlist)
   (export olnode->adjlist)
   (import
-    (only (euphrates hashmap)
-          hashmap-has?
-          hashmap-set!
-          make-hashmap))
+    (only (euphrates hashset)
+          hashset-add!
+          hashset-has?
+          make-hashset))
   (import
     (only (euphrates olgraph)
           olnode:children
