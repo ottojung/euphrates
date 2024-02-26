@@ -17,11 +17,6 @@
           list->join-semilattice))
   (import (only (euphrates list-union) list-union))
   (import
-    (only (euphrates olgraph-to-adjlist)
-          olnode->adjlist))
-  (import
-    (only (euphrates olgraph) olgraph:initial))
-  (import
     (only (scheme base)
           begin
           define
@@ -29,7 +24,6 @@
           if
           lambda
           let
-          map
           null?
           quote
           values))

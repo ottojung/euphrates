@@ -7,8 +7,7 @@
      lst))
 
   (define actual
-    (map olnode->adjlist
-         (olgraph:initial result)))
+    (olgraph->adjlist result))
 
   (debugs actual)
 
