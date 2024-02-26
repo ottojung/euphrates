@@ -1,7 +1,9 @@
 
 (define-library
   (euphrates olgraph-remove-transitive-edges)
-  (export olnode-remove-transitive-edges)
+  (export
+    olnode-remove-transitive-edges
+    olgraph-remove-transitive-edges)
   (import
     (only (euphrates hashmap)
           hashmap-set!
