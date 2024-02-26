@@ -42,6 +42,7 @@
      #f all-nodes))
 
   (define (add-join-point! node-x node-y value)
+    (define existing (find-existing-node value))
     pass)
 
   (define (join! node-x node-y)
