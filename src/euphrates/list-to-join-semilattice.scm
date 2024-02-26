@@ -14,7 +14,11 @@
   ;;                      The nature of the `equality-tester` function will depend on the specific elements within your list.
   ;;                      For instance, if your list is composed of integers, your `equality-tester` could be a simple `equal?` function.
   ;;
-  ;; - `join-function`: This is a function that produces either a common successor of two list elements (also known as a join point in the context of semilattices), or returns `void` (the type of `(values)` expression) if there's no join point. For example, if you're working with a list of integers, you might use the `greatest common divisor` function as your `join-function` (e.g., `(greatest-common-divisor x y)`).
+  ;; - `join-function`: This is a function that produces either a common successor of
+  ;;                    two list elements (also known as a join point in the context of semilattices),
+  ;;                    or returns `void` (the type of `(values)` expression) if there's no join point.
+  ;;                    For example, if you're working with a list of integers, you might use
+  ;;                    the `greatest common divisor` function as your `join-function` (e.g., `(greatest-common-divisor x y)`).
   ;;
   ;; - `lst`: This is the list of elements you want to transform. The type of list elements ('U') can be flexible, with the condition that the `equality-tester` and `join-function` can handle such type. For example, this could be a list of integers, such as `(1 2 3 4 5)`.
   ;;
