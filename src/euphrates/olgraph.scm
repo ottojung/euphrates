@@ -54,3 +54,7 @@
       (define id counter)
       (set! counter (+ 1 counter))
       (olnode-constructor id value children meta))))
+
+
+(define (olnode:prepend-child! parent child)
+  (olnode:children:set! parent (cons child (olnode:children parent))))

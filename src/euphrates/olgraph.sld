@@ -20,6 +20,7 @@
     (only (scheme base)
           +
           begin
+          cons
           define
           lambda
           let
