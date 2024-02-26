@@ -7,7 +7,7 @@
      lst))
 
   (define actual
-    (map (lambda (node) (olnode->list/depth 0 node))
+    (map (lambda (node) (olnode->list/depth 1 node))
          (olgraph:initial result)))
 
   (debugs actual)
