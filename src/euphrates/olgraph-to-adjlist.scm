@@ -16,4 +16,4 @@
                  (map olnode:value children)))
         (for-each loop children))))
 
-  (reverse (stack->list ret)))
+  (reverse (stack->list S)))
