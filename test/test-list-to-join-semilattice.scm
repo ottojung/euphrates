@@ -7,10 +7,9 @@
      lst))
 
   (define actual
-    (olnode->list
+    (olnode->list result))
 
   (assert= actual expected))
-
 
 (test-case
  equal?
