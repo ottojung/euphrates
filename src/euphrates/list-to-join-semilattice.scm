@@ -6,8 +6,6 @@
          join-function
          lst)
   ;;
-  ;;
-  ;;
   ;; Let U : Type
   ;; Then
   ;; lst: List[U]
