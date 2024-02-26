@@ -77,22 +77,22 @@
 
 
 
-;; (test-case
-;;  (lambda (x y)
-;;    (hashset-equal?
-;;     (list->hashset x)
-;;     (list->hashset y)))
+(test-case
+ (lambda (x y)
+   (hashset-equal?
+    (list->hashset x)
+    (list->hashset y)))
 
-;;  (lambda (x y) (list-intersect x y))
+ (lambda (x y) (list-intersect x y))
 
-;;  '((1 2 3) (2 6 1) (5 1 6) (7 1))
+ '((1 2 3) (2 6 1) (5 1 6) (7 1))
 
-;;  '(((1 2 3) ((1)) ((1 2) ((1))))
-;;    ((2 6 1) ((1)) ((6 1) ((1))) ((1 2) ((1))))
-;;    ((5 1 6) ((6 1) ((1))) ((1)))
-;;    ((7 1) ((1))))
+ '(((1 2 3) ((1 2) ((1))))
+   ((2 6 1) ((6 1) ((1))) ((1 2) ((1))))
+   ((5 1 6) ((6 1) ((1))))
+   ((7 1) ((1))))
 
-;;  )
+ )
 
 
 
