@@ -52,7 +52,7 @@
 
 (define (olnode-remove-edges/generic make-check olnode)
   (define H (make-hashmap))
-  (olnode-remove-transitive-edges/aux make-check H olnode))
+  (olnode-remove-edges/generic/aux make-check H olnode))
 
 
 (define (olgraph-remove-edges/generic make-check olgraph)
