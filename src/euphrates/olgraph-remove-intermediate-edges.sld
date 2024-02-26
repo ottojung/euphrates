@@ -21,6 +21,7 @@
           define
           lambda
           let
+          not
           or))
   (cond-expand
     (guile (import (only (guile) include-from-path))

@@ -9,9 +9,9 @@
        (lambda (other)
          (or (olnode-eq? other child)
              (let ()
-               (define key (cons (olnode:id other)
-                                 (olnode:id child)))
-               (hashset-has? closure key))))
+               (define key (cons (olnode:id child)
+                                 (olnode:id other)))
+               (not (hashset-has? closure key)))))
        old-children))))
 
 
