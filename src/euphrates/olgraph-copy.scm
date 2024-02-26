@@ -27,4 +27,9 @@
 
 
 (define (olgraph-copy/deep olgraph)
-  
+  (define H (make-hashmap))
+  (define initial (olgraph:initial))
+  (define new-initial
+    (map (comp (olnode-copy/deep/aux H)) initial))
+
+  (make-olgraph new-initial))
