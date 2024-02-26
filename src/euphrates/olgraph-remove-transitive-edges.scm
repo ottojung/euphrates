@@ -14,6 +14,9 @@
   (define closure
     (olnode-transitive-closure/edges olnode))
 
+  (define keep?
+    (make-check closure))
+
   (define ret
     (make-olnode (olnode:value olnode)))
 
@@ -36,9 +39,7 @@
           (define filtered
             (filter
              (lambda (child)
-               (list-and-map
-                (negate (contains-child? child))
-                old-children))
+               (list-and-map (keep? child) old-children))
              old-children))
 
           (define new-children

@@ -10,7 +10,6 @@
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates list-and-map) list-and-map))
-  (import (only (euphrates negate) negate))
   (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))
