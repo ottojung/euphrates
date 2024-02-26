@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates olgraph-copy)
-  (export olgraph-copy)
+  (export olgraph-copy/deep olnode-copy/deep)
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates hashmap)
