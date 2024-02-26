@@ -23,7 +23,7 @@
 
 (define (olnode-copy/deep olnode)
   (define H (make-hashmap))
-  (olnode-copy/deep H olnode))
+  (olnode-copy/deep/aux H olnode))
 
 
 (define (olgraph-copy/deep olgraph)
