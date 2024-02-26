@@ -13,5 +13,4 @@
   (let loop ((olnode olnode))
     (let ((value (olnode:value olnode))
           (children (olnode:children olnode)))
-      (cons value
-            (map loop children)))))
+      (cons value (map loop children)))))
