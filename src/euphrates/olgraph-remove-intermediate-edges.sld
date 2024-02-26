@@ -4,30 +4,12 @@
   (export
     olnode-remove-intermediate-edges
     olgraph-remove-intermediate-edges)
-  (import
-    (only (euphrates hashmap)
-          hashmap-ref
-          hashmap-set!))
   (import (only (euphrates hashset) hashset-has?))
-  (import
-    (only (euphrates list-and-map) list-and-map))
-  (import (only (euphrates negate) negate))
   (import
     (only (euphrates olgraph-remove-edges-generic)
           olgraph-remove-edges/generic
           olnode-remove-edges/generic))
-  (import
-    (only (euphrates olgraph-transitive-closure)
-          olnode-transitive-closure/edges))
-  (import
-    (only (euphrates olgraph)
-          make-olnode
-          make-olnode/full
-          olnode:children
-          olnode:children:set!
-          olnode:id
-          olnode:meta
-          olnode:value))
+  (import (only (euphrates olgraph) olnode:id))
   (import
     (only (euphrates olnode-eq-huh) olnode-eq?))
   (import
@@ -38,13 +20,7 @@
           define
           lambda
           let
-          map
-          not
-          or
-          quote))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
+          not))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -13,53 +13,6 @@
               (not (hashset-has? closure key))))))))
 
 
-(define (olnode-remove-intermediate-edges/aux H olnode)
-  (define closure
-    (olnode-transitive-closure/edges olnode))
-
-  (define ret
-    (make-olnode (olnode:value olnode)))
-
-  (let loop ((olnode olnode))
-    (define existing (hashmap-ref H (olnode:id olnode) #f))
-    (or existing
-        (let ()
-          (define ret
-            (make-olnode/full
-             (olnode:value olnode)
-             '()
-             (olnode:meta olnode)))
-
-          (define _182313
-            (hashmap-set! H (olnode:id olnode) ret))
-
-          (define old-children
-            (olnode:children olnode))
-
-          (define (contains-current? current)
-            (lambda (child)
-              (and (not (olnode-eq? child current))
-                   (let ()
-                     (define key (cons (olnode:id child)
-                                       (olnode:id current)))
-                     (not (hashset-has? closure key))))))
-
-          (define filtered
-            (filter
-             (lambda (current)
-               (list-and-map
-                (negate (contains-current? current))
-                old-children))
-             old-children))
-
-          (define new-children
-            (map loop filtered))
-
-          (olnode:children:set! ret new-children)
-
-          ret))))
-
-
 (define (olnode-remove-intermediate-edges olnode)
   (olnode-remove-edges/generic make-check olnode))
 
