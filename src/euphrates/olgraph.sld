@@ -13,7 +13,8 @@
     olnode:children
     olnode:children:set!
     olnode:meta
-    olnode:meta:set!)
+    olnode:meta:set!
+    olnode:prepend-child!)
   (import
     (only (euphrates define-type9) define-type9))
   (import
