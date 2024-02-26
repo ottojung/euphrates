@@ -4,8 +4,10 @@
   (export
     olnode-remove-transitive-edges
     olgraph-remove-transitive-edges)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
+          hashmap->alist
           hashmap-ref
           hashmap-set!
           make-hashmap))
