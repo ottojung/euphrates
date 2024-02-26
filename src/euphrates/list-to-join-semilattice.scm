@@ -91,7 +91,7 @@
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
            (join! x y)))
-       copy
+       all-nodes
        copy)))
 
   graph)
