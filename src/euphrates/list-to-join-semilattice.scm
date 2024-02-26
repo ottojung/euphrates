@@ -65,6 +65,8 @@
     (values))
 
   (define (join! node-x node-y)
+    (debugs (list node-x node-y))
+
     (define join-result
       (call-with-values
           (lambda _
