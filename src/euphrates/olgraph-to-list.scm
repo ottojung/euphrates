@@ -11,6 +11,7 @@
   ;; and the rest are the children of that node.
 
   (let loop ((olnode olnode))
+    (debugs olnode)
     (let ((value (olnode:value olnode))
           (children (olnode:children olnode)))
       (cons value (map loop children)))))

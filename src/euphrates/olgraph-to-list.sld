@@ -2,6 +2,7 @@
 (define-library
   (euphrates olgraph-to-list)
   (export olnode->list)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates olgraph)
           olnode:children
