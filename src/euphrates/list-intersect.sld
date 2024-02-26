@@ -3,6 +3,10 @@
   (euphrates list-intersect)
   (export list-intersect)
   (import
+    (only (euphrates hashset)
+          hashset-has?
+          list->hashset))
+  (import
     (only (scheme base)
           begin
           car
@@ -11,7 +15,6 @@
           define
           if
           let
-          member
           null?
           quote
           reverse))
