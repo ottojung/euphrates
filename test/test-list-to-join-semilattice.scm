@@ -87,9 +87,11 @@
     (list->hashset x)
     (list->hashset y)))
 
- (lambda (x y) (list-intersect x y))
+ (lambda (x y)
+   (let ((r (list-intersect x y)))
+     (if (null? r) (values) r)))
 
- '((1 2 3) (2 6 1) (5 1 6) (7 1))
+ '((1 2 3) (2 6 1) (5 1 6) (7 1) (5))
 
  '(((1 2 3) ((1)) ((1 2) ((1))))
    ((2 6 1) ((1)) ((6 1) ((1))) ((1 2) ((1))))
