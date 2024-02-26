@@ -4,9 +4,6 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debugs) debugs))
   (import
-    (only (euphrates greatest-common-divisor)
-          greatest-common-divisor))
-  (import
     (only (euphrates hashset)
           hashset-equal?
           list->hashset))
@@ -23,7 +20,6 @@
     (only (scheme base)
           begin
           define
-          equal?
           lambda
           map
           quote))
