@@ -27,7 +27,7 @@
   ;;                    function as your `join-function`.
   ;;
   ;; - `lst`: This is the list of elements you want to transform. The type of
-  ;;          list elements ('U') can be flexible, with the condition that the
+  ;;          list elements can be flexible, with the condition that the
   ;;          `equality-tester` and `join-function` can handle such type.
   ;;          For example, this could be a list of integers,
   ;;          such as `(1 2 3 4 5)`.
