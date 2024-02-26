@@ -13,8 +13,7 @@
           hashset->list
           hashset-has?))
   (import
-    (only (euphrates list-and-map) list-and-map))
-  (import (only (euphrates negate) negate))
+    (only (euphrates list-or-map) list-or-map))
   (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))

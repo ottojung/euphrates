@@ -37,9 +37,10 @@
           (define filtered
             (filter
              (lambda (current)
-               (list-and-map
-                (negate (contains-current? current))
-                old-children))
+               (define is-transitive
+                 (list-or-map
+                  (contains-current? current)))
+               (not is-transitive))
              old-children))
 
           (define new-children
