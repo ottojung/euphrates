@@ -17,6 +17,7 @@
 ;; OLgraph is a list of initial Olnodes, which serves as the 'root' or starting point
 ;; of graph exploration.
 
+
 (define-type9 olgraph
   (make-olgraph initial) olgraph?
   (initial olgraph:initial olgraph:initial:set!)
