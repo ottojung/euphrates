@@ -95,5 +95,5 @@
 
       (loop)))
 
-  ;; (olgraph-remove-transitive-edges graph))
-  (olgraph-remove-intermediate-edges graph))
+  (olgraph-remove-transitive-edges graph))
+  ;; (olgraph-remove-intermediate-edges graph))
