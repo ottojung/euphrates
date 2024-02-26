@@ -23,8 +23,14 @@
         (define old-children
           (olnode:children olnode))
 
-        ;; (define filtered
-        ;;   (filter 
+        (define (contains-current? current)
+          (lambda (child)
+            (if (and (not (equal? (olnode:id child)
+                                  (olnode:id current)))
+                     
+
+        (define filtered
+          (filter 
 
         (define new-children
           0)
