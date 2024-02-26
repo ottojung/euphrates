@@ -38,7 +38,8 @@
             (filter
              (lambda (current)
                (list-and-map
-                (negate (contains-current? current))
+                ;; (negate (contains-current? current))
+                (const #f)
                 old-children))
              old-children))
 
