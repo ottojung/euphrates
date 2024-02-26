@@ -30,8 +30,8 @@
             (lambda (other)
               (and (not (olnode-eq? other child))
                    (let ()
-                     (define key (cons (olnode:id child)
-                                       (olnode:id other)))
+                     (define key (cons (olnode:id other)
+                                       (olnode:id child)))
                      (not (hashset-has? closure key))))))
 
           (define filtered
