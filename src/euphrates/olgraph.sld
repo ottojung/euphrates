@@ -3,10 +3,12 @@
   (euphrates olgraph)
   (export
     make-olgraph
+    olgraph:value
     olgraph:children
     olgraph:children:set!
-    olgraph:eq?
-    olgraph:meta)
+    olgraph:meta
+    olgraph:meta:set!
+    olgraph-eq?)
   (import
     (only (scheme base)
           +
