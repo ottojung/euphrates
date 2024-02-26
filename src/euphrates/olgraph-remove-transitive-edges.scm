@@ -26,9 +26,6 @@
           (define old-children
             (olnode:children olnode))
 
-          (define recursed
-            (map loop old-children))
-
           (define (contains-current? current)
             (lambda (child)
               (and (not (olnode-eq? child current))
@@ -37,13 +34,16 @@
                                        (olnode:id current)))
                      (not (hashset-has? key))))))
 
-          (define new-children
+          (define filtered
             (filter
              (lambda (current)
                (list-and-map
                 (negate (contains-current? current))
                 old-children))
              old-children))
+
+          (define new-children
+            (map loop filtered))
 
           (olnode:children:set! ret new-children)
 
