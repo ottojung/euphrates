@@ -85,7 +85,6 @@
   (let loop ()
     (define copy current-layer)
     (set! current-layer '())
-
     (unless (null? copy)
       (cartesian-each
        (lambda (x y)
