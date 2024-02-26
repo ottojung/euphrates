@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates olgraph-to-adjlist)
-  (export olnode->adjlist)
+  (export olgraph->adjlist olnode->adjlist)
   (import
     (only (euphrates hashset)
           hashset-add!
