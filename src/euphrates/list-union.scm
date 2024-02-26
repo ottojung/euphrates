@@ -8,6 +8,6 @@
         (append source-list (reverse ret))
         (let ()
           (define x (car source-list))
-          (if (hashset-has? hash-b x)
+          (if (not (hashset-has? hash-a x))
               (loop (cdr source-list) (cons x ret))
               (loop (cdr source-list) ret))))))

@@ -16,6 +16,7 @@
           define
           if
           let
+          not
           null?
           quote
           reverse))
