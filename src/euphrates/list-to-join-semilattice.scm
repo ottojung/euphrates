@@ -11,8 +11,8 @@
   ;; Let U : Type
   ;; Then
   ;; lst: List[U]
-  ;; join-function: \forall x,y,z \in U . x, y -> Union[z, void]
   ;; equality-tester: U, U -> boolean
+  ;; join-function: \forall x,y,z \in U . x, y -> Union[z, void]
   ;; list->join-semilattice: ... -> olgraph[z]
   ;;
   ;; Where `void` is the type of `(values)` expression.
