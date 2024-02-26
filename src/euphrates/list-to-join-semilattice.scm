@@ -87,16 +87,11 @@
     (set! current-layer '())
 
     (when (< 1 (length copy))
-      (debugs copy)
       (cartesian-each
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
            (join! x y)))
        copy
        copy)))
-
-  (debug "DONE CONSTRUCTING!")
-  (debug "~s" graph)
-  (debug "THAT WAS GRAPH")
 
   graph)
