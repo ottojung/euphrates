@@ -12,7 +12,7 @@
   (olnode-constructor id value children meta) olnode?
   (id olnode:id)
   (value olnode:value)
-  (children olnode:children internal-olnode:children:set!)
+  (children olnode:children olnode:children:set!)
   (meta olnode:meta olnode:meta:set!)
   )
 
