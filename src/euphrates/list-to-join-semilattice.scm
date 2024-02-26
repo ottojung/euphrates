@@ -47,8 +47,8 @@
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
            
-           0)
-         current-layer
-         current-layer))))
+           0))
+       current-layer
+       current-layer)))
 
   graph)
