@@ -24,6 +24,10 @@
   )
 
 
+(define (olgraph:prepend-initial! graph node)
+  (olgraph:initial:set! graph (cons node (olgraph:initial graph))))
+
+
 ;; OLNODE
 
 ;; Each OLNode represents a node in the graph, and includes several properties:
