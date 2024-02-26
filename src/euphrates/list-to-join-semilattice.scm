@@ -12,6 +12,7 @@
   ;; Then
   ;; join-function: \forall x,y,z \in x, y -> Union[z, void]
   ;; lst: List[X]
+  ;; equality-tester: X, X -> boolean
   ;; list->join-semilattice: ... -> olgraph[z]
   ;;
   ;; Where `void` is the type of `(values)` expression.
