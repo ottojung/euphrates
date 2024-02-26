@@ -36,6 +36,7 @@
           null?
           or
           quote
+          set!
           unless
           values
           when))

@@ -69,13 +69,16 @@
 
       (add-join-point! node-x node-y (car join-result))))
 
-  (let loop ((current-layer initial-nodes))
-    (when (< 1 (length current-layer))
+  (let loop ()
+    (define copy current-layer)
+    (set! current-layer '())
+
+    (when (< 1 (length copy))
       (cartesian-each
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
            (join! x y)))
-       current-layer
-       current-layer)))
+       copy
+       copy)))
 
   graph)
