@@ -5,7 +5,7 @@
   (define closure
     (olnode-transitive-closure/edges olnode))
 
-  (define copy
-    
+  (define ret
+    (make-olnode (olnode:value olnode)))
 
   
