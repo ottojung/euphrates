@@ -1,6 +1,6 @@
 (define-library
   (euphrates olgraph-remove-transitive-edges)
-  (export olgraph-remove-transitive-edges)
+  (export olnode-remove-transitive-edges)
   (import
     (only (scheme base) begin define make-parameter))
   (cond-expand
