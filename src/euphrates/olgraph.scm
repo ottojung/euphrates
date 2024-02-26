@@ -22,6 +22,7 @@
   (initial olgraph:initial olgraph:initial:set!)
   )
 
+
 ;; OLNODE
 
 ;; Each Olnode represents a node in the graph, and includes several properties:
