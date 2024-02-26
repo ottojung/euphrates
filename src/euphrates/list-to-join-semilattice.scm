@@ -5,6 +5,7 @@
          equality-tester
          join-function
          lst)
+
   ;;
   ;; Let U : Type
   ;; Then
