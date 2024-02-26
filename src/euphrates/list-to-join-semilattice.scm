@@ -27,6 +27,7 @@
     (make-olgraph initial-nodes))
 
   (define all-nodes initial-nodes)
+  (define current-layer initial-nodes)
 
   (define (find-existing-node needle-value)
     (list-find-first
