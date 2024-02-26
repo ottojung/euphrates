@@ -4,7 +4,6 @@
   (export olnode->adjlist)
   (import
     (only (euphrates hashset)
-          hashset-add!
           hashset-has?
           make-hashset))
   (import
@@ -19,7 +18,6 @@
           for-each
           lambda
           let
-          list
           unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))

@@ -4,18 +4,14 @@
 (define (olnode->adjlist olnode)
   (define ret (make-hashset))
 
-  (let loop ((olnode olnode) (ancestors (list (olnode:id olnode))))
+  (let loop ((olnode olnode))
     (define children (olnode:children olnode))
     (for-each
      (lambda (child)
        (define key (cons olnode child))
        (unless (hashset-has? ret key)
-         (for-each
-          (lambda (ancestor)
-            (define key (cons ancestor (olnode:id child)))
-            (hashset-add! ret key))
-          ancestors)
-         (loop child (cons (olnode:id child) ancestors))))
+         (let ()
+           (loop child (cons (olnode:id child) ancestors)))))
      children))
 
   ret)
