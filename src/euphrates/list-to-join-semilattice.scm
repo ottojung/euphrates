@@ -45,9 +45,9 @@
   ;;
   ;; produces the graph `((1) (2 1) (3 1) (4 2) (5 1))` (adjacency list notation).
   ;;
-  ;; In this case, for instance,
-  ;; elements `2` and `3` have the common successor `1`,
-  ;; and `4` is succeeded by `2`.
+  ;; In this case, for instance, elements `2` and `3`
+  ;; have the common successor `1`, and `4` is succeeded by `2`.
+  ;; Note that 1 is not succeded by itself, because that is not allowed.
   ;;
   ;; Corner Cases:
   ;;
