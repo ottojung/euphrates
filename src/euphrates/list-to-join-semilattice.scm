@@ -61,8 +61,8 @@
   ;;
   ;; - If `lst` is an empty list, the function will return an empty graph.
   ;;
-  ;; - Disjoint subgraphs are supported, even though they are not formally
-  ;;   lattices.
+  ;; - Disjoint subgraphs can be produced if `join-function` so desires,
+  ;;   even though they are not formally lattices.
   ;;
   ;; Performance Considerations:
   ;;
