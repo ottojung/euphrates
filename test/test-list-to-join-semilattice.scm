@@ -6,8 +6,6 @@
      join-function
      lst))
 
-  ;; (debugs result)
-
   (define actual
     (map olnode->list
          (olgraph:initial result)))
