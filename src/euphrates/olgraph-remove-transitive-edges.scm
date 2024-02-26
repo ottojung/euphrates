@@ -20,7 +20,8 @@
              '()
              (olnode:meta olnode)))
 
-          (hashmap-set! H (olnode:id olnode) ret)
+          (define _182313
+            (hashmap-set! H (olnode:id olnode) ret))
 
           (define old-children
             (olnode:children olnode))
