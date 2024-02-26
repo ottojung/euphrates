@@ -86,6 +86,7 @@
     (set! current-layer '())
 
     (when (< 1 (length copy))
+      (debugs copy)
       (cartesian-each
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
