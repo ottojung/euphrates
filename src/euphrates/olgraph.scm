@@ -18,7 +18,7 @@
 ;; of graph exploration.
 ;;
 ;; This structure is completely optional,
-;; and all graph operations should be based on the OLNode.
+;; and all graph operations should be based on the OLNode instead.
 ;;
 
 (define-type9 olgraph
