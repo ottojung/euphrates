@@ -8,8 +8,7 @@
     olgraph:children
     olgraph:children:set!
     olgraph:meta
-    olgraph:meta:set!
-    olgraph-eq?)
+    olgraph:meta:set!)
   (import
     (only (scheme base)
           +
