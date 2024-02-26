@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates olgraph-to-list-depth)
-  (export olgraph->list/depth)
+  (export olnode->list/depth)
   (import
     (only (euphrates olgraph)
           olnode:children
