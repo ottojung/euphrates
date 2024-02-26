@@ -8,6 +8,7 @@
           list->hashset))
   (import
     (only (scheme base)
+          append
           begin
           car
           cdr
