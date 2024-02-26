@@ -1,2 +1,14 @@
 
-(define test-list->join-semilattice "wg1pgje7r5os74s0ctqa")
+(define (test-case equality-tester join-function lst expected)
+  (define actual
+    (list->join-semilattice
+     equality-tester
+     join-function
+     lst))
+
+  (assert= actual expected))
+
+
+(test-case
+ equal?
+ (lambda (x y) (= (modulo x y) 0))
