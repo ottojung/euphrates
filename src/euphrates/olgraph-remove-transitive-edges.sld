@@ -8,6 +8,9 @@
           hashset-has?
           make-hashset))
   (import
+    (only (euphrates list-and-map) list-and-map))
+  (import (only (euphrates negate) negate))
+  (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))
   (import
@@ -20,12 +23,21 @@
           olnode:meta
           olnode:value))
   (import
+    (only (euphrates olnode-eq-huh) olnode-eq?))
+  (import
     (only (scheme base)
+          and
           begin
+          cons
           define
+          lambda
           let
+          not
           quote
           unless))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

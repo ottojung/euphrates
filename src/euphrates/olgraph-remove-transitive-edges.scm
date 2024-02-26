@@ -26,7 +26,10 @@
         (define (contains-current? current)
           (lambda (child)
             (and (not (olnode-eq? child current))
-                 
+                 (let ()
+                   (define key (cons (olnode:id child)
+                                     (olnode:id current)))
+                   (not (hashset-has? key))))))
 
         (define filtered
           (filter
