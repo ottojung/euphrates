@@ -7,21 +7,22 @@
   (import
     (only (euphrates hashmap)
           hashmap-ref
-          hashmap-set!
-          make-hashmap))
+          hashmap-set!))
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates list-and-map) list-and-map))
   (import (only (euphrates negate) negate))
   (import
+    (only (euphrates olgraph-remove-edges-generic)
+          olgraph-remove-edges/generic
+          olnode-remove-edges/generic))
+  (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))
   (import
     (only (euphrates olgraph)
-          make-olgraph
           make-olnode
           make-olnode/full
-          olgraph:initial
           olnode:children
           olnode:children:set!
           olnode:id

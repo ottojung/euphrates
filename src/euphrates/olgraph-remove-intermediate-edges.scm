@@ -61,13 +61,8 @@
 
 
 (define (olnode-remove-intermediate-edges olnode)
-  (define H (make-hashmap))
-  (olnode-remove-intermediate-edges/aux H olnode))
+  (olnode-remove-edges/generic make-check olnode))
 
 
 (define (olgraph-remove-intermediate-edges olgraph)
-  (define H (make-hashmap))
-  (define new-initials
-    (map (lambda (node) (olnode-remove-intermediate-edges/aux H node))
-         (olgraph:initial olgraph)))
-  (make-olgraph new-initials))
+  (olgraph-remove-edges/generic make-check olgraph))
