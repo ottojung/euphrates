@@ -30,7 +30,7 @@
                    (let ()
                      (define key (cons (olnode:id child)
                                        (olnode:id current)))
-                     (not (hashset-has? key))))))
+                     (not (hashset-has? closure key))))))
 
           (define filtered
             (filter
