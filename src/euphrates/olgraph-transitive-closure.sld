@@ -17,7 +17,7 @@
           for-each
           lambda
           let
-          quote
+          list
           unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))

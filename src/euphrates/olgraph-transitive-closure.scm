@@ -4,14 +4,18 @@
 (define (olnode-transitive-closure/edges olnode)
   (define ret (make-hashset))
 
-  (let loop ((olnode olnode) (trace '()))
+  (let loop ((olnode olnode) (ancestors (list olnode)))
     (define children (olnode:children olnode))
     (for-each
      (lambda (child)
        (define key (cons olnode child))
        (unless (hashset-has? ret key)
-         (hashset-add! ret key)
-         (loop child)))
+         (for-each
+          (lambda (ancestor)
+            (define key (cons ancestor key))
+            (hashset-add! ret key))
+          ancestors)
+         (loop child (cons child ancestors))))
      children))
 
   ret)
