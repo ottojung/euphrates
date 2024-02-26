@@ -49,7 +49,7 @@
   ;; have the common successor `1`, and `4` is succeeded by `2`.
   ;; Note that 1 is not succeded by itself, even thought GCD(1, 1) = 1,
   ;; because loops are prohibited in the resulting graph
-  ;; (such graph is not a lattice).
+  ;; (such graphs are not lattices).
   ;;
   ;; Corner Cases:
   ;;
