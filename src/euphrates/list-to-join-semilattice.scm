@@ -32,8 +32,12 @@
     (make-olgraph initial-nodes))
 
   (let loop ((current-layer initial-nodes))
-    
-    
-    0)
+    (cartesian-each
+     (lambda (x y)
+       (unless (equal? (olnode:id x) (olnode:id y))
+         
+       0)
+     current-layer
+     current-layer))
 
   graph)
