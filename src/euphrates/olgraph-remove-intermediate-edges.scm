@@ -8,8 +8,6 @@
   (define ret
     (make-olnode (olnode:value olnode)))
 
-  (debugs (hashset->list closure))
-
   (let loop ((olnode olnode))
     (define existing (hashmap-ref H (olnode:id olnode) #f))
     (or existing
