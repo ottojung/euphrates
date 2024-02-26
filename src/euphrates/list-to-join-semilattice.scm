@@ -23,8 +23,8 @@
     (map
      (lambda (value)
        (define children '())
-       (make-olnode value children 
-       )
+       (define meta #f)
+       (make-olnode value children meta))
      lst))
 
   TODO
