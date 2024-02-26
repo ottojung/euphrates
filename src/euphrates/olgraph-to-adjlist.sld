@@ -26,6 +26,7 @@
           cons
           define
           for-each
+          lambda
           let
           map
           reverse
