@@ -3,9 +3,6 @@
   (euphrates olgraph-reverse-children-inplace-bang)
   (export olgraph-reverse-children-inplace!)
   (import
-    (only (euphrates olgraph-reverse-children)
-          olgraph-reverse-children))
-  (import
     (only (euphrates olgraph)
           olgraph:initial
           olnode:children
