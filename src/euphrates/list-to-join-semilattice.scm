@@ -5,11 +5,14 @@
   ;;
   ;; The `list->join-semilattice` function generates a join semilattice graph from a given list.
   ;; A semilattice is a partially ordered set with a function operation - known as the join - which
-  ;; finds the smallest common successor for any pair of elements. This function is useful in understanding the properties and relationships between elements of a list.
+  ;; finds the smallest common successor for any pair of elements. This function is useful in understanding
+  ;; the properties and relationships between elements of a list.
   ;;
   ;; Parameters:
   ;;
-  ;; - `equality-tester`: This is a function that checks the equality between two elements. The nature of the `equality-tester` function will depend on the specific elements within your list. For instance, if your list is composed of integers, your `equality-tester` could be a simple `equal?` function.
+  ;; - `equality-tester`: This is a function that checks the equality between two elements.
+  ;;                      The nature of the `equality-tester` function will depend on the specific elements within your list.
+  ;;                      For instance, if your list is composed of integers, your `equality-tester` could be a simple `equal?` function.
   ;;
   ;; - `join-function`: This is a function that produces either a common successor of two list elements (also known as a join point in the context of semilattices), or returns `void` (the type of `(values)` expression) if there's no join point. For example, if you're working with a list of integers, you might use the `greatest common divisor` function as your `join-function` (e.g., `(greatest-common-divisor x y)`).
   ;;
