@@ -3,18 +3,27 @@
 
 
 (define-type9 olgraph
-  (olgraph-constructor id value children meta) olgraph?
-  (id olgraph:id)
-  (value olgraph:value)
-  (children olgraph:children olgraph:children:set!)
-  (meta olgraph:meta olgraph:meta:set!)
+  (olgraph-constructor nodes) olgraph?
+  (nodes olgraph:nodes)
   )
 
 
-(define make-olgraph
+(define-type9 olnode
+  (olnode-constructor id value children meta) olnode?
+  (id olnode:id)
+  (value olnode:value)
+  (children olnode:children internal-olnode:children:set!)
+  (meta olnode:meta olnode:meta:set!)
+  )
+
+
+(define make-olnode
   (let ()
     (define counter 0)
     (lambda (value children meta)
       (define id counter)
       (set! counter (+ 1 counter))
-      (olgraph-constructor id value children meta))))
+      (olnode-constructor id value children meta))))
+
+
+(define 
