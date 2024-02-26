@@ -90,8 +90,7 @@
          (unless (olnode-eq? x y)
            (join! x y)))
 
-       copy
-       copy)
+       copy copy)
 
       (loop)))
 
