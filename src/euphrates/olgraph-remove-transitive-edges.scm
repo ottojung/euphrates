@@ -14,14 +14,17 @@
     (unless (hashset-has? H (olnode:id olnode))
       (hashset-add! H (olnode:id olnode))
       (let ()
-        (define old-children
-          (olnode:children olnode))
-
         (define ret
           (make-olnode/full
            (olnode:value olnode)
            '()
            (olnode:meta olnode)))
+
+        (define old-children
+          (olnode:children olnode))
+
+        ;; (define filtered
+        ;;   (filter 
 
         (define new-children
           0)
