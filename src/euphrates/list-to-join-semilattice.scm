@@ -10,7 +10,7 @@
   ;;
   ;; Let U : Type
   ;; Then
-  ;; join-function: \forall x,y,z \in U, y -> Union[z, void]
+  ;; join-function: \forall x,y,z \in U . x, y -> Union[z, void]
   ;; lst: List[U]
   ;; equality-tester: U, U -> boolean
   ;; list->join-semilattice: ... -> olgraph[z]
