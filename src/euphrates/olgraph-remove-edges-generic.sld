@@ -11,8 +11,6 @@
           make-hashmap))
   (import (only (euphrates hashset) hashset-has?))
   (import
-    (only (euphrates list-and-map) list-and-map))
-  (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))
   (import
