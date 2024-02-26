@@ -3,7 +3,7 @@
 
 
 (define-type9 olgraph
-  (olgraph-constructor roots) olgraph?
+  (make-olgraph roots) olgraph?
   (roots olgraph:roots) ;; Actually a superset of all root (source) nodes. The only guaranteed property is that we can get all nodes by traversing these "roots".
   )
 

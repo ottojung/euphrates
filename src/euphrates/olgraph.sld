@@ -3,12 +3,16 @@
   (euphrates olgraph)
   (export
     make-olgraph
-    olgraph:id
-    olgraph:value
-    olgraph:children
-    olgraph:children:set!
-    olgraph:meta
-    olgraph:meta:set!)
+    olgraph?
+    olgraph:roots
+    make-olnode
+    olnode?
+    olnode:id
+    olnode:value
+    olnode:children
+    olnode:children:set!
+    olnode:meta
+    olnode:meta:set!)
   (import
     (only (euphrates define-type9) define-type9))
   (import
