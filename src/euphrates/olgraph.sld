@@ -6,6 +6,7 @@
     olgraph?
     olgraph:initial
     olgraph:initial:set!
+    olgraph:prepend-initial!
     make-olnode
     olnode?
     olnode:id
