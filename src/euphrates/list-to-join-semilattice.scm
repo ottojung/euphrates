@@ -41,12 +41,30 @@
         (olnode:value other)))
      #f all-nodes))
 
+  (define (join! node-x node-y)
+    (define join-result
+      (call-with-values
+          (lambda _
+            (join-function
+             (olnode:value node-x)
+             (olnode:value node-y)))
+        list))
+
+    (unless (null? join-result)
+      (unless (null? (cdr join-result))
+        (raisu* :from "list-reduce/pairwise"
+                :type 'bad-number-of-values
+                :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
+                :args (list result x y lst)))
+
+      (add-join-point! node-x node-y (car join-result))))
+
   (let loop ((current-layer initial-nodes))
     (when (< 1 (length current-layer))
       (cartesian-each
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
-           (add-new! x y)))
+           (join! x y)))
        current-layer
        current-layer)))
 

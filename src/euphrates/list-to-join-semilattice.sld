@@ -13,16 +13,24 @@
           make-olnode
           olnode:id
           olnode:value))
+  (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           <
+          _
           begin
+          call-with-values
+          car
+          cdr
           define
           equal?
           lambda
           length
           let
+          list
           map
+          null?
           quote
           unless
           when))
