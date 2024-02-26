@@ -11,7 +11,9 @@
   ;; and the rest are the children of that node.
   ;; Stops `levels` deep.
 
-  (let loop ((olnode olnode))
+  (let loop ((level 0) (olnode olnode))
     (let ((value (olnode:value olnode))
           (children (olnode:children olnode)))
-      (cons value (map loop children)))))
+      (cons value
+            (map (lambda (c) (loop (+ 1 level) c))
+                 children)))))

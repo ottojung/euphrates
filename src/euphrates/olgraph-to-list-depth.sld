@@ -1,8 +1,20 @@
+
 (define-library
   (euphrates olgraph-to-list-depth)
   (export olgraph->list/depth)
   (import
-    (only (scheme base) begin define make-parameter))
+    (only (euphrates olgraph)
+          olnode:children
+          olnode:value))
+  (import
+    (only (scheme base)
+          +
+          begin
+          cons
+          define
+          lambda
+          let
+          map))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
