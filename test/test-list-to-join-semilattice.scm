@@ -6,7 +6,7 @@
      join-function
      lst))
 
-  (debugs result)
+  ;; (debugs result)
 
   (define actual
     (map olnode->list
