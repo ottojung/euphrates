@@ -8,6 +8,14 @@
   (define ret
     (make-olnode (olnode:value olnode)))
 
-  0)
+  (let loop ((olnode olnode))
+    (define old-children
+      (olnode:children olnode))
 
-  
+    (define new-children
+      0)
+
+    (make-olnode/full
+     (olnode:value olnode)
+     new-children
+     (olnode:meta olnode))))

@@ -8,8 +8,11 @@
   (import
     (only (euphrates olgraph)
           make-olnode
+          make-olnode/full
+          olnode:children
+          olnode:meta
           olnode:value))
-  (import (only (scheme base) begin define))
+  (import (only (scheme base) begin define let))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
