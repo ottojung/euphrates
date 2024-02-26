@@ -7,13 +7,7 @@
           olnode:children
           olnode:value))
   (import
-    (only (scheme base)
-          begin
-          cons
-          define
-          let
-          map
-          quote))
+    (only (scheme base) begin cons define let map))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

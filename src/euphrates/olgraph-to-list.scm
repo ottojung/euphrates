@@ -10,8 +10,7 @@
   ;; First element of each branch is the value,
   ;; and the rest are the children of that node.
 
-  (let loop ((olnode olnode)
-             (result '()))
+  (let loop ((olnode olnode))
     (let ((value (olnode:value olnode))
           (children (olnode:children olnode)))
       (cons value
