@@ -25,11 +25,16 @@
 
         (define (contains-current? current)
           (lambda (child)
-            (if (and (not (olnode-eq? child current))
-                     
+            (and (not (olnode-eq? child current))
+                 
 
         (define filtered
-          (filter 
+          (filter
+           (lambda (current)
+             (list-and-map
+              (negate (contains-current? current))
+              old-children))
+           old-children))
 
         (define new-children
           0)

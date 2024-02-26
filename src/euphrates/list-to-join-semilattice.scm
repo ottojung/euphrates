@@ -39,8 +39,7 @@
 
   (define (prepend-node! parent child)
     (define (equal-to-child? other)
-      (equal? (olnode:id child)
-              (olnode:id other)))
+      (olnode-eq? child other))
 
     (unless (equal-to-child? parent)
       (unless (list-or-map
@@ -88,7 +87,7 @@
     (unless (null? copy)
       (cartesian-each
        (lambda (x y)
-         (unless (equal? (olnode:id x) (olnode:id y))
+         (unless (olnode-eq? x y)
            (join! x y)))
 
        all-nodes

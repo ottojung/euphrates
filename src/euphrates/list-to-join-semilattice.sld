@@ -14,9 +14,10 @@
           make-olgraph
           make-olnode
           olnode:children
-          olnode:id
           olnode:prepend-child!
           olnode:value))
+  (import
+    (only (euphrates olnode-eq-huh) olnode-eq?))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import
@@ -28,7 +29,6 @@
           cdr
           cons
           define
-          equal?
           lambda
           length
           let
