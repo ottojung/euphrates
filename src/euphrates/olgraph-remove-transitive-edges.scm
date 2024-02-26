@@ -17,8 +17,4 @@
 
 
 (define (olgraph-remove-transitive-edges olgraph)
-  (define H (make-hashmap))
-  (define new-initials
-    (map (lambda (node) (olnode-remove-transitive-edges/aux H node))
-         (olgraph:initial olgraph)))
-  (make-olgraph new-initials))
+  (olgraph-remove-edges/generic make-check olgraph))

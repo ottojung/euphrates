@@ -2,16 +2,12 @@
 (define-library
   (euphrates olgraph-remove-transitive-edges)
   (export olgraph-remove-transitive-edges)
-  (import (only (euphrates hashmap) make-hashmap))
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates olgraph-remove-edges-generic)
+          olgraph-remove-edges/generic
           olnode-remove-edges/generic))
-  (import
-    (only (euphrates olgraph)
-          make-olgraph
-          olgraph:initial
-          olnode:id))
+  (import (only (euphrates olgraph) olnode:id))
   (import
     (only (euphrates olnode-eq-huh) olnode-eq?))
   (import
@@ -21,7 +17,6 @@
           define
           lambda
           let
-          map
           not
           or))
   (cond-expand
