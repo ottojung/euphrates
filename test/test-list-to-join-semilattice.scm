@@ -7,7 +7,8 @@
      lst))
 
   (define actual
-    (olnode->list result))
+    (map olnode->list
+         (olgraph:initial result)))
 
   (assert= actual expected))
 

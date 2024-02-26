@@ -11,11 +11,14 @@
   (import
     (only (euphrates olgraph-to-list) olnode->list))
   (import
+    (only (euphrates olgraph) olgraph:initial))
+  (import
     (only (scheme base)
           begin
           define
           equal?
           lambda
+          map
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
