@@ -33,9 +33,6 @@
 ;; * Meta: A placeholder for additional information associated with the node,
 ;;   this should not be considered part of the node itself.
 
-;; OLNode utilizes a counter to ensure each node has a unique ID. This counter is incremented
-;; for each new node created.
-
 
 (define-type9 olnode
   (olnode-constructor id value children meta) olnode?
@@ -44,6 +41,10 @@
   (children olnode:children olnode:children:set!)
   (meta olnode:meta olnode:meta:set!)
   )
+
+
+;; OLNode utilizes a counter to ensure each node has a unique ID. This counter is incremented
+;; for each new node created.
 
 
 (define make-olnode
