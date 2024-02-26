@@ -32,7 +32,11 @@
   ;;          For example, this could be a list of integers,
   ;;          such as `(1 2 3 4 5)`.
   ;;
-  ;; The result of `list->join-semilattice` is a list of sublists where each sublist represents a node in the graph and its direct successors. A sublist starts with a node's value and following elements are its direct successors. Note that if a successor appears in multiple sublist, it means it is a common successor of different nodes. 
+  ;; The result of `list->join-semilattice` is a list of sublists
+  ;; where each sublist represents a node in the graph and its direct
+  ;; successors. A sublist starts with a node's value and following
+  ;; elements are its direct successors. Note that if a successor appears
+  ;; in multiple sublist, it means it is a common successor of different  nodes.
   ;;
   ;; Example:
   ;;
