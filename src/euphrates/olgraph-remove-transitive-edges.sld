@@ -18,8 +18,10 @@
           olnode-transitive-closure/edges))
   (import
     (only (euphrates olgraph)
+          make-olgraph
           make-olnode
           make-olnode/full
+          olgraph:initial
           olnode:children
           olnode:children:set!
           olnode:id
