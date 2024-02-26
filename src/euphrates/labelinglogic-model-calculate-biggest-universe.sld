@@ -20,7 +20,7 @@
           list-fold/semigroup))
   (import
     (only (euphrates list-intersect-order-independent)
-          list-intersect/order-independent))
+          list-intersect))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))

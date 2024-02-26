@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates list-intersect-order-independent)
-  (export list-intersect/order-independent)
+  (export list-intersect)
   (import
     (only (scheme base)
           begin

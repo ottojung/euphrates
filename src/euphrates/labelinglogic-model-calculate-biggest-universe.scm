@@ -37,7 +37,7 @@
 
       ((equal? type 'and)
        (list-fold/semigroup
-        list-intersect/order-independent
+        list-intersect
         (map loop args)))
 
       ((equal? type 'tuple)
