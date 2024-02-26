@@ -28,5 +28,7 @@
        (make-olnode value children meta))
      lst))
 
-  TODO
-  )
+  (define graph
+    (make-olgraph initial-nodes))
+
+  graph)
