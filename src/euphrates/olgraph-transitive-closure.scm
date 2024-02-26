@@ -4,7 +4,7 @@
 (define (olnode-transitive-closure/edges olnode)
   (define ret (make-hashset))
 
-  (let loop ((olnode olnode))
+  (let loop ((olnode olnode) (trace '()))
     (define children (olnode:children olnode))
     (for-each
      (lambda (child)
