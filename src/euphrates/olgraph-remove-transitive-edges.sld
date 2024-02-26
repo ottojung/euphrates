@@ -4,7 +4,6 @@
   (export
     olnode-remove-transitive-edges
     olgraph-remove-transitive-edges)
-  (import (only (euphrates const) const))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
@@ -17,6 +16,7 @@
           hashset-has?))
   (import
     (only (euphrates list-and-map) list-and-map))
+  (import (only (euphrates negate) negate))
   (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))
