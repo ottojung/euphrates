@@ -55,10 +55,10 @@
 
     (unless (null? join-result)
       (unless (null? (cdr join-result))
-        (raisu* :from "list-reduce/pairwise"
+        (raisu* :from "list->join-semilattice"
                 :type 'bad-number-of-values
-                :message (stringf "Expected either 0 or 1 value, got ~s." (length result))
-                :args (list result x y lst)))
+                :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
+                :args (list join-result node-x node-y)))
 
       (add-join-point! node-x node-y (car join-result))))
 
