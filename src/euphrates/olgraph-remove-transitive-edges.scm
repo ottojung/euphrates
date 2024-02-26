@@ -26,4 +26,5 @@
         (define new-children
           0)
 
+        (olnode:children:set! ret new-children)
         ret))))

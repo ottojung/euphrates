@@ -15,6 +15,7 @@
           make-olnode
           make-olnode/full
           olnode:children
+          olnode:children:set!
           olnode:id
           olnode:meta
           olnode:value))
