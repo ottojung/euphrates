@@ -23,7 +23,7 @@
   ;;                    point in the context of semilattices), or returns `void`
   ;;                    (the type of `(values)` expression) if there's no join
   ;;                    point. For example, if you're working with a list of
-  ;;                    integers, you might use the `greatest common divisor`
+  ;;                    integers, you might use the `greatest-common-divisor`
   ;;                    function as your `join-function`.
   ;;
   ;; - `lst`: This is the list of elements you want to transform. The type of
