@@ -13,6 +13,9 @@
     (only (euphrates olgraph-remove-transitive-edges)
           olgraph-remove-transitive-edges))
   (import
+    (only (euphrates olgraph-reverse-children-inplace-bang)
+          olgraph-reverse-children-inplace!))
+  (import
     (only (euphrates olgraph-reverse-children)
           olgraph-reverse-children))
   (import
