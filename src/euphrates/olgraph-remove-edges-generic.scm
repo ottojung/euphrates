@@ -39,7 +39,7 @@
           (define filtered
             (filter
              (lambda (child)
-               (list-and-map keep? old-children))
+               (list-and-map (keep? child) old-children))
              old-children))
 
           (define new-children
