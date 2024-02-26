@@ -4,8 +4,11 @@
 
 (define (olnode-reverse-children olnode)
   (define copy (olnode-copy/deep olnode))
-  (
+  (olnode-reverse-children-inplace! copy)
+  copy)
+
 
 (define (olgraph-reverse-children olgraph)
-  (for-each
-  0)
+  (define copy (olgraph-copy/deep olgraph))
+  (olgraph-reverse-children-inplace! copy)
+  copy)
