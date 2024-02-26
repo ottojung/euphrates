@@ -11,6 +11,8 @@
           olnode:children
           olnode:id))
   (import
+    (only (euphrates stack) stack->list stack-make))
+  (import
     (only (scheme base)
           begin
           cons
@@ -18,6 +20,7 @@
           for-each
           lambda
           let
+          reverse
           unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
