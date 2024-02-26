@@ -7,12 +7,6 @@
     (only (euphrates greatest-common-divisor)
           greatest-common-divisor))
   (import
-    (only (euphrates hashset)
-          hashset-equal?
-          list->hashset))
-  (import
-    (only (euphrates list-intersect) list-intersect))
-  (import
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))
   (import
@@ -24,13 +18,9 @@
           begin
           define
           equal?
-          if
           lambda
-          let
           map
-          null?
-          quote
-          values))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
