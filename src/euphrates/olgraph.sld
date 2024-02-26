@@ -1,7 +1,12 @@
 
 (define-library
   (euphrates olgraph)
-  (export olgraph)
+  (export
+    make-olgraph
+    olgraph:children
+    olgraph:children:set!
+    olgraph:id
+    olgraph:meta)
   (import
     (only (scheme base)
           +
