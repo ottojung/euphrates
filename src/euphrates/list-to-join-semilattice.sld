@@ -13,6 +13,7 @@
     (only (euphrates olgraph)
           make-olgraph
           make-olnode
+          olnode:children
           olnode:id
           olnode:prepend-child!
           olnode:value))

@@ -42,7 +42,7 @@
          (lambda (other)
            (equal? (olnode:id child)
                    (olnode:id other)))
-         all-nodes)
+         (olnode:children parent))
       (olnode:prepend-child! parent child)))
 
   (define (make-new-node! value)
