@@ -39,7 +39,7 @@
              (lambda (current)
                (list-and-map
                 ;; (negate (contains-current? current))
-                (const #f)
+                (const #t)
                 old-children))
              old-children))
 
