@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates olgraph-transitive-closure)
-  (export olgraph-transitive-closure)
+  (export olnode-transitive-closure/edges)
   (import
     (only (euphrates hashset)
           hashset-add!
