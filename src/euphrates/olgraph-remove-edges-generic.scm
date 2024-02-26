@@ -49,14 +49,14 @@
           ret))))
 
 
-(define (olnode-remove-transitive-edges olnode)
+(define (olnode-remove-edges/generic make-check olnode)
   (define H (make-hashmap))
-  (olnode-remove-transitive-edges/aux H olnode))
+  (olnode-remove-transitive-edges/aux make-check H olnode))
 
 
-(define (olgraph-remove-transitive-edges olgraph)
+(define (olgraph-remove-edges/generic make-check olgraph)
   (define H (make-hashmap))
   (define new-initials
-    (map (lambda (node) (olnode-remove-transitive-edges/aux H node))
+    (map (lambda (node) (olnode-remove-edges/generic/aux make-check H node))
          (olgraph:initial olgraph)))
   (make-olgraph new-initials))
