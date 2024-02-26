@@ -14,6 +14,8 @@
   (let loop ((level 0) (olnode olnode))
     (let ((value (olnode:value olnode))
           (children (olnode:children olnode)))
+
       (cons value
-            (map (lambda (c) (loop (+ 1 level) c))
-                 children)))))
+            (if (> level levels) '()
+                (map (lambda (c) (loop (+ 1 level) c))
+                     children))))))

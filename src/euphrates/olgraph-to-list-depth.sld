@@ -9,12 +9,15 @@
   (import
     (only (scheme base)
           +
+          >
           begin
           cons
           define
+          if
           lambda
           let
-          map))
+          map
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
