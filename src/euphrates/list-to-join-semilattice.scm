@@ -41,6 +41,9 @@
         (olnode:value other)))
      #f all-nodes))
 
+  (define (add-join-point! node-x node-y value)
+    pass)
+
   (define (join! node-x node-y)
     (define join-result
       (call-with-values
