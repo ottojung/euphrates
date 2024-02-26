@@ -19,7 +19,13 @@
   ;; or void in case there is no join between them.
   ;;
 
-  
+  (define initial-nodes
+    (map
+     (lambda (value)
+       (define children '())
+       (make-olnode value children 
+       )
+     lst))
 
   TODO
   )
