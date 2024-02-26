@@ -94,4 +94,6 @@
        copy
        copy)))
 
+  (debug "DONE CONSTRUCTING!")
+
   graph)
