@@ -5,19 +5,37 @@
          equality-tester
          join-function
          lst)
-
+  ;; The `list->join-semilattice` function generates a join semilattice graph from a given list. A semilattice is a partially ordered set with a function operation – known as the join – which finds the smallest common successor for any pair of elements. This function is useful in understanding the properties and relationships between elements of a list.
   ;;
-  ;; Let U : Type
-  ;; Then
-  ;; lst: List[U]
-  ;; equality-tester: U, U -> Bool
-  ;; join-function: U, U -> Union[U, void]
-  ;; list->join-semilattice: ... -> olgraph[U]
+  ;; Parameters:
   ;;
-  ;; Where `void` is the type of `(values)` expression.
+  ;; - `equality-tester`: This is a function that checks the equality between two elements. The nature of the `equality-tester` function will depend on the specific elements within your list. For instance, if your list is composed of integers, your `equality-tester` could be a simple `equal?` function.
   ;;
-  ;; Join returns either the join point of the two nodes,
-  ;; or void in case there is no join between them.
+  ;; - `join-function`: This is a function that produces either a common successor of two list elements (also known as a join point in the context of semilattices), or returns `void` (the type of `(values)` expression) if there's no join point. For example, if you're working with a list of integers, you might use the `greatest common divisor` function as your `join-function` (e.g., `(greatest-common-divisor x y)`).
+  ;;
+  ;; - `lst`: This is the list of elements you want to transform. The type of list elements ('U') can be flexible, with the condition that the `equality-tester` and `join-function` can handle such type. For example, this could be a list of integers, such as `(1 2 3 4 5)`.
+  ;;
+  ;; The result of `list->join-semilattice` is a list of sublists where each sublist represents a node in the graph and its direct successors. A sublist starts with a node's value and following elements are its direct successors. Note that if a successor appears in multiple sublist, it means it is a common successor of different nodes. 
+  ;;
+  ;; Example:
+  ;;
+  ;; (list->join-semilattice equal? (lambda (x y) (greatest-common-divisor x y)) '(1 2 3 4 5))
+  ;;
+  ;; produces the graph `((1) (2 1) (3 1) (4 2) (5 1))` (notation = adjacency list).
+  ;;
+  ;; In this case, for instance, `2` and `3` have the common successor `1`, and `4` is succeeded by `2`.
+  ;;
+  ;; Corner Cases:
+  ;;
+  ;; - If `lst` is an empty list, the function will return an empty graph.
+  ;;
+  ;; - If `lst` contains elements that cannot be processed by `equality-tester` or `join-function`, an error will be raised.
+  ;;
+  ;; - If `join-function` returns multiple join points for the same pair of nodes, an error will be triggered.
+  ;;
+  ;; Performance Considerations:
+  ;;
+  ;; - This function can be computationally intensive for large lists due to the potential for pairwise comparisons, so consider this when dealing with larger datasets.
   ;;
 
   (define initial-nodes
