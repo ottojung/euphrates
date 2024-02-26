@@ -31,16 +31,13 @@
                                      (olnode:id current)))
                    (not (hashset-has? key))))))
 
-        (define filtered
+        (define new-children
           (filter
            (lambda (current)
              (list-and-map
               (negate (contains-current? current))
               old-children))
            old-children))
-
-        (define new-children
-          0)
 
         (olnode:children:set! ret new-children)
         ret))))
