@@ -11,4 +11,5 @@
 
 (test-case
  equal?
- (lambda (x y) (= (modulo x y) 0))
+ (lambda (x y)
+   

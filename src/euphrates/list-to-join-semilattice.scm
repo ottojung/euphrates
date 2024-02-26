@@ -6,4 +6,13 @@
          join-function
          lst)
 
+  ;;
+  ;; Let X : Type
+  ;; Then
+  ;; join-function: \forall x,y,z \in x, y -> Union[z, void]
+  ;; lst: List[X]
+  ;;
+  ;; Where `void` is the type of `(values)` expression.
+  ;;
+
   0)
