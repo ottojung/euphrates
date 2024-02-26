@@ -10,6 +10,8 @@
     (map olnode->list
          (olgraph:initial result)))
 
+  (debugs actual)
+
   (assert= actual expected))
 
 
