@@ -2,8 +2,10 @@
 (define-library
   (test-list-to-join-semilattice)
   (import (only (euphrates assert-equal) assert=))
-  (import (only (euphrates debug) debug))
   (import (only (euphrates debugs) debugs))
+  (import
+    (only (euphrates greatest-common-divisor)
+          greatest-common-divisor))
   (import
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))
@@ -11,7 +13,14 @@
     (only (euphrates olgraph-to-list) olnode->list))
   (import
     (only (euphrates olgraph) olgraph:initial))
-  (import (only (scheme base) begin define map))
+  (import
+    (only (scheme base)
+          begin
+          define
+          equal?
+          lambda
+          map
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
