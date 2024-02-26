@@ -21,12 +21,7 @@
   ;;
 
   (define initial-nodes
-    (map
-     (lambda (value)
-       (define children '())
-       (define meta #f)
-       (make-olnode value children meta))
-     lst))
+    (map make-olnode lst))
 
   (define graph
     (make-olgraph initial-nodes))
@@ -43,7 +38,7 @@
 
   (define (add-join-point! node-x node-y value)
     (define existing (find-existing-node value))
-    (define to-add (or existing (make-olnode value '() #f)))
+    (define to-add (or existing (make-olnode value)))
     TODO)
 
   (define (join! node-x node-y)
