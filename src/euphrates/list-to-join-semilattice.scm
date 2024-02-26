@@ -66,10 +66,10 @@
 
   (define (join! node-x node-y)
     (when (and
-           ;; (equal? (olnode:value node-x)
-           ;;         '(1 2))
-           (equal? (olnode:value node-y)
-                   '(7 1))
+           (equal? (olnode:value node-x)
+                   '(1 2))
+           ;; (equal? (olnode:value node-y)
+           ;;         '(7 1))
            )
       (debug "YES!"))
 
