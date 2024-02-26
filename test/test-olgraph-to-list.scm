@@ -30,7 +30,7 @@
 ;; Test case: Multiple branches
 ;; Use graph built above for this test
 (assert=
- (olnode->list (olgraph:initial olgraph-test))
+ (map olnode->list (olgraph:initial olgraph-test))
  '(1   ; root node
    (2) ; 1st child
    (3   ; 2nd child

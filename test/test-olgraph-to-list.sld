@@ -12,7 +12,7 @@
           olgraph:prepend-initial!
           olnode:prepend-child!))
   (import
-    (only (scheme base) begin define let quote))
+    (only (scheme base) begin define let map quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
