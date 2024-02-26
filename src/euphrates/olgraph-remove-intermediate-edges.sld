@@ -1,9 +1,9 @@
 
 (define-library
-  (euphrates olgraph-remove-transitive-edges)
+  (euphrates olgraph-remove-intermediate-edges)
   (export
-    olnode-remove-transitive-edges
-    olgraph-remove-transitive-edges)
+    olnode-remove-intermediate-edges
+    olgraph-remove-intermediate-edges)
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
@@ -52,5 +52,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/olgraph-remove-transitive-edges.scm")))
-    (else (include "olgraph-remove-transitive-edges.scm"))))
+               "euphrates/olgraph-remove-intermediate-edges.scm")))
+    (else (include "olgraph-remove-intermediate-edges.scm"))))
