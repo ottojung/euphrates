@@ -3,6 +3,7 @@
   (euphrates olgraph)
   (export
     make-olgraph
+    olgraph:id
     olgraph:value
     olgraph:children
     olgraph:children:set!
