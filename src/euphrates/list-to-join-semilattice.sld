@@ -39,8 +39,7 @@
           quote
           set!
           unless
-          values
-          when))
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

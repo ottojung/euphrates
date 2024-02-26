@@ -86,7 +86,7 @@
     (define copy current-layer)
     (set! current-layer '())
 
-    (when (null? copy)
+    (unless (null? copy)
       (cartesian-each
        (lambda (x y)
          (unless (equal? (olnode:id x) (olnode:id y))
