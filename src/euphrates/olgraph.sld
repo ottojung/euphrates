@@ -10,11 +10,12 @@
     olgraph:meta
     olgraph:meta:set!)
   (import
+    (only (euphrates define-type9) define-type9))
+  (import
     (only (scheme base)
           +
           begin
           define
-          define-record-type
           lambda
           let
           set!))
