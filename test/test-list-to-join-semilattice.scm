@@ -1,10 +1,13 @@
 
 (define (test-case equality-tester join-function lst expected)
-  (define actual
+  (define result
     (list->join-semilattice
      equality-tester
      join-function
      lst))
+
+  (define actual
+    (olnode->list
 
   (assert= actual expected))
 
