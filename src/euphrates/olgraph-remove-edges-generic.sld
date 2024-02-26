@@ -1,7 +1,9 @@
 
 (define-library
   (euphrates olgraph-remove-edges-generic)
-  (export olgraph-remove-edges/generic)
+  (export
+    olgraph-remove-edges/generic
+    olnode-remove-edges/generic)
   (import
     (only (euphrates hashmap)
           hashmap-ref
