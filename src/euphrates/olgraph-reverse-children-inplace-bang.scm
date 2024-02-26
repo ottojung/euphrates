@@ -7,7 +7,7 @@
     (olnode:children:set! olnode (reverse children))
     (for-each loop children)))
 
-(define (olgraph-reverse-children olgraph)
+(define (olgraph-reverse-children-inplace! olgraph)
   (for-each
    olnode-reverse-children-inplace!
    (olgraph:initial olgraph)))
