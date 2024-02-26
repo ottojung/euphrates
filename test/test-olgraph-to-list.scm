@@ -44,6 +44,3 @@
   (assert=
    (map olnode->list (olgraph:initial empty-graph))
    '())) ; an empty graph
-
-;; Additional test may be conducted if the assumed non-recursion
-;; of input graph is not guaranteed.
