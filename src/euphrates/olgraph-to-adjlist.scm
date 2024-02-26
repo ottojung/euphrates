@@ -3,7 +3,7 @@
 
 (define (olnode->adjlist olnode)
   (define H (make-hashmap))
-  (define ret (stack-make))
+  (define S (stack-make))
 
   (let loop ((olnode olnode))
     (define key (olnode:id olnode))
@@ -11,7 +11,9 @@
       (let ()
         (define children (olnode:children olnode))
         (hashmap-set! H key children)
-        (stack-push! key)
+        (stack-push!
+         S (cons (olnode:value olnode)
+                 (map olnode:value children)))
         (for-each loop children))))
 
   (reverse (stack->list ret)))

@@ -10,7 +10,8 @@
   (import
     (only (euphrates olgraph)
           olnode:children
-          olnode:id))
+          olnode:id
+          olnode:value))
   (import
     (only (euphrates stack)
           stack->list
@@ -19,9 +20,11 @@
   (import
     (only (scheme base)
           begin
+          cons
           define
           for-each
           let
+          map
           reverse
           unless))
   (cond-expand
