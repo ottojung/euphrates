@@ -24,5 +24,7 @@
            (olnode:meta olnode)))
 
         (define new-children
-          0)))))
+          0)
+
+        ret))))
 
