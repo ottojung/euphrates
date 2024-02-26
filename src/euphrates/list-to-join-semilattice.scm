@@ -42,12 +42,13 @@
      #f all-nodes))
 
   (let loop ((current-layer initial-nodes))
-    (cartesian-each
-     (lambda (x y)
-       (unless (equal? (olnode:id x) (olnode:id y))
-         
-       0)
-     current-layer
-     current-layer))
+    (when (< 1 (length current-layer))
+      (cartesian-each
+       (lambda (x y)
+         (unless (equal? (olnode:id x) (olnode:id y))
+           
+           0)
+         current-layer
+         current-layer))))
 
   graph)
