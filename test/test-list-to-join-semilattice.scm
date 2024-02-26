@@ -67,7 +67,7 @@
  (lambda (x y)
    (hashset-equal?
     (list->hashset x)
-    (list->hashset b)))
+    (list->hashset y)))
 
  (lambda (x y) (list-intersect x y))
 
