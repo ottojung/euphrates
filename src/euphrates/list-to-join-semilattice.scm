@@ -96,4 +96,4 @@
 
   (debug "DONE CONSTRUCTING!")
 
-  0)
+  graph)
