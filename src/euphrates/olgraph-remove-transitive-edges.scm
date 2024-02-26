@@ -4,12 +4,11 @@
 (define (make-check closure)
   (lambda (child)
     (lambda (other)
-      (not
-       (and (not (olnode-eq? other child))
-            (let ()
-              (define key (cons (olnode:id other)
-                                (olnode:id child)))
-              (hashset-has? closure key)))))))
+      (or (olnode-eq? other child)
+          (let ()
+            (define key (cons (olnode:id other)
+                              (olnode:id child)))
+            (not (hashset-has? closure key)))))))
 
 (define (olnode-remove-transitive-edges/aux H olnode)
   (define closure

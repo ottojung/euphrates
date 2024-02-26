@@ -28,7 +28,6 @@
     (only (euphrates olnode-eq-huh) olnode-eq?))
   (import
     (only (scheme base)
-          and
           begin
           cons
           define
