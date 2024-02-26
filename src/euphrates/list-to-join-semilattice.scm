@@ -41,12 +41,14 @@
         (list-or-map
          (lambda (other)
            (equal? (olnode:id child)
-                   (olnode:id other))))
+                   (olnode:id other)))
+         all-nodes)
       (olnode:prepend-child! parent child)))
 
   (define (make-new-node! value)
     (define new (make-olnode value))
     (set! current-layer (cons new current-layer))
+    (set! all-nodes (cons new all-nodes))
     new)
 
   (define (make-join-node! value)
