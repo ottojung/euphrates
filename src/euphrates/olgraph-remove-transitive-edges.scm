@@ -26,20 +26,20 @@
           (define old-children
             (olnode:children olnode))
 
-          (define (contains-current? current)
-            (lambda (child)
-              (and (not (olnode-eq? child current))
+          (define (contains-child? child)
+            (lambda (other)
+              (and (not (olnode-eq? other child))
                    (let ()
-                     (define key (cons (olnode:id current)
-                                       (olnode:id child)))
+                     (define key (cons (olnode:id child)
+                                       (olnode:id other)))
                      (not (hashset-has? closure key))))))
 
           (define filtered
             (filter
-             (lambda (current)
+             (lambda (child)
                (define is-transitive
                  (list-or-map
-                  (contains-current? current)
+                  (contains-child? child)
                   old-children))
                (not is-transitive))
              old-children))
