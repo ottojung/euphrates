@@ -8,14 +8,21 @@
   (define ret
     (make-olnode (olnode:value olnode)))
 
+  (define H (make-hashset))
+
   (let loop ((olnode olnode))
-    (define old-children
-      (olnode:children olnode))
+    (unless (hashset-has? H (olnode:id olnode))
+      (hashset-add! H (olnode:id olnode))
+      (let ()
+        (define old-children
+          (olnode:children olnode))
 
-    (define new-children
-      0)
+        (define ret
+          (make-olnode/full
+           (olnode:value olnode)
+           new-children
+           (olnode:meta olnode)))
 
-    (make-olnode/full
-     (olnode:value olnode)
-     new-children
-     (olnode:meta olnode))))
+        (define new-children
+          0)))))
+

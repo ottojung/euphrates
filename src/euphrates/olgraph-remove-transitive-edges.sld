@@ -3,6 +3,11 @@
   (euphrates olgraph-remove-transitive-edges)
   (export olnode-remove-transitive-edges)
   (import
+    (only (euphrates hashset)
+          hashset-add!
+          hashset-has?
+          make-hashset))
+  (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))
   (import
@@ -10,9 +15,11 @@
           make-olnode
           make-olnode/full
           olnode:children
+          olnode:id
           olnode:meta
           olnode:value))
-  (import (only (scheme base) begin define let))
+  (import
+    (only (scheme base) begin define let unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
