@@ -14,13 +14,12 @@
     (only (euphrates olnode-eq-huh) olnode-eq?))
   (import
     (only (scheme base)
-          and
           begin
           cons
           define
           lambda
           let
-          not))
+          or))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

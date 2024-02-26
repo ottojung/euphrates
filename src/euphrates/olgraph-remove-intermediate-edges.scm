@@ -5,12 +5,11 @@
 (define (make-check closure)
   (lambda (current)
     (lambda (child)
-      (not
-       (and (not (olnode-eq? child current))
-            (let ()
-              (define key (cons (olnode:id child)
-                                (olnode:id current)))
-              (not (hashset-has? closure key))))))))
+      (or (olnode-eq? child current)
+          (let ()
+            (define key (cons (olnode:id child)
+                              (olnode:id current)))
+            (hashset-has? closure key))))))
 
 
 (define (olnode-remove-intermediate-edges olnode)
