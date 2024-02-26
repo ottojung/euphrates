@@ -45,10 +45,11 @@
       (equal? (olnode:id child)
               (olnode:id other)))
 
-    (unless (list-or-map
-             equal-to-child?
-             (olnode:children parent))
-      (olnode:prepend-child! parent child)))
+    (unless (equal-to-child? parent)
+      (unless (list-or-map
+               equal-to-child?
+               (olnode:children parent))
+        (olnode:prepend-child! parent child))))
 
   (define (make-new-node! value)
     (define new (make-olnode value))
