@@ -21,7 +21,6 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
-          <
           _
           begin
           call-with-values
