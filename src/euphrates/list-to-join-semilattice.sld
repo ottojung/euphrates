@@ -26,6 +26,7 @@
           call-with-values
           car
           cdr
+          cons
           define
           equal?
           lambda
