@@ -27,7 +27,7 @@
     (make-olgraph initial-nodes))
 
   (define all-nodes initial-nodes)
-  (define current-layer initial-nodes)
+  (define top-layer initial-nodes)
 
   (define (find-existing-node needle-value)
     (list-find-first
@@ -49,7 +49,7 @@
 
   (define (make-new-node! value)
     (define new (make-olnode value))
-    (set! current-layer (cons new current-layer))
+    (set! top-layer (cons new top-layer))
     (set! all-nodes (cons new all-nodes))
     new)
 
@@ -82,8 +82,8 @@
       (add-join-point! node-x node-y (car join-result))))
 
   (let loop ()
-    (define copy current-layer)
-    (set! current-layer '())
+    (define copy top-layer)
+    (set! top-layer '())
     (unless (null? copy)
       (cartesian-each
        (lambda (x y)
