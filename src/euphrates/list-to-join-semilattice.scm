@@ -101,6 +101,8 @@
          (unless (equal? (olnode:id x) (olnode:id y))
            (join! x y)))
        all-nodes
-       all-nodes)))
+       all-nodes)
+
+      (loop)))
 
   graph)
