@@ -45,19 +45,24 @@
   ;; produces the graph `((1) (2 1) (3 1) (4 2) (5 1))` (adjacency list notation).
   ;;
   ;; In this case, for instance,
-  ;; elements `2` and `3` have the common successor `1`, and `4` is succeeded by `2`.
+  ;; elements `2` and `3` have the common successor `1`,
+  ;; and `4` is succeeded by `2`.
   ;;
   ;; Corner Cases:
   ;;
   ;; - If `lst` is an empty list, the function will return an empty graph.
   ;;
-  ;; - If `lst` contains elements that cannot be processed by `equality-tester` or `join-function`, an error will be raised.
+  ;; - If `lst` contains elements that cannot be processed by `equality-tester`
+  ;;   or `join-function`, an error will be raised.
   ;;
-  ;; - If `join-function` returns multiple join points for the same pair of nodes, an error will be triggered.
+  ;; - If `join-function` returns multiple join points for
+  ;;   the same pair of nodes, an error will be triggered.
   ;;
   ;; Performance Considerations:
   ;;
-  ;; - This function can be computationally intensive for large lists due to the potential for pairwise comparisons, so consider this when dealing with larger datasets.
+  ;; - This function can be computationally intensive for large lists due to
+  ;;   the potential for pairwise comparisons, so consider this when dealing
+  ;;   with larger datasets.
   ;;
 
   (define initial-nodes
