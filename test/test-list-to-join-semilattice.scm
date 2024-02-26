@@ -12,4 +12,5 @@
 (test-case
  equal?
  (lambda (x y)
-   
+   (greatest-common-divisor x y))
+ 
