@@ -31,6 +31,11 @@
   (define graph
     (make-olgraph initial-nodes))
 
+  (define all-nodes initial-nodes)
+
+  (define (find-existing-node needle)
+    (list-find-first
+
   (let loop ((current-layer initial-nodes))
     (cartesian-each
      (lambda (x y)
