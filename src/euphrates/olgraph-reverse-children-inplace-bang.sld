@@ -1,7 +1,9 @@
 
 (define-library
   (euphrates olgraph-reverse-children-inplace-bang)
-  (export olgraph-reverse-children-inplace!)
+  (export
+    olnode-reverse-children-inplace!
+    olgraph-reverse-children-inplace!)
   (import
     (only (euphrates olgraph)
           olgraph:initial
