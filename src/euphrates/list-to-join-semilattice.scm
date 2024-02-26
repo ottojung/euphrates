@@ -95,4 +95,4 @@
 
       (loop)))
 
-  graph)
+  (olgraph-remove-transitive-edges graph))

@@ -10,6 +10,9 @@
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
+    (only (euphrates olgraph-remove-transitive-edges)
+          olgraph-remove-transitive-edges))
+  (import
     (only (euphrates olgraph)
           make-olgraph
           make-olnode
