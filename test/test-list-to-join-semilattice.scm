@@ -79,3 +79,21 @@
  )
 
 
+
+
+(test-case
+ (lambda (x y)
+   (hashset-equal?
+    (list->hashset x)
+    (list->hashset y)))
+
+ (lambda (x y) (list-intersect x y))
+
+ '((1 2 3) (1 2 6))
+
+ '(((1 2 3) ((1 2)))
+   ((1 2 6) ((1 2))))
+
+ )
+
+
