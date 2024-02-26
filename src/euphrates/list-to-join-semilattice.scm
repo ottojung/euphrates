@@ -26,7 +26,11 @@
   ;;                    integers, you might use the `greatest common divisor`
   ;;                    function as your `join-function`.
   ;;
-  ;; - `lst`: This is the list of elements you want to transform. The type of list elements ('U') can be flexible, with the condition that the `equality-tester` and `join-function` can handle such type. For example, this could be a list of integers, such as `(1 2 3 4 5)`.
+  ;; - `lst`: This is the list of elements you want to transform. The type of
+  ;;          list elements ('U') can be flexible, with the condition that the
+  ;;          `equality-tester` and `join-function` can handle such type.
+  ;;          For example, this could be a list of integers,
+  ;;          such as `(1 2 3 4 5)`.
   ;;
   ;; The result of `list->join-semilattice` is a list of sublists where each sublist represents a node in the graph and its direct successors. A sublist starts with a node's value and following elements are its direct successors. Note that if a successor appears in multiple sublist, it means it is a common successor of different nodes. 
   ;;
