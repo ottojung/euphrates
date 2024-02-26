@@ -12,7 +12,7 @@
        (unless (hashset-has? ret key)
          (for-each
           (lambda (ancestor)
-            (define key (cons ancestor key))
+            (define key (cons ancestor child))
             (hashset-add! ret key))
           ancestors)
          (loop child (cons child ancestors))))
