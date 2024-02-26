@@ -10,7 +10,7 @@
   ;; Let U : Type
   ;; Then
   ;; lst: List[U]
-  ;; equality-tester: U, U -> bool
+  ;; equality-tester: U, U -> Bool
   ;; join-function: U, U -> Union[U, void]
   ;; list->join-semilattice: ... -> olgraph[U]
   ;;
