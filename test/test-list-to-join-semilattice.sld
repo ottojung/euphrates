@@ -17,6 +17,9 @@
           list->join-semilattice))
   (import (only (euphrates list-union) list-union))
   (import
+    (only (euphrates olgraph-to-adjlist)
+          olgraph->adjlist))
+  (import
     (only (scheme base)
           begin
           define
