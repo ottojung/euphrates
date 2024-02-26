@@ -11,6 +11,9 @@
   (import
     (only (euphrates list-and-map) list-and-map))
   (import
+    (only (euphrates olgraph-remove-edges-generic)
+          olnode-remove-edges/generic))
+  (import
     (only (euphrates olgraph-transitive-closure)
           olnode-transitive-closure/edges))
   (import

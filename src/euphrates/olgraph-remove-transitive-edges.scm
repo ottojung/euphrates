@@ -51,8 +51,10 @@
 
 
 (define (olnode-remove-transitive-edges olnode)
-  (define H (make-hashmap))
-  (olnode-remove-transitive-edges/aux H olnode))
+  ;; (define H (make-hashmap))
+  ;; (olnode-remove-transitive-edges/aux H olnode))
+
+  (olnode-remove-edges/generic make-check olnode))
 
 
 (define (olgraph-remove-transitive-edges olgraph)
