@@ -32,6 +32,7 @@
           define
           lambda
           let
+          map
           not
           quote
           unless))
