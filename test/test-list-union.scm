@@ -1,8 +1,8 @@
 
 ;; Test case: Normal operation
 (assert= '(1 2 3 4) (list-union '(1 2 3) '(3 1 4))) ; Lists have common elements
-(assert= '(1) (list-union '(1 2 3) '(1 4 5))) ; Lists have a single common element
-(assert= '() (list-union '(1 2 3) '(4 5 6))) ; Lists have no common elements
+(assert= '(1 2 3 4 5) (list-union '(1 2 3) '(1 4 5))) ; Lists have a single common element
+(assert= '(1 2 3 4 5 6) (list-union '(1 2 3) '(4 5 6))) ; Lists have no common elements
 
 ;; Test case: Boundary conditions
 (assert= '(1 2 3) (list-union '(1 2 3) '(1 2 3))) ; Lists are identical
