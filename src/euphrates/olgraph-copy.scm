@@ -21,4 +21,10 @@
           ret))))
 
 
-;; (define (olgraph-copy "wg1pgje7r5os74s0ctqa")
+(define (olnode-copy/deep olnode)
+  (define H (make-hashmap))
+  (olnode-copy/deep H olnode))
+
+
+(define (olgraph-copy/deep olgraph)
+  
