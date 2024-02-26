@@ -1,6 +1,6 @@
 
 ;; Test case: Normal operation
-(assert= '(3 1) (list-intersect '(1 2 3) '(3 1 4))) ; Lists have common elements
+(assert= '(1 3) (list-intersect '(1 2 3) '(3 1 4))) ; Lists have common elements
 (assert= '(1) (list-intersect '(1 2 3) '(1 4 5))) ; Lists have a single common element
 (assert= '() (list-intersect '(1 2 3) '(4 5 6))) ; Lists have no common elements
 

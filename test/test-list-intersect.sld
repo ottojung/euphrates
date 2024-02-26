@@ -5,13 +5,10 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
-    (only (euphrates list-intersect)
-          list-intersect))
+    (only (euphrates list-intersect) list-intersect))
   (import (only (scheme base) begin quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path
-               "test-list-intersect.scm")))
-    (else (include
-            "test-list-intersect.scm"))))
+             (include-from-path "test-list-intersect.scm")))
+    (else (include "test-list-intersect.scm"))))
