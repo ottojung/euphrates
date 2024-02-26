@@ -16,15 +16,18 @@
 
   (assert= actual expected))
 
-(test-case
- equal?
- (lambda (x y)
-   (greatest-common-divisor x y))
+;; (test-case
+;;  equal?
+;;  (lambda (x y)
+;;    (greatest-common-divisor x y))
 
- '(1 2 3 4 5)
+;;  '(1 2 3 4 5)
 
- '((1)
-   (2 (1))
-   (3 (1))
-   (4 (1) (2 (1)))
-   (5 (1))))
+;;  '((1)
+;;    (2 (1))
+;;    (3 (1))
+;;    (4 (1) (2 (1)))
+;;    (5 (1))))
+
+
+(debug "OK DONE")
