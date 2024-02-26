@@ -4,7 +4,7 @@
 
 (define-type9 olgraph
   (make-olgraph initial) olgraph?
-  (initial olgraph:initial olgraph:initial:set!) ;; Must a superset of all root (source) nodes. The only guaranteed property is that we can get all nodes by traversing these "initial".
+  (initial olgraph:initial olgraph:initial:set!)
   )
 
 
