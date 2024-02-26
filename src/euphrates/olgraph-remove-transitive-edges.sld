@@ -6,12 +6,10 @@
     olgraph-remove-transitive-edges)
   (import
     (only (euphrates hashmap)
+          hashmap-ref
           hashmap-set!
           make-hashmap))
-  (import
-    (only (euphrates hashset)
-          hashset-has?
-          hashset-ref))
+  (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates list-and-map) list-and-map))
   (import (only (euphrates negate) negate))

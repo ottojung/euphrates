@@ -9,7 +9,7 @@
     (make-olnode (olnode:value olnode)))
 
   (let loop ((olnode olnode))
-    (define existing (hashset-ref H (olnode:id olnode)))
+    (define existing (hashmap-ref H (olnode:id olnode) #f))
     (or existing
         (let ()
           (define ret
