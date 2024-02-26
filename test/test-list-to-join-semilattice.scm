@@ -16,20 +16,22 @@
 
 
 
-;; (test-case
-;;  equal?
-;;  (lambda (x y)
-;;    (greatest-common-divisor x y))
+(test-case
+ equal?
+ (lambda (x y)
+   (greatest-common-divisor x y))
 
-;;  '(1 2 3 4 5)
+ '(1 2 3 4 5)
 
-;;  '((1)
-;;    (2 (1))
-;;    (3 (1))
-;;    (4 (2 (1)))
-;;    (5 (1)))
+ '((1)
+   (2 (1))
+   (3 (1))
+   (4 (2 (1)))
+   (5 (1)))
 
-;;  )
+ )
+
+
 
 (test-case
  equal?
@@ -57,20 +59,20 @@
 
 
 
-;; (test-case
-;;  (lambda (x y)
-;;    (hashset-equal?
-;;     (list->hashset x)
-;;     (list->hashset y)))
+(test-case
+ (lambda (x y)
+   (hashset-equal?
+    (list->hashset x)
+    (list->hashset y)))
 
-;;  (lambda (x y) (list-intersect x y))
+ (lambda (x y) (list-intersect x y))
 
-;;  '((1 2 3) (1 2 6))
+ '((1 2 3) (1 2 6))
 
-;;  '(((1 2 3) ((1 2)))
-;;    ((1 2 6) ((1 2))))
+ '(((1 2 3) ((1 2)))
+   ((1 2 6) ((1 2))))
 
-;;  )
+ )
 
 
 
