@@ -65,14 +65,6 @@
     (values))
 
   (define (join! node-x node-y)
-    (when (and
-           (equal? (olnode:value node-x)
-                   '(1 2))
-           ;; (equal? (olnode:value node-y)
-           ;;         '(7 1))
-           )
-      (debug "YES!"))
-
     (define join-result
       (call-with-values
           (lambda _
@@ -97,6 +89,16 @@
     (unless (null? copy)
       (cartesian-each
        (lambda (x y)
+
+         (when (and
+                (equal? (olnode:value x)
+                        '(1 2))
+                ;; (equal? (olnode:value y)
+                ;;         '(7 1))
+                )
+           (debug "YES!"))
+
+
          (unless (equal? (olnode:id x) (olnode:id y))
            (join! x y)))
        all-nodes
