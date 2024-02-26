@@ -98,7 +98,7 @@
        copy)))
 
   (debug "DONE CONSTRUCTING!")
-  (debugs graph)
+  (debug "~s" graph)
   (debug "THAT WAS GRAPH")
 
   graph)
