@@ -42,7 +42,7 @@
          (lambda (other)
            (equal? (olnode:id child)
                    (olnode:id other))))
-      (
+      (olnode:prepend-child! parent child)))
 
   (define (add-join-point! node-x node-y value)
     (define existing (find-existing-node value))

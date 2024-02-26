@@ -8,10 +8,13 @@
     (only (euphrates list-find-first)
           list-find-first))
   (import
+    (only (euphrates list-or-map) list-or-map))
+  (import
     (only (euphrates olgraph)
           make-olgraph
           make-olnode
           olnode:id
+          olnode:prepend-child!
           olnode:value))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
