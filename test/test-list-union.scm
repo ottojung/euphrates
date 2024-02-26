@@ -1,6 +1,6 @@
 
 ;; Test case: Normal operation
-(assert= '(1 3) (list-union '(1 2 3) '(3 1 4))) ; Lists have common elements
+(assert= '(1 2 3 4) (list-union '(1 2 3) '(3 1 4))) ; Lists have common elements
 (assert= '(1) (list-union '(1 2 3) '(1 4 5))) ; Lists have a single common element
 (assert= '() (list-union '(1 2 3) '(4 5 6))) ; Lists have no common elements
 
