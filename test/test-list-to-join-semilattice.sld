@@ -17,6 +17,9 @@
           list->join-semilattice))
   (import (only (euphrates list-union) list-union))
   (import
+    (only (euphrates olgraph-to-list-depth)
+          olnode->list/depth))
+  (import
     (only (euphrates olgraph) olgraph:initial))
   (import
     (only (scheme base)
