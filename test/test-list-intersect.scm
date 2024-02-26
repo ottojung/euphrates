@@ -7,7 +7,7 @@
 ;; Test case: Boundary conditions
 (assert= '(1 2 3) (list-intersect '(1 2 3) '(1 2 3))) ; Lists are identical
 (assert= '(1 2 3 1 2 3) (list-intersect '(1 2 3 1 2 3) '(1 2 3))) ; List A contains repetitions of B
-(assert= '(1 2 3 1 2 3) (list-intersect '(1 2 3) '(1 2 3 1 2 3))) ; List A contains repetitions of B
+(assert= '(1 2 3) (list-intersect '(1 2 3) '(1 2 3 1 2 3))) ; List A contains repetitions of B
 (assert= '(1 2 3 1 2 3) (list-intersect '(1 2 3 1 2 3) '(1 2 3 1 2 3))) ; Both lists contain identical repetitions
 (assert= '() (list-intersect '() '(1 2 3))) ; List A is empty
 (assert= '() (list-intersect '(1 2 3) '())) ; List B is empty
