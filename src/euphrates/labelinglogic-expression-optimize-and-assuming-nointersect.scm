@@ -145,6 +145,7 @@
             expr-a (car inner-args-b))))
 
      (and (equal? type-b 'not)
+          (not (equal? type-a 'not))
           (equal? type-a inner-type-b)
           (not (equal? (car inner-args-a)
                        (car inner-args-b))))
