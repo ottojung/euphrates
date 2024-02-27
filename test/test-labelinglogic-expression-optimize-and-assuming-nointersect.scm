@@ -88,33 +88,33 @@
 
 ;; Combining 'r7rs' and 'not r7rs' [1]
 (assert=
- '(and (r7rs 2))
+ '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (r7rs 2) (not (r7rs 3)))))
+  '(and (r7rs even?) (not (r7rs odd?)))))
 
 ;; Combining 'r7rs' and 'not r7rs' [2]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (r7rs 2) (not (r7rs 2)))))
+  '(and (r7rs even?) (not (r7rs even?)))))
 
 ;; Combining 'r7rs' and 'not r7rs' [3]
 (assert=
- '(and (r7rs 2))
+ '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (not (r7rs 3)) (r7rs 2))))
+  '(and (not (r7rs odd?)) (r7rs even?))))
 
 ;; Combining 'r7rs' and 'not r7rs' [4]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (not (r7rs 2)) (r7rs 2))))
+  '(and (not (r7rs even?)) (r7rs even?))))
 
 ;; Combining 'r7rs' and 'not r7rs' [5]
 (assert=
- '(and (r7rs 2))
+ '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (not (r7rs 3)) (r7rs 2) (not (r7rs 3)) (not (r7rs 4)))))
+  '(and (not (r7rs odd?)) (r7rs even?) (not (r7rs odd?)) (not (r7rs integer?)))))
 
 
 ;; Combining '=' and 'r7rs [1]
