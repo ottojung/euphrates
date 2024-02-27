@@ -150,6 +150,12 @@
           (not (equal? (car inner-args-a)
                        (car inner-args-b))))
 
+     (and (equal? type-a 'r7rs)
+          (equal? type-b 'not)
+          (equal? inner-type-b 'r7rs)
+          (not (equal? (car inner-args-a)
+                       (car inner-args-b))))
+
      ))
 
   (define bottom
