@@ -148,7 +148,9 @@
           (equal? type-b 'not)
           (equal? inner-type-b '=)
           (not (equal? (car inner-args-a)
-                       (car inner-args-b))))))
+                       (car inner-args-b))))
+
+     ))
 
   (define bottom
     (labelinglogic:expression:make 'or '()))
