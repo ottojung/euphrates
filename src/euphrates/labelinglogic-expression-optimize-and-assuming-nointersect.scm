@@ -93,7 +93,7 @@
              (equal? type-b 'not)
              (equal? inner-type-b 'r7rs)
              (labelinglogic:expression:evaluate/r7rs
-              expr-b (car args-a)))
+              (car args-b) (car args-a)))
 
         #f))
 
