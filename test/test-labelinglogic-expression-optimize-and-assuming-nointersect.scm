@@ -69,7 +69,7 @@
 
 ;; Combining '=' and negated '=' [2]
 (assert=
- '(and (= 2))
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (not (= 2)))))
 
