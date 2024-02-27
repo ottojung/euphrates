@@ -138,6 +138,11 @@
     (define inner-tuple-b? (equal? 'tuple inner-type-b))
 
     (or
+     (and (equal? type-a '=)
+          (equal? type-b 'r7rs)
+          (labelinglogic:expression:evaluate/r7rs
+           expr-b (car args-a)))
+
      (and (equal? type-a 'r7rs)
           (equal? type-b 'not)
           (equal? inner-type-b '=)
@@ -189,8 +194,8 @@
 
     (define (fun expr-a expr-b)
       (cond
-       ((is-subset? expr-a expr-b) 'right)
-       ((is-subset? expr-b expr-a) 'left)
+       ;; ((is-subset? expr-a expr-b) 'right)
+       ;; ((is-subset? expr-b expr-a) 'left)
        ((to-be-consumed? expr-a expr-b) 'left)
        ((to-be-consumed? expr-b expr-a) 'right)
        (else 'skip)))
