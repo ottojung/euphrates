@@ -85,6 +85,38 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 3)) (= 2) (not (= 3)) (not (= 4)))))
 
+
+;; Combining 'r7rs' and 'not r7rs' [1]
+(assertr=
+ '(and (r7rs 2))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs 2) (not (r7rs 3)))))
+
+;; Combining 'r7rs' and 'not r7rs' [2]
+(assertr=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (r7rs 2) (not (r7rs 2)))))
+
+;; Combining 'r7rs' and 'not r7rs' [3]
+(assertr=
+ '(and (r7rs 2))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (r7rs 3)) (r7rs 2))))
+
+;; Combining 'r7rs' and 'not r7rs' [4]
+(assertr=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (r7rs 2)) (r7rs 2))))
+
+;; Combining 'r7rs' and 'not r7rs' [5]
+(assertr=
+ '(and (r7rs 2))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (r7rs 3)) (r7rs 2) (not (r7rs 3)) (not (r7rs 4)))))
+
+
 ;; Combining '=' and 'r7rs [1]
 (assert=
  '(or)
