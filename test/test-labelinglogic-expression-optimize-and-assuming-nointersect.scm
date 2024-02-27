@@ -67,6 +67,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (not (= 2)))))
 
+;; Combining '=' and negated '=' [3]
+(assert=
+ '(and (= 2))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (= 3)) (= 2))))
+
 ;; Combining '=' and 'r7rs [1]
 (assert=
  '(or)
