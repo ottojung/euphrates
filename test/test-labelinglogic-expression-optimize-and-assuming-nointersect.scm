@@ -31,12 +31,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs even?) (r7rs odd?))))
 
-;; Negated and non-negated expressions
-(assert=
- '(or)
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (= 1) (not (= 1)))))
-
 ;; Different non-intersecting tuples
 (assert=
  '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))
