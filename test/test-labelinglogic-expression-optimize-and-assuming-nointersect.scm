@@ -55,19 +55,19 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (or))))
 
-;; Combining '=' and negated '=' [1]
+;; Combining '=' and 'not =' [1]
 (assert=
  '(and (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (not (= 3)))))
 
-;; Combining '=' and negated '=' [2]
+;; Combining '=' and 'not =' [2]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 2) (not (= 2)))))
 
-;; Combining '=' and negated '=' [3]
+;; Combining '=' and 'not =' [3]
 (assert=
  '(and (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect
