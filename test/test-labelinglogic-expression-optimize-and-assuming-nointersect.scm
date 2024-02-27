@@ -189,7 +189,7 @@
 
 ;; Combining '=' and '(not r7rs) [3]
 (assert=
- '(or)
+ '(and (= 3))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (= 3) (not (r7rs even?)))))
 
