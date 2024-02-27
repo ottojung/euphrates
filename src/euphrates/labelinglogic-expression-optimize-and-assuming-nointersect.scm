@@ -117,6 +117,8 @@
     (define inner-tuple-b? (equal? 'tuple inner-type-b))
 
     (or
+     (is-top? expr-a)
+
      (and (equal? type-a '=)
           (equal? type-b 'r7rs)
           (labelinglogic:expression:evaluate/r7rs
