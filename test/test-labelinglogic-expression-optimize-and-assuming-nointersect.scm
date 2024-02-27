@@ -61,6 +61,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (or))))
 
+;; Combining '=' and negated '=' [1]
+(assert=
+ '(and (= 2))
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (not (= 3)))))
+
 ;; A complex case combining '=' and 'r7rs [1]
 (assert=
  '(or)
