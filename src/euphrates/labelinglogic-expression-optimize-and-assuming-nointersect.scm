@@ -90,7 +90,8 @@
                expr-a (car args-b))))
 
         (and (equal? type-a '=)
-             (equal? type-b 'r7rs)
+             (equal? type-b 'not)
+             (equal? inner-type-b 'r7rs)
              (labelinglogic:expression:evaluate/r7rs
               expr-b (car args-a)))
 
