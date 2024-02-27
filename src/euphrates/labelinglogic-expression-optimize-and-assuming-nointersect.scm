@@ -89,6 +89,11 @@
               (labelinglogic:expression:evaluate/r7rs
                expr-a (car args-b))))
 
+        (and (equal? type-a '=)
+             (equal? type-b 'r7rs)
+             (labelinglogic:expression:evaluate/r7rs
+              expr-b (car args-a)))
+
         #f))
 
   (define (different-type-nonintersect? expr-a expr-b)
