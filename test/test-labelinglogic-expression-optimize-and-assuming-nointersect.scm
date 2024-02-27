@@ -175,6 +175,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 3)) (not (= 4)) (r7rs even?) (not (= 2)))))
 
+;; Combining '=' and '(not r7rs) [7]
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (= 2) (not (r7rs even?)))))
+
 ;; Checking negation of 'r7rs
 (assert=
  '(or)
