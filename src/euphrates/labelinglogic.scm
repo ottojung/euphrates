@@ -27,6 +27,9 @@
   (define flat-dnf-model
     (labelinglogic:model:sugarify dnf-model))
 
+  (define simpler-dnf-model
+    (labelinglogic:model: dnf-model))
+
   (define ret-model
     flat-dnf-model)
 
