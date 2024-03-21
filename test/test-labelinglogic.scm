@@ -85,6 +85,7 @@
     `((t_an (and alphanum (not (= #\5))))
       (t_bn (and alphanum (not (= #\7))))
       (t_cn (and alphanum (not (= #\7)) (not (= #\8))))
+      (t_cn (and alphanum (not (= #\7)) (not (= #\.))))
       (t_3  (= #\3))))
 
   (assert=
