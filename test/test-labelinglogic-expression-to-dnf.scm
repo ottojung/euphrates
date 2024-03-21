@@ -68,13 +68,6 @@
  '(or (and a c) (and (not b) c) (and a d) (and (not b) d))
  '(and (or a (not b)) (or c d)))
 
-(exit 0)
-
-;; ; Test with nested ANDs and ORs
-;; (test
-;;  '(or (and c a) (and c (not b)) (and d a) (and d (not b)))
-;;  '(and (or a (not b)) (or c d)))
-
 ; Test that involves all operators in a more complex expression
 (test
  '(or (and a (not b) (not a)) (and a (not b) b) (and a b (not a)) (and a b b))
