@@ -15,8 +15,11 @@
   (define extended-model
     (labelinglogic:model:extend-with-bindings model bindings))
 
-  (define opt-model
-    (labelinglogic:model:inline-non-bindings model bindings))
+  (define inlined-model
+    (labelinglogic:model:inline-non-bindings extended-model bindings))
+
+  (define bindings-model
+    (labelinglogic:model:reduce-to-bindings inlined-model bindings))
 
   (define dnf-model
     (labelinglogic:model:to-dnf model bindings))
