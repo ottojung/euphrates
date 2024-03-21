@@ -6,7 +6,6 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
-  (import (only (euphrates assoc-or) assoc-or))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashset)
@@ -19,6 +18,9 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates labelinglogic-model-assoc-or)
+          labelinglogic:model:assoc-or))
+  (import
     (only (euphrates
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
@@ -26,7 +28,6 @@
     (only (scheme base)
           and
           begin
-          car
           define
           equal?
           if
