@@ -85,7 +85,7 @@
     `((t_an (and alphanum (not (= #\5))))
       (t_bn (and alphanum (not (= #\7))))
       (t_cn (and alphanum (not (= #\7)) (not (= #\8))))
-      (t_cn (and alphanum (not (= #\7)) (not (= #\.))))
+      (t_dn (and alphanum (not (= #\7)) (not (= #\.))))
       (t_3  (= #\3))))
 
   (assert=
@@ -111,8 +111,16 @@
                (and (not (= #\7))
                     (not (= #\8))
                     (r7rs char-numeric?))))
+     (t_dn (or (and (not (= #\7))
+                    (not (= #\.))
+                    (r7rs char-upper-case?))
+               (and (not (= #\7))
+                    (not (= #\.))
+                    (r7rs char-lower-case?))
+               (and (not (= #\7))
+                    (not (= #\.))
+                    (r7rs char-numeric?))))
      (t_3 (= #\3)))
-
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
