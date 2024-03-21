@@ -82,15 +82,12 @@
       (whitespace (r7rs char-whitespace?))))
 
   (define bindings
-    `((t_a (and numeric (not (= #\5))))
-      (t_b (and (not (= #\5)) numeric))))
+    `((t_a (and alphanum (not (= #\5))))
+      (t_b (and (not (= #\5)) alphanum))))
 
   (assert=
 
-   `((t_a (and (r7rs char-numeric?)
-               (not (= #\5))))
-     (t_b (and (not (= #\5))
-               (r7rs char-numeric?))))
+   999
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
