@@ -37,7 +37,7 @@
                    ((equal? c-type 'or)
                     (loop (make type (list next c))))
                    (else
-                    (make 'and args*))))))))
+                    (make type args*))))))))
 
      ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
 
