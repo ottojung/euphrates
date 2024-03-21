@@ -16,7 +16,7 @@
     (labelinglogic:model:extend-with-bindings model bindings))
 
   (define inlined-model
-    (labelinglogic:model:inline-non-bindings extended-model bindings))
+    (labelinglogic:model:inline-all extended-model bindings))
 
   (define bindings-model
     (labelinglogic:model:reduce-to-bindings inlined-model bindings))

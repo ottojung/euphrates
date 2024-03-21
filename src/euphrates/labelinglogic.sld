@@ -14,9 +14,8 @@
             labelinglogic-model-extend-with-bindings)
           labelinglogic:model:extend-with-bindings))
   (import
-    (only (euphrates
-            labelinglogic-model-inline-non-bindings)
-          labelinglogic:model:inline-non-bindings))
+    (only (euphrates labelinglogic-model-inline-all)
+          labelinglogic:model:inline-all))
   (import
     (only (euphrates
             labelinglogic-model-reduce-to-bindings)
