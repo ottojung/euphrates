@@ -18,12 +18,13 @@
   (define keys
     (map car tokens-alist))
 
-  (unless (list-and-map
-           (compose-under or symbol? unique-identifier?)
-           keys)
+  (define (id? key)
+    (or symbol? unique-identifier?))
+
+  (unless (list-and-map id? keys)
     (fail-tokens-check
      "every key must be a symbol"
-     (list (filter (negate symbol?) keys))))
+     (list (filter (negate id?) keys))))
 
   (define duplicates
     (list-get-duplicates
@@ -45,7 +46,10 @@
      (define constants (labelinglogic:expression:constants expr))
 
      (define undefined-constants
-       (filter (negate (lambda (x) (hashset-has? classes/s x))) constants))
+       (filter (negate
+                (lambda (x)
+                  (or (hashset-has? classes/s x)
+                      (labelinglogic: )) constants))
 
      (unless (null? undefined-constants)
        (raisu* :from "labelinglogic"
