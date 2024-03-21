@@ -122,7 +122,7 @@
    ;;                  (r7rs char-numeric?))))
    ;;   (t_3 (= #\3)))
 
-   
+   0
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
