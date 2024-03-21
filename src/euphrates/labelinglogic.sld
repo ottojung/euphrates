@@ -2,7 +2,6 @@
 (define-library
   (euphrates labelinglogic)
   (export labelinglogic:init)
-  (import (only (euphrates debugs) debugs))
   (import (only (euphrates hashset) list->hashset))
   (import
     (only (euphrates labelinglogic-bindings-check)
@@ -12,15 +11,8 @@
           labelinglogic:model:check))
   (import
     (only (euphrates
-            labelinglogic-model-duplicate-bindings)
-          labelinglogic:model:duplicate-bindings))
-  (import
-    (only (euphrates
             labelinglogic-model-extend-with-bindings)
           labelinglogic:model:extend-with-bindings))
-  (import
-    (only (euphrates labelinglogic-model-flatten)
-          labelinglogic:model:flatten))
   (import
     (only (euphrates
             labelinglogic-model-optimize-to-bindings)
