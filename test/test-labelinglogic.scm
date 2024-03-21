@@ -96,7 +96,16 @@
    ;;            (and (not (= #\5))
    ;;                 (r7rs char-numeric?)))))
 
-   999
+   `((t_a (and (or (or (r7rs char-upper-case?)
+                       (r7rs char-lower-case?))
+                   (r7rs char-numeric?))
+               (not (= #\5))))
+     (t_b (and (not (= #\5))
+               (or (or (r7rs char-upper-case?)
+                       (r7rs char-lower-case?))
+                   (r7rs char-numeric?)))))
+
+   ;; 999
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
