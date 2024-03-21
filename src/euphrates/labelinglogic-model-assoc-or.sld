@@ -3,8 +3,6 @@
   (euphrates labelinglogic-model-assoc-or)
   (export labelinglogic:model:assoc-or)
   (import (only (euphrates assoc-or) assoc-or))
-  (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           _
@@ -12,8 +10,6 @@
           car
           define-syntax
           let
-          list
-          quote
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))
