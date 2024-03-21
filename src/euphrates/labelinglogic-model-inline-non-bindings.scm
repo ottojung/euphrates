@@ -14,7 +14,7 @@
          (if (and (equal? type 'constant)
                   (not (hashset-has? bindings/s expr)))
              (let ()
-               (define ret (assoc-or expr model 'impossible-618263163))
+               (define ret (car (assoc-or expr model 'impossible-618263163)))
                (debugs ret)
                ret)
              expr)))
