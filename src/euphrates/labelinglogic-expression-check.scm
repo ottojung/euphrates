@@ -63,6 +63,8 @@
         (~a type))
        (list x)))
 
+    (debugs (car args))
+
     (unless (procedure?
              (labelinglogic:expression:compile/r7rs
               (car args)))
