@@ -11,7 +11,7 @@
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
          (if (and (equal? type 'constant)
-                  (not (hashset-has? expr)))
+                  (not (hashset-has? bindings/s expr)))
              (assoc-or expr model 'impossible-618263163)
              expr)))
 
