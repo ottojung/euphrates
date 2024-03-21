@@ -3,8 +3,9 @@
   (euphrates labelinglogic-bindings-check)
   (export labelinglogic:bindings:check)
   (import
-    (only (euphrates compose-under) compose-under))
-  (import (only (euphrates hashset) hashset-has?))
+    (only (euphrates hashset)
+          hashset-has?
+          list->hashset))
   (import
     (only (euphrates labelinglogic-binding-check)
           labelinglogic:binding:check))

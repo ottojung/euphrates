@@ -32,6 +32,9 @@
       (negate unique-identifier?)
       keys)))
 
+  (define keys/s
+    (list->hashset keys))
+
   (unless (null? duplicates)
     (fail-tokens-check
      "keys must not repeat"
@@ -49,7 +52,8 @@
        (filter (negate
                 (lambda (x)
                   (or (hashset-has? classes/s x)
-                      (labelinglogic: )) constants))
+                      (hashset-has? keys/s x))))
+               constants))
 
      (unless (null? undefined-constants)
        (raisu* :from "labelinglogic"
