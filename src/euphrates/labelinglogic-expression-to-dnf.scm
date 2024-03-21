@@ -39,7 +39,7 @@
                    (else
                     (make 'and args*))))))))
 
-     ((member type (list 'not 'constant 'r7rs 'tuple)) expr)
+     ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
 
      (else
       (raisu* :from "labelinglogic:expression:to-dnf"
