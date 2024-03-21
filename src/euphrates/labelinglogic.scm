@@ -18,6 +18,12 @@
   (define opt-model
     (labelinglogic:model:optimize-to-bindings extended-model bindings))
 
+  (define ret-model
+    dfa-model)
+
+  ;; (define opt-model
+  ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
+
   ;; (define duplicated-model
   ;;   (labelinglogic:model:duplicate-bindings opt-model bindings))
 
@@ -29,4 +35,4 @@
 
   ;; flat-model)
 
-  opt-model)
+  ret-model)
