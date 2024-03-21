@@ -8,6 +8,7 @@
     (labelinglogic:model:map-subexpressions
      (lambda (class predicate)
        (lambda (expr)
+         (debugs expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
          (if (and (equal? type 'constant)

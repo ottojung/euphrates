@@ -7,6 +7,7 @@
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
   (import (only (euphrates assoc-or) assoc-or))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashset)
           hashset-has?
