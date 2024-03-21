@@ -82,8 +82,8 @@
       (whitespace (r7rs char-whitespace?))))
 
   (define bindings
-    `((t_a (and alphanum (not (= #\5))))
-      (t_b (and (not (= #\5)) alphanum))))
+    `((t_a (and upcase (not (= #\5))))
+      (t_b (and (not (= #\5)) upcase))))
 
   (assert=
 
