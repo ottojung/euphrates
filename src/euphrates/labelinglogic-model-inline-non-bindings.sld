@@ -30,6 +30,7 @@
           equal?
           if
           lambda
+          let
           not
           quote))
   (cond-expand
