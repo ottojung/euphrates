@@ -68,3 +68,6 @@
 (test
  '(or (and a (not b) (not a)) (and a (not b) b) (and a b (not a)) (and a b b))
  '(and a (or (not a) b) (or (not b) b)))
+
+; Test not an op.
+(test 'hello 'hello)
