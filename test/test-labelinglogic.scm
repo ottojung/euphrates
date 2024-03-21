@@ -122,7 +122,24 @@
    ;;                  (r7rs char-numeric?))))
    ;;   (t_3 (= #\3)))
 
-   0
+   `((t_an (or (and (r7rs char-upper-case?))
+               (and (r7rs char-lower-case?))
+               (and (not (= #\5))
+                    (r7rs char-numeric?))))
+     (t_bn (or (and (r7rs char-upper-case?))
+               (and (r7rs char-lower-case?))
+               (and (not (= #\7))
+                    (r7rs char-numeric?))))
+     (t_cn (or (and (r7rs char-upper-case?))
+               (and (r7rs char-lower-case?))
+               (and (not (= #\7))
+                    (not (= #\8))
+                    (r7rs char-numeric?))))
+     (t_dn (or (and (r7rs char-upper-case?))
+               (and (r7rs char-lower-case?))
+               (and (not (= #\7))
+                    (r7rs char-numeric?))))
+     (t_3 (= #\3)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
