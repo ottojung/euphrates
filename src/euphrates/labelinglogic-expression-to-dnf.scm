@@ -14,8 +14,6 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((equal? type 'constant) expr)
-     ((equal? type 'not) expr)
      ((equal? type 'or) (make type (map loop args)))
      ((equal? type 'and)
       (if (null? args) expr
@@ -40,6 +38,8 @@
                     (loop (make type (list next c))))
                    (else
                     (make 'and args*))))))))
+
+     ((member type (list 'not 'constant 'r7rs 'tuple)) expr)
 
      (else
       (raisu* :from "labelinglogic:expression:to-dnf"
