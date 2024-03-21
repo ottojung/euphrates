@@ -84,10 +84,10 @@
   (define bindings
     `((t_an (and alphanum (not (= #\5))))
       (t_bn (and alphanum (not (= #\7))))
-      (t_an (and (not (= #\5)) alphanum))
-      (t_cn (and alphanum (not (= #\7)) (not (= #\8))))
-      (t_dn (and alphanum (not (= #\7)) (not (= #\.))))
-      (t_en (or t_an t_bn t_3))
+      (t_cn (and (not (= #\5)) alphanum))
+      (t_dn (and alphanum (not (= #\7)) (not (= #\8))))
+      (t_en (and alphanum (not (= #\7)) (not (= #\.))))
+      (t_fn (or t_an t_bn t_3))
       (t_3  (= #\3))))
 
   (assert=
