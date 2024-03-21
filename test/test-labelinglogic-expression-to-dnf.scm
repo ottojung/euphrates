@@ -69,5 +69,14 @@
  '(or (and a (not b) (not a)) (and a (not b) b) (and a b (not a)) (and a b b))
  '(and a (or (not a) b) (or (not b) b)))
 
-; Test not an op.
-(test 'hello 'hello)
+; Test constant.
+(test 'x 'x)
+
+; Test negation.
+(test '(not x) '(not x))
+
+; Test negations 1.
+(test '(not (not x)) 'x)
+
+; Test negations 2.
+(test '(not (not (not x))) '(not x))
