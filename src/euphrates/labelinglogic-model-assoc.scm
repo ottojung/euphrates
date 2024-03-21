@@ -6,5 +6,5 @@
    expression-name model
    (raisu* :from "labelinglogic:model:assoc"
            :type 'model-assoc-error
-           :message (stringf "Expression named ~s is abscent in the model." name)
-           :args (list name model*))))
+           :message (stringf "Expression named ~s is abscent in the model." expression-name)
+           :args (list expression-name model))))
