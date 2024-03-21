@@ -7,9 +7,6 @@
     (only (euphrates labelinglogic-bindings-check)
           labelinglogic:bindings:check))
   (import
-    (only (euphrates labelinglogic-expression-sugarify)
-          labelinglogic:expression:sugarify))
-  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
@@ -23,6 +20,9 @@
     (only (euphrates
             labelinglogic-model-reduce-to-bindings)
           labelinglogic:model:reduce-to-bindings))
+  (import
+    (only (euphrates labelinglogic-model-sugarify)
+          labelinglogic:model:sugarify))
   (import
     (only (euphrates labelinglogic-model-to-dnf)
           labelinglogic:model:to-dnf))
