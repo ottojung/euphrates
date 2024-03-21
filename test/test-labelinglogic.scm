@@ -136,6 +136,8 @@
                (= #\3)))
      (t_3 (= #\3)))
 
+
+
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
