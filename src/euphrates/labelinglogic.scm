@@ -22,7 +22,7 @@
     (labelinglogic:model:reduce-to-bindings inlined-model bindings))
 
   (define dnf-model
-    (labelinglogic:model:to-dnf bindings-model bindings))
+    (labelinglogic:model:to-dnf bindings-model))
 
   (define ret-model
     bindings-model)
