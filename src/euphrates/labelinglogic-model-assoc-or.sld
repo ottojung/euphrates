@@ -9,7 +9,6 @@
           begin
           car
           define-syntax
-          let
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))

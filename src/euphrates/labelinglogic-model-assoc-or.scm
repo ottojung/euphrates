@@ -7,6 +7,4 @@
      (car (assoc-or expression-name model default)))
 
     ((_ expression-name model)
-     (let ((name expression-name)
-           (model* model))
-       (labelinglogic:model:assoc-or name model* #f)))))
+     (labelinglogic:model:assoc-or expression-name model #f))))
