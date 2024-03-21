@@ -35,7 +35,7 @@
                         (lambda (x) (make 'and (list c x)))
                         next-args))))
                    ((equal? c-type 'or)
-                    (loop (make type (list next c))))
+                    (loop (make type (list c next))))
                    (else
                     (make 'and args*))))))))
 
