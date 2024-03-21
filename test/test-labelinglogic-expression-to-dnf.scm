@@ -65,7 +65,7 @@
 
 ; Test with nested ANDs and ORs
 (test
- '(or (and c a) (and c (not b)) (and d a) (and d (not b)))
+ '(or (and a c) (and (not b) c) (and a d) (and (not b) d))
  '(and (or a (not b)) (or c d)))
 
 (exit 0)
