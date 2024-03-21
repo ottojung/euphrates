@@ -82,51 +82,75 @@
       (whitespace (r7rs char-whitespace?))))
 
   (define bindings
-    `((t_an (and alphanum (not (= #\5))))
-      (t_bn (and alphanum (not (= #\7))))
-      (t_cn (and (not (= #\5)) alphanum))
-      (t_dn (and alphanum (not (= #\7)) (not (= #\8))))
-      (t_en (and alphanum (not (= #\7)) (not (= #\.))))
-      (t_fn (or t_an t_bn t_3))
-      (t_3  (= #\3))))
+    `((t_a (and alphanum (not (= #\5))))
+      (t_b (and (not (= #\5)) alphanum))))
 
   (assert=
 
-   `((t_an (or (and (r7rs char-upper-case?))
-               (and (r7rs char-lower-case?))
-               (and (not (= #\5))
-                    (r7rs char-numeric?))))
-     (t_bn (or (and (r7rs char-upper-case?))
-               (and (r7rs char-lower-case?))
-               (and (not (= #\7))
-                    (r7rs char-numeric?))))
-     (t_cn (or (and (r7rs char-upper-case?))
-               (and (r7rs char-lower-case?))
-               (and (not (= #\5))
-                    (r7rs char-numeric?))))
-     (t_dn (or (and (r7rs char-upper-case?))
-               (and (r7rs char-lower-case?))
-               (and (not (= #\7))
-                    (not (= #\8))
-                    (r7rs char-numeric?))))
-     (t_en (or (and (r7rs char-upper-case?))
-               (and (r7rs char-lower-case?))
-               (and (not (= #\7))
-                    (r7rs char-numeric?))))
-     (t_fn (or (and (r7rs char-upper-case?))
-               (and (r7rs char-lower-case?))
-               (and (not (= #\5))
-                    (r7rs char-numeric?))
-               (and (r7rs char-upper-case?))
-               (and (r7rs char-lower-case?))
-               (and (not (= #\7))
-                    (r7rs char-numeric?))
-               (= #\3)))
-     (t_3 (= #\3)))
+   999
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
+
+
+
+;; (let ()
+;;   (define model
+;;     `((any (or alphanum whitespace))
+;;       (alphanum (or alphabetic numeric))
+;;       (alphabetic (or upcase lowercase))
+;;       (upcase (r7rs char-upper-case?))
+;;       (lowercase (r7rs char-lower-case?))
+;;       (numeric (r7rs char-numeric?))
+;;       (whitespace (r7rs char-whitespace?))))
+
+;;   (define bindings
+;;     `((t_an (and alphanum (not (= #\5))))
+;;       (t_bn (and alphanum (not (= #\7))))
+;;       (t_cn (and (not (= #\5)) alphanum))
+;;       (t_dn (and alphanum (not (= #\7)) (not (= #\8))))
+;;       (t_en (and alphanum (not (= #\7)) (not (= #\.))))
+;;       (t_fn (or t_an t_bn t_3))
+;;       (t_3  (= #\3))))
+
+;;   (assert=
+
+;;    `((t_an (or (and (r7rs char-upper-case?))
+;;                (and (r7rs char-lower-case?))
+;;                (and (not (= #\5))
+;;                     (r7rs char-numeric?))))
+;;      (t_bn (or (and (r7rs char-upper-case?))
+;;                (and (r7rs char-lower-case?))
+;;                (and (not (= #\7))
+;;                     (r7rs char-numeric?))))
+;;      (t_cn (or (and (r7rs char-upper-case?))
+;;                (and (r7rs char-lower-case?))
+;;                (and (not (= #\5))
+;;                     (r7rs char-numeric?))))
+;;      (t_dn (or (and (r7rs char-upper-case?))
+;;                (and (r7rs char-lower-case?))
+;;                (and (not (= #\7))
+;;                     (not (= #\8))
+;;                     (r7rs char-numeric?))))
+;;      (t_en (or (and (r7rs char-upper-case?))
+;;                (and (r7rs char-lower-case?))
+;;                (and (not (= #\7))
+;;                     (r7rs char-numeric?))))
+;;      (t_fn (or (and (r7rs char-upper-case?))
+;;                (and (r7rs char-lower-case?))
+;;                (and (not (= #\5))
+;;                     (r7rs char-numeric?))
+;;                (and (r7rs char-upper-case?))
+;;                (and (r7rs char-lower-case?))
+;;                (and (not (= #\7))
+;;                     (r7rs char-numeric?))
+;;                (= #\3)))
+;;      (t_3 (= #\3)))
+
+;;    (labelinglogic:model:alpha-rename
+;;     '() (labelinglogic:init
+;;          model bindings))))
 
 
 
