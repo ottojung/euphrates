@@ -27,6 +27,7 @@
                   (define next-type (labelinglogic:expression:type next))
                   (define next-args (labelinglogic:expression:args next))
                   (define c-type (labelinglogic:expression:type c))
+                  (define c-args (labelinglogic:expression:type c))
                   (cond
                    ((equal? next-type 'or)
                     (loop
@@ -35,7 +36,12 @@
                         (lambda (x) (make 'and (list c x)))
                         next-args))))
                    ((equal? c-type 'or)
-                    (loop (make type (list next c))))
+                    (loop
+                     (make 'or
+                       (map
+                        (lambda (x) (make 'and (list x next)))
+                        c-args))))
+                    ;; (loop (make type (list next c))))
                    (else
                     (make type args*))))))))
 
