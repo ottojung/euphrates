@@ -3,6 +3,10 @@
 
 (define (labelinglogic:model:inline-non-bindings model bindings)
 
-  
+  (define (inline-vars model)
+    (labelinglogic:model:map-expressions
+     (lambda (class predicate)
+       (lambda (predicate)
+         
 
-  ret-model)
+  (apply-until-fixpoint inline-vars model))
