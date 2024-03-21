@@ -26,6 +26,7 @@
     (only (scheme base)
           and
           begin
+          car
           define
           equal?
           if
