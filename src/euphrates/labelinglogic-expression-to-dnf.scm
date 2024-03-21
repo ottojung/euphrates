@@ -41,7 +41,6 @@
                        (map
                         (lambda (x) (make 'and (list x next)))
                         c-args))))
-                    ;; (loop (make type (list next c))))
                    (else
                     (make type args*))))))))
 
