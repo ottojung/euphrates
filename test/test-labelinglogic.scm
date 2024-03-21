@@ -44,40 +44,40 @@
 
 
 
-;; (let ()
-;;   (define model
-;;     `((any (or alphanum whitespace))
-;;       (alphanum (or alphabetic numeric))
-;;       (alphabetic (or upcase lowercase))
-;;       (upcase (r7rs char-upper-case?))
-;;       (lowercase (r7rs char-lower-case?))
-;;       (numeric (r7rs char-numeric?))
-;;       (whitespace (r7rs char-whitespace?))))
+(let ()
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
+      (alphabetic (or upcase lowercase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
 
-;;   (define bindings
-;;     `((t_an alphanum)
-;;       (t_3  (= #\3))))
+  (define bindings
+    `((t_an alphanum)
+      (t_3  (= #\3))))
 
-;;   (assert=
+  (assert=
 
-;;    `((t_an (or uid_1 uid_2 uid_3))
-;;      (t_3 (= #\3))
-;;      (uid_4 (r7rs char-numeric?))
-;;      (uid_1 (r7rs char-upper-case?))
-;;      (uid_2 (r7rs char-lower-case?))
-;;      (uid_3 (or uid_4 t_3)))
+   `((t_an (or uid_1 uid_2 uid_3))
+     (t_3 (= #\3))
+     (uid_4 (r7rs char-numeric?))
+     (uid_1 (r7rs char-upper-case?))
+     (uid_2 (r7rs char-lower-case?))
+     (uid_3 (or uid_4 t_3)))
 
-;;    ;; `((t_an (or uid_1 t_3))
-;;    ;;   (t_3 (= #\3))
-;;    ;;   (uid_1
-;;    ;;    (r7rs (lambda (c) (or
-;;    ;;                       (or (char-upper-case? c)
-;;    ;;                           (char-lower-case? c))
-;;    ;;                       (char-numeric? c))))))
+   ;; `((t_an (or uid_1 t_3))
+   ;;   (t_3 (= #\3))
+   ;;   (uid_1
+   ;;    (r7rs (lambda (c) (or
+   ;;                       (or (char-upper-case? c)
+   ;;                           (char-lower-case? c))
+   ;;                       (char-numeric? c))))))
 
-;;    (labelinglogic:model:alpha-rename
-;;     '() (labelinglogic:init
-;;          model bindings))))
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
 
 
 
