@@ -16,6 +16,7 @@
           not
           or
           quote))
+  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
