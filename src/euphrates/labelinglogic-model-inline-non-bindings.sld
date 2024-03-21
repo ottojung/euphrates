@@ -8,10 +8,6 @@
           apply-until-fixpoint))
   (import (only (euphrates debugs) debugs))
   (import
-    (only (euphrates hashset)
-          hashset-has?
-          list->hashset))
-  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -26,13 +22,11 @@
           labelinglogic:model:map-subexpressions))
   (import
     (only (scheme base)
-          and
           begin
           define
           equal?
           if
           lambda
-          not
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
