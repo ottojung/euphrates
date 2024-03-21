@@ -28,10 +28,10 @@
     (labelinglogic:model:sugarify dnf-model))
 
   (define simpler-dnf-model
-    (labelinglogic:model: dnf-model))
+    (labelinglogic:model:optimize-ands-assuming-nointersect flat-dnf-model))
 
   (define ret-model
-    flat-dnf-model)
+    simpler-dnf-model)
 
   ;; (define opt-model
   ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
