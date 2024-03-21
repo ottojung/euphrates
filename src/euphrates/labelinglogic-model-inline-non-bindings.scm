@@ -13,10 +13,7 @@
          (define args (labelinglogic:expression:args expr))
          (if (and (equal? type 'constant)
                   (not (hashset-has? bindings/s expr)))
-             (let ()
-               (define ret (car (assoc-or expr model 'impossible-618263163)))
-               (debugs ret)
-               ret)
+             (car (assoc-or expr model 'impossible-618263163))
              expr)))
 
      model))
