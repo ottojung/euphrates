@@ -87,7 +87,14 @@
 
   (assert=
 
-   999
+   `((t_a (or (and (r7rs char-upper-case?))
+              (and (r7rs char-lower-case?))
+              (and (not (= #\5))
+                   (r7rs char-numeric?))))
+     (t_b (or (and (r7rs char-upper-case?))
+              (and (r7rs char-lower-case?))
+              (and (not (= #\5))
+                   (r7rs char-numeric?)))))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
