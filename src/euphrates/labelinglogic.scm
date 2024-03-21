@@ -24,8 +24,11 @@
   (define dnf-model
     (labelinglogic:model:to-dnf bindings-model))
 
+  (define flat-dnf-model
+    (labelinglogic:expression:sugarify dnf-model))
+
   (define ret-model
-    bindings-model)
+    flat-dnf-model)
 
   ;; (define opt-model
   ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
