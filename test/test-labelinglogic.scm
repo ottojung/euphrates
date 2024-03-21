@@ -60,8 +60,8 @@
 
   (assert=
 
-   `((t_an (or (r7rs char-upper-case?)
-               (r7rs char-lower-case?)
+   `((t_an (or (or (r7rs char-upper-case?)
+                   (r7rs char-lower-case?))
                (r7rs char-numeric?)))
      (t_3 (= #\3)))
 
