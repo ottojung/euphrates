@@ -12,6 +12,6 @@
        (labelinglogic:model:assoc-or
         name model*
         (raisu* :from "labelinglogic:model:assoc-or"
-                :type 'model-assoc-error
+                :type 'model-assoc-or-error
                 :message (stringf "Expression named ~s is abscent in the model." name)
                 :args (list name model*)))))))
