@@ -19,7 +19,7 @@
     (labelinglogic:model:inline-non-bindings model bindings))
 
   (define dnf-model
-    (labelinglogic:model:inline-non-bindings model bindings))
+    (labelinglogic:model:to-dnf model bindings))
 
   (define ret-model
     dnf-model)
