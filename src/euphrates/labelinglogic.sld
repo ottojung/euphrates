@@ -18,18 +18,8 @@
           labelinglogic:model:inline-all))
   (import
     (only (euphrates
-            labelinglogic-model-optimize-ands-assuming-nointersect)
-          labelinglogic:model:optimize-ands-assuming-nointersect))
-  (import
-    (only (euphrates
             labelinglogic-model-reduce-to-bindings)
           labelinglogic:model:reduce-to-bindings))
-  (import
-    (only (euphrates labelinglogic-model-sugarify)
-          labelinglogic:model:sugarify))
-  (import
-    (only (euphrates labelinglogic-model-to-dnf)
-          labelinglogic:model:to-dnf))
   (import
     (only (scheme base) begin car define map))
   (cond-expand
