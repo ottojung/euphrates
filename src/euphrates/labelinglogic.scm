@@ -21,8 +21,8 @@
   (define bindings-model
     (labelinglogic:model:reduce-to-bindings inlined-model bindings))
 
-  ;; (define dnf-model
-  ;;   (labelinglogic:model:to-dnf bindings-model))
+  (define dnf-model
+    (labelinglogic:model:to-dnf bindings-model))
 
   ;; (define flat-dnf-model
   ;;   (labelinglogic:model:sugarify dnf-model))
@@ -31,7 +31,7 @@
   ;;   (labelinglogic:model:optimize-ands-assuming-nointersect flat-dnf-model))
 
   (define ret-model
-    bindings-model)
+    dnf-model)
 
   ;; (define opt-model
   ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
