@@ -18,8 +18,8 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates labelinglogic-model-assoc-or)
-          labelinglogic:model:assoc-or))
+    (only (euphrates labelinglogic-model-assoc)
+          labelinglogic:model:assoc))
   (import
     (only (euphrates
             labelinglogic-model-map-subexpressions)

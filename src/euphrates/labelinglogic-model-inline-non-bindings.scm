@@ -13,7 +13,7 @@
          (define args (labelinglogic:expression:args expr))
          (if (and (equal? type 'constant)
                   (not (hashset-has? bindings/s expr)))
-             (labelinglogic:model:assoc-or expr model)
+             (labelinglogic:model:assoc expr model)
              expr)))
 
      model))
