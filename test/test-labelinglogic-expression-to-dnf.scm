@@ -78,8 +78,5 @@
 ; Test negations 1.
 (test 'x '(not (not x)))
 
-;; ; Test negations 1.
-;; (test '(not (not x)) '(not (not x)))
-
-;; ; Test negations 2.
-;; (test '(not (not (not x))) '(not x))
+; Test negations 2.
+(test '(not x) '(not (not (not x))))
