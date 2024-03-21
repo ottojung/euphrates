@@ -63,11 +63,8 @@
         (~a type))
        (list x)))
 
-    (debugs x)
-
     (unless (procedure?
-             (labelinglogic:expression:compile/r7rs
-              (car args)))
+             (labelinglogic:expression:compile/r7rs x))
       (fail-expression-check
        (stringf
         "Expression of type ~s must compile to a R7RS scheme procedure."
