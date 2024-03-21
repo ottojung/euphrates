@@ -16,7 +16,7 @@
     (labelinglogic:model:extend-with-bindings model bindings))
 
   (define opt-model
-    (labelinglogic:model:optimize-to-bindings extended-model bindings))
+    (labelinglogic:model:inline-non-bindings model bindings))
 
   (define ret-model
     dfa-model)
