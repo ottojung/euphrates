@@ -65,21 +65,6 @@
                (r7rs char-numeric?)))
      (t_3 (= #\3)))
 
-   ;; `((t_an (or uid_1 uid_2 uid_3))
-   ;;   (t_3 (= #\3))
-   ;;   (uid_4 (r7rs char-numeric?))
-   ;;   (uid_1 (r7rs char-upper-case?))
-   ;;   (uid_2 (r7rs char-lower-case?))
-   ;;   (uid_3 (or uid_4 t_3)))
-
-   ;; `((t_an (or uid_1 t_3))
-   ;;   (t_3 (= #\3))
-   ;;   (uid_1
-   ;;    (r7rs (lambda (c) (or
-   ;;                       (or (char-upper-case? c)
-   ;;                           (char-lower-case? c))
-   ;;                       (char-numeric? c))))))
-
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
