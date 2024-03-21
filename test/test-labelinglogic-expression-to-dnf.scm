@@ -70,7 +70,7 @@
 
 ; Test that involves all operators in a more complex expression
 (test
- '(or (and a (not b) (not a)) (and a (not b) b) (and a b (not a)) (and a b b))
+ '(or (and a (not a) (not b)) (and a b (not b)) (and a (not a) b) (and a b b))
  '(and a (or (not a) b) (or (not b) b)))
 
 ; Test constant.
