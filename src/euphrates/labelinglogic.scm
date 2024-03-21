@@ -18,8 +18,11 @@
   (define opt-model
     (labelinglogic:model:inline-non-bindings model bindings))
 
+  (define dnf-model
+    (labelinglogic:model:inline-non-bindings model bindings))
+
   (define ret-model
-    dfa-model)
+    dnf-model)
 
   ;; (define opt-model
   ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
