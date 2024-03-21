@@ -5,4 +5,3 @@
   (labelinglogic:model:map-expressions
    (lambda (class predicate) labelinglogic:expression:optimize/and-assuming-nointersect)
    model))
-
