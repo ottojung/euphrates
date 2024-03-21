@@ -61,8 +61,8 @@
   (assert=
 
    `((t_an (or (r7rs char-upper-case?)
-               (or (r7rs char-lower-case?)
-                   (r7rs char-numeric?))))
+               (r7rs char-lower-case?)
+               (r7rs char-numeric?)))
      (t_3 (= #\3)))
 
    ;; `((t_an (or uid_1 uid_2 uid_3))
