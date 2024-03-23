@@ -30,8 +30,11 @@
   (define simpler-dnf-model
     (labelinglogic:model:optimize-ands-assuming-nointersect flat-dnf-model))
 
+  (define latticised
+    (labelinglogic:model:latticize-ands-assuming-nonintersect simpler-dnf-model))
+
   (define ret-model
-    simpler-dnf-model)
+    latticised)
 
   ;; (define opt-model
   ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
