@@ -26,8 +26,10 @@
     (labelinglogic:expression:args dnf*))
 
   (define simpl
-    (map labelinglogic:expression:optimize/and-assuming-nointersect
-         dnf*-args))
+    (labelinglogic:expression:make
+     'or
+     (map labelinglogic:expression:optimize/and-assuming-nointersect
+          dnf*-args)))
 
   (define simpl-type
     (labelinglogic:expression:type simpl))
