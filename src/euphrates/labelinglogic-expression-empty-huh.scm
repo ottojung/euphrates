@@ -30,7 +30,7 @@
               :args (list 'constant constants expr expr0)))
 
     (cond
-     ((equal? type 'not) #t)
+     ((equal? type 'not) #f)
      ((equal? type 'r7rs) #t)
      ((equal? type '=) #f)
 
