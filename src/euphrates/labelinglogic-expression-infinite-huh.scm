@@ -15,16 +15,13 @@
      ((equal? type 'not)
       (not (loop (car args))))
 
-     ((equal? type 'and)
-      (list-and-map loop args))
-
      ((member type (list 'tuple 'or))
       (list-or-map loop args))
 
      ((equal? type 'constant)
       (loop (labelinglogic:model:assoc expr model)))
 
-     ((equal? type 'xor)
+     ((member type (list 'and 'xor))
       (raisu* :from "labelinglogic:expression:infinite?"
               :type 'bad-type
               :message (stringf "Expressions of type ~s cannot be determined to be either finite or infinite."
