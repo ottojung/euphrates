@@ -41,13 +41,13 @@
 
    (labelinglogic:model:bindings model))
 
-  (define (check-recursion model-component)
+  (define (check-recursion binding)
     (define stack (list))
 
-    (let loop ((model-component model-component)
+    (let loop ((binding binding)
                (stack stack))
 
-      (define-tuple (class predicate) model-component)
+      (define-tuple (class predicate) binding)
 
       (define new-stack (cons class stack))
 
