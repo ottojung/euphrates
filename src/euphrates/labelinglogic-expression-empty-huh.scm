@@ -31,8 +31,8 @@
 
     (cond
      ((equal? type 'not) #f)
-     ((equal? type 'r7rs) #t)
-     ((equal? type '=) #f)
+     ((equal? type 'r7rs) #f)
+     ((equal? type '=) #t)
 
      ((equal? type 'and)
       (list-and-map loop args))
