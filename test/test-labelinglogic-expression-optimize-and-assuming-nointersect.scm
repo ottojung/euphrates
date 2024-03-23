@@ -129,7 +129,7 @@
 
 ;; Combining 'not r7rs' and 'not r7rs' [1]
 (assert=
- '(and)
+ '(and (not (r7rs even?)) (not (r7rs odd?)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (r7rs even?)) (not (r7rs odd?)))))
 
