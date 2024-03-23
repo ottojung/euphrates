@@ -27,7 +27,5 @@
              :args (list type expr))))))
    model)
 
-  (if open?
-      labelinglogic:expression:top
-      (labelinglogic:expression:make
-       'or (stack->list S))))
+  (labelinglogic:expression:make
+   'or (stack->list S)))
