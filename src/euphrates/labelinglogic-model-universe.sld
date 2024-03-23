@@ -27,14 +27,15 @@
     (only (scheme base)
           =
           _
+          and
           begin
           cond
           define
           else
-          equal?
           lambda
           list
           member
+          not
           or
           quote))
   (cond-expand
