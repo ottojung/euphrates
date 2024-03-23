@@ -129,7 +129,6 @@
 
 ;; Combining 'not r7rs' and 'not r7rs' [1]
 ;; NOTE: this does not simplify because `(or (r7rs even?) (r7rs odd?))` is `(and)` (which is top).
-;;       therefore the nonintersection assumption has been violated.
 (assert=
  '(and (not (r7rs even?)) (not (r7rs odd?)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
