@@ -39,7 +39,8 @@
   (define simpl*
     (if (equal? 'or simpl-type)
         (labelinglogic:expression:make
-         simpl-type (list-deduplicate simpl-args))
+         simpl-type
+         (list-deduplicate simpl-args))
         simpl))
 
   simpl*)
