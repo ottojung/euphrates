@@ -10,7 +10,7 @@
      (labelinglogic:expression:move-nots-down expr)))
 
   (define constants
-    0)
+    (labelinglogic:expression:constants expr))
 
   (when (equal? type 'constant)
     (raisu* :from "labelinglogic:expression:infinite?"
