@@ -13,6 +13,9 @@
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))
   (import
+    (only (euphrates labelinglogic-model-bindings)
+          labelinglogic:model:bindings))
+  (import
     (only (euphrates labelinglogic-model-names)
           labelinglogic:model:names))
   (import

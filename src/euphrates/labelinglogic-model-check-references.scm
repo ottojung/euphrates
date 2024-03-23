@@ -40,6 +40,6 @@
 
      )
 
-   model)
+   (labelinglogic:model:bindings model))
 
   (when #f #t))
