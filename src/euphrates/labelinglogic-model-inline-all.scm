@@ -5,13 +5,7 @@
   (define (inline-vars model)
     (labelinglogic:model:map-subexpressions
      (lambda (class predicate)
-       (lambda (expr)
-         (define type (labelinglogic:expression:type expr))
-         (define args (labelinglogic:expression:args expr))
-         (if (equal? type 'constant)
-             (labelinglogic:model:assoc expr model)
-             expr)))
-
+       (labelinglogic:expression:inline-references/subexpression model))
      model))
 
   (apply-until-fixpoint inline-vars model))
