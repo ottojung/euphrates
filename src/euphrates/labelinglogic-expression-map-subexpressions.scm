@@ -16,7 +16,7 @@
       (fun expr))
 
      (else
-      (raisu* :from "labelinglogic:model:map-subexpressions"
+      (raisu* :from "labelinglogic:expression:map-subexpressions"
               :type 'unknown-expr-type
               :message (stringf "Expression type ~s not recognized"
                                 (~a type))

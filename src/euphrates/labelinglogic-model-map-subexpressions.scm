@@ -8,26 +8,8 @@
      (define initialized-fun (fun class predicate))
 
      (define new
-       (let loop ((expr predicate))
-         (define type (labelinglogic:expression:type expr))
-         (define args (labelinglogic:expression:args expr))
-
-         (cond
-          ((member type (list 'or 'and 'not 'xor 'tuple))
-           (initialized-fun
-            (labelinglogic:expression:make
-             type (map loop args))))
-
-          ((member type (list '= 'constant 'r7rs))
-           (initialized-fun expr))
-
-          (else
-           (raisu* :from "labelinglogic:model:map-subexpressions"
-                   :type 'unknown-expr-type
-                   :message (stringf "Expression type ~s not recognized"
-                                     (~a type))
-                   :args (list type expr))))))
-
+       (labelinglogic:expression:map-subexpressions
+        initialized-fun expr))
 
      (labelinglogic:binding:make class new))
 
