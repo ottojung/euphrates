@@ -22,7 +22,6 @@
   (for-each
    (lambda (binding)
      (define expr (labelinglogic:binding:expr binding))
-
      (define constants (labelinglogic:expression:constants expr))
 
      (define undefined-constants
