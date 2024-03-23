@@ -6,9 +6,6 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-constants)
-          labelinglogic:expression:constants))
-  (import
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
   (import
@@ -18,6 +15,9 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates labelinglogic-model-assoc)
+          labelinglogic:model:assoc))
   (import
     (only (euphrates list-and-map) list-and-map))
   (import
@@ -38,11 +38,8 @@
           list
           member
           not
-          null?
           or
-          quote
-          unless
-          when))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
