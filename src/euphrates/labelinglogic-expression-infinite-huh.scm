@@ -19,4 +19,4 @@
             :args (list type expr)))
 
   (or (equal? type 'not)
-      0))
+      #f))
