@@ -3,6 +3,8 @@
   (euphrates labelinglogic-model-check-references)
   (export labelinglogic:model:check-references)
   (import
+    (only (euphrates define-tuple) define-tuple))
+  (import
     (only (euphrates hashset)
           hashset-has?
           list->hashset))
@@ -23,19 +25,26 @@
           list-get-duplicates))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
   (import
     (only (euphrates unique-identifier)
           unique-identifier?))
   (import
     (only (scheme base)
+          assoc
           begin
+          cons
           define
           for-each
           lambda
+          let
           list
+          map
+          member
           null?
           or
           quote
+          reverse
           unless
           when))
   (cond-expand
