@@ -37,8 +37,15 @@
      ((equal? type 'and)
       (list-or-map loop args))
 
-     ((member type (list 'tuple 'or 'xor))
+     ((member type (list 'tuple 'or))
       (list-and-map loop args))
+
+     ((equal? type 'xor)
+      (raisu* :from "labelinglogic:expression:empty?"
+              :type 'bad-type
+              :message (stringf "Expressions of type ~s cannot be determined to be empty."
+                                (~a type))
+              :args (list type expression)))
 
      (else
       (raisu* :from "labelinglogic:expression:empty?"
