@@ -18,12 +18,12 @@
           labelinglogic:model:inline-all))
   (import
     (only (euphrates
-            labelinglogic-model-latticize-ands-assuming-nointersect)
-          labelinglogic:model:latticize-ands-assuming-nointersect))
+            labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
+          labelinglogic:model:latticize-ands-assuming-nointersect-dnf))
   (import
     (only (euphrates
-            labelinglogic-model-optimize-ands-assuming-nointersect)
-          labelinglogic:model:optimize-ands-assuming-nointersect))
+            labelinglogic-model-optimize-ands-assuming-nointersect-dnf)
+          labelinglogic:model:optimize-ands-assuming-nointersect-dnf))
   (import
     (only (euphrates
             labelinglogic-model-reduce-to-bindings)

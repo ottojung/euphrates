@@ -1,9 +1,9 @@
 
 (define-library
   (euphrates
-    labelinglogic-expression-optimize-assuming-nointersect)
+    labelinglogic-expression-optimize-assuming-nointersect-dnf)
   (export
-    labelinglogic:expression:optimize/assuming-nointersect)
+    labelinglogic:expression:optimize/assuming-nointersect-dnf)
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
@@ -19,8 +19,8 @@
           labelinglogic:expression:make))
   (import
     (only (euphrates
-            labelinglogic-expression-optimize-and-assuming-nointersect)
-          labelinglogic:expression:optimize/and-assuming-nointersect))
+            labelinglogic-expression-optimize-and-assuming-nointersect-dnf)
+          labelinglogic:expression:optimize/and-assuming-nointersect-dnf))
   (import
     (only (euphrates
             labelinglogic-expression-optimize-singletons)
@@ -63,6 +63,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-optimize-assuming-nointersect.scm")))
+               "euphrates/labelinglogic-expression-optimize-assuming-nointersect-dnf.scm")))
     (else (include
-            "labelinglogic-expression-optimize-assuming-nointersect.scm"))))
+            "labelinglogic-expression-optimize-assuming-nointersect-dnf.scm"))))

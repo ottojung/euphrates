@@ -1,7 +1,7 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (labelinglogic:expression:optimize/and-assuming-nointersect expr)
+(define (labelinglogic:expression:optimize/and-assuming-nointersect-dnf expr)
   ;; This function optimizes an 'and' expression by removing contradicting, redundant and non-intersecting components.
   ;;
   ;; The optimization process includes:
@@ -55,7 +55,7 @@
                 (equal? type 'tuple)
                 (labelinglogic:expression:bottom? expr)
                 (labelinglogic:expression:top? expr))
-      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
+      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect-dnf"
               :type 'bad-sub-expr-type
               :message (stringf "Expression type ~s not permitted here." (~a type))
               :args (list type expr))))
@@ -203,7 +203,7 @@
      ))
 
   (unless (equal? type 'and)
-    (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
+    (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect-dnf"
             :type 'bad-expr-type
             :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
             :args (list type expr)))

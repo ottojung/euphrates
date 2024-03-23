@@ -28,10 +28,10 @@
     (labelinglogic:model:sugarify dnf-model))
 
   (define simpler-dnf-model
-    (labelinglogic:model:optimize-ands-assuming-nointersect flat-dnf-model))
+    (labelinglogic:model:optimize-ands-assuming-nointersect-dnf flat-dnf-model))
 
   (define latticised
-    (labelinglogic:model:latticize-ands-assuming-nointersect simpler-dnf-model))
+    (labelinglogic:model:latticize-ands-assuming-nointersect-dnf simpler-dnf-model))
 
   (define ret-model
     latticised)
