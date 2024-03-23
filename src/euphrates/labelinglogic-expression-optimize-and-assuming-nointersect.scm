@@ -202,7 +202,6 @@
 
   (define optimize
     (compose
-     remove-idempotent
      consume-subsets
      handle-nulls
      explode-bottom
