@@ -6,24 +6,31 @@
     (labelinglogic:expression:desugar
      (labelinglogic:expression:move-nots-down expr)))
 
-  (define type (labelinglogic:expression:type simple))
-  (define args (labelinglogic:expression:args simple))
+  (define expr0 expr)
 
-  (when (equal? type 'constant)
-    (raisu* :from "labelinglogic:expression:infinite?"
-            :type 'bad-expr-type
-            :message (stringf "Expression type ~s not permitted here." (~a type))
-            :args (list type expr)))
+  (let loop ((expr simple))
 
-  (define constants
-    (labelinglogic:expression:constants simple))
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
 
-  (unless (null? constants)
-    (raisu* :from "labelinglogic:expression:infinite?"
-            :type 'contains-bad-types
-            :message (stringf "Expression contains type ~s, which is not permitted here." (~a 'constant))
-            :args (list 'constant constants expr)))
+    (when (equal? type 'constant)
+      (raisu* :from "labelinglogic:expression:infinite?"
+              :type 'bad-expr-type
+              :message (stringf "Expression type ~s not permitted here." (~a type))
+              :args (list type expr expr0)))
 
-  (or (equal? type 'not)
-      (equal? type 'r7rs)
-      (labelinglogic:expression:top? simple)))
+    (define constants
+      (labelinglogic:expression:constants expr))
+
+    (unless (null? constants)
+      (raisu* :from "labelinglogic:expression:infinite?"
+              :type 'contains-bad-types
+              :message (stringf "Expression contains type ~s, which is not permitted here." (~a 'constant))
+              :args (list 'constant constants expr expr0)))
+
+    (or (equal? type 'not)
+        (equal? type 'r7rs)
+        (labelinglogic:expression:top? expr)
+        (and (equal? type 'tuple)
+             (list-and-map loop args)
+             
