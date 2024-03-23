@@ -70,7 +70,10 @@
                (cons c (labelinglogic:model:assoc c model)))
              constants))
 
-      (for-each (lambda (x) (loop x new-stack)) referenced-models)))
+      (for-each
+       (lambda (x)
+         (loop x new-stack))
+       referenced)))
 
   (for-each check-recursion bindings)
 
