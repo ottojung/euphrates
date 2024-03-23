@@ -125,6 +125,8 @@
     (or
      (labelinglogic:expression:top? expr-a)
 
+     (labelinglogic:expression:syntactic-equal? expr-a expr-b)
+
      (and (equal? type-a '=)
           (equal? type-b 'r7rs)
           (labelinglogic:expression:evaluate/r7rs
