@@ -9,9 +9,14 @@
      (define type (labelinglogic:expression:type expr))
      (define args (labelinglogic:expression:args expr))
 
-     
+     (cond
+      (else
+       (raisu* :from "labelinglogic:model:universe"
+               :type 'bad-sub-expr-type
+               :message (stringf "Expression type ~s not permitted here." (~a type))
+               :args (list type expr)))))
 
-     0))
+   model)
 
   (labelinglogic:expression:make
    'or (stack->list stack)))
