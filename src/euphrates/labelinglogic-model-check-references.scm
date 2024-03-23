@@ -31,6 +31,7 @@
 
   (for-each
    (lambda (binding)
+     (define name (labelinglogic:binding:name binding))
      (define expr (labelinglogic:binding:expr binding))
      (define constants (labelinglogic:expression:constants expr))
 
@@ -44,7 +45,7 @@
      (unless (null? undefined-constants)
        (fail-ref-check
         "binding references undefined class"
-        (list binding undefined-constants)))
+        (list name undefined-constants)))
 
      )
 
