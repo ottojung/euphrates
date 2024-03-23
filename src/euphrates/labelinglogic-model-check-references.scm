@@ -14,14 +14,14 @@
       (negate unique-identifier?)
       names)))
 
-  (define names/set
-    (list->hashset names))
-
   (define _831623
     (unless (null? duplicates)
       (fail-tokens-check
        "names must not repeat"
        (list duplicates))))
+
+  (define names/set
+    (list->hashset names))
 
   (for-each
    (lambda (binding)
