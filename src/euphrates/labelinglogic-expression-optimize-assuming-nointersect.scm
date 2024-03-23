@@ -7,14 +7,31 @@
 
   (define dnf-type
     (labelinglogic:expression:type dnf))
+  (define dnf-args
+    (labelinglogic:expression:args dnf))
 
   (define dnf*
     (if (equal? 'or dnf-type)
         (labelinglogic:expression:make
-         dnf-type
-         (list-deduplicate
-          (labelinglogic:expression:args dnf)))
+         dnf-type (list-deduplicate dnf-args))
         dnf))
 
+  (define dnf*-args
+    (labelinglogic:expression:args dnf*))
+
   (define simpl
-    
+    (map labelinglogic:expression:optimize/and-assuming-nointersect
+         dnf*-args))
+
+  (define simpl-type
+    (labelinglogic:expression:type simpl))
+  (define simpl-args
+    (labelinglogic:expression:args simpl))
+
+  (define simpl*
+    (if (equal? 'or simpl-type)
+        (labelinglogic:expression:make
+         simpl-type (list-deduplicate simpl-args))
+        simpl))
+
+  simpl*)
