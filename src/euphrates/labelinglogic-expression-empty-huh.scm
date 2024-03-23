@@ -38,7 +38,7 @@
       (list-or-map loop args))
 
      ((member type (list 'tuple 'or 'xor))
-      (list-or-map loop args))
+      (list-and-map loop args))
 
      (else
       (raisu* :from "labelinglogic:expression:empty?"
