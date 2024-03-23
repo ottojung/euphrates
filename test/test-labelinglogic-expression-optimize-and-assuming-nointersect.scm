@@ -97,6 +97,7 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 2)) (not (= 2)))))
 
+TODO: fix this
 ;; Combining 'not =' and 'not =' [3]
 (assert=
  '(and (not (= 2)) (not (or)))
