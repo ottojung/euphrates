@@ -28,6 +28,9 @@
     (only (euphrates list-deduplicate)
           list-deduplicate))
   (import
+    (only (euphrates list-idempotent)
+          list-idempotent))
+  (import
     (only (scheme base)
           begin
           define
