@@ -3,5 +3,5 @@
 
 (define (labelinglogic:model:check model)
   (labelinglogic:model:check-structure model)
-  (labelinglogic:model:check-references (list->hashset '()) model)
+  (labelinglogic:model:check-references (make-hashset) model)
   )
