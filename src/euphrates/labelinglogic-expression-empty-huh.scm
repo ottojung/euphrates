@@ -9,9 +9,11 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((equal? type 'not) #f)
+     ((equal? type '=) #f)
      ((equal? type 'r7rs) #f)
-     ((equal? type '=) #t)
+
+     ((equal? type 'not)
+      (not (loop (car args))))
 
      ((equal? type 'and)
       (list-or-map loop args))

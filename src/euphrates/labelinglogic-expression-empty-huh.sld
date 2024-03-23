@@ -23,6 +23,7 @@
           =
           and
           begin
+          car
           cond
           define
           else
