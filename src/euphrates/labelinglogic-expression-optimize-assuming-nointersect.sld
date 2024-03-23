@@ -8,12 +8,6 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-bottom-huh)
-          labelinglogic:expression:bottom?))
-  (import
-    (only (euphrates labelinglogic-expression-bottom)
-          labelinglogic:expression:bottom))
-  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
@@ -32,9 +26,6 @@
     (only (euphrates labelinglogic-expression-to-dnf)
           labelinglogic:expression:to-dnf))
   (import
-    (only (euphrates labelinglogic-expression-top-huh)
-          labelinglogic:expression:top?))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -47,7 +38,6 @@
           list-idempotent))
   (import
     (only (euphrates list-or-map) list-or-map))
-  (import (only (euphrates negate) negate))
   (import
     (only (scheme base)
           begin
@@ -61,9 +51,6 @@
           map
           or
           quote))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
