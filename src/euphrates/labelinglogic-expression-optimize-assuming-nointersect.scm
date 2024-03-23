@@ -11,8 +11,8 @@
          dnf-type
          (list-idempotent/left
           labelinglogic:expression:equal?/and-assuming-nointersect
-          dnf-args))
-        dnf))
+          args))
+        expr))
 
   (define dnf
     (optimize-or
