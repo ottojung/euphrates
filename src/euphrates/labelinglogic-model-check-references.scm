@@ -66,5 +66,4 @@
 
   (for-each check-recursion model)
 
-
   (when #f #t))
