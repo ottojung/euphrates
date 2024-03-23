@@ -16,7 +16,8 @@
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))
   (import
-    (only (euphrates list-and-map) list-and-map))
+    (only (euphrates labelinglogic-model-check-structure)
+          labelinglogic:model:check-structure))
   (import
     (only (euphrates list-get-duplicates)
           list-get-duplicates))
@@ -29,18 +30,13 @@
   (import
     (only (scheme base)
           begin
-          car
           define
           for-each
           lambda
           list
-          list?
-          map
           null?
           or
-          pair?
           quote
-          symbol?
           unless
           when))
   (cond-expand

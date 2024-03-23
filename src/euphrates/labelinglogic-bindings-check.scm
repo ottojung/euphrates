@@ -9,22 +9,7 @@
             :message (stringf "Type error in ~s: ~a." (quote tokens-alist) show)
             :args args))
 
-  (unless (list? tokens-alist)
-    (fail-tokens-check "must be a list" (list tokens-alist)))
-
-  (unless (list-and-map pair? tokens-alist)
-    (fail-tokens-check "must an alist" (list tokens-alist)))
-
-  (define keys
-    (map car tokens-alist))
-
-  (define (id? key)
-    (or symbol? unique-identifier?))
-
-  (unless (list-and-map id? keys)
-    (fail-tokens-check
-     "every key must be a symbol"
-     (list (filter (negate id?) keys))))
+  (labelinglogic:model:check-structure tokens-alist)
 
   (define duplicates
     (list-get-duplicates
