@@ -42,10 +42,9 @@
                constants))
 
      (unless (null? undefined-constants)
-       (raisu* :from "labelinglogic"
-               :type 'undefined-reference-in-binding
-               :message "Binding references undefined class."
-               :args (list expr binding undefined-constants)))
+       (fail-ref-check
+        "binding references undefined class"
+        (list binding undefined-constants)))
 
      )
 
