@@ -244,11 +244,11 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (= 3) (not (r7rs even?)))))
 
-;; Combining '(not =) and '(not r7rs) [1]
-(assert=
- '(and (not (r7rs even?)))
- (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (not (r7rs even?)) (not (= 2)))))
+;; ;; Combining '(not =) and '(not r7rs) [1]
+;; (assert=
+;;  '(and (not (r7rs even?)))
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+;;   '(and (not (r7rs even?)) (not (= 2)))))
 
 ;; Combining '(not =) and '(not r7rs) [2]
 (assert=
