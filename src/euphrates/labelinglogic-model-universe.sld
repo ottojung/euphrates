@@ -9,6 +9,12 @@
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
+    (only (euphrates labelinglogic-expression-top-huh)
+          labelinglogic:expression:top?))
+  (import
+    (only (euphrates labelinglogic-expression-top)
+          labelinglogic:expression:top))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -31,11 +37,13 @@
           define
           else
           equal?
+          if
           lambda
           list
           member
           or
-          quote))
+          quote
+          set!))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
