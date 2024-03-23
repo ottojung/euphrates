@@ -54,7 +54,7 @@
                 (equal? type 'not)
                 (equal? type 'tuple)
                 (labelinglogic:expression:bottom? expr)
-                (is-top? expr))
+                (labelinglogic:expression:top? expr))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
               :type 'bad-sub-expr-type
               :message (stringf "Expression type ~s not permitted here." (~a type))
