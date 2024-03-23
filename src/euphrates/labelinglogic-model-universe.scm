@@ -14,7 +14,7 @@
         ((equal? type 'r7rs)
          (stack-push! S expr))
 
-        ((equal? type 'r7rs)
+        ((equal? type '=)
          (stack-push! S expr))
 
         ((member 0) 'pass)
