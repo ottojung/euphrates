@@ -3,14 +3,15 @@
   (euphrates labelinglogic-model-check-references)
   (export labelinglogic:model:check-references)
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
     (only (euphrates hashset)
           hashset-has?
           list->hashset))
   (import
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
+  (import
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic:binding:name))
   (import
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))

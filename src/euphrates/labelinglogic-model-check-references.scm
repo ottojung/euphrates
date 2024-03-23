@@ -47,7 +47,8 @@
     (let loop ((binding binding)
                (stack stack))
 
-      (define-tuple (class predicate) binding)
+      (define class (labelinglogic:binding:name binding))
+      (define predicate (labelinglogic:binding:expr binding))
 
       (define new-stack (cons class stack))
 
