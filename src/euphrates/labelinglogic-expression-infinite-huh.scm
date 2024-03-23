@@ -32,11 +32,11 @@
               :type 'bad-type
               :message (stringf "Expressions of type ~s cannot be determined to be either finite or infinite."
                                 (~a type))
-              :args (list type expression)))
+              :args (list type expr expr0)))
 
      (else
       (raisu* :from "labelinglogic:expression:infinite?"
               :type 'unknown-expr-type
               :message (stringf "Expression type ~s not recognized"
                                 (~a type))
-              :args (list type expression))))))
+              :args (list type expr expr0))))))
