@@ -173,12 +173,6 @@
     (define new-args (filter (negate labelinglogic:expression:top?) args))
     (labelinglogic:expression:make type new-args))
 
-  (define (remove-idempotent expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-    (define new-args (list-idempotent/left labelinglogic:expression:syntactic-equal? args))
-    (labelinglogic:expression:make type new-args))
-
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))

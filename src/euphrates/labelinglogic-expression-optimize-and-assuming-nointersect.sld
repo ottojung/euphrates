@@ -40,9 +40,6 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates list-idempotent-left)
-          list-idempotent/left))
-  (import
     (only (euphrates list-idempotent)
           list-idempotent))
   (import
