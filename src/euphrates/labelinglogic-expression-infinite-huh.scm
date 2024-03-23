@@ -9,6 +9,9 @@
     (labelinglogic:expression:desugar
      (labelinglogic:expression:move-nots-down expr)))
 
+  (define simple-type (labelinglogic:expression:type simple))
+  (define simple-args (labelinglogic:expression:args simple))
+
   (when (equal? type 'constant)
     (raisu* :from "labelinglogic:expression:infinite?"
             :type 'bad-expr-type
