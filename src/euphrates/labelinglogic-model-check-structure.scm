@@ -4,7 +4,7 @@
 (define (labelinglogic:model:check-structure model)
   (define (fail-tokens-check show args)
     (raisu* :from "labelinglogic:model:check-structure"
-            :type 'tokens-alist-type-error
+            :type 'model-type-error
             :message (stringf "Type error in ~s: ~a." (quote tokens-alist) show)
             :args args))
 
