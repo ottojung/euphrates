@@ -2,21 +2,18 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:infinite? model expr)
-  (define simple
-    (labelinglogic:expression:desugar
-     (labelinglogic:expression:move-nots-down expr)))
-
   (define expr0 expr)
-
-  (let loop ((expr simple))
+  (let loop ((expr expr))
 
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((equal? type 'not) #t)
-     ((equal? type 'r7rs) #t)
      ((equal? type '=) #f)
+     ((equal? type 'r7rs) #t)
+
+     ((equal? type 'not)
+      (not (loop (car args))))
 
      ((equal? type 'and)
       (list-and-map loop args))

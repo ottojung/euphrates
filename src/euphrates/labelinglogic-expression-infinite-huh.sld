@@ -6,13 +6,6 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-desugar)
-          labelinglogic:expression:desugar))
-  (import
-    (only (euphrates
-            labelinglogic-expression-move-nots-down)
-          labelinglogic:expression:move-nots-down))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -30,6 +23,7 @@
           =
           and
           begin
+          car
           cond
           define
           else
