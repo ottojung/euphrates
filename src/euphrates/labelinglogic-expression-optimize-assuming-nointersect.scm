@@ -46,9 +46,10 @@
     (labelinglogic:expression:to-dnf expr))
 
   (define dnf*
-    (if (equal? 'or (labelinglogic:expression:type dnf))
-        dnf
-        (labelinglogic:expression:make 'or (list dnf))))
+    (optimize-or
+     (if (equal? 'or (labelinglogic:expression:type dnf))
+         dnf
+         (labelinglogic:expression:make 'or (list dnf)))))
 
   (define dnf*-args
     (labelinglogic:expression:args dnf*))
