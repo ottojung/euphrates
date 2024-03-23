@@ -11,7 +11,7 @@
       (negate unique-identifier?)
       names)))
 
-  (define names/s
+  (define names/set
     (list->hashset names))
 
   (unless (null? duplicates)
@@ -28,7 +28,7 @@
        (filter (negate
                 (lambda (x)
                   (or (hashset-has? external-names/set x)
-                      (hashset-has? names/s x))))
+                      (hashset-has? names/set x))))
                constants))
 
      (unless (null? undefined-constants)
