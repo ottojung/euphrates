@@ -13,11 +13,12 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (when (equal? type 'constant)
-      (raisu* :from "labelinglogic:expression:infinite?"
-              :type 'bad-expr-type
-              :message (stringf "Expression type ~s not permitted here." (~a type))
-              :args (list type expr expr0)))
+    (define _152354736372
+      (when (equal? type 'constant)
+        (raisu* :from "labelinglogic:expression:infinite?"
+                :type 'bad-expr-type
+                :message (stringf "Expression type ~s not permitted here." (~a type))
+                :args (list type expr expr0))))
 
     (define constants
       (labelinglogic:expression:constants expr))
