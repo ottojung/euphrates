@@ -41,7 +41,6 @@
           equal?
           if
           length
-          let
           list
           map
           member

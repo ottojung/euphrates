@@ -12,21 +12,19 @@
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
-  (labelinglogic:expression:optimize/singletons
-   (let ()
-     (define rec
-       (map labelinglogic:expression:optimize args))
+  (define rec
+    (map labelinglogic:expression:optimize args))
 
-     (define dedup
-       (list-idempotent/left
-        labelinglogic:expression:syntactic-equal?
-        rec))
+  (define dedup
+    (list-idempotent/left
+     labelinglogic:expression:syntactic-equal?
+     rec))
 
-     (define new
-       (labelinglogic:expression:make type dedup))
+  (define new
+    (labelinglogic:expression:make type dedup))
 
-     (if (= (length rec) (length dedup)) new
-         (labelinglogic:expression:optimize new)))))
+  (if (= (length rec) (length dedup)) new
+      (labelinglogic:expression:optimize new)))
 
 
 (define (labelinglogic:expression:optimize/xor expr)
@@ -37,33 +35,33 @@
 (define (labelinglogic:expression:optimize expr)
   (define type (labelinglogic:expression:type expr))
 
-  (cond
-   ((equal? type 'r7rs)
-    expr)
-   ;; (labelinglogic:expression:optimize/r7rs expr))
+  (labelinglogic:expression:optimize/singletons
+   (cond
+    ((equal? type 'r7rs)
+     expr)
+    ;; (labelinglogic:expression:optimize/r7rs expr))
 
-   ((equal? type 'not)
-    (labelinglogic:expression:move-nots-down expr))
+    ((equal? type 'not)
+     (labelinglogic:expression:move-nots-down expr))
 
-   ((equal? type 'tuple)
-    (labelinglogic:expression:optimize/singletons
-     (labelinglogic:expression:optimize/recurse-on-args expr)))
+    ((equal? type 'tuple)
+     (labelinglogic:expression:optimize/recurse-on-args expr))
 
-   ((equal? type 'or)
-    (labelinglogic:expression:optimize/and+or expr))
+    ((equal? type 'or)
+     (labelinglogic:expression:optimize/and+or expr))
 
-   ((member type (list 'and 'or))
-    (labelinglogic:expression:optimize/and+or expr))
+    ((member type (list 'and 'or))
+     (labelinglogic:expression:optimize/and+or expr))
 
-   ((member type (list 'xor))
-    (labelinglogic:expression:optimize/xor expr))
+    ((member type (list 'xor))
+     (labelinglogic:expression:optimize/xor expr))
 
-   ((member type (list '= 'constant))
-    expr)
+    ((member type (list '= 'constant))
+     expr)
 
-   (else
-    (raisu* :from "labelinglogic:expression:optimize"
-            :type 'unknown-expr-type
-            :message (stringf "Expression type ~s not recognized"
-                              (~a type))
-            :args (list type expr)))))
+    (else
+     (raisu* :from "labelinglogic:expression:optimize"
+             :type 'unknown-expr-type
+             :message (stringf "Expression type ~s not recognized"
+                               (~a type))
+             :args (list type expr))))))
