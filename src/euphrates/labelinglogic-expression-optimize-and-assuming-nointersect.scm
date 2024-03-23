@@ -172,16 +172,10 @@
     (define args (labelinglogic:expression:args expr))
     (if (list-or-map is-bottom? args) bottom expr))
 
-  (define (is-top? expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-    (and (equal? type 'and)
-         (null? args)))
-
   (define (remove-tops expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (define new-args (filter (negate is-top?) args))
+    (define new-args (filter (negate labelinglogic:expression:top?) args))
     (labelinglogic:expression:make type new-args))
 
   (define (remove-idempotent expr)
