@@ -14,6 +14,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-bottom-huh)
+          labelinglogic:expression:bottom?))
+  (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic:expression:check))
   (import
@@ -59,7 +62,6 @@
           if
           list
           not
-          null?
           or
           quote
           unless))

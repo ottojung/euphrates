@@ -53,7 +53,7 @@
                 (equal? type 'r7rs)
                 (equal? type 'not)
                 (equal? type 'tuple)
-                (is-bottom? expr)
+                (labelinglogic:expression:bottom? expr)
                 (is-top? expr))
       (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect"
               :type 'bad-sub-expr-type
@@ -161,16 +161,10 @@
   (define bottom
     (labelinglogic:expression:make 'or '()))
 
-  (define (is-bottom? expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-    (and (equal? type 'or)
-         (null? args)))
-
   (define (explode-bottom expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (if (list-or-map is-bottom? args) bottom expr))
+    (if (list-or-map labelinglogic:expression:bottom? args) bottom expr))
 
   (define (remove-tops expr)
     (define type (labelinglogic:expression:type expr))
