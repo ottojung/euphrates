@@ -65,7 +65,9 @@
            (list class cycle))))
 
       (define constants (labelinglogic:expression:constants predicate))
-      (define referenced-models (map (lambda (c) (assoc c model)) constants))
+      (define referenced-models
+        (map (lambda (c) (labelinglogic:model:assoc c model))
+             constants))
       (for-each (lambda (x) (loop x new-stack)) referenced-models)))
 
   (for-each check-recursion bindings)

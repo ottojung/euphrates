@@ -16,6 +16,9 @@
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))
   (import
+    (only (euphrates labelinglogic-model-assoc)
+          labelinglogic:model:assoc))
+  (import
     (only (euphrates labelinglogic-model-bindings)
           labelinglogic:model:bindings))
   (import
@@ -32,7 +35,6 @@
           unique-identifier?))
   (import
     (only (scheme base)
-          assoc
           begin
           cons
           define
