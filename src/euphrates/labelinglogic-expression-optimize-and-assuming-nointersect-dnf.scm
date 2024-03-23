@@ -127,17 +127,12 @@
 
      (labelinglogic:expression:syntactic-equal? expr-a expr-b)
 
+     (and negated-a? (not negated-b?))
+
      (and (equal? type-a '=)
           (equal? type-b 'r7rs)
           (labelinglogic:expression:evaluate/r7rs
            expr-b (car args-a)))
-
-     (and (equal? type-a '=)
-          (equal? type-b 'not)
-          (equal? inner-type-b 'r7rs)
-          (not
-           (labelinglogic:expression:evaluate/r7rs
-            (car args-b) (car args-a))))
 
      (and (equal? type-a 'r7rs)
           (equal? type-b 'not)
