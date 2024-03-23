@@ -1,5 +1,5 @@
 
-# Euphrates: nourishing projects
+# Euphrates
 
 ## Introduction
 
