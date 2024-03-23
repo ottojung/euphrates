@@ -29,9 +29,6 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates list-deduplicate)
-          list-deduplicate))
-  (import
     (only (euphrates list-idempotent-left)
           list-idempotent/left))
   (import
