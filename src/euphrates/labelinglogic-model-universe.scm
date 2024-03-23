@@ -13,9 +13,10 @@
        (cond
         (else
          (raisu* :from "labelinglogic:model:universe"
-                 :type 'bad-sub-expr-type
-                 :message (stringf "Expression type ~s not permitted here." (~a type))
-                 :args (list type expr))))))
+             :type 'unknown-expr-type
+             :message (stringf "Expression type ~s not recognized"
+                               (~a type))
+             :args (list type expr))))))
    model)
 
   (labelinglogic:expression:make
