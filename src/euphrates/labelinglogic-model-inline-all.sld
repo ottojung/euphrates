@@ -6,26 +6,14 @@
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
   (import
-    (only (euphrates labelinglogic-expression-args)
-          labelinglogic:expression:args))
-  (import
-    (only (euphrates labelinglogic-expression-type)
-          labelinglogic:expression:type))
-  (import
-    (only (euphrates labelinglogic-model-assoc)
-          labelinglogic:model:assoc))
+    (only (euphrates
+            labelinglogic-expression-inline-references)
+          labelinglogic:expression:inline-references))
   (import
     (only (euphrates
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
-  (import
-    (only (scheme base)
-          begin
-          define
-          equal?
-          if
-          lambda
-          quote))
+  (import (only (scheme base) begin define lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
