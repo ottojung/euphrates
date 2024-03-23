@@ -26,8 +26,8 @@
 
      ((equal? type 'xor)
       (raisu* :from "labelinglogic:expression:infinite?"
-              :type 'unknown-expr-type
-              :message (stringf "Expression type ~s not recognized"
+              :type 'bad-type
+              :message (stringf "Expressions of type ~s cannot be determined to be either finite or infinite."
                                 (~a type))
               :args (list type expression)))
 
