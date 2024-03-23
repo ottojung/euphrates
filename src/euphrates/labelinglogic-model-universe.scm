@@ -11,13 +11,11 @@
        (define args (labelinglogic:expression:args expr))
 
        (cond
-        ((equal? type 'r7rs)
+        ((member type (list 'r7rs '=))
          (stack-push! S expr))
 
-        ((equal? type '=)
-         (stack-push! S expr))
-
-        ((member 0) 'pass)
+        ((member type (list 'or 'and 'xor 'not 'tuple 'constant))
+         'pass)
 
         (else
          (raisu* :from "labelinglogic:model:universe"
