@@ -47,12 +47,12 @@
 
   (define (check-recursion binding)
     (define stack (list))
+    (define class (labelinglogic:binding:name binding))
+    (define predicate (labelinglogic:binding:expr binding))
 
-    (let loop ((binding binding)
+    (let loop ((class class)
+               (predicate predicate)
                (stack stack))
-
-      (define class (labelinglogic:binding:name binding))
-      (define predicate (labelinglogic:binding:expr binding))
 
       (define new-stack (cons class stack))
 
