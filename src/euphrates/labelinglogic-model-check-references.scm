@@ -17,10 +17,11 @@
   (define names/set
     (list->hashset names))
 
-  (unless (null? duplicates)
-    (fail-tokens-check
-     "names must not repeat"
-     (list duplicates)))
+  (define _831623
+    (unless (null? duplicates)
+      (fail-tokens-check
+       "names must not repeat"
+       (list duplicates))))
 
   (for-each
    (lambda (binding)
