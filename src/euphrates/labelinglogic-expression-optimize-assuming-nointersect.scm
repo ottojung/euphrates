@@ -9,7 +9,8 @@
         expr))
 
   (define dnf
-    (labelinglogic:expression:to-dnf expr))
+    (optimize/singletons
+     (labelinglogic:expression:to-dnf expr)))
 
   (define dnf-type
     (labelinglogic:expression:type dnf))
