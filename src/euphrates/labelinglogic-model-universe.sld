@@ -22,6 +22,7 @@
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          _
           begin
           cond
           define
