@@ -123,7 +123,7 @@
     (define inner-tuple-b? (equal? 'tuple inner-type-b))
 
     (or
-     (is-top? expr-a)
+     (labelinglogic:expression:top? expr-a)
 
      (and (equal? type-a '=)
           (equal? type-b 'r7rs)
