@@ -5,5 +5,16 @@
   (define dnf
     (labelinglogic:expression:to-dnf expr))
 
+  (define dnf-type
+    (labelinglogic:expression:type dnf))
+
+  (define dnf*
+    (if (equal? 'or dnf-type)
+        (labelinglogic:expression:make
+         dnf-type
+         (list-deduplicate
+          (labelinglogic:expression:args dnf)))
+        dnf))
+
   (define simpl
     
