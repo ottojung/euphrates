@@ -246,9 +246,9 @@
 
 ;; Combining '(not =) and '(not r7rs) [1]
 (assert=
- '(and (r7rs even?) (not (= 2)))
+ '(and (not (r7rs even?)) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (r7rs even?) (not (= 2)))))
+  '(and (not (r7rs even?)) (not (= 2)))))
 
 ;; Checking negation of 'r7rs
 (assert=
