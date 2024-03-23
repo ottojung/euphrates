@@ -38,7 +38,7 @@
       (list-or-map loop args))
 
      ((member type (list 'and))
-      (list 0))
+      (list-and-map loop args))
 
      (else
       (raisu* :from "labelinglogic:expression:infinite?"
