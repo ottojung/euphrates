@@ -14,6 +14,10 @@
           labelinglogic:expression:move-nots-down))
   (import
     (only (euphrates
+            labelinglogic-expression-optimize-singletons)
+          labelinglogic:expression:optimize/singletons))
+  (import
+    (only (euphrates
             labelinglogic-expression-syntactic-equal-huh)
           labelinglogic:expression:syntactic-equal?))
   (import
@@ -22,9 +26,6 @@
   (import
     (only (euphrates list-idempotent-left)
           list-idempotent/left))
-  (import
-    (only (euphrates list-singleton-q)
-          list-singleton?))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -33,7 +34,6 @@
           =
           and
           begin
-          car
           cond
           cons
           define
