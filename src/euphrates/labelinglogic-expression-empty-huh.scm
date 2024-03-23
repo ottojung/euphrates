@@ -40,6 +40,9 @@
      ((member type (list 'tuple 'or))
       (list-and-map loop args))
 
+     ((equal? type 'constant)
+      (loop (labelinglogic:model:assoc expr model)))
+
      ((equal? type 'xor)
       (raisu* :from "labelinglogic:expression:empty?"
               :type 'bad-type

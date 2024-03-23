@@ -19,6 +19,9 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates labelinglogic-model-assoc)
+          labelinglogic:model:assoc))
+  (import
     (only (euphrates list-and-map) list-and-map))
   (import
     (only (euphrates list-or-map) list-or-map))
