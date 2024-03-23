@@ -11,6 +11,9 @@
 
   (labelinglogic:model:check-structure tokens-alist)
 
+  (define keys
+    (map car tokens-alist))
+
   (define duplicates
     (list-get-duplicates
      (filter

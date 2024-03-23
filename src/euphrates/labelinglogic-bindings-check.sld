@@ -30,10 +30,12 @@
   (import
     (only (scheme base)
           begin
+          car
           define
           for-each
           lambda
           list
+          map
           null?
           or
           quote
