@@ -81,7 +81,7 @@
 
       (for-each
        (lambda (p)
-         (define-tuple (c e) p)
+         (define-pair (c e) p)
          (loop c e new-stack))
        referenced)))
 

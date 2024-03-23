@@ -3,7 +3,7 @@
   (euphrates labelinglogic-model-check-references)
   (export labelinglogic:model:check-references)
   (import
-    (only (euphrates define-tuple) define-tuple))
+    (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates hashset)
           hashset-has?
