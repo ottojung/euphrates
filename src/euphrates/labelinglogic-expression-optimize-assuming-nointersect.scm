@@ -25,12 +25,21 @@
     (define new-args (list-idempotent fun args))
     (labelinglogic:expression:make type new-args))
 
+  (define (remove-bottoms expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (define new-args (filter (negate labelinglogic:expression:bottom?) args))
+    (labelinglogic:expression:make type new-args))
+
+  (define optimize-or/step
+    (compose consume-subsets remove-bottoms))
+
   (define (optimize-or expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
     (if (equal? 'or type)
-        (apply-until-fixpoint consume-subsets expr)
+        (apply-until-fixpoint optimize-or/step expr)
         expr))
 
   (define dnf
