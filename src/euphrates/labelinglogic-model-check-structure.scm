@@ -33,4 +33,6 @@
      "every key must be a symbol"
      (list (filter (negate id?) keys))))
 
+  (for-each labelinglogic:binding:check model)
+
   )

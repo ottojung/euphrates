@@ -3,6 +3,9 @@
   (euphrates labelinglogic-model-check-structure)
   (export labelinglogic:model:check-structure)
   (import
+    (only (euphrates labelinglogic-binding-check)
+          labelinglogic:binding:check))
+  (import
     (only (euphrates list-and-map) list-and-map))
   (import
     (only (euphrates list-length-eq) list-length=))
@@ -18,6 +21,7 @@
           car
           cdr
           define
+          for-each
           let
           list
           list?
