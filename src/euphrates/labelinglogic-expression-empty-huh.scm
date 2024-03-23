@@ -15,7 +15,7 @@
 
     (define _152354736372
       (when (equal? type 'constant)
-        (raisu* :from "labelinglogic:expression:infinite?"
+        (raisu* :from "labelinglogic:expression:empty?"
                 :type 'bad-expr-type
                 :message (stringf "Expression type ~s not permitted here." (~a type))
                 :args (list type expr expr0))))
@@ -24,7 +24,7 @@
       (labelinglogic:expression:constants expr))
 
     (unless (null? constants)
-      (raisu* :from "labelinglogic:expression:infinite?"
+      (raisu* :from "labelinglogic:expression:empty?"
               :type 'contains-bad-types
               :message (stringf "Expression contains type ~s, which is not permitted here." (~a 'constant))
               :args (list 'constant constants expr expr0)))
@@ -41,7 +41,7 @@
       (list-or-map loop args))
 
      (else
-      (raisu* :from "labelinglogic:expression:infinite?"
+      (raisu* :from "labelinglogic:expression:empty?"
               :type 'unknown-expr-type
               :message (stringf "Expression type ~s not recognized"
                                 (~a type))
