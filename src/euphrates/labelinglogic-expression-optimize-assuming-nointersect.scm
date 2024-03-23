@@ -9,7 +9,7 @@
     (if (equal? 'or type)
         (labelinglogic:expression:make
          dnf-type
-         (list-idempotent
+         (list-idempotent/left
           labelinglogic:expression:equal?/and-assuming-nointersect
           dnf-args))
         dnf))

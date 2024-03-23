@@ -8,6 +8,10 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates
+            labelinglogic-expression-equal-huh-and-assuming-nointersect)
+          labelinglogic:expression:equal?/and-assuming-nointersect))
+  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
@@ -28,8 +32,8 @@
     (only (euphrates list-deduplicate)
           list-deduplicate))
   (import
-    (only (euphrates list-idempotent)
-          list-idempotent))
+    (only (euphrates list-idempotent-left)
+          list-idempotent/left))
   (import
     (only (scheme base)
           begin
