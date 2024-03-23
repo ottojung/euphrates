@@ -40,6 +40,7 @@
           define
           equal?
           if
+          list
           map
           or
           quote))
