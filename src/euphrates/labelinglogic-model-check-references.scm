@@ -41,4 +41,29 @@
 
    (labelinglogic:model:bindings model))
 
+  (define (check-recursion model-component)
+    (define stack (list))
+
+    (let loop ((model-component model-component)
+               (stack stack))
+
+      (define-tuple (class predicate) model-component)
+
+      (define new-stack (cons class stack))
+
+      (when (member class stack)
+        (let ()
+          (define cycle (reverse new-stack))
+
+          (fail-model-check
+           (stringf "class references itself through the following cycle: ~s, this is not allowed" cycle)
+           (list class cycle))))
+
+      (define constants (labelinglogic:expression:constants predicate))
+      (define referenced-models (map (lambda (c) (assoc c model)) constants))
+      (for-each (lambda (x) (loop x new-stack)) referenced-models)))
+
+  (for-each check-recursion model)
+
+
   (when #f #t))
