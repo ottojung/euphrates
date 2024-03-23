@@ -6,7 +6,11 @@
 
   (labelinglogic:model:map-subexpressions
    (lambda (expr)
+     (define type (labelinglogic:expression:type expr))
+     (define args (labelinglogic:expression:args expr))
+
      
+
      0))
 
   (labelinglogic:expression:make
