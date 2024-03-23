@@ -16,20 +16,25 @@
             labelinglogic-expression-move-nots-down)
           labelinglogic:expression:move-nots-down))
   (import
-    (only (euphrates labelinglogic-expression-top-huh)
-          labelinglogic:expression:top?))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          =
+          and
           begin
+          cond
           define
+          else
           equal?
+          let
           list
+          member
           not
           null?
           or

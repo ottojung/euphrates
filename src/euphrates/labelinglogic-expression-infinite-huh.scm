@@ -29,9 +29,20 @@
               :message (stringf "Expression contains type ~s, which is not permitted here." (~a 'constant))
               :args (list 'constant constants expr expr0)))
 
-    (or (equal? type 'not)
-        (equal? type 'r7rs)
-        (labelinglogic:expression:top? expr)
-        (and (equal? type 'tuple)
-             (list-and-map loop args)
-             
+    (cond
+     ((equal? type 'not) #t)
+     ((equal? type 'r7rs) #t)
+     ((equal? type '=) #f)
+
+     ((member type (list 'tuple 'or))
+      (list-or-map loop args))
+
+     ((member type (list 'and))
+      (list 0))
+
+     (else
+      (raisu* :from "labelinglogic:expression:infinite?"
+              :type 'unknown-expr-type
+              :message (stringf "Expression type ~s not recognized"
+                                (~a type))
+              :args (list type expression))))))
