@@ -16,7 +16,7 @@
             :args (list type expr)))
 
   (define constants
-    (labelinglogic:expression:constants expr))
+    (labelinglogic:expression:constants simple))
 
   (unless (null? constants)
     (raisu* :from "labelinglogic:expression:infinite?"
