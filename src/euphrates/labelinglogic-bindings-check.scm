@@ -3,6 +3,4 @@
 
 (define (labelinglogic:bindings:check classes/s tokens-alist)
   (labelinglogic:model:check-structure tokens-alist)
-  (labelinglogic:model:check-references classes/s tokens-alist)
-
-  (when #f #t))
+  (labelinglogic:model:check-references classes/s tokens-alist))

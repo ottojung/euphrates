@@ -8,7 +8,7 @@
   (import
     (only (euphrates labelinglogic-model-check-structure)
           labelinglogic:model:check-structure))
-  (import (only (scheme base) begin define when))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
