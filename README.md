@@ -8,10 +8,10 @@ Euphrates is a standard library/computing environment for Scheme.
 Euphrates is similar to:
 
 - [SLIB](https://people.csail.mit.edu/jaffer/SLIB.html)
-- [Scmutils](https://groups.csail.mit.edu/mac/users/gjs/6946/installation.html)
 - [Schemepunk](https://github.com/ar-nelson/schemepunk)
 - [Spells](https://github.com/rotty/spells/tree/master/spells)
 - [Alschemist](https://github.com/ashinn/alschemist)
+- [Scmutils](https://groups.csail.mit.edu/mac/users/gjs/6946/installation.html)
 - [Xitomatl](https://github.com/weinholt/xitomatl)
 - [Riastradh](https://github.com/arcfide/riastradh)
 - [Ocelotl](https://github.com/rotty/ocelotl)
