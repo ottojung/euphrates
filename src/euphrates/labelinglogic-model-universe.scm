@@ -3,7 +3,6 @@
 
 (define (labelinglogic:model:universe model)
   (define S (stack-make))
-  (define open? #f)
 
   (labelinglogic:model:map-subexpressions
    (lambda _
