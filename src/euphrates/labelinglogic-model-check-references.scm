@@ -64,6 +64,9 @@
       (define referenced-models (map (lambda (c) (assoc c model)) constants))
       (for-each (lambda (x) (loop x new-stack)) referenced-models)))
 
-  (for-each check-recursion model)
+  (for-each
+   check-recursion
+   
+   model)
 
   (when #f #t))
