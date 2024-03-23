@@ -24,15 +24,15 @@
      ((member type (list 'tuple 'or))
       (list-or-map loop args))
 
+     ((equal? type 'constant)
+      (loop (labelinglogic:model:assoc expr model)))
+
      ((equal? type 'xor)
       (raisu* :from "labelinglogic:expression:infinite?"
               :type 'bad-type
               :message (stringf "Expressions of type ~s cannot be determined to be either finite or infinite."
                                 (~a type))
               :args (list type expression)))
-
-     ((equal? type 'constant)
-      (loop (labelinglogic:model:assoc expr model)))
 
      (else
       (raisu* :from "labelinglogic:expression:infinite?"
