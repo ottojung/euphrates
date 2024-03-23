@@ -24,12 +24,8 @@
     (only (euphrates list-deduplicate)
           list-deduplicate))
   (import
-    (only (euphrates list-singleton-q)
-          list-singleton?))
-  (import
     (only (scheme base)
           begin
-          car
           define
           equal?
           if
