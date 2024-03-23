@@ -9,4 +9,13 @@
     (labelinglogic:expression:desugar
      (labelinglogic:expression:move-nots-down expr)))
 
+  (define constants
+    0)
+
+  (when (equal? type 'constant)
+    (raisu* :from "labelinglogic:expression:infinite?"
+            :type 'bad-sub-expr-type
+            :message (stringf "Expression type ~s not permitted here." (~a type))
+            :args (list type expr)))
+
   (or (equal? type 'not)
