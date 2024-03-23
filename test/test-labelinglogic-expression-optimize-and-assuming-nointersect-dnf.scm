@@ -129,7 +129,6 @@
 
 ;; Combining 'not r7rs' and 'not r7rs' [1]
 ;; NOTE: this does not simplify because we do not have the notion of a "universe".
-;; TODO: make optimize procedure accept the universe.
 (assert=
  '(and (not (r7rs even?)) (not (r7rs odd?)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
