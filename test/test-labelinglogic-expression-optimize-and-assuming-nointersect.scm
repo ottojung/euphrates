@@ -85,6 +85,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 3)) (= 2) (not (= 3)) (not (= 4)))))
 
+;; Combining 'not =' and 'not =' [1]
+(assert=
+ '(and)
+ (labelinglogic:expression:optimize/and-assuming-nointersect
+  '(and (not (= 2)) (not (= 3)))))
+
 ;; Combining 'r7rs' and 'not r7rs' [1]
 (assert=
  '(and (r7rs even?))
