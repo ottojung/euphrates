@@ -35,7 +35,7 @@
      ((equal? type '=) #t)
 
      ((equal? type 'and)
-      (list-and-map loop args))
+      (list-or-map loop args))
 
      ((member type (list 'tuple 'or 'xor))
       (list-or-map loop args))
