@@ -25,5 +25,6 @@
             :args (list 'constant constants expr)))
 
   (or (equal? type 'not)
+      (labelinglogic:expression:top? simple)
       
       #f))

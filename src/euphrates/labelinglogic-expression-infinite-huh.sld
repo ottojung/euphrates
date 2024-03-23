@@ -16,6 +16,9 @@
             labelinglogic-expression-move-nots-down)
           labelinglogic:expression:move-nots-down))
   (import
+    (only (euphrates labelinglogic-expression-top-huh)
+          labelinglogic:expression:top?))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import (only (euphrates raisu-star) raisu*))
