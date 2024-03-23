@@ -313,7 +313,7 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (r7rs positive?) (r7rs negative?))))
 
-;; Test nonintersect assumption on r7rs.
+;; Test nointersect assumption on r7rs.
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect

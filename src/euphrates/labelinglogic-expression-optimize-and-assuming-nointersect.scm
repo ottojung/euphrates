@@ -60,14 +60,14 @@
               :message (stringf "Expression type ~s not permitted here." (~a type))
               :args (list type expr))))
 
-  (define (same-type-nonintersect? expr-a expr-b)
+  (define (same-type-nointersect? expr-a expr-b)
     (or (different-values-of-same-type? '= expr-a expr-b)
         (different-values-of-same-type? 'r7rs expr-a expr-b)
         ;; NOTE: there is no similar check for 'tuple because those can contain arbitrary (non-normalized) expressions as args.
         ;; TODO: add a similar check for 'tuple type.
         ))
 
-  (define (different-type-nonintersect?/body expr-a expr-b)
+  (define (different-type-nointersect?/body expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))
     (define type-b (labelinglogic:expression:type expr-b))
     (define args-a (labelinglogic:expression:args expr-a))
@@ -97,14 +97,14 @@
 
         #f))
 
-  (define (different-type-nonintersect? expr-a expr-b)
-    (or (different-type-nonintersect?/body expr-a expr-b)
-        (different-type-nonintersect?/body expr-b expr-a)))
+  (define (different-type-nointersect? expr-a expr-b)
+    (or (different-type-nointersect?/body expr-a expr-b)
+        (different-type-nointersect?/body expr-b expr-a)))
 
   (define (null-exprs? expr-a expr-b)
     (or (opposite-exprs? expr-a expr-b)
-        (same-type-nonintersect? expr-a expr-b)
-        (different-type-nonintersect? expr-a expr-b)))
+        (same-type-nointersect? expr-a expr-b)
+        (different-type-nointersect? expr-a expr-b)))
 
   (define (is-subset? expr-a expr-b)
     (define type-a (labelinglogic:expression:type expr-a))

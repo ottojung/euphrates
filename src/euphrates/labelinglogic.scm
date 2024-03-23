@@ -31,7 +31,7 @@
     (labelinglogic:model:optimize-ands-assuming-nointersect flat-dnf-model))
 
   (define latticised
-    (labelinglogic:model:latticize-ands-assuming-nonintersect simpler-dnf-model))
+    (labelinglogic:model:latticize-ands-assuming-nointersect simpler-dnf-model))
 
   (define ret-model
     latticised)

@@ -18,8 +18,8 @@
           labelinglogic:model:inline-all))
   (import
     (only (euphrates
-            labelinglogic-model-latticize-ands-assuming-nonintersect)
-          labelinglogic:model:latticize-ands-assuming-nonintersect))
+            labelinglogic-model-latticize-ands-assuming-nointersect)
+          labelinglogic:model:latticize-ands-assuming-nointersect))
   (import
     (only (euphrates
             labelinglogic-model-optimize-ands-assuming-nointersect)
