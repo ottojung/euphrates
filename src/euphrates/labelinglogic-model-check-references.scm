@@ -72,9 +72,12 @@
 
       (define constants (labelinglogic:expression:constants predicate))
       (define referenced
-        (map (lambda (c)
-               (cons c (labelinglogic:model:assoc c model)))
-             constants))
+        (filter
+         identity
+         (map (lambda (c)
+                (and (hashset-has? names/set c)
+                     (cons c (labelinglogic:model:assoc c model))))
+              constants)))
 
       (for-each
        (lambda (p)

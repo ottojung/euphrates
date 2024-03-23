@@ -8,6 +8,7 @@
     (only (euphrates hashset)
           hashset-has?
           list->hashset))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
@@ -37,6 +38,7 @@
           unique-identifier?))
   (import
     (only (scheme base)
+          and
           begin
           cons
           define
