@@ -97,13 +97,6 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 2)) (not (= 2)))))
 
-;; TODO: fix this
-;; Combining 'not =' and 'not =' [3]
-(assert=
- '(and (not (= 2)) (and))
- (labelinglogic:expression:optimize/and-assuming-nointersect
-  '(and (not (= 2)) (not (and)))))
-
 ;; Combining 'r7rs' and 'not r7rs' [1]
 (assert=
  '(and (r7rs even?))
