@@ -30,7 +30,7 @@ Here's a snapshot of what Euphrates offers:
 - CFG-based CLI parsing `define-cli.scm`
 - Object system based on properties constraints `properties.scm`
   - similar to propagators but less (computationally) expensive, and time-aware
-- A fast LALR+GLR parser `parselynn.scm`
+- A fast LALR+GLR parser generator `parselynn.scm`
   - with a simplified interface (ex. irregex-based lexer) - `parselynn-simple.scm`
 - Embedabble mini prolog `profun.scm`
 - Composable monads `monadic.scm`
