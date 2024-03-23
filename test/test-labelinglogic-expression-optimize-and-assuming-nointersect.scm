@@ -127,6 +127,8 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (r7rs odd?)) (r7rs even?) (not (r7rs odd?)) (not (r7rs integer?)))))
 
+
+FIXME: this
 ;; Combining 'not r7rs' and 'not r7rs' [1]
 (assert=
  '(and (not (r7rs even?)) (not (r7rs odd?)))
