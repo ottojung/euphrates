@@ -71,8 +71,9 @@
              constants))
 
       (for-each
-       (lambda (x)
-         (loop x new-stack))
+       (lambda (p)
+         (define-tuple (c e) p)
+         (loop c e new-stack))
        referenced)))
 
   (for-each check-recursion bindings)
