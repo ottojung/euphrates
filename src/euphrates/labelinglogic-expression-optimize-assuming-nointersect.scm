@@ -34,4 +34,5 @@
          simpl-type (list-deduplicate simpl-args))
         simpl))
 
-  (optimize/singletons simpl*))
+  (labelinglogic:expression:optimize/singletons
+   simpl*))
