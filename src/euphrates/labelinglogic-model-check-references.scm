@@ -5,6 +5,9 @@
   (define names
     (labelinglogic:model:names model))
 
+  (define bindings
+    (labelinglogic:model:bindings model))
+
   (define duplicates
     (list-get-duplicates
      (filter
@@ -40,9 +43,6 @@
      )
 
    (labelinglogic:model:bindings model))
-
-  (define bindings
-    (labelinglogic:model:bindings model))
 
   (define (check-recursion binding)
     (define stack (list))
