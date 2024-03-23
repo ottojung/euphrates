@@ -5,17 +5,25 @@
   (define (fail-tokens-check show args)
     (raisu* :from "labelinglogic:model:check-structure"
             :type 'model-type-error
-            :message (stringf "Type error in ~s: ~a." (quote tokens-alist) show)
+            :message (stringf "Type error in ~s: ~a." (quote model) show)
             :args args))
 
-  (unless (list? tokens-alist)
-    (fail-tokens-check "must be a list" (list tokens-alist)))
+  (unless (list? model)
+    (fail-tokens-check "must be a list" (list model)))
 
-  (unless (list-and-map pair? tokens-alist)
-    (fail-tokens-check "must be an alist" (list tokens-alist)))
+  (unless (list-and-map pair? model)
+    (fail-tokens-check "must be an alist" (list model)))
+
+  (let loop ((model model))
+    (unless (null? model)
+      (let ()
+        (define first (car model))
+        (unless (list-length= 2 first)
+          (fail-tokens-check "bad assignment, expected a list of length 2" first))
+        (loop (cdr model)))))
 
   (define keys
-    (map car tokens-alist))
+    (map car model))
 
   (define (id? key)
     (or symbol? unique-identifier?))
