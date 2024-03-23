@@ -48,11 +48,11 @@
               :type 'bad-type
               :message (stringf "Expressions of type ~s cannot be determined to be empty."
                                 (~a type))
-              :args (list type expression)))
+              :args (list type expr expr0)))
 
      (else
       (raisu* :from "labelinglogic:expression:empty?"
               :type 'unknown-expr-type
               :message (stringf "Expression type ~s not recognized"
                                 (~a type))
-              :args (list type expression))))))
+              :args (list type expr expr0))))))
