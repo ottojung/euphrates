@@ -21,8 +21,8 @@
   (unless (null? constants)
     (raisu* :from "labelinglogic:expression:infinite?"
             :type 'contains-bad-types
-            :message (stringf "Expression contains type ~s, which is not permitted here." (~a type))
-            :args (list type expr)))
+            :message (stringf "Expression contains type ~s, which is not permitted here." (~a 'constant))
+            :args (list 'constant constants expr)))
 
   (or (equal? type 'not)
       #f))
