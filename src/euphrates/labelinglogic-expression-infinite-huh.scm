@@ -34,11 +34,11 @@
      ((equal? type 'r7rs) #t)
      ((equal? type '=) #f)
 
+     ((equal? type 'and)
+      (list-and-map loop args))
+
      ((member type (list 'tuple 'or))
       (list-or-map loop args))
-
-     ((member type (list 'and))
-      (list-and-map loop args))
 
      (else
       (raisu* :from "labelinglogic:expression:infinite?"
