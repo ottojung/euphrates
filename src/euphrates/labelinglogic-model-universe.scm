@@ -12,9 +12,6 @@
        (define args (labelinglogic:expression:args expr))
 
        (cond
-        ((labelinglogic:expression:top? expr)
-         (set! open? #t))
-
         ((equal? type 'r7rs)
          (stack-push! S expr))
 
