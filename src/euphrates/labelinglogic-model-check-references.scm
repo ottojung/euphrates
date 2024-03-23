@@ -41,6 +41,9 @@
 
    (labelinglogic:model:bindings model))
 
+  (define bindings
+    (labelinglogic:model:bindings model))
+
   (define (check-recursion binding)
     (define stack (list))
 
@@ -64,9 +67,6 @@
       (define referenced-models (map (lambda (c) (assoc c model)) constants))
       (for-each (lambda (x) (loop x new-stack)) referenced-models)))
 
-  (for-each
-   check-recursion
-   
-   model)
+  (for-each check-recursion bindings)
 
   (when #f #t))
