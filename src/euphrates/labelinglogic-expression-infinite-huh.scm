@@ -26,5 +26,4 @@
 
   (or (equal? type 'not)
       (equal? type 'r7rs)
-      (labelinglogic:expression:top? simple)
-      #f))
+      (labelinglogic:expression:top? simple)))
