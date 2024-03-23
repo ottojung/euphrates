@@ -42,7 +42,7 @@
 
      )
 
-   (labelinglogic:model:bindings model))
+   bindings)
 
   (define (check-recursion binding)
     (define stack (list))
