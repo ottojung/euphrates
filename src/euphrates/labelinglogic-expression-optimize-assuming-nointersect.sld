@@ -5,6 +5,9 @@
   (export
     labelinglogic:expression:optimize/assuming-nointersect)
   (import
+    (only (euphrates apply-until-fixpoint)
+          apply-until-fixpoint))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -30,9 +33,6 @@
           labelinglogic:expression:type))
   (import
     (only (euphrates list-and-map) list-and-map))
-  (import
-    (only (euphrates list-idempotent-left)
-          list-idempotent/left))
   (import
     (only (euphrates list-idempotent)
           list-idempotent))

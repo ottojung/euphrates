@@ -30,11 +30,7 @@
     (define args (labelinglogic:expression:args expr))
 
     (if (equal? 'or type)
-        (labelinglogic:expression:make
-         dnf-type
-         (list-idempotent/left
-          labelinglogic:expression:equal?/and-assuming-nointersect
-          args))
+        (apply-until-fixpoint consume-subsets expr)
         expr))
 
   (define dnf
