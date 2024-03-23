@@ -17,6 +17,9 @@
     (only (euphrates labelinglogic-expression-bottom-huh)
           labelinglogic:expression:bottom?))
   (import
+    (only (euphrates labelinglogic-expression-bottom)
+          labelinglogic:expression:bottom))
+  (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic:expression:check))
   (import

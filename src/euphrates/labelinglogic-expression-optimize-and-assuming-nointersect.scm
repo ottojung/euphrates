@@ -158,13 +158,12 @@
 
      ))
 
-  (define bottom
-    (labelinglogic:expression:make 'or '()))
-
   (define (explode-bottom expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
-    (if (list-or-map labelinglogic:expression:bottom? args) bottom expr))
+    (if (list-or-map labelinglogic:expression:bottom? args)
+        labelinglogic:expression:bottom
+        expr))
 
   (define (remove-tops expr)
     (define type (labelinglogic:expression:type expr))
@@ -195,7 +194,8 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
     (if (cartesian-any? null-exprs? args args)
-        (labelinglogic:expression:make type (list bottom))
+        (labelinglogic:expression:make
+         type (list labelinglogic:expression:bottom))
         expr))
 
   (define optimize
