@@ -19,6 +19,9 @@
     (only (euphrates labelinglogic-model-check-structure)
           labelinglogic:model:check-structure))
   (import
+    (only (euphrates labelinglogic-model-names)
+          labelinglogic:model:names))
+  (import
     (only (euphrates list-get-duplicates)
           list-get-duplicates))
   (import (only (euphrates negate) negate))
@@ -30,12 +33,10 @@
   (import
     (only (scheme base)
           begin
-          car
           define
           for-each
           lambda
           list
-          map
           null?
           or
           quote

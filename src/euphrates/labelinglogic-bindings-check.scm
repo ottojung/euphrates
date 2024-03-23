@@ -12,7 +12,7 @@
   (labelinglogic:model:check-structure tokens-alist)
 
   (define keys
-    (map car tokens-alist))
+    (labelinglogic:model:names tokens-alist))
 
   (define duplicates
     (list-get-duplicates
