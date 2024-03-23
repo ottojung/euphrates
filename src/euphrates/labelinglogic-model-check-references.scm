@@ -22,7 +22,7 @@
 
   (define _831623
     (unless (null? duplicates)
-      (fail-tokens-check
+      (fail-ref-check
        "names must not repeat"
        (list duplicates))))
 
@@ -66,7 +66,7 @@
         (let ()
           (define cycle (reverse new-stack))
 
-          (fail-model-check
+          (fail-ref-check
            (stringf "class references itself through the following cycle: ~s, this is not allowed" cycle)
            (list class cycle))))
 
