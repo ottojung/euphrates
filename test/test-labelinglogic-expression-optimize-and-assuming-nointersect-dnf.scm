@@ -128,8 +128,8 @@
   '(and (not (r7rs odd?)) (r7rs even?) (not (r7rs odd?)) (not (r7rs integer?)))))
 
 ;; Combining 'not r7rs' and 'not r7rs' [1]
-;; NOTE: this does not simplify because detecting it is impossible.
-;; NOTE: if we tried adding a "universe" notion, then we would not be able to use `(and)` anywhere.
+;; NOTE: This does not simplify because detecting it is impossible.
+;; NOTE: If we tried adding a "universe" notion, then we would not be able to use `(and)` anywhere,
 ;; NOTE: because that would make it the universe, and then this would not simplify again.
 (assert=
  '(and (not (r7rs even?)) (not (r7rs odd?)))
