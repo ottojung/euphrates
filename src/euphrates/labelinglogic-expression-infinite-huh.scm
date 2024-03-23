@@ -9,13 +9,19 @@
     (labelinglogic:expression:desugar
      (labelinglogic:expression:move-nots-down expr)))
 
+  (when (equal? type 'constant)
+    (raisu* :from "labelinglogic:expression:infinite?"
+            :type 'bad-expr-type
+            :message (stringf "Expression type ~s not permitted here." (~a type))
+            :args (list type expr)))
+
   (define constants
     (labelinglogic:expression:constants expr))
 
-  (when (equal? type 'constant)
+  (unless (null? constants)
     (raisu* :from "labelinglogic:expression:infinite?"
-            :type 'bad-sub-expr-type
-            :message (stringf "Expression type ~s not permitted here." (~a type))
+            :type 'contains-bad-types
+            :message (stringf "Expression contains type ~s, which is not permitted here." (~a type))
             :args (list type expr)))
 
   (or (equal? type 'not)

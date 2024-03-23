@@ -28,8 +28,10 @@
           equal?
           list
           not
+          null?
           or
           quote
+          unless
           when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
