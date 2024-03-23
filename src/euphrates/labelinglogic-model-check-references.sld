@@ -7,9 +7,6 @@
           hashset-has?
           list->hashset))
   (import
-    (only (euphrates labelinglogic-binding-check)
-          labelinglogic:binding:check))
-  (import
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
   (import
