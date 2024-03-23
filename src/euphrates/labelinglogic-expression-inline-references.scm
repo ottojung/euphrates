@@ -3,10 +3,5 @@
 
 (define (labelinglogic:expression:inline-references model expr)
   (labelinglogic:expression:map-subexpressions
-   (lambda (expr)
-     (define type (labelinglogic:expression:type expr))
-     (define args (labelinglogic:expression:args expr))
-     (if (equal? type 'constant)
-         (labelinglogic:model:assoc expr model)
-         expr))
+   (labelinglogic:expression:inline-references/subexpression model)
    expr))

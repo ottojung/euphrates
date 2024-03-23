@@ -5,26 +5,14 @@
   (export
     labelinglogic:expression:inline-references)
   (import
-    (only (euphrates labelinglogic-expression-args)
-          labelinglogic:expression:args))
+    (only (euphrates
+            labelinglogic-expression-inline-references-subexpression)
+          labelinglogic:expression:inline-references/subexpression))
   (import
     (only (euphrates
             labelinglogic-expression-map-subexpressions)
           labelinglogic:expression:map-subexpressions))
-  (import
-    (only (euphrates labelinglogic-expression-type)
-          labelinglogic:expression:type))
-  (import
-    (only (euphrates labelinglogic-model-assoc)
-          labelinglogic:model:assoc))
-  (import
-    (only (scheme base)
-          begin
-          define
-          equal?
-          if
-          lambda
-          quote))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
