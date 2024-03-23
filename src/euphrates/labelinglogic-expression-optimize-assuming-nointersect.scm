@@ -29,10 +29,9 @@
     (labelinglogic:expression:args simpl))
 
   (define simpl*
-    (optimize/singletons
-     (if (equal? 'or simpl-type)
-         (labelinglogic:expression:make
-          simpl-type (list-deduplicate simpl-args))
-         simpl)))
+    (if (equal? 'or simpl-type)
+        (labelinglogic:expression:make
+         simpl-type (list-deduplicate simpl-args))
+        simpl))
 
-  simpl*)
+  (optimize/singletons simpl*))
