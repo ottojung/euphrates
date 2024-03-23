@@ -37,8 +37,15 @@
      ((equal? type 'and)
       (list-and-map loop args))
 
-     ((member type (list 'tuple 'or 'xor))
+     ((member type (list 'tuple 'or))
       (list-or-map loop args))
+
+     ((equal? type 'xor)
+      (raisu* :from "labelinglogic:expression:infinite?"
+              :type 'unknown-expr-type
+              :message (stringf "Expression type ~s not recognized"
+                                (~a type))
+              :args (list type expression)))
 
      (else
       (raisu* :from "labelinglogic:expression:infinite?"
