@@ -9,7 +9,7 @@
 
      (define new
        (labelinglogic:expression:map-subexpressions
-        initialized-fun expr))
+        initialized-fun predicate))
 
      (labelinglogic:binding:make class new))
 
