@@ -17,7 +17,10 @@
           labelinglogic:model:map-subexpressions))
   (import (only (euphrates raisu-star) raisu*))
   (import
-    (only (euphrates stack) stack->list stack-make))
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -27,8 +30,10 @@
           cond
           define
           else
+          equal?
           lambda
           list
+          member
           or
           quote))
   (cond-expand

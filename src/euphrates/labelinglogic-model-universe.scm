@@ -2,7 +2,7 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:model:universe model)
-  (define stack (stack-make))
+  (define S (stack-make))
 
   (labelinglogic:model:map-subexpressions
    (lambda _
@@ -11,6 +11,11 @@
        (define args (labelinglogic:expression:args expr))
 
        (cond
+        ((equal? type 'r7rs)
+         (stack-push! S expr))
+
+        ((member 0) 'pass)
+
         (else
          (raisu* :from "labelinglogic:model:universe"
              :type 'unknown-expr-type
@@ -20,4 +25,4 @@
    model)
 
   (labelinglogic:expression:make
-   'or (stack->list stack)))
+   'or (stack->list S)))
