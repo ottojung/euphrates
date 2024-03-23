@@ -87,7 +87,7 @@
 
 ;; Combining 'not =' and 'not =' [1]
 (assert=
- '(and)
+ '(and (not (= 2)) (not (= 3)))
  (labelinglogic:expression:optimize/and-assuming-nointersect
   '(and (not (= 2)) (not (= 3)))))
 
