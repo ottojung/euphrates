@@ -15,16 +15,13 @@
      ((equal? type 'not)
       (not (loop (car args))))
 
-     ((equal? type 'and)
-      (list-or-map loop args))
-
      ((member type (list 'tuple 'or))
       (list-and-map loop args))
 
      ((equal? type 'constant)
       (loop (labelinglogic:model:assoc expr model)))
 
-     ((equal? type 'xor)
+     ((member type (list 'and 'xor))
       (raisu* :from "labelinglogic:expression:empty?"
               :type 'bad-type
               :message (stringf "Expressions of type ~s cannot be determined to be empty."
