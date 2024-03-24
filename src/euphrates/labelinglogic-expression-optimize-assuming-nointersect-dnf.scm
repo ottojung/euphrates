@@ -11,18 +11,18 @@
         expr-big))
      expr-small))
 
-  (define (is-subset? expr-small expr-big)
-    (define type-a (labelinglogic:expression:type expr-small))
-    (define type-b (labelinglogic:expression:type expr-big))
-    (define args-a (labelinglogic:expression:args expr-small))
-    (define args-b (labelinglogic:expression:args expr-big))
+  (define (is-subset? expr-small expr-bigig)
+    (define type-small (labelinglogic:expression:type expr-small))
+    (define type-big (labelinglogic:expression:type expr-bigig))
+    (define args-small (labelinglogic:expression:args expr-small))
+    (define args-big (labelinglogic:expression:args expr-bigig))
 
-    (or (and (equal? type-a 'and)
-             (equal? type-b 'and)
-             (ands-subset? expr-small expr-big))
+    (or (and (equal? type-small 'and)
+             (equal? type-big 'and)
+             (ands-subset? expr-small expr-bigig))
 
-        (and (not (equal? type-a 'and))
-             (equal? type-b 'and)
+        (and (not (equal? type-small 'and))
+             (equal? type-big 'and)
              0)))
 
   (define (consume-subsets expr)
