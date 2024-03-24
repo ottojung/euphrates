@@ -66,7 +66,8 @@
 
 ;; Test with nested ANDs and ORs
 (test
- '(or (and a c) (and (not b) c) (and a d) (and (not b) d))
+ '(or (or (and a c) (and (not b) c))
+      (or (and a d) (and (not b) d)))
  '(and (or a (not b)) (or c d)))
 
 ;; Test non-binary
