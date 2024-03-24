@@ -43,11 +43,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)))))
 
-;; ;; Tuples with top expressions
-;; (assert=
-;;  '(and (tuple (= 1) (= 2)))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-;;   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
+;; Tuples with top expressions
+(assert=
+ ;; '(and (tuple (= 1) (= 2)))
+ 999
+ (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
 
 ;; ;; Tuples with bottom expressions
 ;; (assert=
