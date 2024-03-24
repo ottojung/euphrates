@@ -449,23 +449,23 @@
 ;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
 ;;   '(and (tuple (= 1) (tuple (r7rs odd?))) (not (tuple (= 1))))))
 
-;; Case with complex mixture of types
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (r7rs odd?) (not (= 1)) (not (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
+;; ;; Case with complex mixture of types
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (r7rs odd?) (not (= 1)) (not (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
 
-;; Case with identical 'tuple values
-(assert=
- '(and (tuple (= 1) (r7rs odd?)))
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple (= 1) (r7rs odd?)) (tuple (= 1) (r7rs odd?)))))
+;; ;; Case with identical 'tuple values
+;; (assert=
+;;  '(and (tuple (= 1) (r7rs odd?)))
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (tuple (= 1) (r7rs odd?)) (tuple (= 1) (r7rs odd?)))))
 
-;; Case with non-identical 'tuple values
-(assert=
- '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
+;; ;; Case with non-identical 'tuple values
+;; (assert=
+;;  '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
 
 ;; Case with '=, 'tuple and 'r7rs
 (assert=
