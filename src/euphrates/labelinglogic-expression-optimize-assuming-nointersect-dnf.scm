@@ -60,9 +60,6 @@
         (apply-until-fixpoint optimize-or/step expr)
         expr))
 
-  (define dnf
-    (labelinglogic:expression:to-dnf expr))
-
   (define dnf-flat
     (labelinglogic:expression:sugarify dnf))
 
