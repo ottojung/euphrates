@@ -139,7 +139,7 @@
           ;; (not
           ;;  (is-subset? inner-b expr-a)))
           (labelinglogic:expression:evaluate/r7rs
-           expr-b args-a))
+           inner-b args-a))
 
      (and (equal? type-a 'r7rs)
           (equal? type-b 'not)
