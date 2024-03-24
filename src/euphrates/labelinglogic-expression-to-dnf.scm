@@ -71,11 +71,13 @@
           (let ()
             (define new-args (distribute-args args*))
 
-            ;; (if (list-singleton? new-args)
-            ;;     (car args)
-            ;;     (make type new-args)))))))
+            (define ret
+              (if (list-singleton? new-args)
+                  (car args)
+                  (make type new-args)))
 
-            (define ret (make type new-args))
+            ;; (define ret (make type new-args))
+
             (debugs ret)
             ret)))))
 
