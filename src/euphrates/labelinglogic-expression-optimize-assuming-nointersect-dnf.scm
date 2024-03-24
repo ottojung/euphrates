@@ -44,11 +44,15 @@
 
   (debugs dnf)
 
+  (define dnf-wrapped
+    (if (equal? 'or (labelinglogic:expression:type dnf))
+        dnf
+        (labelinglogic:expression:make 'or (list dnf))))
+
+  (debugs dnf-wrapped)
+
   (define dnf*
-    (optimize-or
-     (if (equal? 'or (labelinglogic:expression:type dnf))
-         dnf
-         (labelinglogic:expression:make 'or (list dnf)))))
+    (optimize-or dnf-wrapped))
 
   (debugs dnf*)
 
