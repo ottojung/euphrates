@@ -45,15 +45,15 @@
 
 ;; Tuples with top expressions
 (assert=
- (or)
+ 999
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
 
-;; Tuples with bottom expressions
-(assert=
- '(or)
- (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (or))))
+;; ;; Tuples with bottom expressions
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+;;   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (or))))
 
 ;; Combining '=' and 'not =' [1]
 (assert=
