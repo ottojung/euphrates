@@ -1,9 +1,9 @@
 
 (define-library
   (euphrates
-    labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-clause)
+    labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-term)
   (export
-    labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause)
+    labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-term)
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -52,6 +52,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-clause.scm")))
+               "euphrates/labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-term.scm")))
     (else (include
-            "labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-clause.scm"))))
+            "labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-term.scm"))))

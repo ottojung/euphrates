@@ -28,8 +28,8 @@
           labelinglogic:expression:evaluate/r7rs))
   (import
     (only (euphrates
-            labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-clause)
-          labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause))
+            labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-term)
+          labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-term))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))

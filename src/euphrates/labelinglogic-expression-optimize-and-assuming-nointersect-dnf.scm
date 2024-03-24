@@ -127,8 +127,8 @@
 
     (define (fun expr-a expr-b)
       (cond
-       ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause expr-a expr-b) 'left)
-       ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause expr-b expr-a) 'right)
+       ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-term expr-a expr-b) 'left)
+       ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-term expr-b expr-a) 'right)
        (else 'skip)))
 
     (define new-args (list-idempotent fun args))
