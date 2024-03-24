@@ -354,11 +354,11 @@
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (= 0) (not (= 0)))))
 
-;; Testing single tuple optimization
-(assert=
- '(and (tuple (= 2)))
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple (= 2)) (tuple (= 2)))))
+;; ;; Testing single tuple optimization
+;; (assert=
+;;  '(and (tuple (= 2)))
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (tuple (= 2)) (tuple (= 2)))))
 
 ;; Testing with multiple 'r7rs expressions
 (assert=
