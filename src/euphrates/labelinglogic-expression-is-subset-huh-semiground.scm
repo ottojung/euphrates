@@ -37,7 +37,7 @@
      ((labelinglogic:expression:top? expr-small) #f)
      ((labelinglogic:expression:syntactic-equal? expr-small expr-big) #t)
 
-     ((equal? (equal? type-small 'and))
+     ((equal? type-small 'and)
       (if (equal? type-big 'and)
           (ands-subset? args-small args-big)
           (ands-subset? args-small (list expr-big))))
