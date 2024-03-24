@@ -132,8 +132,8 @@
           (labelinglogic:expression:evaluate/r7rs
            expr-b (car args-a)))
 
-     (and (equal? type-b 'not)
-          (equal? type-a '=)
+     (and (equal? type-a '=)
+          (equal? type-b 'not)
           (equal? inner-type-b 'r7rs)
           #t)
           ;; (not
