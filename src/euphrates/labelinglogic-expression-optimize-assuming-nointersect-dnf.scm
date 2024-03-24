@@ -2,24 +2,24 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:optimize/assuming-nointersect-dnf expr)
-  (define (ands-subset? expr-a expr-b)
+  (define (ands-subset? expr-small expr-big)
     (list-and-map
-     (lambda (sub-expr-a)
+     (lambda (sub-expr-small)
        (list-or-map
-        (lambda (sub-expr-b)
-          (is-subset? sub-expr-a sub-expr-b))
-        expr-b))
-     expr-a))
+        (lambda (sub-expr-big)
+          (is-subset? sub-expr-small sub-expr-big))
+        expr-big))
+     expr-small))
 
-  (define (is-subset? expr-a expr-b)
-    (define type-a (labelinglogic:expression:type expr-a))
-    (define type-b (labelinglogic:expression:type expr-b))
-    (define args-a (labelinglogic:expression:args expr-a))
-    (define args-b (labelinglogic:expression:args expr-b))
+  (define (is-subset? expr-small expr-big)
+    (define type-a (labelinglogic:expression:type expr-small))
+    (define type-b (labelinglogic:expression:type expr-big))
+    (define args-a (labelinglogic:expression:args expr-small))
+    (define args-b (labelinglogic:expression:args expr-big))
 
     (or (and (equal? type-a 'and)
              (equal? type-b 'and)
-             (ands-subset? expr-a expr-b))
+             (ands-subset? expr-small expr-big))
 
         (and (not (equal? type-a 'and))
              (equal? type-b 'and)
