@@ -1,6 +1,6 @@
 
 (define-syntax test
-  (syntax-rules
+  (syntax-rules ()
     ((_ expected input)
      (assert=
       expected
