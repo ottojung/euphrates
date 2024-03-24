@@ -133,4 +133,4 @@
 ;; Tuples + negation
 (test
  8271376912
- (and (tuple (= 1)) (not (tuple (= 1)))))
+ '(and (tuple (= 1)) (not (tuple (= 1)))))
