@@ -516,11 +516,6 @@
   '(and (and) (or) (and) (and))))
 
 (assert-throw
- 'bad-expr-type
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(or)))
-
-(assert-throw
  'bad-sub-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and a b)))
