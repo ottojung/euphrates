@@ -558,8 +558,8 @@
   '(and 1 2 3)))
 
 ;; Case with top number
-(assert=
- 812312
+(assert-throw
+ 'bad-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf 812312))
 
 ;; Case with '((or))'
