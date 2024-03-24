@@ -465,17 +465,17 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple (r7rs even?) (= 2)) (r7rs positive?))))
 
-;; ;; Case with top. [1]
-;; (assert=
-;;  '(and (= 3))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-;;   '(and (and) (= 3))))
+;; Case with top. [1]
+(assert=
+ '(and (= 3))
+ (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+  '(and (and) (= 3))))
 
-;; ;; Case with top. [2]
-;; (assert=
-;;  '(and (= 3))
-;;  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-;;   '(and (= 3) (and))))
+;; Case with top. [2]
+(assert=
+ '(and (= 3))
+ (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+  '(and (= 3) (and))))
 
 (assert-throw
  'bad-expr-type
