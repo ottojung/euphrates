@@ -127,7 +127,7 @@
 
      (labelinglogic:expression:syntactic-equal? expr-a expr-b)
 
-     (and negated-a? (not negated-b?))
+     (and negated-b? (not negated-a?))
 
      (and (equal? type-a '=)
           (equal? type-b 'r7rs)
