@@ -1,10 +1,12 @@
 
-(define (test expected input)
-  (assert=
-   expected
-   (labelinglogic:expression:sugarify
-    (labelinglogic:expression:to-dnf
-     input))))
+(define-syntax test
+  (syntax-rules
+    ((_ expected input)
+     (assert=
+      expected
+      (labelinglogic:expression:sugarify
+       (labelinglogic:expression:to-dnf
+        input))))))
 
 
 (test
@@ -68,6 +70,11 @@
 (test
  '(or (and a (not a) (not b)) (and a b (not b)) (and a (not a) b) (and a b b))
  '(and a (or (not a) b) (or (not b) b)))
+
+(test
+ '(and (= 0))
+ (labelinglogic:expression:optimize/assuming-nointersect-dnf
+  '(and (= 0) (= 0) (= 0) (= 0) (= 0))))
 
 ; Test constant.
 (test 'x 'x)
