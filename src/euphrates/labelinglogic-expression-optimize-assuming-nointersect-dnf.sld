@@ -33,11 +33,19 @@
     (only (euphrates labelinglogic-expression-to-dnf)
           labelinglogic:expression:to-dnf))
   (import
+    (only (euphrates labelinglogic-expression-top-huh)
+          labelinglogic:expression:top?))
+  (import
+    (only (euphrates labelinglogic-expression-top)
+          labelinglogic:expression:top))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
     (only (euphrates list-idempotent)
           list-idempotent))
+  (import
+    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates negate) negate))
   (import
     (only (scheme base)

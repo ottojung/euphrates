@@ -21,8 +21,15 @@
     (define new-args (filter (negate labelinglogic:expression:bottom?) args))
     (labelinglogic:expression:make type new-args))
 
+  (define (explode-top expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (if (list-or-map labelinglogic:expression:top? args)
+        labelinglogic:expression:top
+        expr))
+
   (define optimize-or/step
-    (compose consume-subsets remove-bottoms))
+    (compose consume-subsets explode-top remove-bottoms))
 
   (define (optimize-or expr)
     (define type (labelinglogic:expression:type expr))
