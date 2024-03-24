@@ -18,10 +18,15 @@
  '(and x y)
  '(and x y))
 
-;; Test for De Morgan's laws
+;; Test for De Morgan's laws [1]
 (test
  '(or (not x) (not y))
  '(not (and x y)))
+
+;; Test for De Morgan's laws [2]
+(test
+ '(or (not x) (not y) (not z))
+ '(not (and x y z)))
 
 ;; Test for double negation
 (test
