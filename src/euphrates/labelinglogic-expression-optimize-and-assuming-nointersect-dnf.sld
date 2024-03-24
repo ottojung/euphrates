@@ -34,6 +34,9 @@
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic:expression:sugarify))
+  (import
     (only (euphrates
             labelinglogic-expression-syntactic-equal-huh)
           labelinglogic:expression:syntactic-equal?))
