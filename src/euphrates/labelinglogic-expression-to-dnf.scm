@@ -67,6 +67,7 @@
 
     (cond
      ((equal? type 'or) (make type (map loop args)))
+
      ;; ((equal? type 'and)
      ;;  (if (null? args) expr
      ;;      (let ()
@@ -103,8 +104,9 @@
          ((null? args*) expr)
          ((null? (cdr args*)) expr)
          (else
-          (define new-args (distribute-args args*))
-          (make type new-args)))))
+          (let ()
+            (define new-args (distribute-args args*))
+            (make type new-args))))))
 
                   ;; (define next (car rest))
                   ;; (define next-type (labelinglogic:expression:type next))
