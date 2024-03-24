@@ -184,49 +184,49 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (r7rs even?) (not (= 2)))))
 
-;; Combining 'not =' and 'r7rs [1]
+;; Combining 'not =' and 'r7rs [2]
 (assert=
  '(and (not (= 2)) (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (r7rs even?) (not (= 2)))))
 
-;; Combining 'not =' and 'r7rs [2]
+;; Combining 'not =' and 'r7rs [3]
 (assert=
  '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (r7rs even?) (not (= 3)))))
 
-;; Combining 'not =' and 'r7rs [3]
+;; Combining 'not =' and 'r7rs [4]
 (assert=
  '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (not (= 3)) (r7rs even?))))
 
-;; Combining 'not =' and 'r7rs [3]
+;; Combining 'not =' and 'r7rs [5]
 (assert=
  '(and (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (not (= 3)) (r7rs even?) (not (= 3)) (not (= 3)))))
 
-;; Combining 'not =' and 'r7rs [4]
+;; Combining 'not =' and 'r7rs [6]
 (assert=
  '(and (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (not (= 3)) (r7rs even?) (not (= 2)))))
 
-;; Combining 'not =' and 'r7rs [5]
+;; Combining 'not =' and 'r7rs [7]
 (assert=
  '(and (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (r7rs even?) (not (= 2)) (not (= 3)))))
 
-;; Combining 'not =' and 'r7rs [6]
+;; Combining 'not =' and 'r7rs [8]
 (assert=
  '(and (not (= 4)) (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (not (= 4)) (r7rs even?) (not (= 2)) (not (= 3)))))
 
-;; Combining 'not =' and 'r7rs [7]
+;; Combining 'not =' and 'r7rs [9]
 (assert=
  '(and (not (= 4)) (r7rs even?) (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
