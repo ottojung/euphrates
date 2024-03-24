@@ -94,7 +94,7 @@
       (and x y))
  '(and (or z w x) y))
 
-;; Test non-binary [3]
+;; Test non-binary [4]
 (test
  '(or (or (and (and (and z y) k) m)
           (and (and (and w y) k) m))
