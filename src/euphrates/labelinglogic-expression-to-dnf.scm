@@ -49,6 +49,18 @@
       (distribute #f expr-2 expr-1))
      (else #f)))
 
+  (define (distribute-args args)
+    (let loop ((prev (car args*))
+               (rest (cdr args*)))
+      (if (null? rest) '()
+          (let ()
+            (define current (car rest))
+            (define follow (cdr rest))
+            (define maybe (maybe-distribute prev current))
+            (if maybe
+                (cons maybe follow)
+                (cons current (loop current follow)))))))
+
   (let loop ((expr expr*))
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
@@ -91,16 +103,8 @@
          ((null? args*) expr)
          ((null? (cdr args*)) expr)
          (else
-          (let ()
-            (define windows
-              (list-windows 2 args*))
-
-            (define new-windows
-              (map maybe-distribute windows))
-
-            (if (= (length windows) (length new-windows)) expr
-                (let ()
-                  0)))))))
+          (define new-args (distribute-args args*))
+          (make type new-args)))))
 
                   ;; (define next (car rest))
                   ;; (define next-type (labelinglogic:expression:type next))

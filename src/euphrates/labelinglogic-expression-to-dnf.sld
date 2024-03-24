@@ -16,8 +16,6 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates list-windows) list-windows))
-  (import
     (only (euphrates make-unique) make-unique))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
@@ -27,14 +25,15 @@
           =
           and
           begin
+          car
           cdr
           cond
+          cons
           define
           else
           equal?
           if
           lambda
-          length
           let
           list
           map
