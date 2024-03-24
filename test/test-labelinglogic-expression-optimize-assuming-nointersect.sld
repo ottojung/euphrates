@@ -7,8 +7,8 @@
   (import (only (euphrates assert) assert))
   (import
     (only (euphrates
-            labelinglogic-expression-optimize-assuming-nointersect-dnf)
-          labelinglogic:expression:optimize/assuming-nointersect-dnf))
+            labelinglogic-expression-optimize-assuming-nointersect)
+          labelinglogic:expression:optimize/assuming-nointersect))
   (import
     (only (scheme base)
           =
