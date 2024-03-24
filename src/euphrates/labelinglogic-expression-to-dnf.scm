@@ -57,7 +57,7 @@
             (define maybe (maybe-distribute prev current))
             (debugs maybe)
             (if maybe
-                (cons maybe follow)
+                (append maybe follow)
                 (cons prev (loop current follow)))))))
 
   (let loop ((expr expr*))
