@@ -14,6 +14,7 @@
 
     (and
      (equal? type-1 type-2)
+
      (cond
       ((labelinglogic:expression:ground? expr-1)
        (labelinglogic:expression:syntactic-equal? expr-1 expr-2))
