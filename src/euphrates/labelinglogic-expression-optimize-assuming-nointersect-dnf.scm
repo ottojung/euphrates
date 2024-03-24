@@ -56,8 +56,15 @@
 
   (debugs dnf*)
 
+  (define dnf*-wrapped
+    (if (equal? 'or (labelinglogic:expression:type dnf*))
+        dnf
+        (labelinglogic:expression:make 'or (list dnf*))))
+
+  (debugs dnf*-wrapped)
+
   (define dnf*-args
-    (labelinglogic:expression:args dnf*))
+    (labelinglogic:expression:args dnf*-wrapped))
 
   (debugs dnf*-args)
 
