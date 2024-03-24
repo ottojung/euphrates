@@ -11,7 +11,7 @@
   (define uniq
     (make-unique))
 
-  (define (distribute to-expr-1? expr-1 expr-2)
+  (define (distribute to-left? expr-1 expr-2)
     (define type-1 (labelinglogic:expression:type expr-1))
     (define args-1 (labelinglogic:expression:args expr-1))
     (define type-2 (labelinglogic:expression:type expr-2))
@@ -20,10 +20,10 @@
     (define new-args
       (map
        (lambda (other)
-         (make type-expr-2 expr-1 other))
+         (make type-2 expr-1 other))
        args-expr-2))
 
-    (make type-right new-args))
+    (make type-1 new-args))
 
   (define (maybe-distribute expr-1 expr-2)
     (define type-1 (labelinglogic:expression:type expr-1))
