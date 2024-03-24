@@ -30,6 +30,7 @@
           define
           equal?
           if
+          let
           not
           or
           quote))
