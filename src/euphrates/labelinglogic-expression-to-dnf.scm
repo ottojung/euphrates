@@ -76,12 +76,7 @@
                   (car new-args)
                   (make type new-args)))
 
-            ;; (define ret (make type new-args))
-
-            (debugs new-args)
-            (debugs ret)
-
-            ret)))))
+            (loop ret))))))
 
      ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
 
