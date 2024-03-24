@@ -48,6 +48,8 @@
 
   (debugs dnf)
 
+  (exit 0)
+
   (define dnf-flat
     (labelinglogic:expression:sugarify expr))
 

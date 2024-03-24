@@ -64,6 +64,7 @@
           map
           or
           quote))
+  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))
