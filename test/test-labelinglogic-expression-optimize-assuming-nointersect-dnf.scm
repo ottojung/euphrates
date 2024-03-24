@@ -5,6 +5,7 @@
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(= 3)))
 
+
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
