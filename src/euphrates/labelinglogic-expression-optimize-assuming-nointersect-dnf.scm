@@ -2,39 +2,14 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:optimize/assuming-nointersect-dnf expr)
-  (define (ands-subset? args-small args-big)
-    (list-and-map
-     (lambda (arg-big)
-       (list-or-map
-        (lambda (arg-small)
-          (is-subset? arg-small arg-big))
-        args-small))
-     args-big))
-
-  (define (is-subset? expr-small expr-big)
-    (define type-small (labelinglogic:expression:type expr-small))
-    (define type-big (labelinglogic:expression:type expr-big))
-    (define args-small (labelinglogic:expression:args expr-small))
-    (define args-big (labelinglogic:expression:args expr-big))
-
-    (or (and (equal? type-small 'and)
-             (equal? type-big 'and)
-             (ands-subset? expr-small expr-big))
-
-        (and (equal? type-small 'and)
-             (not (equal? type-big 'and))
-             (ands-subset? args-small (list expr-big)))
-
-        TODO))
-
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
     (define (fun expr-a expr-b)
       (cond
-       ((is-subset? expr-a expr-b) 'left)
-       ((is-subset? expr-b expr-a) 'right)
+       ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause expr-a expr-b) 'left)
+       ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause expr-b expr-a) 'right)
        (else 'skip)))
 
     (define new-args (list-idempotent fun args))

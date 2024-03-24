@@ -15,6 +15,10 @@
     (only (euphrates labelinglogic-expression-bottom-huh)
           labelinglogic:expression:bottom?))
   (import
+    (only (euphrates
+            labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-clause)
+          labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause))
+  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
@@ -32,26 +36,19 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates list-and-map) list-and-map))
-  (import
     (only (euphrates list-idempotent)
           list-idempotent))
-  (import
-    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates negate) negate))
   (import
     (only (scheme base)
-          and
           begin
           cond
           define
           else
           equal?
           if
-          lambda
           list
           map
-          not
           or
           quote))
   (cond-expand
