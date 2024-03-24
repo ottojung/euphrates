@@ -32,10 +32,10 @@
           else
           equal?
           for-each
-          integer?
           list
           list?
           not
+          number?
           or
           procedure?
           quote
