@@ -24,8 +24,6 @@
   '(and (or (= 2) (= 3) (= 4))
         (or (= 5) (r7rs odd?) (= 7)))))
 
-(exit 1)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Cases from labelinglogic:expression:optimize/and-assuming-nointersect-dnf
