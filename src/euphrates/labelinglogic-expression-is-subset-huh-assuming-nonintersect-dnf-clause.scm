@@ -3,6 +3,7 @@
 
 (define (labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause
          expr-small expr-big)
+
   (let loop ((expr-small expr-small)
              (expr-big expr-big))
 
