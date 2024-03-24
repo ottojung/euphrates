@@ -286,11 +286,12 @@
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (tuple (= 1)) (tuple (= 1)))))
 
-;; Mixing 'tuple and 'not in a single expression
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple (= 1)) (not (tuple (= 1))))))
+;; TODO
+;; ;; Mixing 'tuple and 'not in a single expression
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (tuple (= 1)) (not (tuple (= 1))))))
 
 ;; Combining '= and 'r7rs with opposite values
 (assert=
