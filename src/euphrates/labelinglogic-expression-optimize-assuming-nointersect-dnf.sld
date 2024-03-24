@@ -54,6 +54,7 @@
   (import (only (euphrates negate) negate))
   (import
     (only (scheme base)
+          and
           begin
           cond
           define

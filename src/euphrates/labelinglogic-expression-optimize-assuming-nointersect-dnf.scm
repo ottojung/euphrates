@@ -77,11 +77,15 @@
 
   (debugs dnf*-args)
 
+  (define (maybe-optimize-and expr)
+    (define type (labelinglogic:expression:type expr))
+    (if (equal? type 'and)
+        (labelinglogic:expression:optimize/and-assuming-nointersect-dnf expr)
+        expr))
+
   (define simpl
     (labelinglogic:expression:make
-     'or
-     (map labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-          dnf*-args)))
+     'or (map maybe-optimize-and dnf*-args)))
 
   (debugs simpl)
 
