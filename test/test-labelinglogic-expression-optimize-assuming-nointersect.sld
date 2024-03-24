@@ -1,6 +1,6 @@
 
 (define-library
-  (test-labelinglogic-expression-optimize-assuming-nointersect-dnf)
+  (test-labelinglogic-expression-optimize-assuming-nointersect)
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
@@ -29,6 +29,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-labelinglogic-expression-optimize-assuming-nointersect-dnf.scm")))
+               "test-labelinglogic-expression-optimize-assuming-nointersect.scm")))
     (else (include
-            "test-labelinglogic-expression-optimize-assuming-nointersect-dnf.scm"))))
+            "test-labelinglogic-expression-optimize-assuming-nointersect.scm"))))
