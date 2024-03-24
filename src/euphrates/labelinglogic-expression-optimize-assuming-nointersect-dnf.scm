@@ -60,7 +60,7 @@
 
   (define dnf*-wrapped
     (if (equal? 'or (labelinglogic:expression:type dnf*))
-        dnf
+        dnf*
         (labelinglogic:expression:make 'or (list dnf*))))
 
   (debugs dnf*-wrapped)
