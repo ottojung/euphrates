@@ -159,11 +159,11 @@
                        (car inner-args-b))))
 
      (and (equal? type-a 'not)
-          (equal? inner-type-b '=)
+          (equal? inner-type-a '=)
           (equal? type-b 'not)
           (equal? inner-type-b 'r7rs)
-          (is-subset? (car inner-args-b)
-                      (car inner-args-a)))
+          (is-subset? (car inner-args-a)
+                      (car inner-args-b)))
 
      ))
 
