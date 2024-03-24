@@ -18,22 +18,29 @@
     (define inner-smallrgs-small (labelinglogic:expression:args inner-small))
     (define inner-smallrgs-big (labelinglogic:expression:args inner-big))
 
-    (or
-     (labelinglogic:expression:top? expr-big)
+    (cond
+     ((labelinglogic:expression:top? expr-big) #t)
+     ((labelinglogic:expression:syntactic-equal? expr-small expr-big) #t)
 
-     (labelinglogic:expression:syntactic-equal? expr-small expr-big)
+     ((equal? type-small '=)
+      (or
+       (and (equal? type-small '=)
+            (equal? type-big 'r7rs)
+            (labelinglogic:expression:evaluate/r7rs
+             expr-big (car args-small)))
 
-     (and (equal? type-small '=)
-          (equal? type-big 'r7rs)
-          (labelinglogic:expression:evaluate/r7rs
-           expr-big (car args-small)))
+       (and (equal? type-small '=)
+            (equal? type-big 'not)
+            (equal? inner-type-big 'r7rs)
+            (not
+             (labelinglogic:expression:evaluate/r7rs
+              inner-big (car args-small))))
 
-     (and (equal? type-small '=)
-          (equal? type-big 'not)
-          (equal? inner-type-big 'r7rs)
-          (not
-           (labelinglogic:expression:evaluate/r7rs
-            inner-big (car args-small))))
+       (and (equal? type-small '=)
+            (equal? type-big 'not)
+            (equal? inner-type-big '=)
+            (not (equal? (car inner-smallrgs-small)
+                         (car inner-smallrgs-big))))))
 
      (and (equal? type-small 'r7rs)
           (equal? type-big 'not)
@@ -41,12 +48,6 @@
           (not
            (labelinglogic:expression:evaluate/r7rs
             expr-small (car inner-smallrgs-big))))
-
-     (and (equal? type-small '=)
-          (equal? type-big 'not)
-          (equal? inner-type-big '=)
-          (not (equal? (car inner-smallrgs-small)
-                       (car inner-smallrgs-big))))
 
      (and (equal? type-small 'r7rs)
           (equal? type-big 'not)

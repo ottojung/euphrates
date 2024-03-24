@@ -27,6 +27,7 @@
           and
           begin
           car
+          cond
           define
           equal?
           if
