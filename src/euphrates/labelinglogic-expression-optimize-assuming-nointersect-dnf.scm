@@ -42,7 +42,7 @@
   (define dnf
     (labelinglogic:expression:to-dnf expr))
 
-  (debug dnf)
+  (debugs dnf)
 
   (define dnf*
     (optimize-or
@@ -50,7 +50,7 @@
          dnf
          (labelinglogic:expression:make 'or (list dnf)))))
 
-  (debug dnf*)
+  (debugs dnf*)
 
   (define dnf*-args
     (labelinglogic:expression:args dnf*))
@@ -62,6 +62,6 @@
       (map labelinglogic:expression:optimize/and-assuming-nointersect-dnf
            dnf*-args))))
 
-  (debug simpl)
+  (debugs simpl)
 
   (labelinglogic:expression:optimize/singletons simpl))
