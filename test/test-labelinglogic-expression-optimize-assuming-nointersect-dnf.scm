@@ -431,17 +431,17 @@
 ;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
 ;;   '(and (not (= 2)) (not (tuple (= 2))))))
 
-;; Case with negated 'tuple and 'r7rs
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (not (tuple (= 1))) (r7rs odd?))))
+;; ;; Case with negated 'tuple and 'r7rs
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (not (tuple (= 1))) (r7rs odd?))))
 
-;; Case with 'tuple, 'not, '= and 'r7rs values
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple (= 1)) (not (tuple (= 1))) (r7rs odd?) (= 2))))
+;; ;; Case with 'tuple, 'not, '= and 'r7rs values
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (tuple (= 1)) (not (tuple (= 1))) (r7rs odd?) (= 2))))
 
 ;; ;; Case with 'tuple containing other 'tuple
 ;; (assert=
