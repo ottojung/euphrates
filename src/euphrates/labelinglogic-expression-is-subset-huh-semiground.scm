@@ -42,23 +42,29 @@
             (not (equal? (car inner-smallrgs-small)
                          (car inner-smallrgs-big))))))
 
-     (and (equal? type-small 'r7rs)
-          (equal? type-big 'not)
-          (equal? inner-type-big '=)
-          (not
-           (labelinglogic:expression:evaluate/r7rs
-            expr-small (car inner-smallrgs-big))))
+     ((equal? type-small 'r7rs)
+      (or
+       (and (equal? type-small 'r7rs)
+            (equal? type-big 'not)
+            (equal? inner-type-big '=)
+            (not
+             (labelinglogic:expression:evaluate/r7rs
+              expr-small (car inner-smallrgs-big))))
 
-     (and (equal? type-small 'r7rs)
-          (equal? type-big 'not)
-          (equal? inner-type-big 'r7rs)
-          (not (equal? (car inner-smallrgs-small)
-                       (car inner-smallrgs-big))))
+       (and (equal? type-small 'r7rs)
+            (equal? type-big 'not)
+            (equal? inner-type-big 'r7rs)
+            (not (equal? (car inner-smallrgs-small)
+                         (car inner-smallrgs-big))))))
 
-     (and (equal? type-big 'not)
-          (equal? inner-type-big '=)
-          (equal? type-small 'not)
-          (equal? inner-type-small 'r7rs)
-          (loop inner-big inner-small))
+     ((equal? type-small 'not)
+      (and (equal? inner-type-small 'r7rs)
+           (equal? type-big 'not)
+           (equal? inner-type-big '=)
+           (loop inner-big inner-small)))
 
-     )))
+     (else
+      (raisu* :from "labelinglogic:expression:is-subset?/semiground"
+              :type 'bad-sub-expr-type
+              :message (stringf "Expression type ~s not permitted here." (~a type))
+              :args (list type expr))))))
