@@ -34,7 +34,7 @@
              (make d-type (list inner expr-2))))
        d-args))
 
-    (make result-type new-args))
+    new-args)
 
   (define (maybe-distribute expr-1 expr-2)
     (define type-1 (labelinglogic:expression:type expr-1))
