@@ -123,7 +123,7 @@
     (define inner-tuple-b? (equal? 'tuple inner-type-b))
 
     (or
-     ;; (labelinglogic:expression:top? expr-b)
+     (labelinglogic:expression:top? expr-b)
 
      (labelinglogic:expression:syntactic-equal? expr-a expr-b)
 
