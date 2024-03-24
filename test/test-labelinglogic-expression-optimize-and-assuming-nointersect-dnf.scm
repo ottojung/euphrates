@@ -280,6 +280,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple (= 2)) (tuple (r7rs odd?)))))
 
+;; Optimizing tuples with different expressions [3]
+(assert=
+ '(and (tuple (= 2) (= 2)) (tuple (r7rs odd?) (r7rs odd?)))
+ (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+  '(and (tuple (= 2) (= 2)) (tuple (r7rs odd?) (r7rs odd?)))))
+
 ;; Optimizing tuples with the same expressions
 (assert=
  '(and (tuple (= 1)))
