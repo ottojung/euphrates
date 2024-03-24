@@ -535,7 +535,8 @@
 ;; Case with top number
 (assert-throw
  'expression-type-error
- (labelinglogic:expression:optimize/assuming-nointersect-dnf 812312))
+ (labelinglogic:expression:optimize/assuming-nointersect-dnf
+  812312))
 
 ;; Case with '((or))'
 (assert-throw
