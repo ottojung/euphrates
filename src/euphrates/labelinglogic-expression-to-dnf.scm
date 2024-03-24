@@ -17,9 +17,6 @@
     (debugs expr-1)
     (debugs expr-2)
 
-    (define result-type
-      (if to-right? type-1 type-2))
-
     (define d-type
       (if to-right? type-2 type-1))
 
