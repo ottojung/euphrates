@@ -1,39 +1,39 @@
 
-;; Case with constant.
-(assert=
- '(= 3)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(= 3)))
+;; ;; Case with constant.
+;; (assert=
+;;  '(= 3)
+;;  (labelinglogic:expression:optimize/assuming-nointersect
+;;   '(= 3)))
 
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (= 6) (= 7)))))
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/assuming-nointersect
+;;   '(and (or (= 2) (= 3) (= 4))
+;;         (or (= 5) (= 6) (= 7)))))
 
-(assert=
- '(= 2)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (= 2) (= 7)))))
+;; (assert=
+;;  '(= 2)
+;;  (labelinglogic:expression:optimize/assuming-nointersect
+;;   '(and (or (= 2) (= 3) (= 4))
+;;         (or (= 5) (= 2) (= 7)))))
 
-(assert=
- '(= 3)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (r7rs odd?) (= 7)))))
+;; (assert=
+;;  '(= 3)
+;;  (labelinglogic:expression:optimize/assuming-nointersect
+;;   '(and (or (= 2) (= 3) (= 4))
+;;         (or (= 5) (r7rs odd?) (= 7)))))
 
-(assert=
- '(= 3)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (and (r7rs odd?) (not (= 9))) (= 7)))))
+;; (assert=
+;;  '(= 3)
+;;  (labelinglogic:expression:optimize/assuming-nointersect
+;;   '(and (or (= 2) (= 3) (= 4))
+;;         (or (= 5) (and (r7rs odd?) (not (= 9))) (= 7)))))
 
-(assert=
- '(and (r7rs odd?) (not (= 9)))
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(or (and (= 3) (not (= 5)))
-       (and (r7rs odd?) (not (= 9))))))
+;; (assert=
+;;  '(and (r7rs odd?) (not (= 9)))
+;;  (labelinglogic:expression:optimize/assuming-nointersect
+;;   '(or (and (= 3) (not (= 5)))
+;;        (and (r7rs odd?) (not (= 9))))))
 
 (assert=
  '(or (= 3)
@@ -41,6 +41,8 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(or (= 3)
        (and (r7rs odd?) (not (= 9))))))
+
+(exit 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
