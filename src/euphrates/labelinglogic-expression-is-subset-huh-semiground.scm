@@ -21,8 +21,6 @@
     (define inner-smallrgs-big (labelinglogic:expression:args inner-big))
 
     (define (ands-subset? args-small args-big)
-      (debug "IN SUB: ~s ~s" args-small args-big)
-
       (list-and-map
        (lambda (arg-big)
          (list-or-map
@@ -31,12 +29,8 @@
           args-small))
        args-big))
 
-    (debugs expr-small)
-    (debugs expr-big)
-
     (cond
      ((labelinglogic:expression:top? expr-big) #t)
-     ;; ((labelinglogic:expression:top? expr-small) #f)
      ((labelinglogic:expression:syntactic-equal? expr-small expr-big) #t)
 
      ((equal? type-small 'and)

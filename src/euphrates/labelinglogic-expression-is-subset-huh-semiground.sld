@@ -5,7 +5,6 @@
   (export
     labelinglogic:expression:is-subset?/semiground)
   (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
