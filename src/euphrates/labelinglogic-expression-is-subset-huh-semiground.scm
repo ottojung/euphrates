@@ -58,6 +58,6 @@
           (equal? inner-type-big '=)
           (equal? type-small 'not)
           (equal? inner-type-small 'r7rs)
-          (is-subset? inner-big inner-small))
+          (loop inner-big inner-small))
 
      )))
