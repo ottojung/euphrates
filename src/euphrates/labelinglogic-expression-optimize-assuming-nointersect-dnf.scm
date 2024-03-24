@@ -18,10 +18,7 @@
     (define args-a (labelinglogic:expression:args expr-a))
     (define args-b (labelinglogic:expression:args expr-b))
 
-    (or (labelinglogic:expression:syntactic-equal?
-         expr-a expr-b)
-
-        (and (equal? type-a 'and)
+    (or (and (equal? type-a 'and)
              (equal? type-b 'and)
              (ands-subset? expr-a expr-b))
 
