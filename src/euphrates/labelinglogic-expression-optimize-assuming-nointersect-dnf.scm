@@ -7,10 +7,10 @@
     (define args-big (labelinglogic:expression:args expr-bigig))
 
     (list-and-map
-     (lambda (sub-expr-big)
+     (lambda (arg-big)
        (list-or-map
-        (lambda (sub-expr-small)
-          (is-subset? sub-expr-small sub-expr-big))
+        (lambda (arg-small)
+          (is-subset? arg-small arg-big))
         args-small))
      args-big))
 
