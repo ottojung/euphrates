@@ -1,4 +1,12 @@
 
+;; Case with top constant
+(labelinglogic:expression:optimize/assuming-nointersect-dnf
+ 'const1)
+
+;; Case with top number
+(labelinglogic:expression:optimize/assuming-nointersect-dnf
+ 812312)
+
 (assert=
  '(and)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
@@ -531,12 +539,6 @@
  'bad-sub-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and 1 2 3)))
-
-;; Case with top number
-(assert-throw
- 'expression-type-error
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  812312))
 
 ;; Case with '((or))'
 (assert-throw
