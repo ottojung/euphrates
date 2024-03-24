@@ -59,6 +59,8 @@
   (define dnf*-args
     (labelinglogic:expression:args dnf*))
 
+  (debugs dnf*-args)
+
   (define simpl
     (labelinglogic:expression:make
      'or
