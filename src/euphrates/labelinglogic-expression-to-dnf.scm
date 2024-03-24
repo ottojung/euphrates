@@ -43,7 +43,7 @@
      ((equal? type-2 'or)
       (distribute #t expr-1 expr-2))
      ((equal? type-1 'or)
-      (distribute #f expr-2 expr-1))
+      (distribute #f expr-1 expr-2))
      (else #f)))
 
   (define (distribute-args args)
