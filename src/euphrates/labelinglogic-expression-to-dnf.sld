@@ -6,9 +6,6 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-desugar)
-          labelinglogic:expression:desugar))
-  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import

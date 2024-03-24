@@ -3,8 +3,7 @@
 
 (define (labelinglogic:expression:to-dnf expr)
   (define expr*
-    (labelinglogic:expression:desugar
-     (labelinglogic:expression:move-nots-down expr)))
+    (labelinglogic:expression:move-nots-down expr))
 
   (define (make type args)
     (labelinglogic:expression:make type args))
@@ -15,6 +14,35 @@
 
     (cond
      ((equal? type 'or) (make type (map loop args)))
+     ;; ((equal? type 'and)
+     ;;  (if (null? args) expr
+     ;;      (let ()
+     ;;        (define args* (map loop args))
+     ;;        (define c (car args*))
+     ;;        (define rest (cdr args*))
+     ;;        (if (null? rest) expr
+     ;;            (let ()
+     ;;              (define next (car rest))
+     ;;              (define next-type (labelinglogic:expression:type next))
+     ;;              (define next-args (labelinglogic:expression:args next))
+     ;;              (define c-type (labelinglogic:expression:type c))
+     ;;              (define c-args (labelinglogic:expression:args c))
+     ;;              (cond
+     ;;               ((equal? next-type 'or)
+     ;;                (loop
+     ;;                 (make 'or
+     ;;                   (map
+     ;;                    (lambda (x) (make 'and (list c x)))
+     ;;                    next-args))))
+     ;;               ((equal? c-type 'or)
+     ;;                (loop
+     ;;                 (make 'or
+     ;;                   (map
+     ;;                    (lambda (x) (make 'and (list x next)))
+     ;;                    c-args))))
+     ;;               (else
+     ;;                (make type args*))))))))
+
      ((equal? type 'and)
       (if (null? args) expr
           (let ()
