@@ -69,9 +69,10 @@
          ((null? (cdr args*)) expr)
          (else
           (let ()
-            (define ret (make type (distribute-args args*)))
-            (debugs ret)
-            ret)))))
+            (define new-args (distribute-args args*))
+            (if (list-singleton? new-args)
+                (car args)
+                (make type new-args)))))))
 
      ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
 
