@@ -288,7 +288,7 @@
 
 ;; Optimizing tuples with different expressions [1]
 (assert=
- '(and (tuple (= 1)))
+ '(and (= 1))
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (tuple (= 1)) (tuple (r7rs odd?)))))
 
