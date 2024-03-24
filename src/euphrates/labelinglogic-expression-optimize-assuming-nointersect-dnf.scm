@@ -60,12 +60,16 @@
     (labelinglogic:expression:args dnf*))
 
   (define simpl
-    (optimize-or
-     (labelinglogic:expression:make
-      'or
-      (map labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-           dnf*-args))))
+    (labelinglogic:expression:make
+     'or
+     (map labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+          dnf*-args)))
 
   (debugs simpl)
 
-  (labelinglogic:expression:optimize/singletons simpl))
+  (define simpl*
+    (optimize-or simpl))
+
+  (debugs simpl*)
+
+  (labelinglogic:expression:optimize/singletons simpl*))
