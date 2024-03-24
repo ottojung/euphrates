@@ -18,6 +18,12 @@
   '(and (or (= 2) (= 3) (= 4))
         (or (= 5) (= 2) (= 7)))))
 
+(assert=
+ '(= 2)
+ (labelinglogic:expression:optimize/assuming-nointersect-dnf
+  '(and (or (= 2) (= 3) (= 4))
+        (or (= 5) (r7rs odd?) (= 7)))))
+
 (exit 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
