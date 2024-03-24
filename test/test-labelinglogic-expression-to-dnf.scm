@@ -4,9 +4,8 @@
     ((_ expected input)
      (assert=
       expected
-      (labelinglogic:expression:sugarify
-       (labelinglogic:expression:to-dnf
-        input))))))
+      (labelinglogic:expression:to-dnf
+       input)))))
 
 
 ;; Test for a simple OR expression
