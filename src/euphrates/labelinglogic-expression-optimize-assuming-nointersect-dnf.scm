@@ -53,8 +53,6 @@
 
   (debugs dnf-flat)
 
-  (exit 1)
-
   (define dnf-wrapped
     (if (equal? 'or (labelinglogic:expression:type dnf-flat))
         dnf-flat
