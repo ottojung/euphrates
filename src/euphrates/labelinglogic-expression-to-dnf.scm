@@ -69,12 +69,12 @@
          ((null? (cdr args*)) expr)
          (else
           (let ()
-            ;; (define new-args (distribute-args args*))
+            (define new-args (distribute-args args*))
             ;; (if (list-singleton? new-args)
             ;;     (car args)
             ;;     (make type new-args)))))))
 
-            (define ret (make type (distribute-args args*)))
+            (define ret (make type new-args))
             (debugs ret)
             ret)))))
 
