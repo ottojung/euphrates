@@ -17,6 +17,9 @@
     (only (euphrates labelinglogic-expression-bottom-huh)
           labelinglogic:expression:bottom?))
   (import
+    (only (euphrates labelinglogic-expression-check)
+          labelinglogic:expression:check))
+  (import
     (only (euphrates
             labelinglogic-expression-is-subset-huh-assuming-nonintersect-dnf-clause)
           labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-clause))
@@ -52,19 +55,26 @@
   (import
     (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates negate) negate))
+  (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          =
           and
           begin
           cond
           define
           else
           equal?
+          for-each
           if
           list
           map
+          not
           or
-          quote))
+          quote
+          unless))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))
