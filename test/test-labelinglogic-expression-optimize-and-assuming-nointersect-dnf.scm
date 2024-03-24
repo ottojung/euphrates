@@ -15,7 +15,7 @@
   '(and (= 0) (= 0))))
 
 (assert=
- '(and (= 0))
+ '(= 0)
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (= 0) (= 0) (= 0) (= 0) (= 0))))
 
