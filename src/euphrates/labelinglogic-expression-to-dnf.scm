@@ -8,7 +8,12 @@
   (define (make type args)
     (labelinglogic:expression:make type args))
 
-  (define (maybe-distribute left right)
+  (define (maybe-distribute expr-1 expr-2)
+    (define type-1 (labelinglogic:expression:type expr-1))
+    (define args-1 (labelinglogic:expression:args expr-1))
+    (define type-2 (labelinglogic:expression:type expr-2))
+    (define args-2 (labelinglogic:expression:args expr-2))
+
     
 
   (let loop ((expr expr*))
