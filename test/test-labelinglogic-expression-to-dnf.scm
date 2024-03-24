@@ -20,7 +20,7 @@
 
 ;; Simple or + and.
 (test
- 8888
+ '(or (and x y) (and x z))
  '(and x (or y z)))
 
 ;; Test for De Morgan's laws [1]
