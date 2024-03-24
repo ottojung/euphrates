@@ -35,7 +35,7 @@
     (debugs expr-big)
 
     (cond
-     ;; ((labelinglogic:expression:top? expr-big) #t)
+     ((labelinglogic:expression:top? expr-big) #t)
      ;; ((labelinglogic:expression:top? expr-small) #f)
      ((labelinglogic:expression:syntactic-equal? expr-small expr-big) #t)
 
