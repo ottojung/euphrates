@@ -70,13 +70,15 @@
          (else
           (let ()
             (define new-args (distribute-args args*))
+            (if (= (length args) (length new-args))
+                expr
+                (let ()
+                  (define ret
+                    (if (list-singleton? new-args)
+                        (car new-args)
+                        (make type new-args)))
 
-            (define ret
-              (if (list-singleton? new-args)
-                  (car new-args)
-                  (make type new-args)))
-
-            (loop ret))))))
+                  (loop ret))))))))
 
      ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
 

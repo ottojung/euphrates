@@ -36,6 +36,7 @@
           equal?
           if
           lambda
+          length
           let
           list
           map
