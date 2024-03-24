@@ -4,7 +4,6 @@
     labelinglogic-expression-is-subset-huh-semiground)
   (export
     labelinglogic:expression:is-subset?/semiground)
-  (import (only (euphrates debug) debug))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
