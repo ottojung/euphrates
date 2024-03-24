@@ -77,7 +77,7 @@
 
             (define ret (make type new-args))
             (debugs ret)
-            (loop ret))))))
+            ret)))))
 
      ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
 
