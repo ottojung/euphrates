@@ -467,7 +467,7 @@
 
 ;; Complex case with 'tuple, 'not and 'r7rs
 (assert=
- '(or)
+ '(and (= 2))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple (r7rs even?)) (= 2) (not (r7rs odd?)))))
 
