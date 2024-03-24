@@ -20,7 +20,7 @@
                 (labelinglogic:expression:bottom? expr)
                 (labelinglogic:expression:top? expr))
 
-      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect-dnf"
+      (raisu* :from "labelinglogic:expression:optimize/assuming-nointersect-dnf"
               :type 'bad-sub-expr-type
               :message (stringf "Expression type ~s not permitted here." (~a type))
               :args (list type expr))))
