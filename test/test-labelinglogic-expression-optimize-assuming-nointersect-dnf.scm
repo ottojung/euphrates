@@ -1,7 +1,7 @@
 
 (assert=
  '(and)
- (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+ (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and)))
 
 (assert=

@@ -7,6 +7,10 @@
             labelinglogic-expression-optimize-and-assuming-nointersect-dnf)
           labelinglogic:expression:optimize/and-assuming-nointersect-dnf))
   (import
+    (only (euphrates
+            labelinglogic-expression-optimize-assuming-nointersect-dnf)
+          labelinglogic:expression:optimize/assuming-nointersect-dnf))
+  (import
     (only (scheme base) = and begin or quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
