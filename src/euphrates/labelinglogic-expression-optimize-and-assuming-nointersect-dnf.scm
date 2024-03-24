@@ -122,8 +122,8 @@
 
     (define (fun expr-a expr-b)
       (cond
-       ((is-subset? expr-a expr-b) 'left)
-       ((is-subset? expr-b expr-a) 'right)
+       ((labelinglogic:expression:is-subset?/semiground expr-a expr-b) 'left)
+       ((labelinglogic:expression:is-subset?/semiground expr-b expr-a) 'right)
        (else 'skip)))
 
     (define new-args (list-idempotent fun args))

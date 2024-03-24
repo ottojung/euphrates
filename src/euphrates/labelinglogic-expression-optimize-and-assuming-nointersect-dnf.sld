@@ -27,6 +27,10 @@
             labelinglogic-expression-evaluate-r7rs)
           labelinglogic:expression:evaluate/r7rs))
   (import
+    (only (euphrates
+            labelinglogic-expression-is-subset-huh-semiground)
+          labelinglogic:expression:is-subset?/semiground))
+  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
