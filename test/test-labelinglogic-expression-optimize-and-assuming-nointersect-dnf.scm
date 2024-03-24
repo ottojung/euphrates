@@ -467,7 +467,7 @@
 
 ;; Case with top.
 (assert=
- '(and (and) (= 3))
+ '(and (= 3))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (and) (= 3))))
 
