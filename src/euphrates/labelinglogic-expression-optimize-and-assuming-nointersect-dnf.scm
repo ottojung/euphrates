@@ -158,12 +158,19 @@
           (not (equal? (car inner-args-a)
                        (car inner-args-b))))
 
-     (and (equal? type-a 'a)
+     (and (equal? type-a 'not)
           (equal? inner-type-b '=)
           (equal? type-b 'not)
           (equal? inner-type-b 'r7rs)
           (not (equal? (car inner-args-a)
                        (car inner-args-b))))
+
+     ;; (and (equal? type-a 'a)
+     ;;      (equal? inner-type-b '=)
+     ;;      (equal? type-b 'not)
+     ;;      (equal? inner-type-b 'r7rs)
+     ;;      (not (equal? (car inner-args-a)
+     ;;                   (car inner-args-b))))
 
      ))
 
