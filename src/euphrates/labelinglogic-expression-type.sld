@@ -12,6 +12,7 @@
           define
           else
           list-ref
+          number?
           quote
           symbol?))
   (cond-expand
