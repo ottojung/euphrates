@@ -19,6 +19,8 @@
           labelinglogic:expression:type))
   (import
     (only (euphrates list-and-map) list-and-map))
+  (import
+    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -31,6 +33,7 @@
           define
           else
           equal?
+          lambda
           length
           let
           list

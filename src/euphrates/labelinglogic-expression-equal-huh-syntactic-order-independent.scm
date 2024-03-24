@@ -12,6 +12,15 @@
     (define args-1 (labelinglogic:expression:args expr-1))
     (define args-2 (labelinglogic:expression:args expr-2))
 
+    (define (eqv-oi args-1 args-2)
+      (list-and-map
+       (lambda (arg1)
+         (list-or-map
+          (lambda (arg2)
+            (loop arg1 arg2))
+          args-2))
+       args-1))
+
     (and
      (equal? type-1 type-2)
 
@@ -21,7 +30,8 @@
 
       ((member type-1 (list 'or 'and 'xor 'not 'tuple 'r7rs '=))
        (and (= (length args-1) (length args-2))
-            (list-and-map loop args-1 args-2)))
+            (eqv-oi args-1 args-2)
+            (eqv-oi args-2 args-1)))
 
       ((equal? type-1 'constant)
        (raisu* :from "labelinglogic:expression:equal?/syntactic/order-independent"
