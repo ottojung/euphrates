@@ -66,5 +66,5 @@
      (else
       (raisu* :from "labelinglogic:expression:is-subset?/semiground"
               :type 'bad-sub-expr-type
-              :message (stringf "Expression type ~s not permitted here." (~a type))
-              :args (list type expr))))))
+              :message (stringf "Expression type ~s not permitted here." (~a type-small))
+              :args (list type-small expr-small))))))
