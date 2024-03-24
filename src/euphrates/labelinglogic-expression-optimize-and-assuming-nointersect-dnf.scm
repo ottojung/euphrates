@@ -1,7 +1,7 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (labelinglogic:expression:optimize/and-assuming-nointersect-dnf expr0)
+(define (labelinglogic:expression:optimize/and-assuming-nointersect-dnf expr)
   ;; This function optimizes an 'and' expression by removing contradicting, redundant and non-intersecting components.
   ;;
   ;; The optimization process includes:
@@ -21,9 +21,7 @@
   ;; Or, in other words, ground terms + negated ground terms.
   ;;
 
-  (define _0 (labelinglogic:expression:check expr0))
-  (define original-type (labelinglogic:expression:type expr0))
-  (define expr (labelinglogic:expression:sugarify expr0))
+  (define _0 (labelinglogic:expression:check expr))
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
 
@@ -158,16 +156,12 @@
      remove-tops
      ))
 
-  (unless (equal? original-type 'and)
+  (unless (equal? type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect-dnf"
             :type 'bad-expr-type
-            :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a original-type))
-            :args (list original-type expr0)))
+            :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
+            :args (list type expr)))
 
-  (if (equal? type 'and)
-      (let ()
-        (for-each check-type args)
-        (apply-until-fixpoint optimize expr))
-      (let ()
-        (check-type expr)
-        expr)))
+  (for-each check-type args)
+
+  (apply-until-fixpoint optimize expr))
