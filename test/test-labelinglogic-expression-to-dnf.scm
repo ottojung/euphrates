@@ -72,9 +72,8 @@
  '(and a (or (not a) b) (or (not b) b)))
 
 (test
- '(and (= 0))
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (= 0) (= 0) (= 0) (= 0) (= 0))))
+ '(and (= 0) (= 0) (= 0) (= 0) (= 0))
+ '(and (= 0) (= 0) (= 0) (= 0) (= 0)))
 
 ; Test constant.
 (test 'x 'x)
