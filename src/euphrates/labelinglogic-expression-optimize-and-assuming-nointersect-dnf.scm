@@ -81,21 +81,24 @@
     (define inner-tuple-a? (equal? 'tuple inner-type-a))
     (define inner-tuple-b? (equal? 'tuple inner-type-b))
 
-    (or (not (equal? inner-tuple-a? inner-tuple-b?))
+    (and (not (labelinglogic:expression:top? expr-a))
+         (not (labelinglogic:expression:top? expr-b))
 
-        (and (equal? type-a 'r7rs)
-             (equal? type-b '=)
-             (not
-              (labelinglogic:expression:evaluate/r7rs
-               expr-a (car args-b))))
+         (or (not (equal? inner-tuple-a? inner-tuple-b?))
 
-        (and (equal? type-a '=)
-             (equal? type-b 'not)
-             (equal? inner-type-b 'r7rs)
-             (labelinglogic:expression:evaluate/r7rs
-              (car args-b) (car args-a)))
+             (and (equal? type-a 'r7rs)
+                  (equal? type-b '=)
+                  (not
+                   (labelinglogic:expression:evaluate/r7rs
+                    expr-a (car args-b))))
 
-        #f))
+             (and (equal? type-a '=)
+                  (equal? type-b 'not)
+                  (equal? inner-type-b 'r7rs)
+                  (labelinglogic:expression:evaluate/r7rs
+                   (car args-b) (car args-a)))
+
+             #f)))
 
   (define (different-type-nointersect? expr-a expr-b)
     (or (different-type-nointersect?/body expr-a expr-b)
