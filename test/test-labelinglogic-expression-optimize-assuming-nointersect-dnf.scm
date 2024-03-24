@@ -566,3 +566,9 @@
  'bad-sub-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (tuple 1 2))))
+
+;; Bad nots.
+(assert-throw
+ 'bad-sub-expr-type
+ (labelinglogic:expression:optimize/assuming-nointersect-dnf
+  '(and (not 1))))
