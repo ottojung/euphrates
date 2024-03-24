@@ -75,7 +75,13 @@
       (or (and a d) (and (not b) d)))
  '(and (or a (not b)) (or c d)))
 
-;; Test non-binary
+;; Test non-binary [1]
+(test
+ '(or (and x (and y x))
+      (and x (and y y)))
+ '(and x y (or x y)))
+
+;; Test non-binary [2]
 (test
  '(or (and x (and (not y) x))
       (and x (and (not y) y)))
