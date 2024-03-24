@@ -19,8 +19,6 @@
  '(and x y)
  '(and x y))
 
-(exit 0)
-
 ;; Test for De Morgan's laws
 (test
  '(or (not x) (not y))
