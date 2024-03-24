@@ -45,7 +45,7 @@
 
 ;; Tuples with top expressions
 (assert=
- 999
+ '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
 
