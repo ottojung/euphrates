@@ -506,13 +506,13 @@
 
 ;; Case with top. [2]
 (assert=
- '(and (= 3))
+ '(= 3)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (= 3) (and))))
 
 ;; Case with top. [3]
 (assert=
- '(and (= 3))
+ '(= 3)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (= 3) (and) (= 3))))
 
