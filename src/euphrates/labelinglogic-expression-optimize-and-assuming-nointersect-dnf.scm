@@ -47,12 +47,16 @@
          (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
   (define (check-type expr)
-    (labelinglogic:expression:check expr)
+    (define _531 (labelinglogic:expression:check expr))
     (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
-                (equal? type 'not)
-                (equal? type 'tuple)
+                (and (equal? type 'not)
+                     (for-each check-type args))
+                (and (equal? type 'tuple)
+                     (for-each check-type args))
                 (labelinglogic:expression:bottom? expr)
                 (labelinglogic:expression:top? expr))
 
