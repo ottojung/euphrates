@@ -96,7 +96,10 @@
 
 ;; Test non-binary [3]
 (test
- 7777
+ '(or (or (and (and (and z y) k) m)
+          (and (and (and w y) k) m))
+      (or (and (and (and z y) u) m)
+          (and (and (and w y) u) m)))
  '(and (or z w) y (or k u) m))
 
 ;; Test that involves all operators in a more complex expression
