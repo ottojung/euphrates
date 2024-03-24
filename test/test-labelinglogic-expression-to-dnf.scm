@@ -78,7 +78,10 @@
 
 ;; Test that involves all operators in a more complex expression
 (test
- '(or (and a (not a) (not b)) (and a b (not b)) (and a (not a) b) (and a b b))
+ '(or (or (and (and a (not a)) (not b))
+          (and (and a b) (not b)))
+      (or (and (and a (not a)) b)
+          (and (and a b) b)))
  '(and a (or (not a) b) (or (not b) b)))
 
 (test
