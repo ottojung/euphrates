@@ -32,6 +32,7 @@
           else
           equal?
           for-each
+          integer?
           list
           list?
           not
