@@ -16,8 +16,7 @@
 
 ;; Test for a simple AND expression
 (test
- ;; '(and x y)
- 99
+ '(and x y)
  '(and x y))
 
 ;; Test for De Morgan's laws
