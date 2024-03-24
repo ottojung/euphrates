@@ -73,7 +73,7 @@
 
             (define ret
               (if (list-singleton? new-args)
-                  (car args)
+                  (car new-args)
                   (make type new-args)))
 
             ;; (define ret (make type new-args))
