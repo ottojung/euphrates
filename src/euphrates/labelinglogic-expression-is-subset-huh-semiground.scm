@@ -35,7 +35,7 @@
       (or (and (equal? type-big 'and)
                (ands-subset? args-small args-big))
           (and (not (equal? type-big 'and))
-               (ands-subset? args-small (list args-big)))))
+               (ands-subset? args-small (list expr-big)))))
 
      ((equal? type-small '=)
       (or
