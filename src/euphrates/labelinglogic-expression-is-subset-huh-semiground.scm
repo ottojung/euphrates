@@ -18,9 +18,26 @@
     (define inner-smallrgs-small (labelinglogic:expression:args inner-small))
     (define inner-smallrgs-big (labelinglogic:expression:args inner-big))
 
+    (define (ands-subset? args-small args-big)
+      (list-and-map
+       (lambda (arg-big)
+         (list-or-map
+          (lambda (arg-small)
+            (loop arg-small arg-big))
+          args-small))
+       args-big))
+
     (cond
-     ((labelinglogic:expression:top? expr-big) #t)
+     ;; ((labelinglogic:expression:top? expr-big) #t)
      ((labelinglogic:expression:syntactic-equal? expr-small expr-big) #t)
+
+     ((equal? (equal? type-small 'and))
+      (and (equal? type-big 'and)
+           (ands-subset? expr-small expr-big)))
+
+     ((equal? type-small 'and)
+      (and (not (equal? type-big 'and))
+           (ands-subset? args-small (list expr-big))))
 
      ((equal? type-small '=)
       (or
