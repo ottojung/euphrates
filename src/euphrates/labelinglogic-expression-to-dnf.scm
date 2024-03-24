@@ -58,6 +58,7 @@
             (define current (car rest))
             (define follow (cdr rest))
             (define maybe (maybe-distribute prev current))
+            (debugs maybe)
             (if maybe
                 (cons maybe follow)
                 (cons prev (loop current follow)))))))
