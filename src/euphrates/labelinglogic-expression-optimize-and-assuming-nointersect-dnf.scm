@@ -22,6 +22,7 @@
   ;;
 
   (define _0 (labelinglogic:expression:check expr0))
+  (define original-type (labelinglogic:expression:type expr0))
   (define expr (labelinglogic:expression:sugarify expr0))
   (define type (labelinglogic:expression:type expr))
   (define args (labelinglogic:expression:args expr))
@@ -157,11 +158,11 @@
      remove-tops
      ))
 
-  (unless (equal? type 'and)
+  (unless (equal? original-type 'and)
     (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect-dnf"
             :type 'bad-expr-type
-            :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
-            :args (list type expr)))
+            :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a original-type))
+            :args (list original-type expr0)))
 
   (for-each check-type args)
 
