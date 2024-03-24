@@ -48,12 +48,12 @@
 
   (debugs dnf)
 
-  (exit 1)
-
   (define dnf-flat
-    (labelinglogic:expression:sugarify expr))
+    (labelinglogic:expression:sugarify dnf))
 
   (debugs dnf-flat)
+
+  (exit 1)
 
   (define dnf-wrapped
     (if (equal? 'or (labelinglogic:expression:type dnf-flat))
