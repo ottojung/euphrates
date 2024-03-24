@@ -119,8 +119,6 @@
     (define inner-type-b (labelinglogic:expression:type inner-b))
     (define inner-args-a (labelinglogic:expression:args inner-a))
     (define inner-args-b (labelinglogic:expression:args inner-b))
-    (define inner-tuple-a? (equal? 'tuple inner-type-a))
-    (define inner-tuple-b? (equal? 'tuple inner-type-b))
 
     (or
      (labelinglogic:expression:top? expr-b)
