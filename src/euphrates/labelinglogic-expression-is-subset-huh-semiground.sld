@@ -18,9 +18,6 @@
             labelinglogic-expression-syntactic-equal-huh)
           labelinglogic:expression:syntactic-equal?))
   (import
-    (only (euphrates labelinglogic-expression-top-huh)
-          labelinglogic:expression:top?))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
