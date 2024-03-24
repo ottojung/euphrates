@@ -545,13 +545,13 @@
 
 ;; Case with '((tuple))'
 (assert-throw
- 'expression-type-error
+ 'unknown-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '((tuple))))
 
 ;; Complex case with '((tuple))' and '((or))'
 (assert-throw
- 'expression-type-error
+ 'unknown-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '((tuple) (or))))
 
