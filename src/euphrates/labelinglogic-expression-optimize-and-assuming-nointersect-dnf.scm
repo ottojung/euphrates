@@ -137,11 +137,18 @@
          type (list labelinglogic:expression:bottom))
         expr))
 
+  (define (remove-tops expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (define new-args (filter (negate labelinglogic:expression:top?) args))
+    (labelinglogic:expression:make type new-args))
+
   (define optimize
     (compose
      consume-subsets
      handle-nulls
      explode-bottom
+     remove-tops
      ))
 
   (unless (equal? type 'and)
