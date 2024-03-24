@@ -288,7 +288,7 @@
 
 ;; Optimizing tuples with the same expressions
 (assert=
- '(and (tuple (= 1)))
+ '(and (= 1))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple (= 1)) (tuple (= 1)))))
 
