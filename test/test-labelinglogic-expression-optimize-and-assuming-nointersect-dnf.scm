@@ -507,6 +507,12 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (and) (and) (and))))
 
+;; Case with bottom. [1]
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+  '(and (and) (or) (and) (and))))
+
 (assert-throw
  'bad-expr-type
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
