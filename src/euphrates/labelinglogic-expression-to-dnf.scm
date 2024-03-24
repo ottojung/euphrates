@@ -61,35 +61,6 @@
     (cond
      ((equal? type 'or) (make type (map loop args)))
 
-     ;; ((equal? type 'and)
-     ;;  (if (null? args) expr
-     ;;      (let ()
-     ;;        (define args* (map loop args))
-     ;;        (define c (car args*))
-     ;;        (define rest (cdr args*))
-     ;;        (if (null? rest) expr
-     ;;            (let ()
-     ;;              (define next (car rest))
-     ;;              (define next-type (labelinglogic:expression:type next))
-     ;;              (define next-args (labelinglogic:expression:args next))
-     ;;              (define c-type (labelinglogic:expression:type c))
-     ;;              (define c-args (labelinglogic:expression:args c))
-     ;;              (cond
-     ;;               ((equal? next-type 'or)
-     ;;                (loop
-     ;;                 (make 'or
-     ;;                   (map
-     ;;                    (lambda (x) (make 'and (list c x)))
-     ;;                    next-args))))
-     ;;               ((equal? c-type 'or)
-     ;;                (loop
-     ;;                 (make 'or
-     ;;                   (map
-     ;;                    (lambda (x) (make 'and (list x next)))
-     ;;                    c-args))))
-     ;;               (else
-     ;;                (make type args*))))))))
-
      ((equal? type 'and)
       (let ()
         (define args* (map loop args))
@@ -101,27 +72,6 @@
             (define ret (make type (distribute-args args*)))
             (debugs ret)
             ret)))))
-
-                  ;; (define next (car rest))
-                  ;; (define next-type (labelinglogic:expression:type next))
-                  ;; (define next-args (labelinglogic:expression:args next))
-                  ;; (define c-type (labelinglogic:expression:type c))
-                  ;; (define c-args (labelinglogic:expression:args c))
-                  ;; (cond
-                  ;;  ((equal? next-type 'or)
-                  ;;   (loop
-                  ;;    (make 'or
-                  ;;      (map
-                  ;;       (lambda (x) (make 'and (list c x)))
-                  ;;       next-args))))
-                  ;;  ((equal? c-type 'or)
-                  ;;   (loop
-                  ;;    (make 'or
-                  ;;      (map
-                  ;;       (lambda (x) (make 'and (list x next)))
-                  ;;       c-args))))
-                  ;;  (else
-                  ;;   (make type args*))))))))
 
      ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
 
