@@ -1,4 +1,10 @@
 
+;; Case with constant.
+(assert=
+ '(= 3)
+ (labelinglogic:expression:optimize/assuming-nointersect-dnf
+  '(and (and) (= 3))))
+
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
