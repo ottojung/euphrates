@@ -23,6 +23,12 @@
   '(and (or (= 2) (= 3) (= 4))
         (or (= 5) (r7rs odd?) (= 7)))))
 
+(assert=
+ '(= 3)
+ (labelinglogic:expression:optimize/assuming-nointersect
+  '(and (or (= 2) (= 3) (= 4))
+        (or (= 5) (and (r7rs odd?) (not (= 9))) (= 7)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Cases from labelinglogic:expression:optimize/and-assuming-nointersect-dnf
