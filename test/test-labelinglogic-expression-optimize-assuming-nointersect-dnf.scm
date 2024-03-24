@@ -7,6 +7,12 @@
 (labelinglogic:expression:optimize/assuming-nointersect-dnf
  812312)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Cases from labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+;;
+
 (assert=
  '(and)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
