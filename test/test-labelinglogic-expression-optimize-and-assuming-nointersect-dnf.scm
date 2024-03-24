@@ -407,7 +407,7 @@
 
 ;; Case with 'not and negated 'tuple
 (assert=
- '(or)
+ '(and (not (= 2)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (not (= 2)) (not (tuple (= 2))))))
 
