@@ -94,6 +94,11 @@
       (and x y))
  '(and (or z w x) y))
 
+;; Test non-binary [3]
+(test
+ 7777
+ '(and (or z w) y (or k u)))
+
 ;; Test that involves all operators in a more complex expression
 (test
  '(or (or (and (and a (not a)) (not b))
