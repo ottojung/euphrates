@@ -560,3 +560,6 @@
  'expression-type-error
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (tuple 1 2))))
+
+(labelinglogic:expression:optimize/assuming-nointersect-dnf
+ '(and (tuple 1 2)))
