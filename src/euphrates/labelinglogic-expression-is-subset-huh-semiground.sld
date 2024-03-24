@@ -21,6 +21,9 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates list-and-map) list-and-map))
+  (import (only (euphrates list-zip) list-zip))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -30,11 +33,14 @@
           and
           begin
           car
+          cdr
           cond
           define
           else
           equal?
           if
+          lambda
+          length
           let
           list
           not

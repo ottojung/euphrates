@@ -63,6 +63,13 @@
            (equal? inner-type-big '=)
            (loop inner-big inner-small)))
 
+     ((equal? type-small 'tuple)
+      (and (equal? type-big 'tuple)
+           (equal? (length args-small) (length args-big))
+           (list-and-map
+            (lambda (p) (loop (car p) (cdr p)))
+            (list-zip args-small args-big))))
+
      (else
       (raisu* :from "labelinglogic:expression:is-subset?/semiground"
               :type 'bad-sub-expr-type
