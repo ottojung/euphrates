@@ -70,6 +70,7 @@
          (else
           (let ()
             (define new-args (distribute-args args*))
+
             ;; (if (list-singleton? new-args)
             ;;     (car args)
             ;;     (make type new-args)))))))
