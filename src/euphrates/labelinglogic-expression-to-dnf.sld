@@ -23,7 +23,6 @@
     (only (scheme base)
           =
           and
-          append
           begin
           car
           cdr
