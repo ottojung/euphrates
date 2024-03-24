@@ -44,10 +44,10 @@
 
     (cond
      ((equal? type-2 'or)
-      (cons uniq (distribute expr-1 expr-2)))
+      (distribute #t expr-1 expr-2))
      ((equal? type-1 'or)
-      (cons uniq (distribute expr-2 expr-1)))
-     
+      (distribute #f expr-2 expr-1))
+     (else #f)))
 
   (let loop ((expr expr*))
     (define type (labelinglogic:expression:type expr))
