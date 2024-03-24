@@ -18,7 +18,7 @@
     (debugs expr-2)
 
     (define d-type
-      (if to-right? type-2 type-1))
+      (if to-right? type-1 type-2))
 
     (define d-args
       (if to-right? args-2 args-1))
