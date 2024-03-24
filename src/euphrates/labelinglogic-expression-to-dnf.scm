@@ -51,7 +51,15 @@
          ((null? (cdr args*)) expr)
          (else
           (let ()
-            
+            (define windows
+              (list-windows 2 args*))
+
+            (define new-windows
+              (map maybe-distribute windows))
+
+            (if (= (length windows) (length new-windows)) expr
+                (let ()
+                  0)))))))
 
                   ;; (define next (car rest))
                   ;; (define next-type (labelinglogic:expression:type next))
