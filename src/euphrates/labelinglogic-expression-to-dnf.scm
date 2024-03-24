@@ -8,9 +8,6 @@
   (define (make type args)
     (labelinglogic:expression:make type args))
 
-  (define uniq
-    (make-unique))
-
   (define (distribute to-right? expr-1 expr-2)
     (define type-1 (labelinglogic:expression:type expr-1))
     (define args-1 (labelinglogic:expression:args expr-1))

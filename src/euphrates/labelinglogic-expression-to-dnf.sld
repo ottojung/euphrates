@@ -16,8 +16,6 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
-  (import
-    (only (euphrates make-unique) make-unique))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
