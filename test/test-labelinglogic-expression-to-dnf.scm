@@ -60,15 +60,15 @@
  '(or (and a c) (and (not b) c) (and a d) (and (not b) d))
  '(and (or a (not b)) (or c d)))
 
-;; Test that involves all operators in a more complex expression
-(test
- '(or (and a (not a) (not b)) (and a b (not b)) (and a (not a) b) (and a b b))
- '(and a (or (not a) b) (or (not b) b)))
-
 ;; Test non-binary
 (test
  '(or (and x (not y) x) (and x (not y) y))
  '(and x (not y) (or x y)))
+
+;; Test that involves all operators in a more complex expression
+(test
+ '(or (and a (not a) (not b)) (and a b (not b)) (and a (not a) b) (and a b b))
+ '(and a (or (not a) b) (or (not b) b)))
 
 (test
  '(and (= 0) (= 0) (= 0) (= 0) (= 0))
