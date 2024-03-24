@@ -413,7 +413,7 @@
 
 ;; Case with negated 'tuple and 'r7rs
 (assert=
- '(or)
+ '(and (not (= 1)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (not (tuple (= 1))) (r7rs odd?))))
 
