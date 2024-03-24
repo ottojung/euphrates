@@ -44,7 +44,6 @@
           list-idempotent))
   (import
     (only (euphrates list-or-map) list-or-map))
-  (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -65,9 +64,6 @@
           or
           quote
           unless))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
