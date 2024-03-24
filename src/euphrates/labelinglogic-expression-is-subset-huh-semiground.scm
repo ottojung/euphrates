@@ -32,12 +32,10 @@
      ((labelinglogic:expression:syntactic-equal? expr-small expr-big) #t)
 
      ((equal? (equal? type-small 'and))
-      (and (equal? type-big 'and)
-           (ands-subset? expr-small expr-big)))
-
-     ((equal? type-small 'and)
-      (and (not (equal? type-big 'and))
-           (ands-subset? args-small (list expr-big))))
+      (or (and (equal? type-big 'and)
+               (ands-subset? expr-small expr-big))
+          (and (not (equal? type-big 'and))
+               (ands-subset? args-small (list expr-big)))))
 
      ((equal? type-small '=)
       (or
