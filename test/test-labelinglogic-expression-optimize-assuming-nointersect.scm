@@ -36,7 +36,8 @@
        (and (r7rs odd?) (not (= 9))))))
 
 (assert=
- '(and (r7rs odd?) (not (= 9)))
+ '(or (= 3)
+      (and (r7rs odd?) (not (= 9))))
  (labelinglogic:expression:optimize/assuming-nointersect
   '(or (= 3)
        (and (r7rs odd?) (not (= 9))))))
