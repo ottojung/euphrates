@@ -27,6 +27,9 @@
           args-small))
        args-big))
 
+    (debugs expr-small)
+    (debugs expr-big)
+
     (cond
      ;; ((labelinglogic:expression:top? expr-big) #t)
      ((labelinglogic:expression:syntactic-equal? expr-small expr-big) #t)
