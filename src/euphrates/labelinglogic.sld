@@ -22,10 +22,6 @@
           labelinglogic:model:latticize-ands-assuming-nointersect-dnf))
   (import
     (only (euphrates
-            labelinglogic-model-optimize-ands-assuming-nointersect-dnf)
-          labelinglogic:model:optimize-ands-assuming-nointersect-dnf))
-  (import
-    (only (euphrates
             labelinglogic-model-reduce-to-bindings)
           labelinglogic:model:reduce-to-bindings))
   (import
