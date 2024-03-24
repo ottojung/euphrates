@@ -26,11 +26,11 @@
        (raisu* :from "labelinglogic:expression:equal?/syntactic/order-independent"
                :type 'bad-sub-expr-type
                :message (stringf "Expression type ~s not permitted here." (~a type-small))
-               :args (list type-small expr-small)))
+               :args (list expr-1 expr-2)))
 
       (else
        (raisu* :from "labelinglogic:expression:equal?/syntactic/order-independent"
                :type 'unknown-expr-type
                :message (stringf "Expression type ~s not recognized"
                                  (~a type))
-               :args (list type expr)))))))
+               :args (list type-1 expr-1 expr-2)))))))
