@@ -188,7 +188,7 @@
 (assert=
  '(and (not (= 2)) (r7rs even?))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (r7rs even?) (not (= 2)))))
+  '(and (not (= 2)) (r7rs even?))))
 
 ;; Combining 'not =' and 'r7rs [3]
 (assert=
