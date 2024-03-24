@@ -21,8 +21,8 @@
              (equal? type-big 'and)
              (ands-subset? expr-small expr-bigig))
 
-        (and (not (equal? type-small 'and))
-             (equal? type-big 'and)
+        (and (equal? type-small 'and)
+             (not (equal? type-big 'and))
              0)))
 
   (define (consume-subsets expr)
