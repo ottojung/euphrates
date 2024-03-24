@@ -1,9 +1,9 @@
 
 (assert=
  187231
- '(and (or (= 2) (= 3)) (= 4)
-       (or (= 5) (= 6)) (= 7)))
-
+ (labelinglogic:expression:optimize/assuming-nointersect-dnf
+  '(and (or (= 2) (= 3)) (= 4)
+        (or (= 5) (= 6)) (= 7))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
