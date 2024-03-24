@@ -109,64 +109,6 @@
         (same-type-nointersect? expr-a expr-b)
         (different-type-nointersect? expr-a expr-b)))
 
-  (define (is-subset? expr-small expr-big)
-    (define type-small (labelinglogic:expression:type expr-small))
-    (define type-big (labelinglogic:expression:type expr-big))
-    (define args-small (labelinglogic:expression:args expr-small))
-    (define args-big (labelinglogic:expression:args expr-big))
-    (define negated-small? (equal? 'not type-small))
-    (define negated-big? (equal? 'not type-big))
-    (define inner-small (if negated-small? (car args-small) expr-small))
-    (define inner-big (if negated-big? (car args-big) expr-big))
-    (define inner-type-small (labelinglogic:expression:type inner-small))
-    (define inner-type-big (labelinglogic:expression:type inner-big))
-    (define inner-smallrgs-small (labelinglogic:expression:args inner-small))
-    (define inner-smallrgs-big (labelinglogic:expression:args inner-big))
-
-    (or
-     (labelinglogic:expression:top? expr-big)
-
-     (labelinglogic:expression:syntactic-equal? expr-small expr-big)
-
-     (and (equal? type-small '=)
-          (equal? type-big 'r7rs)
-          (labelinglogic:expression:evaluate/r7rs
-           expr-big (car args-small)))
-
-     (and (equal? type-small '=)
-          (equal? type-big 'not)
-          (equal? inner-type-big 'r7rs)
-          (not
-           (labelinglogic:expression:evaluate/r7rs
-            inner-big (car args-small))))
-
-     (and (equal? type-small 'r7rs)
-          (equal? type-big 'not)
-          (equal? inner-type-big '=)
-          (not
-           (labelinglogic:expression:evaluate/r7rs
-            expr-small (car inner-smallrgs-big))))
-
-     (and (equal? type-small '=)
-          (equal? type-big 'not)
-          (equal? inner-type-big '=)
-          (not (equal? (car inner-smallrgs-small)
-                       (car inner-smallrgs-big))))
-
-     (and (equal? type-small 'r7rs)
-          (equal? type-big 'not)
-          (equal? inner-type-big 'r7rs)
-          (not (equal? (car inner-smallrgs-small)
-                       (car inner-smallrgs-big))))
-
-     (and (equal? type-big 'not)
-          (equal? inner-type-big '=)
-          (equal? type-small 'not)
-          (equal? inner-type-small 'r7rs)
-          (is-subset? inner-big inner-small))
-
-     ))
-
   (define (explode-bottom expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
