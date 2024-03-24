@@ -2,10 +2,7 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:optimize/assuming-nointersect-dnf expr)
-  (define (ands-subset? expr-small expr-big)
-    (define args-small (labelinglogic:expression:args expr-small))
-    (define args-big (labelinglogic:expression:args expr-bigig))
-
+  (define (ands-subset? args-small args-big)
     (list-and-map
      (lambda (arg-big)
        (list-or-map
@@ -14,20 +11,21 @@
         args-small))
      args-big))
 
-  (define (is-subset? expr-small expr-bigig)
+  (define (is-subset? expr-small expr-big)
     (define type-small (labelinglogic:expression:type expr-small))
-    (define type-big (labelinglogic:expression:type expr-bigig))
+    (define type-big (labelinglogic:expression:type expr-big))
     (define args-small (labelinglogic:expression:args expr-small))
-    (define args-big (labelinglogic:expression:args expr-bigig))
+    (define args-big (labelinglogic:expression:args expr-big))
 
     (or (and (equal? type-small 'and)
              (equal? type-big 'and)
-             (ands-subset? expr-small expr-bigig))
+             (ands-subset? expr-small expr-big))
 
         (and (equal? type-small 'and)
              (not (equal? type-big 'and))
-             
-             0)))
+             (ands-subset? args-small (list expr-big)))
+
+        TODO))
 
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
