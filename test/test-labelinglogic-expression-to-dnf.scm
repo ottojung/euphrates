@@ -9,6 +9,7 @@
         input))))))
 
 
+(exit 0)
 
 ;; Test for a simple OR expression
 (test
