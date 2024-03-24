@@ -17,9 +17,6 @@
     (debugs expr-1)
     (debugs expr-2)
 
-    (define d-type
-      (if to-right? type-1 type-2))
-
     (define d-args
       (if to-right? args-2 args-1))
 
@@ -27,8 +24,8 @@
       (map
        (lambda (inner)
          (if to-right?
-             (make d-type (list expr-1 inner))
-             (make d-type (list inner expr-2))))
+             (make 'and (list expr-1 inner))
+             (make 'and (list inner expr-2))))
        d-args))
 
     new-args)
