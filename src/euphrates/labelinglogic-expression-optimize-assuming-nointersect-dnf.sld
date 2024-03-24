@@ -8,6 +8,7 @@
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
   (import (only (euphrates compose) compose))
+  (import (only (euphrates debug) debug))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
