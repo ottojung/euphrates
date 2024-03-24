@@ -164,6 +164,10 @@
             :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a original-type))
             :args (list original-type expr0)))
 
-  (for-each check-type args)
-
-  (apply-until-fixpoint optimize expr))
+  (if (equal? type 'and)
+      (let ()
+        (for-each check-type args)
+        (apply-until-fixpoint optimize expr))
+      (let ()
+        (check-type expr)
+        expr)))

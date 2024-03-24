@@ -67,6 +67,7 @@
           equal?
           for-each
           if
+          let
           list
           not
           or
