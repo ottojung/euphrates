@@ -28,10 +28,10 @@
 
     (define new-args
       (map
-       (lambda (other)
+       (lambda (inner)
          (if to-right?
-             (make d-type expr-1 other)
-             (make d-type other expr-2)))
+             (make d-type expr-1 inner)
+             (make d-type inner expr-2)))
        d-args))
 
     (make result-type new-args))
