@@ -14,9 +14,6 @@
     (define type-2 (labelinglogic:expression:type expr-2))
     (define args-2 (labelinglogic:expression:args expr-2))
 
-    (debugs expr-1)
-    (debugs expr-2)
-
     (define d-args
       (if to-right? args-2 args-1))
 
