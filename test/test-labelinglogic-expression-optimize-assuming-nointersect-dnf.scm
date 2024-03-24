@@ -500,7 +500,7 @@
 
 ;; Case with top. [1]
 (assert=
- '(and (= 3))
+ '(= 3)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (and) (= 3))))
 
