@@ -560,6 +560,6 @@
 
 ;; Bad tuples.
 (assert-throw
- 'expression-type-error
+ 'bad-sub-expr-type
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (tuple 1 2))))
