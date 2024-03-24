@@ -539,7 +539,7 @@
 
 ;; Case with '((or))'
 (assert-throw
- 'expression-type-error
+ 'unknown-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '((or))))
 
