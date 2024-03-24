@@ -21,11 +21,11 @@
   (define bindings-model
     (labelinglogic:model:reduce-to-bindings inlined-model bindings))
 
-  (define simple-dnf-model
+  (define opt-dnf-model
     (labelinglogic:model:optimize/assuming-nointersect bindings-model))
 
   (define latticised
-    (labelinglogic:model:latticize-ands-assuming-nointersect-dnf simple-dnf-model))
+    (labelinglogic:model:latticize-ands-assuming-nointersect-dnf opt-dnf-model))
 
   (define ret-model
     latticised)
