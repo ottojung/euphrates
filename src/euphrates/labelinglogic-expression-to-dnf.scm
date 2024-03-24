@@ -104,7 +104,10 @@
          ((null? args*) expr)
          ((null? (cdr args*)) expr)
          (else
-          (make type (distribute-args args*))))))
+          (let ()
+            (define ret (make type (distribute-args args*)))
+            (debugs ret)
+            ret)))))
 
                   ;; (define next (car rest))
                   ;; (define next-type (labelinglogic:expression:type next))

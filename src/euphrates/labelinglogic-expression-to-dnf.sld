@@ -2,6 +2,7 @@
 (define-library
   (euphrates labelinglogic-expression-to-dnf)
   (export labelinglogic:expression:to-dnf)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
