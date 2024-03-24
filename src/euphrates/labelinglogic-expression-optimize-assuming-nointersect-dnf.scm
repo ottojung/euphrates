@@ -96,6 +96,9 @@
   (define dnf*-args
     (labelinglogic:expression:args dnf*-wrapped))
 
+  (define _41328390
+    (for-each check-type dnf*-args))
+
   (debugs dnf*-args)
 
   (define (maybe-optimize-and expr)
