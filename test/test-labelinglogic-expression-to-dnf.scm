@@ -9,67 +9,66 @@
         input))))))
 
 
-(test
- '(or (and x (not y) x) (and x (not y) y))
- '(and x (not y) (or x y)))
 
-
-;;;;;
-
-; Test for a simple OR expression
+;; Test for a simple OR expression
 (test
  '(or x y)
  '(or x y))
 
-; Test for a simple AND expression
+;; Test for a simple AND expression
 (test
  '(and x y)
  '(and x y))
 
-; Test for De Morgan's laws
+;; Test for De Morgan's laws
 (test
  '(or (not x) (not y))
  '(not (and x y)))
 
-; Test for double negation
+;; Test for double negation
 (test
  'x
  '(not (not x)))
 
-; Test for distributive law conversion to DNF
+;; Test for distributive law conversion to DNF
 (test
  '(or a (and b c))
  '(or a (and b c)))
 
-; Test for distributive law with multiple ANDs
+;; Test for distributive law with multiple ANDs
 (test
  '(or a (and b c) (and d e))
  '(or a (and b c) (and d e)))
 
-; Test for distributive law with nested ORs inside ANDs
+;; Test for distributive law with nested ORs inside ANDs
 (test
  '(or (and a c) (and b c) (and a d) (and b d))
  '(and (or a b) (or c d)))
 
-; Test for distributive law with nested ANDs inside ORs
+;; Test for distributive law with nested ANDs inside ORs
 (test
  '(or (and a b) (and c d))
  '(or (and a b) (and c d)))
 
-; Test with nested NOT expressions
+;; Test with nested NOT expressions
 (test
  '(and x (not y))
  '(not (or (not x) y)))
 
-; Test with nested ANDs and ORs
+;; Test with nested ANDs and ORs
 (test
  '(or (and a c) (and (not b) c) (and a d) (and (not b) d))
  '(and (or a (not b)) (or c d)))
 
-; Test that involves all operators in a more complex expression
+;; Test that involves all operators in a more complex expression
 (test
  '(or (and a (not a) (not b)) (and a b (not b)) (and a (not a) b) (and a b b))
  '(and a (or (not a) b) (or (not b) b)))
+
+;; Test non-binary
+(test
+ '(or (and x (not y) x) (and x (not y) y))
+ '(and x (not y) (or x y)))
 
 (test
  '(and (= 0) (= 0) (= 0) (= 0) (= 0))
@@ -79,14 +78,14 @@
  '(and (= 0) (= 0) (= 0) (= 0) (= 0))
  '(or (and (= 0) (= 0) (= 0) (= 0) (= 0))))
 
-; Test constant.
+;; Test constant.
 (test 'x 'x)
 
-; Test negation.
+;; Test negation.
 (test '(not x) '(not x))
 
-; Test negations 1.
+;; Test negations 1.
 (test 'x '(not (not x)))
 
-; Test negations 2.
+;; Test negations 2.
 (test '(not x) '(not (not (not x))))
