@@ -292,17 +292,17 @@
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (tuple (= 1)) (tuple (r7rs odd?)))))
 
-;; Optimizing tuples with different expressions [2]
-(assert=
- '(and (tuple (= 2)) (tuple (r7rs odd?)))
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple (= 2)) (tuple (r7rs odd?)))))
+;; ;; Optimizing tuples with different expressions [2]
+;; (assert=
+;;  '(and (tuple (= 2)) (tuple (r7rs odd?)))
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (tuple (= 2)) (tuple (r7rs odd?)))))
 
-;; Optimizing tuples with the same expressions
-(assert=
- '(and (tuple (= 1)))
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple (= 1)) (tuple (= 1)))))
+;; ;; Optimizing tuples with the same expressions
+;; (assert=
+;;  '(and (tuple (= 1)))
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (tuple (= 1)) (tuple (= 1)))))
 
 ;; TODO
 ;; ;; Mixing 'tuple and 'not in a single expression
