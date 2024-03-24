@@ -32,8 +32,14 @@
 (assert=
  '(= 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(or (= 3)
+  '(or (and (= 3) (not (= 5)))
        (and (r7rs odd?) (not (= 9))))))
+
+;; (assert=
+;;  '(= 3)
+;;  (labelinglogic:expression:optimize/assuming-nointersect
+;;   '(or (= 3)
+;;        (and (r7rs odd?) (not (= 9))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
