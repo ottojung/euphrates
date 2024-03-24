@@ -162,8 +162,7 @@
           (equal? inner-type-a '=)
           (equal? type-b 'not)
           (equal? inner-type-b 'r7rs)
-          (is-subset? (car inner-args-a)
-                      (car inner-args-b)))
+          (is-subset? inner-a inner-b))
 
      ))
 
