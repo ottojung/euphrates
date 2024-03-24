@@ -559,7 +559,7 @@
 
 ;; Case with top number
 (assert-throw
- 'bad-expr-type
+ 'bad-sub-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf 812312))
 
 ;; Case with '((or))'
