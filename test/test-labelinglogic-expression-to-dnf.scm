@@ -83,8 +83,7 @@
 
 ;; Test non-binary [2]
 (test
- '(or (and x (and y z))
-      (and x (and y w)))
+ 0
  '(and (or z w) x y))
 
 ;; Test that involves all operators in a more complex expression
