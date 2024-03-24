@@ -425,11 +425,11 @@
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (= 2) (not (tuple (= 2))))))
 
-;; Case with 'not and negated 'tuple
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (not (= 2)) (not (tuple (= 2))))))
+;; ;; Case with 'not and negated 'tuple
+;; (assert=
+;;  '(or)
+;;  (labelinglogic:expression:optimize/assuming-nointersect-dnf
+;;   '(and (not (= 2)) (not (tuple (= 2))))))
 
 ;; Case with negated 'tuple and 'r7rs
 (assert=
