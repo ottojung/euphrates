@@ -9,7 +9,9 @@
     (cond
      ((member type (list 'or 'and 'xor 'tuple))
       (let ()
-        (define args* (labelinglogic:expression:args expr))
+        (define args*
+          (map loop (labelinglogic:expression:args expr)))
+
         (if (list-singleton? args*)
             (car args*)
             (labelinglogic:expression:make type args*))))
