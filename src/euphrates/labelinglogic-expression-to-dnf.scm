@@ -44,12 +44,12 @@
      ;;                (make type args*))))))))
 
      ((equal? type 'and)
-      (if (null? args) expr
-          (let ()
-            (define args* (map loop args))
-            (if (null? (cdr args*)) expr
-                (let ()
-                  (
+      (cond
+       ((null? args) expr)
+       ((null? (cdr args)) expr)
+       (else
+        (let ()
+          (define args* (map loop args))
 
                   ;; (define next (car rest))
                   ;; (define next-type (labelinglogic:expression:type next))
