@@ -9,8 +9,6 @@
         input))))))
 
 
-(exit 0)
-
 ;; Test for a simple OR expression
 (test
  '(or x y)
@@ -20,6 +18,8 @@
 (test
  '(and x y)
  '(and x y))
+
+(exit 0)
 
 ;; Test for De Morgan's laws
 (test
