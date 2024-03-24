@@ -3,7 +3,7 @@
 (assert=
  '(= 3)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (and) (= 3))))
+  '(= 3)))
 
 (assert=
  '(or)
