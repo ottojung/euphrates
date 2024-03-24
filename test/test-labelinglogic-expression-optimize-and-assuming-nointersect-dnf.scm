@@ -495,11 +495,17 @@
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (not (= 3)) (and) (not (= 5)))))
 
-;; Case with top. [4]
+;; Case with top. [5]
 (assert=
  '(and)
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
   '(and (and))))
+
+;; Case with top. [5]
+(assert=
+ '(and)
+ (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+  '(and (and) (and) (and))))
 
 (assert-throw
  'bad-expr-type
