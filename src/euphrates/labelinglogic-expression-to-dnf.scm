@@ -50,8 +50,8 @@
      (else #f)))
 
   (define (distribute-args args)
-    (let loop ((prev (car args*))
-               (rest (cdr args*)))
+    (let loop ((prev (car args))
+               (rest (cdr args)))
       (if (null? rest) '()
           (let ()
             (define current (car rest))
