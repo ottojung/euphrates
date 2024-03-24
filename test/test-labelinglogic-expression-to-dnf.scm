@@ -18,6 +18,11 @@
  '(and x y)
  '(and x y))
 
+;; Simple or + and.
+(test
+ 8888
+ '(and x (or y z)))
+
 ;; Test for De Morgan's laws [1]
 (test
  '(or (not x) (not y))
