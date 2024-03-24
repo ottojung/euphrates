@@ -562,5 +562,7 @@
   '((tuple) (or))))
 
 ;; Bad tuples.
+(assert-throw
+ 'bad-sub-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
-  '(and (tuple 1 2)))
+  '(and (tuple 1 2))))
