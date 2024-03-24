@@ -21,7 +21,7 @@
       (if to-right? type-2 type-1))
 
     (define d-args
-      (if to-right? expr-2 expr-1))
+      (if to-right? args-2 args-1))
 
     (define new-args
       (map
