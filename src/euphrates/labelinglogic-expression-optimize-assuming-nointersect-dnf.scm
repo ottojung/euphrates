@@ -4,6 +4,25 @@
 (define (labelinglogic:expression:optimize/assuming-nointersect-dnf expr)
   (debug "-------------------------------------------")
 
+  (define (check-type expr)
+    (define _531 (labelinglogic:expression:check expr))
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
+    (unless (or (equal? type '=)
+                (equal? type 'r7rs)
+                (and (equal? type 'not)
+                     (for-each check-type args))
+                (and (equal? type 'tuple)
+                     (for-each check-type args))
+                (labelinglogic:expression:bottom? expr)
+                (labelinglogic:expression:top? expr))
+
+      (raisu* :from "labelinglogic:expression:optimize/and-assuming-nointersect-dnf"
+              :type 'bad-sub-expr-type
+              :message (stringf "Expression type ~s not permitted here." (~a type))
+              :args (list type expr))))
+
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
