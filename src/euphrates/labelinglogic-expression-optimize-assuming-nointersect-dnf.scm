@@ -15,6 +15,8 @@
                      (for-each check-type args))
                 (and (equal? type 'tuple)
                      (for-each check-type args))
+                (and (equal? type 'and)
+                     (for-each check-type args))
                 (labelinglogic:expression:bottom? expr)
                 (labelinglogic:expression:top? expr))
 
