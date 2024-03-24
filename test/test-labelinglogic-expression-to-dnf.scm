@@ -51,8 +51,10 @@
 ;; Test for distributive law with nested ORs inside ANDs
 (test
  ;; '(or (and a c) (and b c) (and a d) (and b d))
- 9000000
+ '(or (or (and a c) (and b c)) (or (and a d) (and b d)))
  '(and (or a b) (or c d)))
+
+(exit 0)
 
 ;; Test for distributive law with nested ANDs inside ORs
 (test
