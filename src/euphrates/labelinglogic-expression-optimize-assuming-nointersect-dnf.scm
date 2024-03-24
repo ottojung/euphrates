@@ -7,8 +7,7 @@
      (lambda (sub-expr-a)
        (list-or-map
         (lambda (sub-expr-b)
-          (labelinglogic:expression:syntactic-equal?
-           sub-expr-a sub-expr-b))
+          (is-subset? sub-expr-a sub-expr-b))
         expr-b))
      expr-a))
 
@@ -24,7 +23,7 @@
 
         (and (not (equal? type-a 'and))
              (equal? type-b 'and)
-             (
+             0)))
 
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))

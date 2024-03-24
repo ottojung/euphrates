@@ -26,10 +26,6 @@
             labelinglogic-expression-optimize-singletons)
           labelinglogic:expression:optimize/singletons))
   (import
-    (only (euphrates
-            labelinglogic-expression-syntactic-equal-huh)
-          labelinglogic:expression:syntactic-equal?))
-  (import
     (only (euphrates labelinglogic-expression-to-dnf)
           labelinglogic:expression:to-dnf))
   (import
@@ -45,6 +41,7 @@
   (import (only (euphrates negate) negate))
   (import
     (only (scheme base)
+          and
           begin
           cond
           define
@@ -54,6 +51,7 @@
           lambda
           list
           map
+          not
           or
           quote))
   (cond-expand
