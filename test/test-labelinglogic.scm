@@ -185,8 +185,6 @@
                (= #\3)))
      (t_3 (= #\3)))
 
-   99999
-
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
          model bindings))))
