@@ -59,7 +59,7 @@
             (define maybe (maybe-distribute prev current))
             (if maybe
                 (cons maybe follow)
-                (cons current (loop current follow)))))))
+                (cons prev (loop current follow)))))))
 
   (let loop ((expr expr*))
     (define type (labelinglogic:expression:type expr))
