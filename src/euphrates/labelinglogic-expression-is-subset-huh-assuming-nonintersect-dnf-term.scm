@@ -38,6 +38,9 @@
           (ands-subset? args-small args-big)
           (ands-subset? args-small (list expr-big))))
 
+     ((equal? type-big 'and)
+      (ands-subset? (list expr-small) args-big))
+
      ((equal? type-small '=)
       (or
        (and (equal? type-small '=)
