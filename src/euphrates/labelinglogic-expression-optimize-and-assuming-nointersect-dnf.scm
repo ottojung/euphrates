@@ -135,9 +135,6 @@
      (and (equal? type-a '=)
           (equal? type-b 'not)
           (equal? inner-type-b 'r7rs)
-          ;; #t)
-          ;; (not
-          ;;  (is-subset? inner-b expr-a)))
           (not
            (labelinglogic:expression:evaluate/r7rs
             inner-b (car args-a))))
