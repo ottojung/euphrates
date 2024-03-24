@@ -81,11 +81,11 @@
       (and x (and y w)))
  '(and x y (or z w)))
 
-;; Test non-binary [1]
+;; Test non-binary [2]
 (test
  '(or (and x (and y z))
       (and x (and y w)))
- '(and x y (or z w)))
+ '(and (or z w) x y))
 
 ;; Test that involves all operators in a more complex expression
 (test
