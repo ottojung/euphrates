@@ -41,6 +41,8 @@
         (apply-until-fixpoint optimize-or/step expr)
         expr))
 
+  (debugs expr)
+
   (define dnf
     (labelinglogic:expression:to-dnf expr))
 
