@@ -3,13 +3,16 @@
 
 (define (labelinglogic:expression:optimize/assuming-nointersect-dnf expr)
   (define (ands-subset? expr-small expr-big)
+    (define args-small (labelinglogic:expression:args expr-small))
+    (define args-big (labelinglogic:expression:args expr-bigig))
+
     (list-and-map
      (lambda (sub-expr-big)
        (list-or-map
         (lambda (sub-expr-small)
           (is-subset? sub-expr-small sub-expr-big))
-        expr-small))
-     expr-big))
+        args-small))
+     args-big))
 
   (define (is-subset? expr-small expr-bigig)
     (define type-small (labelinglogic:expression:type expr-small))
@@ -23,6 +26,7 @@
 
         (and (equal? type-small 'and)
              (not (equal? type-big 'and))
+             
              0)))
 
   (define (consume-subsets expr)
