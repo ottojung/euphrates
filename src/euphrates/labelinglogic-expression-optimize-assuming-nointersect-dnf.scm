@@ -2,7 +2,7 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:optimize/assuming-nointersect-dnf expr)
-  (define (is-subset? expr-a expr-b)
+  (define (ands-subset? expr-a expr-b)
     (list-and-map
      (lambda (sub-expr-a)
        (list-or-map
@@ -11,6 +11,23 @@
            sub-expr-a sub-expr-b))
         expr-b))
      expr-a))
+
+  (define (is-subset? expr-a expr-b)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+    (define args-a (labelinglogic:expression:args expr-a))
+    (define args-b (labelinglogic:expression:args expr-b))
+
+    (or (labelinglogic:expression:syntactic-equal?
+         expr-a expr-b)
+
+        (and (equal? type-a 'and)
+             (equal? type-b 'and)
+             (ands-subset? expr-a expr-b))
+
+        (and (not (equal? type-a 'and))
+             (equal? type-b 'and)
+             (
 
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
