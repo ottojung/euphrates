@@ -30,7 +30,7 @@
         (or (= 5) (and (r7rs odd?) (not (= 9))) (= 7)))))
 
 (assert=
- '(= 3)
+ '(and (r7rs odd?) (not (= 9)))
  (labelinglogic:expression:optimize/assuming-nointersect
   '(or (and (= 3) (not (= 5)))
        (and (r7rs odd?) (not (= 9))))))
