@@ -129,3 +129,8 @@
 
 ;; Test negations 2.
 (test '(not x) '(not (not (not x))))
+
+;; Tuples + negation
+(test
+ 8271376912
+ (and (tuple (= 1)) (not (tuple (= 1)))))
