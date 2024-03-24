@@ -58,5 +58,4 @@
       (map labelinglogic:expression:optimize/and-assuming-nointersect-dnf
            dnf*-args))))
 
-  (labelinglogic:expression:optimize/singletons
-   simpl*))
+  (labelinglogic:expression:optimize/singletons simpl))
