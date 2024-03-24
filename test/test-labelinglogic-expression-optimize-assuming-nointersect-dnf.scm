@@ -16,7 +16,7 @@
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect-dnf
   '(and (or (= 2) (= 3)) (= 4)
-        (or (= 5) (= 6)) (= 7))))
+        (or (= 5) (= 2)) (= 7))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
