@@ -7,9 +7,6 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-check)
-          labelinglogic:expression:check))
-  (import
     (only (euphrates labelinglogic-expression-compile-r7rs)
           labelinglogic:expression:compile/r7rs))
   (import
@@ -20,6 +17,8 @@
   (import
     (only (euphrates list-length-geq-q)
           list-length=<?))
+  (import
+    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -34,7 +33,7 @@
           define
           else
           equal?
-          for-each
+          let
           list
           list?
           not
