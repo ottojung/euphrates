@@ -5,6 +5,9 @@
   (define error
     (labelinglogic:expression:check/nothrow x))
 
+  (debugs x)
+  (debugs error)
+
   (when error
     (raisu* :from (vector-ref error 0)
             :type (vector-ref error 1)
