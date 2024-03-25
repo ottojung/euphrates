@@ -47,14 +47,14 @@
         (recurse args)))
 
       ((equal? 'not type)
-       (and
+       (or
 
-        (or (list-length= 1 args)
-            (fail-expression-check
-             (stringf
-              "Expression of type ~s must have exactly 1 argument."
-              (~a type))
-             (list x)))
+        (and (not (list-length= 1 args))
+             (fail-expression-check
+              (stringf
+               "Expression of type ~s must have exactly 1 argument."
+               (~a type))
+              (list x)))
 
         (recurse args)))
 
