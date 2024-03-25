@@ -21,6 +21,9 @@
           args-2))
        args-1))
 
+    (debugs expr-1)
+    (debugs expr-2)
+
     (and
      (equal? type-1 type-2)
 
