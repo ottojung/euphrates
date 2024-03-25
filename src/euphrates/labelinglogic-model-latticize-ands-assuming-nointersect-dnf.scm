@@ -55,10 +55,8 @@
     (define new-ands (list-union ands-1 ands-2))
     (define new (labelinglogic:expression:make 'and new-ands))
     (define new-opt
-      (labelinglogic:expression:optimize/singletons
-       (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-        (labelinglogic:expression:sugarify
-         new))))
+      (labelinglogic:expression:optimize/assuming-nointersect
+       new))
 
     (if (labelinglogic:expression:bottom? new-opt)
         (values)

@@ -23,15 +23,8 @@
           labelinglogic:expression:make))
   (import
     (only (euphrates
-            labelinglogic-expression-optimize-and-assuming-nointersect-dnf)
-          labelinglogic:expression:optimize/and-assuming-nointersect-dnf))
-  (import
-    (only (euphrates
-            labelinglogic-expression-optimize-singletons)
-          labelinglogic:expression:optimize/singletons))
-  (import
-    (only (euphrates labelinglogic-expression-sugarify)
-          labelinglogic:expression:sugarify))
+            labelinglogic-expression-optimize-assuming-nointersect)
+          labelinglogic:expression:optimize/assuming-nointersect))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
