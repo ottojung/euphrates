@@ -43,11 +43,13 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (define terms
-      (if (equal? 'or type) args (list expr)))
+    (if (equal? 'and type) args (list expr)))
 
   (define (join expr-1 expr-2)
-    (define ands-1 (
+    (define ands-1 (get-ands expr-1))
+    (define ands-2 (get-ands expr-2))
+
+    
 
     0)
 
