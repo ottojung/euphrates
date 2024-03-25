@@ -2,7 +2,6 @@
 (define-library
   (euphrates labelinglogic-expression-check)
   (export labelinglogic:expression:check)
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates
             labelinglogic-expression-check-nothrow)
