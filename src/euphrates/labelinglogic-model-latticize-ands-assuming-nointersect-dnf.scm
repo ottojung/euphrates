@@ -5,7 +5,7 @@
 
   (define (nicolaus? x)
     (and (labelinglogic:expression? x)
-         (let loop ((expr expr))
+         (let loop ((expr x))
            (define type (labelinglogic:expression:type expr))
            (define args (labelinglogic:expression:args expr))
 
