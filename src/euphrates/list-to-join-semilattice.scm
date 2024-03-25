@@ -82,7 +82,6 @@
   (define graph
     (make-olgraph initial-nodes))
 
-  
   (define all-nodes initial-nodes)
   (define top-layer initial-nodes)
 
