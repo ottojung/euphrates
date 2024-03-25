@@ -34,17 +34,20 @@
 
      model))
 
+  (define equalp
+    labelinglogic:expression:equal?/syntactic/order-independent)
+
+  (define nicolauses/dup
+    (stack->list nicolaus-stack))
+
   (define nicolauses
-    (map car (hashmap->alist nicolaus-map)))
+    (list-idempotent/left equalp nicolauses/dup))
 
   (define (get-ands expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
     (if (equal? 'and type) args (list expr)))
-
-  (define equalp
-    labelinglogic:expression:equal?/syntactic/order-independent)
 
   (define (join expr-1 expr-2)
     (define ands-1 (get-ands expr-1))
