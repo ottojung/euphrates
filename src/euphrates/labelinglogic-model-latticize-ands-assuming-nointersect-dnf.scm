@@ -3,8 +3,17 @@
 
 (define (labelinglogic:model:latticize-ands-assuming-nointersect-dnf model)
 
-  (define term-map (make-hashmap))
+  (define r7rs-map (make-hashmap))
 
-  
+  (define _1237123
+    (for-each
+     (lambda (binding)
+       (define class (labelinglogic:binding:name binding))
+       (define expr (labelinglogic:binding:expr binding))
+
+       
+
+       0)
+     (labelinglogic:model:bindings model)))
 
   model)
