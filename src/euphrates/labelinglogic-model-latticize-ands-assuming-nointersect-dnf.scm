@@ -58,6 +58,7 @@
     (define new
       (labelinglogic:expression:make
        'and (list expr-1 expr-2)))
+
     (define new-opt
       (labelinglogic:expression:optimize/assuming-nointersect-dnf
        new))
