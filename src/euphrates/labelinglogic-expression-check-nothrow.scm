@@ -9,6 +9,7 @@
             args))
 
   (and
+
    (or (symbol? x)
        (unique-identifier? x)
        (number? x)
