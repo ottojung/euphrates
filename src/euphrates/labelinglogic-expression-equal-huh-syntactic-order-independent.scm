@@ -41,7 +41,7 @@
 
       (else
        (raisu* :from "labelinglogic:expression:equal?/syntactic/order-independent"
-               :type 'unknown-expr-type-172313
+               :type 'unknown-expr-type
                :message (stringf "Expression type ~s not recognized"
                                  (~a type-1))
                :args (list type-1 expr-1 expr-2)))))))
