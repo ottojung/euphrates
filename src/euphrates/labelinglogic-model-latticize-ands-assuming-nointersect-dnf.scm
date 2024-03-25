@@ -5,13 +5,13 @@
 
   (define (nicolaus? x)
     (and (labelinglogic:expression? x)
-         (let ()
-           (define type (labelinglogic:expression:type x))
-           (define args (labelinglogic:expression:args x))
+         (let loop ((expr expr))
+           (define type (labelinglogic:expression:type expr))
+           (define args (labelinglogic:expression:args expr))
 
            (or (equal? 'r7rs type)
                (and (equal? 'and type)
-                    (list-or-map nicolaus? args))))))
+                    (list-or-map loop args))))))
 
   (define nicolaus-map (make-hashmap))
 
