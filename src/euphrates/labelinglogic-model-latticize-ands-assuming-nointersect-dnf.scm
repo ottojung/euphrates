@@ -36,6 +36,10 @@
 
      model))
 
-  
+  (define nicolauses
+    (map car (hashmap->alist nicolaus-map)))
+
+  (define kek
+    (
 
   model)
