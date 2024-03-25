@@ -8,12 +8,14 @@
             (stringf "Type error: ~a." show)
             args))
 
-  (unless (or (symbol? x)
-              (unique-identifier? x)
-              (number? x)
-              (list? x))
-    (fail-expression-check
-     "Must be either a symbol or a list." (list x)))
+  (and
+   (or (symbol? x)
+       (unique-identifier? x)
+       (number? x)
+       (list? x)
+
+       (fail-expression-check
+        "Must be either a symbol or a list." (list x)))
 
   (define type
     (labelinglogic:expression:type x))
