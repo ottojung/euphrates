@@ -8,7 +8,7 @@
             (stringf "Type error: ~a." show)
             args))
 
-  (and
+  (or
 
    (or (symbol? x)
        (unique-identifier? x)
