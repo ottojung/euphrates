@@ -36,7 +36,7 @@
       ((equal? type-1 'constant)
        (raisu* :from "labelinglogic:expression:equal?/syntactic/order-independent"
                :type 'bad-sub-expr-type
-               :message (stringf "Expression type ~s not permitted here." (~a type-small))
+               :message (stringf "Expression type ~s not permitted here." (~a type-1))
                :args (list expr-1 expr-2)))
 
       (else
