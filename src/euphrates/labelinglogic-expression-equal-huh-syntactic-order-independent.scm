@@ -7,6 +7,18 @@
   (debugs expr-1)
   (debugs expr-2)
 
+  (define ret
+    (labelinglogic:expression:equal?/syntactic/order-independent/2
+     expr-1 expr-2))
+
+  (debugs ret)
+
+  ret)
+
+
+(define (labelinglogic:expression:equal?/syntactic/order-independent/2
+         expr-1 expr-2)
+
   (let loop ((expr-1 expr-1)
              (expr-2 expr-2))
 
