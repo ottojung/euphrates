@@ -27,55 +27,55 @@
      (define (recurse args)
        (list-or-map labelinglogic:expression:check/nothrow args))
 
-  (cond
-   ((equal? type 'constant) 'ok)
-   ((equal? 'or type) (recurse args)) ;; any arity is ok.
-   ((equal? 'and type) (recurse args)) ;; any arity is ok.
-   ((equal? 'xor type) (recurse args)) ;; any arity is ok.
+     (cond
+      ((equal? type 'constant) #f)
+      ((equal? 'or type) (recurse args)) ;; any arity is ok.
+      ((equal? 'and type) (recurse args)) ;; any arity is ok.
+      ((equal? 'xor type) (recurse args)) ;; any arity is ok.
 
-   ((equal? 'tuple type)
-    (unless (list-length=<? 1 args)
-      (fail-expression-check
-       (stringf
-        "Expression of type ~s must have at least 1 argument."
-        (~a type))
-       (list x)))
-    (recurse args))
+      ((equal? 'tuple type)
+       (unless (list-length=<? 1 args)
+         (fail-expression-check
+          (stringf
+           "Expression of type ~s must have at least 1 argument."
+           (~a type))
+          (list x)))
+       (recurse args))
 
-   ((equal? 'not type)
-    (unless (list-length= 1 args)
-      (fail-expression-check
-       (stringf
-        "Expression of type ~s must have exactly 1 argument."
-        (~a type))
-       (list x)))
-    (recurse args))
+      ((equal? 'not type)
+       (unless (list-length= 1 args)
+         (fail-expression-check
+          (stringf
+           "Expression of type ~s must have exactly 1 argument."
+           (~a type))
+          (list x)))
+       (recurse args))
 
-   ((equal? '= type)
-    (unless (list-length= 1 args)
-      (fail-expression-check
-       (stringf
-        "Expression of type ~s must have exactly 1 argument."
-        (~a type))
-       (list x))))
+      ((equal? '= type)
+       (unless (list-length= 1 args)
+         (fail-expression-check
+          (stringf
+           "Expression of type ~s must have exactly 1 argument."
+           (~a type))
+          (list x))))
 
-   ((equal? 'r7rs type)
-    (unless (list-length= 1 args)
-      (fail-expression-check
-       (stringf
-        "Expression of type ~s must have exactly 1 argument."
-        (~a type))
-       (list x)))
+      ((equal? 'r7rs type)
+       (unless (list-length= 1 args)
+         (fail-expression-check
+          (stringf
+           "Expression of type ~s must have exactly 1 argument."
+           (~a type))
+          (list x)))
 
-    (unless (procedure?
-             (labelinglogic:expression:compile/r7rs x))
-      (fail-expression-check
-       (stringf
-        "Expression of type ~s must compile to a R7RS scheme procedure."
-        (~a type))
-       (list x))))
+       (unless (procedure?
+                (labelinglogic:expression:compile/r7rs x))
+         (fail-expression-check
+          (stringf
+           "Expression of type ~s must compile to a R7RS scheme procedure."
+           (~a type))
+          (list x))))
 
-   (else
-    (fail-expression-check
-     "Expression type unrecognized."
-     (list x)))))
+      (else
+       (fail-expression-check
+        "Expression type unrecognized."
+        (list x)))))
