@@ -17,16 +17,15 @@
        (fail-expression-check
         "Must be either a symbol or a list." (list x)))
 
-   (
+   (let ()
+     (define type
+       (labelinglogic:expression:type x))
 
-  (define type
-    (labelinglogic:expression:type x))
+     (define args
+       (labelinglogic:expression:args x))
 
-  (define args
-    (labelinglogic:expression:args x))
-
-  (define (recurse args)
-    (for-each labelinglogic:expression:check args))
+     (define (recurse args)
+       (list-or-map labelinglogic:expression:check/nothrow args))
 
   (cond
    ((equal? type 'constant) 'ok)
