@@ -26,21 +26,8 @@
        (define terms
          (if (equal? 'or type) args (list expr)))
 
-       (define r7rss
-         (filter
-          (lambda (term)
-            (define type (labelinglogic:expression:type term))
-            (define args (labelinglogic:expression:args term))
-
-            (or (equal? 'r7rs type)
-                (and (equal? 'and type)
-                     (list-or-map
-                      (lambda (arg)
-                        (define type (labelinglogic:expression:type arg))
-                        (define args (labelinglogic:expression:args arg))
-                        (equal? type 'r7rs))
-                      args))))
-          terms))
+       (define nicolauses
+         (filter nicolaus? terms))
 
        0)
      (labelinglogic:model:bindings model)))
