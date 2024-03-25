@@ -1,8 +1,12 @@
+
 (define-library
   (euphrates labelinglogic-expression-huh)
   (export labelinglogic:expression?)
   (import
-    (only (scheme base) begin define make-parameter))
+    (only (euphrates
+            labelinglogic-expression-check-nothrow)
+          labelinglogic:expression:check/nothrow))
+  (import (only (scheme base) begin define not))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
