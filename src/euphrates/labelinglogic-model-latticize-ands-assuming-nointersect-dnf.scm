@@ -11,12 +11,7 @@
 
            (or (equal? 'r7rs type)
                (and (equal? 'and type)
-                    (list-or-map
-                     (lambda (arg)
-                       (define type (labelinglogic:expression:type arg))
-                       (define args (labelinglogic:expression:args arg))
-                       (equal? type 'r7rs))
-                     args))))))
+                    (list-or-map nicolaus? args))))))
 
   (define nicolaus-map (make-hashmap))
 
