@@ -20,6 +20,9 @@
     (only (euphrates labelinglogic-expression-huh)
           labelinglogic:expression?))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
