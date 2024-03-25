@@ -69,15 +69,15 @@
              (stringf
               "Expression of type ~s must have exactly 1 argument."
               (~a type))
-             (list x))))
+             (list x)))
 
-       (or (procedure?
-            (labelinglogic:expression:compile/r7rs x))
-           (fail-expression-check
-            (stringf
-             "Expression of type ~s must compile to a R7RS scheme procedure."
-             (~a type))
-            (list x))))
+        (or (procedure?
+             (labelinglogic:expression:compile/r7rs x))
+            (fail-expression-check
+             (stringf
+              "Expression of type ~s must compile to a R7RS scheme procedure."
+              (~a type))
+             (list x)))))
 
       (else
        (fail-expression-check
