@@ -17,6 +17,8 @@
        (fail-expression-check
         "Must be either a symbol or a list." (list x)))
 
+   (
+
   (define type
     (labelinglogic:expression:type x))
 
