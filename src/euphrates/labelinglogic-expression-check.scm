@@ -6,7 +6,7 @@
     (labelinglogic:expression:check/nothrow x))
 
   (when error
-    (raisu* :from "labelinglogic:expression:check"
-            :type 'expression-type-error
-            :message (stringf "Type error: ~a." show)
-            :args args)))
+    (raisu* :from (vector-ref error 0)
+            :type (vector-ref error 1)
+            :message (vector-ref error 2)
+            :args (vector-ref error 3))))
