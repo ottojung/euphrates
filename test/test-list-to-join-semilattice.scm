@@ -9,7 +9,7 @@
   (define actual
     (olgraph->adjlist result))
 
-  (debugs actual)
+  ;; (debugs actual)
 
   (assert= actual expected))
 
