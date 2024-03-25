@@ -43,6 +43,8 @@
   (define nicolauses
     (list-idempotent/left equalp nicolauses/dup))
 
+  (debugs nicolauses)
+
   (define (get-ands expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
