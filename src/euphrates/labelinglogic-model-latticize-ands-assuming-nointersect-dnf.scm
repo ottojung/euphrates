@@ -40,6 +40,8 @@
     (map car (hashmap->alist nicolaus-map)))
 
   (define (join expr-1 expr-2)
+    
+
     0)
 
   (define lattice
