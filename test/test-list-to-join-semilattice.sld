@@ -2,7 +2,6 @@
 (define-library
   (test-list-to-join-semilattice)
   (import (only (euphrates assert-equal) assert=))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates greatest-common-divisor)
           greatest-common-divisor))
