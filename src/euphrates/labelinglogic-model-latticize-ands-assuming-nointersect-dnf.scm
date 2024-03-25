@@ -13,7 +13,7 @@
                (and (equal? 'and type)
                     (list-or-map loop args))))))
 
-  (define nicolaus-map (make-hashmap))
+  (define nicolaus-stack (stack-make))
 
   (define _1237123
     (labelinglogic:model:foreach-expression
@@ -29,9 +29,7 @@
            (filter nicolaus? terms))
 
          (for-each
-          (lambda (nic)
-            (hashmap-set! nicolaus-map nic nic))
-
+          (lambda (nic) (stack-push! nicolaus-stack nic))
           nicolauses)))
 
      model))

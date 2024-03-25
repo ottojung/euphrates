@@ -6,10 +6,7 @@
     labelinglogic:model:latticize-ands-assuming-nointersect-dnf)
   (import (only (euphrates debugs) debugs))
   (import
-    (only (euphrates hashmap)
-          hashmap->alist
-          hashmap-set!
-          make-hashmap))
+    (only (euphrates hashmap) hashmap->alist))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -39,6 +36,8 @@
   (import
     (only (euphrates olgraph-to-adjlist)
           olgraph->adjlist))
+  (import
+    (only (euphrates stack) stack-make stack-push!))
   (import
     (only (scheme base)
           _
