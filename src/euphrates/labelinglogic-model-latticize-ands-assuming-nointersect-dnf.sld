@@ -6,11 +6,16 @@
     labelinglogic:model:latticize-ands-assuming-nointersect-dnf)
   (import
     (only (euphrates hashmap)
+          hashmap->alist
           hashmap-set!
           make-hashmap))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
+  (import
+    (only (euphrates
+            labelinglogic-expression-equal-huh-syntactic-order-independent)
+          labelinglogic:expression:equal?/syntactic/order-independent))
   (import
     (only (euphrates labelinglogic-expression-huh)
           labelinglogic:expression?))
@@ -24,10 +29,15 @@
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
+    (only (euphrates list-to-join-semilattice)
+          list->join-semilattice))
+  (import (only (euphrates list-union) list-union))
+  (import
     (only (scheme base)
           _
           and
           begin
+          car
           define
           equal?
           for-each
@@ -35,6 +45,7 @@
           lambda
           let
           list
+          map
           or
           quote))
   (cond-expand

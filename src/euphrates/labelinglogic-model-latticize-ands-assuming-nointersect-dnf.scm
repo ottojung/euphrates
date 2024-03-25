@@ -45,16 +45,17 @@
 
     (if (equal? 'and type) args (list expr)))
 
+  (define equalp
+    labelinglogic:expression:equal?/syntactic/order-independent)
+
   (define (join expr-1 expr-2)
     (define ands-1 (get-ands expr-1))
     (define ands-2 (get-ands expr-2))
 
-    
-
-    0)
+    (list-union ands-1 ands-2))
 
   (define lattice
     (list->join-semilattice
-     nicolauses
+     equalp join nicolauses))
 
   model)
