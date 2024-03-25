@@ -67,6 +67,9 @@
             (list x))))
 
       ((equal? 'r7rs type)
+
+       (debugs x)
+
        (and
 
         (or (list-length= 1 args)
