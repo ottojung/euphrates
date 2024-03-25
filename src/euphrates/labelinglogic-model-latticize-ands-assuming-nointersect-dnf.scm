@@ -16,22 +16,20 @@
   (define nicolaus-map (make-hashmap))
 
   (define _1237123
-    (for-each
-     (lambda (binding)
-       (define class (labelinglogic:binding:name binding))
-       (define expr (labelinglogic:binding:expr binding))
-       (define type (labelinglogic:expression:type expr))
-       (define args (labelinglogic:expression:args expr))
+    (labelinglogic:model:foreach-expression
+     (lambda (class predicate)
+       (lambda (expr)
+         (define type (labelinglogic:expression:type expr))
+         (define args (labelinglogic:expression:args expr))
 
-       (define terms
-         (if (equal? 'or type) args (list expr)))
+         (define terms
+           (if (equal? 'or type) args (list expr)))
 
-       (define nicolauses
-         (filter nicolaus? terms))
+         (define nicolauses
+           (filter nicolaus? terms))
 
-       
+         0))
 
-       0)
-     (labelinglogic:model:bindings model)))
+     model))
 
   model)
