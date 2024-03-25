@@ -29,6 +29,8 @@
        (define nicolauses
          (filter nicolaus? terms))
 
+       
+
        0)
      (labelinglogic:model:bindings model)))
 
