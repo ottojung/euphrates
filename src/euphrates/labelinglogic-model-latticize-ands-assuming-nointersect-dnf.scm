@@ -58,6 +58,9 @@
     (list->join-semilattice
      equalp join nicolauses))
 
-  
+  (define lattice-list
+    (olgraph->adjlist lattice))
+
+  (debugs lattice-list)
 
   model)

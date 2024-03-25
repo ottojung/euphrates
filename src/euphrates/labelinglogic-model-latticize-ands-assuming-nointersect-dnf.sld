@@ -4,6 +4,7 @@
     labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
   (export
     labelinglogic:model:latticize-ands-assuming-nointersect-dnf)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
           hashmap->alist
@@ -35,6 +36,9 @@
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))
   (import (only (euphrates list-union) list-union))
+  (import
+    (only (euphrates olgraph-to-adjlist)
+          olgraph->adjlist))
   (import
     (only (scheme base)
           _
