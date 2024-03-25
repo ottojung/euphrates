@@ -30,6 +30,9 @@
             labelinglogic-expression-optimize-singletons)
           labelinglogic:expression:optimize/singletons))
   (import
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic:expression:sugarify))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import

@@ -57,7 +57,8 @@
     (define new-opt
       (labelinglogic:expression:optimize/singletons
        (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-        new)))
+        (labelinglogic:expression:sugarify
+         new))))
 
     (if (labelinglogic:expression:bottom? new-opt)
         (values)
