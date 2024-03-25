@@ -60,7 +60,7 @@
         new)))
 
     (if (labelinglogic:expression:bottom? new-opt)
-        #f
+        (values)
         new-opt))
 
   (define lattice
