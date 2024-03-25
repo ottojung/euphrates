@@ -41,7 +41,10 @@
     (stack->list nicolaus-stack))
 
   (define nicolauses
-    (list-idempotent/left equalp nicolauses/dup))
+    (apply-until-fixpoint
+     (lambda (lst)
+       (list-idempotent/left equalp lst))
+     nicolauses/dup))
 
   (debugs nicolauses)
 

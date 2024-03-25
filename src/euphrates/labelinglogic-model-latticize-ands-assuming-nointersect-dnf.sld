@@ -4,6 +4,9 @@
     labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
   (export
     labelinglogic:model:latticize-ands-assuming-nointersect-dnf)
+  (import
+    (only (euphrates apply-until-fixpoint)
+          apply-until-fixpoint))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-expression-args)
