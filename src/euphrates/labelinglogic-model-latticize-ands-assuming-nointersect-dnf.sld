@@ -43,7 +43,6 @@
   (import
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))
-  (import (only (euphrates list-union) list-union))
   (import
     (only (euphrates olgraph-to-adjlist)
           olgraph->adjlist))

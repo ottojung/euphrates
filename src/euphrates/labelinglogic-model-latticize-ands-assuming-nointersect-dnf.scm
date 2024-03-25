@@ -55,10 +55,9 @@
     (if (equal? 'and type) args (list expr)))
 
   (define (join expr-1 expr-2)
-    (define ands-1 (get-ands expr-1))
-    (define ands-2 (get-ands expr-2))
-    (define new-ands (list-union ands-1 ands-2))
-    (define new (labelinglogic:expression:make 'and new-ands))
+    (define new
+      (labelinglogic:expression:make
+       'and (list expr-1 expr-2)))
     (define new-opt
       (labelinglogic:expression:optimize/assuming-nointersect-dnf
        new))
