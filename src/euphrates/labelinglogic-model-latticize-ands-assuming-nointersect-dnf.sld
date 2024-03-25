@@ -4,7 +4,10 @@
     labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
   (export
     labelinglogic:model:latticize-ands-assuming-nointersect-dnf)
-  (import (only (euphrates hashmap) make-hashmap))
+  (import
+    (only (euphrates hashmap)
+          hashmap-set!
+          make-hashmap))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -27,6 +30,7 @@
           begin
           define
           equal?
+          for-each
           if
           lambda
           let

@@ -28,7 +28,11 @@
          (define nicolauses
            (filter nicolaus? terms))
 
-         0))
+         (for-each
+          (lambda (nic)
+            (hashmap-set! nicolaus-map nic nic))
+
+          nicolauses)))
 
      model))
 
