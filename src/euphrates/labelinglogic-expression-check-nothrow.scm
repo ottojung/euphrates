@@ -35,16 +35,20 @@
       ((equal? 'xor type) (recurse args)) ;; any arity is ok.
 
       ((equal? 'tuple type)
-       (unless (list-length=<? 1 args)
-         (fail-expression-check
-          (stringf
-           "Expression of type ~s must have at least 1 argument."
-           (~a type))
-          (list x)))
-       (recurse args))
+       (and
+
+        (or (list-length=<? 1 args)
+            (fail-expression-check
+             (stringf
+              "Expression of type ~s must have at least 1 argument."
+              (~a type))
+             (list x)))
+
+        (recurse args)))
 
       ((equal? 'not type)
        (and
+
         (or (list-length= 1 args)
             (fail-expression-check
              (stringf

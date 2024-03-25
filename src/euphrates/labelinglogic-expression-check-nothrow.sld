@@ -42,7 +42,6 @@
           procedure?
           quote
           symbol?
-          unless
           vector))
   (cond-expand
     (guile (import (only (guile) include-from-path))
