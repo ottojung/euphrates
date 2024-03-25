@@ -21,7 +21,10 @@
     (only (euphrates labelinglogic-model-bindings)
           labelinglogic:model:bindings))
   (import
+    (only (euphrates list-or-map) list-or-map))
+  (import
     (only (scheme base)
+          and
           begin
           define
           equal?
@@ -31,6 +34,9 @@
           list
           or
           quote))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
