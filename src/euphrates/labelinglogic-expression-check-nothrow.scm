@@ -55,6 +55,7 @@
               "Expression of type ~s must have exactly 1 argument."
               (~a type))
              (list x)))
+
         (recurse args)))
 
       ((equal? '= type)
