@@ -75,6 +75,23 @@
 
 
 
+(test-case
+ equal?
+ (lambda (x y)
+   (greatest-common-divisor x y))
+
+ '(3 4 5)
+
+ '((3 1)
+   (1)
+   (2 1)
+   (4 2)
+   (5 1))
+
+ )
+
+
+
 
 
 (test-case
