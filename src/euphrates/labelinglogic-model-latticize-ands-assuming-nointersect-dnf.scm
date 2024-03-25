@@ -3,6 +3,7 @@
 
 (define (labelinglogic:model:latticize-ands-assuming-nointersect-dnf model)
 
-  ;; (define infinite-expr-map
+  (define term-map
+    
 
   model)
