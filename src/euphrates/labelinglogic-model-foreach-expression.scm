@@ -3,9 +3,9 @@
 
 (define (labelinglogic:model:foreach-expression fun model)
   (for-each
-   (lambda (model-component)
+   (lambda (binding)
      (define class (labelinglogic:binding:name binding))
      (define expr (labelinglogic:binding:expr binding))
-     ((fun class expr) predicate))
+     ((fun class expr) expr))
 
    (labelinglogic:model:bindings model)))
