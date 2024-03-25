@@ -16,8 +16,11 @@
     (map labelinglogic:expression:optimize args))
 
   (define dedup
-    (list-idempotent/left
-     labelinglogic:expression:syntactic-equal?
+    (apply-until-fixpoint
+     (lambda (lst)
+       (list-idempotent/left
+        labelinglogic:expression:syntactic-equal?
+        lst))
      rec))
 
   (define new

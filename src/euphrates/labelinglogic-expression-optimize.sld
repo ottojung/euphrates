@@ -3,6 +3,9 @@
   (euphrates labelinglogic-expression-optimize)
   (export labelinglogic:expression:optimize)
   (import
+    (only (euphrates apply-until-fixpoint)
+          apply-until-fixpoint))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -40,6 +43,7 @@
           else
           equal?
           if
+          lambda
           length
           list
           map
