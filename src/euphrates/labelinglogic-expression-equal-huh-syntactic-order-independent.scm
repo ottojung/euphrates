@@ -4,6 +4,9 @@
 (define (labelinglogic:expression:equal?/syntactic/order-independent
          expr-1 expr-2)
 
+  (debugs expr-1)
+  (debugs expr-2)
+
   (let loop ((expr-1 expr-1)
              (expr-2 expr-2))
 
@@ -20,9 +23,6 @@
             (loop arg1 arg2))
           args-2))
        args-1))
-
-    (debugs expr-1)
-    (debugs expr-2)
 
     (and
      (equal? type-1 type-2)
