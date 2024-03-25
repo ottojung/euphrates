@@ -3,10 +3,10 @@
 
 (define (labelinglogic:expression:check/nothrow x)
   (define (fail-expression-check show args)
-    (raisu* :from "labelinglogic:expression:check"
-            :type 'expression-type-error
-            :message (stringf "Type error: ~a." show)
-            :args args))
+    (vector "labelinglogic:expression:check"
+            'expression-type-error
+            (stringf "Type error: ~a." show)
+            args))
 
   (unless (or (symbol? x)
               (unique-identifier? x)

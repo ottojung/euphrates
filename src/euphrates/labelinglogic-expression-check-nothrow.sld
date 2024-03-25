@@ -20,7 +20,6 @@
   (import
     (only (euphrates list-length-geq-q)
           list-length=<?))
-  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -44,7 +43,8 @@
           procedure?
           quote
           symbol?
-          unless))
+          unless
+          vector))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
