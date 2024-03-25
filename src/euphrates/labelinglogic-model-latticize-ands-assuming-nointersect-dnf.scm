@@ -58,4 +58,6 @@
     (list->join-semilattice
      equalp join nicolauses))
 
+  
+
   model)
