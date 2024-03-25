@@ -3,7 +3,22 @@
 
 (define (labelinglogic:model:latticize-ands-assuming-nointersect-dnf model)
 
-  (define r7rs-map (make-hashmap))
+  (define (nicolaus? x)
+    (and (labelinglogic:expression? x)
+         (let ()
+           (define type (labelinglogic:expression:type x))
+           (define args (labelinglogic:expression:args x))
+
+           (or (equal? 'r7rs type)
+               (and (equal? 'and type)
+                    (list-or-map
+                     (lambda (arg)
+                       (define type (labelinglogic:expression:type arg))
+                       (define args (labelinglogic:expression:args arg))
+                       (equal? type 'r7rs))
+                     args))))))
+
+  (define nicolaus-map (make-hashmap))
 
   (define _1237123
     (for-each
