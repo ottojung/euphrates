@@ -26,7 +26,7 @@
        (labelinglogic:expression:args x))
 
      (define (recurse args)
-       (list-or-map labelinglogic:expression:check/nothrow args))
+       (list-find-first labelinglogic:expression:check/nothrow #f args))
 
      (cond
       ((equal? type 'constant) #f)

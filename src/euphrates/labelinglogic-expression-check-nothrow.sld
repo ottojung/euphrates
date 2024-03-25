@@ -13,12 +13,13 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates list-find-first)
+          list-find-first))
+  (import
     (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates list-length-geq-q)
           list-length=<?))
-  (import
-    (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
