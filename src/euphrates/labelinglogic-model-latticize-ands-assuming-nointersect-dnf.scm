@@ -3,7 +3,8 @@
 
 (define (labelinglogic:model:latticize-ands-assuming-nointersect-dnf model)
 
-  (define term-map
-    
+  (define term-map (make-hashmap))
+
+  
 
   model)
