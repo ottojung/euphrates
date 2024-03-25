@@ -10,13 +10,13 @@
 
   (or
 
-   (or (symbol? x)
-       (unique-identifier? x)
-       (number? x)
-       (list? x)
+   (and (not (or (symbol? x)
+                 (unique-identifier? x)
+                 (number? x)
+                 (list? x)))
 
-       (fail-expression-check
-        "Must be either a symbol or a list." (list x)))
+        (fail-expression-check
+         "Must be either a symbol or a list." (list x)))
 
    (let ()
      (define type
