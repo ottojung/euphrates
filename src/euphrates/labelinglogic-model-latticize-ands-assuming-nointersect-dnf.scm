@@ -54,7 +54,9 @@
     (define ands-2 (get-ands expr-2))
     (define new-ands (list-union ands-1 ands-2))
     (define new (labelinglogic:expression:make 'and new-ands))
-    (define new-opt (labelinglogic:expression:optimize/and-assuming-nointersect-dnf new))
+    (define new-opt
+      (labelinglogic:expression:optimize/singletons
+       (labelinglogic:expression:optimize/and-assuming-nointersect-dnf new)))
     new-opt)
 
   (define lattice
