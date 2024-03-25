@@ -10,6 +10,11 @@
      (lambda (binding)
        (define class (labelinglogic:binding:name binding))
        (define expr (labelinglogic:binding:expr binding))
+       (define type (labelinglogic:expression:type expr))
+       (define args (labelinglogic:expression:args expr))
+
+       (define terms
+         (if (equal? 'or type) args (list expr)))
 
        
 
