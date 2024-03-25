@@ -9,6 +9,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-bottom-huh)
+          labelinglogic:expression:bottom?))
+  (import
     (only (euphrates
             labelinglogic-expression-equal-huh-syntactic-order-independent)
           labelinglogic:expression:equal?/syntactic/order-independent))

@@ -56,8 +56,12 @@
     (define new (labelinglogic:expression:make 'and new-ands))
     (define new-opt
       (labelinglogic:expression:optimize/singletons
-       (labelinglogic:expression:optimize/and-assuming-nointersect-dnf new)))
-    new-opt)
+       (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+        new)))
+
+    (if (labelinglogic:expression:bottom? new-opt)
+        #f
+        new-opt))
 
   (define lattice
     (list->join-semilattice
