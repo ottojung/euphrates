@@ -17,7 +17,7 @@
 
   (define _1237123
     (labelinglogic:model:foreach-expression
-     (lambda (class predicate)
+     (lambda _
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
