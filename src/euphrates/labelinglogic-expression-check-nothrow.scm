@@ -68,8 +68,6 @@
 
       ((equal? 'r7rs type)
 
-       (debugs x)
-
        (or
 
         (and (not (list-length= 1 args))
