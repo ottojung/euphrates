@@ -18,7 +18,7 @@
     (only (euphrates list-length-geq-q)
           list-length=<?))
   (import
-    (only (euphrates list-or-map) list-or-map))
+    (only (euphrates list-map-first) list-map-first))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
