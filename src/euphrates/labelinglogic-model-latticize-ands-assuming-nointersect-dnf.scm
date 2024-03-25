@@ -39,7 +39,11 @@
   (define nicolauses
     (map car (hashmap->alist nicolaus-map)))
 
-  (define kek
-    (
+  (define (join expr-1 expr-2)
+    0)
+
+  (define lattice
+    (list->join-semilattice
+     nicolauses
 
   model)
