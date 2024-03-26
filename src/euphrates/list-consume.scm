@@ -10,7 +10,7 @@
   ;; depending on the result of `pred`.
   ;; If `(pred x y)` returns `'left`, then `x` is kept.
   ;; If `(pred x y)` returns `'right`, then `y` is kept.
-  ;; If `(pred x y)` returns `'ski`, then both are kept.
+  ;; If `(pred x y)` returns `'skip`, then both are kept.
   ;;
   ;; This operation is related to the mathematical concept of idempotence in the context of set operations.
   ;; In set theory, idempotent operations such as union, intersection, or function composition do not change
