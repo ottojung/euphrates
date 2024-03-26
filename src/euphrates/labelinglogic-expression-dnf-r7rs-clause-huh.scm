@@ -10,4 +10,3 @@
          (or (equal? 'r7rs type)
              (and (equal? 'and type)
                   (list-or-map loop args))))))
-
