@@ -12,11 +12,6 @@
   ;; If `(pred x y)` returns `'right`, then `y` is kept.
   ;; If `(pred x y)` returns `'skip`, then both are kept.
   ;;
-  ;; This operation is related to the mathematical concept of idempotence in the context of set operations.
-  ;; In set theory, idempotent operations such as union, intersection, or function composition do not change
-  ;; the output upon repeated application. Similarly, `list-consume` will ensure that applying the same function
-  ;; repeatedly will yield the same list after the first application, as duplicate elements will have been removed.
-  ;;
   ;; Example usage:
   ;; (list-consume (lambda (x y) (if (equal? x y) 'left 'skip)) (list 1 2 1 4 1))
   ;; will return
