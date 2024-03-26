@@ -27,8 +27,8 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates list-idempotent-left)
-          list-idempotent/left))
+    (only (euphrates jwsxce)
+          jwsxcu))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))

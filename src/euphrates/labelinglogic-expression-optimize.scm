@@ -18,7 +18,7 @@
   (define dedup
     (apply-until-fixpoint
      (lambda (lst)
-       (list-idempotent/left
+       (jwsxcu
         labelinglogic:expression:syntactic-equal?
         lst))
      rec))

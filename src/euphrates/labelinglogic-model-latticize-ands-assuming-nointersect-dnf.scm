@@ -11,7 +11,7 @@
   (define nicolauses
     (apply-until-fixpoint
      (lambda (lst)
-       (list-idempotent/left equalp lst))
+       (jwsxcu equalp lst))
      nicolauses/dup))
 
   (debugs nicolauses)
