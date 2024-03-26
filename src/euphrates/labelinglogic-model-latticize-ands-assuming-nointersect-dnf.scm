@@ -84,6 +84,11 @@
      (lambda (adj)
        (define-pair (parent children) adj)
        (define name (make-unique-identifier))
+
+       (stack-push!
+        lattice-renames-stack
+        (cons parent name))
+
        
 
      lattice-adjlist))
