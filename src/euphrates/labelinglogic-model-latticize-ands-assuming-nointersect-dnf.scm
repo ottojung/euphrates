@@ -71,9 +71,20 @@
     (list->join-semilattice
      equalp join nicolauses))
 
-  (define lattice-list
+  (define lattice-adjlist
     (olgraph->adjlist lattice))
 
-  (debugs lattice-list)
+  (debugs lattice-adjlist)
+
+  (define lattice-renames
+    (filter
+     identity
+     (map
+      (lambda (adj)
+
+        
+        
+        0)
+      lattice-adjlist)))
 
   model)
