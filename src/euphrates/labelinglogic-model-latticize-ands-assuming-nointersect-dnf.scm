@@ -76,7 +76,7 @@
 
   (debugs lattice-adjlist)
 
-  (define lattice-renames
+  (define lattice-renames-alist
     (filter
      identity
      (map
