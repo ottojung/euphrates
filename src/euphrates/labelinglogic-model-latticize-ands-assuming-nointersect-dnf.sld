@@ -15,9 +15,6 @@
           hashmap-set!
           make-hashmap))
   (import
-    (only (euphrates labelinglogic-expression-args)
-          labelinglogic:expression:args))
-  (import
     (only (euphrates labelinglogic-expression-bottom-huh)
           labelinglogic:expression:bottom?))
   (import
@@ -31,9 +28,6 @@
     (only (euphrates
             labelinglogic-expression-optimize-assuming-nointersect-dnf)
           labelinglogic:expression:optimize/assuming-nointersect-dnf))
-  (import
-    (only (euphrates labelinglogic-expression-type)
-          labelinglogic:expression:type))
   (import
     (only (euphrates
             labelinglogic-model-collect-dnf-r7rs-clauses)
@@ -61,7 +55,6 @@
           begin
           cons
           define
-          equal?
           for-each
           if
           lambda

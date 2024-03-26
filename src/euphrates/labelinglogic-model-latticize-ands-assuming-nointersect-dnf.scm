@@ -16,12 +16,6 @@
 
   (debugs nicolauses)
 
-  (define (get-ands expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
-    (if (equal? 'and type) args (list expr)))
-
   (define (join expr-1 expr-2)
     (define new
       (labelinglogic:expression:make
