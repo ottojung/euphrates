@@ -13,6 +13,7 @@
   ;; In set theory, idempotent operations such as union, intersection, or function composition do not change
   ;; the output upon repeated application. Similarly, `list-idempotent` will ensure that applying the same function
   ;; repeatedly will yield the same list after the first application, as duplicate elements will have been removed.
+  ;; This procedure is `list-deduplicate', but with a binary `pred' instead of a unary `identity', and working one step at a time.
   ;;
   ;; Example usage:
   ;; (list-idempotent equal? (list 1 2 1 4 1))
@@ -20,7 +21,6 @@
   ;; (list 1 2 4 1)
   ;; keeping only the first appearance of each number.
   ;;
-  ;; Note: this function is `list-deduplicate', but with a binary `pred' instead of a unary `identity', and working one step at a time.
   ;;
   ;; Best used together with `apply-until-fixpoint`.
   ;;
