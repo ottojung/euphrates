@@ -81,7 +81,8 @@
      identity
      (map
       (lambda (adj)
-        (and (not (list-singleton? adj))
+        (define-pair (parent children) adj)
+        (and (not (null? children))
              (cons  adj)))
       lattice-adjlist)))
 
