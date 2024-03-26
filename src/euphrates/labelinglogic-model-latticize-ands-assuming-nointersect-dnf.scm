@@ -81,10 +81,8 @@
      identity
      (map
       (lambda (adj)
-
-        
-        
-        0)
+        (and (not (list-singleton? adj))
+             (cons adj)))
       lattice-adjlist)))
 
   model)

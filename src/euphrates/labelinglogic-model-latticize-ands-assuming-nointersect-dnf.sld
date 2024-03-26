@@ -8,6 +8,7 @@
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
   (import (only (euphrates debugs) debugs))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -41,6 +42,9 @@
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
+    (only (euphrates list-singleton-q)
+          list-singleton?))
+  (import
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))
   (import
@@ -56,6 +60,7 @@
           _
           and
           begin
+          cons
           define
           equal?
           for-each
@@ -63,6 +68,8 @@
           lambda
           let
           list
+          map
+          not
           or
           quote
           values))
