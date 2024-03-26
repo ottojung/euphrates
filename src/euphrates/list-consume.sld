@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates list-idempotent)
-  (export list-idempotent)
+  (euphrates list-consume)
+  (export list-consume)
   (import
     (only (euphrates list-reduce-pairwise)
           list-reduce/pairwise))
@@ -25,5 +25,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/list-idempotent.scm")))
-    (else (include "list-idempotent.scm"))))
+               "euphrates/list-consume.scm")))
+    (else (include "list-consume.scm"))))

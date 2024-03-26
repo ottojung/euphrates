@@ -1,12 +1,12 @@
 
 (define-library
-  (test-list-idempotent)
+  (test-list-consume)
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
-    (only (euphrates list-idempotent)
-          list-idempotent))
+    (only (euphrates list-consume)
+          list-consume))
   (import
     (only (scheme base)
           <
@@ -28,5 +28,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "test-list-idempotent.scm")))
-    (else (include "test-list-idempotent.scm"))))
+             (include-from-path "test-list-consume.scm")))
+    (else (include "test-list-consume.scm"))))

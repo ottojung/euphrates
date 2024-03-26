@@ -131,7 +131,7 @@
        ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-term expr-b expr-a) 'right)
        (else 'skip)))
 
-    (define new-args (list-idempotent fun args))
+    (define new-args (list-consume fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (handle-nulls expr)

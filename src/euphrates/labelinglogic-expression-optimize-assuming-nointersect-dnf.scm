@@ -35,7 +35,7 @@
        ((labelinglogic:expression:is-subset?/assuming-nonintersect-dnf-term expr-b expr-a) 'left)
        (else 'skip)))
 
-    (define new-args (list-idempotent fun args))
+    (define new-args (list-consume fun args))
     (labelinglogic:expression:make type new-args))
 
   (define (remove-bottoms expr)
