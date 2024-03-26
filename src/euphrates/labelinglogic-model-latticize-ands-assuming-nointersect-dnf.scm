@@ -79,6 +79,12 @@
   (define lattice-renames-stack
     (stack-make))
 
+  (define lattice-bodies-map
+    (make-hashmap))
+
+  (define lattice-reverse-renames-map
+    (make-hashmap))
+
   (define _318237
     (for-each
      (lambda (adj)
@@ -89,7 +95,13 @@
         lattice-renames-stack
         (cons parent name))
 
-       
+       (hashmap-set!
+        lattice-reverse-renames-map
+        name parent)
+
+       (hashmap-set!
+        lattice-bodies-map
+        name children))
 
      lattice-adjlist))
 

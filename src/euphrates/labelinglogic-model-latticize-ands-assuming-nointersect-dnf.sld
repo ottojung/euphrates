@@ -11,6 +11,10 @@
   (import
     (only (euphrates define-pair) define-pair))
   (import
+    (only (euphrates hashmap)
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -54,10 +58,14 @@
           stack-make
           stack-push!))
   (import
+    (only (euphrates unique-identifier)
+          make-unique-identifier))
+  (import
     (only (scheme base)
           _
           and
           begin
+          cons
           define
           equal?
           for-each
@@ -65,10 +73,8 @@
           lambda
           let
           list
-          null?
           or
           quote
-          unless
           values))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
