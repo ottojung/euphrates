@@ -3,32 +3,11 @@
 
 (define (labelinglogic:model:latticize-ands-assuming-nointersect-dnf model)
 
-  (define nicolaus-stack (stack-make))
-
-  (define _1237123
-    (labelinglogic:model:foreach-expression
-     (lambda _
-       (lambda (expr)
-         (define type (labelinglogic:expression:type expr))
-         (define args (labelinglogic:expression:args expr))
-
-         (define terms
-           (if (equal? 'or type) args (list expr)))
-
-         (define nicolauses
-           (filter labelinglogic:expression:dnf-r7rs-clause? terms))
-
-         (for-each
-          (lambda (nic) (stack-push! nicolaus-stack nic))
-          nicolauses)))
-
-     model))
-
   (define equalp
     labelinglogic:expression:equal?/syntactic/order-independent)
 
   (define nicolauses/dup
-    (stack->list nicolaus-stack))
+    (labelinglogic:model:collect-dnf-r7rs-clauses model))
 
   (define nicolauses
     (apply-until-fixpoint

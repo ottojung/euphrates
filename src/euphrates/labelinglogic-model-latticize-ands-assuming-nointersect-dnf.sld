@@ -22,10 +22,6 @@
           labelinglogic:expression:bottom?))
   (import
     (only (euphrates
-            labelinglogic-expression-dnf-r7rs-clause-huh)
-          labelinglogic:expression:dnf-r7rs-clause?))
-  (import
-    (only (euphrates
             labelinglogic-expression-equal-huh-syntactic-order-independent)
           labelinglogic:expression:equal?/syntactic/order-independent))
   (import
@@ -40,8 +36,8 @@
           labelinglogic:expression:type))
   (import
     (only (euphrates
-            labelinglogic-model-foreach-expression)
-          labelinglogic:model:foreach-expression))
+            labelinglogic-model-collect-dnf-r7rs-clauses)
+          labelinglogic:model:collect-dnf-r7rs-clauses))
   (import
     (only (euphrates list-idempotent-left)
           list-idempotent/left))
@@ -61,7 +57,6 @@
           make-unique-identifier))
   (import
     (only (scheme base)
-          _
           and
           begin
           cons
@@ -71,12 +66,8 @@
           if
           lambda
           list
-          or
           quote
           values))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
