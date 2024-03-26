@@ -18,8 +18,6 @@
   ;; (list 1 2 4 1)
   ;; keeping only the first appearance of each number.
   ;;
-  ;; Note: this function is similar to `list-deduplicate', but with a binary `pred' instead of a unary `identity', and working one step at a time.
-  ;;
   ;; Best used together with `apply-until-fixpoint`.
   ;;
 
