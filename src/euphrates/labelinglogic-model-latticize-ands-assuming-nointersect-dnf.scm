@@ -82,7 +82,7 @@
      (map
       (lambda (adj)
         (and (not (list-singleton? adj))
-             (cons adj)))
+             (cons  adj)))
       lattice-adjlist)))
 
   model)
