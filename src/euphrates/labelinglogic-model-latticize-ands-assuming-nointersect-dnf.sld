@@ -22,11 +22,12 @@
           labelinglogic:expression:bottom?))
   (import
     (only (euphrates
+            labelinglogic-expression-dnf-r7rs-clause-huh)
+          labelinglogic:expression:dnf-r7rs-clause?))
+  (import
+    (only (euphrates
             labelinglogic-expression-equal-huh-syntactic-order-independent)
           labelinglogic:expression:equal?/syntactic/order-independent))
-  (import
-    (only (euphrates labelinglogic-expression-huh)
-          labelinglogic:expression?))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
@@ -44,8 +45,6 @@
   (import
     (only (euphrates list-idempotent-left)
           list-idempotent/left))
-  (import
-    (only (euphrates list-or-map) list-or-map))
   (import
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))
@@ -71,7 +70,6 @@
           for-each
           if
           lambda
-          let
           list
           or
           quote

@@ -3,16 +3,6 @@
 
 (define (labelinglogic:model:latticize-ands-assuming-nointersect-dnf model)
 
-  (define (nicolaus? x)
-    (and (labelinglogic:expression? x)
-         (let loop ((expr x))
-           (define type (labelinglogic:expression:type expr))
-           (define args (labelinglogic:expression:args expr))
-
-           (or (equal? 'r7rs type)
-               (and (equal? 'and type)
-                    (list-or-map loop args))))))
-
   (define nicolaus-stack (stack-make))
 
   (define _1237123
@@ -26,7 +16,7 @@
            (if (equal? 'or type) args (list expr)))
 
          (define nicolauses
-           (filter nicolaus? terms))
+           (filter labelinglogic:expression:dnf-r7rs-clause? terms))
 
          (for-each
           (lambda (nic) (stack-push! nicolaus-stack nic))
