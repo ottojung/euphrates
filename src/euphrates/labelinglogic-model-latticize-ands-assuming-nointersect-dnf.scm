@@ -76,14 +76,18 @@
 
   (debugs lattice-adjlist)
 
+  (define lattice-renames-stack
+    (stack-make))
+
+  (define _318237
+    (for-each
+     (lambda (adj)
+       (define-pair (parent children) adj)
+       (unless (null? children)
+         0))
+     lattice-adjlist))
+
   (define lattice-renames-alist
-    (filter
-     identity
-     (map
-      (lambda (adj)
-        (define-pair (parent children) adj)
-        (and (not (null? children))
-             (cons  adj)))
-      lattice-adjlist)))
+    (stack->list lattice-renames-stack))
 
   model)
