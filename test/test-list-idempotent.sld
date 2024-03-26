@@ -1,12 +1,12 @@
 
 (define-library
-  (test-jwsxcu)
+  (test-list-idempotent)
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
-    (only (euphrates jwsxce)
-          jwsxcu))
+    (only (euphrates list-idempotent)
+          list-idempotent))
   (import
     (only (scheme base)
           *
@@ -36,5 +36,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-jwsxce.scm")))
-    (else (include "test-jwsxce.scm"))))
+               "test-list-idempotent.scm")))
+    (else (include "test-list-idempotent.scm"))))

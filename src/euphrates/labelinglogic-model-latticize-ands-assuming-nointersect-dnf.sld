@@ -33,8 +33,8 @@
             labelinglogic-model-collect-dnf-r7rs-clauses)
           labelinglogic:model:collect-dnf-r7rs-clauses))
   (import
-    (only (euphrates jwsxce)
-          jwsxcu))
+    (only (euphrates list-idempotent)
+          list-idempotent))
   (import
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))

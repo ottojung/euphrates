@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates jwsxce)
-  (export jwsxcu)
+  (euphrates list-idempotent)
+  (export list-idempotent)
   (import
     (only (euphrates list-reduce-pairwise-left)
           list-reduce/pairwise/left))
@@ -16,5 +16,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/jwsxce.scm")))
-    (else (include "jwsxce.scm"))))
+               "euphrates/list-idempotent.scm")))
+    (else (include "list-idempotent.scm"))))
