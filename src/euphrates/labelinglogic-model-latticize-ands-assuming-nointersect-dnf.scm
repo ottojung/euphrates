@@ -85,7 +85,8 @@
        (define-pair (parent children) adj)
        (define name (make-unique-identifier))
        (unless (null? children)
-         (
+         
+
          0))
      lattice-adjlist))
 
