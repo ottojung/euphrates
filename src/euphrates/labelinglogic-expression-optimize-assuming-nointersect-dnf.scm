@@ -25,7 +25,13 @@
               :message (stringf "Expression type ~s not permitted here." (~a type))
               :args (list type expr))))
 
-  
+  (define (handle-tops expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (if (cartesian-any? top-exprs? args args)
+        (labelinglogic:expression:make
+         type (list labelinglogic:expression:top))
+        expr))
 
   (define (consume-subsets expr)
     (define type (labelinglogic:expression:type expr))
