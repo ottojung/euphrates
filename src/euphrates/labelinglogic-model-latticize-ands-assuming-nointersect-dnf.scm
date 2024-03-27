@@ -109,12 +109,15 @@
             (let ()
               (debugs expr)
 
-              (define found
+              (define-pair (parent name)
                 (list-find-first
-                 (lambda (x) (equalp x expr))
-                 #f lattice-renames-alist))
+                 (lambda (x)
+                   (define-pair (parent name) x)
+                   (equalp parent expr))
+                 (cons #f #f)
+                 lattice-renames-alist))
 
-              (or found expr))
+              (or name expr))
             expr))))
 
   (define model-with-factored-nicolauses
