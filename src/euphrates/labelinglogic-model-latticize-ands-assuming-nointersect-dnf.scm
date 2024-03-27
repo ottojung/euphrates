@@ -59,8 +59,8 @@
             'and (list
                   parent
                   (labelinglogic:expression:make
-                   'not (labelinglogic:expression:make
-                         'or children))))))))
+                   'not (list (labelinglogic:expression:make
+                               'or children)))))))))
 
   (define _318237
     (for-each
