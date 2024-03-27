@@ -71,7 +71,7 @@
         (define args* (map loop args))
         (cond
          ((null? args*) expr)
-         ;; ((null? (cdr args*)) expr)
+         ((null? (cdr args*)) (loop (car args*)))
          (else
           (let ()
             (define new-args (distribute-args args*))
