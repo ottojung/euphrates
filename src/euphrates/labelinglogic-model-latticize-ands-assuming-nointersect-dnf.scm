@@ -104,6 +104,9 @@
 
   (define (replacer class)
     (lambda (constant)
+
+      
+
       0))
 
   (define model-with-factored-nicolauses
