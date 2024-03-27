@@ -107,6 +107,8 @@
       (lambda (expr)
         (if (labelinglogic:expression:dnf-r7rs-clause? expr)
             (let ()
+              (debugs expr)
+
               (define found
                 (list-find-first
                  (lambda (x) (equalp x expr))
