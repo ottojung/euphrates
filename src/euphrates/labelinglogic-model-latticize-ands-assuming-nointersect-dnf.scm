@@ -54,15 +54,16 @@
     (define children-or
       (labelinglogic:expression:make 'or children))
 
-    (labelinglogic:expression:sugarify
-     (labelinglogic:expression:make
-      'or (list
-           children-or
-           (labelinglogic:expression:optimize/assuming-nointersect
-            (labelinglogic:expression:make
-             'and (list parent
-                        (labelinglogic:expression:make
-                         'not (list children-or)))))))))
+    (list
+     (labelinglogic:expression:sugarify
+      (labelinglogic:expression:make
+       'or (list
+            children-or
+            (labelinglogic:expression:optimize/assuming-nointersect
+             (labelinglogic:expression:make
+              'and (list parent
+                         (labelinglogic:expression:make
+                          'not (list children-or))))))))))
 
   (define _318237
     (for-each
