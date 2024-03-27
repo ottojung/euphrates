@@ -95,6 +95,9 @@
 
   (define model-with-added-nicolauses
     (labelinglogic:model:append
-     
+     (hashmap->alist
+      lattice-completed-bodies-map)))
+
+  (debugs model-with-added-nicolauses)
 
   model)

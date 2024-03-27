@@ -12,6 +12,7 @@
     (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates hashmap)
+          hashmap->alist
           hashmap-set!
           make-hashmap))
   (import
@@ -35,6 +36,9 @@
   (import
     (only (euphrates labelinglogic-expression-to-dnf)
           labelinglogic:expression:to-dnf))
+  (import
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
   (import
     (only (euphrates
             labelinglogic-model-collect-dnf-r7rs-clauses)
