@@ -20,6 +20,10 @@
           labelinglogic:expression:bottom?))
   (import
     (only (euphrates
+            labelinglogic-expression-dnf-r7rs-clause-huh)
+          labelinglogic:expression:dnf-r7rs-clause?))
+  (import
+    (only (euphrates
             labelinglogic-expression-equal-huh-syntactic-order-independent)
           labelinglogic:expression:equal?/syntactic/order-independent))
   (import
@@ -44,8 +48,12 @@
             labelinglogic-model-collect-dnf-r7rs-clauses)
           labelinglogic:model:collect-dnf-r7rs-clauses))
   (import
-    (only (euphrates labelinglogic-model-replace-constants)
-          labelinglogic:model:replace-constants))
+    (only (euphrates
+            labelinglogic-model-map-subexpressions)
+          labelinglogic:model:map-subexpressions))
+  (import
+    (only (euphrates list-find-first)
+          list-find-first))
   (import
     (only (euphrates list-idempotent)
           list-idempotent))
@@ -65,6 +73,7 @@
           make-unique-identifier))
   (import
     (only (scheme base)
+          _
           and
           begin
           cons
@@ -72,6 +81,7 @@
           for-each
           if
           lambda
+          let
           list
           not
           or
