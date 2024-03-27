@@ -102,4 +102,12 @@
 
   (debugs model-with-added-nicolauses)
 
+  (define model-with-factored-nicolauses
+    (labelinglogic:model:append
+     model
+     (hashmap->alist
+      lattice-completed-bodies-map)))
+
+  (debugs model-with-factored-nicolauses)
+
   model)
