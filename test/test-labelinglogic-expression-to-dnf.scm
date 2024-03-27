@@ -142,6 +142,7 @@
 
 ;; Complex expression.
 (test
+
  '(or (or (and (and (r7rs char-numeric?)
                     (not (= 7))
                     (not (= 5)))
