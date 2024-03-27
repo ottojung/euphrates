@@ -47,6 +47,9 @@
   (define lattice-reverse-renames-map
     (make-hashmap))
 
+  (define lattice-completed-bodies-map
+    (make-hashmap))
+
   (define _318237
     (for-each
      (lambda (adj)
@@ -63,7 +66,13 @@
 
        (hashmap-set!
         lattice-bodies-map
-        name children))
+        name children)
+
+       (hashmap-set!
+        lattice-completed-bodies-map
+        name (complete-bodies parent children))
+
+       )
 
      lattice-adjlist))
 
