@@ -51,8 +51,14 @@
     (make-hashmap))
 
   (define (complete-bodies parent children)
-    
-    0)
+    (labelinglogic:expression:optimize/assuming-nointersect
+     (labelinglogic:expression:make
+      'or (list parent
+                (labelinglogic:expression:make
+                 'and (list parent
+                            (labelinglogic:expression:make
+                             'not (labelinglogic:expression:make
+                                   'or children))))))))
 
 
   (define _318237
