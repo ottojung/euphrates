@@ -135,7 +135,7 @@
  '(and (tuple (= 1)) (tuple (not (= 1))))
  '(and (tuple (= 1)) (not (tuple (= 1)))))
 
-;; Complex expression
+;; Singleton and.
 (test
  '(and (or (= 5) (= 7) (= 8)))
  '(and (or (= 5) (= 7) (= 8))))
