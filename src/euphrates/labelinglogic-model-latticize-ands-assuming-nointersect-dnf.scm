@@ -120,6 +120,7 @@
      (hashmap->alist
       lattice-completed-bodies-map)))
 
+  (debugs model)
   (debugs model-with-added-nicolauses)
 
   model)
