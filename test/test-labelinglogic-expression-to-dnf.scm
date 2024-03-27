@@ -139,3 +139,18 @@
 (test
  '(or (= 5) (= 7) (= 8))
  '(and (or (= 5) (= 7) (= 8))))
+
+;; Complex expression.
+(test
+ 9999
+ '(or (and (and (r7rs char-numeric?)
+                (not (= #\7))
+                (not (= #\5)))
+           (not (or (and (r7rs char-numeric?)
+                         (not (= #\5))
+                         (not (= #\7))
+                         (not (= #\8))))))
+      (and (r7rs char-numeric?)
+           (not (= #\5))
+           (not (= #\7))
+           (not (= #\8)))))
