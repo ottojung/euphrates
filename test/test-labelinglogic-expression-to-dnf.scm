@@ -138,4 +138,4 @@
 ;; Complex expression
 (test
  9999
- (and (or (= 5) (= 7) (= 8))))
+ '(and (or (= 5) (= 7) (= 8))))
