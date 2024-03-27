@@ -42,7 +42,7 @@
        (and (r7rs odd?) (not (= 9))))))
 
 (assert=
- 9999
+ '(or (= 9) (not (= 9)))
  (labelinglogic:expression:optimize/assuming-nointersect
   '(or (= 9) (not (= 9)))))
 
