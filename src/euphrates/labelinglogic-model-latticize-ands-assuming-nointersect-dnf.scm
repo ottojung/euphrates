@@ -120,7 +120,7 @@
 
   (define model-with-factored-nicolauses
     (labelinglogic:model:map-subexpressions
-     replacer model))
+     replacer model-with-added-nicolauses))
 
   (debugs model-with-factored-nicolauses)
 
