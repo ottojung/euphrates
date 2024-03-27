@@ -94,14 +94,6 @@
   (define lattice-renames-alist
     (stack->list lattice-renames-stack))
 
-  (define model-with-added-nicolauses
-    (labelinglogic:model:append
-     model
-     (hashmap->alist
-      lattice-completed-bodies-map)))
-
-  (debugs model-with-added-nicolauses)
-
   (define replacer
     (lambda _
       (lambda (expr)
@@ -120,8 +112,16 @@
 
   (define model-with-factored-nicolauses
     (labelinglogic:model:map-subexpressions
-     replacer model-with-added-nicolauses))
+     replacer model))
 
   (debugs model-with-factored-nicolauses)
+
+  (define model-with-added-nicolauses
+    (labelinglogic:model:append
+     model-with-factored-nicolauses
+     (hashmap->alist
+      lattice-completed-bodies-map)))
+
+  (debugs model-with-added-nicolauses)
 
   model)
