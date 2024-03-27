@@ -76,7 +76,7 @@
         expr))
 
   (define optimize-or/step
-    (compose consume-subsets explode-top remove-bottoms))
+    (compose handle-tops consume-subsets explode-top remove-bottoms))
 
   (define (optimize-or expr)
     (define type (labelinglogic:expression:type expr))
