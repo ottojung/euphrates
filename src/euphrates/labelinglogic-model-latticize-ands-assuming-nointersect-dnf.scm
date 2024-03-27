@@ -62,7 +62,6 @@
                    'not (labelinglogic:expression:make
                          'or children))))))))
 
-
   (define _318237
     (for-each
      (lambda (adj)
