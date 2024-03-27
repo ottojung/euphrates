@@ -53,14 +53,14 @@
   (define (complete-bodies parent children)
     (labelinglogic:expression:optimize/assuming-nointersect
      (labelinglogic:expression:make
-      'or (list
-           parent
+      'or (cons
            (labelinglogic:expression:make
             'and (list
                   parent
                   (labelinglogic:expression:make
                    'not (list (labelinglogic:expression:make
-                               'or children)))))))))
+                               'or children)))))
+           children))))
 
   (define _318237
     (for-each
