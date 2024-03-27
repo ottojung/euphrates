@@ -102,15 +102,13 @@
 
   (debugs model-with-added-nicolauses)
 
-  (define (replacer class)
-    (lambda (constant)
-
-      
-
-      0))
+  (define replacer
+    (lambda _
+      (lambda (expr)
+        0)))
 
   (define model-with-factored-nicolauses
-    (labelinglogic:model:replace-constants
+    (labelinglogic:model:map-subexpressions
      replacer model))
 
   (debugs model-with-factored-nicolauses)
