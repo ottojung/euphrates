@@ -41,6 +41,11 @@
   '(or (= 3)
        (and (r7rs odd?) (not (= 9))))))
 
+(assert=
+ '(or (= 9) (not (= 9)))
+ (labelinglogic:expression:optimize/assuming-nointersect
+  '(or (= 9) (not (= 9)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Cases from labelinglogic:expression:optimize/and-assuming-nointersect-dnf

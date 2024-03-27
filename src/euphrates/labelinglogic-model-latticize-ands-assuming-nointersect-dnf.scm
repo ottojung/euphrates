@@ -50,6 +50,11 @@
   (define lattice-completed-bodies-map
     (make-hashmap))
 
+  (define (complete-bodies parent children)
+    
+    0)
+
+
   (define _318237
     (for-each
      (lambda (adj)
