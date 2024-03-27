@@ -114,7 +114,7 @@
     (labelinglogic:model:map-subexpressions
      replacer model))
 
-  (debugs model-with-factored-nicolauses)
+  ;; (debugs model-with-factored-nicolauses)
 
   (define model-with-added-nicolauses
     (labelinglogic:model:append
