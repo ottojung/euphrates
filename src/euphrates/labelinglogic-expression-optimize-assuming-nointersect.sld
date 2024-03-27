@@ -4,7 +4,6 @@
     labelinglogic-expression-optimize-assuming-nointersect)
   (export
     labelinglogic:expression:optimize/assuming-nointersect)
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates
             labelinglogic-expression-optimize-assuming-nointersect-dnf)
