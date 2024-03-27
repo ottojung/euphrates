@@ -44,6 +44,9 @@
             labelinglogic-model-collect-dnf-r7rs-clauses)
           labelinglogic:model:collect-dnf-r7rs-clauses))
   (import
+    (only (euphrates labelinglogic-model-replace-constants)
+          labelinglogic:model:replace-constants))
+  (import
     (only (euphrates list-idempotent)
           list-idempotent))
   (import

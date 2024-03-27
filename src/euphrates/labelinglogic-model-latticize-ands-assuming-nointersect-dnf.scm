@@ -102,11 +102,13 @@
 
   (debugs model-with-added-nicolauses)
 
+  (define (replacer class)
+    (lambda (constant)
+      0))
+
   (define model-with-factored-nicolauses
-    (labelinglogic:model:append
-     model
-     (hashmap->alist
-      lattice-completed-bodies-map)))
+    (labelinglogic:model:replace-constants
+     replacer model))
 
   (debugs model-with-factored-nicolauses)
 
