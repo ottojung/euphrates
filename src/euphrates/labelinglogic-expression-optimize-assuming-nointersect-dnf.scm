@@ -25,6 +25,24 @@
               :message (stringf "Expression type ~s not permitted here." (~a type))
               :args (list type expr))))
 
+  (define (opposite-exprs? expr-a expr-b)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+    (define args-a (labelinglogic:expression:args expr-a))
+    (define args-b (labelinglogic:expression:args expr-b))
+    (define negated-a? (equal? 'not type-a))
+    (define negated-b? (equal? 'not type-b))
+    (define inner-a (if negated-a? (car args-a) expr-a))
+    (define inner-b (if negated-b? (car args-b) expr-b))
+
+    (and (not (equal? negated-a? negated-b?))
+         (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
+
+  (define (top-exprs? expr-a expr-b)
+    (or (opposite-exprs? expr-a expr-b)
+        (same-type-nointersect? expr-a expr-b)
+        (different-type-nointersect? expr-a expr-b)))
+
   (define (handle-tops expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))

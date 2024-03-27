@@ -40,6 +40,10 @@
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
+    (only (euphrates
+            labelinglogic-expression-syntactic-equal-huh)
+          labelinglogic:expression:syntactic-equal?))
+  (import
     (only (euphrates labelinglogic-expression-top-huh)
           labelinglogic:expression:top?))
   (import
@@ -61,6 +65,7 @@
           =
           and
           begin
+          car
           cond
           define
           else
