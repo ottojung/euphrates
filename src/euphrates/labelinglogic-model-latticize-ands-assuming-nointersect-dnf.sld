@@ -33,6 +33,9 @@
             labelinglogic-expression-optimize-assuming-nointersect)
           labelinglogic:expression:optimize/assuming-nointersect))
   (import
+    (only (euphrates labelinglogic-expression-to-dnf)
+          labelinglogic:expression:to-dnf))
+  (import
     (only (euphrates
             labelinglogic-model-collect-dnf-r7rs-clauses)
           labelinglogic:model:collect-dnf-r7rs-clauses))
