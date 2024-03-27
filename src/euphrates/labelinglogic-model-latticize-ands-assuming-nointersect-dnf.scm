@@ -107,8 +107,6 @@
       (lambda (expr)
         (if (labelinglogic:expression:dnf-r7rs-clause? expr)
             (let ()
-              (debugs expr)
-
               (define-pair (parent name)
                 (list-find-first
                  (lambda (x)
