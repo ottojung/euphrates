@@ -93,6 +93,7 @@
   (define lattice-renames-alist
     (stack->list lattice-renames-stack))
 
-  
+  (define model-with-added-nicolauses
+    (
 
   model)
