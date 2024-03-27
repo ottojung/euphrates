@@ -91,7 +91,7 @@
      (labelinglogic:expression:sugarify
       (labelinglogic:expression:make
        'or (list
-            children-or
+            or-yemapped
             (labelinglogic:expression:optimize/assuming-nointersect
              (labelinglogic:expression:make
               'and (list parent
