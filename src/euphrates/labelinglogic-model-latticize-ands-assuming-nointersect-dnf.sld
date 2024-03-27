@@ -12,7 +12,9 @@
     (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates hashmap)
+          alist->hashmap
           hashmap->alist
+          hashmap-ref
           hashmap-set!
           make-hashmap))
   (import

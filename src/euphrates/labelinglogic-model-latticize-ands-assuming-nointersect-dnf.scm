@@ -47,24 +47,6 @@
   (define lattice-reverse-renames-map
     (make-hashmap))
 
-  (define lattice-completed-bodies-map
-    (make-hashmap))
-
-  (define (complete-bodies parent children)
-    (define children-or
-      (labelinglogic:expression:make 'or children))
-
-    (list
-     (labelinglogic:expression:sugarify
-      (labelinglogic:expression:make
-       'or (list
-            children-or
-            (labelinglogic:expression:optimize/assuming-nointersect
-             (labelinglogic:expression:make
-              'and (list parent
-                         (labelinglogic:expression:make
-                          'not (list children-or))))))))))
-
   (define _318237
     (for-each
      (lambda (adj)
@@ -83,16 +65,47 @@
         lattice-bodies-map
         name children)
 
-       (hashmap-set!
-        lattice-completed-bodies-map
-        name (complete-bodies parent children))
-
        )
 
      lattice-adjlist))
 
   (define lattice-renames-alist
     (stack->list lattice-renames-stack))
+
+  (define lattice-renames-map
+    (alist->hashmap lattice-renames-alist))
+
+  (define lattice-completed-bodies-map
+    (make-hashmap))
+
+  (define (complete-bodies parent children)
+    (define children-or
+      (labelinglogic:expression:make 'or children))
+
+    (list
+     (labelinglogic:expression:sugarify
+      (labelinglogic:expression:make
+       'or (list
+            children-or
+            (labelinglogic:expression:optimize/assuming-nointersect
+             (labelinglogic:expression:make
+              'and (list parent
+                         (labelinglogic:expression:make
+                          'not (list children-or))))))))))
+
+  (define _619823798
+    (for-each
+     (lambda (p)
+       (define-pair (parent name) p)
+
+       (define children
+         (hashmap-ref lattice-bodies-map name))
+
+       (hashmap-set!
+        lattice-completed-bodies-map
+        name (complete-bodies parent children)))
+
+     lattice-renames-alist))
 
   (define replacer
     (lambda _
