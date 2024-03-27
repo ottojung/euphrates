@@ -108,7 +108,9 @@
         (if (labelinglogic:expression:dnf-r7rs-clause? expr)
             (let ()
               (define found
-                (list-find-first equalp #f lattice-renames-alist))
+                (list-find-first
+                 (lambda (x) (equalp x expr))
+                 #f lattice-renames-alist))
 
               (or found expr))
             expr))))
