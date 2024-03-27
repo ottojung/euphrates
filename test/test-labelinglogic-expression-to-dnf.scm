@@ -142,7 +142,27 @@
 
 ;; Complex expression.
 (test
- 9999
+ '(or (or (and (and (r7rs char-numeric?)
+                    (not (= 7))
+                    (not (= 5)))
+               (not (r7rs char-numeric?)))
+          (and (and (r7rs char-numeric?)
+                    (not (= 7))
+                    (not (= 5)))
+               (= 5))
+          (and (and (r7rs char-numeric?)
+                    (not (= 7))
+                    (not (= 5)))
+               (= 7))
+          (and (and (r7rs char-numeric?)
+                    (not (= 7))
+                    (not (= 5)))
+               (= 8)))
+      (and (r7rs char-numeric?)
+           (not (= 5))
+           (not (= 7))
+           (not (= 8))))
+
  '(or (and (and (r7rs char-numeric?)
                 (not (= 7))
                 (not (= 5)))
