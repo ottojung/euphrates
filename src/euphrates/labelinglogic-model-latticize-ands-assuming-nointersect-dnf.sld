@@ -85,6 +85,7 @@
           lambda
           let
           list
+          map
           not
           or
           quote

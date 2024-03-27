@@ -79,8 +79,13 @@
     (make-hashmap))
 
   (define (complete-bodies parent children)
-    (define children-or
+    (define or-unmapped
       (labelinglogic:expression:make 'or children))
+    (define or-yemapped
+      (labelinglogic:expression:make
+       'or
+       (map (lambda (child) (hashmap-ref lattice-renames-map child))
+            children)))
 
     (list
      (labelinglogic:expression:sugarify
@@ -91,7 +96,7 @@
              (labelinglogic:expression:make
               'and (list parent
                          (labelinglogic:expression:make
-                          'not (list children-or))))))))))
+                          'not (list or-unmapped))))))))))
 
   (define _619823798
     (for-each
