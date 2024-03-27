@@ -39,9 +39,7 @@
          (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
   (define (top-exprs? expr-a expr-b)
-    (or (opposite-exprs? expr-a expr-b)
-        (same-type-nointersect? expr-a expr-b)
-        (different-type-nointersect? expr-a expr-b)))
+    (opposite-exprs? expr-a expr-b))
 
   (define (handle-tops expr)
     (define type (labelinglogic:expression:type expr))
