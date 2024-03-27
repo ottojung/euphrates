@@ -94,6 +94,7 @@
     (stack->list lattice-renames-stack))
 
   (define model-with-added-nicolauses
-    (
+    (labelinglogic:model:append
+     
 
   model)
