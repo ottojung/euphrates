@@ -34,8 +34,8 @@
             labelinglogic-expression-optimize-assuming-nointersect)
           labelinglogic:expression:optimize/assuming-nointersect))
   (import
-    (only (euphrates labelinglogic-expression-to-dnf)
-          labelinglogic:expression:to-dnf))
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic:expression:sugarify))
   (import
     (only (euphrates labelinglogic-model-append)
           labelinglogic:model:append))

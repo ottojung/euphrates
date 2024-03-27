@@ -54,7 +54,7 @@
     (define children-or
       (labelinglogic:expression:make 'or children))
 
-    (labelinglogic:expression:to-dnf
+    (labelinglogic:expression:sugarify
      (labelinglogic:expression:make
       'or (list
            children-or
