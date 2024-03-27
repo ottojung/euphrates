@@ -16,7 +16,6 @@
           or
           quote
           syntax-rules))
-  (import (only (scheme char) char-numeric?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

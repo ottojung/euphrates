@@ -135,18 +135,7 @@
  '(and (tuple (= 1)) (tuple (not (= 1))))
  '(and (tuple (= 1)) (not (tuple (= 1)))))
 
-
 ;; Complex expression
 (test
  9999
- '(or (and (and (r7rs char-numeric?)
-                (not (= #\7))
-                (not (= #\5)))
-           (not (or (and (r7rs char-numeric?)
-                         (not (= #\5))
-                         (not (= #\7))
-                         (not (= #\8))))))
-      (and (r7rs char-numeric?)
-           (not (= #\5))
-           (not (= #\7))
-           (not (= #\8)))))
+ (and (or (= 5) (= 7) (= 8))))
