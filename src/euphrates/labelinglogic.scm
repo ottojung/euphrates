@@ -31,10 +31,10 @@
     (labelinglogic:model:inline-all latticised))
 
   (define latticised-reduced
-    (labelinglogic:model:reduce-to-bindings latticised-inlined))
+    (labelinglogic:model:reduce-to-bindings latticised-inlined bindings))
 
   (define latticised-opt
-    (labelinglogic:model:reduce-to-bindings latticised-inlined))
+    (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
 
   (define ret-model
     latticised-opt)
