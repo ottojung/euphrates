@@ -5,9 +5,11 @@
   (define (optimize expr)
     (define args (labelinglogic:expression:args expr))
     (define sugar (labelinglogic:expression:sugarify expr))
+
     (define (dedup expr)
-      
-      )
+      (list-idempotent
+       labelinglogic:expression:syntactic-equal?
+       expr))
 
     (apply-until-fixpoint dedup sugar))
 
