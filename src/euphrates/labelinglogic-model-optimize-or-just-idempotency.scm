@@ -4,9 +4,7 @@
 (define (labelinglogic:model:optimize/or/just-idempotency model)
   (define (optimize expr)
     (define args (labelinglogic:expression:args expr))
-    (define sugar
-      (labelinglogic:expression:sugarify expr))
-
+    (define sugar (labelinglogic:expression:sugarify expr))
     (
 
 
