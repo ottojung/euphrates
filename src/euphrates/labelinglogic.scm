@@ -33,6 +33,9 @@
   (define latticised-reduced
     (labelinglogic:model:reduce-to-bindings latticised-inlined))
 
+  (define latticised-reduced
+    (labelinglogic:model:reduce-to-bindings latticised-inlined))
+
   (define ret-model
     latticised-reduced)
 
