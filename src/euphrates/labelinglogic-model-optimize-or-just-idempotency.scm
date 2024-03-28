@@ -3,6 +3,11 @@
 
 (define (labelinglogic:model:optimize/or/just-idempotency model)
   (define (optimize expr)
+    (define sugar
+      (labelinglogic:expression:sugarify expr))
+
+    
+
     0)
 
   (labelinglogic:model:map-expressions
