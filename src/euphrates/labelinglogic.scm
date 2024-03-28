@@ -27,8 +27,14 @@
   (define latticised
     (labelinglogic:model:latticize-ands-assuming-nointersect-dnf opt-dnf-model))
 
+  (define latticised-inlined
+    (labelinglogic:model:inline-all latticised))
+
+  (define latticised-reduced
+    (labelinglogic:model:reduce-to-bindings latticised-inlined))
+
   (define ret-model
-    latticised)
+    latticised-reduced)
 
   ;; (define opt-model
   ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
