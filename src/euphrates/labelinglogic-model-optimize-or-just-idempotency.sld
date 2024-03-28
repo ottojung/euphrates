@@ -4,7 +4,11 @@
     labelinglogic-model-optimize-or-just-idempotency)
   (export
     labelinglogic:model:optimize/or/just-idempotency)
-  (import (only (scheme base) begin define))
+  (import
+    (only (euphrates labelinglogic-model-map-expressions)
+          labelinglogic:model:map-expressions))
+  (import
+    (only (scheme base) _ begin define lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
