@@ -3,12 +3,19 @@
 
 (define (labelinglogic:model:optimize/or/just-idempotency model)
   (define (optimize expr)
+    (define args (labelinglogic:expression:args expr))
     (define sugar
       (labelinglogic:expression:sugarify expr))
 
-    
+    (
 
-    0)
+
+  (define (maybe-optimize expr)
+    (define type (labelinglogic:expression:type expr))
+
+    (if (equal? type 'or)
+        (optimize expr)
+        expr))
 
   (labelinglogic:model:map-expressions
    (const optimize) model))
