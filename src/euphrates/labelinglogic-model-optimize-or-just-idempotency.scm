@@ -5,8 +5,10 @@
   (define (optimize expr)
     (define args (labelinglogic:expression:args expr))
     (define sugar (labelinglogic:expression:sugarify expr))
-    (
-
+    (define (dedup expr)
+      
+      )
+    (apply-until-fixpoint dedup sugar))
 
   (define (maybe-optimize expr)
     (define type (labelinglogic:expression:type expr))
