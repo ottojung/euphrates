@@ -6,4 +6,4 @@
     0)
 
   (labelinglogic:model:map-expressions
-   (lambda _ optimize) model))
+   (const optimize) model))
