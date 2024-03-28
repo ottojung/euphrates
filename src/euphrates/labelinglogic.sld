@@ -26,6 +26,10 @@
           labelinglogic:model:optimize/assuming-nointersect))
   (import
     (only (euphrates
+            labelinglogic-model-optimize-or-just-idempotency)
+          labelinglogic:model:optimize/or/just-idempotency))
+  (import
+    (only (euphrates
             labelinglogic-model-reduce-to-bindings)
           labelinglogic:model:reduce-to-bindings))
   (import

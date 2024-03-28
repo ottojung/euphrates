@@ -1,10 +1,10 @@
+
 (define-library
   (euphrates
     labelinglogic-model-optimize-or-just-idempotency)
   (export
     labelinglogic:model:optimize/or/just-idempotency)
-  (import
-    (only (scheme base) begin define make-parameter))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
