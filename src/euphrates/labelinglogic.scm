@@ -33,11 +33,11 @@
   (define latticised-reduced
     (labelinglogic:model:reduce-to-bindings latticised-inlined))
 
-  (define latticised-reduced
+  (define latticised-opt
     (labelinglogic:model:reduce-to-bindings latticised-inlined))
 
   (define ret-model
-    latticised-reduced)
+    latticised-opt)
 
   ;; (define opt-model
   ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
