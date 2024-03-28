@@ -8,6 +8,7 @@
     (define (dedup expr)
       
       )
+
     (apply-until-fixpoint dedup sugar))
 
   (define (maybe-optimize expr)
