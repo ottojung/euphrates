@@ -8,9 +8,7 @@
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashset)
-          hashset-add!
           hashset-clear!
-          hashset-has?
           make-hashset))
   (import
     (only (euphrates list-or-map) list-or-map))
@@ -25,7 +23,8 @@
           make-olgraph
           make-olnode
           olnode:children
-          olnode:id
+          olnode:meta
+          olnode:meta:set!
           olnode:prepend-child!
           olnode:value))
   (import
@@ -35,6 +34,7 @@
   (import
     (only (scheme base)
           +
+          <
           _
           and
           begin
@@ -51,6 +51,7 @@
           list
           map
           null?
+          number?
           quote
           set!
           unless

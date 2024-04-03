@@ -123,11 +123,12 @@
 
   (define (add-join-point! node-x node-y value)
     (define-values (to-add existing?) (make-join-node! value))
+    (define existing-level (olnode:meta to-add))
 
-    (unless (and existing?
-                 (hashset-has? top-layer-indexes (olnode:id to-add)))
+    (unless (and (number? existing-level)
+                 (< existing-level current-level))
       (set! top-layer (cons to-add top-layer))
-      (hashset-add! top-layer-indexes (olnode:id to-add)))
+      (olnode:meta:set! to-add current-level))
 
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
