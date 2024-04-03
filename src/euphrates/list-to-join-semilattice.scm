@@ -158,7 +158,7 @@
   (let loop ()
     (define copy top-layer)
     (set! top-layer '())
-    (hashset-clear! top-layer-indexes
+    (hashset-clear! top-layer-indexes)
     (unless (null? copy)
       (cartesian-each
        (lambda (x y)

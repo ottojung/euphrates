@@ -4,7 +4,11 @@
   (export list->join-semilattice)
   (import
     (only (euphrates cartesian-each) cartesian-each))
-  (import (only (euphrates hashset) hashset-has?))
+  (import
+    (only (euphrates hashset)
+          hashset-add!
+          hashset-clear!
+          hashset-has?))
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
@@ -43,6 +47,7 @@
           list
           map
           null?
+          or
           quote
           set!
           unless
