@@ -143,10 +143,14 @@
     (labelinglogic:model:map-expressions
      replacer model))
 
+  (debugs model-with-factored-nicolauses)
+
   (define model-with-added-nicolauses
     (labelinglogic:model:append
      model-with-factored-nicolauses
      (hashmap->alist
       lattice-completed-bodies-map)))
+
+  (debugs model-with-added-nicolauses)
 
   model-with-added-nicolauses)
