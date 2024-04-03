@@ -143,27 +143,12 @@
       (whitespace (r7rs char-whitespace?))))
 
   (define bindings
-    `((t_an (and alphanum (not (= #\5))))
-      (t_bn (and alphanum (not (= #\7))))
+    `((t_an (and numeric (not (= #\5))))
       (t_3  (= #\3))))
 
   (assert=
 
-   '((t_an (or (r7rs char-upper-case?)
-               (r7rs char-lower-case?)
-               (= #\3)
-               (and (r7rs char-numeric?)
-                    (not (= #\7))
-                    (not (= #\5)))
-               (= #\7)))
-     (t_bn (or (r7rs char-upper-case?)
-               (r7rs char-lower-case?)
-               (= #\3)
-               (and (r7rs char-numeric?)
-                    (not (= #\7))
-                    (not (= #\5)))
-               (= #\5)))
-     (t_3 (= #\3)))
+   9999
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
