@@ -147,13 +147,12 @@
         list))
 
     (unless (null? join-result)
-      (unless (null? (cdr join-result))
-        (raisu* :from "list->join-semilattice"
-                :type 'bad-number-of-values
-                :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
-                :args (list join-result node-x node-y)))
-
-      (add-join-point! node-x node-y (car join-result))))
+      (if (null? (cdr join-result))
+          (add-join-point! node-x node-y (car join-result))
+          (raisu* :from "list->join-semilattice"
+                  :type 'bad-number-of-values
+                  :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
+                  :args (list join-result node-x node-y)))))
 
   (let loop ()
     (define copy top-layer)
