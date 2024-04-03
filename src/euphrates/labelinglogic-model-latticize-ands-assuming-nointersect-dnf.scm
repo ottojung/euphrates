@@ -6,7 +6,7 @@
     labelinglogic:expression:equal?/syntactic/order-independent)
 
   (define nicolauses/dup
-    (labelinglogic:model:collect-dnf-r7rs-clauses model))
+    (labelinglogic:model:collect-dnf-clauses model))
 
   (define nicolauses
     (apply-until-fixpoint

@@ -22,10 +22,6 @@
           labelinglogic:expression:bottom?))
   (import
     (only (euphrates
-            labelinglogic-expression-dnf-r7rs-clause-huh)
-          labelinglogic:expression:dnf-r7rs-clause?))
-  (import
-    (only (euphrates
             labelinglogic-expression-equal-huh-syntactic-order-independent)
           labelinglogic:expression:equal?/syntactic/order-independent))
   (import
@@ -47,8 +43,8 @@
           labelinglogic:model:append))
   (import
     (only (euphrates
-            labelinglogic-model-collect-dnf-r7rs-clauses)
-          labelinglogic:model:collect-dnf-r7rs-clauses))
+            labelinglogic-model-collect-dnf-clauses)
+          labelinglogic:model:collect-dnf-clauses))
   (import
     (only (euphrates
             labelinglogic-model-map-subexpressions)
