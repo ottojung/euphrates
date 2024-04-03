@@ -110,7 +110,7 @@
   (define (make-new-node! value)
     (define new (make-olnode value))
     (set! all-nodes (cons new all-nodes))
-    (set! top-layer (cons to-add top-layer))
+    (set! top-layer (cons new top-layer))
     new)
 
   (define (make-join-node! value)
@@ -123,6 +123,7 @@
 
   (define (add-join-point! node-x node-y value)
     (define-values (to-add to-add-index) (make-join-node! value))
+    ;; (set! top-layer (cons to-add top-layer))
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
     (values))
