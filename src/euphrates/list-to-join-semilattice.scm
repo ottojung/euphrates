@@ -33,7 +33,7 @@
   ;;                       let f = join-function, then:
   ;;                       (join-function x y) == (join-function y x)  \forall x, y
   ;;                       (f x (f y z)) == (f (f x y) z)              \forall x, y, z.
-  ;;                    Idempotency may be skipped.
+  ;;                    Idempotency may be skipped, see what happens and if you are okay with it.
   ;;
   ;; - `lst`: This is the list of elements you want to transform. The type of
   ;;          list elements can be flexible, with the condition that the
