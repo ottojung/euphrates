@@ -33,6 +33,7 @@
           cdr
           cons
           define
+          define-values
           if
           lambda
           length
@@ -40,7 +41,6 @@
           list
           map
           null?
-          or
           quote
           set!
           unless

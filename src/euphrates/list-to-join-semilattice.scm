@@ -87,7 +87,8 @@
 
   (define (find-existing-node needle-value)
     (let loop ((i 0) (rest all-nodes))
-      (if (null? rest) #f
+      (if (null? rest)
+          (values #f #f)
           (let ()
             (define other (car rest))
             (if (equality-tester
@@ -112,11 +113,15 @@
     new)
 
   (define (make-join-node! value)
-    (define existing (find-existing-node value))
-    (or existing (make-new-node! value)))
+    (define-values (existing existing-index)
+      (find-existing-node value))
+
+    (if existing-index
+        (values existing existing-index)
+        (values (make-new-node! value) #f)))
 
   (define (add-join-point! node-x node-y value)
-    (define to-add (make-join-node! value))
+    (define (to-add to-add-index) (make-join-node! value))
     (set! top-layer (cons to-add top-layer))
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
