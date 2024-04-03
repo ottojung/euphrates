@@ -126,7 +126,8 @@
 
     (unless (and to-add-index
                  (hashset-has? top-layer-indexes to-add-index))
-      (set! top-layer (cons to-add top-layer)))
+      (set! top-layer (cons to-add top-layer))
+      (hashset-add! top-layer-indexes to-add-index))
 
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
@@ -155,6 +156,7 @@
   (let loop ()
     (define copy top-layer)
     (set! top-layer '())
+    (hashset-clear! top-layer-indexes
     (unless (null? copy)
       (cartesian-each
        (lambda (x y)
