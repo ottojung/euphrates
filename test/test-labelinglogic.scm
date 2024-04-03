@@ -170,7 +170,7 @@
       (whitespace (r7rs char-whitespace?))))
 
   (define bindings
-    `((t_an (and alphanumeric (not (= #\5))))
+    `((t_an (and alphanum (not (= #\5))))
       (t_3  (= #\3))))
 
   (assert=
