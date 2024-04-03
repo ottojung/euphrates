@@ -175,11 +175,7 @@
 
   (assert=
 
-   '((t_an (or (= #\3)
-               (and (r7rs char-numeric?)
-                    (not (= #\5))
-                    (not (= #\3)))))
-     (t_3 (= #\3)))
+   99999
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
