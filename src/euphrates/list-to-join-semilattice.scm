@@ -133,7 +133,7 @@
     (prepend-node! node-y to-add)
     (values))
 
-  (define (join! node-x node-y)
+  (define (join! level node-x node-y)
     (define join-result
       (call-with-values
           (lambda _
@@ -164,7 +164,7 @@
       (cartesian-each
        (lambda (x y)
          (unless (olnode-eq? x y)
-           (join! x y)))
+           (join! level x y)))
 
        copy copy)
 
