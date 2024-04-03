@@ -39,18 +39,4 @@
   (define ret-model
     latticised-opt)
 
-  ;; (define opt-model
-  ;;   (labelinglogic:model:optimize-to-bindings extended-model bindings))
-
-  ;; (define duplicated-model
-  ;;   (labelinglogic:model:duplicate-bindings opt-model bindings))
-
-  ;; (define flat-model
-  ;;   (labelinglogic:model:flatten
-  ;;    duplicated-model))
-
-  ;; (debugs flat-model)
-
-  ;; flat-model)
-
   ret-model)
