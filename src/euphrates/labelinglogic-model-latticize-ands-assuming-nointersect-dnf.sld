@@ -18,6 +18,9 @@
           hashmap-set!
           make-hashmap))
   (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic:expression:args))
+  (import
     (only (euphrates labelinglogic-expression-bottom-huh)
           labelinglogic:expression:bottom?))
   (import
@@ -39,6 +42,9 @@
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic:expression:type))
+  (import
     (only (euphrates labelinglogic-model-append)
           labelinglogic:model:append))
   (import
@@ -46,9 +52,8 @@
             labelinglogic-model-collect-dnf-clauses)
           labelinglogic:model:collect-dnf-clauses))
   (import
-    (only (euphrates
-            labelinglogic-model-map-subexpressions)
-          labelinglogic:model:map-subexpressions))
+    (only (euphrates labelinglogic-model-map-expressions)
+          labelinglogic:model:map-expressions))
   (import
     (only (euphrates list-find-first)
           list-find-first))
@@ -74,12 +79,13 @@
           _
           and
           begin
+          car
           cons
           define
+          equal?
           for-each
           if
           lambda
-          let
           list
           map
           not

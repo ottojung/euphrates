@@ -117,9 +117,11 @@
       (list-find-first
        (lambda (x)
          (define-pair (parent name) x)
-         (equalp parent expr))
+         (equalp parent clause))
        (cons #f #f)
        lattice-renames-alist))
+
+    (or name clause))
 
   (define replacer
     (lambda _
@@ -131,9 +133,11 @@
           (if (equal? 'or type) args (list expr)))
 
         (define new-clauses
-          
+          (map little-replacer clauses))
 
-        (or name expr))))
+        (if (equal? 'or type)
+            (car new-clauses)
+            (labelinglogic:expression:make type new-clauses)))))
 
   (define model-with-factored-nicolauses
     (labelinglogic:model:map-expressions
