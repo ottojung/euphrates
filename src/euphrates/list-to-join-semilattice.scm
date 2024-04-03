@@ -121,7 +121,7 @@
         (values existing existing?)
         (values (make-new-node! value) existing?)))
 
-  (define (add-join-point! node-x node-y value)
+  (define (add-join-point! current-level node-x node-y value)
     (define-values (to-add existing?) (make-join-node! value))
     (define existing-level (olnode:meta to-add))
 
@@ -145,7 +145,7 @@
 
     (unless (null? join-result)
       (if (null? (cdr join-result))
-          (add-join-point! node-x node-y (car join-result))
+          (add-join-point! level node-x node-y (car join-result))
           (raisu* :from "list->join-semilattice"
                   :type 'bad-number-of-values
                   :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
