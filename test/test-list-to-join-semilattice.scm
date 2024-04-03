@@ -2,18 +2,19 @@
 (define-syntax test-case
   (syntax-rules ()
     ((_ equality-tester join-function lst expected)
-     (define result
-       (list->join-semilattice
-        equality-tester
-        join-function
-        lst))
+     (begin
+       (define result
+         (list->join-semilattice
+          equality-tester
+          join-function
+          lst))
 
-     (define actual
-       (olgraph->adjlist result))
+       (define actual
+         (olgraph->adjlist result))
 
-     ;; (debugs actual)
+       ;; (debugs actual)
 
-     (assert= actual expected))))
+       (assert= actual expected)))))
 
 
 
