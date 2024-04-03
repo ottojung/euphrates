@@ -123,9 +123,11 @@
     (define join-result
       (call-with-values
           (lambda _
-            (join-function
-             (olnode:value node-x)
-             (olnode:value node-y)))
+            (if (equalp node-x node-y)
+                (values)
+                (join-function
+                 (olnode:value node-x)
+                 (olnode:value node-y))))
         list))
 
     (unless (null? join-result)

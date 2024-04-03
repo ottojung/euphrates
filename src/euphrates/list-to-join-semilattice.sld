@@ -35,6 +35,7 @@
           cdr
           cons
           define
+          if
           lambda
           length
           let
