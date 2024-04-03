@@ -149,10 +149,6 @@
   (let loop ((level 0))
     (define copy top-layer)
 
-    (debug "=================")
-    (debugs (map olnode:value top-layer))
-    (debug "-----------------")
-
     (set! top-layer '())
     (hashset-clear! top-layer-indexes)
 
