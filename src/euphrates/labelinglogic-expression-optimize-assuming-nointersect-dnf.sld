@@ -10,8 +10,6 @@
   (import
     (only (euphrates cartesian-any-q) cartesian-any?))
   (import (only (euphrates compose) compose))
-  (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
