@@ -126,7 +126,7 @@
     (define existing-level (olnode:meta to-add))
 
     (unless (and (number? existing-level)
-                 (< existing-level current-level))
+                 (= existing-level current-level))
       (set! top-layer (cons to-add top-layer))
       (olnode:meta:set! to-add current-level))
 
