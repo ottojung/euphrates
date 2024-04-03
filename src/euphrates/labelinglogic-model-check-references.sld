@@ -6,7 +6,10 @@
     (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates hashset)
+          hashset->list
           hashset-has?
+          hashset-intersection
+          hashset-null?
           list->hashset))
   (import (only (euphrates identity) identity))
   (import

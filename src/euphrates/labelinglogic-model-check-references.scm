@@ -29,6 +29,14 @@
   (define names/set
     (list->hashset names))
 
+  (define redefined
+    (hashset-intersection names/set external-names/set))
+
+  (unless (hashset-null? redefined)
+    (fail-ref-check
+     "redefinition is not allowed"
+     (list (hashset->list redefined))))
+
   (for-each
    (lambda (binding)
      (define name (labelinglogic:binding:name binding))
