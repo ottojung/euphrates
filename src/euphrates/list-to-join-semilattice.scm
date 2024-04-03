@@ -132,11 +132,11 @@
     (define join-result
       (call-with-values
           (lambda _
-            (if (equality-tester node-x node-y)
+            (define left (olnode:value node-x))
+            (define right (olnode:value node-y))
+            (if (equality-tester left right)
                 (values)
-                (join-function
-                 (olnode:value node-x)
-                 (olnode:value node-y))))
+                (join-function left right)))
         list))
 
     (unless (null? join-result)
