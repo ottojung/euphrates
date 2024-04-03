@@ -163,14 +163,15 @@
     (hashset-clear! top-layer-indexes)
 
     (unless (null? copy)
-      (cartesian-each
-       (lambda (x y)
-         (unless (olnode-eq? x y)
-           (join! x y)))
+      (unless (null? (cdr copy))
+        (cartesian-each
+         (lambda (x y)
+           (unless (olnode-eq? x y)
+             (join! x y)))
 
-       copy copy)
+         copy copy)
 
-      (loop)))
+        (loop))))
 
   (olgraph-reverse-children-inplace! graph)
   (olgraph-remove-transitive-edges graph))
