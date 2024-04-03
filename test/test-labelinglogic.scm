@@ -214,38 +214,38 @@
 ;;          model bindings))))
 
 
-;; (let ()
-;;   (define model
-;;     `((any (or alphanum whitespace))
-;;       (alphanum (or alphabetic numeric))
-;;       (alphabetic (or upcase lowercase))
-;;       (upcase (r7rs char-upper-case?))
-;;       (lowercase (r7rs char-lower-case?))
-;;       (numeric (r7rs char-numeric?))
-;;       (whitespace (r7rs char-whitespace?))))
+(let ()
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
+      (alphabetic (or upcase lowercase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
 
-;;   (define bindings
-;;     `((t_an (and numeric (not (= #\5))))
-;;       (t_bn (and numeric (not (= #\7))))
-;;       (t_3  (= #\3))))
+  (define bindings
+    `((t_an (and numeric (not (= #\5))))
+      (t_bn (and numeric (not (= #\7))))
+      (t_3  (= #\3))))
 
-;;   (assert=
+  (assert=
 
-;;    '((t_an (or (= #\3)
-;;                (and (r7rs char-numeric?)
-;;                     (not (= #\7))
-;;                     (not (= #\5)))
-;;                (= #\7)))
-;;      (t_bn (or (= #\3)
-;;                (and (r7rs char-numeric?)
-;;                     (not (= #\7))
-;;                     (not (= #\5)))
-;;                (= #\5)))
-;;      (t_3 (= #\3)))
+   '((t_an (or (= #\3)
+               (and (r7rs char-numeric?)
+                    (not (= #\7))
+                    (not (= #\5)))
+               (= #\7)))
+     (t_bn (or (= #\3)
+               (and (r7rs char-numeric?)
+                    (not (= #\7))
+                    (not (= #\5)))
+               (= #\5)))
+     (t_3 (= #\3)))
 
-;;    (labelinglogic:model:alpha-rename
-;;     '() (labelinglogic:init
-;;          model bindings))))
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
 
 
 (exit 0) ;; DEBUG
