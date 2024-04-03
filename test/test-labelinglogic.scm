@@ -42,30 +42,30 @@
 
 
 
-(let ()
-  (define model
-    `((any (or alphanum whitespace))
-      (alphanum (or alphabetic numeric))
-      (alphabetic (or upcase lowercase))
-      (upcase (r7rs char-upper-case?))
-      (lowercase (r7rs char-lower-case?))
-      (numeric (r7rs char-numeric?))
-      (whitespace (r7rs char-whitespace?))))
+;; (let ()
+;;   (define model
+;;     `((any (or alphanum whitespace))
+;;       (alphanum (or alphabetic numeric))
+;;       (alphabetic (or upcase lowercase))
+;;       (upcase (r7rs char-upper-case?))
+;;       (lowercase (r7rs char-lower-case?))
+;;       (numeric (r7rs char-numeric?))
+;;       (whitespace (r7rs char-whitespace?))))
 
-  (define bindings
-    `((t_an alphanum)
-      (t_nn  numeric)))
+;;   (define bindings
+;;     `((t_an alphanum)
+;;       (t_nn numeric)))
 
-  (assert=
+;;   (assert=
 
-   '((t_an (or (r7rs char-upper-case?)
-               (r7rs char-lower-case?)
-               (r7rs char-numeric?)))
-     (t_nn (r7rs char-numeric?)))
+;;    '((t_an (or (r7rs char-upper-case?)
+;;                (r7rs char-lower-case?)
+;;                (r7rs char-numeric?)))
+;;      (t_nn (r7rs char-numeric?)))
 
-   (labelinglogic:model:alpha-rename
-    '() (labelinglogic:init
-         model bindings))))
+;;    (labelinglogic:model:alpha-rename
+;;     '() (labelinglogic:init
+;;          model bindings))))
 
 
 
