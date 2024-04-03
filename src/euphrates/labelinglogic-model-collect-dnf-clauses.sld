@@ -1,16 +1,11 @@
 
 (define-library
   (euphrates
-    labelinglogic-model-collect-dnf-r7rs-clauses)
-  (export
-    labelinglogic:model:collect-dnf-r7rs-clauses)
+    labelinglogic-model-collect-dnf-clauses)
+  (export labelinglogic:model:collect-dnf-clauses)
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
-  (import
-    (only (euphrates
-            labelinglogic-expression-dnf-r7rs-clause-huh)
-          labelinglogic:expression:dnf-r7rs-clause?))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
@@ -36,12 +31,9 @@
           or
           quote))
   (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
-  (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-model-collect-dnf-r7rs-clauses.scm")))
+               "euphrates/labelinglogic-model-collect-dnf-clauses.scm")))
     (else (include
-            "labelinglogic-model-collect-dnf-r7rs-clauses.scm"))))
+            "labelinglogic-model-collect-dnf-clauses.scm"))))
