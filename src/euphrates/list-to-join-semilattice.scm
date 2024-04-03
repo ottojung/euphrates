@@ -130,21 +130,20 @@
     (values))
 
   (define (join! level node-x node-y)
-    (define join-result
-      (call-with-values
-          (lambda _
-            (define left (olnode:value node-x))
-            (define right (olnode:value node-y))
-            (join-function left right))
-        list))
+    (call-with-values
+        (lambda _
+          (define left (olnode:value node-x))
+          (define right (olnode:value node-y))
+          (join-function left right))
 
-    (unless (null? join-result)
-      (if (null? (cdr join-result))
-          (add-join-point! level node-x node-y (car join-result))
-          (raisu* :from "list->join-semilattice"
-                  :type 'bad-number-of-values
-                  :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
-                  :args (list join-result node-x node-y)))))
+      (lambda join-result
+        (unless (null? join-result)
+          (if (null? (cdr join-result))
+              (add-join-point! level node-x node-y (car join-result))
+              (raisu* :from "list->join-semilattice"
+                      :type 'bad-number-of-values
+                      :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
+                      :args (list join-result node-x node-y)))))))
 
   (let loop ((level 0))
     (define copy top-layer)
