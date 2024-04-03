@@ -121,7 +121,7 @@
         (values (make-new-node! value) #f)))
 
   (define (add-join-point! node-x node-y value)
-    (define (to-add to-add-index) (make-join-node! value))
+    (define-values (to-add to-add-index) (make-join-node! value))
     (set! top-layer (cons to-add top-layer))
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
