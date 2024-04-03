@@ -60,10 +60,12 @@
 
   (assert=
 
-   `((t_an (or (r7rs char-upper-case?)
-               (r7rs char-lower-case?)
-               (r7rs char-numeric?)))
-     (t_3 (= #\3)))
+   ;; `((t_an (or (r7rs char-upper-case?)
+   ;;             (r7rs char-lower-case?)
+   ;;             (r7rs char-numeric?)))
+   ;;   (t_3 (= #\3)))
+
+   999999
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init

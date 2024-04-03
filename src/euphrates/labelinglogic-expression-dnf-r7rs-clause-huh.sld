@@ -17,6 +17,7 @@
     (only (euphrates list-or-map) list-or-map))
   (import
     (only (scheme base)
+          =
           and
           begin
           define

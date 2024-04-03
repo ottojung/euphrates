@@ -8,5 +8,6 @@
          (define args (labelinglogic:expression:args expr))
 
          (or (equal? 'r7rs type)
+             (equal? '= type)
              (and (equal? 'and type)
                   (list-or-map loop args))))))
