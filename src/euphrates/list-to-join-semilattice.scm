@@ -111,24 +111,23 @@
   (define (make-new-node! value)
     (define new (make-olnode value))
     (set! all-nodes (cons new all-nodes))
-    (set! all-nodes-length-1 (+ 1 all-nodes-length-1))
     new)
 
   (define (make-join-node! value)
-    (define-values (existing existing-index)
+    (define-values (existing existing?)
       (find-existing-node value))
 
-    (if existing-index
-        (values existing existing-index)
-        (values (make-new-node! value) #f)))
+    (if existing?
+        (values existing existing?)
+        (values (make-new-node! value) existing?)))
 
   (define (add-join-point! node-x node-y value)
     (define-values (to-add existing?) (make-join-node! value))
 
-    (unless (and to-add-index
-                 (hashset-has? top-layer-indexes to-add-index))
+    (unless (and existing?
+                 (hashset-has? top-layer-indexes (olnode:id to-add)))
       (set! top-layer (cons to-add top-layer))
-      (hashset-add! top-layer-indexes (or to-add-index all-nodes-length-1)))
+      (hashset-add! top-layer-indexes (olnode:id to-add)))
 
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)

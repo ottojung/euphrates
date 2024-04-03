@@ -25,6 +25,7 @@
           make-olgraph
           make-olnode
           olnode:children
+          olnode:id
           olnode:prepend-child!
           olnode:value))
   (import
@@ -33,7 +34,6 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
-          +
           _
           and
           begin
@@ -50,7 +50,6 @@
           list
           map
           null?
-          or
           quote
           set!
           unless
