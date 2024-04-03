@@ -22,8 +22,10 @@
   (import
     (only (scheme base)
           +
+          _
           begin
           define
+          define-syntax
           equal?
           if
           lambda
@@ -31,6 +33,7 @@
           min
           null?
           quote
+          syntax-rules
           values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
