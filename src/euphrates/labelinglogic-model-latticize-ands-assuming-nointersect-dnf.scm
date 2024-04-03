@@ -136,8 +136,8 @@
           (map little-replacer clauses))
 
         (if (equal? 'or type)
-            (car new-clauses)
-            (labelinglogic:expression:make type new-clauses)))))
+            (labelinglogic:expression:make type new-clauses)
+            (car new-clauses)))))
 
   (define model-with-factored-nicolauses
     (labelinglogic:model:map-expressions
