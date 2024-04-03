@@ -113,7 +113,6 @@
     (define new (make-olnode value))
     (set! all-nodes (cons new all-nodes))
     (set! all-nodes-length-1 (+ 1 all-nodes-length-1))
-    ;; (set! top-layer (cons new top-layer))
     new)
 
   (define (make-join-node! value)
