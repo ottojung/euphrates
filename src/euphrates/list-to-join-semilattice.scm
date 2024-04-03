@@ -83,12 +83,11 @@
     (make-olgraph initial-nodes))
 
   (define all-nodes initial-nodes)
-  (define all-nodes-length-1 -1)
   (define top-layer initial-nodes)
   (define top-layer-indexes (make-hashset))
 
   (define (find-existing-node needle-value)
-    (let loop ((i 0) (rest all-nodes))
+    (let loop ((rest all-nodes))
       (if (null? rest)
           (values #f #f)
           (let ()
@@ -96,8 +95,8 @@
             (if (equality-tester
                  needle-value
                  (olnode:value other))
-                (values other i)
-                (loop (+ 1 i) (cdr rest)))))))
+                (values other #t)
+                (loop (cdr rest)))))))
 
   (define (prepend-node! parent child)
     (define (equal-to-child? other)
