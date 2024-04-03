@@ -19,5 +19,6 @@
 
    model)
 
-  (stack->list ret))
+  (reverse
+   (stack->list ret)))
 

@@ -29,7 +29,8 @@
           lambda
           list
           or
-          quote))
+          quote
+          reverse))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
