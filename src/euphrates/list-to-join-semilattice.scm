@@ -143,8 +143,7 @@
               (raisu* :from "list->join-semilattice"
                       :type 'bad-number-of-values
                       :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
-                      :args (list join-result node-x node-y))))))
-    (values))
+                      :args (list join-result node-x node-y)))))))
 
   (let loop ((level 0))
     (define copy top-layer)
