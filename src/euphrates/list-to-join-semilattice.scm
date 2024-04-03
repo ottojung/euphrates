@@ -155,6 +155,10 @@
   (let loop ()
     (define copy top-layer)
 
+    (debug "=================")
+    (debugs top-layer)
+    (debug "-----------------")
+
     (set! top-layer '())
     (hashset-clear! top-layer-indexes)
 

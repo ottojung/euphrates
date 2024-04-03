@@ -4,6 +4,8 @@
   (export list->join-semilattice)
   (import
     (only (euphrates cartesian-each) cartesian-each))
+  (import (only (euphrates debug) debug))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashset)
           hashset-add!
