@@ -115,21 +115,24 @@
   (define replacer
     (lambda _
       (lambda (expr)
-        (if (labelinglogic:expression:dnf-r7rs-clause? expr)
-            (let ()
-              (define-pair (parent name)
-                (list-find-first
-                 (lambda (x)
-                   (define-pair (parent name) x)
-                   (equalp parent expr))
-                 (cons #f #f)
-                 lattice-renames-alist))
+        (define type (labelinglogic:expression:type expr))
+        (define args (labelinglogic:expression:args expr))
 
-              (or name expr))
-            expr))))
+        (define clauses
+          (if (equal? 'or type) args (list expr)))
+
+        (define-pair (parent name)
+          (list-find-first
+           (lambda (x)
+             (define-pair (parent name) x)
+             (equalp parent expr))
+           (cons #f #f)
+           lattice-renames-alist))
+
+        (or name expr))))
 
   (define model-with-factored-nicolauses
-    (labelinglogic:model:map-subexpressions
+    (labelinglogic:model:map-expressions
      replacer model))
 
   (define model-with-added-nicolauses
