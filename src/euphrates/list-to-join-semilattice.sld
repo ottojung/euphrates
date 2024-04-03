@@ -5,9 +5,6 @@
   (import
     (only (euphrates cartesian-each) cartesian-each))
   (import
-    (only (euphrates list-find-first)
-          list-find-first))
-  (import
     (only (euphrates list-or-map) list-or-map))
   (import
     (only (euphrates olgraph-remove-transitive-edges)
@@ -28,6 +25,7 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
+          +
           _
           begin
           call-with-values

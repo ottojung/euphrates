@@ -86,12 +86,15 @@
   (define top-layer initial-nodes)
 
   (define (find-existing-node needle-value)
-    (list-find-first
-     (lambda (other)
-       (equality-tester
-        needle-value
-        (olnode:value other)))
-     #f all-nodes))
+    (let loop ((i 0) (rest all-nodes))
+      (if (null? rest) #f
+          (let ()
+            (define other (car rest))
+            (if (equality-tester
+                 needle-value
+                 (olnode:value other))
+                (values other i)
+                (loop (+ 1 i) (cdr rest)))))))
 
   (define (prepend-node! parent child)
     (define (equal-to-child? other)
