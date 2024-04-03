@@ -123,7 +123,7 @@
     (define join-result
       (call-with-values
           (lambda _
-            (if (equalp node-x node-y)
+            (if (equality-tester node-x node-y)
                 (values)
                 (join-function
                  (olnode:value node-x)
