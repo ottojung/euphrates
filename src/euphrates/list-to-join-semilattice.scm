@@ -149,14 +149,14 @@
   (let loop ((level 0))
     (define copy top-layer)
 
-    (debug "=================")
-    (debugs (map olnode:value top-layer))
-    (debug "-----------------")
-
-    (set! top-layer '())
-    (hashset-clear! top-layer-indexes)
-
     (unless (null? copy)
+      (debug "=================")
+      (debugs (map olnode:value top-layer))
+      (debug "-----------------")
+
+      (set! top-layer '())
+      (hashset-clear! top-layer-indexes)
+
       (let xloop ((xlist copy))
         (unless (null? xlist)
           (let ()
