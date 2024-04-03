@@ -42,6 +42,32 @@
 
 
 
+(let ()
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
+      (alphabetic (or upcase lowercase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
+
+  (define bindings
+    `((t_an alphanum)
+      (t_nn  numeric)))
+
+  (assert=
+
+   999999
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
+
+
+
+
+
 
 
 (let ()
