@@ -65,7 +65,12 @@
    ;;             (r7rs char-numeric?)))
    ;;   (t_3 (= #\3)))
 
-   999999
+   '((t_an (or (r7rs char-upper-case?)
+               (r7rs char-lower-case?)
+               (= #\3)
+               (and (r7rs char-numeric?)
+                    (not (= #\3)))))
+     (t_3 (= #\3)))
 
    (labelinglogic:model:alpha-rename
     '() (labelinglogic:init
