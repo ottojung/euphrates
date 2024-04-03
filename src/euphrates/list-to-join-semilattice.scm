@@ -129,7 +129,7 @@
     (unless (and to-add-index
                  (hashset-has? top-layer-indexes to-add-index))
       (set! top-layer (cons to-add top-layer))
-      (hashset-add! top-layer-indexes to-add-index))
+      (hashset-add! top-layer-indexes (or to-add-index all-nodes-length-1)))
 
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
