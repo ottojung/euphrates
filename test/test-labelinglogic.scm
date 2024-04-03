@@ -149,7 +149,6 @@
 
   (assert=
 
-
    '((t_an (or (r7rs char-upper-case?)
                (r7rs char-lower-case?)
                (= #\3)
