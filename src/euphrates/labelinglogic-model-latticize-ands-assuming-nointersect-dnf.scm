@@ -112,6 +112,15 @@
 
      lattice-renames-alist))
 
+  (define (little-replacer clause)
+    (define-pair (parent name)
+      (list-find-first
+       (lambda (x)
+         (define-pair (parent name) x)
+         (equalp parent expr))
+       (cons #f #f)
+       lattice-renames-alist))
+
   (define replacer
     (lambda _
       (lambda (expr)
@@ -121,13 +130,8 @@
         (define clauses
           (if (equal? 'or type) args (list expr)))
 
-        (define-pair (parent name)
-          (list-find-first
-           (lambda (x)
-             (define-pair (parent name) x)
-             (equalp parent expr))
-           (cons #f #f)
-           lattice-renames-alist))
+        (define new-clauses
+          
 
         (or name expr))))
 
