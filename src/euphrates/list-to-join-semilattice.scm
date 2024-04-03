@@ -88,14 +88,13 @@
 
   (define (find-existing-node needle-value)
     (let loop ((rest all-nodes))
-      (if (null? rest)
-          (values #f #f)
+      (if (null? rest) #f
           (let ()
             (define other (car rest))
             (if (equality-tester
                  needle-value
                  (olnode:value other))
-                (values other #t)
+                other
                 (loop (cdr rest)))))))
 
   (define (prepend-node! parent child)
@@ -114,15 +113,11 @@
     new)
 
   (define (make-join-node! value)
-    (define-values (existing existing?)
-      (find-existing-node value))
-
-    (if existing?
-        (values existing existing?)
-        (values (make-new-node! value) existing?)))
+    (define existing (find-existing-node value))
+    (or existing (make-new-node! value)))
 
   (define (add-join-point! current-level node-x node-y value)
-    (define-values (to-add existing?) (make-join-node! value))
+    (define to-add (make-join-node! value))
     (define existing-level (olnode:meta to-add))
 
     (unless (and (number? existing-level)
