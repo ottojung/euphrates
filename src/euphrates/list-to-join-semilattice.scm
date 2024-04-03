@@ -156,7 +156,7 @@
     (define copy top-layer)
 
     (debug "=================")
-    (debugs top-layer)
+    (debugs (map olnode:value top-layer))
     (debug "-----------------")
 
     (set! top-layer '())
