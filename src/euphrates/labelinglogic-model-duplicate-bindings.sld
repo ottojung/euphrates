@@ -4,7 +4,6 @@
     labelinglogic-model-duplicate-bindings)
   (export labelinglogic:model:duplicate-bindings)
   (import (only (euphrates const) const))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashset)
           hashset->list

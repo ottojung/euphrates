@@ -3,8 +3,6 @@
 
 ;; TODO: RENAME
 (define (labelinglogic:model:duplicate-bindings model bindings)
-  (debugs model)
-
   (define to-duplicate
     (let ()
       (define S (make-hashset))
@@ -38,7 +36,5 @@
   (define duplicated-model
     (labelinglogic:model:map-subexpressions
      (const mapper) model))
-
-  (debugs duplicated-model)
 
   duplicated-model)
