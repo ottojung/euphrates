@@ -127,7 +127,7 @@
 
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)
-    (values))
+    (when #f #t))
 
   (define (join! level node-x node-y)
     (call-with-values
