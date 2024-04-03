@@ -225,9 +225,9 @@
       (whitespace (r7rs char-whitespace?))))
 
   (define bindings
-    `((t_an (and numeric (not (= #\5))))
-      (t_bn (and numeric (not (= #\7))))
-      (t_3  (= #\3))))
+    `((t_an (and numeric (not (= #\3))))
+      (t_bn (and numeric (not (= #\4))))
+      (t_3  (= #\9))))
 
   (assert=
 
