@@ -2,7 +2,7 @@
 (define-syntax test-case
   (syntax-rules ()
     ((_ equality-tester join-function lst expected)
-     (begin
+     (let ()
        (define result
          (list->join-semilattice
           equality-tester
