@@ -149,10 +149,6 @@
     (define copy top-layer)
 
     (unless (null? copy)
-      (debug "=================")
-      (debugs (map olnode:value top-layer))
-      (debug "-----------------")
-
       (set! top-layer '())
       (hashset-clear! top-layer-indexes)
 

@@ -2,8 +2,6 @@
 (define-library
   (euphrates list-to-join-semilattice)
   (export list->join-semilattice)
-  (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashset)
           hashset-clear!
