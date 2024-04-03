@@ -157,12 +157,17 @@
     (hashset-clear! top-layer-indexes)
 
     (unless (null? copy)
-      (cartesian-each
-       (lambda (x y)
-         (unless (olnode-eq? x y)
-           (join! level x y)))
-
-       copy copy)
+      (let xloop ((xlist copy))
+        (unless (null? xlist)
+          (let ()
+            (define left (car xlist))
+            (let yloop ((ylist (cdr xlist)))
+              (unless (null? ylist)
+                (let ()
+                  (define right (car ylist))
+                  (join! level left right)
+                  (yloop (cdr ylist))))))
+          (xloop (cdr xlist))))
 
       (loop (+ 1 level))))
 
