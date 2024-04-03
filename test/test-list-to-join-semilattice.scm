@@ -202,8 +202,7 @@
 (test-case
  equal?
  (lambda (x y)
-   (debugs x)
-   (debugs y)
+   (debug "~s + ~s = ~s" x y (min (+ x y) 9))
    (min (+ x y) 9))
 
  '(3 4 9)
