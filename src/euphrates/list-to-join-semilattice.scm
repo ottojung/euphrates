@@ -29,11 +29,11 @@
   ;;                    function as your `join-function`.
   ;;                    The join function must return the same value for any two
   ;;                    equal inputs, as determined by `equality-tester`.
-  ;;                    This function should be idempotant, commutative and associative, i.e.:
+  ;;                    This function should be commutative and associative, i.e.:
   ;;                       let f = join-function, then:
-  ;;                       (f x x) == x                                \forall x.
-  ;;                       (join-function x y) == (join-function y x)  \forall x, y.
+  ;;                       (join-function x y) == (join-function y x)  \forall x, y
   ;;                       (f x (f y z)) == (f (f x y) z)              \forall x, y, z.
+  ;;                    Idempotency is forced, i.e. (f x x) will be x.
   ;;
   ;; - `lst`: This is the list of elements you want to transform. The type of
   ;;          list elements can be flexible, with the condition that the
