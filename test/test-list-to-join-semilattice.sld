@@ -20,12 +20,14 @@
           olgraph->adjlist))
   (import
     (only (scheme base)
+          +
           begin
           define
           equal?
           if
           lambda
           let
+          modulo
           null?
           quote
           values))
