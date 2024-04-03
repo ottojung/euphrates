@@ -101,6 +101,8 @@
 ;;          model bindings))))
 
 
+(exit 0) ;; DEBUG
+
 
 (let ()
   (define model
