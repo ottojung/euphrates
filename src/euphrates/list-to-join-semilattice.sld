@@ -4,6 +4,7 @@
   (export list->join-semilattice)
   (import
     (only (euphrates cartesian-each) cartesian-each))
+  (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
@@ -27,6 +28,7 @@
     (only (scheme base)
           +
           _
+          and
           begin
           call-with-values
           car
