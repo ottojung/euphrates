@@ -124,7 +124,7 @@
         (values (make-new-node! value) #f)))
 
   (define (add-join-point! node-x node-y value)
-    (define-values (to-add to-add-index) (make-join-node! value))
+    (define-values (to-add existing?) (make-join-node! value))
 
     (unless (and to-add-index
                  (hashset-has? top-layer-indexes to-add-index))
