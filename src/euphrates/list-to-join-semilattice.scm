@@ -85,6 +85,7 @@
   (define all-nodes initial-nodes)
   (define all-nodes-length-1 -1)
   (define top-layer initial-nodes)
+  (define top-layer-indexes (make-hashset))
 
   (define (find-existing-node needle-value)
     (let loop ((i 0) (rest all-nodes))

@@ -8,7 +8,8 @@
     (only (euphrates hashset)
           hashset-add!
           hashset-clear!
-          hashset-has?))
+          hashset-has?
+          make-hashset))
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
