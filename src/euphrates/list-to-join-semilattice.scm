@@ -150,7 +150,7 @@
                   :message (stringf "Expected either 0 or 1 value, got ~s." (length join-result))
                   :args (list join-result node-x node-y)))))
 
-  (let loop ()
+  (let loop ((level 0))
     (define copy top-layer)
 
     (debug "=================")
@@ -168,7 +168,7 @@
 
        copy copy)
 
-      (loop)))
+      (loop (+ 1 level))))
 
   (olgraph-reverse-children-inplace! graph)
   (olgraph-remove-transitive-edges graph))
