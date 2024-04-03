@@ -141,9 +141,7 @@
           (lambda _
             (define left (olnode:value node-x))
             (define right (olnode:value node-y))
-            (if (equality-tester left right)
-                left
-                (join-function left right)))
+            (join-function left right))
         list))
 
     (unless (null? join-result)
