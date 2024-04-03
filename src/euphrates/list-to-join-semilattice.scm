@@ -158,6 +158,7 @@
 
   (let loop ()
     (define copy top-layer)
+
     (set! top-layer '())
     (hashset-clear! top-layer-indexes)
 
