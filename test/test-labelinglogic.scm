@@ -132,7 +132,35 @@
 ;;          model bindings))))
 
 
-;; (exit 0) ;; DEBUG
+(let ()
+  (define model
+    `((any (or alphanum whitespace))
+      (alphanum (or alphabetic numeric))
+      (alphabetic (or upcase lowercase))
+      (upcase (r7rs char-upper-case?))
+      (lowercase (r7rs char-lower-case?))
+      (numeric (r7rs char-numeric?))
+      (whitespace (r7rs char-whitespace?))))
+
+  (define bindings
+    `((t_an (and alphanum (not (= #\5))))
+      (t_bn (and alphanum (not (= #\7))))
+      (t_cn (and (not (= #\5)) alphanum))
+      (t_dn (and alphanum (not (= #\7)) (not (= #\8))))
+      (t_en (and alphanum (not (= #\7)) (not (= #\.))))
+      (t_fn (or t_an t_bn t_3))
+      (t_3  (= #\3))))
+
+  (assert=
+
+   999999
+
+   (labelinglogic:model:alpha-rename
+    '() (labelinglogic:init
+         model bindings))))
+
+
+(exit 0) ;; DEBUG
 
 
 (let ()
