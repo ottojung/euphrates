@@ -202,6 +202,8 @@
 (test-case
  equal?
  (lambda (x y)
+   (debugs x)
+   (debugs y)
    (min (+ x y) 9))
 
  '(3 4 9)
