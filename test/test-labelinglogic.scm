@@ -132,7 +132,7 @@
 ;;          model bindings))))
 
 
-(exit 0) ;; DEBUG
+;; (exit 0) ;; DEBUG
 
 
 (let ()
