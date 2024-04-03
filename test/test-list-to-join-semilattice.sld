@@ -27,7 +27,7 @@
           if
           lambda
           let
-          modulo
+          min
           null?
           quote
           values))

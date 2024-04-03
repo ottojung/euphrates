@@ -202,7 +202,7 @@
 (test-case
  equal?
  (lambda (x y)
-   (modulo (+ x y) 10))
+   (min (+ x y) 10))
 
  '((1 2) (2 1) (5 1) (7 1 5))
 
