@@ -19,7 +19,6 @@
           labelinglogic:model:foreach-expression))
   (import
     (only (scheme base)
-          _
           begin
           define
           equal?

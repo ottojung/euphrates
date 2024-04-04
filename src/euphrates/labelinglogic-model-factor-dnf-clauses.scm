@@ -5,7 +5,7 @@
   (define H (make-hashmap))
 
   (labelinglogic:model:foreach-expression
-   (lambda _
+   (lambda (class predicate)
      (lambda (expr)
        (define type (labelinglogic:expression:type expr))
        (define args (labelinglogic:expression:args expr))
