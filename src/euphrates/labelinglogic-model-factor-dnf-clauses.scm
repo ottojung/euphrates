@@ -4,5 +4,19 @@
 (define (labelinglogic:model:factor-dnf-clauses model)
   (define H (make-hashmap))
 
-  
+  (labelinglogic:model:foreach-expression
+   (lambda _
+     (lambda (expr)
+       (define type (labelinglogic:expression:type expr))
+       (define args (labelinglogic:expression:args expr))
 
+       (define clauses
+         (if (equal? 'or type) args (list expr)))
+
+       (for-each
+        (lambda (nic) (hashmap-set! H nic))
+        clauses)))
+
+   model)
+
+  new-model)
