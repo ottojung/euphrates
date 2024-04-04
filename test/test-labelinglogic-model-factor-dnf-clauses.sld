@@ -14,11 +14,14 @@
     (only (scheme base)
           =
           _
+          and
           begin
           define
           define-syntax
           equal?
           let
+          not
+          odd?
           or
           quote
           syntax-rules
