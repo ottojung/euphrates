@@ -16,12 +16,13 @@
    args))
 
 (define (labelinglogic:expression:evaluate/constant model expr input)
-  (define reference (assoc expr model))
-  (unless reference
-    (raisu* :from "labelinglogic:expression:evaluate"
-            :type 'undefined-reference
-            :message "Reference to nonexistant class"
-            :args (list expr)))
+  (define reference
+    (labelinglogic:model:assoc-or
+     expr model
+     (raisu* :from "labelinglogic:expression:evaluate"
+             :type 'undefined-reference
+             :message "Reference to nonexistant class"
+             :args (list expr))))
 
   (define-tuple (class predicate) reference)
   (labelinglogic:expression:evaluate model predicate input))

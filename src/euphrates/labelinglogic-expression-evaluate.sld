@@ -19,6 +19,9 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates labelinglogic-model-assoc-or)
+          labelinglogic:model:assoc-or))
+  (import
     (only (euphrates list-and-map) list-and-map))
   (import
     (only (euphrates list-or-map) list-or-map))
@@ -28,7 +31,6 @@
     (only (scheme base)
           =
           and
-          assoc
           begin
           cond
           define
@@ -37,8 +39,7 @@
           lambda
           list
           or
-          quote
-          unless))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
