@@ -44,11 +44,7 @@
              (labelinglogic:expression:make 'or new-clauses)))
 
           (else
-           (hashmap-ref
-            H expr
-            (let ()
-              (hashmap-set! H binding name)
-              expr))))))
+           (hashmap-ref H expr expr)))))
 
      model))
 
