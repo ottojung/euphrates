@@ -140,6 +140,8 @@
 
 (testcase
 
+ ;; Duplicate bindings of equal expressions.
+
  :model
  '((just-5 (= 5))
    (another-5 (= 5))
@@ -154,6 +156,8 @@
 
 
 (testcase
+
+ ;; Duplicate bindings of equal expressions [2].
 
  :model
  '((just-5 (= 5))
@@ -173,6 +177,8 @@
 
 
 (testcase
+
+ ;; Bigger nochange.
 
  :model
  '((any (or alphanum whitespace))
