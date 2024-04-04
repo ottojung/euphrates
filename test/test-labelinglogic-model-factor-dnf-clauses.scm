@@ -17,14 +17,9 @@
   (syntax-rules (:model :bindings :expected)
     ((_ :model model :expected expected)
      (let ()
-       (define names-to-export
-         (list->hashset
-          (map labelinglogic:binding:name
-               (labelinglogic:model:bindings model))))
-
        (define result
-         (labelinglogic:model:minimize/assuming-nointersect
-          names-to-export model))
+         (labelinglogic:model:factor-dnf-clauses
+          model))
 
        (define result/alpha
          (labelinglogic:model:alpha-rename '() result))
