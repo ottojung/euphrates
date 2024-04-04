@@ -1,67 +1,33 @@
+
 (define-library
   (test-labelinglogic-model-minimize-assuming-nointersect)
-  (import
-    (only (data parser-branching-glr)
-          parser-branching-glr))
-  (import
-    (only (data parser-branching-lr)
-          parser-branching-lr))
-  (import
-    (only (data parser-repeating-glr)
-          parser-repeating-glr))
-  (import
-    (only (data parser-repeating-lr)
-          parser-repeating-lr))
   (import (only (euphrates assert-equal) assert=))
-  (import (only (euphrates assert) assert))
-  (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-load) parselynn-load))
+    (only (euphrates labelinglogic-model-alpha-rename)
+          labelinglogic:model:alpha-rename))
   (import
-    (only (euphrates parselynn-run) parselynn-run))
-  (import
-    (only (euphrates parselynn)
-          parselynn
-          make-lexical-token))
-  (import (only (euphrates raisu) raisu))
-  (import
-    (only (euphrates with-benchmark-simple)
-          with-benchmark/simple))
+    (only (euphrates labelinglogic)
+          labelinglogic:init))
   (import
     (only (scheme base)
-          *
-          +
-          -
-          /
-          <
           =
-          >
+          and
           begin
-          car
-          cdr
-          cond
           define
-          else
-          equal?
-          even?
-          if
-          lambda
           let
-          list
-          modulo
-          null?
-          procedure?
+          not
+          or
           quasiquote
-          quote
-          set!
-          string->symbol
-          unquote
-          vector-length
-          vector-ref
-          when))
+          quote))
+  (import
+    (only (scheme char)
+          char-lower-case?
+          char-numeric?
+          char-upper-case?
+          char-whitespace?))
   (cond-expand
-    (guile (import (only (srfi srfi-1) first)))
-    (else (import (only (srfi 1) first))))
+    (guile (import (only (srfi srfi-1) any)))
+    (else (import (only (srfi 1) any))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
