@@ -37,7 +37,7 @@
           define
           else
           equal?
-          lambda
+          let
           list
           or
           quote))
