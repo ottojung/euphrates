@@ -58,6 +58,12 @@
 
   (debugs renamed-model)
 
+  (define factored-model
+    (labelinglogic:model:factor-dnf-clauses
+     renamed-model))
+
+  (debugs factored-model)
+
   (define singleton-map
     (make-hashmap))
 
@@ -88,7 +94,8 @@
                     (cons class (list args))))
       (else
        (raisu 'uknown-expr-type type args))))
-   renamed-model)
+
+   factored-model)
 
   (define categories
     (stack->list categories/stack))
