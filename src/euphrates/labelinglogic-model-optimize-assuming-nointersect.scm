@@ -4,11 +4,8 @@
 (define (labelinglogic:model:optimize/assuming-nointersect exported-names/set model)
   (define _91273 (labelinglogic:model:check model))
 
-  (define extended-model
-    (labelinglogic:model:append model bindings))
-
   (define inlined-model
-    (labelinglogic:model:inline-all extended-model))
+    (labelinglogic:model:inline-all model))
 
   (define bindings-model
     (labelinglogic:model:reduce-to-bindings inlined-model bindings))
