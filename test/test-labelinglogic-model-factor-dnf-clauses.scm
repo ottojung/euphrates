@@ -251,7 +251,7 @@
 
  :expected
  '((just-5 (= 5))
-   (some-tuple (tuple (= 3) just-5)))
+   (some-and (and (r7rs odd?) (not (= 5)))))
 
  )
 
