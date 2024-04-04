@@ -16,8 +16,6 @@
 
      model))
 
-  (debugs H)
-
   (define new-bindings-stack
     (stack-make))
 
@@ -27,8 +25,6 @@
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
-
-         (debugs H)
 
          (cond
           ((equal? 'or type)
@@ -46,9 +42,6 @@
 
                         (stack-push! new-bindings-stack binding)
                         (hashmap-set! H clause name)
-
-                        (debugs H)
-
                         name)))
                 args))
 
