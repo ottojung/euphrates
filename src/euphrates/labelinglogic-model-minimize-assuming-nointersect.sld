@@ -5,9 +5,6 @@
   (export
     labelinglogic:model:minimize/assuming-nointersect)
   (import
-    (only (euphrates labelinglogic-model-check)
-          labelinglogic:model:check))
-  (import
     (only (euphrates labelinglogic-model-inline-all)
           labelinglogic:model:inline-all))
   (import
