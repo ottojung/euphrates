@@ -29,7 +29,6 @@
           char-numeric?
           char-upper-case?
           char-whitespace?))
-  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (srfi srfi-1) any)))
     (else (import (only (srfi 1) any))))

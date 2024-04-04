@@ -75,9 +75,6 @@
  )
 
 
-(exit 0)
-
-
 (testcase
 
  ;; Nested factor out.
