@@ -75,7 +75,7 @@
          (cond
           ((equal? type 'tuple)
            (labelinglogic:expression:make
-            type (map replace-single args)))
+            type (map (comp (replace-single #f)) args)))
 
           (else
            expr))))
