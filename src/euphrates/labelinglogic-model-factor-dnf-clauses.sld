@@ -21,6 +21,9 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
+  (import
     (only (euphrates
             labelinglogic-model-foreach-expression)
           labelinglogic:model:foreach-expression))
@@ -28,7 +31,10 @@
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
   (import
-    (only (euphrates stack) stack-make stack-push!))
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import
     (only (euphrates unique-identifier)
           make-unique-identifier))

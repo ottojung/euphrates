@@ -52,4 +52,9 @@
 
      model))
 
+  (define new-model
+    (labelinglogic:model:append
+     replaced-model
+     (stack->list new-bindings-stack)))
+
   new-model)
