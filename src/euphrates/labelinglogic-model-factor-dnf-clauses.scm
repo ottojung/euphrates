@@ -9,6 +9,7 @@
      (lambda (class predicate)
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
+         (hashmap-set! H class class)
          (unless (equal? 'or type)
            (hashmap-set! H predicate class))))
 
