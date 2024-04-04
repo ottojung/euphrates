@@ -72,8 +72,8 @@
    )
 
  :expected
- `((just-5 another-5)
-   (another-5 (= 5)))
+ `((just-5 (= 5))
+   (another-5 just-5))
 
  )
 
