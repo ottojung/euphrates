@@ -31,6 +31,9 @@
     (only (euphrates labelinglogic-model-append)
           labelinglogic:model:append))
   (import
+    (only (euphrates labelinglogic-model-check)
+          labelinglogic:model:check))
+  (import
     (only (euphrates
             labelinglogic-model-minimize-assuming-nointersect)
           labelinglogic:model:minimize/assuming-nointersect))
