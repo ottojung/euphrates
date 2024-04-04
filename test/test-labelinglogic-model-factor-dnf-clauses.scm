@@ -45,6 +45,28 @@
 
 (testcase
 
+ ;; Simple factor out.
+
+ :model
+ `((alphabetic (or upcase lowercase))
+   (upcase (r7rs char-upper-case?))
+   (lowercase (r7rs char-lower-case?))
+   (numeric (r7rs char-numeric?))
+   )
+
+ :expected
+ `((alphabetic (or upcase lowercase))
+   (upcase (r7rs char-upper-case?))
+   (lowercase (r7rs char-lower-case?))
+   (numeric (r7rs char-numeric?))
+   )
+
+ )
+
+
+
+(testcase
+
  ;; No factoring out needed.
 
  :model
