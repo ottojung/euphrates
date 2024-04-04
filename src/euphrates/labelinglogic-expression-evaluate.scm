@@ -43,7 +43,7 @@
       (labelinglogic:expression:evaluate/and model expr input))
 
      ((equal? type 'not)
-      (not (loop 
+      (labelinglogic:expression:evaluate/not model expr input))
 
      ((equal? type 'constant)
       (labelinglogic:expression:evaluate/constant model expr input))

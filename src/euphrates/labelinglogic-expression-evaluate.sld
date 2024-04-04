@@ -33,12 +33,14 @@
           =
           and
           begin
+          car
           cond
           define
           else
           equal?
           let
           list
+          not
           or
           quote))
   (cond-expand
