@@ -50,6 +50,7 @@
           map
           or
           quote
+          reverse
           unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
