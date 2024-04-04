@@ -95,7 +95,7 @@
       (else
        (raisu 'uknown-expr-type type args))))
 
-   factored-model)
+   renamed-model)
 
   (define categories
     (stack->list categories/stack))
