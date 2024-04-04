@@ -235,7 +235,8 @@
    (some-tuple (tuple (= 3) (= 5))))
 
  :expected
- 9999
+ '((just-5 (= 5))
+   (some-tuple (tuple (= 3) just-5)))
 
  )
 
