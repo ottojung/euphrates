@@ -20,7 +20,7 @@
     (labelinglogic:model:inline-all latticised))
 
   (define latticised-reduced
-    (labelinglogic:model:reduce-to-bindings latticised-inlined bindings))
+    (labelinglogic:model:reduce-to-names exported-names/set latticised-inlined))
 
   (define latticised-opt
     (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
