@@ -2034,13 +2034,6 @@
 
      (cons 'tokens: (lambda (option) (list? option)))
 
-     (cons 'results:
-           (lambda (option)
-             (and (list? option)
-                  (list-length= 2 option)
-                  (symbol? (cadr option))
-                  (memq (cadr option) '(first all)))))
-
      (cons 'driver:
            (lambda (option)
              (and (list? option)
