@@ -155,6 +155,7 @@
    (t_en (and alphanum (not (= #\7)) (not (= #\.))))
    (t_fn (or t_an t_bn t_3))
    (t_3  (= #\3))
+   (t_8  (= #\8))
    )
 
  :expected
