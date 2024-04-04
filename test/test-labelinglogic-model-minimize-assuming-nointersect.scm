@@ -12,7 +12,7 @@
 
 
 
-(define-syntax test1
+(define-syntax testcase
   (syntax-rules (:model :bindings :expected)
     ((_ :model model :bindings bindings :expected expected)
      (let ()
@@ -46,7 +46,7 @@
 
 
 
-(test1
+(testcase
 
  :model
  `((any (or alphanum whitespace))
@@ -86,7 +86,7 @@
 
 
 
-(test1
+(testcase
 
  :model
  `((any (or alphanum whitespace))
@@ -135,7 +135,7 @@
 
 
 
-(test1
+(testcase
 
  :model
  `((any (or alphanum whitespace))
