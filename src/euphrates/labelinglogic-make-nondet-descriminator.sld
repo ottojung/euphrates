@@ -4,16 +4,9 @@
     labelinglogic-make-nondet-descriminator)
   (export labelinglogic:make-nondet-descriminator)
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import (only (euphrates identity) identity))
-  (import
-    (only (euphrates labelinglogic-expression-evaluate)
-          labelinglogic:expression:evaluate))
-  (import
-    (only (scheme base) and begin define lambda map))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
+    (only (euphrates labelinglogic-model-evaluate)
+          labelinglogic:model:evaluate))
+  (import (only (scheme base) begin define lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

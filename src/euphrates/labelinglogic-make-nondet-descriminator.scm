@@ -3,12 +3,5 @@
 
 (define (labelinglogic:make-nondet-descriminator model)
   (lambda (input)
-    (define (eval-component model-component)
-      (define-tuple (class predicate) model-component)
-      (and (labelinglogic:expression:evaluate
-            model predicate input)
-           class))
-
-    (filter
-     identity
-     (map eval-component model))))
+    (labelinglogic:model:evaluate
+     model input)))
