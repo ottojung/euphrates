@@ -7,12 +7,11 @@
     (only (euphrates labelinglogic-bindings-check)
           labelinglogic:bindings:check))
   (import
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
+  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
-  (import
-    (only (euphrates
-            labelinglogic-model-extend-with-bindings)
-          labelinglogic:model:extend-with-bindings))
   (import
     (only (euphrates labelinglogic-model-inline-all)
           labelinglogic:model:inline-all))

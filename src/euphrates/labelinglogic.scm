@@ -13,7 +13,7 @@
   (labelinglogic:bindings:check classes/s bindings)
 
   (define extended-model
-    (labelinglogic:model:extend-with-bindings model bindings))
+    (labelinglogic:model:append model bindings))
 
   (define inlined-model
     (labelinglogic:model:inline-all extended-model))
