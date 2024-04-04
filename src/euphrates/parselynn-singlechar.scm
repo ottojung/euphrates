@@ -75,8 +75,13 @@
   (define full-model
     (labelinglogic:model:append model bindings))
 
+  (define exported-names/set
+    (list->hashset
+     (map labelinglogic:binding:name bindings)))
+
   (define opt-model
-    (labelinglogic:model:minimize/assuming-nointersect full-model))
+    (labelinglogic:model:minimize/assuming-nointersect
+     exported-names/set full-model))
 
   (define renamed-model
     (labelinglogic:model:alpha-rename

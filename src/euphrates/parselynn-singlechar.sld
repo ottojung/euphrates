@@ -10,9 +10,13 @@
     (only (euphrates hashmap)
           hashmap-set!
           make-hashmap))
+  (import (only (euphrates hashset) list->hashset))
   (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
+  (import
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic:binding:name))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
