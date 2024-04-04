@@ -99,6 +99,8 @@
      taken-token-names-set
      opt-model))
 
+  (debugs renamed-model)
+
   (define singleton-map
     (make-hashmap))
 
