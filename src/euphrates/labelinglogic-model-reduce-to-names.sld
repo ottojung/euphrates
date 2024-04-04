@@ -6,10 +6,10 @@
   (import
     (only (euphrates labelinglogic-binding-name)
           labelinglogic:binding:name))
+  (import
+    (only (euphrates labelinglogic-model-filter)
+          labelinglogic:model:filter))
   (import (only (scheme base) begin define lambda))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -5,7 +5,7 @@
   (define (keep? x)
     (hashset-has? names/set x))
 
-  (filter
+  (labelinglogic:model:filter
    (lambda (binding)
      (define class (labelinglogic:binding:name binding))
      (keep? class))
