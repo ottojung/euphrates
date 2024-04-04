@@ -55,12 +55,14 @@
    (upcase (r7rs char-upper-case?))
    (lowercase (r7rs char-lower-case?))
    (numeric (r7rs char-numeric?))
-   (whitespace (r7rs char-whitespace?)))
+   (whitespace (r7rs char-whitespace?))
+   )
 
  :bindings
  `((t_an (and numeric (not (= #\3))))
    (t_bn (and numeric (not (= #\4))))
-   (t_3  (= #\9)))
+   (t_3  (= #\9))
+   )
 
  :expected
  '((t_an (or (= #\9)
@@ -93,13 +95,15 @@
    (upcase (r7rs char-upper-case?))
    (lowercase (r7rs char-lower-case?))
    (numeric (r7rs char-numeric?))
-   (whitespace (r7rs char-whitespace?)))
+   (whitespace (r7rs char-whitespace?))
+   )
 
  :bindings
  `((t_an (and numeric (not (= #\3))))
    (t_bn (and numeric (not (= #\4))))
-   (t_3  (= #\9)))
-   (t_8  (= #\8)))
+   (t_3  (= #\9))
+   (t_8  (= #\8))
+   )
 
  :expected
  '((t_an (or (= #\9)
