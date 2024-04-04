@@ -24,6 +24,9 @@
        (define result/alpha
          (labelinglogic:model:alpha-rename '() result))
 
+       (unless (equal? expected result/alpha)
+         (debugs result/alpha))
+
        (assert= expected result/alpha)))))
 
 
