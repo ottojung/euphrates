@@ -13,6 +13,20 @@
 
    model)
 
-  
+  (define new-model
+    (labelinglogic:model:map-expressions
+     (lambda _
+            (lambda (expr)
+       (define type (labelinglogic:expression:type expr))
+       (define args (labelinglogic:expression:args expr))
+
+       (define clauses
+         (if (equal? 'or type) args (list expr)))
+
+       (for-each
+        (lambda (nic) (stack-push! ret nic))
+        clauses)))
+
+     model))
 
   new-model)
