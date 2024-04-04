@@ -5,6 +5,7 @@
   (export labelinglogic:model:factor-dnf-clauses)
   (import
     (only (euphrates hashmap)
+          hashmap-has?
           hashmap-ref
           hashmap-set!
           make-hashmap))

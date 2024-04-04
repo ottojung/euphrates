@@ -11,7 +11,8 @@
          (define type (labelinglogic:expression:type expr))
          (hashmap-set! H class class)
          (unless (equal? 'or type)
-           (hashmap-set! H predicate class))))
+           (unless (hashmap-has? predicate)
+             (hashmap-set! H predicate class)))))
 
      model))
 
