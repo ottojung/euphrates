@@ -49,7 +49,7 @@
 
                         (debugs H)
 
-                        )))
+                        name)))
                 args))
 
              (labelinglogic:expression:make 'or new-clauses)))
