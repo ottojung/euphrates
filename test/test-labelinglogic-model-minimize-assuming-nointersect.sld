@@ -2,23 +2,35 @@
 (define-library
   (test-labelinglogic-model-minimize-assuming-nointersect)
   (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates hashset) list->hashset))
+  (import
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic:binding:name))
   (import
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
-    (only (euphrates labelinglogic)
-          labelinglogic:init))
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
+  (import
+    (only (euphrates
+            labelinglogic-model-minimize-assuming-nointersect)
+          labelinglogic:model:minimize/assuming-nointersect))
   (import
     (only (scheme base)
           =
+          _
           and
           begin
           define
+          define-syntax
           let
+          map
           not
           or
           quasiquote
-          quote))
+          quote
+          syntax-rules))
   (import
     (only (scheme char)
           char-lower-case?
