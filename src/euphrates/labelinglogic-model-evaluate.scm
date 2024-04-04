@@ -6,3 +6,4 @@
    labelinglogic:binding:name
    (labelinglogic:model:filter
     (lambda (binding)
+      
