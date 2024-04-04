@@ -8,6 +8,13 @@
      (labelinglogic:expression:evaluate model arg input))
    args))
 
+(define (labelinglogic:expression:evaluate/and model expr input)
+  (define args (labelinglogic:expression:args expr))
+  (list-and-map
+   (lambda (arg)
+     (labelinglogic:expression:evaluate model arg input))
+   args))
+
 (define (labelinglogic:expression:evaluate/constant model expr input)
   (define reference (assoc expr model))
   (unless reference
@@ -31,6 +38,9 @@
 
    ((equal? type 'or)
     (labelinglogic:expression:evaluate/or model expr input))
+
+   ((equal? type 'and)
+    (labelinglogic:expression:evaluate/and model expr input))
 
    ((equal? type 'constant)
     (labelinglogic:expression:evaluate/constant model expr input))
