@@ -15,18 +15,16 @@
 
 (define-syntax testcase
   (syntax-rules (:model :bindings :expected)
-    ((_ :model model :bindings bindings :expected expected)
+    ((_ :model model :expected expected)
      (let ()
        (define names-to-export
          (list->hashset
-          (map labelinglogic:binding:name bindings)))
-
-       (define model-full
-         (labelinglogic:model:append model bindings))
+          (map labelinglogic:binding:name
+               (labelinglogic:model:bindings model))))
 
        (define result
          (labelinglogic:model:minimize/assuming-nointersect
-          names-to-export model-full))
+          names-to-export model))
 
        (define result/alpha
          (labelinglogic:model:alpha-rename '() result))

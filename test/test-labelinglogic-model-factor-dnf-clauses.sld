@@ -10,8 +10,8 @@
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
-    (only (euphrates labelinglogic-model-append)
-          labelinglogic:model:append))
+    (only (euphrates labelinglogic-model-bindings)
+          labelinglogic:model:bindings))
   (import
     (only (euphrates
             labelinglogic-model-minimize-assuming-nointersect)
