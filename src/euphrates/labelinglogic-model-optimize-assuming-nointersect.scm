@@ -8,7 +8,7 @@
     (labelinglogic:model:inline-all model))
 
   (define bindings-model
-    (labelinglogic:model:reduce-to-bindings inlined-model bindings))
+    (labelinglogic:model:reduce-to-bindings inlined-model exported-names/set))
 
   (define opt-dnf-model
     (labelinglogic:model:optimize/assuming-nointersect bindings-model))
