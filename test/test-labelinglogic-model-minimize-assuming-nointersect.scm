@@ -106,7 +106,6 @@
    )
 
  :expected
-
  '((t_an (or (= #\9)
              (= #\8)
              (and (r7rs char-numeric?)
@@ -127,5 +126,39 @@
 
    (t_3 (= #\9))
    (t_8 (= #\8)))
+
+ )
+
+
+
+
+
+
+
+(test1
+
+ :model
+ `((any (or alphanum whitespace))
+   (alphanum (or alphabetic numeric))
+   (alphabetic (or upcase lowercase))
+   (upcase (r7rs char-upper-case?))
+   (lowercase (r7rs char-lower-case?))
+   (numeric (r7rs char-numeric?))
+   (whitespace (r7rs char-whitespace?))
+   )
+
+ :bindings
+ `((t_an (and alphanum (not (= #\5))))
+   (t_bn (and alphanum (not (= #\7))))
+   (t_cn (and (not (= #\5)) alphanum))
+   (t_dn (and alphanum (not (= #\7)) (not (= #\8))))
+   (t_en (and alphanum (not (= #\7)) (not (= #\.))))
+   (t_fn (or t_an t_bn t_3))
+   (t_3  (= #\3))
+   )
+
+ :expected
+
+ 9999
 
  )
