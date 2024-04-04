@@ -95,7 +95,8 @@
       (else
        (raisu 'uknown-expr-type type args))))
 
-   renamed-model)
+   (labelinglogic:model:bindings
+    renamed-model))
 
   (define categories
     (stack->list categories/stack))
