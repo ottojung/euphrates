@@ -14,11 +14,13 @@
   (define upper-case?
     `(lambda (c)
        (and (char? c)
+            (char-alphabetic? c)
             (char-upper-case? c))))
 
   (define lower-case?
     `(lambda (c)
        (and (char? c)
+            (char-alphabetic? c)
             (char-lower-case? c))))
 
   (define numeric?
