@@ -11,14 +11,11 @@
           labelinglogic:model:factor-dnf-clauses))
   (import
     (only (scheme base)
-          =
           _
-          and
           begin
           define
           define-syntax
           let
-          not
           or
           quasiquote
           quote
