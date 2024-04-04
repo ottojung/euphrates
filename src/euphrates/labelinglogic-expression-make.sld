@@ -2,6 +2,7 @@
 (define-library
   (euphrates labelinglogic-expression-make)
   (export labelinglogic:expression:make)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic:expression:check))
