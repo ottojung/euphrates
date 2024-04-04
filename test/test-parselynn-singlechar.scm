@@ -51,6 +51,8 @@
   ;; NOTE: this is too specific to test. Let the parser test generated grammar.
   ;; (assert= expected-additional-rules additional-grammar-rules)
 
+  (debugs output)
+
   (assert= (length output) (length expected-output))
 
   (for-each
