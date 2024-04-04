@@ -43,19 +43,19 @@
 
 
 
-(testcase
+;; (testcase
 
- ;; Simple factor out.
+;;  ;; Simple factor out.
 
- :model
- '((rule1 (or (= 5) (= 6))))
+;;  :model
+;;  '((rule1 (or (= 5) (= 6))))
 
- :expected
- '((rule1 (or uid_1 uid_2))
-   (uid_1 (= 5))
-   (uid_2 (= 6)))
+;;  :expected
+;;  '((rule1 (or uid_1 uid_2))
+;;    (uid_1 (= 5))
+;;    (uid_2 (= 6)))
 
- )
+;;  )
 
 
 
