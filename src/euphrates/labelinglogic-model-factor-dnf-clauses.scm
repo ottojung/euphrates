@@ -8,14 +8,8 @@
    (lambda (class predicate)
      (lambda (expr)
        (define type (labelinglogic:expression:type expr))
-       (define args (labelinglogic:expression:args expr))
-
-       (define clauses
-         (if (equal? 'or type) args (list expr)))
-
-       (for-each
-        (lambda (nic) (hashmap-set! H nic))
-        clauses)))
+       (unless (equal? 'or type)
+         (hashmap-set! H predicate class))))
 
    model)
 

@@ -8,9 +8,6 @@
           hashmap-set!
           make-hashmap))
   (import
-    (only (euphrates labelinglogic-expression-args)
-          labelinglogic:expression:args))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -22,12 +19,10 @@
           begin
           define
           equal?
-          for-each
-          if
           lambda
-          list
           or
-          quote))
+          quote
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
