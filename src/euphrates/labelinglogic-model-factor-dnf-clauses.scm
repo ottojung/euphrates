@@ -28,6 +28,8 @@
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
 
+         (debugs H)
+
          (cond
           ((equal? 'or type)
            (let ()
