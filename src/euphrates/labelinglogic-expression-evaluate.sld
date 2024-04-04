@@ -3,7 +3,8 @@
   (euphrates labelinglogic-expression-evaluate)
   (export labelinglogic:expression:evaluate)
   (import
-    (only (euphrates define-tuple) define-tuple))
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic:binding:expr))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))

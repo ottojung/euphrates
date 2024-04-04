@@ -24,7 +24,7 @@
              :message "Reference to nonexistant class"
              :args (list expr))))
 
-  (define-tuple (class predicate) reference)
+  (define predicate (labelinglogic:binding:expr reference))
   (labelinglogic:expression:evaluate model predicate input))
 
 (define (labelinglogic:expression:evaluate model expr input)
