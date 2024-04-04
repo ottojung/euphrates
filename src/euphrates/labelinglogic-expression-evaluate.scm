@@ -23,8 +23,7 @@
                  :args (list expr))))
 
       (define predicate (labelinglogic:binding:expr reference))
-      (labelinglogic:expression:evaluate model predicate input))
-
+      (loop predicate))
 
     (cond
      ((equal? type 'r7rs)
