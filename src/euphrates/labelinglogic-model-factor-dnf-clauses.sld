@@ -15,6 +15,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -31,14 +34,13 @@
           make-unique-identifier))
   (import
     (only (scheme base)
-          _
           begin
+          cond
           define
+          else
           equal?
-          if
           lambda
           let
-          list
           map
           or
           quote

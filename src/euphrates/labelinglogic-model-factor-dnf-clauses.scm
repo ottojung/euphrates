@@ -18,32 +18,37 @@
 
   (define replaced-model
     (labelinglogic:model:map-expressions
-     (lambda _
+     (lambda (name predicate)
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
 
-         (define clauses
-           (if (equal? 'or type) args (list expr)))
+         (cond
+          ((equal? 'or type)
+           (let ()
+             (define new-clauses
+               (map
+                (lambda (clause)
+                  (define existing (hashmap-ref H clause #f))
+                  (or existing
+                      (let ()
+                        (define name
+                          (make-unique-identifier))
+                        (define binding
+                          (labelinglogic:binding:make name clause))
 
-         (define new-clauses
-           (map
-            (lambda (clause)
-              (define existing (hashmap-ref H clause #f))
-              (or existing
-                  (let ()
-                    (define name
-                      (make-unique-identifier))
-                    (define binding
-                      (labelinglogic:binding:make name clause))
+                        (stack-push! new-bindings-stack binding)
+                        (hashmap-set! H binding name))))
+                args))
 
-                    (stack-push! new-bindings-stack binding)
-                    (hashmap-set! H binding name))))
-            clauses))
+             (labelinglogic:expression:make 'or new-clauses)))
 
-         (map
-          (lambda (nic) (stack-push! ret nic))
-          clauses)))
+          (else
+           (hashmap-ref
+            H expr
+            (let ()
+              (hashmap-set! H binding name)
+              expr))))))
 
      model))
 
