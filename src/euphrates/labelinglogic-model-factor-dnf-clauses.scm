@@ -4,14 +4,15 @@
 (define (labelinglogic:model:factor-dnf-clauses model)
   (define H (make-hashmap))
 
-  (labelinglogic:model:foreach-expression
-   (lambda (class predicate)
-     (lambda (expr)
-       (define type (labelinglogic:expression:type expr))
-       (unless (equal? 'or type)
-         (hashmap-set! H predicate class))))
+  (define _766414
+    (labelinglogic:model:foreach-expression
+     (lambda (class predicate)
+       (lambda (expr)
+         (define type (labelinglogic:expression:type expr))
+         (unless (equal? 'or type)
+           (hashmap-set! H predicate class))))
 
-   model)
+     model))
 
   (define new-bindings-stack
     (stack-make))
