@@ -51,18 +51,18 @@
     (labelinglogic:model:minimize/assuming-nointersect
      exported-names/set full-model))
 
+  (define factored-model
+    (labelinglogic:model:factor-dnf-clauses
+     opt-model))
+
+  (debugs factored-model)
+
   (define renamed-model
     (labelinglogic:model:alpha-rename
      taken-token-names-set
-     opt-model))
+     factored-model))
 
   (debugs renamed-model)
-
-  (define factored-model
-    (labelinglogic:model:factor-dnf-clauses
-     renamed-model))
-
-  (debugs factored-model)
 
   (define singleton-map
     (make-hashmap))
