@@ -6,4 +6,4 @@
     (list->hashset
      (map labelinglogic:binding:name bindings)))
 
-  (
+  (labelinglogic:model:reduce-to-names bindings-found))
