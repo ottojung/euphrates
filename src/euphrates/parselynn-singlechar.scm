@@ -72,8 +72,11 @@
   (define bindings
     (map parse-token-pair tokens-alist))
 
+  (define full-model
+    (labelinglogic:model:append model bindings))
+
   (define opt-model
-    (labelinglogic:init model bindings))
+    (labelinglogic:model:minimize/assuming-nointersect full-model))
 
   (define renamed-model
     (labelinglogic:model:alpha-rename

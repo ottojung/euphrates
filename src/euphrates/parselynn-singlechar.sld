@@ -23,8 +23,12 @@
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
-    (only (euphrates labelinglogic)
-          labelinglogic:init))
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
+  (import
+    (only (euphrates
+            labelinglogic-model-minimize-assuming-nointersect)
+          labelinglogic:model:minimize/assuming-nointersect))
   (import
     (only (euphrates parselynn-singlechar-struct)
           make-parselynn/singlechar-struct))
