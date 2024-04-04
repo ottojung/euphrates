@@ -16,6 +16,8 @@
 
      model))
 
+  (debugs H)
+
   (define new-bindings-stack
     (stack-make))
 
