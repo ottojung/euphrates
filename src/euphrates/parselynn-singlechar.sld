@@ -38,6 +38,9 @@
             labelinglogic-model-minimize-assuming-nointersect)
           labelinglogic:model:minimize/assuming-nointersect))
   (import
+    (only (euphrates parselynn-singlechar-model)
+          parselynn-singlechar-model))
+  (import
     (only (euphrates parselynn-singlechar-struct)
           make-parselynn/singlechar-struct))
   (import (only (euphrates raisu-star) raisu*))
@@ -52,7 +55,6 @@
   (import
     (only (scheme base)
           =
-          and
           begin
           cadr
           car
@@ -67,23 +69,10 @@
           let
           list
           map
-          not
           or
-          quasiquote
           quote
           string->list
-          string?
-          unquote))
-  (import
-    (only (scheme char)
-          char-alphabetic?
-          char-lower-case?
-          char-numeric?
-          char-upper-case?
-          char-whitespace?))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) any)))
-    (else (import (only (srfi 1) any))))
+          string?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

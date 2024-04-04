@@ -36,7 +36,9 @@
     (map parse-token-pair tokens-alist))
 
   (define full-model
-    (labelinglogic:model:append model bindings))
+    (labelinglogic:model:append
+     parselynn-singlechar-model
+     bindings))
 
   (define _61237
     (labelinglogic:model:check full-model))
