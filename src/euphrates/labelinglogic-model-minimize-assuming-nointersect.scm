@@ -25,7 +25,4 @@
   (define latticised-opt
     (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
 
-  (define ret-model
-    latticised-opt)
-
-  ret-model)
+  latticised-opt)
