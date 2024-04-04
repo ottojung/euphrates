@@ -4,5 +4,5 @@
 (define (labelinglogic:model:evaluate model expr)
   (map
    labelinglogic:binding:name
-   (filter
+   (labelinglogic:model:filter
     (lambda (binding)
