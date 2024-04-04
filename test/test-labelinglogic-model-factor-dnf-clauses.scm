@@ -45,6 +45,8 @@
 
 (testcase
 
+ ;; No factoring out needed.
+
  :model
  `((alphabetic (or upcase lowercase))
    (upcase (r7rs char-upper-case?))
