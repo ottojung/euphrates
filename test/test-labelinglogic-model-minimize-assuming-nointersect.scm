@@ -15,7 +15,7 @@
           names-to-export model-full))
 
        (define result/alpha
-         (labelinglogic:model:alpha-rename result))
+         (labelinglogic:model:alpha-rename '() result))
 
        (assert= expected result/alpha)))))
 
