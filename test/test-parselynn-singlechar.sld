@@ -50,7 +50,6 @@
           for-each
           if
           lambda
-          length
           let
           port?
           quote
