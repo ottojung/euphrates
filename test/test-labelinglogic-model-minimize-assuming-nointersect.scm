@@ -99,6 +99,7 @@
  `((t_an (and numeric (not (= #\3))))
    (t_bn (and numeric (not (= #\4))))
    (t_3  (= #\9)))
+   (t_8  (= #\8)))
 
  :expected
  '((t_an (or (= #\9)
