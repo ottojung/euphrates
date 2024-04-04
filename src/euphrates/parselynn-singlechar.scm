@@ -4,54 +4,6 @@
 (define (make-parselynn/singlechar
          taken-token-names-set tokens-alist)
 
-  (define nocase?
-    '(lambda (c)
-       (and (char? c)
-            (char-alphabetic? c)
-            (not (char-upper-case? c))
-            (not (char-lower-case? c)))))
-
-  (define upper-case?
-    `(lambda (c)
-       (and (char? c)
-            (char-alphabetic? c)
-            (char-upper-case? c))))
-
-  (define lower-case?
-    `(lambda (c)
-       (and (char? c)
-            (char-alphabetic? c)
-            (char-lower-case? c))))
-
-  (define numeric?
-    `(lambda (c)
-       (and (char? c)
-            (char-numeric? c))))
-
-  (define whitespace?
-    `(lambda (c)
-       (and (char? c)
-            (char-whitespace? c))))
-
-  (define special?
-    `(lambda (c)
-       (and (char? c)
-            (not (char-alphabetic? c))
-            (not (char-numeric? c))
-            (not (char-whitespace? c)))))
-
-  (define model
-    `((any (or alphanum whitespace special))
-      (alphanum (or numeric alphabetic))
-      (alphabetic (or upcase lowercase nocase))
-      (upcase (r7rs ,upper-case?))
-      (lowercase (r7rs ,lower-case?))
-      (nocase (r7rs ,nocase?))
-      (numeric (r7rs ,numeric?))
-      (whitespace (r7rs ,whitespace?))
-      (special (r7rs ,special?))
-      ))
-
   (define (parse-token-pair p)
     (define-pair (name value) p)
 
