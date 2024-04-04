@@ -7,7 +7,6 @@
   (import
     (only (euphrates apply-until-fixpoint)
           apply-until-fixpoint))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
   (import

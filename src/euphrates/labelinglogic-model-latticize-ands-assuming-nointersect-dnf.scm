@@ -14,8 +14,6 @@
        (list-idempotent equalp lst))
      nicolauses/dup))
 
-  (debugs nicolauses)
-
   (define (join expr-1 expr-2)
     (define new
       (labelinglogic:expression:make
@@ -35,8 +33,6 @@
 
   (define lattice-adjlist
     (olgraph->adjlist lattice))
-
-  (debugs lattice-adjlist)
 
   (define lattice-renames-stack
     (stack-make))
@@ -143,14 +139,10 @@
     (labelinglogic:model:map-expressions
      replacer model))
 
-  (debugs model-with-factored-nicolauses)
-
   (define model-with-added-nicolauses
     (labelinglogic:model:append
      model-with-factored-nicolauses
      (hashmap->alist
       lattice-completed-bodies-map)))
-
-  (debugs model-with-added-nicolauses)
 
   model-with-added-nicolauses)
