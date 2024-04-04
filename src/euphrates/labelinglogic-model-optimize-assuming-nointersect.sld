@@ -5,14 +5,27 @@
   (export
     labelinglogic:model:optimize/assuming-nointersect)
   (import
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
+  (import
+    (only (euphrates labelinglogic-model-check)
+          labelinglogic:model:check))
+  (import
+    (only (euphrates labelinglogic-model-inline-all)
+          labelinglogic:model:inline-all))
+  (import
     (only (euphrates
-            labelinglogic-expression-optimize-assuming-nointersect)
-          labelinglogic:expression:optimize/assuming-nointersect))
+            labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
+          labelinglogic:model:latticize-ands-assuming-nointersect-dnf))
   (import
-    (only (euphrates labelinglogic-model-map-expressions)
-          labelinglogic:model:map-expressions))
+    (only (euphrates
+            labelinglogic-model-optimize-or-just-idempotency)
+          labelinglogic:model:optimize/or/just-idempotency))
   (import
-    (only (scheme base) _ begin define lambda))
+    (only (euphrates
+            labelinglogic-model-reduce-to-bindings)
+          labelinglogic:model:reduce-to-bindings))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
