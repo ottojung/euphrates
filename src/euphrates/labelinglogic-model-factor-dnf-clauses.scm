@@ -45,7 +45,7 @@
                           (labelinglogic:binding:make name clause))
 
                         (stack-push! new-bindings-stack binding)
-                        (hashmap-set! H binding name)
+                        (hashmap-set! H clause name)
 
                         (debugs H)
 
