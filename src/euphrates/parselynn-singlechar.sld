@@ -6,12 +6,13 @@
   (import
     (only (euphrates define-pair) define-pair))
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
     (only (euphrates hashmap)
           hashmap-set!
           make-hashmap))
   (import (only (euphrates hashset) list->hashset))
+  (import
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic:binding:expr))
   (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))

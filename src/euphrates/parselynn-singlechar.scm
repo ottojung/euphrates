@@ -74,8 +74,11 @@
     (stack-make))
 
   (for-each
-   (lambda (model-component)
-     (define-tuple (class predicate) model-component)
+   (lambda (binding)
+     (define class
+       (labelinglogic:binding:name binding))
+     (define predicate
+       (labelinglogic:binding:expr binding))
      (define type
        (labelinglogic:expression:type predicate))
      (define args
@@ -85,7 +88,7 @@
       ((equal? type '=)
        (hashmap-set! singleton-map (car args) class))
       ((equal? type 'r7rs)
-       (stack-push! categories/stack model-component))
+       (stack-push! categories/stack binding))
       ((equal? type 'or)
        (stack-push! additional-grammar-rules/singletons/stack
                     (cons class (map list args))))
