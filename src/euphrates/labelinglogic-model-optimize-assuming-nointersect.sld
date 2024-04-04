@@ -22,6 +22,9 @@
     (only (euphrates
             labelinglogic-model-reduce-to-bindings)
           labelinglogic:model:reduce-to-bindings))
+  (import
+    (only (euphrates labelinglogic-model-reduce-to-names)
+          labelinglogic:model:reduce-to-names))
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
