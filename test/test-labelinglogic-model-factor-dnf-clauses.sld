@@ -12,6 +12,7 @@
           labelinglogic:model:factor-dnf-clauses))
   (import
     (only (scheme base)
+          =
           _
           begin
           define
