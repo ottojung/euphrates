@@ -48,11 +48,7 @@
  ;; Simple factor out.
 
  :model
- `((alphabetic (or upcase lowercase))
-   (upcase (r7rs char-upper-case?))
-   (lowercase (r7rs char-lower-case?))
-   (numeric (r7rs char-numeric?))
-   )
+ `((rule1 (or (= 5) (= 6))))
 
  :expected
  `((alphabetic (or upcase lowercase))
