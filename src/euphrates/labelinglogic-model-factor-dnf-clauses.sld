@@ -48,6 +48,7 @@
           lambda
           let
           map
+          not
           or
           quote
           reverse

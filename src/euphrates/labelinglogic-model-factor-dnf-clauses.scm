@@ -45,7 +45,12 @@
              (labelinglogic:expression:make 'or new-clauses)))
 
           (else
-           (hashmap-ref H expr expr)))))
+           (let ()
+             (define existing (hashmap-ref H expr #f))
+             (cond
+              ((not existing) expr)
+              ((equal? existing name) expr)
+              (else existing)))))))
 
      model))
 
