@@ -73,7 +73,7 @@
    input
    (test/generic tokens-alist (current-input-port) expected-output expected-additional-rules)))
 
-(define (test1 tokens-alist input expected-output expected-additional-rules)
+(define (testcase tokens-alist input expected-output expected-additional-rules)
   (test/string tokens-alist input expected-output expected-additional-rules)
   (test/port tokens-alist input expected-output expected-additional-rules))
 
@@ -103,7 +103,7 @@
 
 
 
-(test1
+(testcase
  '((t_0 . #\0)
    (t_1 . #\1)
    (t_2 . #\2)
@@ -131,7 +131,7 @@
 
 
 
-(test1
+(testcase
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -168,7 +168,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -206,7 +206,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -243,7 +243,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -270,7 +270,7 @@
 ;;  )
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -307,7 +307,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -347,7 +347,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -428,7 +428,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -471,7 +471,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -514,7 +514,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -557,7 +557,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -595,7 +595,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_1 . "1"))
 
 ;;  ""
@@ -607,7 +607,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_A . "A") (t_B . "B"))
 
 ;;  "AB"
@@ -620,7 +620,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_AB . "AB"))
 
 ;;  "AB"
@@ -633,7 +633,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_num class numeric))
 
 ;;  "123"
@@ -647,7 +647,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_A . "A") (t_num class numeric))
 
 ;;  "A1"
@@ -660,7 +660,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_AB . "AB") (t_num class numeric))
 
 ;;  "AB1"
@@ -674,7 +674,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_A . "A") (t_AB . "AB") (t_num class numeric))
 
 ;;  "AAB1"
@@ -689,7 +689,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_A . "A"))
 
 ;;  "AAA"
@@ -703,7 +703,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_AB . "AB"))
 
 ;;  "ABAB"
@@ -718,7 +718,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_num class numeric)
 ;;    (t_any class any))
 
@@ -733,7 +733,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_AB1 . "AB1") (t_num class numeric))
 
 ;;  "AB1"
@@ -748,7 +748,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_A . "A") (t_any class any))
 
 ;;  "A"
@@ -760,7 +760,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_num class numeric))
 
 ;;  "123"
@@ -774,7 +774,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_alpha class alphabetic))
 
 ;;  "ABC"
@@ -788,7 +788,7 @@
 
 
 
-;; (test1
+;; (testcase
 ;;  '((t_alnum class alphanum))
 
 ;;  "A1"
