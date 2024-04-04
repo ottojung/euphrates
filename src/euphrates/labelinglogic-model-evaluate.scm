@@ -6,7 +6,7 @@
    identity
    (map
     (lambda (binding)
-      (define expr (labelinglogic:binding:expr bindings))
+      (define expr (labelinglogic:binding:expr binding))
       (and (labelinglogic:expression:evaluate model expr input)
            (labelinglogic:binding:name binding)))
     (labelinglogic:model:bindings model))))
