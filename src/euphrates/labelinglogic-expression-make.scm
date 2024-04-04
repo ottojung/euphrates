@@ -3,6 +3,5 @@
 
 (define (labelinglogic:expression:make type args)
   (define ret (cons type args))
-  (debugs ret)
   (labelinglogic:expression:check ret)
   ret)
