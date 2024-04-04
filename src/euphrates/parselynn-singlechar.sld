@@ -63,6 +63,7 @@
   (import
     (only (scheme base)
           =
+          and
           begin
           cadr
           car
@@ -77,6 +78,7 @@
           let
           list
           map
+          member
           or
           quote
           string->list
