@@ -33,15 +33,24 @@
        (and (char? c)
             (char-whitespace? c))))
 
+  (define special?
+    `(lambda (c)
+       (and (char? c)
+            (not (char-alphabetic? c))
+            (not (char-numeric? c))
+            (not (char-whitespace? c)))))
+
   (define model
-    `((any (or alphanum whitespace))
+    `((any (or alphanum whitespace special))
       (alphanum (or numeric alphabetic))
       (alphabetic (or upcase lowercase nocase))
       (upcase (r7rs ,upper-case?))
       (lowercase (r7rs ,lower-case?))
       (nocase (r7rs ,nocase?))
       (numeric (r7rs ,numeric?))
-      (whitespace (r7rs ,whitespace?))))
+      (whitespace (r7rs ,whitespace?))
+      (special (r7rs ,special?))
+      ))
 
   (define (parse-token-pair p)
     (define-pair (name value) p)
