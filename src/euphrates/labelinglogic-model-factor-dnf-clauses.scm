@@ -13,19 +13,37 @@
 
    model)
 
-  (define new-model
+  (define new-bindings-stack
+    (stack-make))
+
+  (define replaced-model
     (labelinglogic:model:map-expressions
      (lambda _
-            (lambda (expr)
-       (define type (labelinglogic:expression:type expr))
-       (define args (labelinglogic:expression:args expr))
+       (lambda (expr)
+         (define type (labelinglogic:expression:type expr))
+         (define args (labelinglogic:expression:args expr))
 
-       (define clauses
-         (if (equal? 'or type) args (list expr)))
+         (define clauses
+           (if (equal? 'or type) args (list expr)))
 
-       (for-each
-        (lambda (nic) (stack-push! ret nic))
-        clauses)))
+         (define new-clauses
+           (map
+            (lambda (clause)
+              (define existing (hashmap-ref H clause #f))
+              (or existing
+                  (let ()
+                    (define name
+                      (make-unique-identifier))
+                    (define binding
+                      (labelinglogic:binding:make name clause))
+
+                    (stack-push! new-bindings-stack binding)
+                    (hashmap-set! H binding name))))
+            clauses))
+
+         (map
+          (lambda (nic) (stack-push! ret nic))
+          clauses)))
 
      model))
 
