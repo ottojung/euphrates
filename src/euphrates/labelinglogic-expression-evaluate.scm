@@ -13,6 +13,10 @@
       (define args (labelinglogic:expression:args expr))
       (list-and-map loop args))
 
+    (define (labelinglogic:expression:evaluate/not model expr input)
+      (define args (labelinglogic:expression:args expr))
+      (not (loop (car args))))
+
     (define (labelinglogic:expression:evaluate/constant model expr input)
       (define reference
         (labelinglogic:model:assoc-or
@@ -37,6 +41,9 @@
 
      ((equal? type 'and)
       (labelinglogic:expression:evaluate/and model expr input))
+
+     ((equal? type 'not)
+      (not (loop 
 
      ((equal? type 'constant)
       (labelinglogic:expression:evaluate/constant model expr input))
