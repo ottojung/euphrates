@@ -1,4 +1,17 @@
 
+
+;;
+;;
+;;  ▄▄▄▄▄▄▄                 ▄                           ▄
+;;     █     ▄▄▄    ▄▄▄   ▄▄█▄▄          ▄▄▄    ▄▄▄   ▄▄█▄▄  ▄   ▄  ▄▄▄▄
+;;     █    █▀  █  █   ▀    █           █   ▀  █▀  █    █    █   █  █▀ ▀█
+;;     █    █▀▀▀▀   ▀▀▀▄    █            ▀▀▀▄  █▀▀▀▀    █    █   █  █   █
+;;     █    ▀█▄▄▀  ▀▄▄▄▀    ▀▄▄         ▀▄▄▄▀  ▀█▄▄▀    ▀▄▄  ▀▄▄▀█  ██▄█▀
+;;                                                                  █
+;;                                                                  ▀
+
+
+
 (define-syntax test1
   (syntax-rules (:model :bindings :expected)
     ((_ :model model :bindings bindings :expected expected)
@@ -18,6 +31,15 @@
          (labelinglogic:model:alpha-rename '() result))
 
        (assert= expected result/alpha)))))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; Test cases ;;
+;;;;;;;;;;;;;;;;
+
+
+
 
 (test1
 
