@@ -20,10 +20,19 @@
     (only (euphrates multiset)
           make-multiset
           multiset-add!
-          multiset-filter))
+          multiset-foreach))
   (import (only (euphrates stack) stack-make))
   (import
-    (only (scheme base) < begin define lambda unless))
+    (only (euphrates unique-identifier)
+          make-unique-identifier))
+  (import
+    (only (scheme base)
+          <
+          begin
+          define
+          lambda
+          unless
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
