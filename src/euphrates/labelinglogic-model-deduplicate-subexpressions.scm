@@ -27,8 +27,6 @@
     (define new-bindings-stack
       (stack-make))
 
-    (debugs H)
-
     (define _127371273
       (multiset-foreach/key-value
        (lambda (key value)
@@ -70,11 +68,6 @@
              replaced-model
              (reverse
               (stack->list new-bindings-stack))))
-
-          (debug "---------------------")
-          (debugs model)
-          (debugs replaced-model)
-          (debugs combined-model)
 
           combined-model)))
 
