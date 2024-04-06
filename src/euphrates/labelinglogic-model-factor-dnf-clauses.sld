@@ -3,6 +3,7 @@
   (euphrates
     labelinglogic-model-factor-dnf-clauses)
   (export labelinglogic:model:factor-dnf-clauses)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
           hashmap-has?
