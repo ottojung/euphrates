@@ -11,8 +11,7 @@
          (define-values (new-expr new-bindings)
            (labelinglogic:expression:factor-subexpressions
             predicate expr))
-         (for-each (comp (stack-push! bindings))
-                   (reverse new-bindings))
+         (for-each (comp (stack-push! bindings)) new-bindings)
          new-expr))
      model))
 
