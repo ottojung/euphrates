@@ -479,9 +479,9 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_a class alphabetic)
-   (t_n class numeric)
-   (t_x class alphanum))
+   (t_a . (class alphabetic))
+   (t_n . (class numeric))
+   (t_x . (class alphanum)))
 
  "1x371634"
 
