@@ -13,7 +13,6 @@
     multiset-filter)
   (import
     (only (euphrates hashmap)
-          hashmap->alist
           hashmap-count
           hashmap-foreach
           hashmap-ref
@@ -29,22 +28,25 @@
           +
           -
           >=
+          _
           and
           begin
-          car
+          cons
           define
           equal?
           eqv?
           for-each
           lambda
           let
-          map
           quote
           set!
           unless
           vector-length
           vector-ref
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) iota)))
+    (else (import (only (srfi 1) iota))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
