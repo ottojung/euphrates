@@ -9,6 +9,7 @@
     multiset->list
     multiset-equal?
     multiset-ref
+    multiset-has?
     multiset-add!
     multiset-filter)
   (import
