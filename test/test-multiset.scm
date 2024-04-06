@@ -21,5 +21,5 @@
 
 (assert
  (multiset-has?
-  (multiset->list (list->multiset (list 1 2 3 4)))
+  (list->multiset (list 1 2 3 4))
   2))
