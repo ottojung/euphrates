@@ -48,6 +48,7 @@
           else
           eq?
           equal?
+          if
           lambda
           let
           not

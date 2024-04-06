@@ -24,15 +24,16 @@
     (cond
      ((not existing)
 
-      (let ()
-        (define name
-          (make-unique-identifier))
-        (define binding
-          (labelinglogic:binding:make name expr))
+      (if toplevel? expr
+          (let ()
+            (define name
+              (make-unique-identifier))
+            (define binding
+              (labelinglogic:binding:make name expr))
 
-        (stack-push! new-bindings-stack binding)
-        (hashmap-set! H expr name)
-        name))
+            (stack-push! new-bindings-stack binding)
+            (hashmap-set! H expr name)
+            name)))
 
      ((equal? existing maybe-name) expr)
      (else existing)))
