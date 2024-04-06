@@ -16,11 +16,9 @@
           _
           and
           begin
-          char?
           define
           define-syntax
           equal?
-          lambda
           let
           not
           odd?
@@ -31,7 +29,6 @@
           unless))
   (import
     (only (scheme char)
-          char-alphabetic?
           char-lower-case?
           char-numeric?
           char-upper-case?
