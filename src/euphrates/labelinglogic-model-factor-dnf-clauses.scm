@@ -41,7 +41,10 @@
   (define replaced-model
     (labelinglogic:model:map-expressions
      (lambda (name predicate)
-
+       (lambda (predicate)
+         
+         
+         0)))
        
 
        (lambda (expr)
