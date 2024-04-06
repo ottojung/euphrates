@@ -14,6 +14,7 @@
     multiset-filter)
   (import
     (only (euphrates hashmap)
+          hashmap->alist
           hashmap-count
           hashmap-foreach
           hashmap-ref
@@ -35,6 +36,7 @@
           _
           and
           begin
+          car
           cons
           define
           define-syntax
@@ -43,6 +45,7 @@
           for-each
           lambda
           let
+          map
           or
           quote
           set!

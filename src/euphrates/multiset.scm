@@ -84,3 +84,7 @@
        (hashmap-set! RH key value)))
    H)
   R)
+
+(define (multiset-keys S)
+  (define H (multiset-value S))
+  (map car (hashmap->alist H)))
