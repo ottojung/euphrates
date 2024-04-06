@@ -340,7 +340,7 @@
                          (not (char-upper-case? c))
                          (not (char-lower-case? c))))))))
 
- :model
+ :expected
  99998
 
  )
