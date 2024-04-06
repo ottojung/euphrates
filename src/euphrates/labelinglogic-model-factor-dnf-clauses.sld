@@ -49,7 +49,9 @@
           equal?
           lambda
           let
+          list
           map
+          member
           not
           or
           quote

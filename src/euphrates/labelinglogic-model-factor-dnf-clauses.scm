@@ -34,7 +34,7 @@
          (define args (labelinglogic:expression:args expr))
 
          (cond
-          ((equal? 'or type)
+          ((member type (list 'or 'tuple))
            (let ()
              (define new-clauses
                (map
