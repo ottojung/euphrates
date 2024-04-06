@@ -1,10 +1,17 @@
+
 (define-library
   (euphrates
     labelinglogic-model-reduce-to-names-unsafe)
   (export
     labelinglogic:model:reduce-to-names/unsafe)
+  (import (only (euphrates hashset) hashset-has?))
   (import
-    (only (scheme base) begin define make-parameter))
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic:binding:name))
+  (import
+    (only (euphrates labelinglogic-model-filter)
+          labelinglogic:model:filter))
+  (import (only (scheme base) begin define lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
