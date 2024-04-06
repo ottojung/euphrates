@@ -272,10 +272,10 @@
    (other-and (and (r7rs odd?) (r7rs even?))))
 
  :expected
- '((some-and (and uid_1 uid_2))
+ '((some-and (and uid_2 uid_1))
    (other-and some-and)
-   (uid_2 (r7rs even?))
-   (uid_1 (r7rs odd?)))
+   (uid_1 (r7rs even?))
+   (uid_2 (r7rs odd?)))
 
  )
 
