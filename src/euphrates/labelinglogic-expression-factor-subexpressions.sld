@@ -12,7 +12,10 @@
             labelinglogic-expression-map-subexpressions)
           labelinglogic:expression:map-subexpressions))
   (import
-    (only (euphrates stack) stack-make stack-push!))
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import
     (only (euphrates unique-identifier)
           make-unique-identifier))
@@ -25,6 +28,7 @@
           eq?
           lambda
           let
+          reverse
           values))
   (cond-expand
     (guile (import (only (guile) include-from-path))

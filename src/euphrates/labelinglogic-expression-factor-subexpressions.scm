@@ -18,4 +18,4 @@
         (else expr)))
      expr))
 
-  (values new-expr bindings))
+  (values new-expr (reverse (stack->list bindings))))
