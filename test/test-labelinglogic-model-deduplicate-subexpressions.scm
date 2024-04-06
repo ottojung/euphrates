@@ -42,19 +42,17 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  ;; Simple factor out.
+ ;; Simple noop.
 
-;;  :model
-;;  '((rule1 (or (= 5) (= 6))))
+ :model
+ '((rule1 (or (= 5) (= 6))))
 
-;;  :expected
-;;  '((rule1 (or uid_1 uid_2))
-;;    (uid_1 (= 5))
-;;    (uid_2 (= 6)))
+ :expected
+ '((rule1 (or (= 5) (= 6))))
 
-;;  )
+ )
 
 
 
@@ -73,43 +71,24 @@
  )
 
 
-;; (testcase
-
-;;  ;; Nested factor out.
-
-;;  :model
-;;  '((rule1 (or (= 5) rule2 (= 6)))
-;;    (rule2 (or (= 7) (= 8))))
-
-;;  :expected
-;;  '((rule1 (or uid_1 rule2 uid_2))
-;;    (rule2 (or uid_3 uid_4))
-;;    (uid_1 (= 5))
-;;    (uid_2 (= 6))
-;;    (uid_3 (= 7))
-;;    (uid_4 (= 8)))
-
-;;  )
 
 
+(testcase
 
+ ;; Nested factor out with duplicates.
 
-;; (testcase
+ :model
+ '((rule1 (or (= 5) rule2 (= 6)))
+   (rule2 (or (= 7) (= 5))))
 
-;;  ;; Nested factor out with duplicates.
+ :expected
+ '((rule1 (or uid_1 rule2 uid_2))
+   (rule2 (or uid_3 uid_1))
+   (uid_1 (= 5))
+   (uid_2 (= 6))
+   (uid_3 (= 7)))
 
-;;  :model
-;;  '((rule1 (or (= 5) rule2 (= 6)))
-;;    (rule2 (or (= 7) (= 5))))
-
-;;  :expected
-;;  '((rule1 (or uid_1 rule2 uid_2))
-;;    (rule2 (or uid_3 uid_1))
-;;    (uid_1 (= 5))
-;;    (uid_2 (= 6))
-;;    (uid_3 (= 7)))
-
-;;  )
+ )
 
 
 
