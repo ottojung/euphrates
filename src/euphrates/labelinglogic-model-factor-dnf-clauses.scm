@@ -49,6 +49,10 @@
          (when toplevel?
            (debug "YAAAAAY"))
 
+         (unless toplevel?
+           (debugs predicate)
+           (debugs expr))
+
          (replace-single toplevel? name expr)))
 
      model))
