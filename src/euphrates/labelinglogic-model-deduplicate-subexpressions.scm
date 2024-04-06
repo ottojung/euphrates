@@ -60,6 +60,9 @@
 
        model))
 
+    (debugs model)
+    (debugs replaced-model)
+
     (if unchanged? #f
         (let ()
           (define combined-model
