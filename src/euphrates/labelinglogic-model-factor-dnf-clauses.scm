@@ -47,14 +47,6 @@
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
-         (define toplevel? (equal? expr predicate))
-
-         (when toplevel?
-           (debug "YAAAAAY"))
-
-         (unless toplevel?
-           (debugs predicate)
-           (debugs expr))
 
          (replace-single toplevel? name expr)))
 
