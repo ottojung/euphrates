@@ -3,3 +3,22 @@
 
 (define (labelinglogic:model:factor-subexpressions predicate model)
   (define bindings (stack-make))
+  (define replaced-model
+    (labelinglogic:model:map-expressions
+     (lambda (class expr)
+       (lambda (expr)
+         (define-values (new-expr new-bindings)
+           (labelinglogic:expression:factor-subexpressions
+            predicate expr))
+         (for-each stack-push! new-bindings)
+         new-expr))
+     model))
+
+  (define combined
+    (labelinglogic:model:append
+     replaced-model
+     (reverse
+      (stack->list bindings))))
+
+  combined)
+
