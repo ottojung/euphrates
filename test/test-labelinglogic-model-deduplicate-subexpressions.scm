@@ -199,8 +199,7 @@
 
  :expected
  '((just-5 (= 5))
-   (some-tuple (tuple uid_1 just-5))
-   (uid_1 (= 3)))
+   (some-tuple (tuple (= 3) just-5)))
 
  )
 
