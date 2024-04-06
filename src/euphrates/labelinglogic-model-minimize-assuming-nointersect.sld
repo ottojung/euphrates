@@ -5,6 +5,14 @@
   (export
     labelinglogic:model:minimize/assuming-nointersect)
   (import
+    (only (euphrates
+            labelinglogic-model-deduplicate-subexpressions)
+          labelinglogic:model:deduplicate-subexpressions))
+  (import
+    (only (euphrates
+            labelinglogic-model-factor-dnf-clauses)
+          labelinglogic:model:factor-dnf-clauses))
+  (import
     (only (euphrates labelinglogic-model-inline-all)
           labelinglogic:model:inline-all))
   (import

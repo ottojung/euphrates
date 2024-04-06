@@ -23,10 +23,10 @@
   (define latticised-opt
     (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
 
-  (define latticised-opt
-    (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
+  (define dedup-model
+    (labelinglogic:model:deduplicate-subexpressions latticised-reduced))
 
-  ;; (define latticised-opt
-  ;;   (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
+  (define factored-model
+    (labelinglogic:model:factor-dnf-clauses dedup-reduced))
 
   latticised-opt)
