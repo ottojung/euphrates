@@ -13,6 +13,7 @@
            (hashmap-set! H class class)
            (unless (hashmap-has? H predicate)
              (hashmap-set! H predicate class))))
+
        model))
 
     (define S (make-multiset))
@@ -59,6 +60,10 @@
              existing))))
 
        model))
+
+    (debug "---------------------")
+    (debugs model)
+    (debugs replaced-model)
 
     (if unchanged? #f
         (let ()
