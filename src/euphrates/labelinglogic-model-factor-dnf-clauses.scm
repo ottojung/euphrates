@@ -54,7 +54,7 @@
              predicate
              (let ()
                (define new-args (map inner args))
-               (labelinglogic:expression:make type new-args))))
+               (labelinglogic:expression:make type new-args)))))
 
      model))
 
