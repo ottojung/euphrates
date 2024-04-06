@@ -27,6 +27,6 @@
     (labelinglogic:model:deduplicate-subexpressions latticised-reduced))
 
   (define factored-model
-    (labelinglogic:model:factor-dnf-clauses dedup-reduced))
+    (labelinglogic:model:factor-dnf-clauses dedup-model))
 
   latticised-opt)
