@@ -50,7 +50,10 @@
             (lambda (expr) (replace-single #f name expr))
             expr))
 
-         (define new-args (map inner args))
+         (define new-args
+           (if (labelinglogic:expression:ground? predicate)
+               args
+               (map inner args)))
          (define new-predicate (labelinglogic:expression:make type new-args))
          (replace-single #t name new-predicate)))
 
