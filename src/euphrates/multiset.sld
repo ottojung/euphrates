@@ -11,7 +11,8 @@
     multiset-ref
     multiset-has?
     multiset-add!
-    multiset-filter)
+    multiset-filter
+    multiset-keys)
   (import
     (only (euphrates hashmap)
           hashmap->alist
