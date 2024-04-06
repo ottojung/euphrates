@@ -50,11 +50,9 @@
             (lambda (expr) (replace-single #f name expr))
             expr))
 
-         (if (labelinglogic:expression:ground? predicate)
-             (replace-single #t name expr)
-             (let ()
-               (define new-args (map inner args))
-               (labelinglogic:expression:make type new-args)))))
+         (define new-args (map inner args))
+         (define new-predicate (labelinglogic:expression:make type new-args))
+         (replace-single #t name new-predicate)))
 
      model))
 
