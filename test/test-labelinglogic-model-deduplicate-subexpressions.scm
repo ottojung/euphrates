@@ -323,3 +323,18 @@
    (uid_2 (not just-5)))
 
  )
+
+
+
+
+(testcase
+
+ ;; Empty model.
+
+ :model
+ '()
+
+ :expected
+ '()
+
+ )
