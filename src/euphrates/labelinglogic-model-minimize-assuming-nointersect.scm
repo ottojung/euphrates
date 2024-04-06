@@ -23,4 +23,10 @@
   (define latticised-opt
     (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
 
+  (define latticised-opt
+    (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
+
+  ;; (define latticised-opt
+  ;;   (labelinglogic:model:optimize/or/just-idempotency latticised-reduced))
+
   latticised-opt)
