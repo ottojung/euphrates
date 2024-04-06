@@ -226,27 +226,27 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  ;; Embeded tuples.
+ ;; Embeded tuples.
 
-;;  :model
-;;  `((t_1 (= #\1))
-;;    (t_2 (= #\2))
-;;    (t_3 (= #\3))
-;;    (t_x (or (tuple (= #\x) (= #\3))
-;;             (= #\2))))
+ :model
+ `((t_1 (= #\1))
+   (t_2 (= #\2))
+   (t_3 (= #\3))
+   (t_x (or (tuple (= #\x) (= #\3))
+            (= #\2))))
 
-;;  :expected
+ :expected
 
-;;  '((t_1 (= #\1))
-;;    (t_2 (= #\2))
-;;    (t_3 (= #\3))
-;;    (t_x (or uid_1 t_2))
-;;    (uid_2 (= #\x))
-;;    (uid_1 (tuple uid_2 t_3)))
+ '((t_1 (= #\1))
+   (t_2 (= #\2))
+   (t_3 (= #\3))
+   (t_x (or uid_1 t_2))
+   (uid_2 (= #\x))
+   (uid_1 (tuple uid_2 t_3)))
 
-;;  )
+ )
 
 
 
