@@ -21,10 +21,6 @@
   (define (replace-single toplevel? maybe-name expr)
     (define existing (hashmap-ref H expr #f))
 
-    (debugs maybe-name)
-    (debugs expr)
-    (debugs existing)
-
     (cond
      ((not existing)
 
