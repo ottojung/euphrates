@@ -56,15 +56,10 @@
             ((equal? class existing) expr)
             ((eq? expr existing) expr)
             (else
-             (debug "~s -> ~s" expr existing)
              (set! unchanged? #f)
              existing))))
 
        model))
-
-    (debug "---------------------")
-    (debugs model)
-    (debugs replaced-model)
 
     (if unchanged? #f
         (let ()
