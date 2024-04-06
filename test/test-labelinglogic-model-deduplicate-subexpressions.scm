@@ -268,14 +268,14 @@
  ;; Duble ands.
 
  :model
- '((some-and (and (r7rs odd?) (not (= 5))))
+ '((some-and (and (r7rs even?) (not (= 2))))
    (other-and (and (r7rs odd?) (not (= 5)))))
 
  :expected
- '((just-5 (= 5))
-   (some-and (and uid_1 (not just-5)))
-   (other-and (and uid_1 (not just-5)))
-   (uid_2 (not (= 5)))
+ '((some-and (and uid_1 (not uid_2)))
+   (other-and (and uid_1 (not uid_2)))
+   (uid_2 (= 5))
+   (uid_3 (not (= 5)))
    (uid_1 (r7rs odd?)))
 
  )
