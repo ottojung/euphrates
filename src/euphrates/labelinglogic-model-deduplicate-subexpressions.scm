@@ -15,6 +15,14 @@
 
      model))
 
+  (define S (make-multiset '()))
+
+  (define _172371
+    (labelinglogic:model:foreach-subexpressions
+     (lambda (class predicate)
+       (lambda (expr) (multiset-add! expr)))
+     model))
+
   (define new-bindings-stack
     (stack-make))
 
@@ -27,4 +35,13 @@
              (hashmap-ref
               H expr
               (let ()
-                (define 
+                (define name
+                  (make-unique-identifier))
+                (define binding
+                  (labelinglogic:binding:make name expr))
+
+                (stack-push! new-bindings-stack binding)
+                (hashmap-set! H expr name)
+                name)))
+
+
