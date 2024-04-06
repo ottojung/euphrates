@@ -4,7 +4,6 @@
 (define (labelinglogic:model:factor-dnf-clauses model)
   (define (predicate expr)
      (define type (labelinglogic:expression:type expr))
-     (define args (labelinglogic:expression:args expr))
      (not (equal? type 'or)))
 
   (labelinglogic:model:factor-subexpressions predicate model))

@@ -4,9 +4,6 @@
     labelinglogic-model-factor-dnf-clauses)
   (export labelinglogic:model:factor-dnf-clauses)
   (import
-    (only (euphrates labelinglogic-expression-args)
-          labelinglogic:expression:args))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
