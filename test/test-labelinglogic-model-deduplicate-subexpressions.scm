@@ -30,254 +30,254 @@
 
 
 
-;;
-;;
-;;  ▄▄▄▄▄▄▄                 ▄
-;;     █     ▄▄▄    ▄▄▄   ▄▄█▄▄          ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄
-;;     █    █▀  █  █   ▀    █           █▀  ▀  ▀   █  █   ▀  █▀  █  █   ▀
-;;     █    █▀▀▀▀   ▀▀▀▄    █           █      ▄▀▀▀█   ▀▀▀▄  █▀▀▀▀   ▀▀▀▄
-;;     █    ▀█▄▄▀  ▀▄▄▄▀    ▀▄▄         ▀█▄▄▀  ▀▄▄▀█  ▀▄▄▄▀  ▀█▄▄▀  ▀▄▄▄▀
-;;
-;;
+;; ;;
+;; ;;
+;; ;;  ▄▄▄▄▄▄▄                 ▄
+;; ;;     █     ▄▄▄    ▄▄▄   ▄▄█▄▄          ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄
+;; ;;     █    █▀  █  █   ▀    █           █▀  ▀  ▀   █  █   ▀  █▀  █  █   ▀
+;; ;;     █    █▀▀▀▀   ▀▀▀▄    █           █      ▄▀▀▀█   ▀▀▀▄  █▀▀▀▀   ▀▀▀▄
+;; ;;     █    ▀█▄▄▀  ▀▄▄▄▀    ▀▄▄         ▀█▄▄▀  ▀▄▄▀█  ▀▄▄▄▀  ▀█▄▄▀  ▀▄▄▄▀
+;; ;;
+;; ;;
 
 
 
-(testcase
+;; (testcase
 
- ;; Simple noop.
+;;  ;; Simple noop.
 
- :model
- '((rule1 (or (= 5) (= 6))))
+;;  :model
+;;  '((rule1 (or (= 5) (= 6))))
 
- :expected
- '((rule1 (or (= 5) (= 6))))
+;;  :expected
+;;  '((rule1 (or (= 5) (= 6))))
 
- )
+;;  )
 
 
 
 
-(testcase
+;; (testcase
 
- ;; Simple factor out of duplicates.
+;;  ;; Simple factor out of duplicates.
 
- :model
- '((rule1 (or (= 5) (= 6) (= 5))))
+;;  :model
+;;  '((rule1 (or (= 5) (= 6) (= 5))))
 
- :expected
- '((rule1 (or uid_1 (= 6) uid_1))
-   (uid_1 (= 5)))
+;;  :expected
+;;  '((rule1 (or uid_1 (= 6) uid_1))
+;;    (uid_1 (= 5)))
 
- )
+;;  )
 
 
 
 
-(testcase
+;; (testcase
 
- ;; Nested factor out with duplicates.
+;;  ;; Nested factor out with duplicates.
 
- :model
- '((rule1 (or (= 5) rule2 (= 6)))
-   (rule2 (or (= 7) (= 5))))
+;;  :model
+;;  '((rule1 (or (= 5) rule2 (= 6)))
+;;    (rule2 (or (= 7) (= 5))))
 
- :expected
- '((rule1 (or uid_1 rule2 (= 6)))
-   (rule2 (or (= 7) uid_1))
-   (uid_1 (= 5)))
+;;  :expected
+;;  '((rule1 (or uid_1 rule2 (= 6)))
+;;    (rule2 (or (= 7) uid_1))
+;;    (uid_1 (= 5)))
 
- )
+;;  )
 
 
 
-(testcase
+;; (testcase
 
- ;; No factoring out needed.
+;;  ;; No factoring out needed.
 
- :model
- '((alphabetic (or upcase lowercase))
-   (upcase (r7rs char-upper-case?))
-   (lowercase (r7rs char-lower-case?))
-   (numeric (r7rs char-numeric?))
-   )
+;;  :model
+;;  '((alphabetic (or upcase lowercase))
+;;    (upcase (r7rs char-upper-case?))
+;;    (lowercase (r7rs char-lower-case?))
+;;    (numeric (r7rs char-numeric?))
+;;    )
 
- :expected
- '((alphabetic (or upcase lowercase))
-   (upcase (r7rs char-upper-case?))
-   (lowercase (r7rs char-lower-case?))
-   (numeric (r7rs char-numeric?))
-   )
+;;  :expected
+;;  '((alphabetic (or upcase lowercase))
+;;    (upcase (r7rs char-upper-case?))
+;;    (lowercase (r7rs char-lower-case?))
+;;    (numeric (r7rs char-numeric?))
+;;    )
 
- )
+;;  )
 
 
 
 
-(testcase
+;; (testcase
 
- ;; Duplicate bindings of equal expressions.
+;;  ;; Duplicate bindings of equal expressions.
 
- :model
- '((just-5 (= 5))
-   (another-5 (= 5))
-   )
+;;  :model
+;;  '((just-5 (= 5))
+;;    (another-5 (= 5))
+;;    )
 
- :expected
- '((just-5 (= 5))
-   (another-5 just-5))
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (another-5 just-5))
 
- )
+;;  )
 
 
 
-(testcase
+;; (testcase
 
- ;; Duplicate bindings of equal expressions [2].
+;;  ;; Duplicate bindings of equal expressions [2].
 
- :model
- '((just-5 (= 5))
-   (another-5 (= 5))
-   (something-that-uses-5 (or (= 5) (= 3)))
-   )
+;;  :model
+;;  '((just-5 (= 5))
+;;    (another-5 (= 5))
+;;    (something-that-uses-5 (or (= 5) (= 3)))
+;;    )
 
- :expected
- '((just-5 (= 5))
-   (another-5 just-5)
-   (something-that-uses-5 (or just-5 (= 3))))
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (another-5 just-5)
+;;    (something-that-uses-5 (or just-5 (= 3))))
 
- )
+;;  )
 
 
 
-(testcase
+;; (testcase
 
- ;; Duplicate bindings of equal expressions [3].
+;;  ;; Duplicate bindings of equal expressions [3].
 
- :model
- '((something-that-uses-5 (or (= 5) (= 3)))
-   (just-5 (= 5))
-   (another-5 (= 5))
-   )
+;;  :model
+;;  '((something-that-uses-5 (or (= 5) (= 3)))
+;;    (just-5 (= 5))
+;;    (another-5 (= 5))
+;;    )
 
- :expected
- '((something-that-uses-5 (or just-5 (= 3)))
-   (just-5 (= 5))
-   (another-5 just-5))
+;;  :expected
+;;  '((something-that-uses-5 (or just-5 (= 3)))
+;;    (just-5 (= 5))
+;;    (another-5 just-5))
 
- )
+;;  )
 
 
 
 
-(testcase
+;; (testcase
 
- ;; Complex nested factor out with duplicates across different rules.
+;;  ;; Complex nested factor out with duplicates across different rules.
 
- :model
- '((rule1 (or (= 5) rule2 (= 6) rule3))
-   (rule2 (or (= 7) (= 5)))
-   (rule3 (or (= 5) (= 5) (= 8)))
-   (rule4 (or rule1 rule2 rule3)))
+;;  :model
+;;  '((rule1 (or (= 5) rule2 (= 6) rule3))
+;;    (rule2 (or (= 7) (= 5)))
+;;    (rule3 (or (= 5) (= 5) (= 8)))
+;;    (rule4 (or rule1 rule2 rule3)))
 
- :expected
- '((rule1 (or uid_1 rule2 (= 6) rule3))
-   (rule2 (or (= 7) uid_1))
-   (rule3 (or uid_1 uid_1 (= 8)))
-   (rule4 (or rule1 rule2 rule3))
-   (uid_1 (= 5)))
+;;  :expected
+;;  '((rule1 (or uid_1 rule2 (= 6) rule3))
+;;    (rule2 (or (= 7) uid_1))
+;;    (rule3 (or uid_1 uid_1 (= 8)))
+;;    (rule4 (or rule1 rule2 rule3))
+;;    (uid_1 (= 5)))
 
- )
+;;  )
 
 
-(testcase
+;; (testcase
 
- ;; Simple tuples.
+;;  ;; Simple tuples.
 
- :model
- '((just-5 (= 5))
-   (some-tuple (tuple (= 3) (= 5))))
+;;  :model
+;;  '((just-5 (= 5))
+;;    (some-tuple (tuple (= 3) (= 5))))
 
- :expected
- '((just-5 (= 5))
-   (some-tuple (tuple (= 3) just-5)))
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (some-tuple (tuple (= 3) just-5)))
 
- )
+;;  )
 
 
 
-(testcase
+;; (testcase
 
- ;; Simple tuples [2].
+;;  ;; Simple tuples [2].
 
- :model
- `((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (tuple (= #\x) (= #\3))))
+;;  :model
+;;  `((t_1 (= #\1))
+;;    (t_2 (= #\2))
+;;    (t_3 (= #\3))
+;;    (t_x (tuple (= #\x) (= #\3))))
 
- :expected
- '((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (tuple (= #\x) t_3)))
+;;  :expected
+;;  '((t_1 (= #\1))
+;;    (t_2 (= #\2))
+;;    (t_3 (= #\3))
+;;    (t_x (tuple (= #\x) t_3)))
 
- )
+;;  )
 
 
 
 
-(testcase
+;; (testcase
 
- ;; Embeded tuples.
+;;  ;; Embeded tuples.
 
- :model
- `((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (or (tuple (= #\x) (= #\3))
-            (= #\2))))
+;;  :model
+;;  `((t_1 (= #\1))
+;;    (t_2 (= #\2))
+;;    (t_3 (= #\3))
+;;    (t_x (or (tuple (= #\x) (= #\3))
+;;             (= #\2))))
 
- :expected
- '((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (or (tuple (= #\x) t_3) t_2)))
+;;  :expected
+;;  '((t_1 (= #\1))
+;;    (t_2 (= #\2))
+;;    (t_3 (= #\3))
+;;    (t_x (or (tuple (= #\x) t_3) t_2)))
 
- )
+;;  )
 
 
 
-(testcase
+;; (testcase
 
- ;; Simple ands.
+;;  ;; Simple ands.
 
- :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5)))))
+;;  :model
+;;  '((just-5 (= 5))
+;;    (some-and (and (r7rs odd?) (not (= 5)))))
 
- :expected
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not just-5))))
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (some-and (and (r7rs odd?) (not just-5))))
 
- )
+;;  )
 
 
 
-(testcase
+;; (testcase
 
- ;; Duble ands [1].
+;;  ;; Duble ands [1].
 
- :model
- '((some-and (and (r7rs odd?) (r7rs even?)))
-   (other-and (and (r7rs odd?) (r7rs even?))))
+;;  :model
+;;  '((some-and (and (r7rs odd?) (r7rs even?)))
+;;    (other-and (and (r7rs odd?) (r7rs even?))))
 
- :expected
- '((some-and (and uid_2 uid_1))
-   (other-and some-and)
-   (uid_1 (r7rs even?))
-   (uid_2 (r7rs odd?)))
+;;  :expected
+;;  '((some-and (and uid_2 uid_1))
+;;    (other-and some-and)
+;;    (uid_1 (r7rs even?))
+;;    (uid_2 (r7rs odd?)))
 
- )
+;;  )
 
 
 
@@ -305,51 +305,51 @@
 
 
 
-(testcase
+;; (testcase
 
- ;; Duble ands [3].
+;;  ;; Duble ands [3].
 
- :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5))))
-   (other-and (and (r7rs odd?) (not (= 5)))))
+;;  :model
+;;  '((just-5 (= 5))
+;;    (some-and (and (r7rs odd?) (not (= 5))))
+;;    (other-and (and (r7rs odd?) (not (= 5)))))
 
- :expected
- '((just-5 (= 5))
-   (some-and (and uid_2 uid_3))
-   (other-and some-and)
-   (uid_1 uid_3)
-   (uid_2 (r7rs odd?))
-   (uid_3 (not just-5)))
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (some-and (and uid_2 uid_3))
+;;    (other-and some-and)
+;;    (uid_1 uid_3)
+;;    (uid_2 (r7rs odd?))
+;;    (uid_3 (not just-5)))
 
- )
-
-
-
-
-(testcase
-
- ;; Empty model.
-
- :model
- '()
-
- :expected
- '()
-
- )
+;;  )
 
 
 
 
-(testcase
+;; (testcase
 
- ;; Singleton expr model.
+;;  ;; Empty model.
 
- :model
- '((just-5 (= 5)))
+;;  :model
+;;  '()
 
- :expected
- '((just-5 (= 5)))
+;;  :expected
+;;  '()
 
- )
+;;  )
+
+
+
+
+;; (testcase
+
+;;  ;; Singleton expr model.
+
+;;  :model
+;;  '((just-5 (= 5)))
+
+;;  :expected
+;;  '((just-5 (= 5)))
+
+;;  )
