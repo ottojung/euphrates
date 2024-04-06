@@ -193,13 +193,16 @@
 
  :expected
  '((rule1 (or uid_1 rule2 uid_2 rule3))
-   (rule2 (or uid_3 uid_1))
-   (rule3 (or uid_1 uid_1 uid_4))
+   (rule2 (or uid_3 uid_4))
+   (rule3 (or uid_5 uid_6 uid_7))
    (rule4 (or rule1 rule2 rule3))
    (uid_1 (= 5))
    (uid_2 (= 6))
    (uid_3 (= 7))
-   (uid_4 (= 8)))
+   (uid_4 (= 5))
+   (uid_5 (= 5))
+   (uid_6 (= 5))
+   (uid_7 (= 8)))
 
  )
 
