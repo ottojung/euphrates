@@ -46,10 +46,8 @@
 
          (cond
           ((equal? expr predicate) expr)
-          ;; ((labelinglogic:expression:ground? expr) (replace-single name expr))
-          ;; (else expr))))
-          ((equal? type 'or) expr)
-          (else (replace-single name expr)))))
+          ((labelinglogic:expression:ground? expr) (replace-single name expr))
+          (else expr))))
 
      model))
 
