@@ -42,16 +42,21 @@
     (labelinglogic:model:map-expressions
      (lambda (name predicate)
        (lambda (predicate)
-         
-         
-         0)))
-       
-
-       (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
 
-         (replace-single toplevel? name expr)))
+         (define (inner expr)
+           (labelinglogic:expression:map-subexpressions
+            (lambda (expr) (replace-single toplevel? name expr))
+            expr))
+
+         (map inner args)))
+
+       ;; (lambda (expr)
+       ;;   (define type (labelinglogic:expression:type expr))
+       ;;   (define args (labelinglogic:expression:args expr))
+
+       ;;   (replace-single toplevel? name expr)))
 
      model))
 

@@ -3,8 +3,6 @@
   (euphrates
     labelinglogic-model-factor-dnf-clauses)
   (export labelinglogic:model:factor-dnf-clauses)
-  (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
           hashmap-has?
@@ -18,6 +16,10 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates
+            labelinglogic-expression-map-subexpressions)
+          labelinglogic:expression:map-subexpressions))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -28,9 +30,8 @@
             labelinglogic-model-foreach-expression)
           labelinglogic:model:foreach-expression))
   (import
-    (only (euphrates
-            labelinglogic-model-map-subexpressions)
-          labelinglogic:model:map-subexpressions))
+    (only (euphrates labelinglogic-model-map-expressions)
+          labelinglogic:model:map-expressions))
   (import
     (only (euphrates stack)
           stack->list
@@ -49,10 +50,10 @@
           if
           lambda
           let
+          map
           not
           reverse
-          unless
-          when))
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
