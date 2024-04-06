@@ -74,6 +74,13 @@
                 key
                 (+ 1 (hashmap-ref (multiset-value H) key 0))))
 
+(define (multiset-foreach/key-value fun S)
+  (define H (multiset-value S))
+  (hashmap-foreach
+   (lambda (key value)
+     (fun key value))
+   H))
+
 (define (multiset-foreach fun S)
   (define H (multiset-value S))
   (hashmap-foreach
