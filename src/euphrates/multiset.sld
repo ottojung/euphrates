@@ -11,6 +11,7 @@
     multiset-ref
     multiset-has?
     multiset-add!
+    multiset-foreach/key-value
     multiset-foreach
     multiset-filter
     multiset-keys)
