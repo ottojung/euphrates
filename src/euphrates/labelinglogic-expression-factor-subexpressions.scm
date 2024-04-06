@@ -6,7 +6,10 @@
   (define orig-expr expr)
 
   (define type (labelinglogic:expression:type expr))
-  (define args (labelinglogic:expression:args expr))
+  (define args
+    (if (labelinglogic:expression:ground? expr) '()
+        (labelinglogic:expression:args expr)))
+
   (define new-args
     (map
      (lambda (expr)

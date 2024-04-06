@@ -11,6 +11,9 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-ground-huh)
+          labelinglogic:expression:ground?))
+  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
@@ -39,6 +42,7 @@
           lambda
           let
           map
+          quote
           reverse
           values))
   (cond-expand
