@@ -27,6 +27,8 @@
     (define new-bindings-stack
       (stack-make))
 
+    (debugs H)
+
     (define _127371273
       (multiset-foreach/key-value
        (lambda (key value)
