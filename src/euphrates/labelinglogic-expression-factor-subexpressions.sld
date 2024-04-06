@@ -8,12 +8,19 @@
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
   (import
+    (only (euphrates labelinglogic-expression-args)
+          labelinglogic:expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates
             labelinglogic-expression-map-subexpressions)
           labelinglogic:expression:map-subexpressions))
   (import
     (only (euphrates stack)
           stack->list
+          stack-empty?
           stack-make
           stack-push!))
   (import
@@ -25,9 +32,10 @@
           cond
           define
           else
-          eq?
+          if
           lambda
           let
+          map
           reverse
           values))
   (cond-expand
