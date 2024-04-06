@@ -17,6 +17,9 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
+  (import
     (only (euphrates
             labelinglogic-model-foreach-expression)
           labelinglogic:model:foreach-expression))
@@ -30,7 +33,10 @@
           multiset-add!
           multiset-foreach/key-value))
   (import
-    (only (euphrates stack) stack-make stack-push!))
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import
     (only (euphrates unique-identifier)
           make-unique-identifier))
@@ -45,6 +51,7 @@
           lambda
           let
           not
+          reverse
           unless
           when))
   (cond-expand

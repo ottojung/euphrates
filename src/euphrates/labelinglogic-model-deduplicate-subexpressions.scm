@@ -54,6 +54,10 @@
 
      model))
 
-  0)
+  (define combined-model
+    (labelinglogic:model:append
+     replaced-model
+     (reverse
+      (stack->list new-bindings-stack))))
 
-
+  combined-model)
