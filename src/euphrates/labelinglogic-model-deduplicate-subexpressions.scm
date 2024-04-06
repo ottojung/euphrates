@@ -60,6 +60,7 @@
 
        model))
 
+    (debug "---------------------")
     (debugs model)
     (debugs replaced-model)
 

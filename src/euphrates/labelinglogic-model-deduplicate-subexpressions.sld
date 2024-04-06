@@ -4,6 +4,7 @@
     labelinglogic-model-deduplicate-subexpressions)
   (export
     labelinglogic:model:deduplicate-subexpressions)
+  (import (only (euphrates debug) debug))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
