@@ -27,35 +27,15 @@
      (else existing)))
 
   (define replaced-model
-    (labelinglogic:model:map-expressions
+    (labelinglogic:model:map-subexpressions
      (lambda (name predicate)
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
 
          (cond
-          ((member type (list 'or 'tuple))
-           (let ()
-             (define new-clauses
-               (map
-                (lambda (clause)
-                  (define existing (hashmap-ref H clause #f))
-                  (or existing
-                      (let ()
-                        (define name
-                          (make-unique-identifier))
-                        (define binding
-                          (labelinglogic:binding:make name clause))
-
-                        (stack-push! new-bindings-stack binding)
-                        (hashmap-set! H clause name)
-                        name)))
-                args))
-
-             (labelinglogic:expression:make type new-clauses)))
-
-          (else
-           (replace-single name expr)))))
+          ((member type (list 'or 'tuple)) expr)
+          (else (replace-single name expr)))))
 
      model))
 
