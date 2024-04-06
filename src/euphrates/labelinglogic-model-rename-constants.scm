@@ -25,6 +25,10 @@
           new)
         existing))
 
+  (for-each
+   cached-renamer
+   (labelinglogic:model:names model))
+
   (map
    (lambda (model-component)
      (define-tuple (class predicate) model-component)
