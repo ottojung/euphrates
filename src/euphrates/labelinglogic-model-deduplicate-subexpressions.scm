@@ -23,35 +23,36 @@
        (lambda (expr) (multiset-add! expr)))
      model))
 
+  (define new-bindings-stack
+    (stack-make))
+
   (define _127371273
     (multiset-foreach/key-value
      (lambda (key value)
        (when (< 1 value)
          (unless (hashmap-has? H key)
-           (hashmap-set!
-            H key
-            (make-unique-identifier)))))))
+           (let ()
+            (define name
+              (make-unique-identifier))
+            (define binding
+              (labelinglogic:binding:make name expr))
 
-  (define new-bindings-stack
-    (stack-make))
+            (stack-push! new-bindings-stack binding)
+            (hashmap-set! H key name)))))))
 
-  ;; (define replaced-model
-  ;;   (labelinglogic:model:map-subexpressions
-  ;;    (lambda (class predicate)
-  ;;      (if (equal? class (hashmap-ref H predicate #f))
-  ;;          identity
-  ;;          (lambda (expr)
-  ;;            (hashmap-ref
-  ;;             H expr
-  ;;             (let ()
-  ;;               (define name
-  ;;                 (make-unique-identifier))
-  ;;               (define binding
-  ;;                 (labelinglogic:binding:make name expr))
+  (define replaced-model
+    (labelinglogic:model:map-subexpressions
+     (lambda (class predicate)
+       (lambda (expr)
+         (define existing
+           (hashmap-ref H expr #f))
 
-  ;;               (stack-push! new-bindings-stack binding)
-  ;;               (hashmap-set! H expr name)
-  ;;               name)))
+         (cond
+          ((not existing) expr)
+          ((equal? class existing) expr)
+          (else existing))))
+
+     model))
 
   0)
 

@@ -7,8 +7,12 @@
   (import
     (only (euphrates hashmap)
           hashmap-has?
+          hashmap-ref
           hashmap-set!
           make-hashmap))
+  (import
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic:binding:make))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
@@ -17,11 +21,16 @@
             labelinglogic-model-foreach-expression)
           labelinglogic:model:foreach-expression))
   (import
+    (only (euphrates
+            labelinglogic-model-map-subexpressions)
+          labelinglogic:model:map-subexpressions))
+  (import
     (only (euphrates multiset)
           make-multiset
           multiset-add!
           multiset-foreach/key-value))
-  (import (only (euphrates stack) stack-make))
+  (import
+    (only (euphrates stack) stack-make stack-push!))
   (import
     (only (euphrates unique-identifier)
           make-unique-identifier))
@@ -29,8 +38,13 @@
     (only (scheme base)
           <
           begin
+          cond
           define
+          else
+          equal?
           lambda
+          let
+          not
           unless
           when))
   (cond-expand
