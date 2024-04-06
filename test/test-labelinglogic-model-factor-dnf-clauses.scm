@@ -265,10 +265,6 @@
  ;; Simple ands.
 
  :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5)))))
-
- :expected
  `((t_0 (= #\0))
    (t_1 (= #\1))
    (t_2 (= #\2))
@@ -343,5 +339,8 @@
                          (char-alphabetic? c)
                          (not (char-upper-case? c))
                          (not (char-lower-case? c))))))))
+
+ :model
+ 0
 
  )
