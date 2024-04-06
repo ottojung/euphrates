@@ -55,6 +55,7 @@
             ((not existing) expr)
             ((equal? class existing) expr)
             (else
+             (debug "~s -> ~s" expr existing)
              (set! unchanged? #f)
              existing))))
 
