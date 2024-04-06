@@ -50,13 +50,8 @@
             (lambda (expr) (replace-single #f name expr))
             expr))
 
-         (map inner args)))
-
-       ;; (lambda (expr)
-       ;;   (define type (labelinglogic:expression:type expr))
-       ;;   (define args (labelinglogic:expression:args expr))
-
-       ;;   (replace-single toplevel? name expr)))
+         (define new-args (map inner args))
+         (labelinglogic:expression:make type new-args)))
 
      model))
 
