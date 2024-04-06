@@ -21,6 +21,10 @@
   (define replaced-model
     (labelinglogic:model:map-subexpressions
      (lambda (class predicate)
-       (lambda (expr)
-         (define existing (hashmap-ref H expr #f))
-         
+       (if (equal? class (hashmap-ref H predicate #f))
+           identity
+           (lambda (expr)
+             (hashmap-ref
+              H expr
+              (let ()
+                (define 
