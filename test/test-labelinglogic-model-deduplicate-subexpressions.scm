@@ -90,25 +90,25 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  ;; No factoring out needed.
+ ;; No factoring out needed.
 
-;;  :model
-;;  '((alphabetic (or upcase lowercase))
-;;    (upcase (r7rs char-upper-case?))
-;;    (lowercase (r7rs char-lower-case?))
-;;    (numeric (r7rs char-numeric?))
-;;    )
+ :model
+ '((alphabetic (or upcase lowercase))
+   (upcase (r7rs char-upper-case?))
+   (lowercase (r7rs char-lower-case?))
+   (numeric (r7rs char-numeric?))
+   )
 
-;;  :expected
-;;  '((alphabetic (or upcase lowercase))
-;;    (upcase (r7rs char-upper-case?))
-;;    (lowercase (r7rs char-lower-case?))
-;;    (numeric (r7rs char-numeric?))
-;;    )
+ :expected
+ '((alphabetic (or upcase lowercase))
+   (upcase (r7rs char-upper-case?))
+   (lowercase (r7rs char-lower-case?))
+   (numeric (r7rs char-numeric?))
+   )
 
-;;  )
+ )
 
 
 
