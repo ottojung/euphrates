@@ -18,7 +18,7 @@
   (define S (make-multiset))
 
   (define _172371
-    (labelinglogic:model:foreach-subexpressions
+    (labelinglogic:model:foreach-subexpression
      (lambda (class predicate)
        (lambda (expr) (multiset-add! S expr)))
      model))

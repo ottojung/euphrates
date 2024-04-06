@@ -25,6 +25,10 @@
           labelinglogic:model:foreach-expression))
   (import
     (only (euphrates
+            labelinglogic-model-foreach-subexpression)
+          labelinglogic:model:foreach-subexpression))
+  (import
+    (only (euphrates
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
   (import
