@@ -28,10 +28,10 @@
         (define name
           (make-unique-identifier))
         (define binding
-          (labelinglogic:binding:make name clause))
+          (labelinglogic:binding:make name expr))
 
         (stack-push! new-bindings-stack binding)
-        (hashmap-set! H clause name)
+        (hashmap-set! H expr name)
         name))
 
      ((equal? existing maybe-name) expr)
