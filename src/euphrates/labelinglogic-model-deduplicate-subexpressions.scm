@@ -61,10 +61,6 @@
 
        model))
 
-    (debug "---------------------")
-    (debugs model)
-    (debugs replaced-model)
-
     (if unchanged? #f
         (let ()
           (define combined-model
@@ -72,6 +68,11 @@
              replaced-model
              (reverse
               (stack->list new-bindings-stack))))
+
+          (debug "---------------------")
+          (debugs model)
+          (debugs replaced-model)
+          (debugs combined-model)
 
           combined-model)))
 
