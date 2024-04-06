@@ -20,6 +20,7 @@
     hashset-foreach
     hashset-map
     hashset-clear!
+    hashset-copy
     hashset-delete!)
   (import (only (euphrates fn) fn))
   (import
