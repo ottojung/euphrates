@@ -38,7 +38,8 @@
               (labelinglogic:binding:make name expr))
 
             (stack-push! new-bindings-stack binding)
-            (hashmap-set! H key name)))))))
+            (hashmap-set! H key name)))))
+     S))
 
   (define replaced-model
     (labelinglogic:model:map-subexpressions
