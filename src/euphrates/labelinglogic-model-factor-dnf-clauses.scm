@@ -3,7 +3,15 @@
 
 (define (labelinglogic:model:factor-dnf-clauses model)
   (define (predicate expr)
-     (define type (labelinglogic:expression:type expr))
-     (not (equal? type 'or)))
+    (define type (labelinglogic:expression:type expr))
+    (cond
+     ((member type (list 'or 'constant)) #t)
+     ((member type (list 'and 'not 'xor 'tuple 'r7rs '=) #f))
+     (else
+      (raisu* :from "labelinglogic:expression:map-subexpressions"
+              :type 'unknown-expr-type
+              :message (stringf "Expression type ~s not recognized"
+                                (~a type))
+              :args (list type expr)))))
 
   (labelinglogic:model:factor-subexpressions predicate model))

@@ -10,11 +10,19 @@
     (only (euphrates
             labelinglogic-model-factor-subexpressions)
           labelinglogic:model:factor-subexpressions))
+  (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
+          =
+          and
           begin
+          cond
           define
-          equal?
+          else
+          list
+          member
           not
           or
           quote))
