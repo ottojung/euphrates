@@ -9,6 +9,11 @@
     (unless (stack-empty? stack)
       (let ()
         (define current (stack-pop! stack))
-        
+
+        (define expr
+          (labelinglogic:model:assoc-or
+           
+
+        (loop))))
 
   ret)
