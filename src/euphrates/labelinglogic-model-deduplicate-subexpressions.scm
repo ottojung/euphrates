@@ -74,6 +74,13 @@
 
           combined-model)))
 
-  (let loop ((model model))
-    (define new (cycle model))
-    (if new (loop new) model)))
+  (define looped
+    (let loop ((model model))
+      (define new (cycle model))
+      (if new (loop new) model)))
+
+  (define reduced
+    (labelinglogic:model:reduce-to-names
+     original-names looped))
+
+  reduced)

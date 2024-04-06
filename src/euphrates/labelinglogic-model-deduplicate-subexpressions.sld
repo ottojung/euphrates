@@ -36,6 +36,9 @@
     (only (euphrates labelinglogic-model-names)
           labelinglogic:model:names))
   (import
+    (only (euphrates labelinglogic-model-reduce-to-names)
+          labelinglogic:model:reduce-to-names))
+  (import
     (only (euphrates multiset)
           make-multiset
           multiset-add!
