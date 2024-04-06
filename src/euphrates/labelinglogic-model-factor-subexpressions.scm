@@ -3,6 +3,7 @@
 
 (define (labelinglogic:model:factor-subexpressions predicate model)
   (define bindings (stack-make))
+
   (define replaced-model
     (labelinglogic:model:map-expressions
      (lambda (class expr)
