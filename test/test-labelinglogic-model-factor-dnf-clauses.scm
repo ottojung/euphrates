@@ -43,7 +43,7 @@
 
 
 
-;; (testcase
+(testcase
 
  ;; Simple factor out.
 
