@@ -303,10 +303,14 @@
 
  :expected
  '((just-5 (= 5))
-   (some-and (and uid_1 uid_2))
-   (other-and (and uid_1 uid_2))
+   (some-and (and uid_1 uid_3))
+   (other-and (and uid_4 uid_6))
    (uid_1 (r7rs odd?))
-   (uid_2 (not just-5)))
+   (uid_2 (= 5))
+   (uid_3 (not uid_2))
+   (uid_4 (r7rs odd?))
+   (uid_5 (= 5))
+   (uid_6 (not uid_5)))
 
  )
 
