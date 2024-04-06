@@ -24,7 +24,7 @@
      model))
 
   (define need-dedup
-    (multiset->list
+    (multiset-keys
      (multiset-filter
       (lambda (key value)
         (< 1 value)))))
