@@ -24,7 +24,7 @@
      model))
 
   (define _127371273
-    (multiset-foreach-item
+    (multiset-foreach/key-value
      (lambda (key value)
        (when (< 1 value)
          (hashmap-set!

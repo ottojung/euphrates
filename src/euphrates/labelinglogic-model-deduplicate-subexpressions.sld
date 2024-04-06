@@ -19,8 +19,7 @@
   (import
     (only (euphrates multiset)
           make-multiset
-          multiset-add!
-          multiset-foreach))
+          multiset-add!))
   (import (only (euphrates stack) stack-make))
   (import
     (only (euphrates unique-identifier)
