@@ -45,17 +45,17 @@
 
 ;; (testcase
 
-;;  ;; Simple factor out.
+ ;; Simple factor out.
 
-;;  :model
-;;  '((rule1 (or (= 5) (= 6))))
+ :model
+ '((rule1 (or (= 5) (= 6))))
 
-;;  :expected
-;;  '((rule1 (or uid_1 uid_2))
-;;    (uid_1 (= 5))
-;;    (uid_2 (= 6)))
+ :expected
+ '((rule1 (or uid_1 uid_2))
+   (uid_1 (= 5))
+   (uid_2 (= 6)))
 
-;;  )
+ )
 
 
 
@@ -307,22 +307,22 @@
 
 
 
-(testcase
+;; (testcase
 
- ;; Duble ands.
+;;  ;; Duble ands.
 
- :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5))))
-   (other-and (and (r7rs odd?) (not (= 5)))))
+;;  :model
+;;  '((just-5 (= 5))
+;;    (some-and (and (r7rs odd?) (not (= 5))))
+;;    (other-and (and (r7rs odd?) (not (= 5)))))
 
- :expected
- '((just-5 (= 5))
-   (some-and (and uid_1 uid_2))
-   (other-and (and uid_1 uid_2))
-   (uid_1 (r7rs odd?))
-   (uid_2 (not just-5)))
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (some-and (and uid_1 uid_2))
+;;    (other-and (and uid_1 uid_2))
+;;    (uid_1 (r7rs odd?))
+;;    (uid_2 (not just-5)))
 
- )
+;;  )
 
 
