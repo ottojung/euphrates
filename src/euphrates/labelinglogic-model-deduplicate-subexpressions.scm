@@ -23,10 +23,11 @@
        (lambda (expr) (multiset-add! expr)))
      model))
 
-  (define need-dedup
-    (multiset-filter
+  (define _127371273
+    (multiset-foreach
      (lambda (key value)
-       (< 1 value))))
+       (when (< 1 value)
+         (hashmap
 
   (define new-bindings-stack
     (stack-make))
