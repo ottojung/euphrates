@@ -299,8 +299,9 @@
 
  :expected
  '((just-5 (= 5))
-   (some-and (and uid_1 (not just-5)))
-   (uid_1 (r7rs odd?)))
+   (some-and (and uid_1 uid_2))
+   (uid_1 (r7rs odd?))
+   (uid_2 (not just-5)))
 
  )
 
