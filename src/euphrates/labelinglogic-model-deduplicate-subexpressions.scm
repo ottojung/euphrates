@@ -35,7 +35,7 @@
             (define name
               (make-unique-identifier))
             (define binding
-              (labelinglogic:binding:make name expr))
+              (labelinglogic:binding:make name key))
 
             (stack-push! new-bindings-stack binding)
             (hashmap-set! H key name)))))
