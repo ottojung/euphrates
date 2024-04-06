@@ -39,8 +39,11 @@
      (else existing)))
 
   (define replaced-model
-    (labelinglogic:model:map-subexpressions
+    (labelinglogic:model:map-expressions
      (lambda (name predicate)
+
+       
+
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
