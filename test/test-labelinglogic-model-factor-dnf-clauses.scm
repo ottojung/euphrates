@@ -267,6 +267,29 @@
 
 (testcase
 
+ ;; Embeded tuples.
+
+ :model
+ `((t_1 (= #\1))
+   (t_2 (= #\2))
+   (t_3 (= #\3))
+   (t_x (or (tuple (= #\x) (= #\3))
+            (= #\2))))
+
+ :expected
+ '((t_1 (= #\1))
+   (t_2 (= #\2))
+   (t_3 (= #\3))
+   (t_x (tuple uid_1 t_3))
+   (uid_1 (= #\x)))
+
+ )
+
+
+
+
+(testcase
+
  ;; Simple ands.
 
  :model
