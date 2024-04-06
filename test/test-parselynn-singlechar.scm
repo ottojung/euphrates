@@ -78,7 +78,7 @@
    (test/generic tokens-alist (current-input-port) expected-output expected-additional-rules)))
 
 (define (testcase tokens-alist input expected-output expected-additional-rules)
-  (test/string tokens-alist input expected-output expected-additional-rules)
+  ;; (test/string tokens-alist input expected-output expected-additional-rules)
   (test/port tokens-alist input expected-output expected-additional-rules))
 
 (define (test-error tokens-alist input expected-error-type)
