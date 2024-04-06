@@ -47,8 +47,6 @@
          (cond
           ((labelinglogic:expression:ground? expr) (replace-single name expr))
           (else expr))))
-          ;; ((member type (list 'or 'tuple)) expr)
-          ;; (else (replace-single name expr)))))
 
      model))
 
