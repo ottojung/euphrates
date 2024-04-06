@@ -19,6 +19,7 @@
           define
           define-syntax
           equal?
+          even?
           let
           not
           odd?

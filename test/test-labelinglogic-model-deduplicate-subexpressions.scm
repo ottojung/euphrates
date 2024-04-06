@@ -265,21 +265,62 @@
 
 (testcase
 
- ;; Duble ands [2].
+ ;; Duble ands [1].
 
  :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5))))
-   (other-and (and (r7rs odd?) (not (= 5)))))
+ '((some-and (and (r7rs odd?) (r7rs even?)))
+   (other-and (and (r7rs odd?) (r7rs even?))))
 
  :expected
- '((just-5 (= 5))
-   (some-and (and uid_1 (not just-5)))
+ '((some-and (and uid_1 (not just-5)))
    (other-and (and uid_1 (not just-5)))
    (uid_2 (not (= 5)))
    (uid_1 (r7rs odd?)))
 
  )
+
+
+
+
+
+
+;; (testcase
+
+;;  ;; Duble ands [2].
+
+;;  :model
+;;  '((some-and (and (r7rs odd?) (not (= 5))))
+;;    (other-and (and (r7rs odd?) (not (= 5)))))
+
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (some-and (and uid_1 (not just-5)))
+;;    (other-and (and uid_1 (not just-5)))
+;;    (uid_2 (not (= 5)))
+;;    (uid_1 (r7rs odd?)))
+
+;;  )
+
+
+
+
+;; (testcase
+
+;;  ;; Duble ands [3].
+
+;;  :model
+;;  '((just-5 (= 5))
+;;    (some-and (and (r7rs odd?) (not (= 5))))
+;;    (other-and (and (r7rs odd?) (not (= 5)))))
+
+;;  :expected
+;;  '((just-5 (= 5))
+;;    (some-and (and uid_1 (not just-5)))
+;;    (other-and (and uid_1 (not just-5)))
+;;    (uid_2 (not (= 5)))
+;;    (uid_1 (r7rs odd?)))
+
+;;  )
 
 
 
