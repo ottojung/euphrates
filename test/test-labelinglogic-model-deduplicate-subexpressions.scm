@@ -265,41 +265,21 @@
 
 (testcase
 
- ;; Duble ands.
+ ;; Duble ands [2].
 
  :model
- '((some-and (and (r7rs even?) (not (= 2))))
+ '((just-5 (= 5))
+   (some-and (and (r7rs odd?) (not (= 5))))
    (other-and (and (r7rs odd?) (not (= 5)))))
 
  :expected
- '((some-and (and uid_1 (not uid_2)))
-   (other-and (and uid_1 (not uid_2)))
-   (uid_2 (= 5))
-   (uid_3 (not (= 5)))
+ '((just-5 (= 5))
+   (some-and (and uid_1 (not just-5)))
+   (other-and (and uid_1 (not just-5)))
+   (uid_2 (not (= 5)))
    (uid_1 (r7rs odd?)))
 
  )
-
-
-
-
-;; (testcase
-
-;;  ;; Duble ands [2].
-
-;;  :model
-;;  '((just-5 (= 5))
-;;    (some-and (and (r7rs odd?) (not (= 5))))
-;;    (other-and (and (r7rs odd?) (not (= 5)))))
-
-;;  :expected
-;;  '((just-5 (= 5))
-;;    (some-and (and uid_1 (not just-5)))
-;;    (other-and (and uid_1 (not just-5)))
-;;    (uid_2 (not (= 5)))
-;;    (uid_1 (r7rs odd?)))
-
-;;  )
 
 
 
