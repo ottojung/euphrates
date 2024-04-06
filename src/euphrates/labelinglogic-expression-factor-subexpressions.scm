@@ -5,7 +5,8 @@
   (define bindings (stack-make))
   (define orig-expr expr)
 
-  (define args (labelinglogic:expression:args predicate))
+  (define type (labelinglogic:expression:type expr))
+  (define args (labelinglogic:expression:args expr))
   (define new-args
     (map
      (lambda (expr)

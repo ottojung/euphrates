@@ -18,6 +18,9 @@
             labelinglogic-expression-map-subexpressions)
           labelinglogic:expression:map-subexpressions))
   (import
+    (only (euphrates labelinglogic-expression-type)
+          labelinglogic:expression:type))
+  (import
     (only (euphrates stack)
           stack->list
           stack-empty?
