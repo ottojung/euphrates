@@ -180,14 +180,11 @@
    (rule4 (or rule1 rule2 rule3)))
 
  :expected
- '((rule1 (or uid_1 rule2 uid_2 rule3))
-   (rule2 (or uid_3 uid_1))
-   (rule3 (or uid_1 uid_1 uid_4))
+ '((rule1 (or uid_1 rule2 (= 6) rule3))
+   (rule2 (or (= 7) uid_1))
+   (rule3 (or uid_1 uid_1 (= 8)))
    (rule4 (or rule1 rule2 rule3))
-   (uid_1 (= 5))
-   (uid_2 (= 6))
-   (uid_3 (= 7))
-   (uid_4 (= 8)))
+   (uid_1 (= 5)))
 
  )
 
