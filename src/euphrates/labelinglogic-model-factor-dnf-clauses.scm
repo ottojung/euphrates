@@ -16,6 +16,9 @@
 
      model))
 
+  (define new-bindings-stack
+    (stack-make))
+
   (define (replace-single maybe-name expr)
     (define existing (hashmap-ref H expr #f))
     (cond
@@ -23,53 +26,43 @@
      ((equal? existing maybe-name) expr)
      (else existing)))
 
-  (define (factor-1 model)
-    (define new-bindings-stack
-      (stack-make))
-
-    (define new-model
-      (labelinglogic:model:map-expressions
-       (lambda (name predicate)
-         (lambda (expr)
-           (define type (labelinglogic:expression:type expr))
-           (define args (labelinglogic:expression:args expr))
-
-           (cond
-            ((member type (list 'or 'tuple))
-             (let ()
-               (define new-clauses
-                 (map
-                  (lambda (clause)
-                    (define existing (hashmap-ref H clause #f))
-                    (or existing
-                        (let ()
-                          (define name
-                            (make-unique-identifier))
-                          (define binding
-                            (labelinglogic:binding:make name clause))
-
-                          (stack-push! new-bindings-stack binding)
-                          (hashmap-set! H clause name)
-                          name)))
-                  args))
-
-               (labelinglogic:expression:make type new-clauses)))
-
-            (else
-             (replace-single name expr)))))
-
-       model))
-
-    (define factored-model
-      (labelinglogic:model:append
-       new-model
-       (reverse
-        (stack->list new-bindings-stack))))
-
-    factored-model)
-
-
   (define replaced-model
-    (factor-1 (factor-1 model)))
+    (labelinglogic:model:map-expressions
+     (lambda (name predicate)
+       (lambda (expr)
+         (define type (labelinglogic:expression:type expr))
+         (define args (labelinglogic:expression:args expr))
 
-  replaced-model)
+         (cond
+          ((member type (list 'or 'tuple))
+           (let ()
+             (define new-clauses
+               (map
+                (lambda (clause)
+                  (define existing (hashmap-ref H clause #f))
+                  (or existing
+                      (let ()
+                        (define name
+                          (make-unique-identifier))
+                        (define binding
+                          (labelinglogic:binding:make name clause))
+
+                        (stack-push! new-bindings-stack binding)
+                        (hashmap-set! H clause name)
+                        name)))
+                args))
+
+             (labelinglogic:expression:make type new-clauses)))
+
+          (else
+           (replace-single name expr)))))
+
+     model))
+
+  (define factored-model
+    (labelinglogic:model:append
+     replaced-model
+     (reverse
+      (stack->list new-bindings-stack))))
+
+  factored-model)
