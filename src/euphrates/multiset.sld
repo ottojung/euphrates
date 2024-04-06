@@ -24,7 +24,6 @@
           multiset-constructor
           multiset-predicate
           multiset-value))
-  (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base)
           +
@@ -33,24 +32,19 @@
           and
           begin
           car
-          cond
           define
-          else
           equal?
           eqv?
           for-each
           lambda
           let
-          list?
           map
           quote
           set!
           unless
           vector-length
           vector-ref
-          vector?
           when))
-  (import (only (scheme case-lambda) case-lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
