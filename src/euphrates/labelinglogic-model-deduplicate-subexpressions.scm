@@ -27,9 +27,10 @@
     (multiset-foreach/key-value
      (lambda (key value)
        (when (< 1 value)
-         (hashmap-set!
-          H key
-          (make-unique-identifier))))))
+         (unless (hashmap-has? H key)
+           (hashmap-set!
+            H key
+            (make-unique-identifier)))))))
 
   (define new-bindings-stack
     (stack-make))
