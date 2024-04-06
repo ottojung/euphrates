@@ -5,6 +5,7 @@
   (import (only (euphrates assert) assert))
   (import
     (only (euphrates multiset)
+          list->multiset
           make-multiset
           multiset->list))
   (import
