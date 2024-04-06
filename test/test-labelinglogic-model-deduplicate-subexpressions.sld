@@ -12,6 +12,7 @@
           labelinglogic:model:deduplicate-subexpressions))
   (import
     (only (scheme base)
+          =
           _
           and
           begin
@@ -20,6 +21,7 @@
           equal?
           even?
           let
+          not
           odd?
           quote
           syntax-rules
