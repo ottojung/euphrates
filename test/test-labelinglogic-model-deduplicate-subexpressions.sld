@@ -19,12 +19,20 @@
           define
           define-syntax
           equal?
+          even?
           let
           not
           odd?
+          or
+          quasiquote
           quote
           syntax-rules
           unless))
+  (import
+    (only (scheme char)
+          char-lower-case?
+          char-numeric?
+          char-upper-case?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
