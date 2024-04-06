@@ -22,14 +22,17 @@
            (hashmap-set! H key (+ 1 (hashmap-ref H key 0))))))
      H)))
 
-(define (make-multiset collection)
-  (cond
-   ((list? collection)
-    (list->multiset collection))
-   ((vector? collection)
-    (vector->multiset collection))
-   (else
-    (raisu 'expected-list-or-vector collection))))
+(define make-multiset
+  (case-lambda
+   (() (make-multiset '()))
+   ((collection)
+    (cond
+     ((list? collection)
+      (list->multiset collection))
+     ((vector? collection)
+      (vector->multiset collection))
+     (else
+      (raisu 'expected-list-or-vector collection))))))
 
 (define (multiset->list S)
   (map car (hashmap->alist (multiset-value S))))
