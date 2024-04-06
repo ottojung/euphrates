@@ -51,8 +51,6 @@
           lambda
           let
           not
-          or
-          quote
           reverse
           unless))
   (cond-expand
