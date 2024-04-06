@@ -262,7 +262,7 @@
 
 (testcase
 
- ;; Simple ands.
+ ;; More tuples.
 
  :model
  `((t_1 (= #\1))
