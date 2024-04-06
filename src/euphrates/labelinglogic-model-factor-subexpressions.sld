@@ -4,6 +4,7 @@
     labelinglogic-model-factor-subexpressions)
   (export
     labelinglogic:model:factor-subexpressions)
+  (import (only (euphrates comp) comp))
   (import
     (only (euphrates
             labelinglogic-expression-factor-subexpressions)
