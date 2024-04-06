@@ -14,7 +14,15 @@
           (labelinglogic:model:assoc
            current model))
 
-        (
+        (define constants
+          (labelinglogic:expression:constants expr))
+
+        (for-each
+         (lambda (c)
+           (unless (hashset-has? ret c)
+             (hashset-add! ret c)
+             (stack-push! c)))
+         constants)
 
         (loop))))
 
