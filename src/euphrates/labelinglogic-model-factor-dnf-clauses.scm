@@ -45,8 +45,10 @@
          (define args (labelinglogic:expression:args expr))
 
          (cond
-          ((labelinglogic:expression:ground? expr) (replace-single name expr))
-          (else expr))))
+          ;; ((labelinglogic:expression:ground? expr) (replace-single name expr))
+          ;; (else expr))))
+          ((equal? type 'or) expr)
+          (else (replace-single name expr)))))
 
      model))
 
