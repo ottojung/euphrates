@@ -19,7 +19,7 @@
   (define new-bindings-stack
     (stack-make))
 
-  (define (replace-single maybe-name expr)
+  (define (replace-single toplevel? maybe-name expr)
     (define existing (hashmap-ref H expr #f))
     (cond
      ((not existing)
@@ -43,10 +43,10 @@
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
+         (define toplevel? (eq? expr predicate))
 
          (cond
-          ((equal? expr predicate) (hashmap-ref H expr expr))
-          ((labelinglogic:expression:ground? expr) (replace-single name expr))
+          ((labelinglogic:expression:ground? expr) (replace-single toplevel? name expr))
           (else expr))))
 
      model))

@@ -46,6 +46,7 @@
           cond
           define
           else
+          eq?
           equal?
           lambda
           let
