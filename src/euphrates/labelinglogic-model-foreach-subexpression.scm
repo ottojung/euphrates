@@ -3,8 +3,9 @@
 
 (define (labelinglogic:model:foreach-subexpression fun model)
   (map
-   (lambda (model-component)
-     (define-tuple (class predicate) model-component)
+   (lambda (binding)
+     (define class (labelinglogic:binding:name binding))
+     (define predicate (labelinglogic:binding:expr binding))
      (define initialized-fun (fun class predicate))
 
      (define new
@@ -13,4 +14,4 @@
 
      (labelinglogic:binding:make class new))
 
-   model))
+   (labelinglogic:model:bindings model)))

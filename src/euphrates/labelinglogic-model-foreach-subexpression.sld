@@ -1,10 +1,27 @@
+
 (define-library
   (euphrates
     labelinglogic-model-foreach-subexpression)
   (export
     labelinglogic:model:foreach-subexpression)
   (import
-    (only (scheme base) begin define make-parameter))
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic:binding:expr))
+  (import
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic:binding:make))
+  (import
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic:binding:name))
+  (import
+    (only (euphrates
+            labelinglogic-expression-map-subexpressions)
+          labelinglogic:expression:map-subexpressions))
+  (import
+    (only (euphrates labelinglogic-model-bindings)
+          labelinglogic:model:bindings))
+  (import
+    (only (scheme base) begin define lambda map))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
