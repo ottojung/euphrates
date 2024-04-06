@@ -338,3 +338,18 @@
  '()
 
  )
+
+
+
+
+(testcase
+
+ ;; Singleton expr model.
+
+ :model
+ '((just-5 (= 5)))
+
+ :expected
+ '((just-5 (= 5)))
+
+ )
