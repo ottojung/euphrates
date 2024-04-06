@@ -52,7 +52,7 @@
                         name)))
                 args))
 
-             (labelinglogic:expression:make 'or new-clauses)))
+             (labelinglogic:expression:make type new-clauses)))
 
           (else
            (replace-single name expr)))))
