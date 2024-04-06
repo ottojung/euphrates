@@ -56,8 +56,16 @@
                  (hashmap-count B))
          (each-is-equal? A B))))
 
-(define (multiset-ref H key)
-  (hashmap-ref (multiset-value H) key #f))
+(define-syntax multiset-ref
+  (syntax-rules ()
+    ((_ H key0)
+     (let ((key key0))
+       (multiset-ref
+        H key (raisu 'hashset-key-not-found key))))
+    ((_ H key default)
+     (let ((get (hashmap-ref (hashset-value H) key #f)))
+       (or get default)))))
+
 (define (multiset-add! H key)
   (hashmap-set! (multiset-value H)
                 key

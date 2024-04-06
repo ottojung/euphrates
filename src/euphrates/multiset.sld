@@ -19,10 +19,13 @@
           hashmap-set!
           make-hashmap))
   (import
+    (only (euphrates hashset-obj) hashset-value))
+  (import
     (only (euphrates multiset-obj)
           multiset-constructor
           multiset-predicate
           multiset-value))
+  (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base)
           +
@@ -33,13 +36,16 @@
           begin
           cons
           define
+          define-syntax
           equal?
           eqv?
           for-each
           lambda
           let
+          or
           quote
           set!
+          syntax-rules
           unless
           vector-length
           vector-ref
