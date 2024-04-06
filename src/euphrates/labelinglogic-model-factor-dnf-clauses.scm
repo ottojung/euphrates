@@ -8,7 +8,7 @@
      ((member type (list 'or 'constant)) #f)
      ((member type (list 'and 'not 'xor 'tuple 'r7rs '=) #t))
      (else
-      (raisu* :from "labelinglogic:expression:map-subexpressions"
+      (raisu* :from "labelinglogic:model:factor-dnf-clauses"
               :type 'unknown-expr-type
               :message (stringf "Expression type ~s not recognized"
                                 (~a type))
