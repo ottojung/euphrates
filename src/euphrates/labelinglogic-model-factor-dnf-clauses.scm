@@ -21,8 +21,6 @@
   (define (replace-single toplevel? maybe-name expr)
     (define existing (hashmap-ref H expr #f))
 
-    (assert (not toplevel?))
-
     (cond
      ((not existing)
 
@@ -47,6 +45,9 @@
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
          (define toplevel? (equal? expr predicate))
+
+         (assert (not toplevel?))
+
          (replace-single toplevel? name expr)))
 
      model))
