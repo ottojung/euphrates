@@ -42,8 +42,8 @@
     (labelinglogic:model:map-expressions
      (lambda (name predicate)
        (lambda (predicate)
-         (define type (labelinglogic:expression:type expr))
-         (define args (labelinglogic:expression:args expr))
+         (define type (labelinglogic:expression:type predicate))
+         (define args (labelinglogic:expression:args predicate))
 
          (define (inner expr)
            (labelinglogic:expression:map-subexpressions
