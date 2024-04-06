@@ -20,6 +20,7 @@
           equal?
           let
           or
+          quasiquote
           quote
           syntax-rules
           unless))
