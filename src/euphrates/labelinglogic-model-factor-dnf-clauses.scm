@@ -26,7 +26,7 @@
      ((equal? existing maybe-name) expr)
      (else existing)))
 
-  (define replaced-model
+  (define (factor-1 model)
     (labelinglogic:model:map-expressions
      (lambda (name predicate)
        (lambda (expr)
@@ -58,6 +58,9 @@
            (replace-single name expr)))))
 
      model))
+
+  (define replaced-model
+    (factor-1 (factor-1 model)))
 
   (define factored-model
     (labelinglogic:model:append
