@@ -217,10 +217,9 @@
 
  :expected
  '((just-5 (= 5))
-   (some-tuple uid_1)
-   (uid_2 (= 3))
-   (uid_3 (= 5))
-   (uid_1 (tuple uid_2 uid_3)))
+   (some-tuple (tuple uid_1 uid_2))
+   (uid_1 (= 3))
+   (uid_2 (= 5)))
 
  )
 
