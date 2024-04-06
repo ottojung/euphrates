@@ -32,22 +32,24 @@
   (define new-bindings-stack
     (stack-make))
 
-  (define replaced-model
-    (labelinglogic:model:map-subexpressions
-     (lambda (class predicate)
-       (if (equal? class (hashmap-ref H predicate #f))
-           identity
-           (lambda (expr)
-             (hashmap-ref
-              H expr
-              (let ()
-                (define name
-                  (make-unique-identifier))
-                (define binding
-                  (labelinglogic:binding:make name expr))
+  ;; (define replaced-model
+  ;;   (labelinglogic:model:map-subexpressions
+  ;;    (lambda (class predicate)
+  ;;      (if (equal? class (hashmap-ref H predicate #f))
+  ;;          identity
+  ;;          (lambda (expr)
+  ;;            (hashmap-ref
+  ;;             H expr
+  ;;             (let ()
+  ;;               (define name
+  ;;                 (make-unique-identifier))
+  ;;               (define binding
+  ;;                 (labelinglogic:binding:make name expr))
 
-                (stack-push! new-bindings-stack binding)
-                (hashmap-set! H expr name)
-                name)))
+  ;;               (stack-push! new-bindings-stack binding)
+  ;;               (hashmap-set! H expr name)
+  ;;               name)))
+
+  0)
 
 
