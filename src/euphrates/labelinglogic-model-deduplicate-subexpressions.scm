@@ -22,5 +22,5 @@
     (labelinglogic:model:map-subexpressions
      (lambda (class predicate)
        (lambda (expr)
-
+         (define existing (hashmap-ref H expr #f))
          
