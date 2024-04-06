@@ -47,7 +47,7 @@
 
          (define (inner expr)
            (labelinglogic:expression:map-subexpressions
-            (lambda (expr) (replace-single toplevel? name expr))
+            (lambda (expr) (replace-single #f name expr))
             expr))
 
          (map inner args)))
