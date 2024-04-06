@@ -2,14 +2,14 @@
 (define-library
   (euphrates labelinglogic-model-reduce-to-names)
   (export labelinglogic:model:reduce-to-names)
-  (import (only (euphrates hashset) hashset-has?))
   (import
-    (only (euphrates labelinglogic-binding-name)
-          labelinglogic:binding:name))
+    (only (euphrates labelinglogic-model-reachable-from)
+          labelinglogic:model:reachable-from))
   (import
-    (only (euphrates labelinglogic-model-filter)
-          labelinglogic:model:filter))
-  (import (only (scheme base) begin define lambda))
+    (only (euphrates
+            labelinglogic-model-reduce-to-names-unsafe)
+          labelinglogic:model:reduce-to-names/unsafe))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
