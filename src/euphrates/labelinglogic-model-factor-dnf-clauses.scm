@@ -3,6 +3,7 @@
 
 (define (labelinglogic:model:factor-dnf-clauses model)
   (define H (make-hashmap))
+  (define mentioned-in-map (make-hashmap))
 
   (define _766414
     (labelinglogic:model:foreach-expression
