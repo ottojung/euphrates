@@ -51,6 +51,8 @@
     (labelinglogic:model:minimize/assuming-nointersect
      exported-names/set full-model))
 
+  (debugs opt-model)
+
   (define factored-model
     (labelinglogic:model:factor-dnf-clauses
      opt-model))
