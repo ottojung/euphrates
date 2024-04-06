@@ -169,54 +169,27 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  ;; Bigger nochange.
+ ;; Complex nested factor out with duplicates across different rules.
 
-;;  :model
-;;  '((any (or alphanum whitespace))
-;;    (alphanum (or alphabetic numeric))
-;;    (alphabetic (or upcase lowercase))
-;;    (upcase (r7rs char-upper-case?))
-;;    (lowercase (r7rs char-lower-case?))
-;;    (numeric (r7rs char-numeric?))
-;;    (whitespace (r7rs char-whitespace?))
-;;    )
+ :model
+ '((rule1 (or (= 5) rule2 (= 6) rule3))
+   (rule2 (or (= 7) (= 5)))
+   (rule3 (or (= 5) (= 5) (= 8)))
+   (rule4 (or rule1 rule2 rule3)))
 
-;;  :expected
-;;  '((any (or alphanum whitespace))
-;;    (alphanum (or alphabetic numeric))
-;;    (alphabetic (or upcase lowercase))
-;;    (upcase (r7rs char-upper-case?))
-;;    (lowercase (r7rs char-lower-case?))
-;;    (numeric (r7rs char-numeric?))
-;;    (whitespace (r7rs char-whitespace?)))
+ :expected
+ '((rule1 (or uid_1 rule2 uid_2 rule3))
+   (rule2 (or uid_3 uid_1))
+   (rule3 (or uid_1 uid_1 uid_4))
+   (rule4 (or rule1 rule2 rule3))
+   (uid_1 (= 5))
+   (uid_2 (= 6))
+   (uid_3 (= 7))
+   (uid_4 (= 8)))
 
-;;  )
-
-
-
-;; (testcase
-
-;;  ;; Complex nested factor out with duplicates across different rules.
-
-;;  :model
-;;  '((rule1 (or (= 5) rule2 (= 6) rule3))
-;;    (rule2 (or (= 7) (= 5)))
-;;    (rule3 (or (= 5) (= 5) (= 8)))
-;;    (rule4 (or rule1 rule2 rule3)))
-
-;;  :expected
-;;  '((rule1 (or uid_1 rule2 uid_2 rule3))
-;;    (rule2 (or uid_3 uid_1))
-;;    (rule3 (or uid_1 uid_1 uid_4))
-;;    (rule4 (or rule1 rule2 rule3))
-;;    (uid_1 (= 5))
-;;    (uid_2 (= 6))
-;;    (uid_3 (= 7))
-;;    (uid_4 (= 8)))
-
-;;  )
+ )
 
 
 ;; (testcase
