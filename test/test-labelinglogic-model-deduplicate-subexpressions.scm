@@ -263,23 +263,23 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  ;; Duble ands.
+ ;; Duble ands.
 
-;;  :model
-;;  '((just-5 (= 5))
-;;    (some-and (and (r7rs odd?) (not (= 5))))
-;;    (other-and (and (r7rs odd?) (not (= 5)))))
+ :model
+ '((just-5 (= 5))
+   (some-and (and (r7rs odd?) (not (= 5))))
+   (other-and (and (r7rs odd?) (not (= 5)))))
 
-;;  :expected
-;;  '((just-5 (= 5))
-;;    (some-and (and uid_1 (not just-5)))
-;;    (other-and (and uid_1 (not just-5)))
-;;    (uid_2 (not (= 5)))
-;;    (uid_1 (r7rs odd?)))
+ :expected
+ '((just-5 (= 5))
+   (some-and (and uid_1 (not just-5)))
+   (other-and (and uid_1 (not just-5)))
+   (uid_2 (not (= 5)))
+   (uid_1 (r7rs odd?)))
 
-;;  )
+ )
 
 
 
