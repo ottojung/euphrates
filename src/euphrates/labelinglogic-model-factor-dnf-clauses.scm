@@ -24,7 +24,7 @@
     (cond
      ((not existing)
 
-      (if #f expr
+      (if toplevel? expr
           (let ()
             (define name
               (make-unique-identifier))
