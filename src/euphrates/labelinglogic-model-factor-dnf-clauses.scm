@@ -46,7 +46,8 @@
          (define args (labelinglogic:expression:args expr))
          (define toplevel? (equal? expr predicate))
 
-         (assert (not toplevel?))
+         (when toplevel?
+           (debug "YAAAAAY"))
 
          (replace-single toplevel? name expr)))
 

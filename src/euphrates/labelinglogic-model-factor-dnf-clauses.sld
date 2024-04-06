@@ -3,7 +3,7 @@
   (euphrates
     labelinglogic-model-factor-dnf-clauses)
   (export labelinglogic:model:factor-dnf-clauses)
-  (import (only (euphrates assert) assert))
+  (import (only (euphrates debug) debug))
   (import
     (only (euphrates hashmap)
           hashmap-has?
@@ -50,7 +50,8 @@
           let
           not
           reverse
-          unless))
+          unless
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
