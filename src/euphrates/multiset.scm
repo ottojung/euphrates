@@ -85,7 +85,9 @@
   (define H (multiset-value S))
   (hashmap-foreach
    (lambda (key value)
-     (fun key))
+     (for-each
+      (lambda _ (fun key))
+      (iota value)))
    H))
 
 (define (multiset-filter S predicate)
