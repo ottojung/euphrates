@@ -32,7 +32,7 @@
      (for-each
       (lambda _ (set! ret (cons key ret)))
       (iota value)))
-   A)
+   S)
   ret)
 
 (define (multiset-equal? a b)
