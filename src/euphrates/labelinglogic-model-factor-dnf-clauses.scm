@@ -51,7 +51,7 @@
             expr))
 
          (if (labelinglogic:expression:ground? predicate)
-             predicate
+             (replace-single #t name expr)
              (let ()
                (define new-args (map inner args))
                (labelinglogic:expression:make type new-args)))))
