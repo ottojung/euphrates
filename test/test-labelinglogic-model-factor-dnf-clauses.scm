@@ -241,6 +241,28 @@
  )
 
 
+
+(testcase
+
+ ;; Simple tuples [2].
+
+ :model
+ `((t_1 (= #\1))
+   (t_2 (= #\2))
+   (t_3 (= #\3))
+   (t_x (tuple (= #\x) (= #\3))))
+
+ :expected
+ '((t_1 (= #\1))
+   (t_2 (= #\2))
+   (t_3 (= #\3))
+   (t_x (tuple (= #\x) t_3)))
+
+ )
+
+
+
+
 (testcase
 
  ;; Simple ands.
@@ -256,24 +278,3 @@
  )
 
 
-
-
-
-
-(testcase
-
- ;; More tuples.
-
- :model
- `((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (tuple (= #\x) (= #\3))))
-
- :expected
- '((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (tuple (= #\x) t_3)))
-
- )
