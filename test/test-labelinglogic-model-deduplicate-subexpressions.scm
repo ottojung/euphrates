@@ -143,8 +143,7 @@
  :expected
  '((just-5 (= 5))
    (another-5 just-5)
-   (something-that-uses-5 (or just-5 uid_1))
-   (uid_1 (= 3)))
+   (something-that-uses-5 (or just-5 (= 3))))
 
  )
 
