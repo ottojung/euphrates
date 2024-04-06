@@ -45,8 +45,10 @@
          (define args (labelinglogic:expression:args expr))
 
          (cond
-          ((member type (list 'or 'tuple)) expr)
-          (else (replace-single name expr)))))
+          ((labelinglogic:expression:ground? expr) (replace-single name expr))
+          (else expr))))
+          ;; ((member type (list 'or 'tuple)) expr)
+          ;; (else (replace-single name expr)))))
 
      model))
 
