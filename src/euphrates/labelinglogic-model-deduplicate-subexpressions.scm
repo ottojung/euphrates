@@ -20,7 +20,7 @@
   (define _172371
     (labelinglogic:model:foreach-subexpressions
      (lambda (class predicate)
-       (lambda (expr) (multiset-add! expr)))
+       (lambda (expr) (multiset-add! S expr)))
      model))
 
   (define new-bindings-stack
