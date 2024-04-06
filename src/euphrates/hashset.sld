@@ -26,6 +26,7 @@
     (only (euphrates hashmap)
           hashmap->alist
           hashmap-clear!
+          hashmap-copy
           hashmap-count
           hashmap-delete!
           hashmap-foreach
