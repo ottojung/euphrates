@@ -7,7 +7,8 @@
     (only (euphrates multiset)
           list->multiset
           make-multiset
-          multiset->list))
+          multiset->list
+          multiset-has?))
   (import
     (only (scheme base) begin equal? list not quote))
   (cond-expand
