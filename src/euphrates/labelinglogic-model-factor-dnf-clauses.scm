@@ -5,8 +5,8 @@
   (define (predicate expr)
     (define type (labelinglogic:expression:type expr))
     (cond
-     ((member type (list 'or 'constant)) #t)
-     ((member type (list 'and 'not 'xor 'tuple 'r7rs '=) #f))
+     ((member type (list 'or 'constant)) #f)
+     ((member type (list 'and 'not 'xor 'tuple 'r7rs '=) #t))
      (else
       (raisu* :from "labelinglogic:expression:map-subexpressions"
               :type 'unknown-expr-type
