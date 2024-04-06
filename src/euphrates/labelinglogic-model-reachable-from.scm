@@ -3,17 +3,12 @@
 
 (define (labelinglogic:model:reachable-from names/set model)
   (define ret (hashset-copy names/set))
+  (define stack (list->stack (hashset->list names/set)))
 
-  (labelinglogic:model:foreach-expression
-   (lambda (class expr)
-     (lambda (expr)
-       (define constants
-         (labelinglogic:expression:constants expr))
-
-       (for-each
-        (lambda (constant)
-          (hashset-add! ret constant))
-        constants)))
-   model)
+  (let loop ()
+    (unless (stack-empty? stack)
+      (let ()
+        (define current (stack-pop! stack))
+        
 
   ret)
