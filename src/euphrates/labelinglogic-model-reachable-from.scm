@@ -11,8 +11,10 @@
         (define current (stack-pop! stack))
 
         (define expr
-          (labelinglogic:model:assoc-or
-           
+          (labelinglogic:model:assoc
+           current model))
+
+        (
 
         (loop))))
 
