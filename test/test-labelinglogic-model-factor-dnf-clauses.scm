@@ -263,11 +263,11 @@
  '((t_1 (= #\1))
    (t_2 (= #\2))
    (t_3 (= #\3))
-   (t_x (or uid_1 uid_2))
-   (uid_3 (= #\x))
-   (uid_4 (= #\3))
-   (uid_1 (tuple uid_3 uid_4))
-   (uid_2 (= #\2)))
+   (t_x (or uid_3 uid_4))
+   (uid_1 (= #\x))
+   (uid_2 (= #\3))
+   (uid_3 (tuple uid_1 uid_2))
+   (uid_4 (= #\2)))
 
  )
 
