@@ -10,6 +10,7 @@
           hashmap-ref
           hashmap-set!
           make-hashmap))
+  (import (only (euphrates hashset) list->hashset))
   (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
@@ -31,6 +32,9 @@
     (only (euphrates
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
+  (import
+    (only (euphrates labelinglogic-model-names)
+          labelinglogic:model:names))
   (import
     (only (euphrates multiset)
           make-multiset

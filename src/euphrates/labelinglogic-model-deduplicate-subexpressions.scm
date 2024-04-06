@@ -3,6 +3,9 @@
 
 (define (labelinglogic:model:deduplicate-subexpressions model)
   (define H (make-hashmap))
+  (define original-names
+    (list->hashset
+     (labelinglogic:model:names model)))
 
   (define (cycle model)
     (define _766414
