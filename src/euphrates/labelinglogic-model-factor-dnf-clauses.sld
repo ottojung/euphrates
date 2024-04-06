@@ -46,7 +46,6 @@
           cond
           define
           else
-          eq?
           equal?
           if
           lambda

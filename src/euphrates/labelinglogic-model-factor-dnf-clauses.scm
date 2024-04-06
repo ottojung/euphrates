@@ -24,7 +24,7 @@
     (cond
      ((not existing)
 
-      (if (not toplevel?) expr
+      (if toplevel? expr
           (let ()
             (define name
               (make-unique-identifier))
@@ -44,7 +44,7 @@
        (lambda (expr)
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
-         (define toplevel? (eq? expr predicate))
+         (define toplevel? (equal? expr predicate))
 
          (cond
           ((labelinglogic:expression:ground? expr) (replace-single toplevel? name expr))
