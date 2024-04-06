@@ -59,27 +59,10 @@
 
      model))
 
-  (define factored-model-1
+  (define factored-model
     (labelinglogic:model:append
      replaced-model
      (reverse
       (stack->list new-bindings-stack))))
 
-  (define factored-model-2
-    (labelinglogic:model:map-expressions
-     (lambda (clause predicate)
-       (lambda (expr)
-         (define type (labelinglogic:expression:type expr))
-         (define args (labelinglogic:expression:args expr))
-
-         (cond
-          ((equal? type 'tuple)
-           (labelinglogic:expression:make
-            type (map (comp (replace-single #f)) args)))
-
-          (else
-           expr))))
-
-     factored-model-1))
-
-  factored-model-2)
+  factored-model)
