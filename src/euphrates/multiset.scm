@@ -66,7 +66,7 @@
      (let ((get (hashmap-ref (hashset-value H) key #f)))
        (or get default)))))
 
-(define-syntax (multiset-has? S key)
+(define (multiset-has? S key)
   (hashmap-ref (hashset-value S) key #f))
 
 (define (multiset-add! H key)
