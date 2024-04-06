@@ -45,6 +45,7 @@
          (define args (labelinglogic:expression:args expr))
 
          (cond
+          ((equal? expr predicate) expr)
           ;; ((labelinglogic:expression:ground? expr) (replace-single name expr))
           ;; (else expr))))
           ((equal? type 'or) expr)
