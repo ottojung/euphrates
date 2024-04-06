@@ -3,5 +3,5 @@
 
 (define (labelinglogic:model:reachable-from names/set model)
   (define ret (hashset-copy names/set))
-  
-  
+
+  ret)

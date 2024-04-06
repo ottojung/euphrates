@@ -1,8 +1,9 @@
+
 (define-library
   (euphrates labelinglogic-model-reachable-from)
   (export labelinglogic:model:reachable-from)
-  (import
-    (only (scheme base) begin define make-parameter))
+  (import (only (euphrates hashset) hashset-copy))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
