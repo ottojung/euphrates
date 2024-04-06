@@ -52,10 +52,12 @@
           define
           else
           equal?
+          if
           lambda
           let
           not
           reverse
+          set!
           unless
           when))
   (cond-expand

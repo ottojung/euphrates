@@ -4,61 +4,72 @@
 (define (labelinglogic:model:deduplicate-subexpressions model)
   (define H (make-hashmap))
 
-  (define _766414
-    (labelinglogic:model:foreach-expression
-     (lambda (class predicate)
-       (lambda (expr)
-         (define type (labelinglogic:expression:type expr))
-         (hashmap-set! H class class)
-         (unless (hashmap-has? H predicate)
-           (hashmap-set! H predicate class))))
+  (define (cycle model)
+    (define _766414
+      (labelinglogic:model:foreach-expression
+       (lambda (class predicate)
+         (lambda (expr)
+           (define type (labelinglogic:expression:type expr))
+           (hashmap-set! H class class)
+           (unless (hashmap-has? H predicate)
+             (hashmap-set! H predicate class))))
 
-     model))
+       model))
 
-  (define S (make-multiset))
+    (define S (make-multiset))
 
-  (define _172371
-    (labelinglogic:model:foreach-subexpression
-     (lambda (class predicate)
-       (lambda (expr) (multiset-add! S expr)))
-     model))
+    (define _172371
+      (labelinglogic:model:foreach-subexpression
+       (lambda (class predicate)
+         (lambda (expr) (multiset-add! S expr)))
+       model))
 
-  (define new-bindings-stack
-    (stack-make))
+    (define new-bindings-stack
+      (stack-make))
 
-  (define _127371273
-    (multiset-foreach/key-value
-     (lambda (key value)
-       (when (< 1 value)
-         (unless (hashmap-has? H key)
-           (let ()
-            (define name
-              (make-unique-identifier))
-            (define binding
-              (labelinglogic:binding:make name key))
+    (define _127371273
+      (multiset-foreach/key-value
+       (lambda (key value)
+         (when (< 1 value)
+           (unless (hashmap-has? H key)
+             (let ()
+               (define name
+                 (make-unique-identifier))
+               (define binding
+                 (labelinglogic:binding:make name key))
 
             (stack-push! new-bindings-stack binding)
             (hashmap-set! H key name)))))
-     S))
+       S))
 
-  (define replaced-model
-    (labelinglogic:model:map-subexpressions
-     (lambda (class predicate)
-       (lambda (expr)
-         (define existing
-           (hashmap-ref H expr #f))
+    (define unchanged? #t)
 
-         (cond
-          ((not existing) expr)
-          ((equal? class existing) expr)
-          (else existing))))
+    (define replaced-model
+      (labelinglogic:model:map-subexpressions
+       (lambda (class predicate)
+         (lambda (expr)
+           (define existing
+             (hashmap-ref H expr #f))
 
-     model))
+           (cond
+            ((not existing) expr)
+            ((equal? class existing) expr)
+            (else
+             (set! unchanged? #f)
+             existing))))
 
-  (define combined-model
-    (labelinglogic:model:append
-     replaced-model
-     (reverse
-      (stack->list new-bindings-stack))))
+       model))
 
-  combined-model)
+    (if unchanged? #f
+        (let ()
+          (define combined-model
+            (labelinglogic:model:append
+             replaced-model
+             (reverse
+              (stack->list new-bindings-stack))))
+
+          combined-model)))
+
+  (let loop ((model model))
+    (define new (cycle model))
+    (if new (loop new) model)))
