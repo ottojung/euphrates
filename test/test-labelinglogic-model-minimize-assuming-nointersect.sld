@@ -2,6 +2,7 @@
 (define-library
   (test-labelinglogic-model-minimize-assuming-nointersect)
   (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates debugs) debugs))
   (import (only (euphrates hashset) list->hashset))
   (import
     (only (euphrates labelinglogic-binding-name)
@@ -24,13 +25,15 @@
           begin
           define
           define-syntax
+          equal?
           let
           map
           not
           or
           quasiquote
           quote
-          syntax-rules))
+          syntax-rules
+          unless))
   (import
     (only (scheme char)
           char-lower-case?
