@@ -29,4 +29,4 @@
   (define factored-model
     (labelinglogic:model:factor-dnf-clauses dedup-model))
 
-  latticised-opt)
+  factored-model)
