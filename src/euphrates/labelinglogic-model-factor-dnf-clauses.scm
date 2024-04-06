@@ -45,10 +45,7 @@
          (define type (labelinglogic:expression:type expr))
          (define args (labelinglogic:expression:args expr))
          (define toplevel? (equal? expr predicate))
-
-         (cond
-          ((labelinglogic:expression:ground? expr) (replace-single toplevel? name expr))
-          (else expr))))
+         (replace-single toplevel? name expr)))
 
      model))
 
