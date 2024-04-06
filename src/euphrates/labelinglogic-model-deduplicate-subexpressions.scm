@@ -15,7 +15,7 @@
 
      model))
 
-  (define S (make-multiset '()))
+  (define S (make-multiset))
 
   (define _172371
     (labelinglogic:model:foreach-subexpressions
