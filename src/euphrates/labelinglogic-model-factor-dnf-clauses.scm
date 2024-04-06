@@ -51,7 +51,7 @@
 
          (define (inner expr)
            (labelinglogic:expression:map-subexpressions
-            (lambda (expr) (replace-single #f name expr))
+            (lambda (expr) (replace-single #f #f expr))
             expr))
 
          (define new-args
