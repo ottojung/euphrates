@@ -169,39 +169,15 @@
 
  :expected
  '((just-5 (= 5))
-   (another-5 just-5)
-   (something-that-uses-5 (or just-5 uid_1))
-   (uid_1 (= 3)))
+   (another-5 (= 5))
+   (something-that-uses-5 (or uid_1 uid_2))
+   (uid_1 (= 5))
+   (uid_2 (= 3)))
 
  )
 
 
 
-
-;; (testcase
-
-;;  ;; Bigger nochange.
-
-;;  :model
-;;  '((any (or alphanum whitespace))
-;;    (alphanum (or alphabetic numeric))
-;;    (alphabetic (or upcase lowercase))
-;;    (upcase (r7rs char-upper-case?))
-;;    (lowercase (r7rs char-lower-case?))
-;;    (numeric (r7rs char-numeric?))
-;;    (whitespace (r7rs char-whitespace?))
-;;    )
-
-;;  :expected
-;;  '((any (or alphanum whitespace))
-;;    (alphanum (or alphabetic numeric))
-;;    (alphabetic (or upcase lowercase))
-;;    (upcase (r7rs char-upper-case?))
-;;    (lowercase (r7rs char-lower-case?))
-;;    (numeric (r7rs char-numeric?))
-;;    (whitespace (r7rs char-whitespace?)))
-
-;;  )
 
 
 
