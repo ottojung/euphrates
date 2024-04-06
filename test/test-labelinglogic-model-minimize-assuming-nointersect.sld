@@ -22,8 +22,10 @@
           _
           and
           begin
+          char?
           define
           define-syntax
+          lambda
           let
           map
           not
@@ -33,6 +35,7 @@
           syntax-rules))
   (import
     (only (scheme char)
+          char-alphabetic?
           char-lower-case?
           char-numeric?
           char-upper-case?
