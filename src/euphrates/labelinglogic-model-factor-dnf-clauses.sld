@@ -10,6 +10,9 @@
           hashmap-set!
           make-hashmap))
   (import
+    (only (euphrates labelinglogic-binding-make)
+          labelinglogic:binding:make))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -27,7 +30,13 @@
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
   (import
-    (only (euphrates stack) stack->list stack-make))
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
+  (import
+    (only (euphrates unique-identifier)
+          make-unique-identifier))
   (import
     (only (scheme base)
           begin
@@ -36,6 +45,7 @@
           else
           equal?
           lambda
+          let
           list
           member
           not
