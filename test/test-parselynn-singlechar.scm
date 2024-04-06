@@ -352,7 +352,7 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_? class alphanum))
+   (t_? . (class alphanum)))
 
  "1x371634"
 
