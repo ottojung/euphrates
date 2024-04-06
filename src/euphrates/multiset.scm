@@ -26,13 +26,16 @@
   (list->multiset '()))
 
 (define (multiset->list S)
+  (define H (multiset-value S))
   (define ret '())
+
   (hashmap-foreach
    (lambda (key value)
      (for-each
       (lambda _ (set! ret (cons key ret)))
       (iota value)))
-   S)
+   H)
+
   ret)
 
 (define (multiset-equal? a b)
