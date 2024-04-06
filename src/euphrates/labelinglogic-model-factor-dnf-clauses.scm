@@ -46,27 +46,7 @@
 
          (cond
           ((member type (list 'or 'tuple)) expr)
-           ;; (let ()
-           ;;   (define new-clauses
-           ;;     (map
-           ;;      (lambda (clause)
-           ;;        (define existing (hashmap-ref H clause #f))
-           ;;        (or existing
-           ;;            (let ()
-           ;;              (define name
-           ;;                (make-unique-identifier))
-           ;;              (define binding
-           ;;                (labelinglogic:binding:make name clause))
-
-           ;;              (stack-push! new-bindings-stack binding)
-           ;;              (hashmap-set! H clause name)
-           ;;              name)))
-           ;;      args))
-
-           ;;   (labelinglogic:expression:make type new-clauses)))
-
-          (else
-           (replace-single name expr)))))
+          (else (replace-single name expr)))))
 
      model))
 
