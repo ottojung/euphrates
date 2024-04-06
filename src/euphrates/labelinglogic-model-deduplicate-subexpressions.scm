@@ -26,6 +26,12 @@
   (define new-bindings-stack
     (stack-make))
 
+  (define need-dedup
+    (multiset->list
+     (multiset-filter
+      (lambda (key value)
+        (< 1 value)))))
+
   (define replaced-model
     (labelinglogic:model:map-subexpressions
      (lambda (class predicate)
