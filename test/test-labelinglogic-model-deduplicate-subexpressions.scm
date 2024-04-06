@@ -67,9 +67,8 @@
  '((rule1 (or (= 5) (= 6) (= 5))))
 
  :expected
- '((rule1 (or uid_1 uid_2 uid_1))
-   (uid_1 (= 5))
-   (uid_2 (= 6)))
+ '((rule1 (or uid_1 (= 6) uid_1))
+   (uid_1 (= 5)))
 
  )
 
