@@ -207,20 +207,20 @@
  )
 
 
-;; (testcase
+(testcase
 
-;;  ;; Simple tuples.
+ ;; Simple tuples.
 
-;;  :model
-;;  '((just-5 (= 5))
-;;    (some-tuple (tuple (= 3) (= 5))))
+ :model
+ '((just-5 (= 5))
+   (some-tuple (tuple (= 3) (= 5))))
 
-;;  :expected
-;;  '((just-5 (= 5))
-;;    (some-tuple (tuple uid_1 just-5))
-;;    (uid_1 (= 3)))
+ :expected
+ '((just-5 (= 5))
+   (some-tuple (tuple uid_1 just-5))
+   (uid_1 (= 3)))
 
-;;  )
+ )
 
 
 
