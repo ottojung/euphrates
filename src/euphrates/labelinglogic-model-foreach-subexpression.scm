@@ -8,10 +8,7 @@
      (define predicate (labelinglogic:binding:expr binding))
      (define initialized-fun (fun class predicate))
 
-     (define new
-       (labelinglogic:expression:map-subexpressions
-        initialized-fun predicate))
-
-     (labelinglogic:binding:make class new))
+     (labelinglogic:expression:foreach-subexpression
+      initialized-fun predicate))
 
    (labelinglogic:model:bindings model)))
