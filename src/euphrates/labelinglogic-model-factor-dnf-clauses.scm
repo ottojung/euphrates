@@ -45,7 +45,7 @@
          (define args (labelinglogic:expression:args expr))
 
          (cond
-          ((equal? expr predicate) expr)
+          ((equal? expr predicate) (hashmap-ref H expr expr))
           ((labelinglogic:expression:ground? expr) (replace-single name expr))
           (else expr))))
 
