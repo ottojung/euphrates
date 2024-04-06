@@ -268,8 +268,7 @@
  ;; Duble ands.
 
  :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5))))
+ '((some-and (and (r7rs odd?) (not (= 5))))
    (other-and (and (r7rs odd?) (not (= 5)))))
 
  :expected
