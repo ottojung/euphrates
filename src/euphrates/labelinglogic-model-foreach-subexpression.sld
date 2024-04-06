@@ -21,7 +21,7 @@
     (only (euphrates labelinglogic-model-bindings)
           labelinglogic:model:bindings))
   (import
-    (only (scheme base) begin define lambda map))
+    (only (scheme base) begin define for-each lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
