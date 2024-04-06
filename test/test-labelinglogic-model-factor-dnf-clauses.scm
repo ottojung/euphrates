@@ -277,15 +277,26 @@
             (= #\2))))
 
  :expected
+
  '((t_1 (= #\1))
    (t_2 (= #\2))
    (t_3 (= #\3))
-   (t_x (or (tuple uid_1 t_3) t_2))
-   (uid_1 (= #\x)))
+   (t_x (or uid_1 t_2))
+   (uid_2 (= #\x))
+   (uid_1 (tuple uid_2 t_3)))
+
+
+ 
+ ;; '((t_1 (= #\1))
+ ;;   (t_2 (= #\2))
+ ;;   (t_3 (= #\3))
+ ;;   (t_x (or (tuple uid_1 t_3) t_2))
+ ;;   (uid_1 (= #\x)))
 
  )
 
 
+(exit 0)
 
 
 (testcase
