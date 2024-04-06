@@ -157,23 +157,23 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  ;; Duplicate bindings of equal expressions [2].
+ ;; Duplicate bindings of equal expressions [2].
 
-;;  :model
-;;  '((just-5 (= 5))
-;;    (another-5 (= 5))
-;;    (something-that-uses-5 (or (= 5) (= 3)))
-;;    )
+ :model
+ '((just-5 (= 5))
+   (another-5 (= 5))
+   (something-that-uses-5 (or (= 5) (= 3)))
+   )
 
-;;  :expected
-;;  '((just-5 (= 5))
-;;    (another-5 just-5)
-;;    (something-that-uses-5 (or just-5 uid_1))
-;;    (uid_1 (= 3)))
+ :expected
+ '((just-5 (= 5))
+   (another-5 just-5)
+   (something-that-uses-5 (or just-5 uid_1))
+   (uid_1 (= 3)))
 
-;;  )
+ )
 
 
 
