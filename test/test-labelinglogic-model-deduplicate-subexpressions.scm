@@ -293,11 +293,12 @@
    (other-and (and (r7rs odd?) (not (= 5)))))
 
  :expected
- '((just-5 (= 5))
-   (some-and (and uid_1 (not just-5)))
-   (other-and (and uid_1 (not just-5)))
-   (uid_2 (not (= 5)))
-   (uid_1 (r7rs odd?)))
+ '((some-and (and uid_1 uid_2))
+   (other-and some-and)
+   (uid_3 (= 5))
+   (uid_4 uid_2)
+   (uid_1 (r7rs odd?))
+   (uid_2 (not uid_3)))
 
  )
 
