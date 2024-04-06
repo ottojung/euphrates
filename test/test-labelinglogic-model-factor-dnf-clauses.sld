@@ -16,18 +16,22 @@
           _
           and
           begin
+          char?
           define
           define-syntax
           equal?
+          lambda
           let
           not
           odd?
           or
+          quasiquote
           quote
           syntax-rules
           unless))
   (import
     (only (scheme char)
+          char-alphabetic?
           char-lower-case?
           char-numeric?
           char-upper-case?
