@@ -20,8 +20,7 @@
     (only (euphrates multiset)
           make-multiset
           multiset-add!
-          multiset-filter
-          multiset-keys))
+          multiset-filter))
   (import (only (euphrates stack) stack-make))
   (import
     (only (scheme base) < begin define lambda unless))

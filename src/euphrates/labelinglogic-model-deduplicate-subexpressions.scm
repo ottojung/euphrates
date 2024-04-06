@@ -24,10 +24,9 @@
      model))
 
   (define need-dedup
-    (multiset-keys
-     (multiset-filter
-      (lambda (key value)
-        (< 1 value)))))
+    (multiset-filter
+     (lambda (key value)
+       (< 1 value))))
 
   (define new-bindings-stack
     (stack-make))
