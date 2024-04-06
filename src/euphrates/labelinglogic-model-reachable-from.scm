@@ -21,7 +21,7 @@
          (lambda (c)
            (unless (hashset-has? ret c)
              (hashset-add! ret c)
-             (stack-push! c)))
+             (stack-push! stack c)))
          constants)
 
         (loop))))
