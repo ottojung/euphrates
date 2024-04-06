@@ -19,9 +19,6 @@
     (only (euphrates
             labelinglogic-model-optimize-or-just-idempotency)
           labelinglogic:model:optimize/or/just-idempotency))
-  (import
-    (only (euphrates labelinglogic-model-reduce-to-names)
-          labelinglogic:model:reduce-to-names))
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
