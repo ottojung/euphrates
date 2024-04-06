@@ -20,10 +20,13 @@
 
   (define (replace-single toplevel? maybe-name expr)
     (define existing (hashmap-ref H expr #f))
+
+    (assert (not toplevel?))
+
     (cond
      ((not existing)
 
-      (if toplevel? expr
+      (if #f expr
           (let ()
             (define name
               (make-unique-identifier))
