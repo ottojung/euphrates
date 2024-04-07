@@ -80,8 +80,6 @@
                         :message "Encountered a character that is not handled by any of the grammar rules"
                         :args (list c))))
 
-          (debugs category)
-
           (wrap-return c category))))
 
   process-next)
