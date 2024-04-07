@@ -97,7 +97,7 @@
        (define args (labelinglogic:expression:args expr))
        (define token-value (assoc-or class tokens-alist #f))
 
-       (when (equal? type 'or)
+       (when (member type (list 'or 'constant))
          (cond
           ((string? token-value)
            (let ()
