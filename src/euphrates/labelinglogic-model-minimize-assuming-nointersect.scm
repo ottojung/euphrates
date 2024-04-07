@@ -32,4 +32,4 @@
   (define inlined-model-2
     (labelinglogic:model:inline-dnf-clauses factored-model))
 
-  factored-model)
+  inlined-model-2)
