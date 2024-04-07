@@ -5,7 +5,8 @@
   (define (inline-vars model)
     (labelinglogic:model:map-subexpressions
      (lambda (class predicate)
-       (labelinglogic:expression:inline-references/subexpression model))
+       (lambda (expr)
+         (labelinglogic:expression:inline-references model expr)))
      model))
 
   ;; TODO: optimize. This is horrible.
