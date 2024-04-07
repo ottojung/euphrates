@@ -43,10 +43,10 @@
                  (define name
                    (make-unique-identifier))
                  (define binding
-                   (labelinglogic:binding:make name key))
+                   (labelinglogic:binding:make name expr))
 
                  (stack-push! new-bindings-stack binding)
-                 (hashmap-set! H key name))))))
+                 (hashmap-set! H expr name))))))
        model))
 
     (define unchanged? #t)
