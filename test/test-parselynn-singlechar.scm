@@ -1011,6 +1011,19 @@
 
 (test-error
 
+ `((t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3"))
+
+ "1234"
+
+ 'unrecognized-character
+
+ )
+
+
+(test-error
+
  `((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
