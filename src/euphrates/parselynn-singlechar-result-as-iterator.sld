@@ -3,6 +3,7 @@
   (euphrates
     parselynn-singlechar-result-as-iterator)
   (export parselynn/singlechar-result:as-iterator)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates labelinglogic-model-evaluate-first)
           labelinglogic:model:evaluate/first))
