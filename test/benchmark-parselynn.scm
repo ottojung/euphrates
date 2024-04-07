@@ -62,7 +62,34 @@
 
   (lambda () (next)))
 
-(define (repeating-template driver load? seq-len)
+(define (run/generic driver parser make-lexer n-runs)
+  (let loop ((i n-runs))
+    (when (< 0 i)
+      (let ()
+        (define lexer
+          (make-lexer))
+
+        (when (= i n-runs)
+          (with-benchmark/timestamp "constructed lexer"))
+
+        (define result
+          (parselynn-run parser lexer))
+
+        (if (< 1 i)
+            (loop (- i 1))
+            (let ()
+              (with-benchmark/timestamp "parsed input")
+              (cond
+               ((equal? driver 'lr)
+                (assert= #t result))
+               ((equal? driver 'glr)
+                (assert (procedure? result))
+                (assert= #t (result 'get))
+                (iterate-results result))
+               (else
+                (raisu 'unrecognized-driver driver)))))))))
+
+(define (repeating-template driver load? seq-len n-runs)
   (define parser
     (if load?
         (cond
@@ -86,25 +113,15 @@
 
   (with-benchmark/timestamp "constructed parser")
 
-  (define lexer
-    (make-repeating-lexer
-     seq-len
-     (list (make-lexical-token 'NUM #f "5")
-           (make-lexical-token '+ #f "+"))))
+  (define make-lexer
+    (lambda _
+      (make-repeating-lexer
+       seq-len
+       (list (make-lexical-token 'NUM #f "5")
+             (make-lexical-token '+ #f "+")))))
 
-  (with-benchmark/timestamp "constructed lexer")
-
-  (define result
-    (parselynn-run parser lexer))
-
-  (with-benchmark/timestamp "got first result")
-
-  (if (equal? driver "lr")
-      (assert= #t result)
-      (begin
-        (assert (procedure? result))
-        (assert= #t (result 'get))
-        (iterate-results result))))
+  (run/generic (string->symbol driver)
+               parser make-lexer n-runs))
 
 
 (define (brackets-template driver load? tree-depth)
@@ -150,58 +167,65 @@
        (iterate-results result))))
 
 
-;;;;;;;;;;;;
-;;
-;; START
-;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;             ▄▄▄▄    ▄                    ▄
+;;;;;            █▀   ▀ ▄▄█▄▄   ▄▄▄    ▄ ▄▄  ▄▄█▄▄
+;;;;;            ▀█▄▄▄    █    ▀   █   █▀  ▀   █
+;;;;;                ▀█   █    ▄▀▀▀█   █       █
+;;;;;            ▀▄▄▄█▀   ▀▄▄  ▀▄▄▀█   █       ▀▄▄
+;;;;;
+;;;;;
+;;;;;
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-1"
- :inputs ((driver "lr") (load? #f) (seq-len 300000))
- (repeating-template driver load? seq-len))
+ :inputs ((driver "lr") (load? #f) (seq-len 300000) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-2"
- :inputs ((driver "glr") (load? #f) (seq-len 23))
- (repeating-template driver load? seq-len))
+ :inputs ((driver "glr") (load? #f) (seq-len 23) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-3"
- :inputs ((driver "lr") (load? #f) (tree-depth 50000))
+ :inputs ((driver "lr") (load? #f) (tree-depth 50000) (n-runs 1))
  (brackets-template driver load? tree-depth))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-4"
- :inputs ((driver "glr") (load? #f) (tree-depth 50000))
+ :inputs ((driver "glr") (load? #f) (tree-depth 50000) (n-runs 1))
  (brackets-template driver load? tree-depth))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-5"
- :inputs ((driver "lr") (load? #t) (seq-len 300000))
- (repeating-template driver load? seq-len))
+ :inputs ((driver "lr") (load? #t) (seq-len 300000) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-6"
- :inputs ((driver "glr") (load? #t) (seq-len 23))
- (repeating-template driver load? seq-len))
+ :inputs ((driver "glr") (load? #t) (seq-len 23) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-7"
- :inputs ((driver "lr") (load? #t) (seq-len 30000000))
- (repeating-template driver load? seq-len))
+ :inputs ((driver "lr") (load? #t) (seq-len 30000000) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-8"
- :inputs ((driver "glr") (load? #t) (seq-len 29))
- (repeating-template driver load? seq-len))
+ :inputs ((driver "glr") (load? #t) (seq-len 29) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
 
 
 (with-benchmark/simple
@@ -227,3 +251,14 @@
  :inputs ((driver "glr") (load? #t) (tree-depth 5000000))
  (brackets-template driver load? tree-depth))
 
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-14"
+ :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000))
+ (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-15"
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
+ (repeating-template driver load? seq-len n-runs))
