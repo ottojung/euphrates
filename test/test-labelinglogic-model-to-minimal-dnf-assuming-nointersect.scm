@@ -135,7 +135,10 @@
    )
 
  :expected
- 9999
+ '((t_an (or uid_1 uid_2))
+   (t_cn t_an)
+   (uid_1 (and (r7rs char-numeric?) (not (= #\5))))
+   (uid_2 (r7rs char-whitespace?)))
 
  )
 
