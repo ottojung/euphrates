@@ -924,8 +924,7 @@
    #(uid_2 #\B 0 2 2 1)
    #(uid_3 #\1 0 3 3 1))
 
- '((t_num (c_1) (c_numeric))
-   (t_AB1 (uid_1 uid_2 c_1)))
+ '((t_AB1 (uid_1 uid_2 uid_3)))
 
  )
 
