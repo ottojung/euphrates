@@ -33,8 +33,6 @@
   (define additional-grammar-rules
     (parselynn/singlechar:additional-grammar-rules lexer))
 
-  (debugs additional-grammar-rules)
-
   ;; NOTE: this is too specific to test. Let the parser test generated grammar.
   (when expected-additional-rules
     (assert= expected-additional-rules additional-grammar-rules))
@@ -53,8 +51,6 @@
 
   (define output
     (collect lexer-iterator))
-
-  (debugs output)
 
   (assert= (length output) (length expected-output))
 
