@@ -15,7 +15,13 @@
     (only (euphrates labelinglogic-model-assoc)
           labelinglogic:model:assoc))
   (import
-    (only (scheme base) begin define equal? if quote))
+    (only (scheme base)
+          begin
+          define
+          equal?
+          if
+          let
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
