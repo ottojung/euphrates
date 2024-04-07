@@ -15,7 +15,8 @@
           cond
           define
           else
-          lambda))
+          lambda
+          not))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

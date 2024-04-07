@@ -8,7 +8,7 @@
        (cond
         ((predicate class expr)
          (labelinglogic:expression:inline-some
-          (lambda (expr) (hashset-has? exported-names/set expr))
+          (lambda (expr) (not (hashset-has? exported-names/set expr)))
           model expr))
         (else expr))))
    model))
