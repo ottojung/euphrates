@@ -5,7 +5,7 @@
   (labelinglogic:model:map-expressions
    (lambda (class expr)
      (lambda (expr)
-       (if (predicate expr)
+       (if (predicate class expr)
            (labelinglogic:expression:inline-references model expr)
            expr)))
    model))
