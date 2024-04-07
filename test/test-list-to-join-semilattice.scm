@@ -12,8 +12,6 @@
        (define actual
          (olgraph->adjlist result))
 
-       ;; (debugs actual)
-
        (assert= actual expected)))))
 
 
@@ -205,7 +203,6 @@
 (test-case
  equal?
  (lambda (x y)
-   (debug "~s + ~s = ~s" x y (min (+ x y) 9))
    (min (+ x y) 9))
 
  '(3 4 9)
