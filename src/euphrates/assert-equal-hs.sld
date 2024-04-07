@@ -5,7 +5,7 @@
   (import (only (euphrates assert) assert))
   (import
     (only (euphrates multiset)
-          make-multiset
+          list->multiset
           multiset-equal?))
   (import
     (only (scheme base)
