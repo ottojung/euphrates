@@ -10,9 +10,9 @@
   parselynn/singlechar-struct?
 
   (additional-grammar-rules
-   parselynn/singlechar-struct:additional-grammar-rules)
+   parselynn/singlechar:additional-grammar-rules)
 
   (lexer-model
-   parselynn/singlechar-struct:lexer-model)
+   parselynn/singlechar:lexer-model)
 
   )
