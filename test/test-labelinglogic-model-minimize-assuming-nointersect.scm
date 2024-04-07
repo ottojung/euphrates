@@ -97,48 +97,48 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  :model
-;;  `((any (or alphanum whitespace))
-;;    (alphanum (or alphabetic numeric))
-;;    (alphabetic (or upcase lowercase))
-;;    (upcase (r7rs char-upper-case?))
-;;    (lowercase (r7rs char-lower-case?))
-;;    (numeric (r7rs char-numeric?))
-;;    (whitespace (r7rs char-whitespace?))
-;;    )
+ :model
+ `((any (or alphanum whitespace))
+   (alphanum (or alphabetic numeric))
+   (alphabetic (or upcase lowercase))
+   (upcase (r7rs char-upper-case?))
+   (lowercase (r7rs char-lower-case?))
+   (numeric (r7rs char-numeric?))
+   (whitespace (r7rs char-whitespace?))
+   )
 
-;;  :bindings
-;;  `((t_an (and numeric (not (= #\3))))
-;;    (t_bn (and numeric (not (= #\4))))
-;;    (t_3  (= #\9))
-;;    (t_8  (= #\8))
-;;    )
+ :bindings
+ `((t_an (and numeric (not (= #\3))))
+   (t_bn (and numeric (not (= #\4))))
+   (t_3  (= #\9))
+   (t_8  (= #\8))
+   )
 
-;;  :expected
-;;  '((t_an (or (= #\9)
-;;              (= #\8)
-;;              (and (r7rs char-numeric?)
-;;                   (not (= #\3))
-;;                   (not (= #\4))
-;;                   (not (= #\9))
-;;                   (not (= #\8)))
-;;              (= #\4)))
+ :expected
+ '((t_an (or (= #\9)
+             (= #\8)
+             (and (r7rs char-numeric?)
+                  (not (= #\3))
+                  (not (= #\4))
+                  (not (= #\9))
+                  (not (= #\8)))
+             (= #\4)))
 
-;;    (t_bn (or (= #\9)
-;;              (= #\8)
-;;              (and (r7rs char-numeric?)
-;;                   (not (= #\3))
-;;                   (not (= #\4))
-;;                   (not (= #\9))
-;;                   (not (= #\8)))
-;;              (= #\3)))
+   (t_bn (or (= #\9)
+             (= #\8)
+             (and (r7rs char-numeric?)
+                  (not (= #\3))
+                  (not (= #\4))
+                  (not (= #\9))
+                  (not (= #\8)))
+             (= #\3)))
 
-;;    (t_3 (= #\9))
-;;    (t_8 (= #\8)))
+   (t_3 (= #\9))
+   (t_8 (= #\8)))
 
-;;  )
+ )
 
 
 
