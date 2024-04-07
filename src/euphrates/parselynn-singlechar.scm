@@ -89,6 +89,7 @@
   (define _2341723
     (for-each
      (lambda (binding)
+       (define class (labelinglogic:binding:name binding))
        (define expr (labelinglogic:binding:expr binding))
        (define type (labelinglogic:expression:type expr))
        (define args (labelinglogic:expression:args expr))
