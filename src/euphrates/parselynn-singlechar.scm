@@ -99,7 +99,10 @@
        (when (equal? type 'or)
          (cond
           ((string? token-value)
-           (stack-push! todo-strings/stack (list class expr token-value)))
+           (let ()
+             (define rule 0)
+             (stack-push! additional-grammar-rules/stack rule)))
+
           (else
            (let ()
              (define rule (cons class (map list args)))
