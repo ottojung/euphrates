@@ -82,7 +82,7 @@
   (test/port tokens-alist input expected-output expected-additional-rules))
 
 (define (test-error tokens-alist input expected-error-type)
-  (define additional-grammar-rules 'whatever-ignore-it)
+  (define additional-grammar-rules #f)
 
   (assert-throw
    expected-error-type
