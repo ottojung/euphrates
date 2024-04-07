@@ -71,21 +71,22 @@
 
   (labelinglogic:model:foreach-expression
    (lambda (class predicate)
-     (define type
-       (labelinglogic:expression:type predicate))
-     (define args
-       (labelinglogic:expression:args predicate))
+     (lambda (predicate)
+       (define type
+         (labelinglogic:expression:type predicate))
+       (define args
+         (labelinglogic:expression:args predicate))
 
-     (cond
-      ((equal? type '=)
-       (hashmap-set! singleton-map (car args) class))
-      ((equal? type 'or)
-       (stack-push! additional-grammar-rules/singletons/stack
-                    (cons class (map list args))))
-      ((member type (list 'and 'r7rs))
-       (stack-push! categories/stack (list class predicate)))
-      (else
-       (raisu 'uknown-expr-type type args))))
+       (cond
+        ((equal? type '=)
+         (hashmap-set! singleton-map (car args) class))
+        ((equal? type 'or)
+         (stack-push! additional-grammar-rules/singletons/stack
+                      (cons class (map list args))))
+        ((member type (list 'and 'r7rs))
+         (stack-push! categories/stack (list class predicate)))
+        (else
+         (raisu 'uknown-expr-type type args)))))
 
     renamed-model)
 
