@@ -641,6 +641,7 @@
           hashset-add!
           hashset-clear!
           hashset-contains?
+          hashset-copy
           hashset-delete!
           hashset-difference
           hashset-equal?
@@ -763,6 +764,16 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-bottom-huh)
+          labelinglogic:expression:bottom?))
+  (import
+    (only (euphrates labelinglogic-expression-bottom)
+          labelinglogic:expression:bottom))
+  (import
+    (only (euphrates
+            labelinglogic-expression-check-nothrow)
+          labelinglogic:expression:check/nothrow))
+  (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic:expression:check))
   (import
@@ -777,11 +788,21 @@
     (only (euphrates labelinglogic-expression-compare)
           labelinglogic:expression:compare))
   (import
+    (only (euphrates labelinglogic-expression-compile-r7rs)
+          labelinglogic:expression:compile/r7rs))
+  (import
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))
   (import
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
+  (import
+    (only (euphrates labelinglogic-expression-empty-huh)
+          labelinglogic:expression:empty?))
+  (import
+    (only (euphrates
+            labelinglogic-expression-equal-huh-syntactic-order-independent)
+          labelinglogic:expression:equal?/syntactic/order-independent))
   (import
     (only (euphrates
             labelinglogic-expression-evaluate-equal)
@@ -794,15 +815,71 @@
     (only (euphrates labelinglogic-expression-evaluate)
           labelinglogic:expression:evaluate))
   (import
+    (only (euphrates
+            labelinglogic-expression-factor-subexpressions)
+          labelinglogic:expression:factor-subexpressions))
+  (import
+    (only (euphrates labelinglogic-expression-finite-huh)
+          labelinglogic:expression:finite?))
+  (import
+    (only (euphrates
+            labelinglogic-expression-foreach-subexpression)
+          labelinglogic:expression:foreach-subexpression))
+  (import
+    (only (euphrates labelinglogic-expression-ground-huh)
+          labelinglogic:expression:ground?))
+  (import
     (only (euphrates labelinglogic-expression-huh)
           labelinglogic:expression?))
+  (import
+    (only (euphrates labelinglogic-expression-infinite-huh)
+          labelinglogic:expression:infinite?))
+  (import
+    (only (euphrates
+            labelinglogic-expression-inline-references)
+          labelinglogic:expression:inline-references))
+  (import
+    (only (euphrates labelinglogic-expression-inline-some)
+          labelinglogic:expression:inline-some))
+  (import
+    (only (euphrates
+            labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-term)
+          labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
     (only (euphrates
+            labelinglogic-expression-map-subexpressions)
+          labelinglogic:expression:map-subexpressions))
+  (import
+    (only (euphrates
+            labelinglogic-expression-move-nots-down)
+          labelinglogic:expression:move-nots-down))
+  (import
+    (only (euphrates
+            labelinglogic-expression-optimize-and-assuming-nointersect-dnf)
+          labelinglogic:expression:optimize/and-assuming-nointersect-dnf))
+  (import
+    (only (euphrates
+            labelinglogic-expression-optimize-assuming-nointersect-dnf)
+          labelinglogic:expression:optimize/assuming-nointersect-dnf))
+  (import
+    (only (euphrates
+            labelinglogic-expression-optimize-assuming-nointersect)
+          labelinglogic:expression:optimize/assuming-nointersect))
+  (import
+    (only (euphrates
+            labelinglogic-expression-optimize-or-assuming-nointersect-dnf)
+          labelinglogic:expression:optimize/or-assuming-nointersect-dnf))
+  (import
+    (only (euphrates
             labelinglogic-expression-optimize-r7rs)
           labelinglogic:expression:optimize/r7rs))
+  (import
+    (only (euphrates
+            labelinglogic-expression-optimize-singletons)
+          labelinglogic:expression:optimize/singletons))
   (import
     (only (euphrates labelinglogic-expression-optimize)
           labelinglogic:expression:optimize))
@@ -811,36 +888,118 @@
             labelinglogic-expression-replace-constants)
           labelinglogic:expression:replace-constants))
   (import
+    (only (euphrates
+            labelinglogic-expression-simplify-subground-term)
+          labelinglogic:expression:simplify-subground-term))
+  (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
+  (import
+    (only (euphrates
+            labelinglogic-expression-syntactic-equal-huh)
+          labelinglogic:expression:syntactic-equal?))
+  (import
+    (only (euphrates labelinglogic-expression-to-dnf)
+          labelinglogic:expression:to-dnf))
+  (import
+    (only (euphrates
+            labelinglogic-expression-to-mod2-expression)
+          labelinglogic:expression->mod2-expression))
+  (import
+    (only (euphrates
+            labelinglogic-expression-to-simplified-mod2-expression)
+          labelinglogic:expression->simplified-mod2-expression))
+  (import
+    (only (euphrates labelinglogic-expression-top-huh)
+          labelinglogic:expression:top?))
+  (import
+    (only (euphrates labelinglogic-expression-top)
+          labelinglogic:expression:top))
+  (import
+    (only (euphrates
+            labelinglogic-expression-try-simplify-subground-term)
+          labelinglogic:expression:try-simplify-subground-term))
+  (import
+    (only (euphrates
+            labelinglogic-expression-type-associative-huh)
+          labelinglogic:expression:type:associative?))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates
-            labelinglogic-make-nondet-descriminator)
-          labelinglogic:make-nondet-descriminator))
-  (import
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
-    (only (euphrates
-            labelinglogic-model-calculate-biggest-universe-typed)
-          labelinglogic:model:calculate-biggest-universe/typed))
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
   (import
-    (only (euphrates
-            labelinglogic-model-calculate-biggest-universe)
-          labelinglogic:model:calculate-biggest-universe))
+    (only (euphrates labelinglogic-model-assoc-or)
+          labelinglogic:model:assoc-or))
+  (import
+    (only (euphrates labelinglogic-model-assoc)
+          labelinglogic:model:assoc))
+  (import
+    (only (euphrates labelinglogic-model-bindings)
+          labelinglogic:model:bindings))
+  (import
+    (only (euphrates labelinglogic-model-check-references)
+          labelinglogic:model:check-references))
+  (import
+    (only (euphrates labelinglogic-model-check-structure)
+          labelinglogic:model:check-structure))
   (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
     (only (euphrates
-            labelinglogic-model-extend-with-bindings)
-          labelinglogic:model:extend-with-bindings))
+            labelinglogic-model-collect-dnf-clauses)
+          labelinglogic:model:collect-dnf-clauses))
+  (import
+    (only (euphrates
+            labelinglogic-model-deduplicate-subexpressions)
+          labelinglogic:model:deduplicate-subexpressions))
+  (import
+    (only (euphrates labelinglogic-model-evaluate-first)
+          labelinglogic:model:evaluate/first))
+  (import
+    (only (euphrates labelinglogic-model-evaluate)
+          labelinglogic:model:evaluate))
+  (import
+    (only (euphrates
+            labelinglogic-model-factor-dnf-clauses)
+          labelinglogic:model:factor-dnf-clauses))
+  (import
+    (only (euphrates
+            labelinglogic-model-factor-subexpressions)
+          labelinglogic:model:factor-subexpressions))
+  (import
+    (only (euphrates labelinglogic-model-filter)
+          labelinglogic:model:filter))
   (import
     (only (euphrates labelinglogic-model-flatten)
           labelinglogic:model:flatten))
+  (import
+    (only (euphrates
+            labelinglogic-model-foreach-expression)
+          labelinglogic:model:foreach-expression))
+  (import
+    (only (euphrates
+            labelinglogic-model-foreach-subexpression)
+          labelinglogic:model:foreach-subexpression))
+  (import
+    (only (euphrates labelinglogic-model-inline-all)
+          labelinglogic:model:inline-all))
+  (import
+    (only (euphrates
+            labelinglogic-model-inline-dnf-clauses)
+          labelinglogic:model:inline-dnf-clauses))
+  (import
+    (only (euphrates labelinglogic-model-inline-some)
+          labelinglogic:model:inline-some))
+  (import
+    (only (euphrates
+            labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
+          labelinglogic:model:latticize-ands-assuming-nointersect-dnf))
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
@@ -849,12 +1008,29 @@
             labelinglogic-model-map-subexpressions)
           labelinglogic:model:map-subexpressions))
   (import
+    (only (euphrates labelinglogic-model-names)
+          labelinglogic:model:names))
+  (import
     (only (euphrates
-            labelinglogic-model-optimize-to-bindings)
-          labelinglogic:model:optimize-to-bindings))
+            labelinglogic-model-optimize-assuming-nointersect)
+          labelinglogic:model:optimize/assuming-nointersect))
+  (import
+    (only (euphrates
+            labelinglogic-model-optimize-or-just-idempotency)
+          labelinglogic:model:optimize/or/just-idempotency))
+  (import
+    (only (euphrates labelinglogic-model-reachable-from)
+          labelinglogic:model:reachable-from))
   (import
     (only (euphrates labelinglogic-model-reduce-to-leafs)
           labelinglogic:model:reduce-to-leafs))
+  (import
+    (only (euphrates
+            labelinglogic-model-reduce-to-names-unsafe)
+          labelinglogic:model:reduce-to-names/unsafe))
+  (import
+    (only (euphrates labelinglogic-model-reduce-to-names)
+          labelinglogic:model:reduce-to-names))
   (import
     (only (euphrates
             labelinglogic-model-reduce-to-nonleafs)
@@ -866,8 +1042,19 @@
     (only (euphrates labelinglogic-model-replace-constants)
           labelinglogic:model:replace-constants))
   (import
-    (only (euphrates labelinglogic)
-          labelinglogic:init))
+    (only (euphrates
+            labelinglogic-model-smallest-encompasing-set)
+          labelinglogic:model:smallest-encompasing-set))
+  (import
+    (only (euphrates labelinglogic-model-sugarify)
+          labelinglogic:model:sugarify))
+  (import
+    (only (euphrates labelinglogic-model-to-dnf)
+          labelinglogic:model:to-dnf))
+  (import
+    (only (euphrates
+            labelinglogic-model-to-minimal-dnf-assuming-nointersect)
+          labelinglogic:model:to-minimal-dnf/assuming-nointersect))
   (import (only (euphrates lazy-monad) lazy-monad))
   (import
     (only (euphrates lazy-parameter) lazy-parameter))
@@ -903,6 +1090,9 @@
           linux-get-memory-stat))
   (import
     (only (euphrates list-and-map) list-and-map))
+  (import
+    (only (euphrates list-annihilate)
+          list-annihilate))
   (import (only (euphrates list-break) list-break))
   (import
     (only (euphrates list-chunks) list-chunks))
@@ -911,6 +1101,8 @@
   (import
     (only (euphrates list-combinations)
           list-combinations))
+  (import
+    (only (euphrates list-consume) list-consume))
   (import (only (euphrates list-count) list-count))
   (import
     (only (euphrates list-deduplicate)
@@ -938,12 +1130,14 @@
           list-get-duplicates))
   (import
     (only (euphrates list-group-by) list-group-by))
+  (import
+    (only (euphrates list-idempotent)
+          list-idempotent))
   (import (only (euphrates list-init) list-init))
   (import
     (only (euphrates list-insert-at) list-insert-at))
   (import
-    (only (euphrates list-intersect)
-          list-intersect))
+    (only (euphrates list-intersect) list-intersect))
   (import
     (only (euphrates list-intersperse)
           list-intersperse))
@@ -996,6 +1190,12 @@
     (only (euphrates list-random-shuffle)
           list-random-shuffle))
   (import
+    (only (euphrates list-reduce-pairwise-left)
+          list-reduce/pairwise/left))
+  (import
+    (only (euphrates list-reduce-pairwise)
+          list-reduce/pairwise))
+  (import
     (only (euphrates list-ref-or) list-ref-or))
   (import
     (only (euphrates list-remove-common-prefix)
@@ -1031,9 +1231,13 @@
     (only (euphrates list-take-while)
           list-take-while))
   (import
+    (only (euphrates list-to-join-semilattice)
+          list->join-semilattice))
+  (import
     (only (euphrates list-to-tree) list->tree))
   (import
     (only (euphrates list-traverse) list-traverse))
+  (import (only (euphrates list-union) list-union))
   (import (only (euphrates list-unzip) list-unzip))
   (import
     (only (euphrates list-windows) list-windows))
@@ -1167,6 +1371,10 @@
           multiset-add!
           multiset-equal?
           multiset-filter
+          multiset-foreach
+          multiset-foreach/key-value
+          multiset-has?
+          multiset-keys
           multiset-ref
           multiset?
           vector->multiset))
@@ -1230,6 +1438,59 @@
   (import
     (only (euphrates octal-string-to-number)
           octal-string->number))
+  (import
+    (only (euphrates olgraph-copy)
+          olgraph-copy/deep
+          olnode-copy/deep))
+  (import
+    (only (euphrates olgraph-remove-edges-generic)
+          olgraph-remove-edges/generic
+          olnode-remove-edges/generic))
+  (import
+    (only (euphrates olgraph-remove-intermediate-edges)
+          olgraph-remove-intermediate-edges
+          olnode-remove-intermediate-edges))
+  (import
+    (only (euphrates olgraph-remove-transitive-edges)
+          olgraph-remove-transitive-edges))
+  (import
+    (only (euphrates olgraph-reverse-children-inplace-bang)
+          olgraph-reverse-children-inplace!
+          olnode-reverse-children-inplace!))
+  (import
+    (only (euphrates olgraph-reverse-children)
+          olgraph-reverse-children))
+  (import
+    (only (euphrates olgraph-to-adjlist)
+          olgraph->adjlist
+          olnode->adjlist))
+  (import
+    (only (euphrates olgraph-to-list-depth)
+          olnode->list/depth))
+  (import
+    (only (euphrates olgraph-to-list) olnode->list))
+  (import
+    (only (euphrates olgraph-transitive-closure)
+          olnode-transitive-closure/edges))
+  (import
+    (only (euphrates olgraph)
+          make-olgraph
+          make-olnode
+          make-olnode/full
+          olgraph:initial
+          olgraph:initial:set!
+          olgraph:prepend-initial!
+          olgraph?
+          olnode:children
+          olnode:children:set!
+          olnode:id
+          olnode:meta
+          olnode:meta:set!
+          olnode:prepend-child!
+          olnode:value
+          olnode?))
+  (import
+    (only (euphrates olnode-eq-huh) olnode-eq?))
   (import
     (only (euphrates open-cond-obj)
           open-cond-constructor
@@ -1349,9 +1610,8 @@
     (only (euphrates parselynn-simple)
           parselynn/simple))
   (import
-    (only (euphrates
-            parselynn-singlechar-additional-grammar-rules)
-          parselynn/singlechar:additional-grammar-rules))
+    (only (euphrates parselynn-singlechar-model)
+          parselynn-singlechar-model))
   (import
     (only (euphrates
             parselynn-singlechar-result-as-iterator)
@@ -1372,10 +1632,9 @@
   (import
     (only (euphrates parselynn-singlechar-struct)
           make-parselynn/singlechar-struct
-          parselynn/singlechar-struct:additional-grammar-rules
-          parselynn/singlechar-struct:categories
-          parselynn/singlechar-struct:singleton-map
-          parselynn/singlechar-struct?))
+          parselynn/singlechar:additional-grammar-rules
+          parselynn/singlechar:lexer-model
+          parselynn/singlechar?))
   (import
     (only (euphrates parselynn-singlechar)
           make-parselynn/singlechar))
@@ -2011,6 +2270,7 @@
     (only (euphrates stack)
           list->stack
           stack->list
+          stack-copy
           stack-discard!
           stack-empty?
           stack-has?
