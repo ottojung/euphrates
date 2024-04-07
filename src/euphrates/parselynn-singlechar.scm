@@ -69,12 +69,8 @@
   (define categories/stack
     (stack-make))
 
-  (for-each
-   (lambda (binding)
-     (define class
-       (labelinglogic:binding:name binding))
-     (define predicate
-       (labelinglogic:binding:expr binding))
+  (labelinglogic:model:foreach-expression
+   (lambda (class predicate)
      (define type
        (labelinglogic:expression:type predicate))
      (define args
@@ -91,8 +87,7 @@
       (else
        (raisu 'uknown-expr-type type args))))
 
-   (labelinglogic:model:bindings
-    renamed-model))
+    renamed-model)
 
   (define categories
     (stack->list categories/stack))

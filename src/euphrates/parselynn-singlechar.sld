@@ -11,9 +11,6 @@
           make-hashmap))
   (import (only (euphrates hashset) list->hashset))
   (import
-    (only (euphrates labelinglogic-binding-expr)
-          labelinglogic:binding:expr))
-  (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
   (import
@@ -32,11 +29,12 @@
     (only (euphrates labelinglogic-model-append)
           labelinglogic:model:append))
   (import
-    (only (euphrates labelinglogic-model-bindings)
-          labelinglogic:model:bindings))
-  (import
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
+  (import
+    (only (euphrates
+            labelinglogic-model-foreach-expression)
+          labelinglogic:model:foreach-expression))
   (import
     (only (euphrates
             labelinglogic-model-to-minimal-dnf-assuming-nointersect)
@@ -69,7 +67,6 @@
           define
           else
           equal?
-          for-each
           lambda
           let
           list
