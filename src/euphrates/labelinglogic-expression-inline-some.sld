@@ -20,6 +20,7 @@
           equal?
           if
           lambda
+          let
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
