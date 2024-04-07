@@ -16,6 +16,7 @@
   (import
     (only (euphrates stack)
           stack->list
+          stack-copy
           stack-empty?
           stack-pop!
           stack-push!))
