@@ -102,7 +102,7 @@
         ((member type (list '= 'r7rs 'and))
          (stack-push! lexer-model/stack binding))
         (else
-         (raisu 'uknown-expr-type type args))))
+         (raisu 'unexpected-expr-type type args binding))))
 
      (labelinglogic:model:bindings
       renamed-model)))

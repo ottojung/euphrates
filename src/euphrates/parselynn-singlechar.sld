@@ -6,10 +6,7 @@
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
-  (import
-    (only (euphrates hashmap)
-          hashmap-set!
-          make-hashmap))
+  (import (only (euphrates hashmap) make-hashmap))
   (import (only (euphrates hashset) list->hashset))
   (import
     (only (euphrates labelinglogic-binding-expr)
