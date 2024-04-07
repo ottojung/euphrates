@@ -110,6 +110,9 @@
   (define additional-grammar-rules
     (stack->list additional-grammar-rules/stack))
 
+  (define lexer-model
+    (stack->list lexer-model/stack))
+
   (make-parselynn/singlechar-struct
    additional-grammar-rules
    lexer-model))
