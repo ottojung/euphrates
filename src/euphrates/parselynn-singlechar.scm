@@ -89,9 +89,10 @@
         (stack-push! additional-grammar-rules/stack rule)))))
 
 
-  (labelinglogic:model:foreach-expression
-   (lambda (class predicate)
-     (lambda (expr)
+  (define _2341723
+    (for-each
+     (lambda (binding)
+       (define expr (labelinglogic:binding:expr binding))
        (define type (labelinglogic:expression:type expr))
        (define args (labelinglogic:expression:args expr))
 
@@ -105,7 +106,8 @@
         (else
          (raisu 'uknown-expr-type type args)))))
 
-    renamed-model)
+    (labelinglogic:model:bindings
+     renamed-model))
 
   (define categories
     (stack->list categories/stack))
@@ -115,4 +117,4 @@
 
   (make-parselynn/singlechar-struct
    additional-grammar-rules
-   categories singleton-map))
+   lexer-model))
