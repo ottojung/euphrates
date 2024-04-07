@@ -3,6 +3,10 @@
   (euphrates labelinglogic-expression-inline-some)
   (export labelinglogic:expression:inline-some)
   (import
+    (only (euphrates
+            labelinglogic-expression-map-subexpressions)
+          labelinglogic:expression:map-subexpressions))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
@@ -15,6 +19,7 @@
           define
           equal?
           if
+          lambda
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
