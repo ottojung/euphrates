@@ -53,6 +53,7 @@
           length
           let
           port?
+          quasiquote
           quote
           string?
           vector
