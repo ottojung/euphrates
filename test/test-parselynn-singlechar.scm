@@ -823,18 +823,20 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_AB . "AB") (t_num class numeric))
+ '((t_AB . "AB")
+   (t_num . (class numeric)))
 
-;;  "AB1"
+ "AB1"
 
-;;  '(#(uid_1 #\A 0 1 1 1)
-;;    #(uid_2 #\B 0 2 2 1)
-;;    #(t_num #\1 0 3 3 1))
+ '(#(uid_1 #\A 0 1 1 1)
+   #(uid_2 #\B 0 2 2 1)
+   #(t_num #\1 0 3 3 1))
 
-;;  '((t_AB (c_A c_B)))
-;;  )
+ '((t_AB (c_A c_B)))
+
+ )
 
 
 
