@@ -72,6 +72,9 @@
   (define (add-grammar-rule! class expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
+    (define token-value
+      (assoc-or class tokens-alist
+                (raisu 'impossible-172371273 class tokens-alist)))
 
     (stack-push! additional-grammar-rules/singletons/stack
                  (cons class (map list args))))
