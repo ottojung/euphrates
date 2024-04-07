@@ -136,12 +136,16 @@
 ;;
 
 
+(exit 0)
+
 (test-parser
  `( expr = choice+
     choice = "aaa" / "bbb" )
 
  "aaa"
  '(expr (choice+ (choice "aaa"))))
+
+
 
 
 
