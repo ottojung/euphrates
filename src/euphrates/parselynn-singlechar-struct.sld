@@ -3,9 +3,9 @@
   (euphrates parselynn-singlechar-struct)
   (export
     make-parselynn/singlechar-struct
-    parselynn/singlechar-struct?
-    parselynn/singlechar-struct:additional-grammar-rules
-    parselynn/singlechar-struct:lexer-model)
+    parselynn/singlechar?
+    parselynn/singlechar:additional-grammar-rules
+    parselynn/singlechar:lexer-model)
   (import
     (only (euphrates define-type9) define-type9))
   (import (only (scheme base) begin))
