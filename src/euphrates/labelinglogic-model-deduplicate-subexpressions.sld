@@ -42,7 +42,7 @@
     (only (euphrates multiset)
           make-multiset
           multiset-add!
-          multiset-foreach/key-value))
+          multiset-ref))
   (import
     (only (euphrates stack)
           stack->list

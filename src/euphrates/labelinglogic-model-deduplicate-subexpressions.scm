@@ -31,19 +31,23 @@
       (stack-make))
 
     (define _127371273
-      (multiset-foreach/key-value
-       (lambda (key value)
-         (when (< 1 value)
-           (unless (hashmap-has? H key)
-             (let ()
-               (define name
-                 (make-unique-identifier))
-               (define binding
-                 (labelinglogic:binding:make name key))
+      (labelinglogic:model:foreach-subexpression
+       (lambda (class predicate)
+         (lambda (expr)
+           (define occurences
+             (multiset-ref S expr 0))
 
-            (stack-push! new-bindings-stack binding)
-            (hashmap-set! H key name)))))
-       S))
+           (when (< 1 occurences)
+             (unless (hashmap-has? H expr)
+               (let ()
+                 (define name
+                   (make-unique-identifier))
+                 (define binding
+                   (labelinglogic:binding:make name key))
+
+                 (stack-push! new-bindings-stack binding)
+                 (hashmap-set! H key name))))))
+       model))
 
     (define unchanged? #t)
 
