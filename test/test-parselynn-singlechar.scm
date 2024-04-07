@@ -977,9 +977,9 @@
 
  "ABC"
 
- '(#(t_alpha #\A 0 1 1 1)
-   #(t_alpha #\B 0 2 2 1)
-   #(t_alpha #\C 0 3 3 1))
+ '(#(uid_1 #\A 0 1 1 1)
+   #(uid_1 #\B 0 2 2 1)
+   #(uid_1 #\C 0 3 3 1))
 
  '((t_alpha (uid_1) (uid_2) (uid_3)))
 
