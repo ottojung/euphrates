@@ -63,9 +63,6 @@
   (define additional-grammar-rules/stack
     (stack-make))
 
-  (define todo-strings/stack
-    (stack-make))
-
   (define lexer-model/stack
     (stack-make))
 
@@ -95,10 +92,10 @@
        (define args (labelinglogic:expression:args expr))
 
        (cond
-        ((equal? type 'or)
-         (add-grammar-rule! class expr))
         ((member type (list '= 'r7rs 'and))
          (stack-push! lexer-model/stack binding))
+        ((equal? type 'or)
+         'do-them-later-when-the-lexer-model-is-available)
         (else
          (raisu 'unexpected-expr-type type args binding))))
 
