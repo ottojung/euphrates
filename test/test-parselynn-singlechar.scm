@@ -842,7 +842,9 @@
 
 (testcase
 
- '((t_A . "A") (t_AB . "AB") (t_num class numeric))
+ '((t_A . "A")
+   (t_AB . "AB")
+   (t_num class numeric))
 
  "AAB1"
 
