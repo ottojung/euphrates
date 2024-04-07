@@ -1037,19 +1037,17 @@
 
 
 
-(test-error
+(testcase
 
- `((t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3"))
+ '((t_0 . #\0)
+   (t_1 . #\1)
+   )
 
- "123"
+ "01301"
 
  'unrecognized-character
 
  )
-
-
 
 ;; (test-error
 
