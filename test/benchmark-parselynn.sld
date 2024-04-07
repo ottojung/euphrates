@@ -17,19 +17,18 @@
   (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-load)
-          parselynn-load))
+    (only (euphrates parselynn-load) parselynn-load))
   (import
-    (only (euphrates parselynn-run)
-          parselynn-run))
+    (only (euphrates parselynn-run) parselynn-run))
   (import
     (only (euphrates parselynn)
-          parselynn
-          make-lexical-token))
+          make-lexical-token
+          parselynn))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates with-benchmark-simple)
-          with-benchmark/simple))
+          with-benchmark/simple
+          with-benchmark/timestamp))
   (import
     (only (scheme base)
           *

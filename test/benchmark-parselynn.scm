@@ -84,14 +84,20 @@
             (add      (+) : #t)
             (term     (NUM) : #t))))))
 
+  (with-benchmark/timestamp "constructed parser")
+
   (define lexer
     (make-repeating-lexer
      seq-len
      (list (make-lexical-token 'NUM #f "5")
            (make-lexical-token '+ #f "+"))))
 
+  (with-benchmark/timestamp "constructed lexer")
+
   (define result
     (parselynn-run parser lexer))
+
+  (with-benchmark/timestamp "got first result")
 
   (if (equal? driver "lr")
       (assert= #t result)
@@ -124,9 +130,17 @@
             (add      (+) : #t)
             (term     (NUM) : #t))))))
 
+  (with-benchmark/timestamp "constructed parser")
+
+  (define lexer
+    (make-brackets-lexer tree-depth))
+
+  (with-benchmark/timestamp "constructed lexer")
+
   (define result
-    (parselynn-run
-     parser (make-brackets-lexer tree-depth)))
+    (parselynn-run parser lexer))
+
+  (with-benchmark/timestamp "got first result")
 
  (if (equal? driver "lr")
      (assert= #t result)
