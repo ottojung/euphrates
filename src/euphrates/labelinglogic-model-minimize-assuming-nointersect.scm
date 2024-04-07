@@ -30,6 +30,6 @@
     (labelinglogic:model:factor-dnf-clauses dedup-model))
 
   (define inlined-model-2
-    (labelinglogic:model:inline-dnf-clauses factored-model))
+    (labelinglogic:model:inline-dnf-clauses exported-names/set factored-model))
 
   inlined-model-2)
