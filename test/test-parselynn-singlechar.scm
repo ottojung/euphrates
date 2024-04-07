@@ -534,6 +534,8 @@
  )
 
 
+(exit 0) ;; DEBUG
+
 
 (testcase
 
