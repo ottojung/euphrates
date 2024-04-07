@@ -124,11 +124,7 @@
 (testcase
 
  :model
- `((any (or alphanum whitespace))
-   (alphanum (or alphabetic numeric))
-   (alphabetic (or upcase lowercase))
-   (upcase (r7rs char-upper-case?))
-   (lowercase (r7rs char-lower-case?))
+ `((any (or numeric whitespace))
    (numeric (r7rs char-numeric?))
    (whitespace (r7rs char-whitespace?))
    )
