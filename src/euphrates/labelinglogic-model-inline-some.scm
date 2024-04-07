@@ -10,6 +10,8 @@
       (lambda (expr)
         (cond
          ((predicate class expr)
-          (labelinglogic:expression:inline-some  model expr))
+          (labelinglogic:expression:inline-some
+           (lambda (expr) (hashset-has? exported-names/set expr))
+           model expr))
          (else #f))))
     model)))

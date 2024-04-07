@@ -7,9 +7,8 @@
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
   (import
-    (only (euphrates
-            labelinglogic-expression-inline-references)
-          labelinglogic:expression:inline-references))
+    (only (euphrates labelinglogic-expression-inline-some)
+          labelinglogic:expression:inline-some))
   (import
     (only (euphrates labelinglogic-model-filter)
           labelinglogic:model:filter))
