@@ -63,7 +63,7 @@
   (define singleton-map
     (make-hashmap))
 
-  (define additional-grammar-rules/singletons/stack
+  (define additional-grammar-rules/stack
     (stack-make))
 
   (define todo-strings/stack
@@ -86,7 +86,7 @@
       (let ()
         (define rule
           (cons class (map list args)))
-        (stack-push! additional-grammar-rules/singletons/stack rule)))))
+        (stack-push! additional-grammar-rules/stack rule)))))
 
 
   (labelinglogic:model:foreach-expression
@@ -111,7 +111,7 @@
     (stack->list categories/stack))
 
   (define additional-grammar-rules
-    (stack->list additional-grammar-rules/singletons/stack))
+    (stack->list additional-grammar-rules/stack))
 
   (make-parselynn/singlechar-struct
    additional-grammar-rules
