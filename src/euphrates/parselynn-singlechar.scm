@@ -78,12 +78,14 @@
 
     (debugs token-value)
 
-    (cond
-     ((string? token-value)
-      0)
-     (else
-      (stack-push! additional-grammar-rules/singletons/stack
-                   (cons class (map list args))))))
+    (define rule
+      (cond
+       ((string? token-value)
+        (cons class (map list args))))
+      (else
+       (cons class (map list args))))
+
+    (stack-push! additional-grammar-rules/singletons/stack rule))
 
   (labelinglogic:model:foreach-expression
    (lambda (class predicate)
