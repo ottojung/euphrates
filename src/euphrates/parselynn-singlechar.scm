@@ -66,23 +66,6 @@
   (define lexer-model/stack
     (stack-make))
 
-  (define (add-grammar-rule! class expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-    (define token-value
-      (assoc-or class tokens-alist
-                (raisu 'impossible-172371273 class tokens-alist)))
-
-    (cond
-     ((string? token-value)
-      (stack-push! todo-strings/stack (list class expr token-value)))
-     (else
-      (let ()
-        (define rule
-          (cons class (map list args)))
-        (stack-push! additional-grammar-rules/stack rule)))))
-
-
   (define _2341723
     (for-each
      (lambda (binding)
@@ -102,11 +85,31 @@
      (labelinglogic:model:bindings
       renamed-model)))
 
-  (define additional-grammar-rules
-    (stack->list additional-grammar-rules/stack))
-
   (define lexer-model
     (stack->list lexer-model/stack))
+
+  (define _2341723
+    (for-each
+     (lambda (binding)
+       (define class (labelinglogic:binding:name binding))
+       (define expr (labelinglogic:binding:expr binding))
+       (define type (labelinglogic:expression:type expr))
+       (define args (labelinglogic:expression:args expr))
+
+       (when (equal? type 'or)
+         (cond
+          ((string? token-value)
+           (stack-push! todo-strings/stack (list class expr token-value)))
+          (else
+           (let ()
+             (define rule (cons class (map list args)))
+             (stack-push! additional-grammar-rules/stack rule))))))
+
+     (labelinglogic:model:bindings
+      renamed-model)))
+
+  (define additional-grammar-rules
+    (stack->list additional-grammar-rules/stack))
 
   (make-parselynn/singlechar-struct
    additional-grammar-rules

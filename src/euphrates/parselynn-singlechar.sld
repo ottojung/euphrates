@@ -2,7 +2,6 @@
 (define-library
   (euphrates parselynn-singlechar)
   (export make-parselynn/singlechar)
-  (import (only (euphrates assoc-or) assoc-or))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
@@ -75,7 +74,8 @@
           or
           quote
           string->list
-          string?))
+          string?
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
