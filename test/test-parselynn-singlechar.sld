@@ -60,9 +60,6 @@
           vector-length
           vector-ref))
   (cond-expand
-    (guile (import (only (srfi srfi-1) any)))
-    (else (import (only (srfi 1) any))))
-  (cond-expand
     (guile (import (only (srfi srfi-64) test-error)))
     (else (import (only (srfi 64) test-error))))
   (cond-expand
