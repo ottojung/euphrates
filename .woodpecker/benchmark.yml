@@ -1,0 +1,14 @@
+
+steps:
+  build:
+    image: alpine
+    commands:
+      - apk add --no-cache $SCHEME make git
+      - make benchmark
+      - find dist/benchmarks -type f -exec echo {} \; -exec cat {} \;
+    when:
+      branch: [master]
+
+matrix:
+  SCHEME:
+    - guile
