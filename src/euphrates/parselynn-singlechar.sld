@@ -3,7 +3,6 @@
   (euphrates parselynn-singlechar)
   (export make-parselynn/singlechar)
   (import (only (euphrates assoc-or) assoc-or))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-pair) define-pair))
   (import (only (euphrates hashset) list->hashset))

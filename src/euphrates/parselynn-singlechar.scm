@@ -51,14 +51,10 @@
     (labelinglogic:model:to-minimal-dnf/assuming-nointersect
      exported-names/set full-model))
 
-  (debugs opt-model)
-
   (define renamed-model
     (labelinglogic:model:alpha-rename
      taken-token-names-set
      opt-model))
-
-  (debugs renamed-model)
 
   (define additional-grammar-rules/stack
     (stack-make))
