@@ -3,8 +3,9 @@
   (euphrates labelinglogic-model-inline-some)
   (export labelinglogic:model:inline-some)
   (import
-    (only (euphrates labelinglogic-model-assoc)
-          labelinglogic:model:assoc))
+    (only (euphrates
+            labelinglogic-expression-inline-references)
+          labelinglogic:expression:inline-references))
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))

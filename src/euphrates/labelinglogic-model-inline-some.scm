@@ -6,6 +6,6 @@
    (lambda (class expr)
      (lambda (expr)
        (if (predicate expr)
-           (labelinglogic:model:assoc expr model)
+           (labelinglogic:expression:inline-references model expr)
            expr)))
    model))
