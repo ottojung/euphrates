@@ -8,5 +8,5 @@
        (labelinglogic:expression:inline-references/subexpression model))
      model))
 
-  ;; TODO: optimize.
+  ;; TODO: optimize. This is horrible.
   (apply-until-fixpoint inline-vars model))
