@@ -136,8 +136,6 @@
 ;;
 
 
-(exit 0)
-
 (test-parser
  `( expr = choice+
     choice = "aaa" / "bbb" )
@@ -147,6 +145,8 @@
 
 
 
+
+(exit 0)
 
 
 
