@@ -4,10 +4,9 @@
   (export labelinglogic:model:reachable-from)
   (import
     (only (euphrates hashset)
-          hashset->list
           hashset-add!
-          hashset-copy
-          hashset-has?))
+          hashset-has?
+          list->hashset))
   (import
     (only (euphrates labelinglogic-expression-constants)
           labelinglogic:expression:constants))
@@ -16,7 +15,7 @@
           labelinglogic:model:assoc))
   (import
     (only (euphrates stack)
-          list->stack
+          stack->list
           stack-empty?
           stack-pop!
           stack-push!))
