@@ -1101,20 +1101,20 @@
  )
 
 
-;; ;; 13. All Characters Unrecognized
-;; (test-error `((t_A . "A")) "BCD" 'unrecognized-character)
+;; 13. All Characters Unrecognized
+(test-error `((t_A . "A")) "BCD" 'unrecognized-character)
 
-;; ;; 14. Mix of Recognized and Unrecognized Characters
-;; (test-error `((t_A . "A")) "ABC" 'unrecognized-character)
+;; 14. Mix of Recognized and Unrecognized Characters
+(test-error `((t_A . "A")) "ABC" 'unrecognized-character)
 
-;; ;; 15. First Character Unrecognized
-;; (test-error `((t_A . "A")) "BAA" 'unrecognized-character)
+;; 15. First Character Unrecognized
+(test-error `((t_A . "A")) "BAA" 'unrecognized-character)
 
-;; ;; 16. Last Character Unrecognized
-;; (test-error `((t_A . "A")) "AAB" 'unrecognized-character)
+;; 16. Last Character Unrecognized
+(test-error `((t_A . "A")) "AAB" 'unrecognized-character)
 
-;; ;; 17. Middle Character Unrecognized
-;; (test-error `((t_A . "A")) "ABA" 'unrecognized-character)
+;; 17. Middle Character Unrecognized
+(test-error `((t_A . "A")) "ABA" 'unrecognized-character)
 
 
 ;; (test-error
