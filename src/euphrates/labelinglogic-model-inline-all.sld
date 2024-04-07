@@ -7,8 +7,8 @@
           apply-until-fixpoint))
   (import
     (only (euphrates
-            labelinglogic-expression-inline-references-subexpression)
-          labelinglogic:expression:inline-references/subexpression))
+            labelinglogic-expression-inline-references)
+          labelinglogic:expression:inline-references))
   (import
     (only (euphrates
             labelinglogic-model-map-subexpressions)
