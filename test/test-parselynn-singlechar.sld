@@ -58,7 +58,8 @@
           string?
           vector
           vector-length
-          vector-ref))
+          vector-ref
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-64) test-error)))
     (else (import (only (srfi 64) test-error))))

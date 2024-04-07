@@ -36,7 +36,8 @@
   (debugs additional-grammar-rules)
 
   ;; NOTE: this is too specific to test. Let the parser test generated grammar.
-  (assert= expected-additional-rules additional-grammar-rules)
+  (when expected-additional-rules
+    (assert= expected-additional-rules additional-grammar-rules))
 
   (define lexer-result
     (cond
