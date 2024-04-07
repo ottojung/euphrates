@@ -60,16 +60,13 @@
 
   (debugs renamed-model)
 
-  (define singleton-map
-    (make-hashmap))
-
   (define additional-grammar-rules/stack
     (stack-make))
 
   (define todo-strings/stack
     (stack-make))
 
-  (define categories/stack
+  (define lexer-model/stack
     (stack-make))
 
   (define (add-grammar-rule! class expr)
