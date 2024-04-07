@@ -104,9 +104,6 @@
      (labelinglogic:model:bindings
       renamed-model)))
 
-  (define categories
-    (stack->list categories/stack))
-
   (define additional-grammar-rules
     (stack->list additional-grammar-rules/stack))
 
