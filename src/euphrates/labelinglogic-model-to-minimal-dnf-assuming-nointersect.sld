@@ -4,7 +4,6 @@
     labelinglogic-model-to-minimal-dnf-assuming-nointersect)
   (export
     labelinglogic:model:to-minimal-dnf/assuming-nointersect)
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates
             labelinglogic-model-deduplicate-subexpressions)
