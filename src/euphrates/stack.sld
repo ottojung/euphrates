@@ -12,7 +12,8 @@
     stack-discard!
     stack->list
     list->stack
-    stack-unload!)
+    stack-unload!
+    stack-copy)
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates stack-obj)
