@@ -77,7 +77,7 @@
        (cond
         ((member type (list '= 'r7rs 'and))
          (stack-push! lexer-model/stack binding))
-        ((equal? type 'or)
+        ((member type (list 'or 'constant))
          'do-them-later-when-the-lexer-model-is-available)
         (else
          (raisu 'unexpected-expr-type type args binding))))
