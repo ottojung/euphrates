@@ -916,20 +916,20 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_AB1 . "AB1")
-;;    (t_num . (class numeric)))
+ '((t_AB1 . "AB1")
+   (t_num . (class numeric)))
 
-;;  "AB1"
+ "AB1"
 
-;;  '(#(uid_1 #\A 0 1 1 1)
-;;    #(uid_2 #\B 0 2 2 1)
-;;    #(uid_3 #\1 0 3 3 1))
+ '(#(uid_1 #\A 0 1 1 1)
+   #(uid_2 #\B 0 2 2 1)
+   #(uid_3 #\1 0 3 3 1))
 
-;;  '((t_AB1 (uid_1 uid_2 uid_3)))
+ '((t_AB1 (uid_1 uid_2 uid_3)))
 
-;;  )
+ )
 
 
 
