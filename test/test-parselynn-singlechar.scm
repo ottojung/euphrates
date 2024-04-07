@@ -708,6 +708,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_0 . "0")
 ;;    (t_1 . "1")
 ;;    (t_2 . "2")
@@ -746,6 +747,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_1 . "1"))
 
 ;;  ""
@@ -758,6 +760,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_A . "A") (t_B . "B"))
 
 ;;  "AB"
@@ -771,6 +774,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_AB . "AB"))
 
 ;;  "AB"
@@ -784,6 +788,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_num class numeric))
 
 ;;  "123"
@@ -798,6 +803,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_A . "A") (t_num class numeric))
 
 ;;  "A1"
@@ -811,6 +817,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_AB . "AB") (t_num class numeric))
 
 ;;  "AB1"
@@ -825,6 +832,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_A . "A") (t_AB . "AB") (t_num class numeric))
 
 ;;  "AAB1"
@@ -840,6 +848,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_A . "A"))
 
 ;;  "AAA"
@@ -854,6 +863,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_AB . "AB"))
 
 ;;  "ABAB"
@@ -869,6 +879,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_num class numeric)
 ;;    (t_any class any))
 
@@ -884,6 +895,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_AB1 . "AB1") (t_num class numeric))
 
 ;;  "AB1"
@@ -899,6 +911,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_A . "A") (t_any class any))
 
 ;;  "A"
@@ -911,6 +924,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_num class numeric))
 
 ;;  "123"
@@ -925,6 +939,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_alpha class alphabetic))
 
 ;;  "ABC"
@@ -939,6 +954,7 @@
 
 
 ;; (testcase
+
 ;;  '((t_alnum class alphanum))
 
 ;;  "A1"
