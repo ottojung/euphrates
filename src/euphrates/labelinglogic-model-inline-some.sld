@@ -4,14 +4,8 @@
   (export labelinglogic:model:inline-some)
   (import (only (euphrates hashset) hashset-has?))
   (import
-    (only (euphrates labelinglogic-binding-expr)
-          labelinglogic:binding:expr))
-  (import
     (only (euphrates labelinglogic-expression-inline-some)
           labelinglogic:expression:inline-some))
-  (import
-    (only (euphrates labelinglogic-model-filter)
-          labelinglogic:model:filter))
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
