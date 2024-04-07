@@ -4,6 +4,6 @@
 (define (labelinglogic:expression:inline-some predicate expr)
   (define type (labelinglogic:expression:type expr))
   (if (and (equal? type 'constant)
-           (predicate 
+           (predicate expr))
       (labelinglogic:model:assoc expr model)
-      expr)))
+      expr))
