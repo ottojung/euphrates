@@ -43,10 +43,6 @@
     (only (euphrates parselynn-simple-struct)
           make-parselynn/simple-struct))
   (import
-    (only (euphrates
-            parselynn-singlechar-additional-grammar-rules)
-          parselynn/singlechar:additional-grammar-rules))
-  (import
     (only (euphrates parselynn-singlechar)
           make-parselynn/singlechar))
   (import (only (euphrates parselynn) parselynn))
