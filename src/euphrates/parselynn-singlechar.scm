@@ -100,7 +100,7 @@
        (cond
         ((equal? type 'constant)
          (let ()
-           (define rule (cons class (list tokens)))
+           (define rule (cons class (list expr)))
            (stack-push! additional-grammar-rules/stack rule)))
 
         ((equal? type 'or)
