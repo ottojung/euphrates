@@ -4,5 +4,6 @@
 (define (labelinglogic:model:inline-dnf-clauses model)
   (labelinglogic:model:inline-some
    (lambda (class expr)
-     0)
+     (define type (labelinglogic:expression:type expr))
+     (not (equal? type 'or)))
    model))
