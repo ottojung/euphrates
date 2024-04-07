@@ -5,9 +5,7 @@
   (labelinglogic:model:map-expressions
    (lambda (class expr)
      (lambda (expr)
-       (define type (labelinglogic:expression:type expr))
-       (if (and (equal? type 'constant)
-                (predicate expr))
+       (if (predicate expr)
            (labelinglogic:model:assoc expr model)
-           expr))
-     expr)))
+           expr)))
+   model))
