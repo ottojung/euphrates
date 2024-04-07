@@ -97,12 +97,10 @@
        (define args (labelinglogic:expression:args expr))
 
        (cond
-        ((equal? type '=)
-         (hashmap-set! singleton-map (car args) class))
         ((equal? type 'or)
          (add-grammar-rule! class expr))
-        ((member type (list 'and 'r7rs))
-         (stack-push! categories/stack (list class expr)))
+        ((member type (list '= 'r7rs 'and))
+         (stack-push! lexer-model/stack binding))
         (else
          (raisu 'uknown-expr-type type args))))
 
