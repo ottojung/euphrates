@@ -76,6 +76,8 @@
       (assoc-or class tokens-alist
                 (raisu 'impossible-172371273 class tokens-alist)))
 
+    (debugs token-value)
+
     (stack-push! additional-grammar-rules/singletons/stack
                  (cons class (map list args))))
 
