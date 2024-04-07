@@ -79,17 +79,6 @@
    (uid_6 (not uid_4))
    (uid_7 (not t_3)))
 
- ;; '((t_an (or t_3 uid_3 uid_4))
- ;;   (t_bn (or t_3 uid_3 uid_1))
- ;;   (t_3 (= #\9))
- ;;   (uid_1 (= #\3))
- ;;   (uid_2 (r7rs char-numeric?))
- ;;   (uid_3 (and uid_2 uid_5 uid_7 uid_6))
- ;;   (uid_4 (= #\4))
- ;;   (uid_5 (not uid_1))
- ;;   (uid_6 (not t_3))
- ;;   (uid_7 (not uid_4)))
-
  ;; '((t_an (or (= #\9)
  ;;             (and (r7rs char-numeric?)
  ;;                  (not (= #\3))
