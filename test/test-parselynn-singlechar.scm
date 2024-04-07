@@ -1003,10 +1003,32 @@
 
 
 
-;; ;;;;;;;;
-;; ;;
-;; ;; Error cases
-;; ;;
+
+(testcase
+
+ ;; Duplicated token test.
+
+ '((t_0 . #\0)
+   (t_1 . #\1)
+   )
+
+ "01301"
+
+ 'unrecognized-character
+
+ )
+
+
+
+;;
+;;
+;; ▄▄▄▄▄▄
+;; █       ▄ ▄▄   ▄ ▄▄   ▄▄▄    ▄ ▄▄          ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄
+;; █▄▄▄▄▄  █▀  ▀  █▀  ▀ █▀ ▀█   █▀  ▀        █▀  ▀  ▀   █  █   ▀  █▀  █  █   ▀
+;; █       █      █     █   █   █            █      ▄▀▀▀█   ▀▀▀▄  █▀▀▀▀   ▀▀▀▄
+;; █▄▄▄▄▄  █      █     ▀█▄█▀   █            ▀█▄▄▀  ▀▄▄▀█  ▀▄▄▄▀  ▀█▄▄▀  ▀▄▄▄▀
+;;
+;;
 
 
 (test-error
@@ -1049,26 +1071,6 @@
 
  )
 
-
-(test-error
-
- `((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_a . (class any))
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_b . (class any)))
-
- "19371634"
-
- 'duplicated-token
-
- )
 
 ;; ;; 13. All Characters Unrecognized
 ;; (test-error `((t_A . "A")) "BCD" 'unrecognized-character)
