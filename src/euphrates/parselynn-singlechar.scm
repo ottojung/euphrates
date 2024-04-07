@@ -53,16 +53,10 @@
 
   (debugs opt-model)
 
-  (define factored-model
-    (labelinglogic:model:factor-dnf-clauses
-     opt-model))
-
-  (debugs factored-model)
-
   (define renamed-model
     (labelinglogic:model:alpha-rename
      taken-token-names-set
-     factored-model))
+     opt-model))
 
   (debugs renamed-model)
 

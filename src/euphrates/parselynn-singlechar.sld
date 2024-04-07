@@ -39,10 +39,6 @@
           labelinglogic:model:check))
   (import
     (only (euphrates
-            labelinglogic-model-factor-dnf-clauses)
-          labelinglogic:model:factor-dnf-clauses))
-  (import
-    (only (euphrates
             labelinglogic-model-to-minimal-dnf-assuming-nointersect)
           labelinglogic:model:to-minimal-dnf/assuming-nointersect))
   (import
