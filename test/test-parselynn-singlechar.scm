@@ -1036,6 +1036,21 @@
  )
 
 
+
+(test-error
+
+ `((t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3"))
+
+ "123"
+
+ 'unrecognized-character
+
+ )
+
+
+
 ;; (test-error
 
 ;;  `((t_0 . "0")
