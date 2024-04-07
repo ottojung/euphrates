@@ -141,18 +141,15 @@
     choice = "aaa" / "bbb" )
 
  "aaa"
- '(expr
-   (choice+
-    (choice "a")
-    (choice+
-     (choice "a")
-     (choice+
-      (choice "a"))))))
+ '(expr (choice+ (choice "aaa"))))
 
-
-
-
-(exit 0)
+;; '(expr
+;;   (choice+
+;;    (choice "a")
+;;    (choice+
+;;     (choice "a")
+;;     (choice+
+;;      (choice "a"))))))
 
 
 
