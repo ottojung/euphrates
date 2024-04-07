@@ -95,9 +95,7 @@
        (define expr (labelinglogic:binding:expr binding))
        (define type (labelinglogic:expression:type expr))
        (define args (labelinglogic:expression:args expr))
-       (define token-value
-         (assoc-or class tokens-alist
-                   (raisu 'impossible-172371273 class tokens-alist)))
+       (define token-value (assoc-or class tokens-alist #f))
 
        (when (equal? type 'or)
          (cond
