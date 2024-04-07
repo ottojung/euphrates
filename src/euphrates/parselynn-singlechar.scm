@@ -88,7 +88,7 @@
   (define lexer-model
     (stack->list lexer-model/stack))
 
-  (define _2341723
+  (define _6478237
     (for-each
      (lambda (binding)
        (define class (labelinglogic:binding:name binding))
