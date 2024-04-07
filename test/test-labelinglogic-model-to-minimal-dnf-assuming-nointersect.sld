@@ -36,7 +36,9 @@
           unless))
   (import
     (only (scheme char)
+          char-lower-case?
           char-numeric?
+          char-upper-case?
           char-whitespace?))
   (cond-expand
     (guile (import (only (srfi srfi-1) any)))
