@@ -15,11 +15,18 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
+  (import
+    (only (euphrates
+            labelinglogic-model-map-subexpressions)
+          labelinglogic:model:map-subexpressions))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -38,10 +45,10 @@
           append
           begin
           cond
-          cons
           define
           else
           equal?
+          lambda
           let
           list
           map

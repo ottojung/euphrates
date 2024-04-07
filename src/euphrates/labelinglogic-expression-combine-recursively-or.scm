@@ -7,8 +7,7 @@
 
   (define grouped
     (list-group-by
-     (lambda (expr)
-       (labelinglogic:expression:type expr))
+     labelinglogic:expression:type
      args))
 
   (define (combine-r7rs left right)

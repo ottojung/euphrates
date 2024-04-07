@@ -12,11 +12,8 @@
   (define input
     (parselynn/singlechar-result-struct:input result))
 
-  (define singleton-map
-    (parselynn/singlechar-struct:singleton-map this))
-
-  (define categories
-    (parselynn/singlechar-struct:categories this))
+  (define lexer-model
+    (parselynn/singlechar:lexer-model this))
 
   (define offset 0)
   (define linenum 0)
@@ -72,20 +69,12 @@
       (make-source-location '*stdin* linenum colnum offset 1))
     (make-lexical-token category location c))
 
-  (define desc
-    (labelinglogic:make-nondet-descriminator categories))
-
-  (define (desc1 input)
-    (define all (desc input))
-    (and (not (null? all)) (car all)))
-
   (define (process-next . _)
     (define c (read-next-char))
     (if (eof-object? c) '*eoi*
         (let ()
           (define category
-            (or (hashmap-ref singleton-map c #f)
-                (desc1 c)
+            (or (labelinglogic:model:evaluate/first lexer-model c)
                 (raisu* :from "make-parselynn/irregex-factory"
                         :type 'unrecognized-character
                         :message "Encountered a character that is not handled by any of the grammar rules"

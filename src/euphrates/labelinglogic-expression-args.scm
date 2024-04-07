@@ -5,5 +5,5 @@
   (define type (labelinglogic:expression:type expr))
 
   (cond
-   ((equal? type 'constant) (list expr))
+   ((equal? type 'constant) (list))
    (else (cdr expr))))

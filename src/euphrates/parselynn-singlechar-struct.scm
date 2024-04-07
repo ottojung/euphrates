@@ -4,17 +4,15 @@
 (define-type9 parselynn/singlechar-struct
   (make-parselynn/singlechar-struct
    additional-grammar-rules
-   categories
-   singleton-map
+   lexer-model
    )
 
-  parselynn/singlechar-struct?
+  parselynn/singlechar?
 
   (additional-grammar-rules
-   parselynn/singlechar-struct:additional-grammar-rules)
+   parselynn/singlechar:additional-grammar-rules)
 
-  (categories
-   parselynn/singlechar-struct:categories)
+  (lexer-model
+   parselynn/singlechar:lexer-model)
 
-  (singleton-map
-   parselynn/singlechar-struct:singleton-map))
+  )

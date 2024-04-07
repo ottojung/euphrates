@@ -9,8 +9,12 @@
     multiset->list
     multiset-equal?
     multiset-ref
+    multiset-has?
     multiset-add!
-    multiset-filter)
+    multiset-foreach/key-value
+    multiset-foreach
+    multiset-filter
+    multiset-keys)
   (import
     (only (euphrates hashmap)
           hashmap->alist
@@ -19,6 +23,8 @@
           hashmap-ref
           hashmap-set!
           make-hashmap))
+  (import
+    (only (euphrates hashset-obj) hashset-value))
   (import
     (only (euphrates multiset-obj)
           multiset-constructor
@@ -30,26 +36,30 @@
           +
           -
           >=
+          _
           and
           begin
           car
-          cond
+          cons
           define
-          else
+          define-syntax
           equal?
           eqv?
           for-each
           lambda
           let
-          list?
           map
+          or
           quote
           set!
+          syntax-rules
           unless
           vector-length
           vector-ref
-          vector?
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) iota)))
+    (else (import (only (srfi 1) iota))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

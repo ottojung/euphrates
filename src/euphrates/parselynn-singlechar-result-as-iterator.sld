@@ -3,11 +3,9 @@
   (euphrates
     parselynn-singlechar-result-as-iterator)
   (export parselynn/singlechar-result:as-iterator)
-  (import (only (euphrates hashmap) hashmap-ref))
   (import
-    (only (euphrates
-            labelinglogic-make-nondet-descriminator)
-          labelinglogic:make-nondet-descriminator))
+    (only (euphrates labelinglogic-model-evaluate-first)
+          labelinglogic:model:evaluate/first))
   (import
     (only (euphrates parselynn-singlechar-result-struct)
           parselynn/singlechar-result-struct:input
@@ -15,8 +13,7 @@
           parselynn/singlechar-result-struct:lexer))
   (import
     (only (euphrates parselynn-singlechar-struct)
-          parselynn/singlechar-struct:categories
-          parselynn/singlechar-struct:singleton-map))
+          parselynn/singlechar:lexer-model))
   (import
     (only (euphrates parselynn) make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
@@ -28,9 +25,7 @@
           +
           >=
           _
-          and
           begin
-          car
           cond
           define
           else
@@ -41,8 +36,6 @@
           lambda
           let
           list
-          not
-          null?
           or
           port?
           quote

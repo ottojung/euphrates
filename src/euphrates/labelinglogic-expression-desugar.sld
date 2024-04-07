@@ -12,15 +12,20 @@
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
+    (only (euphrates
+            labelinglogic-expression-type-associative-huh)
+          labelinglogic:expression:type:associative?))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           =
-          and
           begin
           car
           cddr
@@ -28,10 +33,13 @@
           cond
           define
           else
+          equal?
+          if
           let
           list
           map
           member
+          not
           null?
           or
           quote))

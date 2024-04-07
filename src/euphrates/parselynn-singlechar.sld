@@ -2,17 +2,19 @@
 (define-library
   (euphrates parselynn-singlechar)
   (export make-parselynn/singlechar)
+  (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates define-pair) define-pair))
+  (import (only (euphrates hashset) list->hashset))
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
-    (only (euphrates hashmap)
-          hashmap-set!
-          make-hashmap))
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic:binding:expr))
   (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
+  (import
+    (only (euphrates labelinglogic-binding-name)
+          labelinglogic:binding:name))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -23,8 +25,24 @@
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
-    (only (euphrates labelinglogic)
-          labelinglogic:init))
+    (only (euphrates labelinglogic-model-append)
+          labelinglogic:model:append))
+  (import
+    (only (euphrates labelinglogic-model-bindings)
+          labelinglogic:model:bindings))
+  (import
+    (only (euphrates labelinglogic-model-check)
+          labelinglogic:model:check))
+  (import
+    (only (euphrates labelinglogic-model-evaluate-first)
+          labelinglogic:model:evaluate/first))
+  (import
+    (only (euphrates
+            labelinglogic-model-to-minimal-dnf-assuming-nointersect)
+          labelinglogic:model:to-minimal-dnf/assuming-nointersect))
+  (import
+    (only (euphrates parselynn-singlechar-model)
+          parselynn-singlechar-model))
   (import
     (only (euphrates parselynn-singlechar-struct)
           make-parselynn/singlechar-struct))
@@ -55,23 +73,11 @@
           let
           list
           map
-          not
+          member
           or
-          quasiquote
           quote
           string->list
-          string?
-          unquote))
-  (import
-    (only (scheme char)
-          char-alphabetic?
-          char-lower-case?
-          char-numeric?
-          char-upper-case?
-          char-whitespace?))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) any)))
-    (else (import (only (srfi 1) any))))
+          string?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

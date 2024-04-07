@@ -9,8 +9,14 @@
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
+    (only (euphrates
+            labelinglogic-expression-type-associative-huh)
+          labelinglogic:expression:type:associative?))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -24,6 +30,7 @@
           =
           and
           begin
+          car
           cond
           define
           else
@@ -32,7 +39,9 @@
           if
           let
           list
+          map
           member
+          not
           or
           quote
           reverse))

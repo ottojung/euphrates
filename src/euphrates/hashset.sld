@@ -20,12 +20,14 @@
     hashset-foreach
     hashset-map
     hashset-clear!
+    hashset-copy
     hashset-delete!)
   (import (only (euphrates fn) fn))
   (import
     (only (euphrates hashmap)
           hashmap->alist
           hashmap-clear!
+          hashmap-copy
           hashmap-count
           hashmap-delete!
           hashmap-foreach

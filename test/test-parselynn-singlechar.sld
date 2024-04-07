@@ -7,10 +7,6 @@
   (import (only (euphrates hashset) make-hashset))
   (import
     (only (euphrates
-            parselynn-singlechar-additional-grammar-rules)
-          parselynn/singlechar:additional-grammar-rules))
-  (import
-    (only (euphrates
             parselynn-singlechar-result-as-iterator)
           parselynn/singlechar-result:as-iterator))
   (import
@@ -19,6 +15,9 @@
   (import
     (only (euphrates parselynn-singlechar-run-on-string)
           parselynn/singlechar:run-on-string))
+  (import
+    (only (euphrates parselynn-singlechar-struct)
+          parselynn/singlechar:additional-grammar-rules))
   (import
     (only (euphrates parselynn-singlechar)
           make-parselynn/singlechar))
@@ -58,7 +57,8 @@
           string?
           vector
           vector-length
-          vector-ref))
+          vector-ref
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-1) any)))
     (else (import (only (srfi 1) any))))

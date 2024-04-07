@@ -4,43 +4,6 @@
 (define (make-parselynn/singlechar
          taken-token-names-set tokens-alist)
 
-  (define nocase?
-    '(lambda (c)
-       (and (char? c)
-            (char-alphabetic? c)
-            (not (char-upper-case? c))
-            (not (char-lower-case? c)))))
-
-  (define upper-case?
-    `(lambda (c)
-       (and (char? c)
-            (char-upper-case? c))))
-
-  (define lower-case?
-    `(lambda (c)
-       (and (char? c)
-            (char-lower-case? c))))
-
-  (define numeric?
-    `(lambda (c)
-       (and (char? c)
-            (char-numeric? c))))
-
-  (define whitespace?
-    `(lambda (c)
-       (and (char? c)
-            (char-whitespace? c))))
-
-  (define model
-    `((any (or alphanum whitespace))
-      (alphanum (or numeric alphabetic))
-      (alphabetic (or upcase lowercase nocase))
-      (upcase (r7rs ,upper-case?))
-      (lowercase (r7rs ,lower-case?))
-      (nocase (r7rs ,nocase?))
-      (numeric (r7rs ,numeric?))
-      (whitespace (r7rs ,whitespace?))))
-
   (define (parse-token-pair p)
     (define-pair (name value) p)
 
@@ -52,7 +15,7 @@
           (list '= value))
 
          ((string? value)
-          (cons 'tuple (map loop (string->list value))))
+          (cons 'or (map loop (string->list value))))
 
          ((equal? 'class (car value))
           (cadr value))
@@ -72,52 +35,90 @@
   (define bindings
     (map parse-token-pair tokens-alist))
 
+  (define full-model
+    (labelinglogic:model:append
+     parselynn-singlechar-model
+     bindings))
+
+  (define _61237
+    (labelinglogic:model:check full-model))
+
+  (define exported-names/set
+    (list->hashset
+     (map labelinglogic:binding:name bindings)))
+
   (define opt-model
-    (labelinglogic:init model bindings))
+    (labelinglogic:model:to-minimal-dnf/assuming-nointersect
+     exported-names/set full-model))
 
   (define renamed-model
     (labelinglogic:model:alpha-rename
      taken-token-names-set
      opt-model))
 
-  (define singleton-map
-    (make-hashmap))
-
-  (define additional-grammar-rules/singletons/stack
+  (define additional-grammar-rules/stack
     (stack-make))
 
-  (define categories/stack
+  (define lexer-model/stack
     (stack-make))
 
-  (for-each
-   (lambda (model-component)
-     (define-tuple (class predicate) model-component)
-     (define type
-       (labelinglogic:expression:type predicate))
-     (define args
-       (labelinglogic:expression:args predicate))
+  (define _2341723
+    (for-each
+     (lambda (binding)
+       (define class (labelinglogic:binding:name binding))
+       (define expr (labelinglogic:binding:expr binding))
+       (define type (labelinglogic:expression:type expr))
+       (define args (labelinglogic:expression:args expr))
 
-     (cond
-      ((equal? type '=)
-       (hashmap-set! singleton-map (car args) class))
-      ((equal? type 'r7rs)
-       (stack-push! categories/stack model-component))
-      ((equal? type 'or)
-       (stack-push! additional-grammar-rules/singletons/stack
-                    (cons class (map list args))))
-      ((equal? type 'tuple)
-       (stack-push! additional-grammar-rules/singletons/stack
-                    (cons class (list args))))
-      (else
-       (raisu 'uknown-expr-type type args))))
-   renamed-model)
+       (cond
+        ((member type (list '= 'r7rs 'and))
+         (stack-push! lexer-model/stack binding))
+        ((member type (list 'or 'constant))
+         'do-them-later-when-the-lexer-model-is-available)
+        (else
+         (raisu 'unexpected-expr-type type args binding))))
 
-  (define categories
-    (stack->list categories/stack))
+     (labelinglogic:model:bindings
+      renamed-model)))
+
+  (define lexer-model
+    (stack->list lexer-model/stack))
+
+  (define _6478237
+    (for-each
+     (lambda (binding)
+       (define class (labelinglogic:binding:name binding))
+       (define expr (labelinglogic:binding:expr binding))
+       (define type (labelinglogic:expression:type expr))
+       (define args (labelinglogic:expression:args expr))
+       (define token-value (assoc-or class tokens-alist #f))
+
+       (cond
+        ((equal? type 'constant)
+         (let ()
+           (define rule (cons class (list expr)))
+           (stack-push! additional-grammar-rules/stack rule)))
+
+        ((equal? type 'or)
+         (cond
+          ((string? token-value)
+           (let ()
+             (define letters (string->list token-value))
+             (define tokens (map (lambda (c) (labelinglogic:model:evaluate/first lexer-model c)) letters))
+             (define rule (cons class (list tokens)))
+             (stack-push! additional-grammar-rules/stack rule)))
+
+          (else
+           (let ()
+             (define rule (cons class (map list args)))
+             (stack-push! additional-grammar-rules/stack rule)))))))
+
+     (labelinglogic:model:bindings
+      renamed-model)))
 
   (define additional-grammar-rules
-    (stack->list additional-grammar-rules/singletons/stack))
+    (stack->list additional-grammar-rules/stack))
 
   (make-parselynn/singlechar-struct
    additional-grammar-rules
-   categories singleton-map))
+   lexer-model))

@@ -3,7 +3,8 @@
   (euphrates labelinglogic-expression-evaluate)
   (export labelinglogic:expression:evaluate)
   (import
-    (only (euphrates define-tuple) define-tuple))
+    (only (euphrates labelinglogic-binding-expr)
+          labelinglogic:binding:expr))
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -19,23 +20,29 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates labelinglogic-model-assoc-or)
+          labelinglogic:model:assoc-or))
+  (import
+    (only (euphrates list-and-map) list-and-map))
+  (import
     (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import
     (only (scheme base)
           =
-          assoc
+          and
           begin
+          car
           cond
           define
           else
           equal?
-          lambda
+          let
           list
+          not
           or
-          quote
-          unless))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

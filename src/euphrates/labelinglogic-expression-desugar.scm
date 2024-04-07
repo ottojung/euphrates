@@ -6,29 +6,44 @@
 
     (define type
       (labelinglogic:expression:type expr))
+    (define args
+      (labelinglogic:expression:args expr))
 
     (cond
-     ((member type (list 'or 'and 'tuple))
-      (let ()
-        (define linearized
-          (map
-           loop
-           (labelinglogic:expression:args
-            (labelinglogic:expression:sugarify expr))))
+     ((equal? type 'tuple)
+      (if (list-length= 1 args)
+          (loop (car args))
+          (labelinglogic:expression:make
+           type (map loop args))))
 
-        (define folded
-          (let loop ((rest linearized))
-            (cond
-             ((or (null? rest)
-                  (null? (cdr rest))
-                  (null? (cddr rest)))
-              (labelinglogic:expression:make
-               type rest))
-             (else
-              (labelinglogic:expression:make
-               type (list (car rest) (loop (cdr rest))))))))
+     ((equal? type 'not)
+      (labelinglogic:expression:make
+       type (map loop args)))
 
-        folded))
+     ((labelinglogic:expression:type:associative? type)
+      (if (list-length= 1 args)
+          (loop (car args))
+
+          (let ()
+            (define linearized
+              (map
+               loop
+               (labelinglogic:expression:args
+                (labelinglogic:expression:sugarify expr))))
+
+            (define folded
+              (let loop ((rest linearized))
+                (cond
+                 ((or (null? rest)
+                      (null? (cdr rest))
+                      (null? (cddr rest)))
+                  (labelinglogic:expression:make
+                   type rest))
+                 (else
+                  (labelinglogic:expression:make
+                   type (list (car rest) (loop (cdr rest))))))))
+
+            folded)))
 
      ((member type (list '= 'constant 'r7rs))
       expr)

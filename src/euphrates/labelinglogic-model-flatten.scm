@@ -32,8 +32,9 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((member type (list 'or 'and 'tuple 'not))
-      (cons type (map loop-expr args)))
+     ((member type (list 'or 'and 'tuple 'not 'xor))
+      (labelinglogic:expression:make
+       type (map loop-expr args)))
 
      ((member type (list '= 'constant 'r7rs))
       expr)
@@ -45,8 +46,15 @@
                                 (~a type))
               :args (list type expr)))))
 
+  ;; Just to remember the current aliases.
+  (labelinglogic:model:map-expressions
+   (lambda (class predicate)
+     (lambda (expr)
+       (hashmap-set! H predicate class)))
+   model)
+
   (define maped-model
-    (labelinglogic:model:map-expressions
+    (labelinglogic:model:map-subexpressions
      (const factor-out-expr)
      model))
 

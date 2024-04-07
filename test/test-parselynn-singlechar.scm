@@ -1,4 +1,14 @@
 
+;;
+;;
+;;  ▄▄▄▄▄▄▄                 ▄                           ▄
+;;     █     ▄▄▄    ▄▄▄   ▄▄█▄▄          ▄▄▄    ▄▄▄   ▄▄█▄▄  ▄   ▄  ▄▄▄▄
+;;     █    █▀  █  █   ▀    █           █   ▀  █▀  █    █    █   █  █▀ ▀█
+;;     █    █▀▀▀▀   ▀▀▀▄    █            ▀▀▀▄  █▀▀▀▀    █    █   █  █   █
+;;     █    ▀█▄▄▀  ▀▄▄▄▀    ▀▄▄         ▀▄▄▄▀  ▀█▄▄▀    ▀▄▄  ▀▄▄▀█  ██▄█▀
+;;                                                                  █
+;;                                                                  ▀
+
 (define (collect lexer)
   (let loop ()
     (define t (lexer))
@@ -23,6 +33,10 @@
   (define additional-grammar-rules
     (parselynn/singlechar:additional-grammar-rules lexer))
 
+  ;; NOTE: this is too specific to test. Let the parser test generated grammar.
+  (when expected-additional-rules
+    (assert= expected-additional-rules additional-grammar-rules))
+
   (define lexer-result
     (cond
      ((string? input)
@@ -37,9 +51,6 @@
 
   (define output
     (collect lexer-iterator))
-
-  ;; NOTE: this is too specific to test. Let the parser test generated grammar.
-  ;; (assert= expected-additional-rules additional-grammar-rules)
 
   (assert= (length output) (length expected-output))
 
@@ -63,12 +74,12 @@
    input
    (test/generic tokens-alist (current-input-port) expected-output expected-additional-rules)))
 
-(define (test1 tokens-alist input expected-output expected-additional-rules)
-  (test/string tokens-alist input expected-output expected-additional-rules)
+(define (testcase tokens-alist input expected-output expected-additional-rules)
+  ;; (test/string tokens-alist input expected-output expected-additional-rules)
   (test/port tokens-alist input expected-output expected-additional-rules))
 
 (define (test-error tokens-alist input expected-error-type)
-  (define additional-grammar-rules 'whatever-ignore-it)
+  (define additional-grammar-rules #f)
 
   (assert-throw
    expected-error-type
@@ -79,14 +90,48 @@
    (test/port tokens-alist input '() additional-grammar-rules)))
 
 
-;;;;;;;;;
+
+
 ;;
-;; Start...
+;;
+;;  ▄▄▄▄▄▄▄                 ▄
+;;     █     ▄▄▄    ▄▄▄   ▄▄█▄▄          ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄
+;;     █    █▀  █  █   ▀    █           █▀  ▀  ▀   █  █   ▀  █▀  █  █   ▀
+;;     █    █▀▀▀▀   ▀▀▀▄    █           █      ▄▀▀▀█   ▀▀▀▄  █▀▀▀▀   ▀▀▀▄
+;;     █    ▀█▄▄▀  ▀▄▄▄▀    ▀▄▄         ▀█▄▄▀  ▀▄▄▀█  ▀▄▄▄▀  ▀█▄▄▀  ▀▄▄▄▀
+;;
 ;;
 
 
 
-(test1
+(testcase
+
+ '((t_0 . #\0)
+   (t_1 . #\1)
+   )
+
+ "0101011101"
+
+ '(#(t_0 #\0 0 1 1 1)
+   #(t_1 #\1 0 2 2 1)
+   #(t_0 #\0 0 3 3 1)
+   #(t_1 #\1 0 4 4 1)
+   #(t_0 #\0 0 5 5 1)
+   #(t_1 #\1 0 6 6 1)
+   #(t_1 #\1 0 7 7 1)
+   #(t_1 #\1 0 8 8 1)
+   #(t_0 #\0 0 9 9 1)
+   #(t_1 #\1 0 10 10 1)
+   )
+
+
+ '()
+ )
+
+
+
+(testcase
+
  '((t_0 . #\0)
    (t_1 . #\1)
    (t_2 . #\2)
@@ -96,7 +141,8 @@
    (t_6 . #\6)
    (t_7 . #\7)
    (t_8 . #\8)
-   (t_9 . #\9))
+   (t_9 . #\9)
+   )
 
  "19371634"
 
@@ -114,7 +160,8 @@
 
 
 
-(test1
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -124,12 +171,13 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (c_any class any))
+   (c_any . (class any))
+   )
 
  "19371634"
 
  '(#(t_1 #\1 0 1 1 1)
-   #(c_any #\9 0 2 2 1)
+   #(uid_1 #\9 0 2 2 1)
    #(t_3 #\3 0 3 3 1)
    #(t_7 #\7 0 4 4 1)
    #(t_1 #\1 0 5 5 1)
@@ -137,21 +185,56 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((c_any (t_3)
-          (t_0)
-          (t_4)
-          (t_6)
-          (t_2)
+ '((c_any (t_0)
           (t_1)
+          (t_2)
+          (t_3)
+          (t_4)
+          (t_5)
+          (t_6)
           (t_7)
           (t_8)
-          (t_5)
-          (c1_any)))
+          (uid_1)
+          (uid_2)
+          (uid_3)
+          (uid_4)
+          (uid_5)
+          (uid_6)))
+
  )
 
 
 
-(test1
+
+(testcase
+
+ '((c_any . (class any))
+   )
+
+ "19371634"
+
+ '(#(uid_1 #\1 0 1 1 1)
+   #(uid_1 #\9 0 2 2 1)
+   #(uid_1 #\3 0 3 3 1)
+   #(uid_1 #\7 0 4 4 1)
+   #(uid_1 #\1 0 5 5 1)
+   #(uid_1 #\6 0 6 6 1)
+   #(uid_1 #\3 0 7 7 1)
+   #(uid_1 #\4 0 8 8 1))
+
+ '((c_any (uid_1)
+          (uid_2)
+          (uid_3)
+          (uid_4)
+          (uid_5)
+          (uid_6)))
+
+ )
+
+
+
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -161,12 +244,12 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_other class any))
+   (t_other . (class any)))
 
  "19371634"
 
  '(#(t_1 #\1 0 1 1 1)
-   #(t_other #\9 0 2 2 1)
+   #(uid_1 #\9 0 2 2 1)
    #(t_3 #\3 0 3 3 1)
    #(t_7 #\7 0 4 4 1)
    #(t_1 #\1 0 5 5 1)
@@ -175,21 +258,28 @@
    #(t_4 #\4 0 8 8 1))
 
  '((t_other
-    (t_3)
-    (t_0)
-    (t_4)
-    (t_6)
-    (t_2)
-    (t_1)
-    (t_7)
-    (t_8)
-    (t_5)
-    (c_any)))
+   (t_0)
+   (t_1)
+   (t_2)
+   (t_3)
+   (t_4)
+   (t_5)
+   (t_6)
+   (t_7)
+   (t_8)
+   (uid_1)
+   (uid_2)
+   (uid_3)
+   (uid_4)
+   (uid_5)
+   (uid_6)))
+
  )
 
 
 
-(test1
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -199,12 +289,12 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_num class numeric))
+   (t_num . (class numeric)))
 
  "19371634"
 
  '(#(t_1 #\1 0 1 1 1)
-   #(t_num #\9 0 2 2 1)
+   #(uid_1 #\9 0 2 2 1)
    #(t_3 #\3 0 3 3 1)
    #(t_7 #\7 0 4 4 1)
    #(t_1 #\1 0 5 5 1)
@@ -212,21 +302,23 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_num (t_3)
-          (t_0)
-          (t_4)
-          (t_6)
-          (t_2)
+ '((t_num (t_0)
           (t_1)
+          (t_2)
+          (t_3)
+          (t_4)
+          (t_5)
+          (t_6)
           (t_7)
           (t_8)
-          (t_5)
-          (c_numeric)))
+          (uid_1)))
+
  )
 
 
 
-(test1
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -236,12 +328,12 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_? class alphabetic))
+   (t_? . (class alphabetic)))
 
  "1x371634"
 
  '(#(t_1 #\1 0 1 1 1)
-   #(t_? #\x 0 2 2 1)
+   #(uid_2 #\x 0 2 2 1)
    #(t_3 #\3 0 3 3 1)
    #(t_7 #\7 0 4 4 1)
    #(t_1 #\1 0 5 5 1)
@@ -249,11 +341,13 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '()
+ '((t_? (uid_1) (uid_2) (uid_3)))
+
  )
 
 
-(test1
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -263,12 +357,12 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_? class alphanum))
+   (t_? . (class alphanum)))
 
  "1x371634"
 
  '(#(t_1 #\1 0 1 1 1)
-   #(t_? #\x 0 2 2 1)
+   #(uid_3 #\x 0 2 2 1)
    #(t_3 #\3 0 3 3 1)
    #(t_7 #\7 0 4 4 1)
    #(t_1 #\1 0 5 5 1)
@@ -276,61 +370,26 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_? (t_3)
-        (t_0)
-        (t_4)
-        (t_6)
-        (t_2)
+ '((t_? (t_0)
         (t_1)
-        (t_7)
-        (t_8)
-        (t_5)
-        (c_alphanum)))
- )
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_x class alphanum)
-   (t_a class alphabetic))
-
- "1x371634"
-
- '(#(t_1 #\1 0 1 1 1)
-   #(t_a #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1))
-
- '((t_x (t_a)
+        (t_2)
         (t_3)
-        (t_0)
         (t_4)
+        (t_5)
         (t_6)
-        (t_2)
-        (t_1)
         (t_7)
         (t_8)
-        (t_5)
-        (c_alphanum))
-   (t_a (c_alphabetic)))
+        (uid_1)
+        (uid_2)
+        (uid_3)
+        (uid_4)))
+
  )
 
 
 
-(test1
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -340,13 +399,13 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_a class alphabetic)
-   (t_x class alphanum))
+   (t_x . (class alphanum))
+   (t_a . (class alphabetic)))
 
  "1x371634"
 
  '(#(t_1 #\1 0 1 1 1)
-   #(t_a #\x 0 2 2 1)
+   #(uid_2 #\x 0 2 2 1)
    #(t_3 #\3 0 3 3 1)
    #(t_7 #\7 0 4 4 1)
    #(t_1 #\1 0 5 5 1)
@@ -354,19 +413,68 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_x (t_a)
-        (t_3)
-        (t_0)
-        (t_4)
-        (t_6)
-        (t_2)
+ '((t_a (uid_1) (uid_2) (uid_3))
+   (t_x (t_0)
         (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
         (t_7)
         (t_8)
-        (t_5)
-        (c_alphanum))
-   (t_a (c_alphabetic)))
+        (uid_4)
+        (uid_1)
+        (uid_2)
+        (uid_3)))
+
  )
+
+
+
+
+(testcase
+
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_a . (class alphabetic))
+   (t_x . (class alphanum)))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(uid_2 #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_x (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_4)
+        (uid_1)
+        (uid_2)
+        (uid_3))
+   (t_a (uid_1) (uid_2) (uid_3)))
+
+ )
+
 
 
 
@@ -380,94 +488,9 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (t_a class alphabetic)
-   (t_n class numeric)
-   (t_x class alphanum))
-
- "1x371634"
-
- '(#(t_1 #\1 0 1 1 1)
-   #(t_a #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1))
-
- '((t_x (t_a) (t_n) (c_alphanum))
-   (t_a (c_alphabetic))
-   (t_n (t_3)
-        (t_0)
-        (t_4)
-        (t_6)
-        (t_2)
-        (t_1)
-        (t_7)
-        (t_8)
-        (t_5)
-        (c_numeric)))
- )
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_x . "x3")
-   (t_a class alphabetic)
-   (t_n class numeric)
-   (t_z class alphanum))
-
- "1x371634"
-
- '(#(t_1 #\1 0 1 1 1)
-   #(uid_1 #\x 0 2 2 1)
-   #(t_3 #\3 0 3 3 1)
-   #(t_7 #\7 0 4 4 1)
-   #(t_1 #\1 0 5 5 1)
-   #(t_6 #\6 0 6 6 1)
-   #(t_3 #\3 0 7 7 1)
-   #(t_4 #\4 0 8 8 1))
-
- '((t_z (t_a) (t_n) (c_alphanum))
-   (t_a (c_x) (c_alphabetic))
-   (t_n (t_3)
-        (t_0)
-        (t_4)
-        (t_6)
-        (t_2)
-        (t_1)
-        (t_7)
-        (t_8)
-        (t_5)
-        (c_numeric))
-   (t_x (c_x t_3)))
- )
-
-
-
-(test1
- '((t_0 . "0")
-   (t_1 . "1")
-   (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_x . "x3")
-   (uid_1 class alphabetic)
-   (t_n class numeric)
-   (t_z class alphanum))
+   (t_a . (class alphabetic))
+   (t_n . (class numeric))
+   (t_x . (class alphanum)))
 
  "1x371634"
 
@@ -480,24 +503,38 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_z (t_a) (t_n) (c_alphanum))
-   (t_a (c_x) (c_alphabetic))
-   (t_n (t_3)
-        (t_0)
-        (t_4)
-        (t_6)
-        (t_2)
+ '((t_x (t_0)
         (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
         (t_7)
         (t_8)
+        (uid_4)
+        (uid_1)
+        (uid_2)
+        (uid_3))
+   (t_n (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
         (t_5)
-        (c_numeric))
-   (t_x (c_x t_3)))
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_4))
+   (t_a (uid_1) (uid_2) (uid_3)))
+
  )
 
 
 
-(test1
+
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -507,10 +544,10 @@
    (t_6 . "6")
    (t_7 . "7")
    (t_8 . "8")
-   (c_x . "x3")
-   (t_a class alphabetic)
-   (t_n class numeric)
-   (t_x class alphanum))
+   (t_x . "x3")
+   (t_a . (class alphabetic))
+   (t_n . (class numeric))
+   (t_z . (class alphanum)))
 
  "1x371634"
 
@@ -523,24 +560,156 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_x (t_a) (t_n) (c1_alphanum))
-   (t_a (c1_x) (c1_alphabetic))
-   (t_n (t_3)
-        (t_0)
-        (t_4)
-        (t_6)
-        (t_2)
+ '((t_z (t_0)
         (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
         (t_7)
         (t_8)
+        (uid_5)
+        (uid_2)
+        (uid_1)
+        (uid_3)
+        (uid_4))
+   (t_n (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
         (t_5)
-        (c1_numeric))
-   (c_x (c1_x t_3)))
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_5))
+   (t_a (uid_2) (uid_1) (uid_3) (uid_4))
+   (t_x (uid_1 t_3)))
+
  )
 
 
 
-(test1
+(testcase
+
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_x . "x3")
+   (uid_1 . (class alphabetic))
+   (t_n . (class numeric))
+   (t_z . (class alphanum)))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(uid_2 #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_z (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_6)
+        (uid_3)
+        (uid_2)
+        (uid_4)
+        (uid_5))
+   (t_n (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_6))
+   (uid_1 (uid_3) (uid_2) (uid_4) (uid_5))
+   (t_x (uid_2 t_3)))
+
+ )
+
+
+
+
+(testcase
+
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_7 . "7")
+   (t_8 . "8")
+   (c_x . "x3")
+   (t_a . (class alphabetic))
+   (t_n . (class numeric))
+   (t_x . (class alphanum)))
+
+ "1x371634"
+
+ '(#(t_1 #\1 0 1 1 1)
+   #(uid_1 #\x 0 2 2 1)
+   #(t_3 #\3 0 3 3 1)
+   #(t_7 #\7 0 4 4 1)
+   #(t_1 #\1 0 5 5 1)
+   #(t_6 #\6 0 6 6 1)
+   #(t_3 #\3 0 7 7 1)
+   #(t_4 #\4 0 8 8 1))
+
+ '((t_x (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_5)
+        (uid_2)
+        (uid_1)
+        (uid_3)
+        (uid_4))
+   (t_n (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_5))
+   (t_a (uid_2) (uid_1) (uid_3) (uid_4))
+   (c_x (uid_1 t_3)))
+
+ )
+
+
+
+(testcase
+
  '((t_0 . "0")
    (t_1 . "1")
    (t_2 . "2")
@@ -551,7 +720,7 @@
    (t_7 . "7")
    (t_8 . "8")
    (t_12 . "12")
-   (t_num class numeric))
+   (t_num . (class numeric)))
 
  "1123412"
 
@@ -563,22 +732,23 @@
    #(t_1 #\1 0 6 6 1)
    #(t_2 #\2 0 7 7 1))
 
- '((t_num (t_3)
-          (t_0)
-          (t_4)
-          (t_6)
-          (t_2)
+ '((t_num (t_0)
           (t_1)
+          (t_2)
+          (t_3)
+          (t_4)
+          (t_5)
+          (t_6)
           (t_7)
           (t_8)
-          (t_5)
-          (c_numeric))
+          (uid_1))
    (t_12 (t_1 t_2)))
+
  )
 
 
+(testcase
 
-(test1
  '((t_1 . "1"))
 
  ""
@@ -586,11 +756,13 @@
  '()
 
  '()
+
  )
 
 
 
-(test1
+(testcase
+
  '((t_A . "A") (t_B . "B"))
 
  "AB"
@@ -599,11 +771,13 @@
    #(t_B #\B 0 2 2 1))
 
  '()
+
  )
 
 
 
-(test1
+(testcase
+
  '((t_AB . "AB"))
 
  "AB"
@@ -612,12 +786,14 @@
    #(uid_2 #\B 0 2 2 1))
 
  '((t_AB (uid_1 uid_2)))
+
  )
 
 
 
-(test1
- '((t_num class numeric))
+(testcase
+
+ '((t_num . (class numeric)))
 
  "123"
 
@@ -626,12 +802,15 @@
    #(t_num #\3 0 3 3 1))
 
  '()
+
  )
 
 
 
-(test1
- '((t_A . "A") (t_num class numeric))
+(testcase
+
+ '((t_A . "A")
+   (t_num . (class numeric)))
 
  "A1"
 
@@ -639,12 +818,15 @@
    #(t_num #\1 0 2 2 1))
 
  '()
+
  )
 
 
 
-(test1
- '((t_AB . "AB") (t_num class numeric))
+(testcase
+
+ '((t_AB . "AB")
+   (t_num . (class numeric)))
 
  "AB1"
 
@@ -652,13 +834,17 @@
    #(uid_2 #\B 0 2 2 1)
    #(t_num #\1 0 3 3 1))
 
- '((t_AB (c_A c_B)))
+ '((t_AB (uid_1 uid_2)))
+
  )
 
 
 
-(test1
- '((t_A . "A") (t_AB . "AB") (t_num class numeric))
+(testcase
+
+ '((t_A . "A")
+   (t_AB . "AB")
+   (t_num . (class numeric)))
 
  "AAB1"
 
@@ -668,11 +854,13 @@
    #(t_num #\1 0 4 4 1))
 
  '((t_AB (t_A uid_1)))
+
  )
 
 
 
-(test1
+(testcase
+
  '((t_A . "A"))
 
  "AAA"
@@ -682,11 +870,13 @@
    #(t_A #\A 0 3 3 1))
 
  '()
+
  )
 
 
 
-(test1
+(testcase
+
  '((t_AB . "AB"))
 
  "ABAB"
@@ -697,54 +887,74 @@
    #(uid_2 #\B 0 4 4 1))
 
  '((t_AB (uid_1 uid_2)))
+
  )
 
 
 
-(test1
- '((t_num class numeric)
-   (t_any class any))
+(testcase
+
+ '((t_num . (class numeric))
+   (t_any . (class any)))
 
  "A1"
 
  '(#(uid_1 #\A 0 1 1 1)
    #(t_num #\1 0 2 2 1))
 
- '((t_any (t_num) (c_any))
-   (t_num (c_numeric)))
+ '((t_any (t_num)
+          (uid_1)
+          (uid_2)
+          (uid_3)
+          (uid_4)
+          (uid_5)))
+
  )
 
 
 
-(test1
- '((t_AB1 . "AB1") (t_num class numeric))
+(testcase
+
+ '((t_AB1 . "AB1")
+   (t_num . (class numeric)))
 
  "AB1"
 
- '(#(uid_1 #\A 0 1 1 1)
-   #(uid_2 #\B 0 2 2 1)
-   #(uid_3 #\1 0 3 3 1))
+ '(#(uid_2 #\A 0 1 1 1)
+   #(uid_3 #\B 0 2 2 1)
+   #(uid_1 #\1 0 3 3 1))
 
- '((t_num (c_1) (c_numeric))
-   (t_AB1 (uid_1 uid_2 c_1)))
+ '((t_num (uid_1) (uid_4))
+   (t_AB1 (uid_2 uid_3 uid_1)))
+
  )
 
 
 
-(test1
- '((t_A . "A") (t_any class any))
+(testcase
+
+ '((t_A . "A")
+   (t_any . (class any)))
 
  "A"
 
  '(#(t_A #\A 0 1 1 1))
 
- '((t_any (t_A) (c_any)))
+ '((t_any (uid_1)
+          (t_A)
+          (uid_2)
+          (uid_3)
+          (uid_4)
+          (uid_5)
+          (uid_6)))
+
  )
 
 
 
-(test1
- '((t_num class numeric))
+(testcase
+
+ '((t_num . (class numeric)))
 
  "123"
 
@@ -752,57 +962,92 @@
    #(t_num #\2 0 2 2 1)
    #(t_num #\3 0 3 3 1))
 
- '((t_num (c_numeric)))
+ '()
+
  )
 
 
 
-(test1
- '((t_alpha class alphabetic))
+(testcase
+
+ '((t_alpha . (class alphabetic)))
 
  "ABC"
 
- '(#(t_alpha #\A 0 1 1 1)
-   #(t_alpha #\B 0 2 2 1)
-   #(t_alpha #\C 0 3 3 1))
+ '(#(uid_1 #\A 0 1 1 1)
+   #(uid_1 #\B 0 2 2 1)
+   #(uid_1 #\C 0 3 3 1))
 
- '((t_alpha (c_alphabetic)))
+ '((t_alpha (uid_1) (uid_2) (uid_3)))
+
  )
 
 
 
-(test1
- '((t_alnum class alphanum))
+(testcase
+
+ '((t_alnum . (class alphanum)))
 
  "A1"
 
- '(#(t_alnum #\A 0 1 1 1)
-   #(t_alnum #\1 0 2 2 1))
+ '(#(uid_2 #\A 0 1 1 1)
+   #(uid_1 #\1 0 2 2 1))
 
- '((t_alnum (c_alphanum)))
+ '((t_alnum (uid_1) (uid_2) (uid_3) (uid_4)))
+
  )
 
 
 
-;;;;;;;;
+
+(testcase
+
+ ;; Duplicated token test.
+
+ '((t_0 . #\0)
+   (t_1 . #\1)
+   (t_o . #\0)
+   (t_i . #\1)
+   )
+
+ "0101011101"
+
+ '(#(t_0 #\0 0 1 1 1)
+   #(t_1 #\1 0 2 2 1)
+   #(t_0 #\0 0 3 3 1)
+   #(t_1 #\1 0 4 4 1)
+   #(t_0 #\0 0 5 5 1)
+   #(t_1 #\1 0 6 6 1)
+   #(t_1 #\1 0 7 7 1)
+   #(t_1 #\1 0 8 8 1)
+   #(t_0 #\0 0 9 9 1)
+   #(t_1 #\1 0 10 10 1)
+   )
+
+ '((t_i t_1) (t_o t_0))
+
+ )
+
+
+
 ;;
-;; Error cases
+;;
+;;   ▄▄▄▄▄▄
+;;   █       ▄ ▄▄   ▄ ▄▄   ▄▄▄    ▄ ▄▄          ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄
+;;   █▄▄▄▄▄  █▀  ▀  █▀  ▀ █▀ ▀█   █▀  ▀        █▀  ▀  ▀   █  █   ▀  █▀  █  █   ▀
+;;   █       █      █     █   █   █            █      ▄▀▀▀█   ▀▀▀▄  █▀▀▀▀   ▀▀▀▄
+;;   █▄▄▄▄▄  █      █     ▀█▄█▀   █            ▀█▄▄▀  ▀▄▄▀█  ▀▄▄▄▀  ▀█▄▄▀  ▀▄▄▄▀
+;;
 ;;
 
 
 (test-error
 
- `((t_0 . "0")
-   (t_1 . "1")
+ `((t_1 . "1")
    (t_2 . "2")
-   (t_3 . "3")
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8"))
+   (t_3 . "3"))
 
- "19371634"
+ "1234"
 
  'unrecognized-character
 
@@ -812,23 +1057,45 @@
 
 (test-error
 
- `((t_0 . "0")
-   (t_1 . "1")
+ `((t_1 . "1")
    (t_2 . "2")
-   (t_3 . "3")
-   (t_a . (class any))
-   (t_4 . "4")
-   (t_5 . "5")
-   (t_6 . "6")
-   (t_7 . "7")
-   (t_8 . "8")
-   (t_b . (class any)))
+   (t_3 . "3"))
 
- "19371634"
+ "abcd"
 
- 'duplicated-token
+ 'unrecognized-character
 
  )
+
+
+
+(test-error
+
+ '((t_0 . #\0)
+   (t_1 . #\1)
+   )
+
+ "01301"
+
+ 'unrecognized-character
+
+ )
+
+
+
+(test-error
+
+ '((t_0 . #\0)
+   (t_1 . #\1)
+   (t_0 . #\3)
+   )
+
+ "0101"
+
+ 'model-type-error
+
+ )
+
 
 ;; 13. All Characters Unrecognized
 (test-error `((t_A . "A")) "BCD" 'unrecognized-character)
@@ -861,6 +1128,29 @@
 
  "19371634"
 
- 'undefined-reference-in-binding
+ 'model-type-error
+
+ )
+
+
+
+
+(test-error
+ '((t_0 . "0")
+   (t_1 . "1")
+   (t_2 . "2")
+   (t_3 . "3")
+   (t_4 . "4")
+   (t_5 . "5")
+   (t_6 . "6")
+   (t_x . (class t_y))
+   (t_y . (class t_x))
+   (t_7 . "7")
+   (t_8 . "8")
+   (t_9 . "9"))
+
+ "19371634"
+
+ 'model-type-error
 
  )

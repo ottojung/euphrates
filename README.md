@@ -1,5 +1,5 @@
 
-# Euphrates: nourishing projects
+# Euphrates
 
 ## Introduction
 
@@ -8,8 +8,8 @@ Euphrates is a standard library/computing environment for Scheme.
 Euphrates is similar to:
 
 - [SLIB](https://people.csail.mit.edu/jaffer/SLIB.html)
-- [Scmutils](https://groups.csail.mit.edu/mac/users/gjs/6946/installation.html)
 - [Schemepunk](https://github.com/ar-nelson/schemepunk)
+- [Scmutils](https://groups.csail.mit.edu/mac/users/gjs/6946/installation.html)
 - [Spells](https://github.com/rotty/spells/tree/master/spells)
 - [Alschemist](https://github.com/ashinn/alschemist)
 - [Xitomatl](https://github.com/weinholt/xitomatl)
@@ -30,7 +30,7 @@ Here's a snapshot of what Euphrates offers:
 - CFG-based CLI parsing `define-cli.scm`
 - Object system based on properties constraints `properties.scm`
   - similar to propagators but less (computationally) expensive, and time-aware
-- A fast LALR+GLR parser `parselynn.scm`
+- A fast LALR+GLR parser generator `parselynn.scm`
   - with a simplified interface (ex. irregex-based lexer) - `parselynn-simple.scm`
 - Embedabble mini prolog `profun.scm`
 - Composable monads `monadic.scm`

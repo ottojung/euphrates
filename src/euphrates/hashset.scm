@@ -158,3 +158,8 @@
 (define (hashset-delete! H key)
   (define M (hashset-value H))
   (hashmap-delete! M key))
+
+(define (hashset-copy H)
+  (define M (hashset-value H))
+  (define P (hashmap-copy M))
+  (hashset-constructor P))

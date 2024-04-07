@@ -22,17 +22,21 @@
            (hashmap-set! H key (+ 1 (hashmap-ref H key 0))))))
      H)))
 
-(define (make-multiset collection)
-  (cond
-   ((list? collection)
-    (list->multiset collection))
-   ((vector? collection)
-    (vector->multiset collection))
-   (else
-    (raisu 'expected-list-or-vector collection))))
+(define (make-multiset)
+  (list->multiset '()))
 
 (define (multiset->list S)
-  (map car (hashmap->alist (multiset-value S))))
+  (define H (multiset-value S))
+  (define ret '())
+
+  (hashmap-foreach
+   (lambda (key value)
+     (for-each
+      (lambda _ (set! ret (cons key ret)))
+      (iota value)))
+   H)
+
+  ret)
 
 (define (multiset-equal? a b)
   (define (each-is-equal? A B)
@@ -52,12 +56,39 @@
                  (hashmap-count B))
          (each-is-equal? A B))))
 
-(define (multiset-ref H key)
-  (hashmap-ref (multiset-value H) key #f))
+(define-syntax multiset-ref
+  (syntax-rules ()
+    ((_ H key0)
+     (let ((key key0))
+       (multiset-ref
+        H key (raisu 'hashset-key-not-found key))))
+    ((_ H key default)
+     (let ((get (hashmap-ref (hashset-value H) key #f)))
+       (or get default)))))
+
+(define (multiset-has? S key)
+  (hashmap-ref (hashset-value S) key #f))
+
 (define (multiset-add! H key)
   (hashmap-set! (multiset-value H)
                 key
                 (+ 1 (hashmap-ref (multiset-value H) key 0))))
+
+(define (multiset-foreach/key-value fun S)
+  (define H (multiset-value S))
+  (hashmap-foreach
+   (lambda (key value)
+     (fun key value))
+   H))
+
+(define (multiset-foreach fun S)
+  (define H (multiset-value S))
+  (hashmap-foreach
+   (lambda (key value)
+     (for-each
+      (lambda _ (fun key))
+      (iota value)))
+   H))
 
 (define (multiset-filter S predicate)
   (define H (multiset-value S))
@@ -69,3 +100,7 @@
        (hashmap-set! RH key value)))
    H)
   R)
+
+(define (multiset-keys S)
+  (define H (multiset-value S))
+  (map car (hashmap->alist H)))

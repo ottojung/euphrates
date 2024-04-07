@@ -20,13 +20,13 @@
 ;; Test nested expressions that needs to be flattened
 (let ()
   (assert=
-   '(tuple a b c d e)
+   '(tuple a (tuple b (tuple c (tuple d e))))
    (labelinglogic:expression:sugarify
     '(tuple a (tuple b (tuple c (tuple d e)))))))
 
 (let ()
   (assert=
-   '(tuple a b (or c d) e f)
+   '(tuple a (tuple b (or c d) (tuple e f)))
    (labelinglogic:expression:sugarify
     '(tuple a (tuple b (or c d) (tuple e f))))))
 
@@ -46,7 +46,7 @@
 ;; Test with nested operations of different types
 (let ()
   (assert=
-   '(and a b (tuple c d e) f g)
+   '(and a b (tuple c (tuple d e)) f g)
    (labelinglogic:expression:sugarify
     '(and a (and b (tuple c (tuple d e)) (and f g))))))
 
@@ -69,29 +69,29 @@
    (labelinglogic:expression:sugarify
     '(and a (and (and b c d) (and e f)) (and g h)))))
 
-;; Test nested tupleuences that needs to be flattened
+;; Test nested tupleuences that do not need to be flattened
 (let ()
   (assert=
-   '(tuple a b c d e)
+    '(tuple a (tuple b (tuple c (tuple d e))))
    (labelinglogic:expression:sugarify
     '(tuple a (tuple b (tuple c (tuple d e)))))))
 
 (let ()
   (assert=
-   '(tuple a b (or c d) e f)
+   '(tuple a (tuple b (or c d) (tuple e f)))
    (labelinglogic:expression:sugarify
     '(tuple a (tuple b (or c d) (tuple e f))))))
 
 ;; Test with nested operations of different types
 (let ()
   (assert=
-   '(tuple a b (and c d e) (or f g) h i)
+   '(tuple a (tuple b (and c d e) (or f g)) (tuple h i))
    (labelinglogic:expression:sugarify
     '(tuple a (tuple b (and c (and d e)) (or f g)) (tuple h i)))))
 
 (let ()
   (assert=
-   '(and a b (tuple c d e) (or f g) h i)
+   '(and a b (tuple c (tuple d e)) (or f g) h i)
    (labelinglogic:expression:sugarify
     '(and a (and b (tuple c (tuple d e)) (or f g)) (and h i)))))
 

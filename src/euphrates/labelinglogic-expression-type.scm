@@ -4,5 +4,6 @@
 (define (labelinglogic:expression:type expr)
   (cond
    ((symbol? expr) 'constant)
+   ((number? expr) 'constant)
    ((unique-identifier? expr) 'constant)
    (else (list-ref expr 0))))

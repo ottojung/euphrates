@@ -20,6 +20,9 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates labelinglogic-model-names)
+          labelinglogic:model:names))
+  (import
     (only (euphrates make-unique) make-unique))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
@@ -29,6 +32,7 @@
           begin
           define
           equal?
+          for-each
           if
           lambda
           let

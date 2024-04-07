@@ -3,48 +3,12 @@
   (euphrates labelinglogic-bindings-check)
   (export labelinglogic:bindings:check)
   (import
-    (only (euphrates compose-under) compose-under))
-  (import (only (euphrates hashset) hashset-has?))
+    (only (euphrates labelinglogic-model-check-references)
+          labelinglogic:model:check-references))
   (import
-    (only (euphrates labelinglogic-binding-check)
-          labelinglogic:binding:check))
-  (import
-    (only (euphrates labelinglogic-binding-expr)
-          labelinglogic:binding:expr))
-  (import
-    (only (euphrates labelinglogic-expression-constants)
-          labelinglogic:expression:constants))
-  (import
-    (only (euphrates list-and-map) list-and-map))
-  (import
-    (only (euphrates list-get-duplicates)
-          list-get-duplicates))
-  (import (only (euphrates negate) negate))
-  (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates stringf) stringf))
-  (import
-    (only (euphrates unique-identifier)
-          unique-identifier?))
-  (import
-    (only (scheme base)
-          begin
-          car
-          define
-          for-each
-          lambda
-          list
-          list?
-          map
-          null?
-          or
-          pair?
-          quote
-          symbol?
-          unless
-          when))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
+    (only (euphrates labelinglogic-model-check-structure)
+          labelinglogic:model:check-structure))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
