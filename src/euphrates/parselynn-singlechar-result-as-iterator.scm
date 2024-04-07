@@ -69,19 +69,12 @@
       (make-source-location '*stdin* linenum colnum offset 1))
     (make-lexical-token category location c))
 
-  (define desc
-    (labelinglogic:make-nondet-descriminator lexer-model))
-
-  (define (desc1 input)
-    (define all (desc input))
-    (and (not (null? all)) (car all)))
-
   (define (process-next . _)
     (define c (read-next-char))
     (if (eof-object? c) '*eoi*
         (let ()
           (define category
-            (or (desc1 c)
+            (or (labelinglogic:model:evaluate/first lexer-model c)
                 (raisu* :from "make-parselynn/irregex-factory"
                         :type 'unrecognized-character
                         :message "Encountered a character that is not handled by any of the grammar rules"

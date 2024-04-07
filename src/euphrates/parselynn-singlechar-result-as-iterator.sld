@@ -4,9 +4,8 @@
     parselynn-singlechar-result-as-iterator)
   (export parselynn/singlechar-result:as-iterator)
   (import
-    (only (euphrates
-            labelinglogic-make-nondet-descriminator)
-          labelinglogic:make-nondet-descriminator))
+    (only (euphrates labelinglogic-model-evaluate-first)
+          labelinglogic:model:evaluate/first))
   (import
     (only (euphrates parselynn-singlechar-result-struct)
           parselynn/singlechar-result-struct:input
@@ -26,9 +25,7 @@
           +
           >=
           _
-          and
           begin
-          car
           cond
           define
           else
@@ -39,8 +36,6 @@
           lambda
           let
           list
-          not
-          null?
           or
           port?
           quote
