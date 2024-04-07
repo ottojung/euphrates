@@ -894,8 +894,8 @@
 
 (testcase
 
- '((t_num class numeric)
-   (t_any class any))
+ '((t_num . (class numeric))
+   (t_any . (class any)))
 
  "A1"
 
