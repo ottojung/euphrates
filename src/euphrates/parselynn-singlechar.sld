@@ -78,8 +78,7 @@
           or
           quote
           string->list
-          string?
-          when))
+          string?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

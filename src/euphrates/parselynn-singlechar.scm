@@ -97,7 +97,8 @@
        (define args (labelinglogic:expression:args expr))
        (define token-value (assoc-or class tokens-alist #f))
 
-       (when (member type (list 'or 'constant))
+       (cond
+        ((equal? type 'or)
          (cond
           ((string? token-value)
            (let ()
@@ -109,7 +110,7 @@
           (else
            (let ()
              (define rule (cons class (map list args)))
-             (stack-push! additional-grammar-rules/stack rule))))))
+             (stack-push! additional-grammar-rules/stack rule)))))))
 
      (labelinglogic:model:bindings
       renamed-model)))
