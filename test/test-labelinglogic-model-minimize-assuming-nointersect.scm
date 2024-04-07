@@ -173,6 +173,7 @@
    (t_fn (or t_8 t_3 uid_3 uid_5 uid_1 uid_2 uid_4))
    (t_3 (= #\3))
    (t_8 (= #\8))
+
    (uid_1 (r7rs char-upper-case?))
    (uid_2 (r7rs char-lower-case?))
    (uid_3 (and (r7rs char-numeric?)
