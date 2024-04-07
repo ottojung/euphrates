@@ -7,7 +7,7 @@
    lexer-model
    )
 
-  parselynn/singlechar-struct?
+  parselynn/singlechar?
 
   (additional-grammar-rules
    parselynn/singlechar:additional-grammar-rules)
