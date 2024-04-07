@@ -69,22 +69,26 @@
   (define categories/stack
     (stack-make))
 
+  (define (add-grammar-rule! class expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
+    (stack-push! additional-grammar-rules/singletons/stack
+                 (cons class (map list args))))
+
   (labelinglogic:model:foreach-expression
    (lambda (class predicate)
-     (lambda (predicate)
-       (define type
-         (labelinglogic:expression:type predicate))
-       (define args
-         (labelinglogic:expression:args predicate))
+     (lambda (expr)
+       (define type (labelinglogic:expression:type expr))
+       (define args (labelinglogic:expression:args expr))
 
        (cond
         ((equal? type '=)
          (hashmap-set! singleton-map (car args) class))
         ((equal? type 'or)
-         (stack-push! additional-grammar-rules/singletons/stack
-                      (cons class (map list args))))
+         (add-grammar-rule! class expr))
         ((member type (list 'and 'r7rs))
-         (stack-push! categories/stack (list class predicate)))
+         (stack-push! categories/stack (list class expr)))
         (else
          (raisu 'uknown-expr-type type args)))))
 
