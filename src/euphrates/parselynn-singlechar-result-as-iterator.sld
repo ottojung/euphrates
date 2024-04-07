@@ -3,7 +3,6 @@
   (euphrates
     parselynn-singlechar-result-as-iterator)
   (export parselynn/singlechar-result:as-iterator)
-  (import (only (euphrates hashmap) hashmap-ref))
   (import
     (only (euphrates
             labelinglogic-make-nondet-descriminator)

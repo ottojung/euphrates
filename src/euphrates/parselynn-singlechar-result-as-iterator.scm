@@ -76,7 +76,7 @@
     (make-lexical-token category location c))
 
   (define desc
-    (labelinglogic:make-nondet-descriminator categories))
+    (labelinglogic:make-nondet-descriminator lexer-model))
 
   (define (desc1 input)
     (define all (desc input))
@@ -87,8 +87,7 @@
     (if (eof-object? c) '*eoi*
         (let ()
           (define category
-            (or (hashmap-ref singleton-map c #f)
-                (desc1 c)
+            (or (desc1 c)
                 (raisu* :from "make-parselynn/irregex-factory"
                         :type 'unrecognized-character
                         :message "Encountered a character that is not handled by any of the grammar rules"
