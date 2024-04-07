@@ -892,19 +892,20 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_num class numeric)
-;;    (t_any class any))
+ '((t_num class numeric)
+   (t_any class any))
 
-;;  "A1"
+ "A1"
 
-;;  '(#(uid_1 #\A 0 1 1 1)
-;;    #(t_num #\1 0 2 2 1))
+ '(#(uid_1 #\A 0 1 1 1)
+   #(t_num #\1 0 2 2 1))
 
-;;  '((t_any (t_num) (c_any))
-;;    (t_num (c_numeric)))
-;;  )
+ '((t_any (t_num) (c_any))
+   (t_num (c_numeric)))
+
+ )
 
 
 
