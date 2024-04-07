@@ -943,7 +943,14 @@
 
  '(#(t_A #\A 0 1 1 1))
 
- '((t_any (t_A) (c_any)))
+ '((t_any (uid_1)
+          (t_A)
+          (uid_2)
+          (uid_3)
+          (uid_4)
+          (uid_5)
+          (uid_6)))
+
  )
 
 
