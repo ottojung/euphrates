@@ -996,7 +996,7 @@
  '(#(t_alnum #\A 0 1 1 1)
    #(t_alnum #\1 0 2 2 1))
 
- '((t_alnum (c_alphanum)))
+ '((t_alnum (uid_1) (uid_2) (uid_3) (uid_4)))
 
  )
 
