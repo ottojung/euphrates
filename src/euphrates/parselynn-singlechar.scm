@@ -48,7 +48,7 @@
      (map labelinglogic:binding:name bindings)))
 
   (define opt-model
-    (labelinglogic:model:minimize/assuming-nointersect
+    (labelinglogic:model:to-minimal-dnf/assuming-nointersect
      exported-names/set full-model))
 
   (debugs opt-model)
