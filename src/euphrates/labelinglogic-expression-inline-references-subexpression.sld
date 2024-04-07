@@ -5,9 +5,6 @@
   (export
     labelinglogic:expression:inline-references/subexpression)
   (import
-    (only (euphrates labelinglogic-expression-args)
-          labelinglogic:expression:args))
-  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
