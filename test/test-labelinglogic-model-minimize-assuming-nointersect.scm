@@ -68,14 +68,14 @@
    )
 
  :expected
- '((t_an (or t_3 uid_3 uid_4))
-   (t_bn (or t_3 uid_3 uid_1))
+ '((t_an (or t_3 uid_1 uid_4))
+   (t_bn (or t_3 uid_1 uid_3))
    (t_3 (= #\9))
-   (uid_1 (= #\3))
+   (uid_1 (and uid_2 uid_5 uid_6 uid_7))
    (uid_2 (r7rs char-numeric?))
-   (uid_3 (and uid_2 uid_5 uid_6 uid_7))
+   (uid_3 (= #\3))
    (uid_4 (= #\4))
-   (uid_5 (not uid_1))
+   (uid_5 (not uid_3))
    (uid_6 (not uid_4))
    (uid_7 (not t_3)))
 
