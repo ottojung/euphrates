@@ -134,7 +134,7 @@
    )
 
  :bindings
- `((t_bn (and alphanum (not (= #\7))))
+ `((t_an (and alphanum (not (= #\5))))
    (t_cn (and (not (= #\5)) alphanum))
    )
 
