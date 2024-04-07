@@ -12,12 +12,6 @@
   (define input
     (parselynn/singlechar-result-struct:input result))
 
-  ;; (define singleton-map
-  ;;   (parselynn/singlechar-struct:singleton-map this))
-
-  ;; (define categories
-  ;;   (parselynn/singlechar-struct:categories this))
-
   (define lexer-model
     (parselynn/singlechar:lexer-model this))
 
