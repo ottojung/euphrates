@@ -10,13 +10,7 @@
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
   (import
-    (only (scheme base)
-          begin
-          cond
-          define
-          else
-          lambda
-          not))
+    (only (scheme base) begin define if lambda not))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

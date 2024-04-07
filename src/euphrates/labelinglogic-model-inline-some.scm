@@ -5,10 +5,9 @@
   (labelinglogic:model:map-expressions
    (lambda (class expr)
      (lambda (expr)
-       (cond
-        ((predicate class expr)
-         (labelinglogic:expression:inline-some
-          (lambda (expr) (not (hashset-has? exported-names/set expr)))
-          model expr))
-        (else expr))))
+       (if (predicate class expr)
+           (labelinglogic:expression:inline-some
+            (lambda (expr) (not (hashset-has? exported-names/set expr)))
+            model expr)
+           expr)))
    model))
