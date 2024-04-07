@@ -1037,7 +1037,7 @@
 
 
 
-(testcase
+(test-error
 
  '((t_0 . #\0)
    (t_1 . #\1)
@@ -1048,6 +1048,7 @@
  'unrecognized-character
 
  )
+
 
 ;; (test-error
 
