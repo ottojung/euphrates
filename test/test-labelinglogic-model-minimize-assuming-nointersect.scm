@@ -134,8 +134,8 @@
    )
 
  :bindings
- `((t_an (and numeric (not (= #\5))))
-   (t_cn (and (not (= #\5)) numeric))
+ `((t_an (and alphanum (not (= #\5))))
+   (t_cn (and (not (= #\5)) alphanum))
    )
 
  :expected
