@@ -17,6 +17,9 @@
     (only (euphrates parselynn-singlechar-run-on-string)
           parselynn/singlechar:run-on-string))
   (import
+    (only (euphrates parselynn-singlechar-struct)
+          parselynn/singlechar:additional-grammar-rules))
+  (import
     (only (euphrates parselynn-singlechar)
           make-parselynn/singlechar))
   (import
