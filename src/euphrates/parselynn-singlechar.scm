@@ -86,9 +86,6 @@
       ((equal? type 'or)
        (stack-push! additional-grammar-rules/singletons/stack
                     (cons class (map list args))))
-      ((equal? type 'tuple)
-       (stack-push! additional-grammar-rules/singletons/stack
-                    (cons class (list args))))
       ((member type (list 'and 'r7rs))
        (stack-push! categories/stack binding))
       (else
