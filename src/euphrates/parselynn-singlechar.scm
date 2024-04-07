@@ -66,6 +66,9 @@
   (define additional-grammar-rules/singletons/stack
     (stack-make))
 
+  (define todo-strings/stack
+    (stack-make))
+
   (define categories/stack
     (stack-make))
 
@@ -76,16 +79,15 @@
       (assoc-or class tokens-alist
                 (raisu 'impossible-172371273 class tokens-alist)))
 
-    (debugs token-value)
+    (cond
+     ((string? token-value)
+      (stack-push! todo-strings/stack (list class expr token-value)))
+     (else
+      (let ()
+        (define rule
+          (cons class (map list args)))
+        (stack-push! additional-grammar-rules/singletons/stack rule)))))
 
-    (define rule
-      (cond
-       ((string? token-value)
-        (cons class (map list args)))
-       (else
-        (cons class (map list args)))))
-
-    (stack-push! additional-grammar-rules/singletons/stack rule))
 
   (labelinglogic:model:foreach-expression
    (lambda (class predicate)
