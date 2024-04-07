@@ -934,16 +934,17 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_A . "A") (t_any class any))
+ '((t_A . "A")
+   (t_any . (class any)))
 
-;;  "A"
+ "A"
 
-;;  '(#(t_A #\A 0 1 1 1))
+ '(#(t_A #\A 0 1 1 1))
 
-;;  '((t_any (t_A) (c_any)))
-;;  )
+ '((t_any (t_A) (c_any)))
+ )
 
 
 
