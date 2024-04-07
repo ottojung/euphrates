@@ -8,10 +8,6 @@
   (import (only (euphrates hashset) make-hashset))
   (import
     (only (euphrates
-            parselynn-singlechar-additional-grammar-rules)
-          parselynn/singlechar:additional-grammar-rules))
-  (import
-    (only (euphrates
             parselynn-singlechar-result-as-iterator)
           parselynn/singlechar-result:as-iterator))
   (import
