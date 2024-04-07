@@ -1086,6 +1086,21 @@
  )
 
 
+
+(test-error
+
+ '((t_0 . #\0)
+   (t_1 . #\1)
+   (t_0 . #\3)
+   )
+
+ "01301"
+
+ 'dupl1
+
+ )
+
+
 ;; ;; 13. All Characters Unrecognized
 ;; (test-error `((t_A . "A")) "BCD" 'unrecognized-character)
 
