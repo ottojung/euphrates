@@ -42,10 +42,6 @@
             labelinglogic-model-factor-dnf-clauses)
           labelinglogic:model:factor-dnf-clauses))
   (import
-    (only (euphrates
-            labelinglogic-model-minimize-assuming-nointersect)
-          labelinglogic:model:minimize/assuming-nointersect))
-  (import
     (only (euphrates parselynn-singlechar-model)
           parselynn-singlechar-model))
   (import
