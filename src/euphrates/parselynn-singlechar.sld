@@ -34,6 +34,9 @@
     (only (euphrates labelinglogic-model-check)
           labelinglogic:model:check))
   (import
+    (only (euphrates labelinglogic-model-evaluate-first)
+          labelinglogic:model:evaluate/first))
+  (import
     (only (euphrates
             labelinglogic-model-to-minimal-dnf-assuming-nointersect)
           labelinglogic:model:to-minimal-dnf/assuming-nointersect))
