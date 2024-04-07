@@ -1,13 +1,11 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (labelinglogic:model:inline-some predicate exported-names/set model)
+(define (labelinglogic:model:inline-some predicate model)
   (labelinglogic:model:map-expressions
    (lambda (class expr)
      (lambda (expr)
        (if (predicate class expr)
-           (labelinglogic:expression:inline-some
-            (lambda (expr) (not (hashset-has? exported-names/set expr)))
-            model expr)
+           (labelinglogic:expression:inline-references model expr)
            expr)))
    model))
