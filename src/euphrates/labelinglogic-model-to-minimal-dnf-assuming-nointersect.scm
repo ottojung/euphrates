@@ -34,7 +34,7 @@
   (define inlined-model-2
     (labelinglogic:model:inline-dnf-clauses factored-model))
 
-  (debugs inlined-model-model)
+  (debugs inlined-model-2)
 
   (define reduced-model
     (labelinglogic:model:reduce-to-names exported-names/set inlined-model-2))
