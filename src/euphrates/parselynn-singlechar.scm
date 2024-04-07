@@ -104,10 +104,10 @@
         ((member type (list 'and 'r7rs))
          (stack-push! categories/stack (list class expr)))
         (else
-         (raisu 'uknown-expr-type type args)))))
+         (raisu 'uknown-expr-type type args))))
 
-    (labelinglogic:model:bindings
-     renamed-model))
+     (labelinglogic:model:bindings
+      renamed-model)))
 
   (define categories
     (stack->list categories/stack))
