@@ -791,18 +791,19 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_num class numeric))
+ '((t_num . (class numeric)))
 
-;;  "123"
+ "123"
 
-;;  '(#(t_num #\1 0 1 1 1)
-;;    #(t_num #\2 0 2 2 1)
-;;    #(t_num #\3 0 3 3 1))
+ '(#(t_num #\1 0 1 1 1)
+   #(t_num #\2 0 2 2 1)
+   #(t_num #\3 0 3 3 1))
 
-;;  '()
-;;  )
+ '()
+
+ )
 
 
 
