@@ -776,17 +776,18 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_AB . "AB"))
+ '((t_AB . "AB"))
 
-;;  "AB"
+ "AB"
 
-;;  '(#(uid_1 #\A 0 1 1 1)
-;;    #(uid_2 #\B 0 2 2 1))
+ '(#(uid_1 #\A 0 1 1 1)
+   #(uid_2 #\B 0 2 2 1))
 
-;;  '((t_AB (uid_1 uid_2)))
-;;  )
+ '((t_AB (uid_1 uid_2)))
+
+ )
 
 
 
