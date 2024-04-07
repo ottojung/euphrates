@@ -17,6 +17,10 @@
           labelinglogic:model:inline-all))
   (import
     (only (euphrates
+            labelinglogic-model-inline-dnf-clauses)
+          labelinglogic:model:inline-dnf-clauses))
+  (import
+    (only (euphrates
             labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
           labelinglogic:model:latticize-ands-assuming-nointersect-dnf))
   (import
