@@ -981,7 +981,7 @@
    #(t_alpha #\B 0 2 2 1)
    #(t_alpha #\C 0 3 3 1))
 
- '((t_alpha (c_alphabetic)))
+ '((t_alpha (uid_1) (uid_2) (uid_3)))
 
  )
 
