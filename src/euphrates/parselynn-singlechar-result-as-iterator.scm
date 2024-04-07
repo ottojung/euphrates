@@ -19,7 +19,7 @@
   ;;   (parselynn/singlechar-struct:categories this))
 
   (define lexer-model
-    (parselynn/singlechar-struct:lexer-model this))
+    (parselynn/singlechar:lexer-model this))
 
   (define offset 0)
   (define linenum 0)

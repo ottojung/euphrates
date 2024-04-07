@@ -14,7 +14,7 @@
           parselynn/singlechar-result-struct:lexer))
   (import
     (only (euphrates parselynn-singlechar-struct)
-          parselynn/singlechar-struct:lexer-model))
+          parselynn/singlechar:lexer-model))
   (import
     (only (euphrates parselynn) make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
