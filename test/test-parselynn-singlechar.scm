@@ -987,17 +987,18 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_alnum class alphanum))
+ '((t_alnum . (class alphanum)))
 
-;;  "A1"
+ "A1"
 
-;;  '(#(t_alnum #\A 0 1 1 1)
-;;    #(t_alnum #\1 0 2 2 1))
+ '(#(t_alnum #\A 0 1 1 1)
+   #(t_alnum #\1 0 2 2 1))
 
-;;  '((t_alnum (c_alphanum)))
-;;  )
+ '((t_alnum (c_alphanum)))
+
+ )
 
 
 
