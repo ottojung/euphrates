@@ -13,8 +13,9 @@
     (only (scheme base)
           begin
           define
-          equal?
           lambda
+          list
+          member
           not
           or
           quote))

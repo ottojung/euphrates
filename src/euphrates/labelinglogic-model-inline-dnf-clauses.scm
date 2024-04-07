@@ -5,5 +5,5 @@
   (labelinglogic:model:inline-some
    (lambda (class expr)
      (define type (labelinglogic:expression:type expr))
-     (not (equal? type 'or)))
+     (not (member type (list 'or 'constant))))
    model))
