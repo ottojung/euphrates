@@ -971,18 +971,19 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_alpha class alphabetic))
+ '((t_alpha . (class alphabetic)))
 
-;;  "ABC"
+ "ABC"
 
-;;  '(#(t_alpha #\A 0 1 1 1)
-;;    #(t_alpha #\B 0 2 2 1)
-;;    #(t_alpha #\C 0 3 3 1))
+ '(#(t_alpha #\A 0 1 1 1)
+   #(t_alpha #\B 0 2 2 1)
+   #(t_alpha #\C 0 3 3 1))
 
-;;  '((t_alpha (c_alphabetic)))
-;;  )
+ '((t_alpha (c_alphabetic)))
+
+ )
 
 
 
