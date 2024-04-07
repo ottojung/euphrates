@@ -100,8 +100,6 @@
        (cond
         ((equal? type 'constant)
          (let ()
-           (define letters (string->list token-value))
-           (define tokens (map (lambda (c) (labelinglogic:model:evaluate/first lexer-model c)) letters))
            (define rule (cons class (list tokens)))
            (stack-push! additional-grammar-rules/stack rule)))
 
