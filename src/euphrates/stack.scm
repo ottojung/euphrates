@@ -68,3 +68,6 @@
   (let ((lst (stack-lst S)))
     (set-stack-lst! S '())
     lst))
+
+(define (stack-copy S)
+  (list->stack (stack->list S)))
