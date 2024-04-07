@@ -15,7 +15,7 @@
           (list '= value))
 
          ((string? value)
-          (cons 'tuple (map loop (string->list value))))
+          (cons 'or (map loop (string->list value))))
 
          ((equal? 'class (car value))
           (cadr value))
