@@ -83,7 +83,7 @@
        (stack-push! additional-grammar-rules/singletons/stack
                     (cons class (map list args))))
       ((member type (list 'and 'r7rs))
-       (stack-push! categories/stack binding))
+       (stack-push! categories/stack (list class predicate)))
       (else
        (raisu 'uknown-expr-type type args))))
 
