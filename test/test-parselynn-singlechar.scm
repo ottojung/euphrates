@@ -840,19 +840,20 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_A . "A") (t_AB . "AB") (t_num class numeric))
+ '((t_A . "A") (t_AB . "AB") (t_num class numeric))
 
-;;  "AAB1"
+ "AAB1"
 
-;;  '(#(t_A #\A 0 1 1 1)
-;;    #(t_A #\A 0 2 2 1)
-;;    #(uid_1 #\B 0 3 3 1)
-;;    #(t_num #\1 0 4 4 1))
+ '(#(t_A #\A 0 1 1 1)
+   #(t_A #\A 0 2 2 1)
+   #(uid_1 #\B 0 3 3 1)
+   #(t_num #\1 0 4 4 1))
 
-;;  '((t_AB (t_A uid_1)))
-;;  )
+ '((t_AB (t_A uid_1)))
+
+ )
 
 
 
