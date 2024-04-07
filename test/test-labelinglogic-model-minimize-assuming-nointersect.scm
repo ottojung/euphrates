@@ -78,20 +78,6 @@
    (uid_2 (= #\3))
    (uid_3 (= #\4)))
 
- ;; '((t_an (or (= #\9)
- ;;             (and (r7rs char-numeric?)
- ;;                  (not (= #\3))
- ;;                  (not (= #\4))
- ;;                  (not (= #\9)))
- ;;             (= #\4)))
-
- ;;   (t_bn (or (= #\9)
- ;;             (and (r7rs char-numeric?)
- ;;                  (not (= #\3))
- ;;                  (not (= #\4))
- ;;                  (not (= #\9)))
- ;;             (= #\3)))
-
  )
 
 
@@ -117,26 +103,17 @@
    )
 
  :expected
- '((t_an (or (= #\9)
-             (= #\8)
-             (and (r7rs char-numeric?)
-                  (not (= #\3))
-                  (not (= #\4))
-                  (not (= #\9))
-                  (not (= #\8)))
-             (= #\4)))
-
-   (t_bn (or (= #\9)
-             (= #\8)
-             (and (r7rs char-numeric?)
-                  (not (= #\3))
-                  (not (= #\4))
-                  (not (= #\9))
-                  (not (= #\8)))
-             (= #\3)))
-
+ '((t_an (or t_3 t_8 uid_1 uid_3))
+   (t_bn (or t_3 t_8 uid_1 uid_2))
    (t_3 (= #\9))
-   (t_8 (= #\8)))
+   (t_8 (= #\8))
+   (uid_1 (and (r7rs char-numeric?)
+               (not (= #\3))
+               (not (= #\4))
+               (not (= #\9))
+               (not (= #\8))))
+   (uid_2 (= #\3))
+   (uid_3 (= #\4)))
 
  )
 
