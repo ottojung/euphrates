@@ -98,6 +98,15 @@
        (define token-value (assoc-or class tokens-alist #f))
 
        (cond
+        ((equal? type 'constant)
+         (cond
+          ((string? token-value)
+           (let ()
+             (define letters (string->list token-value))
+             (define tokens (map (lambda (c) (labelinglogic:model:evaluate/first lexer-model c)) letters))
+             (define rule (cons class (list tokens)))
+             (stack-push! additional-grammar-rules/stack rule)))
+
         ((equal? type 'or)
          (cond
           ((string? token-value)
