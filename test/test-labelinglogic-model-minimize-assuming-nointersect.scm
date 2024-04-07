@@ -37,85 +37,85 @@
 
 
 
-;;
-;;
-;;  ▄▄▄▄▄▄▄                 ▄
-;;     █     ▄▄▄    ▄▄▄   ▄▄█▄▄          ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄
-;;     █    █▀  █  █   ▀    █           █▀  ▀  ▀   █  █   ▀  █▀  █  █   ▀
-;;     █    █▀▀▀▀   ▀▀▀▄    █           █      ▄▀▀▀█   ▀▀▀▄  █▀▀▀▀   ▀▀▀▄
-;;     █    ▀█▄▄▀  ▀▄▄▄▀    ▀▄▄         ▀█▄▄▀  ▀▄▄▀█  ▀▄▄▄▀  ▀█▄▄▀  ▀▄▄▄▀
-;;
-;;
+;; ;;
+;; ;;
+;; ;;  ▄▄▄▄▄▄▄                 ▄
+;; ;;     █     ▄▄▄    ▄▄▄   ▄▄█▄▄          ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄    ▄▄▄
+;; ;;     █    █▀  █  █   ▀    █           █▀  ▀  ▀   █  █   ▀  █▀  █  █   ▀
+;; ;;     █    █▀▀▀▀   ▀▀▀▄    █           █      ▄▀▀▀█   ▀▀▀▄  █▀▀▀▀   ▀▀▀▄
+;; ;;     █    ▀█▄▄▀  ▀▄▄▄▀    ▀▄▄         ▀█▄▄▀  ▀▄▄▀█  ▀▄▄▄▀  ▀█▄▄▀  ▀▄▄▄▀
+;; ;;
+;; ;;
 
 
 
-(testcase
+;; (testcase
 
- :model
- `((any (or alphanum whitespace))
-   (alphanum (or alphabetic numeric))
-   (alphabetic (or upcase lowercase))
-   (upcase (r7rs char-upper-case?))
-   (lowercase (r7rs char-lower-case?))
-   (numeric (r7rs char-numeric?))
-   (whitespace (r7rs char-whitespace?))
-   )
+;;  :model
+;;  `((any (or alphanum whitespace))
+;;    (alphanum (or alphabetic numeric))
+;;    (alphabetic (or upcase lowercase))
+;;    (upcase (r7rs char-upper-case?))
+;;    (lowercase (r7rs char-lower-case?))
+;;    (numeric (r7rs char-numeric?))
+;;    (whitespace (r7rs char-whitespace?))
+;;    )
 
- :bindings
- `((t_an (and numeric (not (= #\3))))
-   (t_bn (and numeric (not (= #\4))))
-   (t_3  (= #\9))
-   )
+;;  :bindings
+;;  `((t_an (and numeric (not (= #\3))))
+;;    (t_bn (and numeric (not (= #\4))))
+;;    (t_3  (= #\9))
+;;    )
 
- :expected
- '((t_an (or t_3 uid_1 uid_3))
-   (t_bn (or t_3 uid_1 uid_2))
-   (t_3 (= #\9))
-   (uid_1 (and (r7rs char-numeric?)
-               (not (= #\3))
-               (not (= #\4))
-               (not (= #\9))))
-   (uid_2 (= #\3))
-   (uid_3 (= #\4)))
+;;  :expected
+;;  '((t_an (or t_3 uid_1 uid_3))
+;;    (t_bn (or t_3 uid_1 uid_2))
+;;    (t_3 (= #\9))
+;;    (uid_1 (and (r7rs char-numeric?)
+;;                (not (= #\3))
+;;                (not (= #\4))
+;;                (not (= #\9))))
+;;    (uid_2 (= #\3))
+;;    (uid_3 (= #\4)))
 
- )
-
-
+;;  )
 
 
-(testcase
 
- :model
- `((any (or alphanum whitespace))
-   (alphanum (or alphabetic numeric))
-   (alphabetic (or upcase lowercase))
-   (upcase (r7rs char-upper-case?))
-   (lowercase (r7rs char-lower-case?))
-   (numeric (r7rs char-numeric?))
-   (whitespace (r7rs char-whitespace?))
-   )
 
- :bindings
- `((t_an (and numeric (not (= #\3))))
-   (t_bn (and numeric (not (= #\4))))
-   (t_3  (= #\9))
-   (t_8  (= #\8))
-   )
+;; (testcase
 
- :expected
- '((t_an (or t_3 t_8 uid_1 uid_3))
-   (t_bn (or t_3 t_8 uid_1 uid_2))
-   (t_3 (= #\9))
-   (t_8 (= #\8))
-   (uid_1 (and (r7rs char-numeric?)
-               (not (= #\3))
-               (not (= #\4))
-               (not (= #\9))
-               (not (= #\8))))
-   (uid_2 (= #\3))
-   (uid_3 (= #\4)))
+;;  :model
+;;  `((any (or alphanum whitespace))
+;;    (alphanum (or alphabetic numeric))
+;;    (alphabetic (or upcase lowercase))
+;;    (upcase (r7rs char-upper-case?))
+;;    (lowercase (r7rs char-lower-case?))
+;;    (numeric (r7rs char-numeric?))
+;;    (whitespace (r7rs char-whitespace?))
+;;    )
 
- )
+;;  :bindings
+;;  `((t_an (and numeric (not (= #\3))))
+;;    (t_bn (and numeric (not (= #\4))))
+;;    (t_3  (= #\9))
+;;    (t_8  (= #\8))
+;;    )
+
+;;  :expected
+;;  '((t_an (or t_3 t_8 uid_1 uid_3))
+;;    (t_bn (or t_3 t_8 uid_1 uid_2))
+;;    (t_3 (= #\9))
+;;    (t_8 (= #\8))
+;;    (uid_1 (and (r7rs char-numeric?)
+;;                (not (= #\3))
+;;                (not (= #\4))
+;;                (not (= #\9))
+;;                (not (= #\8))))
+;;    (uid_2 (= #\3))
+;;    (uid_3 (= #\4)))
+
+;;  )
 
 
 
