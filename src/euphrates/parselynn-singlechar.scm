@@ -81,9 +81,9 @@
     (define rule
       (cond
        ((string? token-value)
-        (cons class (map list args))))
-      (else
-       (cons class (map list args))))
+        (cons class (map list args)))
+       (else
+        (cons class (map list args)))))
 
     (stack-push! additional-grammar-rules/singletons/stack rule))
 
