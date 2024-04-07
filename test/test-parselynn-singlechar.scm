@@ -807,17 +807,19 @@
 
 
 
-;; (testcase
+(testcase
 
-;;  '((t_A . "A") (t_num class numeric))
+ '((t_A . "A")
+   (t_num . (class numeric)))
 
-;;  "A1"
+ "A1"
 
-;;  '(#(t_A #\A 0 1 1 1)
-;;    #(t_num #\1 0 2 2 1))
+ '(#(t_A #\A 0 1 1 1)
+   #(t_num #\1 0 2 2 1))
 
-;;  '()
-;;  )
+ '()
+
+ )
 
 
 
