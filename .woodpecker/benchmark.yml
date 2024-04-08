@@ -3,11 +3,13 @@ steps:
   build:
     image: alpine
     commands:
-      - apk add --no-cache $SCHEME make git
+      - apk add --update --no-cache $SCHEME make git openssh-client
       - make benchmark
       - find dist/benchmarks -type f -exec echo {} \; -exec cat {} \;
+      - sh scripts/update-benchmarks-git-branch.sh
     when:
       branch: [master]
+    secrets: [ REPOLOGKEY ]
 
 matrix:
   SCHEME:
