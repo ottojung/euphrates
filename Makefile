@@ -18,7 +18,7 @@ compilation-test:
 one:
 	$(GUILE) $(TARGET)
 
-benchmark: build
+benchmark:
 	sh scripts/run-benchmarks.sh
 
 cleanrun: | clean one

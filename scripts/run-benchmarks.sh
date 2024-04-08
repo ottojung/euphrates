@@ -6,8 +6,7 @@ export EUPHRATES_REVISION_ID="$(git rev-parse HEAD)"
 export EUPHRATES_REVISION_DATE="$(git log -n 1 --format=%cd --date=iso8601-strict)"
 export EUPHRATES_REVISION_TITLE="$(git log -n 1 --format=%s)"
 
-NAMESPACE=$(git log -n 1 --format=%cd --date=iso8601-strict | tr : x)
-DIR="dist/benchmarks/$NAMESPACE"
+DIR="dist/benchmarks"
 GUILE="guile --r7rs -L $PWD/src -L $PWD/test"
 FILES=$(ls "$PWD/test/benchmark-"*".sld")
 TESTCOUNT=$(echo "$FILES" | wc -l)
