@@ -3,18 +3,13 @@
   (euphrates parselynn-simple-run)
   (export parselynn/simple:run)
   (import
-    (only (euphrates parselynn-run-with-error-handler)
-          parselynn-run/with-error-handler))
+    (only (euphrates
+            parselynn-simple-run-with-error-handler)
+          parselynn/simple:run/with-error-handler))
+  (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stringf) stringf))
   (import
-    (only (euphrates parselynn-simple-postprocess)
-          parselynn/simple:postprocess))
-  (import
-    (only (euphrates parselynn-simple-initialize-lexer)
-          parselynn/simple:initialize-lexer))
-  (import
-    (only (euphrates parselynn-simple-struct)
-          parselynn/simple-struct:backend-parser))
-  (import (only (scheme base) begin define))
+    (only (scheme base) begin define list quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

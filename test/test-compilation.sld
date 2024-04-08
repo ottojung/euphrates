@@ -870,10 +870,6 @@
           labelinglogic:expression:optimize/assuming-nointersect))
   (import
     (only (euphrates
-            labelinglogic-expression-optimize-or-assuming-nointersect-dnf)
-          labelinglogic:expression:optimize/or-assuming-nointersect-dnf))
-  (import
-    (only (euphrates
             labelinglogic-expression-optimize-r7rs)
           labelinglogic:expression:optimize/r7rs))
   (import
@@ -1041,10 +1037,6 @@
   (import
     (only (euphrates labelinglogic-model-replace-constants)
           labelinglogic:model:replace-constants))
-  (import
-    (only (euphrates
-            labelinglogic-model-smallest-encompasing-set)
-          labelinglogic:model:smallest-encompasing-set))
   (import
     (only (euphrates labelinglogic-model-sugarify)
           labelinglogic:model:sugarify))
@@ -2915,7 +2907,8 @@
           vector-random-shuffle!))
   (import
     (only (euphrates with-benchmark-simple)
-          with-benchmark/simple))
+          with-benchmark/simple
+          with-benchmark/timestamp))
   (import
     (only (euphrates with-critical) with-critical))
   (import
