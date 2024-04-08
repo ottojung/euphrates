@@ -1040,3 +1040,58 @@
 
  "  83712    + 371673    "
  '(expr "83712" "+" "371673"))
+
+
+
+
+
+(check-parser-result
+ (parselynn/simple
+  `(:grammar
+    ( expr = expr add expr / term
+      add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
+      term = id / num
+      id = idstart idcont / idstart
+      idstart = (class alphabetic)
+      idcont = idchar idcont / idchar
+      idchar = (class (and alphanum (not (= #\0))))
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+    :inline (num id term add)
+    :join (num id)
+    :flatten (term expr)
+    ;; :skip (space)
+
+    ))
+
+ "42+x-y*42+x-y*42+x-y*42+x-y*42+x-y*42+x-y"
+ '(expr "42" "+" "x" "-" "y" "*" "42" "+" "x" "-" "y" "*" "42" "+" "x" "-" "y" "*" "42" "+" "x" "-" "y" "*" "42" "+" "x" "-" "y" "*" "42" "+" "x" "-" "y"))
+
+
+
+
+(check-parser-result
+ (parselynn/simple
+  `(:grammar
+    ( expr = expr add expr / term / space expr / expr space
+      add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
+      term = id / num
+      id = idstart idcont / idstart
+      idstart = (class alphabetic)
+      idcont = idchar idcont / idchar
+      idchar = (class (and alphanum (not (= #\0))))
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+      space = (class whitespace)
+      )
+
+    :inline (num id term add)
+    :join (num id)
+    :flatten (term expr)
+    :skip (space)
+
+    ))
+
+ " 42 + x2 -     y* 59 + x  "
+ '(expr "42" "+" "x2" "-" "y" "*" "59" "+" "x"))

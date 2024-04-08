@@ -30,6 +30,7 @@
           /
           <
           =
+          and
           begin
           car
           case
@@ -41,6 +42,8 @@
           lambda
           let
           make-string
+          not
+          or
           pair?
           procedure?
           quasiquote

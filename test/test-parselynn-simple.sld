@@ -20,6 +20,7 @@
           /
           =
           _
+          and
           apply
           begin
           define
@@ -28,6 +29,8 @@
           let
           list
           list?
+          not
+          or
           quasiquote
           quote
           string-append

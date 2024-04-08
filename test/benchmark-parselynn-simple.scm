@@ -68,6 +68,51 @@
 
 
 
+(define (repeating-template-2 driver load? seq-len n-runs)
+  (define _8123 (assert= driver "lr"))
+  (define _4632 (assert= load? #f))
+
+  (define input
+    (let ()
+      (define count 0)
+      (define constant-s (make-string seq-len))
+      (define normal-s
+        (string-map
+         (lambda (c)
+           (set! count (+ 1 count))
+           (case (remainder count 7)
+             ((1) #\4)
+             ((2) #\2)
+             ((3) #\+)
+             ((4) #\x)
+             ((5) #\-)
+             ((6) #\y)
+             ((0) #\*)))
+         constant-s))
+      normal-s))
+
+  (with-benchmark/timestamp "constructed input")
+
+  (define parser
+    (parselynn/simple
+     `(:grammar
+       ( expr = expr add expr / term
+         add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
+         term = id / num
+         id = idstart idcont / idstart
+         idstart = (class alphabetic)
+         idcont = idchar idcont / idchar
+         idchar = (class (and alphanum (not (= #\0))))
+         num = dig num / dig
+         dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+       :driver ,(string->symbol driver))))
+
+  (with-benchmark/timestamp "constructed parser")
+  (run/generic parser input n-runs))
+
+
+
 ;;;;;
 ;;;;;
 ;;;;;
@@ -86,3 +131,9 @@
  :name "benchmark-parselynn-simple-1"
  :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000))
  (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-2"
+ :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000))
+ (repeating-template-2 driver load? seq-len n-runs))
