@@ -193,4 +193,4 @@
     (assert= 'uid_4 (unique-identifier->symbol u1))
     (assert= 'uid_5 (unique-identifier->symbol u2))
     (assert= 'uid_2 (unique-identifier->symbol u3))
-    (assert= 'uid_7 (unique-identifier->symbol u4)))))
+    (assert= 'uid_6 (unique-identifier->symbol u4)))))

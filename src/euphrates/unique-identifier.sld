@@ -15,8 +15,11 @@
           make-hashmap))
   (import
     (only (euphrates hashset)
+          hashset-add!
           hashset-foreach
-          hashset?))
+          hashset-has?
+          hashset?
+          make-hashset))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -48,7 +51,8 @@
           unless
           vector
           vector-ref
-          vector-set!))
+          vector-set!
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-1) count)))
     (else (import (only (srfi 1) count))))

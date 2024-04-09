@@ -16,9 +16,11 @@
       (uid:constructor counter))))
 
 
-(define unique-identifier:deserialize/p
+(define unique-identifier:deserialize-taken/p
   (make-parameter #f))
 
+(define unique-identifier:deserialize-existing/p
+  (make-parameter #f))
 
 (define (add-additional H additional)
   (cond
@@ -26,15 +28,13 @@
          (list? additional))
 
     (for-each
-     (lambda (x)
-       (hashmap-set! H (~a x) 'taken))
+     (lambda (x) (hashset-add! H (~a x)))
      additional))
 
    ((hashset? additional)
 
     (hashset-foreach
-     (lambda (x)
-       (hashmap-set! H (~a x) 'taken))
+     (lambda (x) (hashset-add! H (~a x)))
      additional))
 
    (else
@@ -53,12 +53,18 @@
     ((_ additional . bodies)
      (let ()
        (define param
-         (or (unique-identifier:deserialize/p)
+         (or (unique-identifier:deserialize-taken/p)
              (vector 1 (make-hashmap))))
-       (define H (vector-ref param 1))
+       (define taken
+         (let ()
+           (define ex (unique-identifier:deserialize-existing/p))
+           (define current (make-hashset))
+           (when ex (add-additional current ex))
+           (add-additional current additional)
+           current))
 
-       (parameterize ((unique-identifier:deserialize/p param))
-         (add-additional H additional)
+       (parameterize ((unique-identifier:deserialize-taken/p param)
+                      (unique-identifier:deserialize-existing/p taken))
          (let () . bodies))))))
 
 
@@ -72,7 +78,7 @@
 
 
 (define (unique-identifier->string uid)
-  (define p (unique-identifier:deserialize/p))
+  (define p (unique-identifier:deserialize-taken/p))
   (unless p
     (raisu* :from "unique-identifier"
             :type 'must-begin-serialization-first
@@ -80,6 +86,7 @@
                               (~a (quote with-unique-identifier-context)))
             :args (list uid)))
 
+  (define E (unique-identifier:deserialize-existing/p))
   (define H (vector-ref p 1))
 
   (define (tostr id)
@@ -90,7 +97,10 @@
 
   (define (try! count)
     (define str (tostr count))
-    (define current (hashmap-ref H str #f))
+    (define current
+      (or (hashmap-ref H str #f)
+          (hashset-has? E str)))
+
     (if current #f
         (let ()
           (hashmap-set! H id str)
