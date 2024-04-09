@@ -2417,6 +2417,9 @@
           uni-spinlock-lock!
           uni-spinlock-unlock!))
   (import
+    (only (euphrates unique-identifier-to-string-recursive)
+          unique-identifier->string/recursive))
+  (import
     (only (euphrates unique-identifier-to-symbol)
           unique-identifier->symbol))
   (import
