@@ -51,8 +51,22 @@
 (define-syntax with-unique-identifier-context/helper
   (syntax-rules ()
     ((_ additional . bodies)
-     (let ((H (make-hashmap)))
-       (parameterize ((unique-identifier:deserialize/p (vector 0 H)))
+     (let ()
+       (define existing-p
+         (unique-identifier:deserialize/p))
+
+       (define last-free
+         (if existing-p
+             (vector-ref existing-p 0)
+             0))
+
+       (define H
+         (if existing-p
+             (hashmap-copy (vector-ref existing-p 1))
+             (make-hashmap)))
+
+       (parameterize ((unique-identifier:deserialize/p
+                       (vector last-free H)))
          (add-additional H additional)
          (let () . bodies))))))
 
