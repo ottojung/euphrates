@@ -35,6 +35,9 @@
 
   ;; NOTE: this is too specific to test. Let the parser test generated grammar.
   (when expected-additional-rules
+    (unless (equal? expected-additional-rules additional-grammar-rules)
+      (debugs additional-grammar-rules))
+
     (assert= expected-additional-rules additional-grammar-rules))
 
   (define lexer-result
@@ -51,6 +54,9 @@
 
   (define output
     (collect lexer-iterator))
+
+  (unless (equal? output expected-output)
+    (debugs output))
 
   (assert= (length output) (length expected-output))
 
@@ -157,7 +163,6 @@
 
  '()
  )
-
 
 
 (testcase
@@ -413,8 +418,7 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_a (uid_1) (uid_2) (uid_3))
-   (t_x (t_0)
+ '((t_x (t_0)
         (t_1)
         (t_2)
         (t_3)
@@ -426,12 +430,10 @@
         (uid_4)
         (uid_1)
         (uid_2)
-        (uid_3)))
+        (uid_3))
+   (t_a (uid_1) (uid_2) (uid_3)))
 
  )
-
-
-
 
 (testcase
 
@@ -458,7 +460,8 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_x (t_0)
+ '((t_a (uid_1) (uid_2) (uid_3))
+   (t_x (t_0)
         (t_1)
         (t_2)
         (t_3)
@@ -470,8 +473,7 @@
         (uid_4)
         (uid_1)
         (uid_2)
-        (uid_3))
-   (t_a (uid_1) (uid_2) (uid_3)))
+        (uid_3)))
 
  )
 
@@ -503,7 +505,18 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_x (t_0)
+ '((t_a (uid_1) (uid_2) (uid_3))
+   (t_n (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_4))
+   (t_x (t_0)
         (t_1)
         (t_2)
         (t_3)
@@ -515,22 +528,9 @@
         (uid_4)
         (uid_1)
         (uid_2)
-        (uid_3))
-   (t_n (t_0)
-        (t_1)
-        (t_2)
-        (t_3)
-        (t_4)
-        (t_5)
-        (t_6)
-        (t_7)
-        (t_8)
-        (uid_4))
-   (t_a (uid_1) (uid_2) (uid_3)))
+        (uid_3)))
 
  )
-
-
 
 
 (testcase
@@ -560,7 +560,19 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_z (t_0)
+ '((t_x (uid_1 t_3))
+   (t_a (uid_2) (uid_1) (uid_3) (uid_4))
+   (t_n (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_5))
+   (t_z (t_0)
         (t_1)
         (t_2)
         (t_3)
@@ -573,22 +585,9 @@
         (uid_2)
         (uid_1)
         (uid_3)
-        (uid_4))
-   (t_n (t_0)
-        (t_1)
-        (t_2)
-        (t_3)
-        (t_4)
-        (t_5)
-        (t_6)
-        (t_7)
-        (t_8)
-        (uid_5))
-   (t_a (uid_2) (uid_1) (uid_3) (uid_4))
-   (t_x (uid_1 t_3)))
+        (uid_4)))
 
  )
-
 
 
 (testcase
@@ -610,7 +609,7 @@
  "1x371634"
 
  '(#(t_1 #\1 0 1 1 1)
-   #(uid_2 #\x 0 2 2 1)
+   #(uid_1 #\x 0 2 2 1)
    #(t_3 #\3 0 3 3 1)
    #(t_7 #\7 0 4 4 1)
    #(t_1 #\1 0 5 5 1)
@@ -618,20 +617,8 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_z (t_0)
-        (t_1)
-        (t_2)
-        (t_3)
-        (t_4)
-        (t_5)
-        (t_6)
-        (t_7)
-        (t_8)
-        (uid_6)
-        (uid_3)
-        (uid_2)
-        (uid_4)
-        (uid_5))
+ '((t_x (uid_1 t_3))
+   (uid_1 (uid_2) (uid_1) (uid_3) (uid_4))
    (t_n (t_0)
         (t_1)
         (t_2)
@@ -641,9 +628,21 @@
         (t_6)
         (t_7)
         (t_8)
-        (uid_6))
-   (uid_1 (uid_3) (uid_2) (uid_4) (uid_5))
-   (t_x (uid_2 t_3)))
+        (uid_5))
+   (t_z (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_5)
+        (uid_2)
+        (uid_1)
+        (uid_3)
+        (uid_4)))
 
  )
 
@@ -677,7 +676,19 @@
    #(t_3 #\3 0 7 7 1)
    #(t_4 #\4 0 8 8 1))
 
- '((t_x (t_0)
+ '((c_x (uid_1 t_3))
+   (t_a (uid_2) (uid_1) (uid_3) (uid_4))
+   (t_n (t_0)
+        (t_1)
+        (t_2)
+        (t_3)
+        (t_4)
+        (t_5)
+        (t_6)
+        (t_7)
+        (t_8)
+        (uid_5))
+   (t_x (t_0)
         (t_1)
         (t_2)
         (t_3)
@@ -690,19 +701,7 @@
         (uid_2)
         (uid_1)
         (uid_3)
-        (uid_4))
-   (t_n (t_0)
-        (t_1)
-        (t_2)
-        (t_3)
-        (t_4)
-        (t_5)
-        (t_6)
-        (t_7)
-        (t_8)
-        (uid_5))
-   (t_a (uid_2) (uid_1) (uid_3) (uid_4))
-   (c_x (uid_1 t_3)))
+        (uid_4)))
 
  )
 
@@ -732,7 +731,8 @@
    #(t_1 #\1 0 6 6 1)
    #(t_2 #\2 0 7 7 1))
 
- '((t_num (t_0)
+ '((t_12 (t_1 t_2))
+   (t_num (t_0)
           (t_1)
           (t_2)
           (t_3)
@@ -741,10 +741,13 @@
           (t_6)
           (t_7)
           (t_8)
-          (uid_1))
-   (t_12 (t_1 t_2)))
+          (uid_1)))
 
  )
+
+
+
+
 
 
 (testcase
@@ -920,12 +923,12 @@
 
  "AB1"
 
- '(#(uid_2 #\A 0 1 1 1)
-   #(uid_3 #\B 0 2 2 1)
-   #(uid_1 #\1 0 3 3 1))
+ '(#(uid_1 #\A 0 1 1 1)
+   #(uid_2 #\B 0 2 2 1)
+   #(uid_3 #\1 0 3 3 1))
 
- '((t_num (uid_1) (uid_4))
-   (t_AB1 (uid_2 uid_3 uid_1)))
+ '((t_AB1 (uid_1 uid_2 uid_3))
+   (t_num (uid_3) (uid_4)))
 
  )
 
@@ -1024,7 +1027,7 @@
    #(t_1 #\1 0 10 10 1)
    )
 
- '((t_i t_1) (t_o t_0))
+ '((t_o (t_0)) (t_i (t_1)))
 
  )
 

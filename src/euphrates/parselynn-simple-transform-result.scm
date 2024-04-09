@@ -4,10 +4,10 @@
 (define (parselynn/simple-transform-result
          transformations result)
 
-  (define flattened (assq-or 'flatten: transformations '()))
-  (define joined (assq-or 'join: transformations '()))
-  (define skiped (assq-or 'skip: transformations '()))
-  (define inlined (assq-or 'inline: transformations '()))
+  (define flattened (assq-or 'flatten: transformations #f))
+  (define joined (assq-or 'join: transformations #f))
+  (define skiped (assq-or 'skip: transformations #f))
+  (define inlined (assq-or 'inline: transformations #f))
 
   (appcomp result
            (parselynn/simple-do-skips skiped)

@@ -57,33 +57,20 @@
   (define rules
     (append rules/2 additional-grammar-rules))
 
+  (define lexer-model
+    (parselynn/singlechar:lexer-model lexer))
+
+  (define tokens
+    (labelinglogic:model:names lexer-model))
+
   (define hidden-tree-labels
-    (appcomp (append additional-grammar-rules tokens-map)
-             (map car)
-             list->hashset))
+    (list->hashset
+     (append
+      tokens
+      (map car additional-grammar-rules))))
 
   (define non-terminals
     (list->hashset (map car rules)))
-
-  (define tokens/0
-    (map car tokens-map))
-
-  (define tokens
-    (let ((S (list->hashset tokens/0)))
-      (let loop ((term additional-grammar-rules))
-        (cond
-         ((list? term) (for-each loop term))
-         ((symbol? term)
-          (unless (hashset-has? non-terminals term)
-            (hashset-add! S term)))))
-
-      (hashset-foreach
-       (lambda (nt)
-         (when (hashset-has? S nt)
-           (hashset-delete! S nt)))
-       non-terminals)
-
-      (hashset->list S)))
 
   (when (assq-or 'tokens: options*)
     (raisu* :from "parselynn/simple"
@@ -94,8 +81,9 @@
   (define (extract+check key)
     (define-values (ret set-list)
       (parselynn/simple-extract-set key options*))
+
     (parselynn/simple-check-set non-terminals set-list)
-    (and (not (null? ret)) (cons key ret)))
+    (and (not (hashset-null? ret)) (cons key ret)))
 
   (define transformations
     (filter

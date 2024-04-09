@@ -8,7 +8,6 @@
   (import
     (only (euphrates assq-unset-multiple-values)
           assq-unset-multiple-values))
-  (import (only (euphrates comp) appcomp))
   (import (only (euphrates fn-pair) fn-pair))
   (import
     (only (euphrates generic-ebnf-tree-to-alist)
@@ -17,16 +16,15 @@
     (only (euphrates gkeyword) gkeyword->fkeyword))
   (import
     (only (euphrates hashset)
-          hashset->list
-          hashset-add!
-          hashset-delete!
-          hashset-foreach
-          hashset-has?
+          hashset-null?
           list->hashset))
   (import (only (euphrates identity) identity))
   (import
     (only (euphrates keylist-to-alist)
           keylist->alist))
+  (import
+    (only (euphrates labelinglogic-model-names)
+          labelinglogic:model:names))
   (import
     (only (euphrates parselynn-simple-check-options)
           parselynn/simple-check-options))
@@ -44,7 +42,8 @@
           make-parselynn/simple-struct))
   (import
     (only (euphrates parselynn-singlechar-struct)
-          parselynn/singlechar:additional-grammar-rules))
+          parselynn/singlechar:additional-grammar-rules
+          parselynn/singlechar:lexer-model))
   (import
     (only (euphrates parselynn-singlechar)
           make-parselynn/singlechar))
@@ -63,23 +62,15 @@
           append
           begin
           car
-          cond
           cons
           define
           define-values
-          for-each
           if
-          lambda
-          let
           list
-          list?
           map
           memq
           not
-          null?
           quote
-          symbol?
-          unless
           when))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))

@@ -4,121 +4,195 @@
 (define (make-parselynn/singlechar
          taken-token-names-set tokens-alist)
 
-  (define (parse-token-pair p)
-    (define-pair (name value) p)
+  (with-unique-identifier-context
+   :existing-names taken-token-names-set
 
-    (define expr
-      (let loop ((value value))
+   (define singletons-tokens-alist/stack
+     (stack-make))
 
+   (define chars-of-strings-map
+     (make-hashmap))
+
+   (define long-strings-alist/stack
+     (stack-make))
+
+   (define _64132
+     (for-each
+      (lambda (p)
+        (define-pair (name value) p)
         (cond
-         ((char? value)
-          (list '= value))
+         ((and (string? value)
+               (= 1 (string-length value)))
 
-         ((string? value)
-          (cons 'or (map loop (string->list value))))
+          (stack-push!
+           singletons-tokens-alist/stack
+           (cons name (string-ref value 0))))
 
-         ((equal? 'class (car value))
-          (cadr value))
+         ((and (string? value)
+               (not (= 1 (string-length value))))
 
-         ((equal? '= (car value))
-          value)
+          (let ()
+            (define parent-stack (stack-make))
+
+            (string-for-each
+             (lambda (c)
+               (define char-name (make-unique-identifier))
+
+               (stack-push! parent-stack char-name)
+
+               (hashmap-set!
+                chars-of-strings-map
+                char-name name)
+
+               (stack-push!
+                singletons-tokens-alist/stack
+                (cons char-name c)))
+
+             value)
+
+            (stack-push!
+             long-strings-alist/stack
+             (cons name
+                   (reverse
+                    (stack->list
+                     parent-stack))))))
 
          (else
-          (raisu* :from "parselynn/singlechar"
-                  :type 'bad-token-type
-                  :message (stringf "Unknown element of ~s in singlechar lexer" (~a (quote tokens-alist)))
-                  :args (list value))))))
+          (stack-push!
+           singletons-tokens-alist/stack
+           (cons name value)))))
 
-    (labelinglogic:binding:make
-     name expr))
+      tokens-alist))
 
-  (define bindings
-    (map parse-token-pair tokens-alist))
+   (define long-strings-alist
+     (reverse
+      (stack->list
+       long-strings-alist/stack)))
 
-  (define full-model
-    (labelinglogic:model:append
-     parselynn-singlechar-model
-     bindings))
+   (define singletons-tokens-alist
+     (reverse
+      (stack->list
+       singletons-tokens-alist/stack)))
 
-  (define _61237
-    (labelinglogic:model:check full-model))
+   (define (parse-token-pair p)
+     (define-pair (name value) p)
 
-  (define exported-names/set
-    (list->hashset
-     (map labelinglogic:binding:name bindings)))
+     (define expr
+       (let loop ((value value))
 
-  (define opt-model
-    (labelinglogic:model:to-minimal-dnf/assuming-nointersect
-     exported-names/set full-model))
-
-  (define renamed-model
-    (labelinglogic:model:alpha-rename
-     taken-token-names-set
-     opt-model))
-
-  (define additional-grammar-rules/stack
-    (stack-make))
-
-  (define lexer-model/stack
-    (stack-make))
-
-  (define _2341723
-    (for-each
-     (lambda (binding)
-       (define class (labelinglogic:binding:name binding))
-       (define expr (labelinglogic:binding:expr binding))
-       (define type (labelinglogic:expression:type expr))
-       (define args (labelinglogic:expression:args expr))
-
-       (cond
-        ((member type (list '= 'r7rs 'and))
-         (stack-push! lexer-model/stack binding))
-        ((member type (list 'or 'constant))
-         'do-them-later-when-the-lexer-model-is-available)
-        (else
-         (raisu 'unexpected-expr-type type args binding))))
-
-     (labelinglogic:model:bindings
-      renamed-model)))
-
-  (define lexer-model
-    (stack->list lexer-model/stack))
-
-  (define _6478237
-    (for-each
-     (lambda (binding)
-       (define class (labelinglogic:binding:name binding))
-       (define expr (labelinglogic:binding:expr binding))
-       (define type (labelinglogic:expression:type expr))
-       (define args (labelinglogic:expression:args expr))
-       (define token-value (assoc-or class tokens-alist #f))
-
-       (cond
-        ((equal? type 'constant)
-         (let ()
-           (define rule (cons class (list expr)))
-           (stack-push! additional-grammar-rules/stack rule)))
-
-        ((equal? type 'or)
          (cond
-          ((string? token-value)
-           (let ()
-             (define letters (string->list token-value))
-             (define tokens (map (lambda (c) (labelinglogic:model:evaluate/first lexer-model c)) letters))
-             (define rule (cons class (list tokens)))
-             (stack-push! additional-grammar-rules/stack rule)))
+          ((char? value)
+           (list '= value))
+
+          ((string? value)
+           (cons 'or (map loop (string->list value))))
+
+          ((equal? 'class (car value))
+           (cadr value))
+
+          ((equal? '= (car value))
+           value)
 
           (else
+           (raisu* :from "parselynn/singlechar"
+                   :type 'bad-token-type
+                   :message (stringf "Unknown element of ~s in singlechar lexer" (~a (quote singletons-tokens-alist)))
+                   :args (list value))))))
+
+     (labelinglogic:binding:make
+      name expr))
+
+   (define bindings
+     (map parse-token-pair singletons-tokens-alist))
+
+   (define full-model
+     (labelinglogic:model:append
+      parselynn-singlechar-model
+      bindings))
+
+   (define _61237
+     (labelinglogic:model:check full-model))
+
+   (define exported-names/set
+     (list->hashset
+      (map labelinglogic:binding:name bindings)))
+
+   (define opt-model
+     (labelinglogic:model:to-minimal-dnf/assuming-nointersect
+      exported-names/set full-model))
+
+   (define additional-grammar-rules/stack
+     (stack-make))
+
+   (define lexer-model/stack
+     (stack-make))
+
+   (define (dereference-while-constant expr)
+     (let loop ((expr expr))
+       (define type (labelinglogic:expression:type expr))
+       (if (equal? type 'constant)
            (let ()
-             (define rule (cons class (map list args)))
-             (stack-push! additional-grammar-rules/stack rule)))))))
+             (define target (labelinglogic:model:assoc expr opt-model))
+             (define target-type (labelinglogic:expression:type target))
+             (if (equal? target-type 'constant)
+                 (loop target)
+                 expr))
+           expr)))
 
-     (labelinglogic:model:bindings
-      renamed-model)))
+   (define _123554
+     (for-each
+      (lambda (p)
+        (define-pair (string-name chars-names) p)
+        (define dereferenced-names (map dereference-while-constant chars-names))
+        (define rule (cons string-name (list dereferenced-names)))
+        (stack-push! additional-grammar-rules/stack rule))
+      long-strings-alist))
 
-  (define additional-grammar-rules
-    (stack->list additional-grammar-rules/stack))
+   (define _2341723
+     (for-each
+      (lambda (binding)
+        (define class (labelinglogic:binding:name binding))
+        (define expr (labelinglogic:binding:expr binding))
+        (define type (labelinglogic:expression:type expr))
+        (define args (labelinglogic:expression:args expr))
+        (define token-value (assoc-or class singletons-tokens-alist #f))
 
-  (make-parselynn/singlechar-struct
-   additional-grammar-rules
-   lexer-model))
+        (cond
+         ((member type (list '= 'r7rs 'and))
+          (stack-push! lexer-model/stack binding))
+         ((member type (list 'or))
+          (let ()
+            (define rule (cons class (map list args)))
+            (stack-push! additional-grammar-rules/stack rule)))
+         ((member type (list 'constant))
+          (unless (hashmap-has? chars-of-strings-map class)
+            (let ()
+              (define rule (list class (list expr)))
+              (stack-push! additional-grammar-rules/stack rule))))
+         (else
+          (raisu 'unexpected-expr-type type args binding))))
+
+      (labelinglogic:model:bindings
+       opt-model)))
+
+   (define lexer-model
+     (reverse
+      (stack->list
+       lexer-model/stack)))
+
+   (define additional-grammar-rules
+     (reverse
+      (stack->list
+       additional-grammar-rules/stack)))
+
+   (define renamed-lexer-model
+     (labelinglogic:model:alpha-rename
+      '() lexer-model))
+
+   (define renamed-grammar-rules
+     (unique-identifier->symbol/recursive
+      additional-grammar-rules))
+
+   (make-parselynn/singlechar-struct
+    renamed-grammar-rules
+    renamed-lexer-model)))

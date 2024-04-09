@@ -151,128 +151,123 @@
 ;; Multicharacter string usage
 ;;
 
-;; FIXME: finish these cases.
-;; TODO: finish these cases.
+(test-parser
+ `( expr = choice
+    choice = "aaa" / "bbb" )
+
+ "aaa"
+ '(expr (choice "aaa"))
+ )
 
 
-;; (test-parser
-;;  `( expr = choice+
-;;     choice = "aaa" / "bbb" )
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "bbb" )
 
-;;  "aaa"
-;;  '(expr (choice+ (choice "aaa"))))
-
-;; ;; '(expr
-;; ;;   (choice+
-;; ;;    (choice "a")
-;; ;;    (choice+
-;; ;;     (choice "a")
-;; ;;     (choice+
-;; ;;      (choice "a"))))))
+ "aaa"
+ '(expr (choice+ (choice "aaa"))))
 
 
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "bbb" )
 
-
-;; (test-parser
-;;  `( expr = choice+
-;;     choice = "aaa" / "bbb" )
-
-;;  "aaabbbaaabbb"
-;;  '(expr (choice+
-;;          (choice "aaa")
-;;          (choice+
-;;           (choice "bbb")
-;;           (choice+
-;;            (choice "aaa")
-;;            (choice+
-;;             (choice "bbb")))))))
+ "aaabbbaaabbb"
+ '(expr (choice+
+         (choice "aaa")
+         (choice+
+          (choice "bbb")
+          (choice+
+           (choice "aaa")
+           (choice+
+            (choice "bbb")))))))
 
 
 
 
-;; (test-parser
-;;  `( expr = choice+
-;;     choice = "aaa" / "bbb" )
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "bbb" )
 
-;;  "aaabbbaaaaaa"
-;;  '(expr (choice+
-;;          (choice "aaa")
-;;          (choice+
-;;           (choice "bbb")
-;;           (choice+
-;;            (choice "aaa")
-;;            (choice+ (choice "aaa")))))))
-
-
-
-
-;; (test-parser
-;;  `( expr = choice+
-;;     choice = "aaa" / "b" )
-
-;;  "aaabbbaaabbaaa"
-;;  '(expr (choice+
-;;          (choice "aaa")
-;;          (choice+
-;;           (choice "b")
-;;           (choice+
-;;            (choice "b")
-;;            (choice+
-;;             (choice "b")
-;;             (choice+
-;;              (choice "aaa")
-;;              (choice+
-;;               (choice "b")
-;;               (choice+
-;;                (choice "b")
-;;                (choice+
-;;                 (choice "aaa")))))))))))
+ "aaabbbaaaaaa"
+ '(expr (choice+
+         (choice "aaa")
+         (choice+
+          (choice "bbb")
+          (choice+
+           (choice "aaa")
+           (choice+ (choice "aaa")))))))
 
 
 
-;; (test-parser
-;;  `( expr = term add expr / term
-;;     add = "+"
-;;     term = num / "!"
-;;     num = dig+
-;;     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-;;  "42+8+!"
+(test-parser
+ `( expr = choice+
+    choice = "aaa" / "b" )
 
-;;  '(expr (term (num (dig+ (dig "4") (dig+ (dig "2"))))) (add "+") (expr (term (num (dig+ (dig "8")))) (add "+") (expr (term "!")))))
-
-
-
-;; (test-parser
-;;  `( expr = term add expr / term
-;;     add = "+"
-;;     term = num / "!42"
-;;     num = dig+
-;;     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
-
-;;  "42+8+!42"
-
-;;  '(expr (term (num (dig+ (dig "4")
-;;                          (dig+ (dig "2")))))
-;;         (add "+")
-;;         (expr
-;;          (term (num (dig+ (dig "8"))))
-;;          (add "+")
-;;          (expr (term "!42")))))
+ "aaabbbaaabbaaa"
+ '(expr (choice+
+         (choice "aaa")
+         (choice+
+          (choice "b")
+          (choice+
+           (choice "b")
+           (choice+
+            (choice "b")
+            (choice+
+             (choice "aaa")
+             (choice+
+              (choice "b")
+              (choice+
+               (choice "b")
+               (choice+
+                (choice "aaa")))))))))))
 
 
 
-;; (assert-throw
-;;  'parse-conflict
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num / "!"
+    num = dig+
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-;;  (parselynn/simple
-;;   `(:grammar
+ "42+8+!"
 
-;;     ( expr = term add expr / term
-;;       add = "+"
-;;       term = num / "42"
-;;       num = dig+
-;;       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"))))
+ '(expr (term (num (dig+ (dig "4") (dig+ (dig "2"))))) (add "+") (expr (term (num (dig+ (dig "8")))) (add "+") (expr (term "!")))))
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num / "!42"
+    num = dig+
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+ "42+8+!42"
+
+ '(expr (term (num (dig+ (dig "4")
+                         (dig+ (dig "2")))))
+        (add "+")
+        (expr
+         (term (num (dig+ (dig "8"))))
+         (add "+")
+         (expr (term "!42")))))
+
+
+
+(assert-throw
+ 'parse-conflict
+
+ (parselynn/simple
+  `(:grammar
+
+    ( expr = term add expr / term
+      add = "+"
+      term = num / "42"
+      num = dig+
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"))))
 
 ;;;;;;;;;;;;;
 ;;

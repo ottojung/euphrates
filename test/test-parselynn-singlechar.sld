@@ -4,6 +4,7 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
+  (import (only (euphrates debugs) debugs))
   (import (only (euphrates hashset) make-hashset))
   (import
     (only (euphrates
@@ -55,6 +56,7 @@
           quasiquote
           quote
           string?
+          unless
           vector
           vector-length
           vector-ref

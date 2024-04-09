@@ -22,5 +22,4 @@
            (begin
              (include-from-path
                "euphrates/parselynn-simple-transform-result.scm")))
-    (else (include
-            "parselynn-simple-transform-result.scm"))))
+    (else (include "parselynn-simple-transform-result.scm"))))
