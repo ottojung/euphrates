@@ -29,7 +29,7 @@
        (list-map-first labelinglogic:expression:check/nothrow #f args))
 
      (cond
-      ((equal? type 'constant) #f)
+      ((equal? type 'variable) #f)
       ((equal? 'or type) (recurse args)) ;; any arity is ok.
       ((equal? 'and type) (recurse args)) ;; any arity is ok.
       ((equal? 'xor type) (recurse args)) ;; any arity is ok.

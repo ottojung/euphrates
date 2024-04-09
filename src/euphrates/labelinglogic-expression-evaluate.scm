@@ -17,7 +17,7 @@
       (define args (labelinglogic:expression:args expr))
       (not (loop (car args))))
 
-    (define (labelinglogic:expression:evaluate/constant model expr input)
+    (define (labelinglogic:expression:evaluate/variable model expr input)
       (define reference
         (labelinglogic:model:assoc-or
          expr model
@@ -45,8 +45,8 @@
      ((equal? type 'not)
       (labelinglogic:expression:evaluate/not model expr input))
 
-     ((equal? type 'constant)
-      (labelinglogic:expression:evaluate/constant model expr input))
+     ((equal? type 'variable)
+      (labelinglogic:expression:evaluate/variable model expr input))
 
      (else
       (raisu 'unknown-expr-type type expr)))))

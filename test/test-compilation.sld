@@ -791,9 +791,6 @@
     (only (euphrates labelinglogic-expression-compile-r7rs)
           labelinglogic:expression:compile/r7rs))
   (import
-    (only (euphrates labelinglogic-expression-constants)
-          labelinglogic:expression:constants))
-  (import
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
   (import
@@ -881,8 +878,8 @@
           labelinglogic:expression:optimize))
   (import
     (only (euphrates
-            labelinglogic-expression-replace-constants)
-          labelinglogic:expression:replace-constants))
+            labelinglogic-expression-replace-variables)
+          labelinglogic:expression:replace-variables))
   (import
     (only (euphrates
             labelinglogic-expression-simplify-subground-term)
@@ -922,6 +919,9 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates labelinglogic-expression-variables)
+          labelinglogic:expression:variables))
   (import
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
@@ -1032,11 +1032,11 @@
             labelinglogic-model-reduce-to-nonleafs)
           labelinglogic:model:reduce-to-nonleafs))
   (import
-    (only (euphrates labelinglogic-model-rename-constants)
-          labelinglogic:model:rename-constants))
+    (only (euphrates labelinglogic-model-rename-variables)
+          labelinglogic:model:rename-variables))
   (import
-    (only (euphrates labelinglogic-model-replace-constants)
-          labelinglogic:model:replace-constants))
+    (only (euphrates labelinglogic-model-replace-variables)
+          labelinglogic:model:replace-variables))
   (import
     (only (euphrates labelinglogic-model-sugarify)
           labelinglogic:model:sugarify))

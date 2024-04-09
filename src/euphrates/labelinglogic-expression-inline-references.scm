@@ -5,7 +5,7 @@
   (let loop ((expr expr))
     (define (fun expr)
       (define type (labelinglogic:expression:type expr))
-      (if (equal? type 'constant)
+      (if (equal? type 'variable)
           (loop (labelinglogic:model:assoc expr model))
           expr))
 

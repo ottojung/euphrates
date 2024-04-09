@@ -12,13 +12,13 @@
          (hashset->list taken-names-set)
          taken-names-set)))
 
-  (define (renamer constant)
-    (if (unique-identifier? constant)
-        (unique-identifier->symbol constant)
-        constant))
+  (define (renamer variable)
+    (if (unique-identifier? variable)
+        (unique-identifier->symbol variable)
+        variable))
 
   (with-unique-identifier-context
    :existing-names all-taken-names
 
-   (labelinglogic:model:rename-constants
+   (labelinglogic:model:rename-variables
     renamer model)))

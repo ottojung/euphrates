@@ -18,7 +18,7 @@
      ((member type (list 'tuple 'or))
       (list-or-map loop args))
 
-     ((equal? type 'constant)
+     ((equal? type 'variable)
       (loop (labelinglogic:model:assoc expr model)))
 
      ((member type (list 'and 'xor))

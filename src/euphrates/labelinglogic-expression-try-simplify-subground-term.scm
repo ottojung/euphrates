@@ -6,7 +6,7 @@
   (define args (labelinglogic:expression:args expr))
 
   (cond
-   ((member type (list '= 'r7rs 'constant 'tuple 'not))
+   ((member type (list '= 'r7rs 'variable 'tuple 'not))
     expr)
 
    ((equal? type 'and)
@@ -25,7 +25,7 @@
         (if (equal? A-expr B-expr) A-expr
             (labelinglogic:expression:make 'or '())))
 
-       ((and (member A-type (list 'constant))
+       ((and (member A-type (list 'variable))
              (equal? A-expr B-expr))
         A-expr)
 
@@ -53,7 +53,7 @@
 
       (cond
        ((and (equal? A-type B-type)
-             (member A-type (list '= 'r7rs 'tuple 'constant)))
+             (member A-type (list '= 'r7rs 'tuple 'variable)))
 
         (if (equal? A-expr B-expr)
             A-expr
@@ -86,7 +86,7 @@
 
       (cond
        ((and (equal? A-type B-type)
-             (member A-type (list '= 'r7rs 'tuple 'constant)))
+             (member A-type (list '= 'r7rs 'tuple 'variable)))
 
         (if (equal? A-expr B-expr)
             (labelinglogic:expression:make 'or '())

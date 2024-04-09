@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates labelinglogic-expression-constants)
-  (export labelinglogic:expression:constants)
+  (euphrates labelinglogic-expression-variables)
+  (export labelinglogic:expression:variables)
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
@@ -25,6 +25,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-constants.scm")))
+               "euphrates/labelinglogic-expression-variables.scm")))
     (else (include
-            "labelinglogic-expression-constants.scm"))))
+            "labelinglogic-expression-variables.scm"))))

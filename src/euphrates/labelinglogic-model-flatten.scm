@@ -10,7 +10,7 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((equal? 'constant type) expr)
+     ((equal? 'variable type) expr)
      (else
       (let ()
         (define existing
@@ -36,7 +36,7 @@
       (labelinglogic:expression:make
        type (map loop-expr args)))
 
-     ((member type (list '= 'constant 'r7rs))
+     ((member type (list '= 'variable 'r7rs))
       expr)
 
      (else

@@ -49,7 +49,7 @@
      ((equal? type 'tuple)
       (cons 'tuple (map loop args)))
 
-     ((member type (list 'xor '= 'r7rs 'constant))
+     ((member type (list 'xor '= 'r7rs 'variable))
       expr)
 
      (else

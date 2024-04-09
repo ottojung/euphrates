@@ -6,7 +6,7 @@
     (labelinglogic:expression:map-subexpressions
      (lambda (expr)
        (define type (labelinglogic:expression:type expr))
-       (if (and (equal? type 'constant)
+       (if (and (equal? type 'variable)
                 (predicate expr))
            (loop (labelinglogic:model:assoc expr model))
            expr))

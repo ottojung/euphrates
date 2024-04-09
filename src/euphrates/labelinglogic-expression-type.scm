@@ -3,7 +3,7 @@
 
 (define (labelinglogic:expression:type expr)
   (cond
-   ((symbol? expr) 'constant)
-   ((number? expr) 'constant)
-   ((unique-identifier? expr) 'constant)
+   ((symbol? expr) 'variable)
+   ((number? expr) 'variable)
+   ((unique-identifier? expr) 'variable)
    (else (list-ref expr 0))))

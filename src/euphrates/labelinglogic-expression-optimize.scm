@@ -59,7 +59,7 @@
     ((member type (list 'xor))
      (labelinglogic:expression:optimize/xor expr))
 
-    ((member type (list '= 'constant))
+    ((member type (list '= 'variable))
      expr)
 
     (else

@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates labelinglogic-model-rename-constants)
-  (export labelinglogic:model:rename-constants)
+  (euphrates labelinglogic-model-rename-variables)
+  (export labelinglogic:model:rename-variables)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -14,8 +14,8 @@
           labelinglogic:expression:check))
   (import
     (only (euphrates
-            labelinglogic-expression-replace-constants)
-          labelinglogic:expression:replace-constants))
+            labelinglogic-expression-replace-variables)
+          labelinglogic:expression:replace-variables))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
@@ -44,6 +44,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-model-rename-constants.scm")))
+               "euphrates/labelinglogic-model-rename-variables.scm")))
     (else (include
-            "labelinglogic-model-rename-constants.scm"))))
+            "labelinglogic-model-rename-variables.scm"))))

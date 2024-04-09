@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates labelinglogic-model-replace-constants)
-  (export labelinglogic:model:replace-constants)
+  (euphrates labelinglogic-model-replace-variables)
+  (export labelinglogic:model:replace-variables)
   (import
     (only (euphrates hashmap)
           hashmap-ref
@@ -12,8 +12,8 @@
           labelinglogic:expression:check))
   (import
     (only (euphrates
-            labelinglogic-expression-replace-constants)
-          labelinglogic:expression:replace-constants))
+            labelinglogic-expression-replace-variables)
+          labelinglogic:expression:replace-variables))
   (import
     (only (euphrates labelinglogic-model-map-expressions)
           labelinglogic:model:map-expressions))
@@ -31,6 +31,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-model-replace-constants.scm")))
+               "euphrates/labelinglogic-model-replace-variables.scm")))
     (else (include
-            "labelinglogic-model-replace-constants.scm"))))
+            "labelinglogic-model-replace-variables.scm"))))

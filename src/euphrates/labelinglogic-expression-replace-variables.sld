@@ -1,9 +1,9 @@
 
 (define-library
   (euphrates
-    labelinglogic-expression-replace-constants)
+    labelinglogic-expression-replace-variables)
   (export
-    labelinglogic:expression:replace-constants)
+    labelinglogic:expression:replace-variables)
   (import
     (only (euphrates hashmap)
           hashmap-ref
@@ -39,6 +39,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-replace-constants.scm")))
+               "euphrates/labelinglogic-expression-replace-variables.scm")))
     (else (include
-            "labelinglogic-expression-replace-constants.scm"))))
+            "labelinglogic-expression-replace-variables.scm"))))

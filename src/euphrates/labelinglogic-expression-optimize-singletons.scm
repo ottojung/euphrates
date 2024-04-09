@@ -20,7 +20,7 @@
       (labelinglogic:expression:make
        type (map loop args)))
 
-     ((member type (list 'constant '= 'r7rs)) expr)
+     ((member type (list 'variable '= 'r7rs)) expr)
 
      (else
       (raisu* :from "labelinglogic:expression:optimize/singleton"

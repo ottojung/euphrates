@@ -36,7 +36,7 @@
     (labelinglogic:expression:make
      type (map labelinglogic:expression:sugarify args)))
 
-   ((member type (list '= 'constant 'r7rs))
+   ((member type (list '= 'variable 'r7rs))
     expr)
 
    (else
@@ -65,7 +65,7 @@
      (labelinglogic:expression:sugarify/children
       (labelinglogic:expression:sugarify/functor expr))))
 
-   ((member type (list '= 'constant 'r7rs)) expr)
+   ((member type (list '= 'variable 'r7rs)) expr)
 
    (else
     (raisu* :from "labelinglogic:expression:sugarify"

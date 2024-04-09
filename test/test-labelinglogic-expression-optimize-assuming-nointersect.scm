@@ -1,5 +1,5 @@
 
-;; Case with constant.
+;; Case with variable.
 (assert=
  '(= 3)
  (labelinglogic:expression:optimize/assuming-nointersect

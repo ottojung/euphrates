@@ -14,7 +14,7 @@
     (define args (labelinglogic:expression:args expression))
 
     (cond
-     ((member type (list 'r7rs '= 'constant))
+     ((member type (list 'r7rs '= 'variable))
       (labelinglogic:expression:make
        'not (list expression)))
 
@@ -41,7 +41,7 @@
     (define args (labelinglogic:expression:args expression))
 
     (cond
-     ((member type (list 'r7rs '= 'constant))
+     ((member type (list 'r7rs '= 'variable))
       expression)
 
      ((member type (list 'or 'and 'tuple))

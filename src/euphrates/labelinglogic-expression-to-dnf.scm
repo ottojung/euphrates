@@ -79,7 +79,7 @@
 
                   (loop ret))))))))
 
-     ((member type (list '= 'constant 'r7rs 'tuple 'not)) expr)
+     ((member type (list '= 'variable 'r7rs 'tuple 'not)) expr)
 
      (else
       (raisu* :from "labelinglogic:expression:to-dnf"

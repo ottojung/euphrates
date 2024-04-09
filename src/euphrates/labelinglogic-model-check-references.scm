@@ -41,19 +41,19 @@
    (lambda (binding)
      (define name (labelinglogic:binding:name binding))
      (define expr (labelinglogic:binding:expr binding))
-     (define constants (labelinglogic:expression:constants expr))
+     (define variables (labelinglogic:expression:variables expr))
 
-     (define undefined-constants
+     (define undefined-variables
        (filter (negate
                 (lambda (x)
                   (or (hashset-has? external-names/set x)
                       (hashset-has? names/set x))))
-               constants))
+               variables))
 
-     (unless (null? undefined-constants)
+     (unless (null? undefined-variables)
        (fail-ref-check
         "binding references undefined class"
-        (list name undefined-constants)))
+        (list name undefined-variables)))
 
      )
 
@@ -78,14 +78,14 @@
            (stringf "class references itself through the following cycle: ~s, this is not allowed" cycle)
            (list class cycle))))
 
-      (define constants (labelinglogic:expression:constants predicate))
+      (define variables (labelinglogic:expression:variables predicate))
       (define referenced
         (filter
          identity
          (map (lambda (c)
                 (and (hashset-has? names/set c)
                      (cons c (labelinglogic:model:assoc c model))))
-              constants)))
+              variables)))
 
       (for-each
        (lambda (p)

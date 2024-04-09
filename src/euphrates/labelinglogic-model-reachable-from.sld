@@ -9,8 +9,8 @@
           hashset-copy
           hashset-has?))
   (import
-    (only (euphrates labelinglogic-expression-constants)
-          labelinglogic:expression:constants))
+    (only (euphrates labelinglogic-expression-variables)
+          labelinglogic:expression:variables))
   (import
     (only (euphrates labelinglogic-model-assoc)
           labelinglogic:model:assoc))

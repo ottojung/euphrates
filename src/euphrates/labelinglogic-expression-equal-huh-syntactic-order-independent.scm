@@ -33,7 +33,7 @@
             (eqv-oi args-1 args-2)
             (eqv-oi args-2 args-1)))
 
-      ((equal? type-1 'constant)
+      ((equal? type-1 'variable)
        (raisu* :from "labelinglogic:expression:equal?/syntactic/order-independent"
                :type 'bad-sub-expr-type
                :message (stringf "Expression type ~s not permitted here." (~a type-1))

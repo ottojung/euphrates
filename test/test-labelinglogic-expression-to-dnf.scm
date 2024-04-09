@@ -118,7 +118,7 @@
  '(or (and (= 0) (= 0) (= 0) (= 0) (= 0)))
  '(or (and (= 0) (= 0) (= 0) (= 0) (= 0))))
 
-;; Test constant.
+;; Test variable.
 (test 'x 'x)
 
 ;; Test negation.
