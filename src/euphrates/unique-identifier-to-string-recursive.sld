@@ -28,6 +28,7 @@
           procedure?
           quote
           string?
+          symbol?
           vector-map
           vector?
           when))

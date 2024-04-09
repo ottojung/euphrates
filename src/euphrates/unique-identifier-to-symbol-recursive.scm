@@ -4,19 +4,19 @@
 (define (unique-identifier->symbol/recursive object)
   (let loop ((object object))
     (cond
+     ((symbol? object) object)
      ((string? object) object)
      ((number? object) object)
      ((char? object) object)
      ((eof-object? object) object)
-     ((parameter? object) object)
      ((procedure? object) object)
      ((null? object) object)
      ((pair? object)
       (cons (loop (car object))
             (loop (cdr object))))
-     ((equal? #t) object)
-     ((equal? #f) object)
-     ((equal? x (when #f #f)) object)
+     ((equal? #t object) object)
+     ((equal? #f object) object)
+     ((equal? object (when #f #f)) object)
      ((vector? object)
       (vector-map loop object))
      ((unique-identifier? object)
@@ -26,4 +26,3 @@
               :type 'unrecognized-type
               :message (stringf "Cannot handle this object: ~s" object)
               :args (list object))))))
-
