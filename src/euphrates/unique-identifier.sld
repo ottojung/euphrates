@@ -10,7 +10,6 @@
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates hashmap)
-          hashmap-copy
           hashmap-ref
           hashmap-set!
           make-hashmap))

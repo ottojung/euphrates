@@ -52,21 +52,12 @@
   (syntax-rules ()
     ((_ additional . bodies)
      (let ()
-       (define existing-p
-         (unique-identifier:deserialize/p))
+       (define param
+         (or (unique-identifier:deserialize/p)
+             (vector 1 (make-hashmap))))
+       (define H (vector-ref param 1))
 
-       (define last-free
-         (if existing-p
-             (vector-ref existing-p 0)
-             0))
-
-       (define H
-         (if existing-p
-             (hashmap-copy (vector-ref existing-p 1))
-             (make-hashmap)))
-
-       (parameterize ((unique-identifier:deserialize/p
-                       (vector last-free H)))
+       (parameterize ((unique-identifier:deserialize/p param))
          (add-additional H additional)
          (let () . bodies))))))
 
@@ -89,7 +80,6 @@
                               (~a (quote with-unique-identifier-context)))
             :args (list uid)))
 
-  (define last-free (vector-ref p 0))
   (define H (vector-ref p 1))
 
   (define (tostr id)
@@ -104,10 +94,13 @@
     (if current #f
         (let ()
           (hashmap-set! H id str)
-          (vector-set! p 0 count)
+          ;; (vector-set! p 0 count)
           str)))
 
   (or (hashmap-ref H id #f)
-      (let loop ((count (+ 1 last-free)))
+      (let loop ()
+        (define count (vector-ref p 0))
+        (vector-set! p 0 (+ 1 count))
+
         (or (try! count)
-            (loop (+ 1 count))))))
+            (loop)))))
