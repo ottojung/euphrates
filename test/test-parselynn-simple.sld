@@ -33,13 +33,14 @@
           or
           quasiquote
           quote
+          string
           string-append
           string?
           syntax-rules
           unquote))
   (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
+    (guile (import (only (srfi srfi-1) any filter)))
+    (else (import (only (srfi 1) any filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
