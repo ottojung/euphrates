@@ -22,7 +22,7 @@
           model))
 
        (define result/alpha
-         (labelinglogic:model:alpha-rename '() result))
+         (labelinglogic:model:alpha-rename result))
 
        (unless (equal? expected result/alpha)
          (debugs result/alpha))

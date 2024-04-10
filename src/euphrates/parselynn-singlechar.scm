@@ -186,8 +186,7 @@
        additional-grammar-rules/stack)))
 
    (define renamed-lexer-model
-     (labelinglogic:model:alpha-rename
-      '() lexer-model))
+     (labelinglogic:model:alpha-rename lexer-model))
 
    (define renamed-grammar-rules
      (unique-identifier->symbol/recursive

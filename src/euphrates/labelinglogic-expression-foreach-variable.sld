@@ -1,7 +1,9 @@
 
 (define-library
-  (euphrates labelinglogic-expression-variables)
-  (export labelinglogic:expression:variables)
+  (euphrates
+    labelinglogic-expression-foreach-variable)
+  (export
+    labelinglogic:expression:foreach-variable)
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -11,21 +13,18 @@
   (import
     (only (scheme base)
           =
-          append
-          apply
           begin
           cond
           define
           else
           equal?
+          for-each
           let
-          list
-          map
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-variables.scm")))
+               "euphrates/labelinglogic-expression-foreach-variable.scm")))
     (else (include
-            "labelinglogic-expression-variables.scm"))))
+            "labelinglogic-expression-foreach-variable.scm"))))

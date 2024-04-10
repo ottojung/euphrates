@@ -1,23 +1,11 @@
-;;;; Copyright (C) 2023  Otto Jung
+;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (labelinglogic:model:alpha-rename model)
-  (define taken-names-stack
-    (stack-make))
-
-  (define _917231
-    (labelinglogic:model:foreach-variable
-     (lambda (variable)
-       (stack-push! taken-names-stack variable))
-     model))
-
-  (define (renamer variable)
-    (if (unique-identifier? variable)
-        (unique-identifier->symbol variable)
-        variable))
-
-  (with-unique-identifier-context
-   :existing-names (stack->list taken-names-stack)
-
-   (labelinglogic:model:rename-variables
-    renamer model)))
+(define (labelinglogic:model:foreach-variable fun model)
+  (labelinglogic:model:foreach-expression
+   (lambda (class expr)
+     (fun class)
+     (lambda (expr)
+       (labelinglogic:expression:foreach-variable
+        fun expr)))
+   model))

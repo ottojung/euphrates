@@ -3,12 +3,16 @@
   (euphrates labelinglogic-model-alpha-rename)
   (export labelinglogic:model:alpha-rename)
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
-    (only (euphrates hashset) hashset->list hashset?))
+    (only (euphrates labelinglogic-model-foreach-variable)
+          labelinglogic:model:foreach-variable))
   (import
     (only (euphrates labelinglogic-model-rename-variables)
           labelinglogic:model:rename-variables))
+  (import
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import
     (only (euphrates unique-identifier-to-symbol)
           unique-identifier->symbol))
@@ -17,13 +21,7 @@
           unique-identifier?
           with-unique-identifier-context))
   (import
-    (only (scheme base)
-          append
-          begin
-          define
-          if
-          lambda
-          map))
+    (only (scheme base) begin define if lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
