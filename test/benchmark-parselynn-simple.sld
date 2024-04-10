@@ -50,13 +50,16 @@
           quote
           remainder
           set!
+          string
           string->symbol
+          string-length
           string-map
+          string-ref
           unquote
           when))
   (cond-expand
-    (guile (import (only (srfi srfi-1) count)))
-    (else (import (only (srfi 1) count))))
+    (guile (import (only (srfi srfi-1) any count)))
+    (else (import (only (srfi 1) any count))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
