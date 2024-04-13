@@ -4,8 +4,8 @@
     parselynn-singlechar-result-as-iterator)
   (export parselynn/singlechar-result:as-iterator)
   (import
-    (only (euphrates labelinglogic-model-evaluate-first)
-          labelinglogic:model:evaluate/first))
+    (only (euphrates labelinglogic-model-interpret-first)
+          labelinglogic:model:interpret/first))
   (import
     (only (euphrates parselynn-singlechar-result-struct)
           parselynn/singlechar-result-struct:input

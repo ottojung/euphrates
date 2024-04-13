@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates labelinglogic-model-evaluate)
-  (export labelinglogic:model:evaluate)
+  (euphrates labelinglogic-model-interpret)
+  (export labelinglogic:model:interpret)
   (import (only (euphrates identity) identity))
   (import
     (only (euphrates labelinglogic-binding-expr)
@@ -24,5 +24,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-model-evaluate.scm")))
-    (else (include "labelinglogic-model-evaluate.scm"))))
+               "euphrates/labelinglogic-model-interpret.scm")))
+    (else (include "labelinglogic-model-interpret.scm"))))

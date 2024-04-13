@@ -70,7 +70,7 @@
     (make-lexical-token category location c))
 
   (define evaluator
-    (labelinglogic:model:evaluate/first lexer-model))
+    (labelinglogic:model:interpret/first lexer-model))
 
   (define (process-next . _)
     (define c (read-next-char))

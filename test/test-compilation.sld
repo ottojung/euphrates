@@ -970,11 +970,11 @@
     (only (euphrates labelinglogic-model-empty-huh)
           labelinglogic:model:empty?))
   (import
-    (only (euphrates labelinglogic-model-evaluate-first)
-          labelinglogic:model:evaluate/first))
+    (only (euphrates labelinglogic-model-interpret-first)
+          labelinglogic:model:interpret/first))
   (import
-    (only (euphrates labelinglogic-model-evaluate)
-          labelinglogic:model:evaluate))
+    (only (euphrates labelinglogic-model-interpret)
+          labelinglogic:model:interpret))
   (import
     (only (euphrates
             labelinglogic-model-factor-dnf-clauses)
