@@ -13,6 +13,7 @@
           _
           and
           begin
+          char?
           cond
           define
           define-syntax
@@ -27,6 +28,7 @@
           unless))
   (import
     (only (scheme char)
+          char-alphabetic?
           char-lower-case?
           char-numeric?
           char-upper-case?
