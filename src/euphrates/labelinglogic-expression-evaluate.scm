@@ -48,5 +48,20 @@
      ((equal? type 'variable)
       (labelinglogic:expression:evaluate/variable model expr input))
 
+     ((equal? type 'xor)
+      (raisu* :from "labelinglogic:expression:evaluate"
+              :type 'xor-not-supported
+              :message (stringf "Expression type ~s not supported here" (~a type))
+              :args (list type expr)))
+
+     ((equal? type 'tuple)
+      (raisu* :from "labelinglogic:expression:evaluate" ;; TODO: support this.
+              :type 'xor-not-supported
+              :message (stringf "Expression type ~s not supported here" (~a type))
+              :args (list type expr)))
+
      (else
-      (raisu 'unknown-expr-type type expr)))))
+      (raisu* :from "labelinglogic:expression:evaluate"
+              :type 'unknown-expr-type
+              :message (stringf "Expression type ~s not recognized" (~a type))
+              :args (list type expr))))))

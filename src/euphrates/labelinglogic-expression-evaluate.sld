@@ -27,7 +27,8 @@
   (import
     (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates raisu) raisu))
+  (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           =
