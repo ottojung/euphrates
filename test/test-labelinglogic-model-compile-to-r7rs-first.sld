@@ -4,9 +4,15 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debugs) debugs))
   (import
+    (only (euphrates labelinglogic-interpret-r7rs-code)
+          labelinglogic:interpret-r7rs-code))
+  (import
     (only (euphrates
             labelinglogic-model-compile-to-r7rs-first)
           labelinglogic:model:compile-to-r7rs/first))
+  (import
+    (only (euphrates labelinglogic-model-interpret-first)
+          labelinglogic:model:interpret/first))
   (import
     (only (scheme base)
           =
@@ -21,9 +27,11 @@
           equal?
           lambda
           let
+          map
           not
           or
           quote
+          string->list
           syntax-rules
           unless))
   (import

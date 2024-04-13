@@ -9,11 +9,9 @@
 ;;                                                                  █
 ;;                                                                  ▀
 
-
-
-(define-syntax testcase
-  (syntax-rules (:model :expected)
-    ((_ :model model :expected expected)
+(define-syntax check-compiled
+  (syntax-rules ()
+    ((_ model expected)
      (let ()
        (define result
          (labelinglogic:model:compile-to-r7rs/first
@@ -23,6 +21,40 @@
          (debugs result))
 
        (assert= expected result)))))
+
+(define-syntax check-interpretation
+  (syntax-rules ()
+    ((_ model input)
+     (let ()
+       (define compiled
+         (labelinglogic:model:compile-to-r7rs/first
+          model))
+
+       (define compiled/imported
+         (labelinglogic:interpret-r7rs-code compiled))
+
+       (define interpreted
+         (labelinglogic:model:interpret/first
+          model))
+
+       (define compiled-result
+         (map compiled/imported input))
+
+       (define interpreted-result
+         (map interpreted input))
+
+       (unless (equal? compiled-result interpreted-result)
+         (debugs interpreted-result))
+
+       (assert= compiled-result interpreted-result)))))
+
+(define-syntax testcase
+  (syntax-rules (:model :expected :input)
+    ((_ :model model :expected expected :input input)
+     (begin
+       (check-compiled model expected)
+       (check-interpretation model input)
+       ))))
 
 
 
@@ -49,6 +81,9 @@
  '(lambda (x)
     (cond (else #f)))
 
+ :input
+ (string->list "hello world!")
+
  )
 
 
@@ -60,14 +95,7 @@
  ;; Large case
 
  :model
- '((any (or alphanum whitespace))
-   (alphanum (or alphabetic numeric))
-   (alphabetic (or upcase lowercase))
-   (upcase (r7rs char-upper-case?))
-   (lowercase (r7rs char-lower-case?))
-   (numeric (r7rs char-numeric?))
-   (whitespace (r7rs char-whitespace?))
-   (t_an (and alphanum (not (= #\5))))
+ '((t_an (and alphanum (not (= #\5))))
    (t_bn (and alphanum (not (= #\7))))
    (t_cn (and (not (= #\5)) alphanum))
    (t_dn (and alphanum (not (= #\7)) (not (= #\8))))
@@ -75,24 +103,18 @@
    (t_fn (or t_an t_bn t_3))
    (t_3  (= #\3))
    (t_8  (= #\8))
+   (any (or alphanum whitespace))
+   (alphanum (or alphabetic numeric))
+   (alphabetic (or upcase lowercase))
+   (upcase (r7rs char-upper-case?))
+   (lowercase (r7rs char-lower-case?))
+   (numeric (r7rs char-numeric?))
+   (whitespace (r7rs char-whitespace?))
    )
 
  :expected
  '(lambda (x)
     (cond
-     ((or (or (or (char-upper-case? x) (char-lower-case? x))
-              (char-numeric? x))
-          (char-whitespace? x))
-      'any)
-     ((or (or (char-upper-case? x) (char-lower-case? x))
-          (char-numeric? x))
-      'alphanum)
-     ((or (char-upper-case? x) (char-lower-case? x))
-      'alphabetic)
-     ((char-upper-case? x) 'upcase)
-     ((char-lower-case? x) 'lowercase)
-     ((char-numeric? x) 'numeric)
-     ((char-whitespace? x) 'whitespace)
      ((and (or (or (char-upper-case? x) (char-lower-case? x))
                (char-numeric? x))
            (not (equal? x #\5)))
@@ -125,7 +147,23 @@
       't_fn)
      ((equal? x #\3) 't_3)
      ((equal? x #\8) 't_8)
+     ((or (or (or (char-upper-case? x) (char-lower-case? x))
+              (char-numeric? x))
+          (char-whitespace? x))
+      'any)
+     ((or (or (char-upper-case? x) (char-lower-case? x))
+          (char-numeric? x))
+      'alphanum)
+     ((or (char-upper-case? x) (char-lower-case? x))
+      'alphabetic)
+     ((char-upper-case? x) 'upcase)
+     ((char-lower-case? x) 'lowercase)
+     ((char-numeric? x) 'numeric)
+     ((char-whitespace? x) 'whitespace)
      (else #f)))
+
+ :input
+ (string->list "hello world!123456789")
 
  )
 
@@ -259,6 +297,10 @@
            (not (equal? x #\+)))
       'uid_9)
      (else #f)))
+
+ :input
+ (string->list
+  " 42 + x2 * \"good morning!\" -     y* 59 + \"a \\\" quote\"  + x  ")
 
  )
 
