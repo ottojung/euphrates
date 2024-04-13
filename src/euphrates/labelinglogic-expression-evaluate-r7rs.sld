@@ -4,8 +4,8 @@
     labelinglogic-expression-evaluate-r7rs)
   (export labelinglogic:expression:evaluate/r7rs)
   (import
-    (only (euphrates labelinglogic-expression-compile-r7rs)
-          labelinglogic:expression:compile/r7rs))
+    (only (euphrates labelinglogic-expression-interpret-r7rs)
+          labelinglogic:expression:interpret/r7rs))
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))

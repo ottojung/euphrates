@@ -78,7 +78,7 @@
               (list x)))
 
         (and (not (procedure?
-                   (labelinglogic:expression:compile/r7rs x)))
+                   (labelinglogic:expression:interpret/r7rs x)))
              (fail-expression-check
               (stringf
                "Expression of type ~s must compile to a R7RS scheme procedure."

@@ -7,8 +7,8 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-compile-r7rs)
-          labelinglogic:expression:compile/r7rs))
+    (only (euphrates labelinglogic-expression-interpret-r7rs)
+          labelinglogic:expression:interpret/r7rs))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))

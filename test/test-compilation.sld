@@ -788,8 +788,8 @@
     (only (euphrates labelinglogic-expression-compare)
           labelinglogic:expression:compare))
   (import
-    (only (euphrates labelinglogic-expression-compile-r7rs)
-          labelinglogic:expression:compile/r7rs))
+    (only (euphrates labelinglogic-expression-interpret-r7rs)
+          labelinglogic:expression:interpret/r7rs))
   (import
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
