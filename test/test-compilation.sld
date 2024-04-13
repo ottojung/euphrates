@@ -788,9 +788,6 @@
     (only (euphrates labelinglogic-expression-compare)
           labelinglogic:expression:compare))
   (import
-    (only (euphrates labelinglogic-expression-interpret-r7rs)
-          labelinglogic:expression:interpret/r7rs))
-  (import
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
   (import
@@ -823,6 +820,10 @@
             labelinglogic-expression-foreach-subexpression)
           labelinglogic:expression:foreach-subexpression))
   (import
+    (only (euphrates
+            labelinglogic-expression-foreach-variable)
+          labelinglogic:expression:foreach-variable))
+  (import
     (only (euphrates labelinglogic-expression-ground-huh)
           labelinglogic:expression:ground?))
   (import
@@ -838,6 +839,10 @@
   (import
     (only (euphrates labelinglogic-expression-inline-some)
           labelinglogic:expression:inline-some))
+  (import
+    (only (euphrates
+            labelinglogic-expression-interpret-r7rs)
+          labelinglogic:expression:interpret/r7rs))
   (import
     (only (euphrates
             labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-term)
@@ -923,6 +928,9 @@
     (only (euphrates labelinglogic-expression-variables)
           labelinglogic:expression:variables))
   (import
+    (only (euphrates labelinglogic-interpret-r7rs-code)
+          labelinglogic:interpret-r7rs-code))
+  (import
     (only (euphrates labelinglogic-model-alpha-rename)
           labelinglogic:model:alpha-rename))
   (import
@@ -952,8 +960,15 @@
           labelinglogic:model:collect-dnf-clauses))
   (import
     (only (euphrates
+            labelinglogic-model-compile-to-r7rs-first)
+          labelinglogic:model:compile-to-r7rs/first))
+  (import
+    (only (euphrates
             labelinglogic-model-deduplicate-subexpressions)
           labelinglogic:model:deduplicate-subexpressions))
+  (import
+    (only (euphrates labelinglogic-model-empty-huh)
+          labelinglogic:model:empty?))
   (import
     (only (euphrates labelinglogic-model-evaluate-first)
           labelinglogic:model:evaluate/first))
@@ -982,6 +997,9 @@
     (only (euphrates
             labelinglogic-model-foreach-subexpression)
           labelinglogic:model:foreach-subexpression))
+  (import
+    (only (euphrates labelinglogic-model-foreach-variable)
+          labelinglogic:model:foreach-variable))
   (import
     (only (euphrates labelinglogic-model-inline-all)
           labelinglogic:model:inline-all))
