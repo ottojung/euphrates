@@ -18,7 +18,7 @@
       (not (loop (car args))))
 
     (define (labelinglogic:expression:evaluate/variable model expr input)
-      (define reference
+      (define predicate
         (labelinglogic:model:assoc-or
          expr model
          (raisu* :from "labelinglogic:expression:evaluate"
@@ -26,7 +26,6 @@
                  :message "Reference to nonexistant class"
                  :args (list expr))))
 
-      (define predicate (labelinglogic:binding:expr reference))
       (loop predicate))
 
     (cond
