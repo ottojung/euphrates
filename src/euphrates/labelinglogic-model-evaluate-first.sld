@@ -6,7 +6,13 @@
     (only (euphrates labelinglogic-model-evaluate)
           labelinglogic:model:evaluate))
   (import
-    (only (scheme base) begin car define if null?))
+    (only (scheme base)
+          begin
+          car
+          define
+          if
+          lambda
+          null?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
