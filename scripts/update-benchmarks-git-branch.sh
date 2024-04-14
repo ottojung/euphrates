@@ -34,15 +34,6 @@ cp -T -r dist/benchmarks/ benchmarks-repo/data/
 
 cd benchmarks-repo/
 
-git submodule update --init
-
-cd euphrates/
-
-git fetch origin master
-git reset --hard origin/master
-
-cd -
-
 git config user.name "Otto Jung (bot)"
 git config user.email "otto.jung@vauplace.com"
 git config gpg.format ssh
