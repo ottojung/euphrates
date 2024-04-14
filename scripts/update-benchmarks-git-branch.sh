@@ -18,19 +18,14 @@ export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $SSHKEYFILE"
 rm -f "$SSHKEYFILE"
 echo "$REPOLOGKEY" > "$SSHKEYFILE"
 chmod u=r,g=,o= "$SSHKEYFILE"
+BRANCH="euphrates-master"
 
 set -x
 
 git clone \
-    --branch euphrates-master \
+    --branch "$BRANCH" \
     pubgit@vau.place:repolog.git \
     benchmarks-repo \
-
-
-rm   -fr benchmarks-repo/data/
-mkdir -p benchmarks-repo/data/
-
-cp -T -r dist/benchmarks/ benchmarks-repo/data/
 
 cd benchmarks-repo/
 
@@ -43,9 +38,25 @@ git remote set-url --add origin pubgit@vau.place:repolog.git
 git remote set-url --add origin git@github.com:ottojung/repolog.git
 git remote set-url --add origin git@codeberg.org:otto/repolog.git
 
-git add --all
-git commit --message 'update benchmarks'
-git push origin HEAD
+
+for TRY in $(seq 10)
+do
+    rm   -fr data/
+    mkdir -p data/
+    cp -T -r ../dist/benchmarks/ data/
+
+    git add --all
+    git commit --message 'update benchmarks'
+
+    if git push origin "$BRANCH"
+    then break
+    fi
+
+    sleep 5
+    git fetch origin "$BRANCH"
+    git reset --hard "$BRANCH"
+    git clean -dfx
+done
 
 rm -f "$SSHKEYFILE"
 rm -fr benchmarks-repo
