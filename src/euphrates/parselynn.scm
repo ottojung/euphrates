@@ -95,21 +95,18 @@
       (define ___gtable goto-table)
       (define ___rtable reduction-table)
 
-      (define ___lexerp #f)
-      (define ___errorp #f)
-
       (define ___stack  #f)
       (define ___sp     0)
 
       (define ___curr-input #f)
       (define ___reuse-input #f)
 
-      (define (initialize-lexer! lexer)
-        (set! ___lexerp lexer))
+      (define (initialize-scanner! scanner)
+        (set! ___scanner scanner))
 
       (define ___input #f)
       (define (___consume)
-        (set! ___input (if ___reuse-input ___curr-input (___lexerp)))
+        (set! ___input (if ___reuse-input ___curr-input (get-next-token)))
         (set! ___reuse-input #f)
         (set! ___curr-input ___input))
 
@@ -246,8 +243,8 @@
                 (loop)))))
 
 
-      (lambda (lexerp errorp)
-        (initialize-lexer! lexerp)
+      (lambda (scanner errorp)
+        (initialize-scanner! scanner)
         (set! ___errorp errorp)
         (set! ___input #f)
         (set! ___reuse-input #f)
@@ -265,15 +262,12 @@
       (define ___gtable goto-table)
       (define ___rtable reduction-table)
 
-      (define ___lexerp #f)
-      (define ___errorp #f)
-
       ;; -- Input handling
 
-      (define (initialize-lexer! lexer)
-        (set! ___lexerp lexer))
+      (define (initialize-scanner! scanner)
+        (set! ___scanner scanner))
       (define (consume)
-        (___lexerp))
+        (get-next-token))
 
       (define (token-category tok)
         (if (lexical-token? tok)
@@ -447,19 +441,19 @@
                     #f #f
                     #f #f)))
 
-      (define (init lexerp errorp)
+      (define (init scanner errorp)
         (set! ___errorp errorp)
-        (initialize-lexer! lexerp)
+        (initialize-scanner! scanner)
         (initialize-processes)
         (save-loop-state! 'run #f #f #f #f #f #f #f)
         (add-process! '(0)))
 
-      (define (make-iterator lexerp errorp)
-        (init lexerp errorp)
+      (define (make-iterator scanner errorp)
+        (init scanner errorp)
         (lambda _ (continue-from-saved)))
 
-      (define (make-first-returner lexerp errorp)
-        (init lexerp errorp)
+      (define (make-first-returner scanner errorp)
+        (init scanner errorp)
         (continue-from-saved))
 
       ,(cond
@@ -467,6 +461,20 @@
         ((equal? results-mode 'first) 'make-first-returner)
         (else (raisu 'impossible 'expected-all-or-first)))))
 
+
+  (define (wrap-lexer-code lexer-code)
+    (append
+     '((define ___scanner #f)
+       (define ___errorp #f)
+       )
+     lexer-code))
+
+  (define default-lexer-code
+    `((define ___scanner #f)
+      (define ___errorp #f)
+      (define get-next-token
+        (lambda args
+          (___scanner)))))
 
   (define (drop l n)
     (cond ((and (> n 0) (pair? l))
@@ -2038,6 +2046,12 @@
 
      (cons 'tokens: (lambda (option) (list? option)))
 
+     (cons 'lexer-code:
+           (lambda (option)
+             (and (pair? option)
+                  (procedure?
+                   (labelinglogic:expression:interpret/r7rs option)))))
+
      (cons 'driver:
            (lambda (option)
              (and (list? option)
@@ -2118,6 +2132,9 @@
   (define (options-get-results-mode options)
     (assq-or 'results: options 'all))
 
+  (define (options-get-lexer-code options)
+    (assq-or 'lexer-code: options #f))
+
 
   ;; -- arguments
 
@@ -2153,6 +2170,14 @@
         (set-results-mode! options)
         (set-conflict-handler! options)))
 
+    (define lexer-code
+      (options-get-lexer-code options))
+
+    (define all-lexer-code
+      (if lexer-code
+          (wrap-lexer-code lexer-code)
+          default-lexer-code))
+
     (define gram/actions (gen-tables! tokens rules))
     (define goto-table (build-goto-table))
     (define reduction-table (build-reduction-table gram/actions))
@@ -2168,6 +2193,7 @@
     (define code
       `(let ()
          ,@common-definitions-code
+         ,@all-lexer-code
          (define action-table (quote ,action-table))
          (define goto-table ,goto-table)
          (lambda (actions)
