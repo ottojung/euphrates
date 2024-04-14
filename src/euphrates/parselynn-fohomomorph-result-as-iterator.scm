@@ -12,8 +12,8 @@
   (define input
     (parselynn:fohomomorph-result-struct:input result))
 
-  (define lexer-model
-    (parselynn:fohomomorph:lexer-model this))
+  (define base-model
+    (parselynn:fohomomorph:base-model this))
 
   (define offset 0)
   (define linenum 0)
@@ -70,7 +70,7 @@
     (make-lexical-token category location c))
 
   (define evaluator-code
-    (labelinglogic:model:compile-to-r7rs/first lexer-model))
+    (labelinglogic:model:compile-to-r7rs/first base-model))
 
   (define evaluator
     (labelinglogic:interpret-r7rs-code evaluator-code))

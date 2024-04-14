@@ -5,7 +5,7 @@
     make-parselynn:fohomomorph-struct
     parselynn:fohomomorph?
     parselynn:fohomomorph:additional-grammar-rules
-    parselynn:fohomomorph:lexer-model)
+    parselynn:fohomomorph:base-model)
   (import
     (only (euphrates define-type9) define-type9))
   (import (only (scheme base) begin))

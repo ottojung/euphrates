@@ -57,11 +57,11 @@
   (define rules
     (append rules/2 additional-grammar-rules))
 
-  (define lexer-model
-    (parselynn:fohomomorph:lexer-model lexer))
+  (define base-model
+    (parselynn:fohomomorph:base-model lexer))
 
   (define tokens
-    (labelinglogic:model:names lexer-model))
+    (labelinglogic:model:names base-model))
 
   (define hidden-tree-labels
     (list->hashset

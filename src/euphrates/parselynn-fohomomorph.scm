@@ -124,7 +124,7 @@
    (define additional-grammar-rules/stack
      (stack-make))
 
-   (define lexer-model/stack
+   (define base-model/stack
      (stack-make))
 
    (define (dereference-while-variable expr)
@@ -159,7 +159,7 @@
 
         (cond
          ((member type (list '= 'r7rs 'and))
-          (stack-push! lexer-model/stack binding))
+          (stack-push! base-model/stack binding))
          ((member type (list 'or))
           (let ()
             (define rule (cons class (map list args)))
@@ -175,18 +175,18 @@
       (labelinglogic:model:bindings
        opt-model)))
 
-   (define lexer-model
+   (define base-model
      (reverse
       (stack->list
-       lexer-model/stack)))
+       base-model/stack)))
 
    (define additional-grammar-rules
      (reverse
       (stack->list
        additional-grammar-rules/stack)))
 
-   (define renamed-lexer-model
-     (labelinglogic:model:alpha-rename lexer-model))
+   (define renamed-base-model
+     (labelinglogic:model:alpha-rename base-model))
 
    (define renamed-grammar-rules
      (unique-identifier->symbol/recursive
@@ -194,4 +194,4 @@
 
    (make-parselynn:fohomomorph-struct
     renamed-grammar-rules
-    renamed-lexer-model)))
+    renamed-base-model)))

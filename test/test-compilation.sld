@@ -1643,7 +1643,7 @@
     (only (euphrates parselynn-fohomomorph-struct)
           make-parselynn:fohomomorph-struct
           parselynn:fohomomorph:additional-grammar-rules
-          parselynn:fohomomorph:lexer-model
+          parselynn:fohomomorph:base-model
           parselynn:fohomomorph?))
   (import
     (only (euphrates parselynn-fohomomorph)

@@ -17,7 +17,7 @@
           parselynn:fohomomorph-result-struct:lexer))
   (import
     (only (euphrates parselynn-fohomomorph-struct)
-          parselynn:fohomomorph:lexer-model))
+          parselynn:fohomomorph:base-model))
   (import
     (only (euphrates parselynn) make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
