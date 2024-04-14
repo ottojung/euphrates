@@ -26,6 +26,16 @@
     (only (euphrates labelinglogic-model-names)
           labelinglogic:model:names))
   (import
+    (only (euphrates parselynn-folexer-compile-iterator)
+          parselynn:folexer:compile/iterator))
+  (import
+    (only (euphrates parselynn-folexer-struct)
+          parselynn:folexer:additional-grammar-rules
+          parselynn:folexer:base-model))
+  (import
+    (only (euphrates parselynn-folexer)
+          make-parselynn:folexer))
+  (import
     (only (euphrates parselynn-simple-check-options)
           parselynn:simple-check-options))
   (import
@@ -40,13 +50,6 @@
   (import
     (only (euphrates parselynn-simple-struct)
           make-parselynn:simple-struct))
-  (import
-    (only (euphrates parselynn-folexer-struct)
-          parselynn:folexer:additional-grammar-rules
-          parselynn:folexer:base-model))
-  (import
-    (only (euphrates parselynn-folexer)
-          make-parselynn:folexer))
   (import (only (euphrates parselynn) parselynn))
   (import (only (euphrates raisu-star) raisu*))
   (import

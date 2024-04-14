@@ -5,8 +5,7 @@
          parser-struct errorp input)
 
   (define lexer-iterator
-    (parselynn:simple:initialize-lexer
-     parser-struct input))
+    input)
 
   (define backend-parser
     (parselynn:simple-struct:backend-parser

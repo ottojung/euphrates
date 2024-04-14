@@ -63,6 +63,10 @@
   (define tokens
     (labelinglogic:model:names base-model))
 
+  (define lexer-code
+    (parselynn:folexer:compile/iterator
+     lexer))
+
   (define hidden-tree-labels
     (list->hashset
      (append
@@ -93,16 +97,18 @@
 
   (define options-to-upstream
     (assq-set-value
-     'rules: rules
+     'lexer-code: lexer-code
      (assq-set-value
-      'tokens: tokens
-      (assq-unset-multiple-values
-       (list 'inline:
-             'skip:
-             'join:
-             'flatten:
-             'grammar:)
-       options*))))
+      'rules: rules
+      (assq-set-value
+       'tokens: tokens
+       (assq-unset-multiple-values
+        (list 'inline:
+              'skip:
+              'join:
+              'flatten:
+              'grammar:)
+        options*)))))
 
   (define backend-parser
     (parselynn options-to-upstream))

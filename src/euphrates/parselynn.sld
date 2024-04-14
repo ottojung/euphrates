@@ -12,10 +12,6 @@
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates fkeyword) fkeyword?))
   (import
-    (only (euphrates
-            labelinglogic-expression-interpret-r7rs)
-          labelinglogic:expression:interpret/r7rs))
-  (import
     (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates parselynn-struct)

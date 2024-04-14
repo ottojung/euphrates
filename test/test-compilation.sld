@@ -1525,6 +1525,9 @@
   (import
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
+    (only (euphrates parselynn-folexer-compile-iterator)
+          parselynn:folexer:compile/iterator))
+  (import
     (only (euphrates parselynn-folexer-model)
           parselynn-folexer-model))
   (import
@@ -1619,9 +1622,6 @@
   (import
     (only (euphrates parselynn-simple-flatten1)
           parselynn:simple-flatten1))
-  (import
-    (only (euphrates parselynn-simple-initialize-lexer)
-          parselynn:simple:initialize-lexer))
   (import
     (only (euphrates parselynn-simple-postprocess)
           parselynn:simple:postprocess))

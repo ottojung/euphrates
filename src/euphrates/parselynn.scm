@@ -2030,11 +2030,7 @@
 
      (cons 'tokens: (lambda (option) (list? option)))
 
-     (cons 'lexer-code:
-           (lambda (option)
-             (and (pair? option)
-                  (procedure?
-                   (labelinglogic:expression:interpret/r7rs option)))))
+     (cons 'lexer-code: (lambda (option) (pair? option)))
 
      (cons 'driver:
            (lambda (option)
