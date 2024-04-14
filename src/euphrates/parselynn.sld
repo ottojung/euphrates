@@ -12,10 +12,10 @@
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates fkeyword) fkeyword?))
   (import
+    (only (euphrates list-length-eq) list-length=))
+  (import
     (only (euphrates parselynn-struct)
           make-parselynn-struct))
-  (import
-    (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))

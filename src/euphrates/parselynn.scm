@@ -266,12 +266,10 @@
 
       ;; -- Input handling
 
-      (define *input* #f)
       (define (initialize-lexer lexer)
-        (set! ___lexerp lexer)
-        (set! *input* #f))
+        (set! ___lexerp lexer))
       (define (consume)
-        (set! *input* (___lexerp)))
+        (___lexerp))
 
       (define (token-category tok)
         (if (lexical-token? tok)
@@ -314,6 +312,7 @@
 
       ;; Loop state. Set by iterator.
       (define s_routine 'run)
+      (define s_input #f)
       (define s_symbol #f)
       (define s_processes #f)
       (define s_stacks #f)
@@ -322,10 +321,11 @@
       (define s_actions #f)
 
       (define (save-loop-state! routine
-                                symbol processes
+                                *input* symbol processes
                                 stacks active-stacks
                                 stack actions)
         (set! s_routine routine)
+        (set! s_input *input*)
         (set! s_symbol symbol)
         (set! s_processes processes)
         (set! s_stacks stacks)
@@ -334,17 +334,17 @@
         (set! s_actions actions))
 
       (define (continue routine
-                        symbol processes
+                        *input* symbol processes
                         stacks active-stacks
                         stack actions)
         (case routine
           ((run) (run))
           ((run-processes)
-           (run-processes symbol processes))
+           (run-processes *input* symbol processes))
           ((run-single-process)
-           (run-single-process symbol processes stacks active-stacks))
+           (run-single-process *input* symbol processes stacks active-stacks))
           ((run-actions-loop)
-           (run-actions-loop symbol processes stacks active-stacks stack actions))
+           (run-actions-loop *input* symbol processes stacks active-stacks stack actions))
           ((done) #f)
           (else
            'TODO
@@ -353,11 +353,11 @@
 
       (define (continue-from-saved)
         (continue s_routine
-                  s_symbol s_processes
+                  s_input s_symbol s_processes
                   s_stacks s_active-stacks
                   s_stack s_actions))
 
-      (define (run-actions-loop symbol processes stacks active-stacks stack actions)
+      (define (run-actions-loop *input* symbol processes stacks active-stacks stack actions)
         (let actions-loop ((actions       actions)
                            (active-stacks active-stacks))
           (if (pair? actions)
@@ -368,7 +368,7 @@
                       ((eq? action 'accept)
                        (let ((actions other-actions))
                          (save-loop-state! 'run-actions-loop
-                                           symbol processes
+                                           *input* symbol processes
                                            stacks active-stacks
                                            stack actions))
                        (let ((result (car (take-right stack 2))))
@@ -382,11 +382,11 @@
                          (actions-loop other-actions (cons new-stack active-stacks))))))
               ;; active-stacks)))
               (continue 'run-single-process
-                        symbol processes
+                        *input* symbol processes
                         (cdr stacks) active-stacks
                         #f #f))))
 
-      (define (run-single-process symbol processes stacks active-stacks)
+      (define (run-single-process *input* symbol processes stacks active-stacks)
         (let loop ((stacks stacks) (active-stacks active-stacks))
           (cond ((pair? stacks)
                  (let ()
@@ -395,51 +395,51 @@
                    (define actions (get-actions symbol (vector-ref ___atable state)))
                    ;; (loop (cdr stacks)
                    ;;       (run-actions-loop
-                   ;;        symbol processes
+                   ;;        *input* symbol processes
                    ;;        stacks active-stacks
                    ;;        stack actions))))
                    (run-actions-loop
-                    symbol processes
+                    *input* symbol processes
                     stacks active-stacks
                     stack actions)))
 
                 ((pair? active-stacks)
                  (continue 'run-single-process
-                           symbol processes
+                           *input* symbol processes
                            (reverse active-stacks) '()
                            #f #f))
                  ;; (loop (reverse active-stacks) '()))
 
                 (else
                  (continue 'run-processes
-                           symbol (cdr processes)
+                           *input* symbol (cdr processes)
                            #f #f
                            #f #f)))))
 
                  ;; (run-processes symbol (cdr processes))))))
 
-      (define (run-processes symbol processes)
+      (define (run-processes *input* symbol processes)
         (let loop ((processes processes))
           (if (null? processes)
               (if (pair? (get-processes))
-                  (continue 'run #f #f #f #f #f #f)
-                  (continue 'done #f #f #f #f #f #f))
+                  (continue 'run #f #f #f #f #f #f #f)
+                  (continue 'done #f #f #f #f #f #f #f))
               (continue 'run-single-process
-                        symbol processes
+                        *input* symbol processes
                         (list (car processes)) '()
                         #f #f))))
               ;; (run-single-process
-              ;;  symbol processes
+              ;;  *input* symbol processes
               ;;  (list (car processes)) '()))))
 
       (define (run)
         (let loop-tokens ()
-          (define _t (consume))
+          (define *input* (consume))
           (define symbol (token-category *input*))
           (define processes (get-processes))
           (initialize-processes)
           (continue 'run-processes
-                    symbol processes
+                    *input* symbol processes
                     #f #f
                     #f #f)))
 
@@ -447,7 +447,7 @@
         (set! ___errorp errorp)
         (initialize-lexer lexerp)
         (initialize-processes)
-        (save-loop-state! 'run #f #f #f #f #f #f)
+        (save-loop-state! 'run #f #f #f #f #f #f #f)
         (add-process '(0)))
 
       (define (make-iterator lexerp errorp)

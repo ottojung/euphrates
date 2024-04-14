@@ -148,11 +148,9 @@
               (define ___rtable reduction-table)
               (define ___lexerp #f)
               (define ___errorp #f)
-              (define *input* #f)
               (define (initialize-lexer lexer)
-                (set! ___lexerp lexer)
-                (set! *input* #f))
-              (define (consume) (set! *input* (___lexerp)))
+                (set! ___lexerp lexer))
+              (define (consume) (___lexerp))
               (define (token-category tok)
                 (if (lexical-token? tok)
                   (lexical-token-category tok)
@@ -186,6 +184,7 @@
                 (let ((pair (assoc token action-list)))
                   (if pair (cdr pair) (cdar action-list))))
               (define s_routine 'run)
+              (define s_input #f)
               (define s_symbol #f)
               (define s_processes #f)
               (define s_stacks #f)
@@ -194,6 +193,7 @@
               (define s_actions #f)
               (define (save-loop-state!
                        routine
+                       *input*
                        symbol
                        processes
                        stacks
@@ -201,6 +201,7 @@
                        stack
                        actions)
                 (set! s_routine routine)
+                (set! s_input *input*)
                 (set! s_symbol symbol)
                 (set! s_processes processes)
                 (set! s_stacks stacks)
@@ -209,6 +210,7 @@
                 (set! s_actions actions))
               (define (continue
                        routine
+                       *input*
                        symbol
                        processes
                        stacks
@@ -218,15 +220,17 @@
                 (case routine
                   ((run) (run))
                   ((run-processes)
-                   (run-processes symbol processes))
+                   (run-processes *input* symbol processes))
                   ((run-single-process)
                    (run-single-process
+                     *input*
                      symbol
                      processes
                      stacks
                      active-stacks))
                   ((run-actions-loop)
                    (run-actions-loop
+                     *input*
                      symbol
                      processes
                      stacks
@@ -238,6 +242,7 @@
               (define (continue-from-saved)
                 (continue
                   s_routine
+                  s_input
                   s_symbol
                   s_processes
                   s_stacks
@@ -245,6 +250,7 @@
                   s_stack
                   s_actions))
               (define (run-actions-loop
+                       *input*
                        symbol
                        processes
                        stacks
@@ -262,6 +268,7 @@
                              (let ((actions other-actions))
                                (save-loop-state!
                                  'run-actions-loop
+                                 *input*
                                  symbol
                                  processes
                                  stacks
@@ -281,6 +288,7 @@
                                  (cons new-stack active-stacks))))))
                     (continue
                       'run-single-process
+                      *input*
                       symbol
                       processes
                       (cdr stacks)
@@ -288,6 +296,7 @@
                       #f
                       #f))))
               (define (run-single-process
+                       *input*
                        symbol
                        processes
                        stacks
@@ -300,6 +309,7 @@
                            (define actions
                              (get-actions symbol (vector-ref ___atable state)))
                            (run-actions-loop
+                             *input*
                              symbol
                              processes
                              stacks
@@ -309,6 +319,7 @@
                         ((pair? active-stacks)
                          (continue
                            'run-single-process
+                           *input*
                            symbol
                            processes
                            (reverse active-stacks)
@@ -318,20 +329,22 @@
                         (else
                          (continue
                            'run-processes
+                           *input*
                            symbol
                            (cdr processes)
                            #f
                            #f
                            #f
                            #f)))))
-              (define (run-processes symbol processes)
+              (define (run-processes *input* symbol processes)
                 (let loop ((processes processes))
                   (if (null? processes)
                     (if (pair? (get-processes))
-                      (continue 'run #f #f #f #f #f #f)
-                      (continue 'done #f #f #f #f #f #f))
+                      (continue 'run #f #f #f #f #f #f #f)
+                      (continue 'done #f #f #f #f #f #f #f))
                     (continue
                       'run-single-process
+                      *input*
                       symbol
                       processes
                       (list (car processes))
@@ -340,12 +353,13 @@
                       #f))))
               (define (run)
                 (let loop-tokens ()
-                  (define _t (consume))
+                  (define *input* (consume))
                   (define symbol (token-category *input*))
                   (define processes (get-processes))
                   (initialize-processes)
                   (continue
                     'run-processes
+                    *input*
                     symbol
                     processes
                     #f
@@ -356,7 +370,7 @@
                 (set! ___errorp errorp)
                 (initialize-lexer lexerp)
                 (initialize-processes)
-                (save-loop-state! 'run #f #f #f #f #f #f)
+                (save-loop-state! 'run #f #f #f #f #f #f #f)
                 (add-process '(0)))
               (define (make-iterator lexerp errorp)
                 (init lexerp errorp)
@@ -536,11 +550,9 @@
                (define ___rtable reduction-table)
                (define ___lexerp #f)
                (define ___errorp #f)
-               (define *input* #f)
                (define (initialize-lexer lexer)
-                 (set! ___lexerp lexer)
-                 (set! *input* #f))
-               (define (consume) (set! *input* (___lexerp)))
+                 (set! ___lexerp lexer))
+               (define (consume) (___lexerp))
                (define (token-category tok)
                  (if (lexical-token? tok)
                    (lexical-token-category tok)
@@ -574,6 +586,7 @@
                  (let ((pair (assoc token action-list)))
                    (if pair (cdr pair) (cdar action-list))))
                (define s_routine 'run)
+               (define s_input #f)
                (define s_symbol #f)
                (define s_processes #f)
                (define s_stacks #f)
@@ -582,6 +595,7 @@
                (define s_actions #f)
                (define (save-loop-state!
                         routine
+                        *input*
                         symbol
                         processes
                         stacks
@@ -589,6 +603,7 @@
                         stack
                         actions)
                  (set! s_routine routine)
+                 (set! s_input *input*)
                  (set! s_symbol symbol)
                  (set! s_processes processes)
                  (set! s_stacks stacks)
@@ -597,6 +612,7 @@
                  (set! s_actions actions))
                (define (continue
                         routine
+                        *input*
                         symbol
                         processes
                         stacks
@@ -606,15 +622,17 @@
                  (case routine
                    ((run) (run))
                    ((run-processes)
-                    (run-processes symbol processes))
+                    (run-processes *input* symbol processes))
                    ((run-single-process)
                     (run-single-process
+                      *input*
                       symbol
                       processes
                       stacks
                       active-stacks))
                    ((run-actions-loop)
                     (run-actions-loop
+                      *input*
                       symbol
                       processes
                       stacks
@@ -626,6 +644,7 @@
                (define (continue-from-saved)
                  (continue
                    s_routine
+                   s_input
                    s_symbol
                    s_processes
                    s_stacks
@@ -633,6 +652,7 @@
                    s_stack
                    s_actions))
                (define (run-actions-loop
+                        *input*
                         symbol
                         processes
                         stacks
@@ -650,6 +670,7 @@
                               (let ((actions other-actions))
                                 (save-loop-state!
                                   'run-actions-loop
+                                  *input*
                                   symbol
                                   processes
                                   stacks
@@ -669,6 +690,7 @@
                                   (cons new-stack active-stacks))))))
                      (continue
                        'run-single-process
+                       *input*
                        symbol
                        processes
                        (cdr stacks)
@@ -676,6 +698,7 @@
                        #f
                        #f))))
                (define (run-single-process
+                        *input*
                         symbol
                         processes
                         stacks
@@ -690,6 +713,7 @@
                                 symbol
                                 (vector-ref ___atable state)))
                             (run-actions-loop
+                              *input*
                               symbol
                               processes
                               stacks
@@ -699,6 +723,7 @@
                          ((pair? active-stacks)
                           (continue
                             'run-single-process
+                            *input*
                             symbol
                             processes
                             (reverse active-stacks)
@@ -708,20 +733,22 @@
                          (else
                           (continue
                             'run-processes
+                            *input*
                             symbol
                             (cdr processes)
                             #f
                             #f
                             #f
                             #f)))))
-               (define (run-processes symbol processes)
+               (define (run-processes *input* symbol processes)
                  (let loop ((processes processes))
                    (if (null? processes)
                      (if (pair? (get-processes))
-                       (continue 'run #f #f #f #f #f #f)
-                       (continue 'done #f #f #f #f #f #f))
+                       (continue 'run #f #f #f #f #f #f #f)
+                       (continue 'done #f #f #f #f #f #f #f))
                      (continue
                        'run-single-process
+                       *input*
                        symbol
                        processes
                        (list (car processes))
@@ -730,12 +757,13 @@
                        #f))))
                (define (run)
                  (let loop-tokens ()
-                   (define _t (consume))
+                   (define *input* (consume))
                    (define symbol (token-category *input*))
                    (define processes (get-processes))
                    (initialize-processes)
                    (continue
                      'run-processes
+                     *input*
                      symbol
                      processes
                      #f
@@ -746,7 +774,7 @@
                  (set! ___errorp errorp)
                  (initialize-lexer lexerp)
                  (initialize-processes)
-                 (save-loop-state! 'run #f #f #f #f #f #f)
+                 (save-loop-state! 'run #f #f #f #f #f #f #f)
                  (add-process '(0)))
                (define (make-iterator lexerp errorp)
                  (init lexerp errorp)
