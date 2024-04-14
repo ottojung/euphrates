@@ -9,18 +9,18 @@
 ;; The base homomorpism is defined in terms of First Order logical formulas, hence "fo" in the name.
 ;;
 
-(define-type9 parselynn:fohomomorph-struct
-  (make-parselynn:fohomomorph-struct
+(define-type9 parselynn:folexer-struct
+  (make-parselynn:folexer-struct
    additional-grammar-rules
    base-model
    )
 
-  parselynn:fohomomorph?
+  parselynn:folexer?
 
   (additional-grammar-rules
-   parselynn:fohomomorph:additional-grammar-rules)
+   parselynn:folexer:additional-grammar-rules)
 
   (base-model
-   parselynn:fohomomorph:base-model)
+   parselynn:folexer:base-model)
 
   )

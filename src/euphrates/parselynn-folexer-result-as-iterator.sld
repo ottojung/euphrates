@@ -1,8 +1,8 @@
 
 (define-library
   (euphrates
-    parselynn-fohomomorph-result-as-iterator)
-  (export parselynn:fohomomorph-result:as-iterator)
+    parselynn-folexer-result-as-iterator)
+  (export parselynn:folexer-result:as-iterator)
   (import
     (only (euphrates labelinglogic-interpret-r7rs-code)
           labelinglogic:interpret-r7rs-code))
@@ -11,13 +11,13 @@
             labelinglogic-model-compile-to-r7rs-first)
           labelinglogic:model:compile-to-r7rs/first))
   (import
-    (only (euphrates parselynn-fohomomorph-result-struct)
-          parselynn:fohomomorph-result-struct:input
-          parselynn:fohomomorph-result-struct:input-type
-          parselynn:fohomomorph-result-struct:lexer))
+    (only (euphrates parselynn-folexer-result-struct)
+          parselynn:folexer-result-struct:input
+          parselynn:folexer-result-struct:input-type
+          parselynn:folexer-result-struct:lexer))
   (import
-    (only (euphrates parselynn-fohomomorph-struct)
-          parselynn:fohomomorph:base-model))
+    (only (euphrates parselynn-folexer-struct)
+          parselynn:folexer:base-model))
   (import
     (only (euphrates parselynn) make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
@@ -55,6 +55,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-fohomomorph-result-as-iterator.scm")))
+               "euphrates/parselynn-folexer-result-as-iterator.scm")))
     (else (include
-            "parselynn-fohomomorph-result-as-iterator.scm"))))
+            "parselynn-folexer-result-as-iterator.scm"))))

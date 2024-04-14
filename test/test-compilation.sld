@@ -1620,34 +1620,34 @@
     (only (euphrates parselynn-simple)
           parselynn:simple))
   (import
-    (only (euphrates parselynn-fohomomorph-model)
-          parselynn-fohomomorph-model))
+    (only (euphrates parselynn-folexer-model)
+          parselynn-folexer-model))
   (import
     (only (euphrates
-            parselynn-fohomomorph-result-as-iterator)
-          parselynn:fohomomorph-result:as-iterator))
+            parselynn-folexer-result-as-iterator)
+          parselynn:folexer-result:as-iterator))
   (import
-    (only (euphrates parselynn-fohomomorph-result-struct)
-          make-parselynn:fohomomorph-result-struct
-          parselynn:fohomomorph-result-struct:input
-          parselynn:fohomomorph-result-struct:input-type
-          parselynn:fohomomorph-result-struct:lexer
-          parselynn:fohomomorph-result-struct?))
+    (only (euphrates parselynn-folexer-result-struct)
+          make-parselynn:folexer-result-struct
+          parselynn:folexer-result-struct:input
+          parselynn:folexer-result-struct:input-type
+          parselynn:folexer-result-struct:lexer
+          parselynn:folexer-result-struct?))
   (import
-    (only (euphrates parselynn-fohomomorph-run-on-char-port)
-          parselynn:fohomomorph:run-on-char-port))
+    (only (euphrates parselynn-folexer-run-on-char-port)
+          parselynn:folexer:run-on-char-port))
   (import
-    (only (euphrates parselynn-fohomomorph-run-on-string)
-          parselynn:fohomomorph:run-on-string))
+    (only (euphrates parselynn-folexer-run-on-string)
+          parselynn:folexer:run-on-string))
   (import
-    (only (euphrates parselynn-fohomomorph-struct)
-          make-parselynn:fohomomorph-struct
-          parselynn:fohomomorph:additional-grammar-rules
-          parselynn:fohomomorph:base-model
-          parselynn:fohomomorph?))
+    (only (euphrates parselynn-folexer-struct)
+          make-parselynn:folexer-struct
+          parselynn:folexer:additional-grammar-rules
+          parselynn:folexer:base-model
+          parselynn:folexer?))
   (import
-    (only (euphrates parselynn-fohomomorph)
-          make-parselynn:fohomomorph))
+    (only (euphrates parselynn-folexer)
+          make-parselynn:folexer))
   (import
     (only (euphrates parselynn-struct)
           make-parselynn-struct

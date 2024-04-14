@@ -57,11 +57,11 @@
                (list-intersperse "_" (map ~a t))))))
      (else (raisu 'impossible t))))
 
-  (define terminal->fohomomorph
+  (define terminal->folexer
     (curry-if re-terminal? identity))
 
   (define tokens-map
-    (map (compose-under cons terminal->token terminal->fohomomorph)
+    (map (compose-under cons terminal->token terminal->folexer)
          all-terminals))
 
   (define (translate-terminal x)

@@ -48,17 +48,17 @@
     (parselynn:simple-extract-regexes rules/1))
 
   (define lexer
-    (make-parselynn:fohomomorph
+    (make-parselynn:folexer
      taken-token-names-set tokens-map))
 
   (define additional-grammar-rules
-    (parselynn:fohomomorph:additional-grammar-rules lexer))
+    (parselynn:folexer:additional-grammar-rules lexer))
 
   (define rules
     (append rules/2 additional-grammar-rules))
 
   (define base-model
-    (parselynn:fohomomorph:base-model lexer))
+    (parselynn:folexer:base-model lexer))
 
   (define tokens
     (labelinglogic:model:names base-model))

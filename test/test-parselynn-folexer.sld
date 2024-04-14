@@ -1,6 +1,6 @@
 
 (define-library
-  (test-parselynn-fohomomorph)
+  (test-parselynn-folexer)
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
@@ -8,20 +8,20 @@
   (import (only (euphrates hashset) make-hashset))
   (import
     (only (euphrates
-            parselynn-fohomomorph-result-as-iterator)
-          parselynn:fohomomorph-result:as-iterator))
+            parselynn-folexer-result-as-iterator)
+          parselynn:folexer-result:as-iterator))
   (import
-    (only (euphrates parselynn-fohomomorph-run-on-char-port)
-          parselynn:fohomomorph:run-on-char-port))
+    (only (euphrates parselynn-folexer-run-on-char-port)
+          parselynn:folexer:run-on-char-port))
   (import
-    (only (euphrates parselynn-fohomomorph-run-on-string)
-          parselynn:fohomomorph:run-on-string))
+    (only (euphrates parselynn-folexer-run-on-string)
+          parselynn:folexer:run-on-string))
   (import
-    (only (euphrates parselynn-fohomomorph-struct)
-          parselynn:fohomomorph:additional-grammar-rules))
+    (only (euphrates parselynn-folexer-struct)
+          parselynn:folexer:additional-grammar-rules))
   (import
-    (only (euphrates parselynn-fohomomorph)
-          make-parselynn:fohomomorph))
+    (only (euphrates parselynn-folexer)
+          make-parselynn:folexer))
   (import
     (only (euphrates parselynn)
           lexical-token-category
@@ -71,5 +71,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-parselynn-fohomomorph.scm")))
-    (else (include "test-parselynn-fohomomorph.scm"))))
+               "test-parselynn-folexer.scm")))
+    (else (include "test-parselynn-folexer.scm"))))

@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates parselynn-fohomomorph-model)
-  (export parselynn-fohomomorph-model)
+  (euphrates parselynn-folexer-model)
+  (export parselynn-folexer-model)
   (import
     (only (scheme base)
           and
@@ -29,5 +29,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-fohomomorph-model.scm")))
-    (else (include "parselynn-fohomomorph-model.scm"))))
+               "euphrates/parselynn-folexer-model.scm")))
+    (else (include "parselynn-folexer-model.scm"))))

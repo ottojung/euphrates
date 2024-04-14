@@ -1,7 +1,7 @@
 ;;;; Copyright (C) 2023, 2024  Otto Jung
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (make-parselynn:fohomomorph
+(define (make-parselynn:folexer
          taken-token-names-set tokens-alist)
 
   (with-unique-identifier-context
@@ -94,9 +94,9 @@
            value)
 
           (else
-           (raisu* :from "parselynn:fohomomorph"
+           (raisu* :from "parselynn:folexer"
                    :type 'bad-token-type
-                   :message (stringf "Unknown element of ~s in fohomomorph lexer" (~a (quote singletons-tokens-alist)))
+                   :message (stringf "Unknown element of ~s in folexer lexer" (~a (quote singletons-tokens-alist)))
                    :args (list value))))))
 
      (labelinglogic:binding:make
@@ -107,7 +107,7 @@
 
    (define full-model
      (labelinglogic:model:append
-      parselynn-fohomomorph-model
+      parselynn-folexer-model
       bindings))
 
    (define _61237
@@ -192,6 +192,6 @@
      (unique-identifier->symbol/recursive
       additional-grammar-rules))
 
-   (make-parselynn:fohomomorph-struct
+   (make-parselynn:folexer-struct
     renamed-grammar-rules
     renamed-base-model)))

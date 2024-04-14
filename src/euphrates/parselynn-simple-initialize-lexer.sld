@@ -4,15 +4,15 @@
   (export parselynn:simple:initialize-lexer)
   (import
     (only (euphrates
-            parselynn-fohomomorph-result-as-iterator)
-          parselynn:fohomomorph-result:as-iterator))
+            parselynn-folexer-result-as-iterator)
+          parselynn:folexer-result:as-iterator))
   (import
     (only (euphrates
-            parselynn-fohomomorph-run-on-char-port)
-          parselynn:fohomomorph:run-on-char-port))
+            parselynn-folexer-run-on-char-port)
+          parselynn:folexer:run-on-char-port))
   (import
-    (only (euphrates parselynn-fohomomorph-run-on-string)
-          parselynn:fohomomorph:run-on-string))
+    (only (euphrates parselynn-folexer-run-on-string)
+          parselynn:folexer:run-on-string))
   (import
     (only (euphrates parselynn-simple-struct)
           parselynn:simple-struct:lexer))
