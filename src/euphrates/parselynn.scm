@@ -89,7 +89,7 @@
        (~a results-mode) 'results: 'first))
      (else (raisu 'impossible 'expected-all-or-first results-mode)))
 
-    `((define *max-stack-size* 500)
+    `((define *initial-stack-size* 500)
 
       (define ___atable action-table)
       (define ___gtable goto-table)
@@ -104,6 +104,9 @@
       (define ___curr-input #f)
       (define ___reuse-input #f)
 
+      (define (initialize-lexer! lexer)
+        (set! ___lexerp lexer))
+
       (define ___input #f)
       (define (___consume)
         (set! ___input (if ___reuse-input ___curr-input (___lexerp)))
@@ -114,7 +117,7 @@
         (set! ___reuse-input #t))
 
       (define (___initstack)
-        (set! ___stack (make-vector *max-stack-size* 0))
+        (set! ___stack (make-vector *initial-stack-size* 0))
         (set! ___sp 0))
 
       (define (___growstack)
@@ -244,8 +247,8 @@
 
 
       (lambda (lexerp errorp)
+        (initialize-lexer! lexerp)
         (set! ___errorp errorp)
-        (set! ___lexerp lexerp)
         (set! ___input #f)
         (set! ___reuse-input #f)
         (___initstack)
@@ -267,7 +270,7 @@
 
       ;; -- Input handling
 
-      (define (initialize-lexer lexer)
+      (define (initialize-lexer! lexer)
         (set! ___lexerp lexer))
       (define (consume)
         (___lexerp))
@@ -446,7 +449,7 @@
 
       (define (init lexerp errorp)
         (set! ___errorp errorp)
-        (initialize-lexer lexerp)
+        (initialize-lexer! lexerp)
         (initialize-processes)
         (save-loop-state! 'run #f #f #f #f #f #f #f)
         (add-process! '(0)))

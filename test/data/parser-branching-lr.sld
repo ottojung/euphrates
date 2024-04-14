@@ -163,7 +163,7 @@
                         3
                         #t
                         (vector-ref ___stack (- ___sp 1)))))))
-              (define *max-stack-size* 500)
+              (define *initial-stack-size* 500)
               (define ___atable action-table)
               (define ___gtable goto-table)
               (define ___rtable reduction-table)
@@ -173,6 +173,8 @@
               (define ___sp 0)
               (define ___curr-input #f)
               (define ___reuse-input #f)
+              (define (initialize-lexer! lexer)
+                (set! ___lexerp lexer))
               (define ___input #f)
               (define (___consume)
                 (set! ___input
@@ -181,7 +183,8 @@
                 (set! ___curr-input ___input))
               (define (___pushback) (set! ___reuse-input #t))
               (define (___initstack)
-                (set! ___stack (make-vector *max-stack-size* 0))
+                (set! ___stack
+                  (make-vector *initial-stack-size* 0))
                 (set! ___sp 0))
               (define (___growstack)
                 (let ((new-stack
@@ -300,8 +303,8 @@
                         (___consume))
                       (loop)))))
               (lambda (lexerp errorp)
+                (initialize-lexer! lexerp)
                 (set! ___errorp errorp)
-                (set! ___lexerp lexerp)
                 (set! ___input #f)
                 (set! ___reuse-input #f)
                 (___initstack)
@@ -492,7 +495,7 @@
                          3
                          #t
                          (vector-ref ___stack (- ___sp 1)))))))
-               (define *max-stack-size* 500)
+               (define *initial-stack-size* 500)
                (define ___atable action-table)
                (define ___gtable goto-table)
                (define ___rtable reduction-table)
@@ -502,6 +505,8 @@
                (define ___sp 0)
                (define ___curr-input #f)
                (define ___reuse-input #f)
+               (define (initialize-lexer! lexer)
+                 (set! ___lexerp lexer))
                (define ___input #f)
                (define (___consume)
                  (set! ___input
@@ -510,7 +515,8 @@
                  (set! ___curr-input ___input))
                (define (___pushback) (set! ___reuse-input #t))
                (define (___initstack)
-                 (set! ___stack (make-vector *max-stack-size* 0))
+                 (set! ___stack
+                   (make-vector *initial-stack-size* 0))
                  (set! ___sp 0))
                (define (___growstack)
                  (let ((new-stack
@@ -629,8 +635,8 @@
                          (___consume))
                        (loop)))))
                (lambda (lexerp errorp)
+                 (initialize-lexer! lexerp)
                  (set! ___errorp errorp)
-                 (set! ___lexerp lexerp)
                  (set! ___input #f)
                  (set! ___reuse-input #f)
                  (___initstack)
