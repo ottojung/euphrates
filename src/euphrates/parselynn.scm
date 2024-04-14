@@ -287,7 +287,7 @@
 
       (define (initialize-processes)
         (set! *processes* '()))
-      (define (add-process process)
+      (define (add-process! process)
         (set! *processes* (cons process *processes*)))
       (define (get-processes)
         (reverse *processes*))
@@ -375,7 +375,7 @@
                          result))
                       ((>= action 0)
                        (let ((new-stack (shift action *input* stack)))
-                         (add-process new-stack))
+                         (add-process! new-stack))
                        (actions-loop other-actions active-stacks))
                       (else
                        (let ((new-stack (reduce (- action) stack)))
@@ -448,7 +448,7 @@
         (initialize-lexer lexerp)
         (initialize-processes)
         (save-loop-state! 'run #f #f #f #f #f #f #f)
-        (add-process '(0)))
+        (add-process! '(0)))
 
       (define (make-iterator lexerp errorp)
         (init lexerp errorp)
