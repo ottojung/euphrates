@@ -1638,7 +1638,6 @@
           parselynn:simple-struct:arguments
           parselynn:simple-struct:backend-parser
           parselynn:simple-struct:hidden-tree-labels
-          parselynn:simple-struct:lexer
           parselynn:simple-struct:transformations
           parselynn:simple-struct?))
   (import

@@ -4,7 +4,6 @@
 (define-type9 parselynn:simple-struct
   (make-parselynn:simple-struct
    arguments
-   lexer
    backend-parser
    hidden-tree-labels
    transformations)
@@ -12,8 +11,6 @@
   parselynn:simple-struct?
 
   (arguments parselynn:simple-struct:arguments)
-
-  (lexer parselynn:simple-struct:lexer)
 
   (backend-parser parselynn:simple-struct:backend-parser)
 

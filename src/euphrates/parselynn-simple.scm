@@ -114,5 +114,5 @@
     (parselynn options-to-upstream))
 
   (make-parselynn:simple-struct
-   arguments lexer backend-parser
+   arguments backend-parser
    hidden-tree-labels transformations))
