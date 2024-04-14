@@ -101,9 +101,6 @@
       (define ___curr-input #f)
       (define ___reuse-input #f)
 
-      (define (initialize-scanner! scanner)
-        (set! ___scanner scanner))
-
       (define ___input #f)
       (define (___consume)
         (set! ___input (if ___reuse-input ___curr-input (get-next-token)))
@@ -243,13 +240,10 @@
                 (loop)))))
 
 
-      (lambda (scanner errorp)
-        (initialize-scanner! scanner)
-        (set! ___errorp errorp)
-        (set! ___input #f)
-        (set! ___reuse-input #f)
-        (___initstack)
-        (___run))))
+      (set! ___input #f)
+      (set! ___reuse-input #f)
+      (___initstack)
+      (___run)))
 
 
 ;;;
@@ -264,8 +258,6 @@
 
       ;; -- Input handling
 
-      (define (initialize-scanner! scanner)
-        (set! ___scanner scanner))
       (define (consume)
         (get-next-token))
 
@@ -441,38 +433,30 @@
                     #f #f
                     #f #f)))
 
-      (define (init scanner errorp)
-        (set! ___errorp errorp)
-        (initialize-scanner! scanner)
+      (define (init)
         (initialize-processes)
         (save-loop-state! 'run #f #f #f #f #f #f #f)
         (add-process! '(0)))
 
-      (define (make-iterator scanner errorp)
-        (init scanner errorp)
+      (define (make-iterator)
+        (init)
         (lambda _ (continue-from-saved)))
 
-      (define (make-first-returner scanner errorp)
-        (init scanner errorp)
+      (define (make-first-returner)
+        (init)
         (continue-from-saved))
 
       ,(cond
-        ((equal? results-mode 'all) 'make-iterator)
-        ((equal? results-mode 'first) 'make-first-returner)
+        ((equal? results-mode 'all) '(make-iterator))
+        ((equal? results-mode 'first) '(make-first-returner))
         (else (raisu 'impossible 'expected-all-or-first)))))
 
 
   (define (wrap-lexer-code lexer-code)
-    (append
-     '((define ___scanner #f)
-       (define ___errorp #f)
-       )
-     lexer-code))
+    lexer-code)
 
   (define default-lexer-code
-    `((define ___scanner #f)
-      (define ___errorp #f)
-      (define get-next-token
+    `((define get-next-token
         (lambda args
           (___scanner)))))
 
@@ -2193,13 +2177,14 @@
     (define code
       `(let ()
          ,@common-definitions-code
-         ,@all-lexer-code
          (define action-table (quote ,action-table))
          (define goto-table ,goto-table)
          (lambda (actions)
            (define (external index . args) (apply (vector-ref actions index) args))
            (define reduction-table ,reduction-table)
-           ,@driver-code)))
+           (lambda (___scanner ___errorp)
+             ,@all-lexer-code
+             ,@driver-code))))
 
     (define _output
       (begin
