@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2013-2020 Aleix Conchillo Flaque <aconchillo@gmail.com>, 2022, 2023  Otto Jung <otto.jung@vauplace.com>
+;;;; Copyright (C) 2013-2020, 2022, 2023  Aleix Conchillo Flaque <aconchillo@gmail.com>, 2022, 2023 Otto Jung <otto.jung@vauplace.com>
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by

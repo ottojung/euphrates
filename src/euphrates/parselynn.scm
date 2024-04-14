@@ -1,9 +1,6 @@
-;;;
-;;;; An Efficient and Portable LALR(1) Parser Generator for Scheme
-;;;
+;; Copyright 2023, 2024  Otto Jung <otto.jung@vauplace.com>
 ;; Copyright 2014  Jan Nieuwenhuizen <janneke@gnu.org>
 ;; Copyright 1993, 2010 Dominique Boucher
-;; Copyright 2023  Otto Jung <otto.jung@vauplace.com>
 ;;
 ;; This program is free software: you can redistribute it and/or
 ;; modify it under the terms of the GNU Lesser General Public License
@@ -17,6 +14,10 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;;
+;;;; An Efficient and Portable LALR(1) Parser Generator for Scheme
+;;;
 
 (define *lalr-scm-version* "3.0.0")
 

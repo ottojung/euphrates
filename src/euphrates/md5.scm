@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2009, 2010, 2012, 2017 Göran Weinholt <goran@weinholt.se>, 2023 Otto Jung
+;;;; Copyright (C) 2009, 2010, 2012, 2017, 2023  Göran Weinholt <goran@weinholt.se>, 2023 Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by

@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022  Otto Jung, 1997,2001,2002,2010,2011,2012,2013,2014,2019-2021 Free Software Foundation, Inc.
+;;;; Copyright (C) 2022, 2023  Otto Jung, 1997,2001,2002,2010,2011,2012,2013,2014,2019-2021 Free Software Foundation, Inc.
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
