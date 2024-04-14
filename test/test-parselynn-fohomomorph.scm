@@ -28,10 +28,10 @@
     (make-hashset))
 
   (define lexer
-    (make-parselynn/singlechar taken tokens-alist))
+    (make-parselynn/fohomomorph taken tokens-alist))
 
   (define additional-grammar-rules
-    (parselynn/singlechar:additional-grammar-rules lexer))
+    (parselynn/fohomomorph:additional-grammar-rules lexer))
 
   ;; NOTE: this is too specific to test. Let the parser test generated grammar.
   (when expected-additional-rules
@@ -43,14 +43,14 @@
   (define lexer-result
     (cond
      ((string? input)
-      (parselynn/singlechar:run-on-string lexer input))
+      (parselynn/fohomomorph:run-on-string lexer input))
      ((port? input)
-      (parselynn/singlechar:run-on-char-port lexer input))
+      (parselynn/fohomomorph:run-on-char-port lexer input))
      (else
       (raisu 'bad-input-type input))))
 
   (define lexer-iterator
-    (parselynn/singlechar-result:as-iterator lexer-result))
+    (parselynn/fohomomorph-result:as-iterator lexer-result))
 
   (define output
     (collect lexer-iterator))

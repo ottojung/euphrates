@@ -1,17 +1,18 @@
 ;;;; Copyright (C) 2023  Otto Jung
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define-type9 parselynn/singlechar-result-struct
-  (make-parselynn/singlechar-result-struct
-   lexer input-type input)
+(define-type9 parselynn/fohomomorph-struct
+  (make-parselynn/fohomomorph-struct
+   additional-grammar-rules
+   lexer-model
+   )
 
-  parselynn/singlechar-result-struct?
+  parselynn/fohomomorph?
 
-  (lexer
-   parselynn/singlechar-result-struct:lexer)
+  (additional-grammar-rules
+   parselynn/fohomomorph:additional-grammar-rules)
 
-  (input-type
-   parselynn/singlechar-result-struct:input-type)
+  (lexer-model
+   parselynn/fohomomorph:lexer-model)
 
-  (input
-   parselynn/singlechar-result-struct:input))
+  )

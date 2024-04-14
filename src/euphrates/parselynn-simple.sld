@@ -41,12 +41,12 @@
     (only (euphrates parselynn-simple-struct)
           make-parselynn/simple-struct))
   (import
-    (only (euphrates parselynn-singlechar-struct)
-          parselynn/singlechar:additional-grammar-rules
-          parselynn/singlechar:lexer-model))
+    (only (euphrates parselynn-fohomomorph-struct)
+          parselynn/fohomomorph:additional-grammar-rules
+          parselynn/fohomomorph:lexer-model))
   (import
-    (only (euphrates parselynn-singlechar)
-          make-parselynn/singlechar))
+    (only (euphrates parselynn-fohomomorph)
+          make-parselynn/fohomomorph))
   (import (only (euphrates parselynn) parselynn))
   (import (only (euphrates raisu-star) raisu*))
   (import

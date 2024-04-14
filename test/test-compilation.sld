@@ -1620,34 +1620,34 @@
     (only (euphrates parselynn-simple)
           parselynn/simple))
   (import
-    (only (euphrates parselynn-singlechar-model)
-          parselynn-singlechar-model))
+    (only (euphrates parselynn-fohomomorph-model)
+          parselynn-fohomomorph-model))
   (import
     (only (euphrates
-            parselynn-singlechar-result-as-iterator)
-          parselynn/singlechar-result:as-iterator))
+            parselynn-fohomomorph-result-as-iterator)
+          parselynn/fohomomorph-result:as-iterator))
   (import
-    (only (euphrates parselynn-singlechar-result-struct)
-          make-parselynn/singlechar-result-struct
-          parselynn/singlechar-result-struct:input
-          parselynn/singlechar-result-struct:input-type
-          parselynn/singlechar-result-struct:lexer
-          parselynn/singlechar-result-struct?))
+    (only (euphrates parselynn-fohomomorph-result-struct)
+          make-parselynn/fohomomorph-result-struct
+          parselynn/fohomomorph-result-struct:input
+          parselynn/fohomomorph-result-struct:input-type
+          parselynn/fohomomorph-result-struct:lexer
+          parselynn/fohomomorph-result-struct?))
   (import
-    (only (euphrates parselynn-singlechar-run-on-char-port)
-          parselynn/singlechar:run-on-char-port))
+    (only (euphrates parselynn-fohomomorph-run-on-char-port)
+          parselynn/fohomomorph:run-on-char-port))
   (import
-    (only (euphrates parselynn-singlechar-run-on-string)
-          parselynn/singlechar:run-on-string))
+    (only (euphrates parselynn-fohomomorph-run-on-string)
+          parselynn/fohomomorph:run-on-string))
   (import
-    (only (euphrates parselynn-singlechar-struct)
-          make-parselynn/singlechar-struct
-          parselynn/singlechar:additional-grammar-rules
-          parselynn/singlechar:lexer-model
-          parselynn/singlechar?))
+    (only (euphrates parselynn-fohomomorph-struct)
+          make-parselynn/fohomomorph-struct
+          parselynn/fohomomorph:additional-grammar-rules
+          parselynn/fohomomorph:lexer-model
+          parselynn/fohomomorph?))
   (import
-    (only (euphrates parselynn-singlechar)
-          make-parselynn/singlechar))
+    (only (euphrates parselynn-fohomomorph)
+          make-parselynn/fohomomorph))
   (import
     (only (euphrates parselynn-struct)
           make-parselynn-struct

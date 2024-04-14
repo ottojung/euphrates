@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates parselynn-singlechar)
-  (export make-parselynn/singlechar)
+  (euphrates parselynn-fohomomorph)
+  (export make-parselynn/fohomomorph)
   (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates define-pair) define-pair))
@@ -46,11 +46,11 @@
             labelinglogic-model-to-minimal-dnf-assuming-nointersect)
           labelinglogic:model:to-minimal-dnf/assuming-nointersect))
   (import
-    (only (euphrates parselynn-singlechar-model)
-          parselynn-singlechar-model))
+    (only (euphrates parselynn-fohomomorph-model)
+          parselynn-fohomomorph-model))
   (import
-    (only (euphrates parselynn-singlechar-struct)
-          make-parselynn/singlechar-struct))
+    (only (euphrates parselynn-fohomomorph-struct)
+          make-parselynn/fohomomorph-struct))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import
@@ -101,5 +101,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-singlechar.scm")))
-    (else (include "parselynn-singlechar.scm"))))
+               "euphrates/parselynn-fohomomorph.scm")))
+    (else (include "parselynn-fohomomorph.scm"))))

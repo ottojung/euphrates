@@ -1,19 +1,19 @@
 ;;;; Copyright (C) 2023  Otto Jung
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (parselynn/singlechar-result:as-iterator result)
+(define (parselynn/fohomomorph-result:as-iterator result)
 
   (define this
-    (parselynn/singlechar-result-struct:lexer result))
+    (parselynn/fohomomorph-result-struct:lexer result))
 
   (define input-type
-    (parselynn/singlechar-result-struct:input-type result))
+    (parselynn/fohomomorph-result-struct:input-type result))
 
   (define input
-    (parselynn/singlechar-result-struct:input result))
+    (parselynn/fohomomorph-result-struct:input result))
 
   (define lexer-model
-    (parselynn/singlechar:lexer-model this))
+    (parselynn/fohomomorph:lexer-model this))
 
   (define offset 0)
   (define linenum 0)
@@ -31,7 +31,7 @@
      ((equal? 'string input-type)
 
       (unless (string? input)
-        (raisu* :from "parselynn/singlechar"
+        (raisu* :from "parselynn/fohomomorph"
                 :type 'bad-input-type
                 :message "Singlechar lexer expected a string, but got some other type"
                 :args (list input)))
@@ -47,7 +47,7 @@
      ((equal? 'port input-type)
 
       (unless (port? input)
-        (raisu* :from "parselynn/singlechar"
+        (raisu* :from "parselynn/fohomomorph"
                 :type 'bad-input-type
                 :message "Singlechar lexer expected a port, but got some other type"
                 :args (list input)))
@@ -59,7 +59,7 @@
           c)))
 
      (else
-      (raisu* :from "parselynn/singlechar"
+      (raisu* :from "parselynn/fohomomorph"
               :type 'bad-input-type
               :message "Singlechar lexer expected a string or a port as input, but got some other type"
               :args (list input)))))

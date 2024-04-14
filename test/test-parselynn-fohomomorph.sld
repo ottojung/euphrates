@@ -1,6 +1,6 @@
 
 (define-library
-  (test-parselynn-singlechar)
+  (test-parselynn-fohomomorph)
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates assert-throw) assert-throw))
@@ -8,20 +8,20 @@
   (import (only (euphrates hashset) make-hashset))
   (import
     (only (euphrates
-            parselynn-singlechar-result-as-iterator)
-          parselynn/singlechar-result:as-iterator))
+            parselynn-fohomomorph-result-as-iterator)
+          parselynn/fohomomorph-result:as-iterator))
   (import
-    (only (euphrates parselynn-singlechar-run-on-char-port)
-          parselynn/singlechar:run-on-char-port))
+    (only (euphrates parselynn-fohomomorph-run-on-char-port)
+          parselynn/fohomomorph:run-on-char-port))
   (import
-    (only (euphrates parselynn-singlechar-run-on-string)
-          parselynn/singlechar:run-on-string))
+    (only (euphrates parselynn-fohomomorph-run-on-string)
+          parselynn/fohomomorph:run-on-string))
   (import
-    (only (euphrates parselynn-singlechar-struct)
-          parselynn/singlechar:additional-grammar-rules))
+    (only (euphrates parselynn-fohomomorph-struct)
+          parselynn/fohomomorph:additional-grammar-rules))
   (import
-    (only (euphrates parselynn-singlechar)
-          make-parselynn/singlechar))
+    (only (euphrates parselynn-fohomomorph)
+          make-parselynn/fohomomorph))
   (import
     (only (euphrates parselynn)
           lexical-token-category
@@ -71,5 +71,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-parselynn-singlechar.scm")))
-    (else (include "test-parselynn-singlechar.scm"))))
+               "test-parselynn-fohomomorph.scm")))
+    (else (include "test-parselynn-fohomomorph.scm"))))

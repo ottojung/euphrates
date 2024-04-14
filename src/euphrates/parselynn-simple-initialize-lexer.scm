@@ -10,9 +10,9 @@
   (define lexer-result
     (cond
      ((string? input)
-      (parselynn/singlechar:run-on-string lexer input))
+      (parselynn/fohomomorph:run-on-string lexer input))
      ((port? input)
-      (parselynn/singlechar:run-on-char-port lexer input))
+      (parselynn/fohomomorph:run-on-char-port lexer input))
      (else
       (raisu* :from "parselynn/simple:run/with-error-handler"
               :type 'bad-input-type
@@ -20,6 +20,6 @@
               :args (list input)))))
 
   (define lexer-iterator
-    (parselynn/singlechar-result:as-iterator lexer-result))
+    (parselynn/fohomomorph-result:as-iterator lexer-result))
 
   lexer-iterator)

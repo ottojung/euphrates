@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates parselynn-singlechar-model)
-  (export parselynn-singlechar-model)
+  (euphrates parselynn-fohomomorph-model)
+  (export parselynn-fohomomorph-model)
   (import
     (only (scheme base)
           and
@@ -29,5 +29,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-singlechar-model.scm")))
-    (else (include "parselynn-singlechar-model.scm"))))
+               "euphrates/parselynn-fohomomorph-model.scm")))
+    (else (include "parselynn-fohomomorph-model.scm"))))
