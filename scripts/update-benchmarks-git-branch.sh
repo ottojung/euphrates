@@ -58,5 +58,6 @@ do
     git clean -dfx
 done
 
+cd ..
 rm -f "$SSHKEYFILE"
 rm -fr benchmarks-repo
