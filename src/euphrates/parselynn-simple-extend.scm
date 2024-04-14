@@ -1,7 +1,7 @@
 ;;;; Copyright (C) 2023  Otto Jung
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (parselynn/simple:extend
+(define (parselynn:simple:extend
          original additional)
 
   (define (arguments->options arguments)
@@ -11,20 +11,20 @@
 
   (define (parser->options parser)
     (define arguments
-      (parselynn/simple-struct:arguments parser))
+      (parselynn:simple-struct:arguments parser))
 
     (arguments->options arguments))
 
   (define (get-options x)
     (cond
-     ((parselynn/simple-struct? x)
+     ((parselynn:simple-struct? x)
       (parser->options x))
      ((list? x)
       (arguments->options x))
      (else
-      (raisu* :from "parselynn/simple:extend"
+      (raisu* :from "parselynn:simple:extend"
               :type 'bad-parser-type
-              :message "Expected either a parselynn/simple-struct or arguments that defined it"
+              :message "Expected either a parselynn:simple-struct or arguments that defined it"
               :args (list x)))))
 
   (define options-original
@@ -68,4 +68,4 @@
   (if (and (list? original)
            (list? additional))
       arguments-new
-      (parselynn/simple arguments-new)))
+      (parselynn:simple arguments-new)))

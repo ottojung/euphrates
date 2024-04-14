@@ -9,19 +9,19 @@
   (import
     (only (euphrates
             parselynn-fohomomorph-result-as-iterator)
-          parselynn/fohomomorph-result:as-iterator))
+          parselynn:fohomomorph-result:as-iterator))
   (import
     (only (euphrates parselynn-fohomomorph-run-on-char-port)
-          parselynn/fohomomorph:run-on-char-port))
+          parselynn:fohomomorph:run-on-char-port))
   (import
     (only (euphrates parselynn-fohomomorph-run-on-string)
-          parselynn/fohomomorph:run-on-string))
+          parselynn:fohomomorph:run-on-string))
   (import
     (only (euphrates parselynn-fohomomorph-struct)
-          parselynn/fohomomorph:additional-grammar-rules))
+          parselynn:fohomomorph:additional-grammar-rules))
   (import
     (only (euphrates parselynn-fohomomorph)
-          make-parselynn/fohomomorph))
+          make-parselynn:fohomomorph))
   (import
     (only (euphrates parselynn)
           lexical-token-category

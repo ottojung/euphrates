@@ -5,7 +5,7 @@
           :args (list type token)))
 
 (define (make-test-parser parser-rules)
-   (parselynn/simple
+   (parselynn:simple
     `(:grammar ,parser-rules)))
 
 (define-syntax check-parser-result
@@ -44,7 +44,7 @@
    (run-input parser input)))
 
 (define (run-input parser input)
-  (parselynn/simple:run/with-error-handler
+  (parselynn:simple:run/with-error-handler
    parser error-procedure input))
 
 ;;;;;;;;;;;;;;;;
@@ -53,7 +53,7 @@
 
 
 
-(parselynn/simple
+(parselynn:simple
  `(:grammar
    ( expr = term add expr / term
      add = "+"
@@ -122,7 +122,7 @@
 
 
 
-(parselynn/simple
+(parselynn:simple
  `(:grammar
    ( expr = t_term add expr / t_term
      add = "+"
@@ -260,7 +260,7 @@
 (assert-throw
  'parse-conflict
 
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
 
     ( expr = term add expr / term
@@ -276,7 +276,7 @@
 
 
 (check-parser-result-and-reverse
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+"
@@ -294,7 +294,7 @@
 
 
 (check-parser-result-and-reverse
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+"
@@ -312,7 +312,7 @@
 
 
 (check-parser-result-and-reverse
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+"
@@ -331,7 +331,7 @@
 
 
 (check-parser-result-and-reverse
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+"
@@ -352,7 +352,7 @@
 
 
 (check-parser-result-and-reverse
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+"
@@ -374,7 +374,7 @@
 
 (assert-throw
  'invalid-set
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+"
@@ -390,7 +390,7 @@
 
 (assert-throw
  'invalid-set
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+"
@@ -406,7 +406,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -424,7 +424,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -443,7 +443,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -462,7 +462,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -481,7 +481,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -498,7 +498,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -516,7 +516,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -539,7 +539,7 @@
 ;;
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -559,7 +559,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -580,7 +580,7 @@
 
 (assert-throw
  'invalid-set
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -594,7 +594,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -615,7 +615,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -633,7 +633,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -653,7 +653,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -676,7 +676,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -699,7 +699,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( root = expr
       expr = term add expr / term
@@ -721,7 +721,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -743,7 +743,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -767,7 +767,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -789,7 +789,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -843,7 +843,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -862,7 +862,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -884,7 +884,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -907,7 +907,7 @@
 (assert-throw
  'parse-conflict
 
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -926,7 +926,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -949,7 +949,7 @@
 (assert-throw
  'parse-conflict
 
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -968,7 +968,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -998,7 +998,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -1019,7 +1019,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -1041,7 +1041,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term
       add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
@@ -1067,7 +1067,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term / space expr / expr space
       add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
@@ -1096,7 +1096,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term / space expr / expr space
       add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
@@ -1126,7 +1126,7 @@
 
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term / space expr / expr space
       add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))

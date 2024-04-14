@@ -2,10 +2,10 @@
 (define-library
   (euphrates parselynn-fohomomorph-struct)
   (export
-    make-parselynn/fohomomorph-struct
-    parselynn/fohomomorph?
-    parselynn/fohomomorph:additional-grammar-rules
-    parselynn/fohomomorph:lexer-model)
+    make-parselynn:fohomomorph-struct
+    parselynn:fohomomorph?
+    parselynn:fohomomorph:additional-grammar-rules
+    parselynn:fohomomorph:lexer-model)
   (import
     (only (euphrates define-type9) define-type9))
   (import (only (scheme base) begin))

@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple)
-  (export parselynn/simple)
+  (export parselynn:simple)
   (import (only (euphrates assq-or) assq-or))
   (import
     (only (euphrates assq-set-value) assq-set-value))
@@ -27,26 +27,26 @@
           labelinglogic:model:names))
   (import
     (only (euphrates parselynn-simple-check-options)
-          parselynn/simple-check-options))
+          parselynn:simple-check-options))
   (import
     (only (euphrates parselynn-simple-check-set)
-          parselynn/simple-check-set))
+          parselynn:simple-check-set))
   (import
     (only (euphrates parselynn-simple-extract-regexes)
-          parselynn/simple-extract-regexes))
+          parselynn:simple-extract-regexes))
   (import
     (only (euphrates parselynn-simple-extract-set)
-          parselynn/simple-extract-set))
+          parselynn:simple-extract-set))
   (import
     (only (euphrates parselynn-simple-struct)
-          make-parselynn/simple-struct))
+          make-parselynn:simple-struct))
   (import
     (only (euphrates parselynn-fohomomorph-struct)
-          parselynn/fohomomorph:additional-grammar-rules
-          parselynn/fohomomorph:lexer-model))
+          parselynn:fohomomorph:additional-grammar-rules
+          parselynn:fohomomorph:lexer-model))
   (import
     (only (euphrates parselynn-fohomomorph)
-          make-parselynn/fohomomorph))
+          make-parselynn:fohomomorph))
   (import (only (euphrates parselynn) parselynn))
   (import (only (euphrates raisu-star) raisu*))
   (import

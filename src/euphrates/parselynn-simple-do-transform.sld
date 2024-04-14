@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-do-transform)
-  (export parselynn/simple-do-transform)
+  (export parselynn:simple-do-transform)
   (import (only (euphrates hashmap) hashmap-ref))
   (import
     (only (scheme base)

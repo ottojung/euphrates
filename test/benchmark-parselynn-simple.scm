@@ -8,14 +8,14 @@
     (when (< 0 i)
       (let ()
         (define result
-          (parselynn/simple:run/with-error-handler
+          (parselynn:simple:run/with-error-handler
            parser ignore input))
 
         (if (< 1 i)
             (loop (- i 1))
             (let ()
               (define arguments
-                (parselynn/simple-struct:arguments parser))
+                (parselynn:simple-struct:arguments parser))
               (define options
                 (keylist->alist arguments))
               (define driver
@@ -54,7 +54,7 @@
   (with-benchmark/timestamp "constructed input")
 
   (define parser
-    (parselynn/simple
+    (parselynn:simple
      `(:grammar
        ( expr = expr add expr / term
          add = "+"
@@ -94,7 +94,7 @@
   (with-benchmark/timestamp "constructed input")
 
   (define parser
-    (parselynn/simple
+    (parselynn:simple
      `(:grammar
        ( expr = expr add expr / term
          add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
@@ -138,7 +138,7 @@
   (with-benchmark/timestamp "constructed input")
 
   (define parser
-    (parselynn/simple
+    (parselynn:simple
      `(:grammar
        ( expr = expr add expr / term / space expr / expr space
          add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))

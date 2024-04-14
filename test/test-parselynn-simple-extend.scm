@@ -5,7 +5,7 @@
           :args (list type token)))
 
 (define (make-test-parser parser-rules)
-   (parselynn/simple
+   (parselynn:simple
     `(:grammar ,parser-rules)))
 
 (define-syntax check-parser-result
@@ -30,7 +30,7 @@
   (assert= input reversed))
 
 (define (run-input parser input)
-  (parselynn/simple:run/with-error-handler
+  (parselynn:simple:run/with-error-handler
    parser error-procedure input))
 
 
@@ -40,7 +40,7 @@
 ;;
 
 (check-parser-result
- (parselynn/simple
+ (parselynn:simple
   `(:grammar
     ( expr = term add expr / term
       add = "+" / space add / add space
@@ -84,7 +84,7 @@
      dig = (class numeric)
      space = (class whitespace)))
 
- (parselynn/simple:extend
+ (parselynn:simple:extend
 
   `(:grammar
     ( expr = term add expr / term
@@ -111,9 +111,9 @@
 
 
 (check-parser-result
- (parselynn/simple:extend
+ (parselynn:simple:extend
 
-  (parselynn/simple
+  (parselynn:simple
    `(:grammar
      ( expr = term add expr / term
        add = "+" / space add / add space
@@ -137,9 +137,9 @@
 
 
 (check-parser-result
- (parselynn/simple:extend
+ (parselynn:simple:extend
 
-  (parselynn/simple
+  (parselynn:simple
    `(:grammar
      ( expr = term add expr / term
        add = "+" / space add / add space

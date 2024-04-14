@@ -6,11 +6,11 @@
 ;; but the original one can be even faster,
 ;; IF you tweak its parameters, like define a more specific lexer.
 
-(define (parselynn/simple arguments)
+(define (parselynn:simple arguments)
   (define options
     (keylist->alist arguments))
 
-  (parselynn/simple-check-options options)
+  (parselynn:simple-check-options options)
 
   (define translate-option
     (fn-pair
@@ -28,7 +28,7 @@
   (define rules/0
     (assq-or 'grammar: options*
              ;; TODO: make grammar optional.
-             (raisu* :from "parselynn/simple"
+             (raisu* :from "parselynn:simple"
                      :type 'missing-argument
                      :message (stringf "Missing required argument ~s" (~a 'grammar:))
                      :args (list 'grammar:))))
@@ -36,29 +36,29 @@
   (define rules/0a
     (semis-ebnf-tree->ebnf-tree rules/0))
 
-  (define (parselynn/simple-escape-re yield name t) t)
+  (define (parselynn:simple-escape-re yield name t) t)
   (define ebnf-parser
     (generic-ebnf-tree->alist
-     '= '/ parselynn/simple-escape-re))
+     '= '/ parselynn:simple-escape-re))
 
   (define rules/1
     (ebnf-parser rules/0a))
 
   (define-values (rules/2 taken-token-names-set tokens-map)
-    (parselynn/simple-extract-regexes rules/1))
+    (parselynn:simple-extract-regexes rules/1))
 
   (define lexer
-    (make-parselynn/fohomomorph
+    (make-parselynn:fohomomorph
      taken-token-names-set tokens-map))
 
   (define additional-grammar-rules
-    (parselynn/fohomomorph:additional-grammar-rules lexer))
+    (parselynn:fohomomorph:additional-grammar-rules lexer))
 
   (define rules
     (append rules/2 additional-grammar-rules))
 
   (define lexer-model
-    (parselynn/fohomomorph:lexer-model lexer))
+    (parselynn:fohomomorph:lexer-model lexer))
 
   (define tokens
     (labelinglogic:model:names lexer-model))
@@ -73,16 +73,16 @@
     (list->hashset (map car rules)))
 
   (when (assq-or 'tokens: options*)
-    (raisu* :from "parselynn/simple"
+    (raisu* :from "parselynn:simple"
             :type 'invalid-argument ;; TODO: make tokens: optionally settable
             :message "This parser handles tokens automatically, no need to provide them"
             :args (list (assq-or 'tokens: options*))))
 
   (define (extract+check key)
     (define-values (ret set-list)
-      (parselynn/simple-extract-set key options*))
+      (parselynn:simple-extract-set key options*))
 
-    (parselynn/simple-check-set non-terminals set-list)
+    (parselynn:simple-check-set non-terminals set-list)
     (and (not (hashset-null? ret)) (cons key ret)))
 
   (define transformations
@@ -107,6 +107,6 @@
   (define backend-parser
     (parselynn options-to-upstream))
 
-  (make-parselynn/simple-struct
+  (make-parselynn:simple-struct
    arguments lexer backend-parser
    hidden-tree-labels transformations))

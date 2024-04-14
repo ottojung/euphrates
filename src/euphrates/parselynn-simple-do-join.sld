@@ -1,11 +1,11 @@
 
 (define-library
   (euphrates parselynn-simple-do-join)
-  (export parselynn/simple-do-join)
+  (export parselynn:simple-do-join)
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (euphrates parselynn-simple-flatten1)
-          parselynn/simple-flatten1))
+          parselynn:simple-flatten1))
   (import
     (only (scheme base)
           apply

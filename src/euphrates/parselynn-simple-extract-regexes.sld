@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-extract-regexes)
-  (export parselynn/simple-extract-regexes)
+  (export parselynn:simple-extract-regexes)
   (import
     (only (euphrates bnf-alist-map-expansion-terms)
           bnf-alist:map-expansion-terms))

@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-latin)
-  (export make-parselynn/latin)
+  (export make-parselynn:latin)
   (import
     (only (euphrates parselynn) make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))

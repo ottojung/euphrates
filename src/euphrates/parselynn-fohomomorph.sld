@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-fohomomorph)
-  (export make-parselynn/fohomomorph)
+  (export make-parselynn:fohomomorph)
   (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates define-pair) define-pair))
@@ -50,7 +50,7 @@
           parselynn-fohomomorph-model))
   (import
     (only (euphrates parselynn-fohomomorph-struct)
-          make-parselynn/fohomomorph-struct))
+          make-parselynn:fohomomorph-struct))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import

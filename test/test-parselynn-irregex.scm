@@ -29,7 +29,7 @@
       (t_8 . "8")
       (t_9 . "9")))
 
-  (define lexer ((make-parselynn/irregex-factory tokens-alist) "19371634"))
+  (define lexer ((make-parselynn:irregex-factory tokens-alist) "19371634"))
 
   (assert=
 
@@ -63,7 +63,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer ((make-parselynn/irregex-factory tokens-alist) "1937foo16barbaz34"))
+  (define lexer ((make-parselynn:irregex-factory tokens-alist) "1937foo16barbaz34"))
 
   (assert=
 
@@ -101,7 +101,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer ((make-parselynn/irregex-factory tokens-alist) "1937foobar16barbaz34"))
+  (define lexer ((make-parselynn:irregex-factory tokens-alist) "1937foobar16barbaz34"))
 
   (assert=
 
@@ -139,7 +139,7 @@
       (t_hello . "foo")
       (t_hello . "barbaz")))
 
-  (define lexer ((make-parselynn/irregex-factory tokens-alist) "1937foofoobar16barbaz34"))
+  (define lexer ((make-parselynn:irregex-factory tokens-alist) "1937foofoobar16barbaz34"))
 
   (assert=
 
@@ -175,7 +175,7 @@
       (t_hello . "barbaz")))
 
   (define lexer
-    ((make-parselynn/irregex-factory tokens-alist)
+    ((make-parselynn:irregex-factory tokens-alist)
      "   1937 foofoobar   16barbaz34 "))
 
   (assert=
@@ -221,7 +221,7 @@
       (t_9 . "9")
       (t_hello (or "foo" "bar"))))
 
-  (define lexer ((make-parselynn/irregex-factory tokens-alist) "1937foo16bar34"))
+  (define lexer ((make-parselynn:irregex-factory tokens-alist) "1937foo16bar34"))
 
   (assert=
 
@@ -259,7 +259,7 @@
       (t_bye . "foo")))
 
   (define lexer
-    ((make-parselynn/irregex-factory tokens-alist)
+    ((make-parselynn:irregex-factory tokens-alist)
      "1937foo16bar34"))
 
   (assert=
@@ -297,7 +297,7 @@
       (t_hello (or "foo" "bar"))))
 
   (define lexer
-    ((make-parselynn/irregex-factory tokens-alist)
+    ((make-parselynn:irregex-factory tokens-alist)
      "1937foo16bar34"))
 
   (assert=

@@ -1,9 +1,9 @@
 
-(define make-lexer make-parselynn/latin)
+(define make-lexer make-parselynn:latin)
 
 (define (make-test-parser parser-rules)
    (parselynn
-    `((tokens: ,@parselynn/latin-tokens)
+    `((tokens: ,@parselynn:latin-tokens)
       (rules: ,@parser-rules))))
 
 (define (test-parser parser-rules input expected-output)
@@ -60,7 +60,7 @@
    (term     (num) : (,save 'term $1))
    (num      (dig num) : (,save 'num $1 $2)
              (dig) : (,save 'num $1))
-   (dig      ,@parselynn/latin/digits))
+   (dig      ,@parselynn:latin/digits))
 
  "5+3"
 
@@ -77,7 +77,7 @@
    (term     (num) : (,save 'term $1))
    (num      (dig num) : (,save 'num $1 $2)
              (dig) : (,save 'num $1))
-   (dig      ,@parselynn/latin/digits))
+   (dig      ,@parselynn:latin/digits))
 
  "47+3732"
 
@@ -99,8 +99,8 @@
              (alphanum) : (,save 'idcont $1))
    (alphanum (alpha) : $1
              (dig) : $1)
-   (alpha    ,@parselynn/latin/letters)
-   (dig      ,@parselynn/latin/digits))
+   (alpha    ,@parselynn:latin/letters)
+   (dig      ,@parselynn:latin/digits))
 
  "47+3732"
 
@@ -124,8 +124,8 @@
              (alphanum) : (,save 'idcont $1))
    (alphanum (alpha) : $1
              (dig) : $1)
-   (alpha    ,@parselynn/latin/letters)
-   (dig      ,@parselynn/latin/digits))
+   (alpha    ,@parselynn:latin/letters)
+   (dig      ,@parselynn:latin/digits))
 
  "47+x3"
 
@@ -147,8 +147,8 @@
              (alphanum) : (,save 'idcont $1))
    (alphanum (alpha) : $1
              (dig) : $1)
-   (alpha    ,@parselynn/latin/letters)
-   (dig      ,@parselynn/latin/digits)
+   (alpha    ,@parselynn:latin/letters)
+   (dig      ,@parselynn:latin/digits)
    (space    (<SPACE) : $1
              (<TAB) : $1))
 
@@ -174,8 +174,8 @@
              (alphanum) : (,save 'idcont $1))
    (alphanum (alpha) : $1
              (dig) : $1)
-   (alpha    ,@parselynn/latin/letters)
-   (dig      ,@parselynn/latin/digits)
+   (alpha    ,@parselynn:latin/letters)
+   (dig      ,@parselynn:latin/digits)
    (space    (<SPACE) : $1
              (<TAB) : $1))
 
@@ -202,8 +202,8 @@
              (alphanum) : (,save 'idcont $1))
    (alphanum (alpha) : $1
              (dig) : $1)
-   (alpha    ,@parselynn/latin/letters)
-   (dig      ,@parselynn/latin/digits)
+   (alpha    ,@parselynn:latin/letters)
+   (dig      ,@parselynn:latin/digits)
    (space    (<SPACE) : $1
              (<TAB) : $1))
 
@@ -229,8 +229,8 @@
              (alphanum) : (,save 'idcont $1))
    (alphanum (alpha) : $1
              (dig) : $1)
-   (alpha    ,@parselynn/latin/letters)
-   (dig      ,@parselynn/latin/digits)
+   (alpha    ,@parselynn:latin/letters)
+   (dig      ,@parselynn:latin/digits)
    (space    (<SPACE) : $1
              (<TAB) : $1))
 
@@ -255,8 +255,8 @@
              (alphanum) : (,save 'idcont $1))
    (alphanum (alpha) : $1
              (dig) : $1)
-   (alpha    ,@parselynn/latin/letters)
-   (dig      ,@parselynn/latin/digits)
+   (alpha    ,@parselynn:latin/letters)
+   (dig      ,@parselynn:latin/digits)
    (space*   (space space*) : $1 ())
    (space    (<SPACE) : $1
              (<TAB) : $1))

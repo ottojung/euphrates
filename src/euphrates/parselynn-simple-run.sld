@@ -1,11 +1,11 @@
 
 (define-library
   (euphrates parselynn-simple-run)
-  (export parselynn/simple:run)
+  (export parselynn:simple:run)
   (import
     (only (euphrates
             parselynn-simple-run-with-error-handler)
-          parselynn/simple:run/with-error-handler))
+          parselynn:simple:run/with-error-handler))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import

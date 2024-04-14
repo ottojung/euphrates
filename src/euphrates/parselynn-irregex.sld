@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-irregex)
-  (export make-parselynn/irregex-factory)
+  (export make-parselynn:irregex-factory)
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates compose-under) compose-under))

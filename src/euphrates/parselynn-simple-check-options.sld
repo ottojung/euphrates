@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-check-options)
-  (export parselynn/simple-check-options)
+  (export parselynn:simple-check-options)
   (import (only (euphrates gkeyword) gkeyword?))
   (import
     (only (euphrates list-find-first)

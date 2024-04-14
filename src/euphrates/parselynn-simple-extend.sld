@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-extend)
-  (export parselynn/simple:extend)
+  (export parselynn:simple:extend)
   (import
     (only (euphrates alist-to-keylist)
           alist->keylist))
@@ -22,11 +22,11 @@
           keylist->alist))
   (import
     (only (euphrates parselynn-simple-struct)
-          parselynn/simple-struct:arguments
-          parselynn/simple-struct?))
+          parselynn:simple-struct:arguments
+          parselynn:simple-struct?))
   (import
     (only (euphrates parselynn-simple)
-          parselynn/simple))
+          parselynn:simple))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)

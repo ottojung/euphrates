@@ -11,13 +11,13 @@
   (import
     (only (euphrates
             parselynn-simple-run-with-error-handler)
-          parselynn/simple:run/with-error-handler))
+          parselynn:simple:run/with-error-handler))
   (import
     (only (euphrates parselynn-simple-struct)
-          parselynn/simple-struct:arguments))
+          parselynn:simple-struct:arguments))
   (import
     (only (euphrates parselynn-simple)
-          parselynn/simple))
+          parselynn:simple))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates with-benchmark-simple)

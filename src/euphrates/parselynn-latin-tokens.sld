@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-latin-tokens)
-  (export parselynn/latin-tokens)
+  (export parselynn:latin-tokens)
   (import
     (only (scheme base) <= begin define list quote))
   (cond-expand

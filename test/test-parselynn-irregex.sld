@@ -4,7 +4,7 @@
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates parselynn-irregex)
-          make-parselynn/irregex-factory))
+          make-parselynn:irregex-factory))
   (import
     (only (euphrates parselynn)
           lexical-token-category

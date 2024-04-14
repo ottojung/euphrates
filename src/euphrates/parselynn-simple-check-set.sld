@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-check-set)
-  (export parselynn/simple-check-set)
+  (export parselynn:simple-check-set)
   (import (only (euphrates comp) comp))
   (import (only (euphrates compose) compose))
   (import (only (euphrates hashset) hashset-has?))

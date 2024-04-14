@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-do-skips)
-  (export parselynn/simple-do-skips)
+  (export parselynn:simple-do-skips)
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (scheme base)

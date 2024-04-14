@@ -3,7 +3,7 @@
 
 ;; This lexer has a category for each ASCII character that is printable.
 ;; For any other character it outputs category 'OTHER.
-(define (make-parselynn/latin initial-input)
+(define (make-parselynn:latin initial-input)
   (define offset 0)
   (define linenum 0)
   (define colnum 0)
