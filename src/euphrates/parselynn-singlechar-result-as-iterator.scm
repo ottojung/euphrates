@@ -69,8 +69,11 @@
       (make-source-location '*stdin* linenum colnum offset 1))
     (make-lexical-token category location c))
 
+  (define evaluator-code
+    (labelinglogic:model:compile-to-r7rs/first lexer-model))
+
   (define evaluator
-    (labelinglogic:model:interpret/first lexer-model))
+    (labelinglogic:interpret-r7rs-code evaluator-code))
 
   (define (process-next . _)
     (define c (read-next-char))
