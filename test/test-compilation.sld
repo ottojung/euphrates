@@ -970,12 +970,6 @@
     (only (euphrates labelinglogic-model-empty-huh)
           labelinglogic:model:empty?))
   (import
-    (only (euphrates labelinglogic-model-interpret-first)
-          labelinglogic:model:interpret/first))
-  (import
-    (only (euphrates labelinglogic-model-interpret)
-          labelinglogic:model:interpret))
-  (import
     (only (euphrates
             labelinglogic-model-factor-dnf-clauses)
           labelinglogic:model:factor-dnf-clauses))
@@ -1010,6 +1004,12 @@
   (import
     (only (euphrates labelinglogic-model-inline-some)
           labelinglogic:model:inline-some))
+  (import
+    (only (euphrates labelinglogic-model-interpret-first)
+          labelinglogic:model:interpret/first))
+  (import
+    (only (euphrates labelinglogic-model-interpret)
+          labelinglogic:model:interpret))
   (import
     (only (euphrates
             labelinglogic-model-latticize-ands-assuming-nointersect-dnf)
@@ -1525,6 +1525,34 @@
   (import
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
+    (only (euphrates parselynn-folexer-model)
+          parselynn-folexer-model))
+  (import
+    (only (euphrates parselynn-folexer-result-as-iterator)
+          parselynn:folexer-result:as-iterator))
+  (import
+    (only (euphrates parselynn-folexer-result-struct)
+          make-parselynn:folexer-result-struct
+          parselynn:folexer-result-struct:input
+          parselynn:folexer-result-struct:input-type
+          parselynn:folexer-result-struct:lexer
+          parselynn:folexer-result-struct?))
+  (import
+    (only (euphrates parselynn-folexer-run-on-char-port)
+          parselynn:folexer:run-on-char-port))
+  (import
+    (only (euphrates parselynn-folexer-run-on-string)
+          parselynn:folexer:run-on-string))
+  (import
+    (only (euphrates parselynn-folexer-struct)
+          make-parselynn:folexer-struct
+          parselynn:folexer:additional-grammar-rules
+          parselynn:folexer:base-model
+          parselynn:folexer?))
+  (import
+    (only (euphrates parselynn-folexer)
+          make-parselynn:folexer))
+  (import
     (only (euphrates parselynn-irregex)
           make-parselynn:irregex-factory))
   (import
@@ -1619,35 +1647,6 @@
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))
-  (import
-    (only (euphrates parselynn-folexer-model)
-          parselynn-folexer-model))
-  (import
-    (only (euphrates
-            parselynn-folexer-result-as-iterator)
-          parselynn:folexer-result:as-iterator))
-  (import
-    (only (euphrates parselynn-folexer-result-struct)
-          make-parselynn:folexer-result-struct
-          parselynn:folexer-result-struct:input
-          parselynn:folexer-result-struct:input-type
-          parselynn:folexer-result-struct:lexer
-          parselynn:folexer-result-struct?))
-  (import
-    (only (euphrates parselynn-folexer-run-on-char-port)
-          parselynn:folexer:run-on-char-port))
-  (import
-    (only (euphrates parselynn-folexer-run-on-string)
-          parselynn:folexer:run-on-string))
-  (import
-    (only (euphrates parselynn-folexer-struct)
-          make-parselynn:folexer-struct
-          parselynn:folexer:additional-grammar-rules
-          parselynn:folexer:base-model
-          parselynn:folexer?))
-  (import
-    (only (euphrates parselynn-folexer)
-          make-parselynn:folexer))
   (import
     (only (euphrates parselynn-struct)
           make-parselynn-struct
