@@ -5,7 +5,7 @@
     (set! current-code code))
 
   (define parser
-    (parselynn
+    (parselynn-core
      `((output-code: ,set-code)
        (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
@@ -23,7 +23,7 @@
   (define out (open-output-string))
 
   (define parser
-    (parselynn
+    (parselynn-core
      `((output-table: ,out)
        (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
@@ -45,7 +45,7 @@
     (set! current-code code))
 
   (define parser
-    (parselynn
+    (parselynn-core
      `((output-table: ,out)
        (output-code: ,set-code)
        (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)

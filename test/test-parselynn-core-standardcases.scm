@@ -51,7 +51,7 @@
   (make-parameter #f))
 
 (define (make-test-parser parser-rules)
-  (parselynn
+  (parselynn-core
    `((driver: ,(if (glr-parser?/p) 'glr 'lr))
      (results: ,(if (glr-parser?/p) 'all 'first))
      (on-conflict: ,ignore)
@@ -61,7 +61,7 @@
 (define (also-test-respective-glr parser-rules input expected-output)
   (define conflicting-glr? #f)
   (define parser/glr/first
-    (parselynn
+    (parselynn-core
      `((driver: glr)
        (results: first)
        (on-conflict: ,(lambda _ (set! conflicting-glr? #t)))
@@ -570,7 +570,7 @@ idblb idclb longeridlb"
 
 (let ()
   (define parser
-    (parselynn
+    (parselynn-core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add term)
@@ -589,7 +589,7 @@ idblb idclb longeridlb"
 
 (let ()
   (define parser
-    (parselynn
+    (parselynn-core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add term)
@@ -616,7 +616,7 @@ idblb idclb longeridlb"
 
 (let ()
   (define parser
-    (parselynn
+    (parselynn-core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add term)
@@ -643,7 +643,7 @@ idblb idclb longeridlb"
 
 (let ()
   (define parser
-    (parselynn
+    (parselynn-core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add term)
@@ -667,7 +667,7 @@ idblb idclb longeridlb"
   (for-each
    (lambda (n)
      (define parser
-       (parselynn
+       (parselynn-core
         `((driver: glr)
           (results: all)
           (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)

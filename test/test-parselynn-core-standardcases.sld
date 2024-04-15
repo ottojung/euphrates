@@ -1,9 +1,10 @@
 
 (define-library
-  (test-parselynn-largecases)
+  (test-parselynn-core-standardcases)
   (import (only (euphrates assert-equal) assert=))
+  (import
+    (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates assert) assert))
-  (import (only (euphrates const) const))
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates parselynn-run-with-error-handler)
@@ -12,18 +13,14 @@
     (only (euphrates parselynn-run)
           parselynn-run))
   (import
-    (only (euphrates parselynn)
-          parselynn
-          lexical-token-value
+    (only (euphrates parselynn-core)
+          parselynn-core
           make-lexical-token))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)
           make-source-location))
   (import (only (euphrates stringf) stringf))
-  (import
-    (only (euphrates with-output-stringified)
-          with-output-stringified))
   (import
     (only (euphrates with-string-as-input)
           with-string-as-input))
@@ -33,14 +30,11 @@
           +
           -
           /
-          <
           =
-          >
+          _
           and
           apply
           begin
-          car
-          cdr
           char=?
           char?
           cond
@@ -48,18 +42,17 @@
           define
           else
           eof-object?
-          equal?
+          for-each
           if
           lambda
           let
           let*
           letrec
           list
-          modulo
-          null?
+          make-parameter
           or
+          parameterize
           peek-char
-          procedure?
           quasiquote
           quote
           read-char
@@ -69,18 +62,18 @@
           string->number
           unless
           unquote
-          vector-length
-          vector-ref
-          when))
+          unquote-splicing))
   (import
     (only (scheme char)
           char-alphabetic?
           char-numeric?
           char-whitespace?))
-  (import (only (scheme write) display))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) first iota)))
+    (else (import (only (srfi 1) first iota))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-parselynn-largecases.scm")))
-    (else (include "test-parselynn-largecases.scm"))))
+               "test-parselynn-core-standardcases.scm")))
+    (else (include "test-parselynn-core-standardcases.scm"))))

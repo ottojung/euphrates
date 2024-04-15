@@ -1525,6 +1525,29 @@
   (import
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
+    (only (euphrates parselynn-core-load)
+          parselynn-core-load))
+  (import
+    (only (euphrates parselynn-core-struct)
+          make-parselynn-core-struct
+          parselynn-core-struct:actions
+          parselynn-core-struct:code
+          parselynn-core-struct:driver
+          parselynn-core-struct:maybefun
+          parselynn-core-struct:results
+          parselynn-core-struct:rules
+          parselynn-core-struct:tokens
+          parselynn-core-struct?))
+  (import
+    (only (euphrates parselynn-core)
+          lexical-token-category
+          lexical-token-source
+          lexical-token-value
+          lexical-token?
+          make-lexical-token
+          parselynn-core
+          serialized-parser-typetag))
+  (import
     (only (euphrates parselynn-folexer-compile-iterator)
           parselynn:folexer:compile/iterator))
   (import
@@ -1576,8 +1599,6 @@
   (import
     (only (euphrates parselynn-latin)
           make-parselynn:latin))
-  (import
-    (only (euphrates parselynn-load) parselynn-load))
   (import
     (only (euphrates parselynn-run-with-error-handler)
           parselynn-run/with-error-handler))
@@ -1646,26 +1667,6 @@
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))
-  (import
-    (only (euphrates parselynn-struct)
-          make-parselynn-struct
-          parselynn-struct:actions
-          parselynn-struct:code
-          parselynn-struct:driver
-          parselynn-struct:maybefun
-          parselynn-struct:results
-          parselynn-struct:rules
-          parselynn-struct:tokens
-          parselynn-struct?))
-  (import
-    (only (euphrates parselynn)
-          lexical-token-category
-          lexical-token-source
-          lexical-token-value
-          lexical-token?
-          make-lexical-token
-          parselynn
-          serialized-parser-typetag))
   (import
     (only (euphrates partial-apply) partial-apply))
   (import

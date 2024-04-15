@@ -59,7 +59,7 @@
           0))))
 
 (define calc-parser
-  (parselynn
+  (parselynn-core
 
    `(
      ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm,

@@ -1,11 +1,11 @@
 
 (define-library
-  (test-parselynn-output-precise)
+  (test-parselynn-core-output-precise)
   (import (only (euphrates assert) assert))
   (import (only (euphrates comp) comp))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn) parselynn))
+    (only (euphrates parselynn-core) parselynn-core))
   (import (only (euphrates printf) printf))
   (import (only (euphrates read-list) read-list))
   (import
@@ -24,7 +24,6 @@
           /
           =
           begin
-          cons
           define
           equal?
           for-each
@@ -50,5 +49,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-parselynn-output-precise.scm")))
-    (else (include "test-parselynn-output-precise.scm"))))
+               "test-parselynn-core-output-precise.scm")))
+    (else (include
+            "test-parselynn-core-output-precise.scm"))))

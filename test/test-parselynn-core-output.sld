@@ -1,9 +1,9 @@
 
 (define-library
-  (test-parselynn-output)
+  (test-parselynn-core-output)
   (import (only (euphrates assert) assert))
   (import
-    (only (euphrates parselynn) parselynn))
+    (only (euphrates parselynn-core) parselynn-core))
   (import
     (only (euphrates list-length-geq-q)
           list-length=<?))
@@ -29,5 +29,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "test-parselynn-output.scm")))
-    (else (include "test-parselynn-output.scm"))))
+             (include-from-path "test-parselynn-core-output.scm")))
+    (else (include "test-parselynn-core-output.scm"))))

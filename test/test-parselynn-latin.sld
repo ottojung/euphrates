@@ -5,22 +5,21 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
+    (only (euphrates parselynn-core) parselynn-core))
+  (import
     (only (euphrates parselynn-latin-digits)
           parselynn:latin/digits))
   (import
     (only (euphrates parselynn-latin-letters)
           parselynn:latin/letters))
   (import
-    (only (euphrates parselynn-latin)
-          make-parselynn:latin))
-  (import
     (only (euphrates parselynn-latin-tokens)
           parselynn:latin-tokens))
   (import
-    (only (euphrates parselynn-run)
-          parselynn-run))
+    (only (euphrates parselynn-latin)
+          make-parselynn:latin))
   (import
-    (only (euphrates parselynn) parselynn))
+    (only (euphrates parselynn-run) parselynn-run))
   (import
     (only (scheme base)
           begin

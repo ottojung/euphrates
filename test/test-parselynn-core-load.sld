@@ -1,6 +1,6 @@
 
 (define-library
-  (test-parselynn-load)
+  (test-parselynn-core-load)
   (import
     (only (data parser-branching-glr)
           parser-branching-glr))
@@ -15,13 +15,13 @@
           parser-repeating-lr))
   (import (only (euphrates assert) assert))
   (import
-    (only (euphrates parselynn-load)
-          parselynn-load))
+    (only (euphrates parselynn-core-load)
+          parselynn-core-load))
   (import
     (only (euphrates parselynn-run)
           parselynn-run))
   (import
-    (only (euphrates parselynn) make-lexical-token))
+    (only (euphrates parselynn-core) make-lexical-token))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)
@@ -74,5 +74,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "test-parselynn-load.scm")))
-    (else (include "test-parselynn-load.scm"))))
+             (include-from-path "test-parselynn-core-load.scm")))
+    (else (include "test-parselynn-core-load.scm"))))

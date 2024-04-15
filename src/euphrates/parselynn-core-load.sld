@@ -1,12 +1,12 @@
 
 (define-library
-  (euphrates parselynn-load)
-  (export parselynn-load)
+  (euphrates parselynn-core-load)
+  (export parselynn-core-load)
   (import
-    (only (euphrates parselynn-struct)
-          make-parselynn-struct))
+    (only (euphrates parselynn-core-struct)
+          make-parselynn-core-struct))
   (import
-    (only (euphrates parselynn)
+    (only (euphrates parselynn-core)
           serialized-parser-typetag))
   (import (only (euphrates raisu-star) raisu*))
   (import
@@ -26,5 +26,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-load.scm")))
-    (else (include "parselynn-load.scm"))))
+               "euphrates/parselynn-core-load.scm")))
+    (else (include "parselynn-core-load.scm"))))

@@ -19,7 +19,7 @@
     (only (euphrates parselynn-folexer-struct)
           parselynn:folexer:base-model))
   (import
-    (only (euphrates parselynn) make-lexical-token))
+    (only (euphrates parselynn-core) make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates source-location)

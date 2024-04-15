@@ -2,7 +2,7 @@
 (define make-lexer make-parselynn:latin)
 
 (define (make-test-parser parser-rules)
-   (parselynn
+   (parselynn-core
     `((tokens: ,@parselynn:latin-tokens)
       (rules: ,@parser-rules))))
 

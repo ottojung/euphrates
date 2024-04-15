@@ -1,13 +1,13 @@
 
 (define-library
-  (test-parselynn-calc)
+  (test-parselynn-core-calc)
   (import (only (euphrates assert-equal) assert=))
   (import
     (only (euphrates parselynn-run-with-error-handler)
           parselynn-run/with-error-handler))
   (import
-    (only (euphrates parselynn)
-          parselynn
+    (only (euphrates parselynn-core)
+          parselynn-core
           lexical-token-category
           lexical-token-source
           lexical-token-value
@@ -81,5 +81,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "test-parselynn-calc.scm")))
-    (else (include "test-parselynn-calc.scm"))))
+             (include-from-path "test-parselynn-core-calc.scm")))
+    (else (include "test-parselynn-core-calc.scm"))))

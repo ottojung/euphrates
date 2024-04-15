@@ -1,6 +1,6 @@
 
 (define-library
-  (benchmark-parselynn)
+  (benchmark-parselynn-core)
   (import
     (only (data parser-branching-glr)
           parser-branching-glr))
@@ -17,13 +17,13 @@
   (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-load) parselynn-load))
+    (only (euphrates parselynn-core-load) parselynn-core-load))
   (import
     (only (euphrates parselynn-run) parselynn-run))
   (import
-    (only (euphrates parselynn)
+    (only (euphrates parselynn-core)
           make-lexical-token
-          parselynn))
+          parselynn-core))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates with-benchmark-simple)
@@ -68,5 +68,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "benchmark-parselynn.scm")))
-    (else (include "benchmark-parselynn.scm"))))
+             (include-from-path "benchmark-parselynn-core.scm")))
+    (else (include "benchmark-parselynn-core.scm"))))

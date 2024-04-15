@@ -111,7 +111,7 @@
         options*)))))
 
   (define backend-parser
-    (parselynn options-to-upstream))
+    (parselynn-core options-to-upstream))
 
   (make-parselynn:simple-struct
    arguments backend-parser

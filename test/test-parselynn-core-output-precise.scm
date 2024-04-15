@@ -37,7 +37,7 @@
     (check-code name filename))
 
   (define (generate-repating driver)
-    (parselynn
+    (parselynn-core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (on-conflict: ,ignore)
        (output-code: ,(comp (save+check "repeating" driver)))
@@ -50,7 +50,7 @@
         (term     (NUM) : #t)))))
 
   (define (generate-branching driver)
-    (parselynn
+    (parselynn-core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (driver: ,(string->symbol driver))
        (results: ,(if (equal? (~a driver) "glr") 'all 'first))

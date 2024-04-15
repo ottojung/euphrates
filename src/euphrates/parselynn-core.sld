@@ -1,8 +1,8 @@
 
 (define-library
-  (euphrates parselynn)
+  (euphrates parselynn-core)
   (export
-    parselynn
+    parselynn-core
     make-lexical-token
     serialized-parser-typetag
     lexical-token?
@@ -14,8 +14,8 @@
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
-    (only (euphrates parselynn-struct)
-          make-parselynn-struct))
+    (only (euphrates parselynn-core-struct)
+          make-parselynn-core-struct))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
@@ -140,5 +140,6 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "euphrates/parselynn.scm")))
-    (else (include "parselynn.scm"))))
+             (include-from-path
+               "euphrates/parselynn-core.scm")))
+    (else (include "parselynn-core.scm"))))

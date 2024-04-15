@@ -6,7 +6,7 @@
     (only (euphrates parselynn-irregex)
           make-parselynn:irregex-factory))
   (import
-    (only (euphrates parselynn)
+    (only (euphrates parselynn-core)
           lexical-token-category
           lexical-token-source
           lexical-token-value))

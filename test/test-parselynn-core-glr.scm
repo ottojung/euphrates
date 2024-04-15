@@ -29,7 +29,7 @@
 
 (define parser-1
   ;; Grammar taken from Tomita's "An Efficient Augmented-Context-Free Parsing Algorithm"
-  (parselynn
+  (parselynn-core
    `((driver: glr)
      (results: all)
      (on-conflict: ,ignore)
@@ -59,7 +59,7 @@
 
 (define parser-2
   ;; The dangling-else problem
-  (parselynn
+  (parselynn-core
    `((driver: glr)
      (results: all)
      (on-conflict: ,ignore)

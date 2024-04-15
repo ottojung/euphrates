@@ -1,13 +1,13 @@
 
 (define-library
-  (test-parselynn-glr)
+  (test-parselynn-core-glr)
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates parselynn-run)
           parselynn-run))
   (import
-    (only (euphrates parselynn) parselynn))
+    (only (euphrates parselynn-core) parselynn-core))
   (import
     (only (scheme base)
           begin
@@ -28,5 +28,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "test-parselynn-glr.scm")))
-    (else (include "test-parselynn-glr.scm"))))
+             (include-from-path "test-parselynn-core-glr.scm")))
+    (else (include "test-parselynn-core-glr.scm"))))

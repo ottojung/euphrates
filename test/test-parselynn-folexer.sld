@@ -7,8 +7,12 @@
   (import (only (euphrates debugs) debugs))
   (import (only (euphrates hashset) make-hashset))
   (import
-    (only (euphrates
-            parselynn-folexer-result-as-iterator)
+    (only (euphrates parselynn-core)
+          lexical-token-category
+          lexical-token-source
+          lexical-token-value))
+  (import
+    (only (euphrates parselynn-folexer-result-as-iterator)
           parselynn:folexer-result:as-iterator))
   (import
     (only (euphrates parselynn-folexer-run-on-char-port)
@@ -22,11 +26,6 @@
   (import
     (only (euphrates parselynn-folexer)
           make-parselynn:folexer))
-  (import
-    (only (euphrates parselynn)
-          lexical-token-category
-          lexical-token-source
-          lexical-token-value))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)
@@ -70,6 +69,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path
-               "test-parselynn-folexer.scm")))
+             (include-from-path "test-parselynn-folexer.scm")))
     (else (include "test-parselynn-folexer.scm"))))

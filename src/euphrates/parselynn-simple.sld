@@ -26,6 +26,8 @@
     (only (euphrates labelinglogic-model-names)
           labelinglogic:model:names))
   (import
+    (only (euphrates parselynn-core) parselynn-core))
+  (import
     (only (euphrates parselynn-folexer-compile-iterator)
           parselynn:folexer:compile/iterator))
   (import
@@ -50,7 +52,6 @@
   (import
     (only (euphrates parselynn-simple-struct)
           make-parselynn:simple-struct))
-  (import (only (euphrates parselynn) parselynn))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates semis-ebnf-tree-to-ebnf-tree)
