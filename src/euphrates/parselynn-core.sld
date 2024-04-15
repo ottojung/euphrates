@@ -18,14 +18,14 @@
           parselynn:core:load-from-disk))
   (import
     (only (euphrates parselynn-core-load)
-          parselynn:core-load))
+          parselynn:core:load))
   (import
     (only (euphrates parselynn-core-serialized-typetag)
           parselynn:core:serialized-typetag))
   (import
     (only (euphrates parselynn-core-struct)
-          make-parselynn:core-struct
-          parselynn:core-struct:code))
+          make-parselynn:core:struct
+          parselynn:core:struct:code))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))

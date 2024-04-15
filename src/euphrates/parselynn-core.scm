@@ -2145,9 +2145,9 @@
      (load-object
       (let ()
         (define loaded
-          (parselynn:core-load load-object))
+          (parselynn:core:load load-object))
 
-        (unless (equal? (parselynn:core-struct:code loaded)
+        (unless (equal? (parselynn:core:struct:code loaded)
                         current-code)
           (grammar-error "Loaded parser has outdated code."))
 
@@ -2157,7 +2157,7 @@
       (let ()
         (define loaded/0 (parselynn:core:load-from-disk disk-path))
         (define up-to-date?
-          (equal? (parselynn:core-struct:code loaded/0)
+          (equal? (parselynn:core:struct:code loaded/0)
                   current-code))
 
         (define _71263
@@ -2253,7 +2253,7 @@
     (define maybefun #f)
 
     (or (options-load-parser options code)
-        (make-parselynn:core-struct
+        (make-parselynn:core:struct
          results-mode driver-name tokens
          rules actions code maybefun)))
 

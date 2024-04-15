@@ -1,6 +1,6 @@
 
 ;;
-;; this file is like test-parselynn:core-largecases.scm, but cases are even larger
+;; this file is like test-parselynn:core:largecases.scm, but cases are even larger
 ;;
 
 (define (iterate-results iter)
@@ -94,9 +94,9 @@
     (if load?
         (cond
          ((equal? driver "lr")
-          (parselynn:core-load parser-repeating-lr))
+          (parselynn:core:load parser-repeating-lr))
          ((equal? driver "glr")
-          (parselynn:core-load parser-repeating-glr))
+          (parselynn:core:load parser-repeating-glr))
          (else
           (raisu 'bad-driver-type driver)))
 
@@ -129,9 +129,9 @@
     (if load?
         (cond
          ((equal? driver "lr")
-          (parselynn:core-load parser-branching-lr))
+          (parselynn:core:load parser-branching-lr))
          ((equal? driver "glr")
-          (parselynn:core-load parser-branching-glr))
+          (parselynn:core:load parser-branching-glr))
          (else
           (raisu 'bad-driver-type driver)))
 

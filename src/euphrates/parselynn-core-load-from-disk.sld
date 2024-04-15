@@ -4,7 +4,7 @@
   (export parselynn:core:load-from-disk)
   (import
     (only (euphrates parselynn-core-load)
-          parselynn:core-load))
+          parselynn:core:load))
   (import (only (scheme base) begin define quote))
   (import (only (scheme eval) environment))
   (import (only (scheme load) load))

@@ -7,9 +7,9 @@
           labelinglogic:interpret-r7rs-code))
   (import
     (only (euphrates parselynn-core-struct)
-          parselynn:core-struct:actions
-          parselynn:core-struct:code
-          parselynn:core-struct:maybefun))
+          parselynn:core:struct:actions
+          parselynn:core:struct:code
+          parselynn:core:struct:maybefun))
   (import (only (scheme base) begin define if let))
   (cond-expand
     (guile (import (only (guile) include-from-path))

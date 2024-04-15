@@ -16,7 +16,7 @@
   (import (only (euphrates assert) assert))
   (import
     (only (euphrates parselynn-core-load)
-          parselynn:core-load))
+          parselynn:core:load))
   (import
     (only (euphrates parselynn-core)
           make-lexical-token))

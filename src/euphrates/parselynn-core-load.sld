@@ -1,13 +1,13 @@
 
 (define-library
   (euphrates parselynn-core-load)
-  (export parselynn:core-load)
+  (export parselynn:core:load)
   (import
     (only (euphrates parselynn-core-serialized-typetag)
           parselynn:core:serialized-typetag))
   (import
     (only (euphrates parselynn-core-struct)
-          make-parselynn:core-struct))
+          make-parselynn:core:struct))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)

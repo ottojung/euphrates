@@ -18,7 +18,7 @@
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates parselynn-core-load)
-          parselynn:core-load))
+          parselynn:core:load))
   (import
     (only (euphrates parselynn-core)
           make-lexical-token
