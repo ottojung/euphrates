@@ -270,3 +270,16 @@
  :name "benchmark-parselynn-simple-6"
  :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #t))
  (repeating-template-3 driver load? seq-len n-runs string-input?))
+
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-7"
+ :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000) (string-input? #f))
+ (repeating-template driver load? seq-len n-runs string-input?))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-8"
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #f))
+ (repeating-template driver load? seq-len n-runs string-input?))
