@@ -15,5 +15,4 @@
            (begin
              (include-from-path
                "euphrates/parselynn-folexer-result-struct.scm")))
-    (else (include
-            "parselynn-folexer-result-struct.scm"))))
+    (else (include "parselynn-folexer-result-struct.scm"))))

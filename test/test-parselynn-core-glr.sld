@@ -4,10 +4,9 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-run)
-          parselynn-run))
+    (only (euphrates parselynn-core) parselynn:core))
   (import
-    (only (euphrates parselynn-core) parselynn-core))
+    (only (euphrates parselynn-run) parselynn-run))
   (import
     (only (scheme base)
           begin

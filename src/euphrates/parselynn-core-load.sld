@@ -1,10 +1,10 @@
 
 (define-library
   (euphrates parselynn-core-load)
-  (export parselynn-core-load)
+  (export parselynn:core-load)
   (import
     (only (euphrates parselynn-core-struct)
-          make-parselynn-core-struct))
+          make-parselynn:core-struct))
   (import
     (only (euphrates parselynn-core)
           serialized-parser-typetag))

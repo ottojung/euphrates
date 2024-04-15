@@ -7,10 +7,11 @@
             labelinglogic-model-compile-to-r7rs-first)
           labelinglogic:model:compile-to-r7rs/first))
   (import
+    (only (euphrates parselynn-core)
+          make-lexical-token))
+  (import
     (only (euphrates parselynn-folexer-struct)
           parselynn:folexer:base-model))
-  (import
-    (only (euphrates parselynn-core) make-lexical-token))
   (import
     (only (scheme base)
           +

@@ -113,7 +113,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add expr) : (,save $1 $2 $3)
@@ -133,7 +133,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add expr) : (,save $1 $2 $3)
@@ -155,7 +155,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add expr) : (,save $1 $2 $3)
@@ -178,7 +178,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add expr) : (,save $1 $2 $3)
@@ -200,7 +200,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add expr) : (,save $1 $2 $3)
@@ -226,7 +226,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (driver: glr)
        (results: all)
@@ -252,7 +252,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add expr) : (,save 'expr $1 $2 $3)
@@ -273,7 +273,7 @@
 
 (let ()
   (define parser
-    (parselynn-core
+    (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (driver: glr)
        (results: all)
@@ -308,7 +308,7 @@
 
   (let ()
     (define parser
-      (parselynn-core
+      (parselynn:core
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
          (rules:
           (expr     (expr add expr) : (,save $1 $2 $3)
@@ -334,7 +334,7 @@
 
   (let ()
     (define parser
-      (parselynn-core
+      (parselynn:core
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
          (driver: glr)
          (results: all)
@@ -365,7 +365,7 @@
 
   (let ()
     (define parser
-      (parselynn-core
+      (parselynn:core
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
          (rules:
           (expr     (expr add expr) : (,save 'expr $1 $2 $3)
@@ -387,7 +387,7 @@
 
   (let ()
     (define parser
-      (parselynn-core
+      (parselynn:core
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
          (driver: glr)
          (results: all)

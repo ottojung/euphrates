@@ -1,7 +1,6 @@
 
 (define-library
-  (euphrates
-    parselynn-folexer-result-as-iterator)
+  (euphrates parselynn-folexer-result-as-iterator)
   (export parselynn:folexer-result:as-iterator)
   (import
     (only (euphrates labelinglogic-interpret-r7rs-code)
@@ -11,6 +10,9 @@
             labelinglogic-model-compile-to-r7rs-first)
           labelinglogic:model:compile-to-r7rs/first))
   (import
+    (only (euphrates parselynn-core)
+          make-lexical-token))
+  (import
     (only (euphrates parselynn-folexer-result-struct)
           parselynn:folexer-result-struct:input
           parselynn:folexer-result-struct:input-type
@@ -18,8 +20,6 @@
   (import
     (only (euphrates parselynn-folexer-struct)
           parselynn:folexer:base-model))
-  (import
-    (only (euphrates parselynn-core) make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates source-location)

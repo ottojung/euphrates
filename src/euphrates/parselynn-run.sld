@@ -12,6 +12,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path
-               "euphrates/parselynn-run.scm")))
+             (include-from-path "euphrates/parselynn-run.scm")))
     (else (include "parselynn-run.scm"))))

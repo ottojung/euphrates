@@ -3,11 +3,11 @@
 
 (define (parselynn-run/with-error-handler
          parser-struct errorp token-iterator)
-  (define maybefun (parselynn-core-struct:maybefun parser-struct))
+  (define maybefun (parselynn:core-struct:maybefun parser-struct))
   (if maybefun
       (maybefun token-iterator errorp)
       (let ()
-        (define code (parselynn-core-struct:code parser-struct))
-        (define actions (parselynn-core-struct:actions parser-struct))
+        (define code (parselynn:core-struct:code parser-struct))
+        (define actions (parselynn:core-struct:actions parser-struct))
         (define compiled (labelinglogic:interpret-r7rs-code code))
         ((compiled actions) token-iterator errorp))))

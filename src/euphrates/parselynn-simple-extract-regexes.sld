@@ -59,5 +59,4 @@
            (begin
              (include-from-path
                "euphrates/parselynn-simple-extract-regexes.scm")))
-    (else (include
-            "parselynn-simple-extract-regexes.scm"))))
+    (else (include "parselynn-simple-extract-regexes.scm"))))

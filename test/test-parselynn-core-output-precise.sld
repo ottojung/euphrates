@@ -5,7 +5,7 @@
   (import (only (euphrates comp) comp))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-core) parselynn-core))
+    (only (euphrates parselynn-core) parselynn:core))
   (import (only (euphrates printf) printf))
   (import (only (euphrates read-list) read-list))
   (import

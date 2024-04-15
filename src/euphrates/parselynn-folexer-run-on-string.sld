@@ -12,5 +12,4 @@
            (begin
              (include-from-path
                "euphrates/parselynn-folexer-run-on-string.scm")))
-    (else (include
-            "parselynn-folexer-run-on-string.scm"))))
+    (else (include "parselynn-folexer-run-on-string.scm"))))

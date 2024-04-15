@@ -1526,18 +1526,18 @@
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
     (only (euphrates parselynn-core-load)
-          parselynn-core-load))
+          parselynn:core-load))
   (import
     (only (euphrates parselynn-core-struct)
-          make-parselynn-core-struct
-          parselynn-core-struct:actions
-          parselynn-core-struct:code
-          parselynn-core-struct:driver
-          parselynn-core-struct:maybefun
-          parselynn-core-struct:results
-          parselynn-core-struct:rules
-          parselynn-core-struct:tokens
-          parselynn-core-struct?))
+          make-parselynn:core-struct
+          parselynn:core-struct:actions
+          parselynn:core-struct:code
+          parselynn:core-struct:driver
+          parselynn:core-struct:maybefun
+          parselynn:core-struct:results
+          parselynn:core-struct:rules
+          parselynn:core-struct:tokens
+          parselynn:core-struct?))
   (import
     (only (euphrates parselynn-core)
           lexical-token-category
@@ -1545,7 +1545,7 @@
           lexical-token-value
           lexical-token?
           make-lexical-token
-          parselynn-core
+          parselynn:core
           serialized-parser-typetag))
   (import
     (only (euphrates parselynn-folexer-compile-iterator)

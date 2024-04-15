@@ -5,7 +5,7 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import
-    (only (euphrates parselynn-core) parselynn-core))
+    (only (euphrates parselynn-core) parselynn:core))
   (import
     (only (euphrates parselynn-latin-digits)
           parselynn:latin/digits))

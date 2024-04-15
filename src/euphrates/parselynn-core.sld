@@ -2,7 +2,7 @@
 (define-library
   (euphrates parselynn-core)
   (export
-    parselynn-core
+    parselynn:core
     make-lexical-token
     serialized-parser-typetag
     lexical-token?
@@ -15,7 +15,7 @@
     (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates parselynn-core-struct)
-          make-parselynn-core-struct))
+          make-parselynn:core-struct))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))

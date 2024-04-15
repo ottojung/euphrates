@@ -1,7 +1,6 @@
 
 (define-library
-  (euphrates
-    parselynn-folexer-run-on-char-port)
+  (euphrates parselynn-folexer-run-on-char-port)
   (export parselynn:folexer:run-on-char-port)
   (import
     (only (euphrates parselynn-folexer-result-struct)

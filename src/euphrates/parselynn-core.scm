@@ -44,7 +44,7 @@
 (define (lexical-token-value x)
   (vector-ref x 3))
 
-(define (parselynn-core arguments)
+(define (parselynn:core arguments)
   (define *bits-per-word* 28)
 
   (define (grammar-error message-fmt . args)
@@ -2191,7 +2191,7 @@
     (define maybefun #f)
 
     (define struct
-      (make-parselynn-core-struct
+      (make-parselynn:core-struct
        results-mode driver-name tokens
        rules actions code maybefun))
 

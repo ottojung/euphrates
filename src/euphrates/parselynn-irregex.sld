@@ -13,9 +13,10 @@
           irregex-search
           sre->irregex))
   (import
-    (only (euphrates parselynn-core) make-lexical-token))
-  (import
     (only (euphrates list-map-first) list-map-first))
+  (import
+    (only (euphrates parselynn-core)
+          make-lexical-token))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates source-location)

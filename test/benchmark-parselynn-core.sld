@@ -17,13 +17,14 @@
   (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-core-load) parselynn-core-load))
-  (import
-    (only (euphrates parselynn-run) parselynn-run))
+    (only (euphrates parselynn-core-load)
+          parselynn:core-load))
   (import
     (only (euphrates parselynn-core)
           make-lexical-token
-          parselynn-core))
+          parselynn:core))
+  (import
+    (only (euphrates parselynn-run) parselynn-run))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates with-benchmark-simple)
@@ -68,5 +69,6 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "benchmark-parselynn-core.scm")))
+             (include-from-path
+               "benchmark-parselynn-core.scm")))
     (else (include "benchmark-parselynn-core.scm"))))
