@@ -26,29 +26,18 @@
     (define read-next-char
       (cond
        ((string? ___scanner)
-
         (let ((input-length (string-length ___scanner)))
           (lambda _
             (if (>= offset input-length)
                 (eof-object)
-                (let ((c (string-ref ___scanner offset)))
-                  (adjust-positions! c)
-                  c)))))
+                (string-ref ___scanner offset)))))
 
        ((port? ___scanner)
-
         (lambda _
-          (let ((c (read-char ___scanner)))
-            (unless (eof-object? c)
-              (adjust-positions! c))
-            c)))
+          (read-char ___scanner)))
 
        ((procedure? ___scanner)
-
-        (lambda _
-          (let ((c (___scanner)))
-            (adjust-positions! c)
-            c)))
+        ___scanner)
 
        (else
         (___errorp
@@ -76,4 +65,5 @@
                    'unrecognized-input
                    "Type error: unrecognized input: ~s" c)))
 
+            (adjust-positions! c)
             (wrap-return c category))))))

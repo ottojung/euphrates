@@ -37,7 +37,6 @@
           string-length
           string-ref
           string?
-          unless
           unquote
           vector
           when))
