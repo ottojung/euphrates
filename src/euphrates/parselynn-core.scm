@@ -2015,6 +2015,12 @@
              (and (list? option)
                   (list-length= 2 option))))
 
+     (cons 'sync-to-disk:
+           (lambda (option)
+             (and (list? option)
+                  (list-length= 2 option)
+                  (string? (cadr option)))))
+
      (cons 'on-conflict:
            (lambda (option)
              (and (list? option)
@@ -2059,28 +2065,31 @@
             :message message
             :args (list type new current on-symbol in-state)))
 
+  (define (output-parser-to-procedure! options code callback)
+    (define tokens (options-get-tokens options))
+    (define rules (options-get-rules options))
+    (define code-actions (get-code-actions))
+    (define code*
+      `(let ()
+         (define maybefun0 ,code)
+         (define code-actions ,code-actions)
+         (define maybefun (maybefun0 code-actions))
+         (vector (quote ,parselynn:core:serialized-typetag)
+                 (quote ,results-mode)
+                 (quote ,driver-name)
+                 (quote ,tokens)
+                 (quote ,rules)
+                 code-actions
+                 (quote ,code)
+                 maybefun)))
+    (callback code*))
+
   (define (output-parser! options code)
     (let ((option (assq-or 'output-code: options)))
       (if option
           (let ()
             (define callback (car option))
-            (define tokens (options-get-tokens options))
-            (define rules (options-get-rules options))
-            (define code-actions (get-code-actions))
-            (define code*
-              `(let ()
-                 (define maybefun0 ,code)
-                 (define code-actions ,code-actions)
-                 (define maybefun (maybefun0 code-actions))
-                 (vector (quote ,parselynn:core:serialized-typetag)
-                         (quote ,results-mode)
-                         (quote ,driver-name)
-                         (quote ,tokens)
-                         (quote ,rules)
-                         code-actions
-                         (quote ,code)
-                         maybefun)))
-            (callback code*)))))
+            (output-parser-to-procedure! options code callback)))))
 
   (define (output-table! options)
     (let ((option (assq-or 'output-table: options)))
@@ -2117,19 +2126,57 @@
   (define (options-get-lexer-code options)
     (assq-or 'lexer-code: options #f))
 
+  (define (options-get-load options)
+    (assq-or 'load: options #f))
+
+  (define (options-get-sync-to-disk options)
+    (assq-or 'sync-to-disk: options #f))
+
   (define (options-load-parser options current-code)
-    (define object (assq-or 'load: options #f))
+    (define load-object (options-get-load options))
+    (define disk-path (options-get-sync-to-disk options))
 
-    (and object
-         (let ()
-           (define loaded
-             (parselynn:core-load object))
+    (when (and load-object disk-path)
+      (grammar-error
+       (stringf "Cannot specify both ~s and ~s arguments."
+                (~s 'load:) (~s 'sync-to-disk:))))
 
-           (unless (equal? (parselynn:core-struct:code loaded)
-                           current-code)
-             (grammar-error "Loaded parser has outdated code."))
+    (cond
+     (load-object
+      (let ()
+        (define loaded
+          (parselynn:core-load load-object))
 
-           loaded)))
+        (unless (equal? (parselynn:core-struct:code loaded)
+                        current-code)
+          (grammar-error "Loaded parser has outdated code."))
+
+        loaded))
+
+     (disk-path
+      (let ()
+        (define loaded/0 (parselynn:core:load-from-disk disk-path))
+        (define up-to-date?
+          (equal? (parselynn:core-struct:code loaded/0)
+                  current-code))
+
+        (define _71263
+          (unless up-to-date?
+            (output-parser-to-procedure!
+             options current-code
+             (lambda (serialized-parser)
+               (call-with-output-file
+                   disk-path
+                 (lambda (port)
+                   (write serialized-parser port)))))))
+
+        (define loaded
+          (if up-to-date? loaded/0
+              (parselynn:core:load-from-disk disk-path)))
+
+        loaded))
+
+     (else #f)))
 
   ;; -- arguments
 

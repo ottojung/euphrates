@@ -14,6 +14,9 @@
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
+    (only (euphrates parselynn-core-load-from-disk)
+          parselynn:core:load-from-disk))
+  (import
     (only (euphrates parselynn-core-load)
           parselynn:core-load))
   (import
@@ -28,6 +31,7 @@
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
+  (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
           *
@@ -102,6 +106,7 @@
           set-cdr!
           string->symbol
           string-append
+          string?
           symbol->string
           symbol?
           unless
@@ -117,7 +122,9 @@
           vector?
           when))
   (import (only (scheme cxr) caaar cadar caddr))
-  (import (only (scheme write) display))
+  (import
+    (only (scheme file) call-with-output-file))
+  (import (only (scheme write) display write))
   (cond-expand
     (guile (import
              (only (srfi srfi-1)
