@@ -3,13 +3,19 @@
   (let loop () (when (iter) (loop))))
 
 
-(define (run/generic parser input n-runs)
+(define (run/generic parser make-lexer n-runs)
   (let loop ((i n-runs))
     (when (< 0 i)
       (let ()
+        (define lexer
+          (make-lexer))
+
+        (when (= i n-runs)
+          (with-benchmark/timestamp "constructed lexer"))
+
         (define result
           (parselynn:simple:run/with-error-handler
-           parser ignore input))
+           parser ignore lexer))
 
         (if (< 1 i)
             (loop (- i 1))
@@ -33,24 +39,34 @@
                (else
                 (raisu 'unrecognized-driver driver)))))))))
 
-(define (repeating-template driver load? seq-len n-runs)
+(define (repeating-template driver load? seq-len n-runs string-input?)
   (define _8123 (assert= driver "lr"))
 
-  (define input
-    (let ()
-      (define count 0)
-      (define constant-s (make-string seq-len))
-      (define normal-s
-        (string-map
-         (lambda (c)
-           (set! count (+ 1 count))
-           (case (remainder count 2)
-             ((1) #\5)
-             ((0) #\+)))
-         constant-s))
-      normal-s))
+  (define (input-getter count)
+    (case (remainder count 2)
+      ((1) #\5)
+      ((0) #\+)))
 
-  (with-benchmark/timestamp "constructed input")
+  (define make-lexer
+    (if string-input?
+        (lambda _
+          (define count 0)
+          (define constant-s (make-string seq-len))
+          (define normal-s
+            (string-map
+             (lambda _
+               (set! count (+ 1 count))
+               (input-getter count))
+             constant-s))
+          normal-s)
+
+        (lambda _
+          (define count 0)
+          (lambda _
+            (set! count (+ 1 count))
+            (if (>= (+ 1 count) seq-len)
+                (eof-object)
+                (input-getter count))))))
 
   (define maybe-load-options
     (if load?
@@ -70,33 +86,43 @@
        :driver ,(string->symbol driver))))
 
   (with-benchmark/timestamp "constructed parser")
-  (run/generic parser input n-runs))
+  (run/generic parser make-lexer n-runs))
 
 
 
-(define (repeating-template-2 driver load? seq-len n-runs)
+(define (repeating-template-2 driver load? seq-len n-runs string-input?)
   (define _8123 (assert= driver "lr"))
 
-  (define input
-    (let ()
-      (define count 0)
-      (define constant-s (make-string seq-len))
-      (define normal-s
-        (string-map
-         (lambda (c)
-           (set! count (+ 1 count))
-           (case (remainder count 7)
-             ((1) #\4)
-             ((2) #\2)
-             ((3) #\+)
-             ((4) #\x)
-             ((5) #\-)
-             ((6) #\y)
-             ((0) #\*)))
-         constant-s))
-      normal-s))
+  (define (input-getter count)
+    (case (remainder count 7)
+      ((1) #\4)
+      ((2) #\2)
+      ((3) #\+)
+      ((4) #\x)
+      ((5) #\-)
+      ((6) #\y)
+      ((0) #\*)))
 
-  (with-benchmark/timestamp "constructed input")
+  (define make-lexer
+    (if string-input?
+        (lambda _
+          (define count 0)
+          (define constant-s (make-string seq-len))
+          (define normal-s
+            (string-map
+             (lambda _
+               (set! count (+ 1 count))
+               (input-getter count))
+             constant-s))
+          normal-s)
+
+        (lambda _
+          (define count 0)
+          (lambda _
+            (set! count (+ 1 count))
+            (if (>= (+ 1 count) seq-len)
+                (eof-object)
+                (input-getter count))))))
 
   (define maybe-load-options
     (if load?
@@ -121,32 +147,42 @@
        :driver ,(string->symbol driver))))
 
   (with-benchmark/timestamp "constructed parser")
-  (run/generic parser input n-runs))
+  (run/generic parser make-lexer n-runs))
 
 
 
-(define (repeating-template-3 driver load? seq-len n-runs)
+(define (repeating-template-3 driver load? seq-len n-runs string-input?)
   (define _8123 (assert= driver "lr"))
 
-  (define input
-    (let ()
-      (define input-template
-        " 42 + x2 * \"good \\\n 777 \\\" quote\"-  y* 59 + \"a \\\" quote\"  + x  ")
-      (define count -1)
-      (define constant-s (make-string seq-len))
-      (define normal-s
-        (string-map
-         (lambda (c)
-           (set! count (+ 1 count))
-           (define denom (+ 1 (string-length input-template)))
-           (define num (remainder count denom))
-           (if (< num (string-length input-template))
-               (string-ref input-template num)
-               #\*))
-         constant-s))
-      normal-s))
+  (define input-template
+    " 42 + x2 * \"good \\\n 777 \\\" quote\"-  y* 59 + \"a \\\" quote\"  + x  ")
+  (define (input-getter count)
+    (define denom (+ 1 (string-length input-template)))
+    (define num (remainder count denom))
+    (if (< num (string-length input-template))
+        (string-ref input-template num)
+        #\*))
 
-  (with-benchmark/timestamp "constructed input")
+  (define make-lexer
+    (if string-input?
+        (lambda _
+          (define count 0)
+          (define constant-s (make-string seq-len))
+          (define normal-s
+            (string-map
+             (lambda _
+               (set! count (+ 1 count))
+               (input-getter count))
+             constant-s))
+          normal-s)
+
+        (lambda _
+          (define count 0)
+          (lambda _
+            (set! count (+ 1 count))
+            (if (>= (+ 1 count) seq-len)
+                (eof-object)
+                (input-getter count))))))
 
   (define maybe-load-options
     (if load?
@@ -182,7 +218,7 @@
        :driver ,(string->symbol driver))))
 
   (with-benchmark/timestamp "constructed parser")
-  (run/generic parser input n-runs))
+  (run/generic parser make-lexer n-runs))
 
 
 
@@ -202,35 +238,35 @@
 
 (with-benchmark/simple
  :name "benchmark-parselynn-simple-1"
- :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000))
- (repeating-template driver load? seq-len n-runs))
+ :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000) (string-input? #t))
+ (repeating-template driver load? seq-len n-runs string-input?))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-simple-2"
- :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000))
- (repeating-template-2 driver load? seq-len n-runs))
+ :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000) (string-input? #t))
+ (repeating-template-2 driver load? seq-len n-runs string-input?))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-simple-3"
- :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000))
- (repeating-template-3 driver load? seq-len n-runs))
+ :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000) (string-input? #t))
+ (repeating-template-3 driver load? seq-len n-runs string-input?))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-simple-4"
- :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
- (repeating-template driver load? seq-len n-runs))
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #t))
+ (repeating-template driver load? seq-len n-runs string-input?))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-simple-5"
- :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
- (repeating-template-2 driver load? seq-len n-runs))
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #t))
+ (repeating-template-2 driver load? seq-len n-runs string-input?))
 
 
 (with-benchmark/simple
  :name "benchmark-parselynn-simple-6"
- :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
- (repeating-template-3 driver load? seq-len n-runs))
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #t))
+ (repeating-template-3 driver load? seq-len n-runs string-input?))

@@ -30,6 +30,8 @@
           /
           <
           =
+          >=
+          _
           and
           begin
           car
@@ -37,6 +39,7 @@
           cond
           define
           else
+          eof-object
           equal?
           if
           lambda
