@@ -56,6 +56,7 @@
           string-map
           string-ref
           unquote
+          unquote-splicing
           when))
   (cond-expand
     (guile (import (only (srfi srfi-1) any count)))

@@ -35,7 +35,6 @@
 
 (define (repeating-template driver load? seq-len n-runs)
   (define _8123 (assert= driver "lr"))
-  (define _4632 (assert= load? #f))
 
   (define input
     (let ()
@@ -53,6 +52,11 @@
 
   (with-benchmark/timestamp "constructed input")
 
+  (define maybe-load-options
+    (if load?
+        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template.scm")
+        '()))
+
   (define parser
     (parselynn:simple
      `(:grammar
@@ -60,6 +64,8 @@
          add = "+"
          term = NUM
          NUM = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+       ,@maybe-load-options
 
        :driver ,(string->symbol driver))))
 
@@ -70,7 +76,6 @@
 
 (define (repeating-template-2 driver load? seq-len n-runs)
   (define _8123 (assert= driver "lr"))
-  (define _4632 (assert= load? #f))
 
   (define input
     (let ()
@@ -93,6 +98,11 @@
 
   (with-benchmark/timestamp "constructed input")
 
+  (define maybe-load-options
+    (if load?
+        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template-2.scm")
+        '()))
+
   (define parser
     (parselynn:simple
      `(:grammar
@@ -106,6 +116,8 @@
          num = dig num / dig
          dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
+       ,@maybe-load-options
+
        :driver ,(string->symbol driver))))
 
   (with-benchmark/timestamp "constructed parser")
@@ -115,7 +127,6 @@
 
 (define (repeating-template-3 driver load? seq-len n-runs)
   (define _8123 (assert= driver "lr"))
-  (define _4632 (assert= load? #f))
 
   (define input
     (let ()
@@ -136,6 +147,11 @@
       normal-s))
 
   (with-benchmark/timestamp "constructed input")
+
+  (define maybe-load-options
+    (if load?
+        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template-3.scm")
+        '()))
 
   (define parser
     (parselynn:simple
@@ -160,6 +176,8 @@
        :join (num id string)
        :flatten (term expr)
        :skip (space)
+
+       ,@maybe-load-options
 
        :driver ,(string->symbol driver))))
 
@@ -197,4 +215,22 @@
 (with-benchmark/simple
  :name "benchmark-parselynn-simple-3"
  :inputs ((driver "lr") (load? #f) (seq-len 41) (n-runs 3000))
+ (repeating-template-3 driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-4"
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
+ (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-5"
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
+ (repeating-template-2 driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-6"
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
  (repeating-template-3 driver load? seq-len n-runs))
