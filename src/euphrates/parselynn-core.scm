@@ -2127,10 +2127,10 @@
     (assq-or 'lexer-code: options #f))
 
   (define (options-get-load options)
-    (assq-or 'load: options #f))
+    (car (assq-or 'load: options (list #f))))
 
   (define (options-get-sync-to-disk options)
-    (assq-or 'sync-to-disk: options #f))
+    (car (assq-or 'sync-to-disk: options (list #f))))
 
   (define (options-load-parser options current-code)
     (define load-object (options-get-load options))
@@ -2155,10 +2155,14 @@
 
      (disk-path
       (let ()
-        (define loaded/0 (parselynn:core:load-from-disk disk-path))
+        (define loaded/0
+          (and (file-exists? disk-path)
+               (parselynn:core:load-from-disk disk-path)))
+
         (define up-to-date?
-          (equal? (parselynn:core:struct:code loaded/0)
-                  current-code))
+          (and loaded/0
+               (equal? (parselynn:core:struct:code loaded/0)
+                       current-code)))
 
         (define _71263
           (unless up-to-date?

@@ -123,7 +123,9 @@
           when))
   (import (only (scheme cxr) caaar cadar caddr))
   (import
-    (only (scheme file) call-with-output-file))
+    (only (scheme file)
+          call-with-output-file
+          file-exists?))
   (import (only (scheme write) display write))
   (cond-expand
     (guile (import
