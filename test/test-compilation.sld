@@ -1528,6 +1528,9 @@
     (only (euphrates parselynn-core-load)
           parselynn:core-load))
   (import
+    (only (euphrates parselynn-core-serialized-typetag)
+          parselynn:core:serialized-typetag))
+  (import
     (only (euphrates parselynn-core-struct)
           make-parselynn:core-struct
           parselynn:core-struct:actions

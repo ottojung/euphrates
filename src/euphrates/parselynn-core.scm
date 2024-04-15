@@ -24,9 +24,6 @@
 (define lexical-token-typetag
   '*lexical-token*)
 
-(define serialized-parser-typetag
-  '*serialized-lalr-scm-parser*)
-
 (define (make-lexical-token category source value)
   (vector lexical-token-typetag category source value))
 
@@ -2013,6 +2010,11 @@
                   (list-length= 2 option)
                   (procedure? (cadr option)))))
 
+     (cons 'load:
+           (lambda (option)
+             (and (list? option)
+                  (list-length= 2 option))))
+
      (cons 'on-conflict:
            (lambda (option)
              (and (list? option)
@@ -2070,7 +2072,7 @@
                  (define maybefun0 ,code)
                  (define code-actions ,code-actions)
                  (define maybefun (maybefun0 code-actions))
-                 (vector (quote ,serialized-parser-typetag)
+                 (vector (quote ,parselynn:core:serialized-typetag)
                          (quote ,results-mode)
                          (quote ,driver-name)
                          (quote ,tokens)
@@ -2115,6 +2117,19 @@
   (define (options-get-lexer-code options)
     (assq-or 'lexer-code: options #f))
 
+  (define (options-load-parser options current-code)
+    (define object (assq-or 'load: options #f))
+
+    (and object
+         (let ()
+           (define loaded
+             (parselynn:core-load object))
+
+           (unless (equal? (parselynn:core-struct:code loaded)
+                           current-code)
+             (grammar-error "Loaded parser has outdated code."))
+
+           loaded)))
 
   ;; -- arguments
 
@@ -2190,12 +2205,10 @@
     (define actions (get-code-actions))
     (define maybefun #f)
 
-    (define struct
-      (make-parselynn:core-struct
-       results-mode driver-name tokens
-       rules actions code maybefun))
-
-    struct)
+    (or (options-load-parser options code)
+        (make-parselynn:core-struct
+         results-mode driver-name tokens
+         rules actions code maybefun)))
 
   (define options
     (extract-arguments arguments))
