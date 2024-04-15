@@ -51,7 +51,8 @@
     (if string-input?
         (lambda _
           (define count 0)
-          (define constant-s (make-string seq-len))
+          (define adj-len (if (odd? seq-len) seq-len (+ 1 seq-len)))
+          (define constant-s (make-string adj-len))
           (define normal-s
             (string-map
              (lambda _
@@ -62,9 +63,10 @@
 
         (lambda _
           (define count 0)
+          (define adj-len (if (odd? seq-len) seq-len (+ 1 seq-len)))
           (lambda _
             (set! count (+ 1 count))
-            (if (>= (+ 1 count) seq-len)
+            (if (>= (+ 1 count) adj-len)
                 (eof-object)
                 (input-getter count))))))
 

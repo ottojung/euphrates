@@ -46,6 +46,7 @@
           let
           make-string
           not
+          odd?
           or
           pair?
           procedure?
