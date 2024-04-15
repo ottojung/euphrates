@@ -4,6 +4,7 @@ steps:
     image: alpine
     commands:
       - apk add --update --no-cache $SCHEME make git openssh-client
+      - sh scripts/compile-benchmarks.sh
       - make benchmark
       - find dist/benchmarks -type f -exec echo {} \; -exec cat {} \;
       - sh scripts/update-benchmarks-git-branch.sh
@@ -14,4 +15,4 @@ steps:
 
 matrix:
   SCHEME:
-    - guile
+    - guile guile-dev
