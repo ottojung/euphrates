@@ -39,19 +39,19 @@
           make-parselynn:folexer))
   (import
     (only (euphrates parselynn-simple-check-options)
-          parselynn:simple-check-options))
+          parselynn:simple:check-options))
   (import
     (only (euphrates parselynn-simple-check-set)
-          parselynn:simple-check-set))
+          parselynn:simple:check-set))
   (import
     (only (euphrates parselynn-simple-extract-regexes)
-          parselynn:simple-extract-regexes))
+          parselynn:simple:extract-regexes))
   (import
     (only (euphrates parselynn-simple-extract-set)
-          parselynn:simple-extract-set))
+          parselynn:simple:extract-set))
   (import
     (only (euphrates parselynn-simple-struct)
-          make-parselynn:simple-struct))
+          make-parselynn:simple:struct))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates semis-ebnf-tree-to-ebnf-tree)

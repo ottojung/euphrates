@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-do-char-to-string)
-  (export parselynn:simple-do-char->string)
+  (export parselynn:simple:do-char->string)
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (scheme base)

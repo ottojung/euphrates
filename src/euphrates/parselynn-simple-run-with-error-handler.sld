@@ -11,7 +11,7 @@
           parselynn:simple:postprocess))
   (import
     (only (euphrates parselynn-simple-struct)
-          parselynn:simple-struct:backend-parser))
+          parselynn:simple:struct:backend-parser))
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))

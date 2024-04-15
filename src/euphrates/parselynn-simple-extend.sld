@@ -22,8 +22,8 @@
           keylist->alist))
   (import
     (only (euphrates parselynn-simple-struct)
-          parselynn:simple-struct:arguments
-          parselynn:simple-struct?))
+          parselynn:simple:struct:arguments
+          parselynn:simple:struct?))
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))

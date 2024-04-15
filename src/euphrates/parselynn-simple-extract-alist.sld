@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-extract-alist)
-  (export parselynn:simple-extract-alist)
+  (export parselynn:simple:extract-alist)
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates curry-if) curry-if))
   (import (only (euphrates fn-cons) fn-cons))

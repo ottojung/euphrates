@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-do-flatten)
-  (export parselynn:simple-do-flatten)
+  (export parselynn:simple:do-flatten)
   (import (only (euphrates comp) comp))
   (import (only (euphrates hashset) hashset-has?))
   (import

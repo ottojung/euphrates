@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-do-inline)
-  (export parselynn:simple-do-inline)
+  (export parselynn:simple:do-inline)
   (import (only (euphrates hashset) hashset-has?))
   (import
     (only (scheme base)

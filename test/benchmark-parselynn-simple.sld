@@ -14,7 +14,7 @@
           parselynn:simple:run/with-error-handler))
   (import
     (only (euphrates parselynn-simple-struct)
-          parselynn:simple-struct:arguments))
+          parselynn:simple:struct:arguments))
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))

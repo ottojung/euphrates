@@ -15,7 +15,7 @@
             (loop (- i 1))
             (let ()
               (define arguments
-                (parselynn:simple-struct:arguments parser))
+                (parselynn:simple:struct:arguments parser))
               (define options
                 (keylist->alist arguments))
               (define driver

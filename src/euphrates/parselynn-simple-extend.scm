@@ -11,20 +11,20 @@
 
   (define (parser->options parser)
     (define arguments
-      (parselynn:simple-struct:arguments parser))
+      (parselynn:simple:struct:arguments parser))
 
     (arguments->options arguments))
 
   (define (get-options x)
     (cond
-     ((parselynn:simple-struct? x)
+     ((parselynn:simple:struct? x)
       (parser->options x))
      ((list? x)
       (arguments->options x))
      (else
       (raisu* :from "parselynn:simple:extend"
               :type 'bad-parser-type
-              :message "Expected either a parselynn:simple-struct or arguments that defined it"
+              :message "Expected either a parselynn:simple:struct or arguments that defined it"
               :args (list x)))))
 
   (define options-original

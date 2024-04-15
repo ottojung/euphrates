@@ -10,7 +10,7 @@
   (define options
     (keylist->alist arguments))
 
-  (parselynn:simple-check-options options)
+  (parselynn:simple:check-options options)
 
   (define translate-option
     (fn-pair
@@ -36,16 +36,16 @@
   (define rules/0a
     (semis-ebnf-tree->ebnf-tree rules/0))
 
-  (define (parselynn:simple-escape-re yield name t) t)
+  (define (parselynn:simple:escape-re yield name t) t)
   (define ebnf-parser
     (generic-ebnf-tree->alist
-     '= '/ parselynn:simple-escape-re))
+     '= '/ parselynn:simple:escape-re))
 
   (define rules/1
     (ebnf-parser rules/0a))
 
   (define-values (rules/2 taken-token-names-set tokens-map)
-    (parselynn:simple-extract-regexes rules/1))
+    (parselynn:simple:extract-regexes rules/1))
 
   (define lexer
     (make-parselynn:folexer
@@ -84,9 +84,9 @@
 
   (define (extract+check key)
     (define-values (ret set-list)
-      (parselynn:simple-extract-set key options*))
+      (parselynn:simple:extract-set key options*))
 
-    (parselynn:simple-check-set non-terminals set-list)
+    (parselynn:simple:check-set non-terminals set-list)
     (and (not (hashset-null? ret)) (cons key ret)))
 
   (define transformations
@@ -113,6 +113,6 @@
   (define backend-parser
     (parselynn:core options-to-upstream))
 
-  (make-parselynn:simple-struct
+  (make-parselynn:simple:struct
    arguments backend-parser
    hidden-tree-labels transformations))

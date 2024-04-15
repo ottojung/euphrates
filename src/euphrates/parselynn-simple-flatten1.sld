@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-flatten1)
-  (export parselynn:simple-flatten1)
+  (export parselynn:simple:flatten1)
   (import
     (only (euphrates list-collapse) list-collapse))
   (import

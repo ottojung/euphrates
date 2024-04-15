@@ -3,14 +3,14 @@
 
 (define (parselynn:simple:postprocess parser-struct result)
   (define hidden-tree-labels
-    (parselynn:simple-struct:hidden-tree-labels
+    (parselynn:simple:struct:hidden-tree-labels
      parser-struct))
 
   (define transformations
-    (parselynn:simple-struct:transformations
+    (parselynn:simple:struct:transformations
      parser-struct))
 
-  (parselynn:simple-transform-result
+  (parselynn:simple:transform-result
    transformations
-   (parselynn:simple-do-char->string
+   (parselynn:simple:do-char->string
     hidden-tree-labels result)))

@@ -1612,43 +1612,43 @@
     (only (euphrates parselynn-run) parselynn-run))
   (import
     (only (euphrates parselynn-simple-check-options)
-          parselynn:simple-check-options))
+          parselynn:simple:check-options))
   (import
     (only (euphrates parselynn-simple-check-set)
-          parselynn:simple-check-set))
+          parselynn:simple:check-set))
   (import
     (only (euphrates parselynn-simple-do-char-to-string)
-          parselynn:simple-do-char->string))
+          parselynn:simple:do-char->string))
   (import
     (only (euphrates parselynn-simple-do-flatten)
-          parselynn:simple-do-flatten))
+          parselynn:simple:do-flatten))
   (import
     (only (euphrates parselynn-simple-do-inline)
-          parselynn:simple-do-inline))
+          parselynn:simple:do-inline))
   (import
     (only (euphrates parselynn-simple-do-join)
-          parselynn:simple-do-join))
+          parselynn:simple:do-join))
   (import
     (only (euphrates parselynn-simple-do-skips)
-          parselynn:simple-do-skips))
+          parselynn:simple:do-skips))
   (import
     (only (euphrates parselynn-simple-do-transform)
-          parselynn:simple-do-transform))
+          parselynn:simple:do-transform))
   (import
     (only (euphrates parselynn-simple-extend)
           parselynn:simple:extend))
   (import
     (only (euphrates parselynn-simple-extract-alist)
-          parselynn:simple-extract-alist))
+          parselynn:simple:extract-alist))
   (import
     (only (euphrates parselynn-simple-extract-regexes)
-          parselynn:simple-extract-regexes))
+          parselynn:simple:extract-regexes))
   (import
     (only (euphrates parselynn-simple-extract-set)
-          parselynn:simple-extract-set))
+          parselynn:simple:extract-set))
   (import
     (only (euphrates parselynn-simple-flatten1)
-          parselynn:simple-flatten1))
+          parselynn:simple:flatten1))
   (import
     (only (euphrates parselynn-simple-postprocess)
           parselynn:simple:postprocess))
@@ -1661,15 +1661,15 @@
           parselynn:simple:run))
   (import
     (only (euphrates parselynn-simple-struct)
-          make-parselynn:simple-struct
-          parselynn:simple-struct:arguments
-          parselynn:simple-struct:backend-parser
-          parselynn:simple-struct:hidden-tree-labels
-          parselynn:simple-struct:transformations
-          parselynn:simple-struct?))
+          make-parselynn:simple:struct
+          parselynn:simple:struct:arguments
+          parselynn:simple:struct:backend-parser
+          parselynn:simple:struct:hidden-tree-labels
+          parselynn:simple:struct:transformations
+          parselynn:simple:struct?))
   (import
     (only (euphrates parselynn-simple-transform-result)
-          parselynn:simple-transform-result))
+          parselynn:simple:transform-result))
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))

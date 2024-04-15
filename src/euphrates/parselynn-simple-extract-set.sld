@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates parselynn-simple-extract-set)
-  (export parselynn:simple-extract-set)
+  (export parselynn:simple:extract-set)
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates hashset) list->hashset))
   (import (only (euphrates raisu-star) raisu*))

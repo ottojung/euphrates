@@ -8,7 +8,7 @@
     input)
 
   (define backend-parser
-    (parselynn:simple-struct:backend-parser
+    (parselynn:simple:struct:backend-parser
      parser-struct))
 
   (parselynn:simple:postprocess
