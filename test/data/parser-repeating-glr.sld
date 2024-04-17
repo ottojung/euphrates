@@ -17,7 +17,7 @@
             (define (lexical-token? x)
               (and (vector? x)
                    (= 4 (vector-length x))
-                   (eq? (vector-ref x 0) '*lexical-token*)))
+                   (equal? (vector-ref x 0) '*lexical-token*)))
             (define (lexical-token-category x)
               (vector-ref x 1))
             (define (lexical-token-source x)
@@ -232,9 +232,9 @@
                     (if (pair? actions)
                       (let ((action (car actions))
                             (other-actions (cdr actions)))
-                        (cond ((eq? action '*error*)
+                        (cond ((equal? action '*error*)
                                (actions-loop other-actions active-stacks))
-                              ((eq? action 'accept)
+                              ((equal? action 'accept)
                                (let ((actions other-actions))
                                  (save-loop-state!
                                    'run-actions-loop
@@ -381,7 +381,7 @@
              (define (lexical-token? x)
                (and (vector? x)
                     (= 4 (vector-length x))
-                    (eq? (vector-ref x 0) '*lexical-token*)))
+                    (equal? (vector-ref x 0) '*lexical-token*)))
              (define (lexical-token-category x)
                (vector-ref x 1))
              (define (lexical-token-source x)
@@ -596,9 +596,9 @@
                      (if (pair? actions)
                        (let ((action (car actions))
                              (other-actions (cdr actions)))
-                         (cond ((eq? action '*error*)
+                         (cond ((equal? action '*error*)
                                 (actions-loop other-actions active-stacks))
-                               ((eq? action 'accept)
+                               ((equal? action 'accept)
                                 (let ((actions other-actions))
                                   (save-loop-state!
                                     'run-actions-loop

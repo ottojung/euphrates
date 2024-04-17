@@ -66,7 +66,6 @@
           define-values
           do
           else
-          eq?
           equal?
           error
           expt

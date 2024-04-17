@@ -30,7 +30,7 @@
 (define (lexical-token? x)
   (and (vector? x)
        (= 4 (vector-length x))
-       (eq? (vector-ref x 0) lexical-token-typetag)))
+       (equal? (vector-ref x 0) lexical-token-typetag)))
 
 (define (lexical-token-category x)
   (vector-ref x 1))
@@ -62,7 +62,7 @@
       (define (lexical-token? x)
         (and (vector? x)
              (= 4 (vector-length x))
-             (eq? (vector-ref x 0) (quote ,lexical-token-typetag))))
+             (equal? (vector-ref x 0) (quote ,lexical-token-typetag))))
 
       (define (lexical-token-category x)
         (vector-ref x 1))
@@ -166,7 +166,7 @@
           (vector-set! ___stack (- ___sp 2) state)
           (let skip ()
             (let ((i (___category ___input)))
-              (if (eq? i '*eoi*)
+              (if (equal? i '*eoi*)
                   (set! ___sp -1)
                   (if (memq i sync-set)
                       (let ((act (assoc i (vector-ref ___atable state))))
@@ -194,12 +194,12 @@
                        #f)
 
                       ;; Input succesfully parsed
-                      ((eq? act 'accept)
+                      ((equal? act 'accept)
                        (vector-ref ___stack 1))
 
                       ;; Syntax error in input
-                      ((eq? act '*error*)
-                       (if (eq? i '*eoi*)
+                      ((equal? act '*error*)
+                       (if (equal? i '*eoi*)
                            (begin
                              (when ___errorp
                                (___errorp 'end-of-input "Syntax error: unexpected end of input: ~s" ___input))
@@ -218,7 +218,7 @@
                       ;; Shift current token on top of the stack
                       ((>= act 0)
                        (___shift act ___input)
-                       (set! ___input (if (eq? i '*eoi*) '*eoi* #f))
+                       (set! ___input (if (equal? i '*eoi*) '*eoi* #f))
                        (loop))
 
                       ;; Reduce by rule (- act)
@@ -350,9 +350,9 @@
           (if (pair? actions)
               (let ((action        (car actions))
                     (other-actions (cdr actions)))
-                (cond ((eq? action '*error*)
+                (cond ((equal? action '*error*)
                        (actions-loop other-actions active-stacks))
-                      ((eq? action 'accept)
+                      ((equal? action 'accept)
                        (let ((actions other-actions))
                          (save-loop-state! 'run-actions-loop
                                            *input* symbol processes
@@ -576,9 +576,9 @@
   (define results-mode    'first)
 
   (define (glr-driver?)
-    (eq? driver-name 'glr-driver))
+    (equal? driver-name 'glr-driver))
   (define (lr-driver?)
-    (eq? driver-name 'lr-driver))
+    (equal? driver-name 'lr-driver))
 
   (define (gen-tables! tokens gram )
     (initialize-all)
@@ -1408,8 +1408,8 @@
         (cond
          ((> sym-prec rule-prec)     'shift)
          ((< sym-prec rule-prec)     'reduce)
-         ((eq? sym-assoc 'left)      'reduce)
-         ((eq? sym-assoc 'right)     'shift)
+         ((equal? sym-assoc 'left)      'reduce)
+         ((equal? sym-assoc 'right)     'shift)
          (else                       'none))))
 
     (define conflict-messages '())
@@ -1563,7 +1563,7 @@
                                  (translate-terms
                                   (lalr-filter (lambda (x)
                                                  (not (and (= (length x) 2)
-                                                           (eq? (cadr x) act))))
+                                                           (equal? (cadr x) act))))
                                                acts)))))
             (vector-set! action-table i
                          (cons `(*default* *error*)
@@ -1701,7 +1701,7 @@
                ((or (member first terms) (member first nonterms))
                 (cons first (loop rest)))
                ((and (pair? first)
-                     (eq? (car first) 'prec:))
+                     (equal? (car first) 'prec:))
                 (if (and (pair? (cdr first))
                          (null? (cddr first))
                          (member (cadr first) terms))
@@ -1718,7 +1718,7 @@
       (let loop ((rhs rhs))
         (if (pair? rhs)
             (begin
-              (when (and (eq? (car rhs) 'error)
+              (when (and (equal? (car rhs) 'error)
                          (or (null? (cdr rhs))
                              (not (member (cadr rhs) terms))
                              (not (null? (cddr rhs)))))
@@ -1760,7 +1760,7 @@
                   (check-error-production rhs)
 
                   (if (and (pair? rest)
-                           (eq? (car rest) ':)
+                           (equal? (car rest) ':)
                            (pair? (cdr rest)))
                       (loop1 (cddr rest)
                              (+ i 1)
@@ -1875,9 +1875,9 @@
   (define (print-states)
     (define (print-action act)
       (cond
-       ((eq? act '*error*)
+       ((equal? act '*error*)
         (display " : Error"))
-       ((eq? act 'accept)
+       ((equal? act 'accept)
         (display " : Accept input"))
        ((< act 0)
         (display " : reduce using rule ")
@@ -1896,7 +1896,7 @@
                   (act (cadar l)))
               (display "   ")
               (cond
-               ((eq? sym 'default)
+               ((equal? sym 'default)
                 (display "default action"))
                (else
                 (if (number? sym)
@@ -1961,7 +1961,7 @@
         ,@(map
            (lambda (p)
              (let ((act (cdr p)))
-               `(lambda ,(if (eq? driver-name 'lr-driver)
+               `(lambda ,(if (equal? driver-name 'lr-driver)
                              '(___stack ___sp ___goto-table ___push yypushback)
                              '(___sp ___goto-table ___push))
                   ,(let* ((nt (caar p)) (rhs (cdar p)) (n (length rhs)))
@@ -1971,7 +1971,7 @@
                                          (let ((rest (cdr l))
                                                (ns (number->string (+ (- n i) 1))))
                                            (cons
-                                            `(tok ,(if (eq? driver-name 'lr-driver)
+                                            `(tok ,(if (equal? driver-name 'lr-driver)
                                                        `(vector-ref ___stack (- ___sp ,(- (* i 2) 1)))
                                                        `(list-ref ___sp ,(+ (* (- i 1) 2) 1))))
                                             (cons
@@ -1985,8 +1985,8 @@
                                    '()))
                         ,(if (= nt 0)
                              '$1
-                             `(___push ,n ,nt ,(cdr p) ,@(if (eq? driver-name 'lr-driver) '() '(___sp))
-                                       ,(if (eq? driver-name 'lr-driver)
+                             `(___push ,n ,nt ,(cdr p) ,@(if (equal? driver-name 'lr-driver) '() '(___sp))
+                                       ,(if (equal? driver-name 'lr-driver)
                                             `(vector-ref ___stack (- ___sp ,(length rhs)))
                                             `(list-ref ___sp ,(length rhs))))))))))
 
@@ -2110,7 +2110,7 @@
   (define (set-driver-name! options)
     (let ((driver-type (assq-or 'driver: options)))
       (when driver-type
-        (set! driver-name (if (eq? (car driver-type) 'glr) 'glr-driver 'lr-driver)))))
+        (set! driver-name (if (equal? (car driver-type) 'glr) 'glr-driver 'lr-driver)))))
 
   (define (options-get-rules options)
     (assq-or 'rules: options

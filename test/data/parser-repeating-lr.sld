@@ -17,7 +17,7 @@
             (define (lexical-token? x)
               (and (vector? x)
                    (= 4 (vector-length x))
-                   (eq? (vector-ref x 0) '*lexical-token*)))
+                   (equal? (vector-ref x 0) '*lexical-token*)))
             (define (lexical-token-category x)
               (vector-ref x 1))
             (define (lexical-token-source x)
@@ -211,7 +211,7 @@
                     (vector-set! ___stack (- ___sp 2) state)
                     (let skip ()
                       (let ((i (___category ___input)))
-                        (if (eq? i '*eoi*)
+                        (if (equal? i '*eoi*)
                           (set! ___sp -1)
                           (if (memq i sync-set)
                             (let ((act (assoc i (vector-ref ___atable state))))
@@ -235,9 +235,9 @@
                                        "Syntax error: invalid token: ~s"
                                        ___input))
                                #f)
-                              ((eq? act 'accept) (vector-ref ___stack 1))
-                              ((eq? act '*error*)
-                               (if (eq? i '*eoi*)
+                              ((equal? act 'accept) (vector-ref ___stack 1))
+                              ((equal? act '*error*)
+                               (if (equal? i '*eoi*)
                                  (begin
                                    (when ___errorp
                                          (___errorp
@@ -260,7 +260,7 @@
                                    (loop))))
                               ((>= act 0)
                                (___shift act ___input)
-                               (set! ___input (if (eq? i '*eoi*) '*eoi* #f))
+                               (set! ___input (if (equal? i '*eoi*) '*eoi* #f))
                                (loop))
                               (else (___reduce (- act)) (loop))))
                       (let* ((state (vector-ref ___stack ___sp))
@@ -306,7 +306,7 @@
              (define (lexical-token? x)
                (and (vector? x)
                     (= 4 (vector-length x))
-                    (eq? (vector-ref x 0) '*lexical-token*)))
+                    (equal? (vector-ref x 0) '*lexical-token*)))
              (define (lexical-token-category x)
                (vector-ref x 1))
              (define (lexical-token-source x)
@@ -501,7 +501,7 @@
                      (vector-set! ___stack (- ___sp 2) state)
                      (let skip ()
                        (let ((i (___category ___input)))
-                         (if (eq? i '*eoi*)
+                         (if (equal? i '*eoi*)
                            (set! ___sp -1)
                            (if (memq i sync-set)
                              (let ((act (assoc i
@@ -526,9 +526,9 @@
                                         "Syntax error: invalid token: ~s"
                                         ___input))
                                 #f)
-                               ((eq? act 'accept) (vector-ref ___stack 1))
-                               ((eq? act '*error*)
-                                (if (eq? i '*eoi*)
+                               ((equal? act 'accept) (vector-ref ___stack 1))
+                               ((equal? act '*error*)
+                                (if (equal? i '*eoi*)
                                   (begin
                                     (when ___errorp
                                           (___errorp
@@ -551,7 +551,8 @@
                                     (loop))))
                                ((>= act 0)
                                 (___shift act ___input)
-                                (set! ___input (if (eq? i '*eoi*) '*eoi* #f))
+                                (set! ___input
+                                  (if (equal? i '*eoi*) '*eoi* #f))
                                 (loop))
                                (else (___reduce (- act)) (loop))))
                        (let* ((state (vector-ref ___stack ___sp))
