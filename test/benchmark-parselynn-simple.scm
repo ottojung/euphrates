@@ -30,8 +30,9 @@
               (with-benchmark/timestamp "parsed input")
               (cond
                ((equal? driver 'lr)
-                (assert (pair? result))
-                (assert= 'expr (car result)))
+                (if (pair? result)
+                    (assert= 'expr (car result))
+                    (assert result)))
                ((equal? driver 'glr)
                 (assert (procedure? result))
                 (assert= #t (result 'get))
@@ -224,6 +225,72 @@
 
 
 
+
+(define (repeating-template-1/dont-build driver load? seq-len n-runs string-input?)
+  (define _8123 (assert= driver "lr"))
+
+  (define (input-getter count)
+    (case (remainder count 2)
+      ((1) #\5)
+      ((0) #\+)))
+
+  (define make-lexer
+    (if string-input?
+        (lambda _
+          (define count 0)
+          (define adj-len (if (odd? seq-len) seq-len (+ 1 seq-len)))
+          (define constant-s (make-string adj-len))
+          (define normal-s
+            (string-map
+             (lambda _
+               (set! count (+ 1 count))
+               (input-getter count))
+             constant-s))
+          normal-s)
+
+        (lambda _
+          (define count 0)
+          (define adj-len (if (odd? seq-len) seq-len (+ 1 seq-len)))
+          (lambda _
+            (set! count (+ 1 count))
+            (if (>= (+ 1 count) adj-len)
+                (eof-object)
+                (input-getter count))))))
+
+  (define maybe-load-options
+    (if load?
+        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template.scm")
+        '()))
+
+  (define parser
+    (parselynn:simple
+     `(:grammar
+
+       ( expr = expr add expr (call #t)
+         /      term (call #t)
+         add = "+" (call #t)
+         term = NUM (call #t)
+         NUM = "0" (call #t)
+         /     "1" (call #t)
+         /     "2" (call #t)
+         /     "3" (call #t)
+         /     "4" (call #t)
+         /     "5" (call #t)
+         /     "6" (call #t)
+         /     "7" (call #t)
+         /     "8" (call #t)
+         /     "9" (call #t)
+         )
+
+       ,@maybe-load-options
+
+       :driver ,(string->symbol driver))))
+
+  (with-benchmark/timestamp "constructed parser")
+  (run/generic parser make-lexer n-runs))
+
+
+
 ;;;;;
 ;;;;;
 ;;;;;
@@ -285,3 +352,21 @@
  :name "benchmark-parselynn-simple-8"
  :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #f))
  (repeating-template driver load? seq-len n-runs string-input?))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-10"
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #t))
+ (repeating-template-1/dont-build driver load? seq-len n-runs string-input?))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-12"
+ :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000) (string-input? #f))
+ (repeating-template-1/dont-build driver load? seq-len n-runs string-input?))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-simple-14"
+ :inputs ((driver "lr") (load? #t) (seq-len 30000000) (n-runs 1) (string-input? #f))
+ (repeating-template-1/dont-build driver load? seq-len n-runs string-input?))
