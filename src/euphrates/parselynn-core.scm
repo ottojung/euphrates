@@ -71,7 +71,24 @@
         (vector-ref x 2))
 
       (define (lexical-token-value x)
-        (vector-ref x 3))))
+        (vector-ref x 3))
+
+      (define (lexical-token-category/soft x)
+        (if (lexical-token? x)
+            (lexical-token-category x)
+            x))
+
+      (define (lexical-token-source/soft x)
+        (if (lexical-token? x)
+            (lexical-token-source x)
+            x))
+
+      (define (lexical-token-value/soft x)
+        (if (lexical-token? x)
+            (lexical-token-value x)
+            x))
+
+      ))
 
 ;;;
 ;;;;  LR-driver
@@ -165,7 +182,7 @@
           (vector-set! ___stack (- ___sp 3) #f)
           (vector-set! ___stack (- ___sp 2) state)
           (let skip ()
-            (let ((i (___category ___input)))
+            (let ((i (lexical-token-category/soft ___input)))
               (if (equal? i '*eoi*)
                   (set! ___sp -1)
                   (if (memq i sync-set)
@@ -176,16 +193,11 @@
                         (___consume)
                         (skip))))))))
 
-      (define (___category tok)
-        (if (lexical-token? tok)
-            (lexical-token-category tok)
-            tok))
-
       (define (___run)
         (let loop ()
           (if ___input
               (let* ((state (vector-ref ___stack ___sp))
-                     (i     (___category ___input))
+                     (i     (lexical-token-category/soft ___input))
                      (act   (___action i (vector-ref ___atable state))))
 
                 (cond ((not (symbol? i))
@@ -257,16 +269,6 @@
 
       (define (consume)
         (get-next-token))
-
-      (define (token-category tok)
-        (if (lexical-token? tok)
-            (lexical-token-category tok)
-            tok))
-
-      (define (token-attribute tok)
-        (if (lexical-token? tok)
-            (lexical-token-value tok)
-            tok))
 
       ;; -- Processes (stacks) handling
 
@@ -422,7 +424,7 @@
       (define (run)
         (let loop-tokens ()
           (define *input* (consume))
-          (define symbol (token-category *input*))
+          (define symbol (lexical-token-category/soft *input*))
           (define processes (get-processes))
           (initialize-processes)
           (continue 'run-processes
@@ -1976,10 +1978,10 @@
                                                        `(list-ref ___sp ,(+ (* (- i 1) 2) 1))))
                                             (cons
                                              `(,(string->symbol (string-append "$" ns))
-                                               (if (lexical-token? tok) (lexical-token-value tok) tok))
+                                               (lexical-token-value/soft tok))
                                              (cons
                                               `(,(string->symbol (string-append "@" ns))
-                                                (if (lexical-token? tok) (lexical-token-source tok) tok))
+                                                (lexical-token-source/soft tok))
                                               (loop (+ i 1) rest)))))
                                          '()))
                                    '()))
