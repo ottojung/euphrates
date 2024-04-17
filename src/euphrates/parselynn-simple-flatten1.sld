@@ -3,19 +3,22 @@
   (euphrates parselynn-simple-flatten1)
   (export parselynn:simple:flatten1)
   (import
-    (only (euphrates compose-under) compose-under))
-  (import
-    (only (euphrates list-collapse) list-collapse))
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import
     (only (scheme base)
           begin
-          char?
+          car
+          cdr
           define
-          or
-          string?))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
+          for-each
+          if
+          let
+          pair?
+          reverse
+          symbol?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
