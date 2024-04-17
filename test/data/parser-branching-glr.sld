@@ -105,7 +105,7 @@
                       (___push 1 3 #t ___sp (list-ref ___sp 1))))))
               (lambda (___scanner ___errorp)
                 (define get-next-token
-                  (lambda args (___scanner)))
+                  (let () (lambda args (___scanner))))
                 (define ___atable action-table)
                 (define ___gtable goto-table)
                 (define ___rtable reduction-table)
@@ -458,7 +458,7 @@
                        (___push 1 3 #t ___sp (list-ref ___sp 1))))))
                (lambda (___scanner ___errorp)
                  (define get-next-token
-                   (lambda args (___scanner)))
+                   (let () (lambda args (___scanner))))
                  (define ___atable action-table)
                  (define ___gtable goto-table)
                  (define ___rtable reduction-table)

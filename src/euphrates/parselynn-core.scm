@@ -430,15 +430,6 @@
         ((equal? results-mode 'first) '(make-first-returner))
         (else (raisu 'impossible 'expected-all-or-first)))))
 
-
-  (define (wrap-lexer-code lexer-code)
-    lexer-code)
-
-  (define default-lexer-code
-    `((define get-next-token
-        (lambda args
-          (___scanner)))))
-
   (define (drop l n)
     (cond ((and (> n 0) (pair? l))
            (drop (cdr l) (- n 1)))
@@ -2201,10 +2192,12 @@
     (define lexer-code
       (options-get-lexer-code options))
 
+    (define default-lexer-code
+      `((lambda args
+          (___scanner))))
+
     (define all-lexer-code
-      (if lexer-code
-          (wrap-lexer-code lexer-code)
-          default-lexer-code))
+      (or lexer-code default-lexer-code))
 
     (define gram/actions (gen-tables! tokens rules))
     (define goto-table (build-goto-table))
@@ -2227,7 +2220,8 @@
            (define (external index . args) (apply (vector-ref actions index) args))
            (define reduction-table ,reduction-table)
            (lambda (___scanner ___errorp)
-             ,@all-lexer-code
+             (define get-next-token
+               (let () ,@all-lexer-code))
              ,@driver-code))))
 
     (define _output

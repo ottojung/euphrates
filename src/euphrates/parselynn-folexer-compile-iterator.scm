@@ -55,7 +55,7 @@
         (vector '*stdin* linenum colnum offset 1))
       (parselynn:token:make category location c))
 
-    (define (get-next-token . args)
+    (lambda args
       (define c (read-next-char))
       (if (eof-object? c) '*eoi*
           (let ()

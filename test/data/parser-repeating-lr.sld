@@ -104,7 +104,7 @@
                         (vector-ref ___stack (- ___sp 1)))))))
               (lambda (___scanner ___errorp)
                 (define get-next-token
-                  (lambda args (___scanner)))
+                  (let () (lambda args (___scanner))))
                 (define *initial-stack-size* 500)
                 (define ___atable action-table)
                 (define ___gtable goto-table)
@@ -361,7 +361,7 @@
                          (vector-ref ___stack (- ___sp 1)))))))
                (lambda (___scanner ___errorp)
                  (define get-next-token
-                   (lambda args (___scanner)))
+                   (let () (lambda args (___scanner))))
                  (define *initial-stack-size* 500)
                  (define ___atable action-table)
                  (define ___gtable goto-table)
