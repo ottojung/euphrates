@@ -1702,16 +1702,18 @@
       (if (not (pair? action)) action
           (let ()
             (define proc (car action))
-            (define index actions-list-length)
+            (if (symbol? proc) action
+                (let ()
+                  (define index actions-list-length)
 
-            (unless (procedure? proc)
-              (grammar-error
-               "Expected procedure as action, but got something else: ~s (context: ~s)"
-               proc action))
+                  (unless (procedure? proc)
+                    (grammar-error
+                     "Expected procedure as action, but got something else: ~s (context: ~s)"
+                     proc action))
 
-            (set! actions-list (cons proc actions-list))
-            (set! actions-list-length (+ 1 actions-list-length))
-            (cons 'external (cons index (cdr action))))))
+                  (set! actions-list (cons proc actions-list))
+                  (set! actions-list-length (+ 1 actions-list-length))
+                  (cons 'external (cons index (cdr action))))))))
 
     (if (not (pair? (cdr nonterm-def)))
         (grammar-error "At least one production needed for nonterminal: ~s" (car nonterm-def))

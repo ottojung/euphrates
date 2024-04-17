@@ -86,21 +86,21 @@
 
       (assign   (ID = expr)             : (,add-binding $1 $3))
 
-      (expr     (expr + expr)           : (,+ $1 $3)
-                (expr - expr)           : (,- $1 $3)
-                (expr * expr)           : (,* $1 $3)
-                (expr / expr)           : (,/ $1 $3)
-                (- expr (prec: uminus)) : (,- $2)
+      (expr     (expr + expr)           : (+ $1 $3)
+                (expr - expr)           : (- $1 $3)
+                (expr * expr)           : (* $1 $3)
+                (expr / expr)           : (/ $1 $3)
+                (- expr (prec: uminus)) : (- $2)
                 (ID)                    : (,get-binding $1)
                 (ID LPAREN args RPAREN) : (,invoke-proc $1 $3)
                 (NUM)                   : $1
                 (LPAREN expr RPAREN)    : $2)
 
-      (args     ()                      : (,list)
-                (expr arg-rest)         : (,cons $1 $2))
+      (args     ()                      : (list)
+                (expr arg-rest)         : (cons $1 $2))
 
-      (arg-rest (COMMA expr arg-rest)   : (,cons $2 $3)
-                ()                      : (,list))))))
+      (arg-rest (COMMA expr arg-rest)   : (cons $2 $3)
+                ()                      : (list))))))
 
 
 ;;;
