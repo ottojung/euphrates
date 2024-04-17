@@ -18,10 +18,10 @@
     (only (euphrates parselynn-core-load)
           parselynn:core:load))
   (import
-    (only (euphrates parselynn-core)
-          make-lexical-token))
-  (import
     (only (euphrates parselynn-run) parselynn-run))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:make))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)

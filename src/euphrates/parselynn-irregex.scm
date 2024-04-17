@@ -64,7 +64,7 @@
       (adjust-positions! s)
 
       (let ((location (make-source-location '*stdin* linenum colnum offset (string-length s))))
-        (make-lexical-token token location s)))
+        (parselynn:token:make token location s)))
 
     (lambda _
       (if (>= offset input-length) '*eoi*

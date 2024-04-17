@@ -44,8 +44,7 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
-    (only (euphrates list-consume)
-          list-consume))
+    (only (euphrates list-consume) list-consume))
   (import
     (only (euphrates list-or-map) list-or-map))
   (import (only (euphrates negate) negate))

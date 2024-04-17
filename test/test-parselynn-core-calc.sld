@@ -3,16 +3,17 @@
   (test-parselynn-core-calc)
   (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates parselynn-core)
-          lexical-token-category
-          lexical-token-source
-          lexical-token-value
-          lexical-token?
-          make-lexical-token
-          parselynn:core))
+    (only (euphrates parselynn-core) parselynn:core))
   (import
     (only (euphrates parselynn-run-with-error-handler)
           parselynn-run/with-error-handler))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:category
+          parselynn:token:make
+          parselynn:token:source
+          parselynn:token:value
+          parselynn:token?))
   (import
     (only (euphrates source-location)
           make-source-location

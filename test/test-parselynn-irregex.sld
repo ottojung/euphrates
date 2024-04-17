@@ -3,13 +3,13 @@
   (test-parselynn-irregex)
   (import (only (euphrates assert-equal) assert=))
   (import
-    (only (euphrates parselynn-core)
-          lexical-token-category
-          lexical-token-source
-          lexical-token-value))
-  (import
     (only (euphrates parselynn-irregex)
           make-parselynn:irregex-factory))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:category
+          parselynn:token:source
+          parselynn:token:value))
   (import
     (only (euphrates source-location)
           source-location-column

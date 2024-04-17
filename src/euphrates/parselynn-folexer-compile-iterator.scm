@@ -44,16 +44,16 @@
          'unsupported-input-type
          "Type error: unsupported input type: ~s" ___scanner))))
 
-    (define lexical-token-typetag
+    (define parselynn:token:typetag
       '*lexical-token*)
 
-    (define (make-lexical-token category source value)
-      (vector lexical-token-typetag category source value))
+    (define (parselynn:token:make category source value)
+      (vector parselynn:token:typetag category source value))
 
     (define (wrap-return c category)
       (define location
         (vector '*stdin* linenum colnum offset 1))
-      (make-lexical-token category location c))
+      (parselynn:token:make category location c))
 
     (define (get-next-token . args)
       (define c (read-next-char))

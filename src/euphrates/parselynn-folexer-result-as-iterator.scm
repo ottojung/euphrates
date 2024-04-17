@@ -67,7 +67,7 @@
   (define (wrap-return c category)
     (define location
       (make-source-location '*stdin* linenum colnum offset 1))
-    (make-lexical-token category location c))
+    (parselynn:token:make category location c))
 
   (define evaluator-code
     (labelinglogic:model:compile-to-r7rs/first base-model))

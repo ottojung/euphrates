@@ -1545,14 +1545,7 @@
           parselynn:core:struct:tokens
           parselynn:core:struct?))
   (import
-    (only (euphrates parselynn-core)
-          lexical-token-category
-          lexical-token-source
-          lexical-token-value
-          lexical-token?
-          make-lexical-token
-          parselynn:core
-          serialized-parser-typetag))
+    (only (euphrates parselynn-core) parselynn:core))
   (import
     (only (euphrates parselynn-folexer-compile-iterator)
           parselynn:folexer:compile/iterator))
@@ -1673,6 +1666,14 @@
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:category
+          parselynn:token:make
+          parselynn:token:source
+          parselynn:token:typetag
+          parselynn:token:value
+          parselynn:token?))
   (import
     (only (euphrates partial-apply) partial-apply))
   (import

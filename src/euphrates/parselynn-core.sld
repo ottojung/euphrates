@@ -1,14 +1,7 @@
 
 (define-library
   (euphrates parselynn-core)
-  (export
-    parselynn:core
-    make-lexical-token
-    serialized-parser-typetag
-    lexical-token?
-    lexical-token-category
-    lexical-token-value
-    lexical-token-source)
+  (export parselynn:core)
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates fkeyword) fkeyword?))
   (import
@@ -26,6 +19,9 @@
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct
           parselynn:core:struct:code))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:typetag))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))

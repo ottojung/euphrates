@@ -20,11 +20,12 @@
     (only (euphrates parselynn-core-load)
           parselynn:core:load))
   (import
-    (only (euphrates parselynn-core)
-          make-lexical-token
-          parselynn:core))
+    (only (euphrates parselynn-core) parselynn:core))
   (import
     (only (euphrates parselynn-run) parselynn-run))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:make))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates with-benchmark-simple)

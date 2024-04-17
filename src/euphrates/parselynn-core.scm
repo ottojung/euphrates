@@ -21,26 +21,6 @@
 
 (define *lalr-scm-version* "3.0.0")
 
-(define lexical-token-typetag
-  '*lexical-token*)
-
-(define (make-lexical-token category source value)
-  (vector lexical-token-typetag category source value))
-
-(define (lexical-token? x)
-  (and (vector? x)
-       (= 4 (vector-length x))
-       (equal? (vector-ref x 0) lexical-token-typetag)))
-
-(define (lexical-token-category x)
-  (vector-ref x 1))
-
-(define (lexical-token-source x)
-  (vector-ref x 2))
-
-(define (lexical-token-value x)
-  (vector-ref x 3))
-
 (define (parselynn:core arguments)
   (define *bits-per-word* 28)
 
@@ -59,33 +39,33 @@
 
       (define (note-source-location lvalue tok) lvalue)
 
-      (define (lexical-token? x)
+      (define (token? x)
         (and (vector? x)
              (= 4 (vector-length x))
-             (equal? (vector-ref x 0) (quote ,lexical-token-typetag))))
+             (equal? (vector-ref x 0) (quote ,parselynn:token:typetag))))
 
-      (define (lexical-token-category x)
+      (define (token-category x)
         (vector-ref x 1))
 
-      (define (lexical-token-source x)
+      (define (token-source x)
         (vector-ref x 2))
 
-      (define (lexical-token-value x)
+      (define (token-value x)
         (vector-ref x 3))
 
-      (define (lexical-token-category/soft x)
-        (if (lexical-token? x)
-            (lexical-token-category x)
+      (define (token-category/soft x)
+        (if (token? x)
+            (token-category x)
             x))
 
-      (define (lexical-token-source/soft x)
-        (if (lexical-token? x)
-            (lexical-token-source x)
+      (define (token-source/soft x)
+        (if (token? x)
+            (token-source x)
             x))
 
-      (define (lexical-token-value/soft x)
-        (if (lexical-token? x)
-            (lexical-token-value x)
+      (define (token-value/soft x)
+        (if (token? x)
+            (token-value x)
             x))
 
       ))
@@ -182,7 +162,7 @@
           (vector-set! ___stack (- ___sp 3) #f)
           (vector-set! ___stack (- ___sp 2) state)
           (let skip ()
-            (let ((i (lexical-token-category/soft ___input)))
+            (let ((i (token-category/soft ___input)))
               (if (equal? i '*eoi*)
                   (set! ___sp -1)
                   (if (memq i sync-set)
@@ -197,7 +177,7 @@
         (let loop ()
           (if ___input
               (let* ((state (vector-ref ___stack ___sp))
-                     (i     (lexical-token-category/soft ___input))
+                     (i     (token-category/soft ___input))
                      (act   (___action i (vector-ref ___atable state))))
 
                 (cond ((not (symbol? i))
@@ -424,7 +404,7 @@
       (define (run)
         (let loop-tokens ()
           (define *input* (consume))
-          (define symbol (lexical-token-category/soft *input*))
+          (define symbol (token-category/soft *input*))
           (define processes (get-processes))
           (initialize-processes)
           (continue 'run-processes
@@ -1978,10 +1958,10 @@
                                                        `(list-ref ___sp ,(+ (* (- i 1) 2) 1))))
                                             (cons
                                              `(,(string->symbol (string-append "$" ns))
-                                               (lexical-token-value/soft tok))
+                                               (token-value/soft tok))
                                              (cons
                                               `(,(string->symbol (string-append "@" ns))
-                                                (lexical-token-source/soft tok))
+                                                (token-source/soft tok))
                                               (loop (+ i 1) rest)))))
                                          '()))
                                    '()))

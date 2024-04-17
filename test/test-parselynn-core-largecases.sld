@@ -6,15 +6,16 @@
   (import (only (euphrates const) const))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-core)
-          lexical-token-value
-          make-lexical-token
-          parselynn:core))
+    (only (euphrates parselynn-core) parselynn:core))
   (import
     (only (euphrates parselynn-run-with-error-handler)
           parselynn-run/with-error-handler))
   (import
     (only (euphrates parselynn-run) parselynn-run))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:make
+          parselynn:token:value))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)

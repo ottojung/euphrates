@@ -46,19 +46,19 @@
      ((< maxdepth how-deep)
       (when (equal? t 'LPAREN)
         (set! maxdepth (+ maxdepth 1)))
-      (make-lexical-token t #f v))
+      (parselynn:token:make t #f v))
      ((> maxdepth how-deep)
       (if (< (+ 1 closecount) maxdepth)
           (begin
             (set! closecount (+ closecount 1))
-            (make-lexical-token 'RPAREN #f ")"))
+            (parselynn:token:make 'RPAREN #f ")"))
           '*eoi*))
      (else
       (if (equal? t 'LPAREN)
           (begin
             (set! maxdepth (+ maxdepth 1))
-            (make-lexical-token 'NUM #f "1"))
-          (make-lexical-token t #f v)))))
+            (parselynn:token:make 'NUM #f "1"))
+          (parselynn:token:make t #f v)))))
 
   (lambda () (next)))
 
@@ -117,8 +117,8 @@
     (lambda _
       (make-repeating-lexer
        seq-len
-       (list (make-lexical-token 'NUM #f "5")
-             (make-lexical-token '+ #f "+")))))
+       (list (parselynn:token:make 'NUM #f "5")
+             (parselynn:token:make '+ #f "+")))))
 
   (run/generic (string->symbol driver)
                parser make-lexer n-runs))

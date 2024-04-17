@@ -7,11 +7,6 @@
   (import (only (euphrates debugs) debugs))
   (import (only (euphrates hashset) make-hashset))
   (import
-    (only (euphrates parselynn-core)
-          lexical-token-category
-          lexical-token-source
-          lexical-token-value))
-  (import
     (only (euphrates parselynn-folexer-result-as-iterator)
           parselynn:folexer-result:as-iterator))
   (import
@@ -26,6 +21,11 @@
   (import
     (only (euphrates parselynn-folexer)
           make-parselynn:folexer))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:category
+          parselynn:token:source
+          parselynn:token:value))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates source-location)

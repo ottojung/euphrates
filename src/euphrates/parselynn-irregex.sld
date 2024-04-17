@@ -15,8 +15,8 @@
   (import
     (only (euphrates list-map-first) list-map-first))
   (import
-    (only (euphrates parselynn-core)
-          make-lexical-token))
+    (only (euphrates parselynn-token)
+          parselynn:token:make))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates source-location)

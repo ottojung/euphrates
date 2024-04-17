@@ -3,8 +3,8 @@
   (euphrates parselynn-latin)
   (export make-parselynn:latin)
   (import
-    (only (euphrates parselynn-core)
-          make-lexical-token))
+    (only (euphrates parselynn-token)
+          parselynn:token:make))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates source-location)

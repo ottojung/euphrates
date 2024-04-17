@@ -21,18 +21,18 @@
         (let* ((location (make-source-location "*stdin*" 'unknown-line 'unknown-column -1 -1))
                (c (read-char)))
           (cond ((eof-object? c)      '*eoi*)
-                ((char=? c #\newline) (make-lexical-token 'NEWLINE location 'NEWLINE))
-                ((char-whitespace? c) (make-lexical-token 'SPACE   location 'SPACE))
-                ((char=? c #\+)       (make-lexical-token '+       location (string c)))
-                ((char=? c #\-)       (make-lexical-token '-       location (string c)))
-                ((char=? c #\*)       (make-lexical-token '*       location (string c)))
-                ((char=? c #\/)       (make-lexical-token '/       location (string c)))
-                ((char=? c #\=)       (make-lexical-token '=       location (string c)))
-                ((char=? c #\,)       (make-lexical-token 'COMMA   location (string c)))
-                ((char=? c #\()       (make-lexical-token 'LPAREN  location (string c)))
-                ((char=? c #\))       (make-lexical-token 'RPAREN  location (string c)))
-                ((char-numeric? c)    (make-lexical-token 'NUM     location (read-number (list c))))
-                ((char-alphabetic? c) (make-lexical-token 'ID      location (read-id (list c))))
+                ((char=? c #\newline) (parselynn:token:make 'NEWLINE location 'NEWLINE))
+                ((char-whitespace? c) (parselynn:token:make 'SPACE   location 'SPACE))
+                ((char=? c #\+)       (parselynn:token:make '+       location (string c)))
+                ((char=? c #\-)       (parselynn:token:make '-       location (string c)))
+                ((char=? c #\*)       (parselynn:token:make '*       location (string c)))
+                ((char=? c #\/)       (parselynn:token:make '/       location (string c)))
+                ((char=? c #\=)       (parselynn:token:make '=       location (string c)))
+                ((char=? c #\,)       (parselynn:token:make 'COMMA   location (string c)))
+                ((char=? c #\()       (parselynn:token:make 'LPAREN  location (string c)))
+                ((char=? c #\))       (parselynn:token:make 'RPAREN  location (string c)))
+                ((char-numeric? c)    (parselynn:token:make 'NUM     location (read-number (list c))))
+                ((char-alphabetic? c) (parselynn:token:make 'ID      location (read-id (list c))))
                 (else
                  (raisu
                   'lex-error
@@ -79,19 +79,19 @@
      ((< maxdepth how-deep)
       (when (equal? t 'LPAREN)
         (set! maxdepth (+ maxdepth 1)))
-      (make-lexical-token t #f v))
+      (parselynn:token:make t #f v))
      ((> maxdepth how-deep)
       (if (< (+ 1 closecount) maxdepth)
           (begin
             (set! closecount (+ closecount 1))
-            (make-lexical-token 'RPAREN #f ")"))
+            (parselynn:token:make 'RPAREN #f ")"))
           '*eoi*))
      (else
       (if (equal? t 'LPAREN)
           (begin
             (set! maxdepth (+ maxdepth 1))
-            (make-lexical-token 'NUM #f "1"))
-          (make-lexical-token t #f v)))))
+            (parselynn:token:make 'NUM #f "1"))
+          (parselynn:token:make t #f v)))))
 
   (lambda () (next)))
 
@@ -108,7 +108,7 @@
           (let loop ()
             (define t (lexer))
             (unless (equal? '*eoi* t)
-              (display (lexical-token-value t))
+              (display (parselynn:token:value t))
               (loop)))))
 
 (let ()
@@ -167,9 +167,9 @@
     (parselynn-run
      parser
      (make-repeating-lexer
-      3 (list (make-lexical-token 'NUM #f "5")
-              (make-lexical-token '+ #f "+")
-              (make-lexical-token 'NUM #f "3")))))
+      3 (list (parselynn:token:make 'NUM #f "5")
+              (parselynn:token:make '+ #f "+")
+              (parselynn:token:make 'NUM #f "3")))))
 
   (assert= #t result))
 
@@ -190,8 +190,8 @@
     (parselynn-run
      parser
      (make-repeating-lexer
-      9 (list (make-lexical-token 'NUM #f "5")
-              (make-lexical-token '+ #f "+")))))
+      9 (list (parselynn:token:make 'NUM #f "5")
+              (parselynn:token:make '+ #f "+")))))
 
   (assert= #t result))
 
@@ -215,9 +215,9 @@
      parser
      error-procedure
      (make-repeating-lexer
-      3 (list (make-lexical-token 'NUM #f "5")
-              (make-lexical-token '+ #f "+")
-              (make-lexical-token '+ #f "+")))))
+      3 (list (parselynn:token:make 'NUM #f "5")
+              (parselynn:token:make '+ #f "+")
+              (parselynn:token:make '+ #f "+")))))
 
   (assert= #f result))
 
@@ -241,8 +241,8 @@
     (parselynn-run
      parser
      (make-repeating-lexer
-      5 (list (make-lexical-token 'NUM #f "5")
-              (make-lexical-token '+ #f "+")))))
+      5 (list (parselynn:token:make 'NUM #f "5")
+              (parselynn:token:make '+ #f "+")))))
 
   (assert (procedure? result))
   (assert (result 'get)))
@@ -321,8 +321,8 @@
        parser
        (make-repeating-lexer
         t1-input-size
-        (list (make-lexical-token 'NUM #f "5")
-              (make-lexical-token '+ #f "+")))))
+        (list (parselynn:token:make 'NUM #f "5")
+              (parselynn:token:make '+ #f "+")))))
 
     (assert= #t result))
 
@@ -350,8 +350,8 @@
        parser
        (make-repeating-lexer
         t2-input-size
-        (list (make-lexical-token 'NUM #f "5")
-              (make-lexical-token '+ #f "+")))))
+        (list (parselynn:token:make 'NUM #f "5")
+              (parselynn:token:make '+ #f "+")))))
 
     (assert (procedure? result))
     (assert (result 'get)))
