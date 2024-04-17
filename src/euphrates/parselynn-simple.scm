@@ -56,11 +56,14 @@
    (define lexer
      (make-parselynn:folexer tokens-map))
 
+   (define rules/4
+     (parselynn:simple:handle-calls rules/3))
+
    (define additional-grammar-rules
      (parselynn:folexer:additional-grammar-rules lexer))
 
    (define rules
-     (append rules/3 additional-grammar-rules))
+     (append rules/4 additional-grammar-rules))
 
    (define base-model
      (parselynn:folexer:base-model lexer))

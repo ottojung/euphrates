@@ -7,6 +7,9 @@
   (import
     (only (euphrates list-collapse) list-collapse))
   (import
+    (only (euphrates parselynn-simple-join1)
+          parselynn:simple:join1))
+  (import
     (only (euphrates
             parselynn-simple-run-with-error-handler)
           parselynn:simple:run/with-error-handler))
@@ -17,6 +20,7 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
+          +
           /
           =
           _
@@ -34,6 +38,7 @@
           quasiquote
           quote
           string
+          string->number
           string-append
           string?
           syntax-rules

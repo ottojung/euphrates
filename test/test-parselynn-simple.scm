@@ -533,6 +533,82 @@
 
 
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Call instruction test
+;;;
+
+
+
+(test-parser
+ `( expr = term add expr (call (list 'LEFT $1 $2 $3)) / term (call (list 'RIGHT $1))
+    add = "+"
+    term = num
+    num = dig num / dig
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+ "5+3"
+
+ '(LEFT (term (num (dig "5"))) (add "+") (RIGHT (term (num (dig "3")))))
+
+ )
+
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( expr = term add expr (call (+ $1 $3)) / term (call $1)
+      add = "+"
+      term = num (call (string->number (,parselynn:simple:join1 $1)))
+      num = dig num / dig
+      dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")))
+
+ "42+777"
+
+ (+ 42 777)
+
+ )
+
+
+
+
+
+
+
+(check-parser-result
+
+ (parselynn:simple
+  `(:grammar
+    ( expr = expr add expr (call #t)
+      /      term (call #t)
+      add = "+" (call #t)
+      term = NUM (call #t)
+      NUM = "0" (call #t)
+      /     "1" (call #t)
+      /     "2" (call #t)
+      /     "3" (call #t)
+      /     "4" (call #t)
+      /     "5" (call #t)
+      /     "6" (call #t)
+      /     "7" (call #t)
+      /     "8" (call #t)
+      /     "9" (call #t)
+      )))
+
+ "5+5"
+
+ #t
+
+ )
+
+
+
+
 ;;;;;;;;;;;;;
 ;;
 ;; Multiple set cases

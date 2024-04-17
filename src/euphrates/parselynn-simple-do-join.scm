@@ -12,8 +12,7 @@
                 (cond
                  ((hashset-has? joined type)
                   (list (car result)
-                        (apply string-append
-                               (parselynn:simple:flatten1 (cdr result)))))
+                        (parselynn:simple:join1 (cdr result))))
                  (else
                   (map loop result))))
               result))

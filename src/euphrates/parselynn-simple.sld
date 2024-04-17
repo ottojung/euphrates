@@ -50,6 +50,9 @@
     (only (euphrates parselynn-simple-extract-set)
           parselynn:simple:extract-set))
   (import
+    (only (euphrates parselynn-simple-handle-calls)
+          parselynn:simple:handle-calls))
+  (import
     (only (euphrates parselynn-simple-struct)
           make-parselynn:simple:struct))
   (import (only (euphrates raisu-star) raisu*))

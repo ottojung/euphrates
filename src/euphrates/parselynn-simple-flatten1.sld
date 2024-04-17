@@ -3,9 +3,16 @@
   (euphrates parselynn-simple-flatten1)
   (export parselynn:simple:flatten1)
   (import
+    (only (euphrates compose-under) compose-under))
+  (import
     (only (euphrates list-collapse) list-collapse))
   (import
-    (only (scheme base) begin define string?))
+    (only (scheme base)
+          begin
+          char?
+          define
+          or
+          string?))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))

@@ -4,11 +4,10 @@
   (export parselynn:simple:do-join)
   (import (only (euphrates hashset) hashset-has?))
   (import
-    (only (euphrates parselynn-simple-flatten1)
-          parselynn:simple:flatten1))
+    (only (euphrates parselynn-simple-join1)
+          parselynn:simple:join1))
   (import
     (only (scheme base)
-          apply
           begin
           car
           cdr
@@ -21,8 +20,7 @@
           list?
           map
           not
-          pair?
-          string-append))
+          pair?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
