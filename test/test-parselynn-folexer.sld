@@ -5,7 +5,6 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates debugs) debugs))
-  (import (only (euphrates hashset) make-hashset))
   (import
     (only (euphrates parselynn-folexer-result-as-iterator)
           parselynn:folexer-result:as-iterator))
@@ -33,6 +32,9 @@
           source-location-length
           source-location-line
           source-location-offset))
+  (import
+    (only (euphrates unique-identifier)
+          with-unique-identifier-context))
   (import
     (only (euphrates with-string-as-input)
           with-string-as-input))

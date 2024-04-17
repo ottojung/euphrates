@@ -47,72 +47,77 @@
   (define-values (rules/2 taken-token-names-set tokens-map)
     (parselynn:simple:extract-regexes rules/1))
 
-  (define lexer
-    (make-parselynn:folexer
-     taken-token-names-set tokens-map))
+  (with-unique-identifier-context
+   :existing-names taken-token-names-set
 
-  (define additional-grammar-rules
-    (parselynn:folexer:additional-grammar-rules lexer))
+   (define rules/3
+     (unique-identifier->symbol/recursive rules/2))
 
-  (define rules
-    (append rules/2 additional-grammar-rules))
+   (define lexer
+     (make-parselynn:folexer tokens-map))
 
-  (define base-model
-    (parselynn:folexer:base-model lexer))
+   (define additional-grammar-rules
+     (parselynn:folexer:additional-grammar-rules lexer))
 
-  (define tokens
-    (labelinglogic:model:names base-model))
+   (define rules
+     (append rules/3 additional-grammar-rules))
 
-  (define lexer-code
-    (parselynn:folexer:compile/iterator
-     lexer))
+   (define base-model
+     (parselynn:folexer:base-model lexer))
 
-  (define hidden-tree-labels
-    (list->hashset
-     (append
-      tokens
-      (map car additional-grammar-rules))))
+   (define tokens
+     (labelinglogic:model:names base-model))
 
-  (define non-terminals
-    (list->hashset (map car rules)))
+   (define lexer-code
+     (parselynn:folexer:compile/iterator
+      lexer))
 
-  (when (assq-or 'tokens: options*)
-    (raisu* :from "parselynn:simple"
-            :type 'invalid-argument ;; TODO: make tokens: optionally settable
-            :message "This parser handles tokens automatically, no need to provide them"
-            :args (list (assq-or 'tokens: options*))))
+   (define hidden-tree-labels
+     (list->hashset
+      (append
+       tokens
+       (map car additional-grammar-rules))))
 
-  (define (extract+check key)
-    (define-values (ret set-list)
-      (parselynn:simple:extract-set key options*))
+   (define non-terminals
+     (list->hashset (map car rules)))
 
-    (parselynn:simple:check-set non-terminals set-list)
-    (and (not (hashset-null? ret)) (cons key ret)))
+   (when (assq-or 'tokens: options*)
+     (raisu* :from "parselynn:simple"
+             :type 'invalid-argument ;; TODO: make tokens: optionally settable
+             :message "This parser handles tokens automatically, no need to provide them"
+             :args (list (assq-or 'tokens: options*))))
 
-  (define transformations
-    (filter
-     identity
-     (map extract+check
-          (list 'flatten: 'join: 'skip: 'inline:))))
+   (define (extract+check key)
+     (define-values (ret set-list)
+       (parselynn:simple:extract-set key options*))
 
-  (define options-to-upstream
-    (assq-set-value
-     'lexer-code: lexer-code
+     (parselynn:simple:check-set non-terminals set-list)
+     (and (not (hashset-null? ret)) (cons key ret)))
+
+   (define transformations
+     (filter
+      identity
+      (map extract+check
+           (list 'flatten: 'join: 'skip: 'inline:))))
+
+   (define options-to-upstream
      (assq-set-value
-      'rules: rules
+      'lexer-code: lexer-code
       (assq-set-value
-       'tokens: tokens
-       (assq-unset-multiple-values
-        (list 'inline:
-              'skip:
-              'join:
-              'flatten:
-              'grammar:)
-        options*)))))
+       'rules: rules
+       (assq-set-value
+        'tokens: tokens
+        (assq-unset-multiple-values
+         (list 'inline:
+               'skip:
+               'join:
+               'flatten:
+               'grammar:)
+         options*)))))
 
-  (define backend-parser
-    (parselynn:core options-to-upstream))
+   (define backend-parser
+     (parselynn:core options-to-upstream))
 
-  (make-parselynn:simple:struct
-   arguments backend-parser
-   hidden-tree-labels transformations))
+   (make-parselynn:simple:struct
+    arguments backend-parser
+    hidden-tree-labels transformations)))

@@ -24,11 +24,9 @@
 
 
 (define (test/generic tokens-alist input expected-output expected-additional-rules)
-  (define taken
-    (make-hashset))
-
   (define lexer
-    (make-parselynn:folexer taken tokens-alist))
+    (with-unique-identifier-context
+     (make-parselynn:folexer tokens-alist)))
 
   (define additional-grammar-rules
     (parselynn:folexer:additional-grammar-rules lexer))

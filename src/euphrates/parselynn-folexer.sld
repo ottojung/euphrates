@@ -65,8 +65,7 @@
           unique-identifier->symbol/recursive))
   (import
     (only (euphrates unique-identifier)
-          make-unique-identifier
-          with-unique-identifier-context))
+          make-unique-identifier))
   (import
     (only (scheme base)
           =

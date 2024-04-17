@@ -59,6 +59,12 @@
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
+    (only (euphrates unique-identifier-to-symbol-recursive)
+          unique-identifier->symbol/recursive))
+  (import
+    (only (euphrates unique-identifier)
+          with-unique-identifier-context))
+  (import
     (only (scheme base)
           /
           =
