@@ -11,10 +11,8 @@
 
     (cond
      ((equal? type 'tuple)
-      (if (list-length= 1 args)
-          (loop (car args))
-          (labelinglogic:expression:make
-           type (map loop args))))
+      (labelinglogic:expression:make
+       type (map loop args)))
 
      ((equal? type 'not)
       (labelinglogic:expression:make

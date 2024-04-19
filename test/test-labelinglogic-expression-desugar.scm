@@ -19,13 +19,13 @@
 
 (let ()
   (assert=
-   'a
+   '(tuple a)
    (labelinglogic:expression:desugar
     '(tuple a))))
 
 (let ()
   (assert=
-   'a
+   '(tuple a)
    (labelinglogic:expression:desugar
     '(or (tuple a)))))
 
@@ -43,7 +43,7 @@
 
 (let ()
   (assert=
-   '(or a (or b (or z c)))
+   '(or a (or (tuple b) (or z c)))
    (labelinglogic:expression:desugar
     '(or a (or (tuple b) z) c))))
 

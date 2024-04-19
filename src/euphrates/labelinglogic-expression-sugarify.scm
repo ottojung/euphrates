@@ -57,8 +57,7 @@
      type (map labelinglogic:expression:sugarify args)))
 
    ((equal? type 'tuple)
-    (labelinglogic:expression:sugarify/unwrap
-     (labelinglogic:expression:sugarify/children expr)))
+    (labelinglogic:expression:sugarify/children expr))
 
    ((labelinglogic:expression:type:associative? type)
     (labelinglogic:expression:sugarify/unwrap
