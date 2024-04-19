@@ -689,3 +689,48 @@ idblb idclb longeridlb"
      (assert= `((expr (expr (term 5)) (add "+") (term ,n))) result))
    (iota 15)))
 
+
+(let ()
+  ;; Test epsilon production [1].
+
+  (define parser
+    (parselynn:core
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules:
+        (start    (term cont))
+        (cont     (comma term cont) ())
+        (comma    (+))
+        (term     (NUM))))))
+
+  (define result
+    (with-string-as-input
+     "5+3+4+6"
+     (parselynn-run parser (make-lexer))))
+
+  (assert=
+   '(start (term 5) (cont (comma "+") (term 3) (cont (comma "+") (term 4) (cont (comma "+") (term 6) (cont)))))
+   result))
+
+
+
+
+(let ()
+  ;; Test epsilon production [2].
+
+  (define parser
+    (parselynn:core
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules:
+        (start    (term cont))
+        (cont     (comma term cont) ())
+        (comma    (+))
+        (term     (NUM))))))
+
+  (define result
+    (with-string-as-input
+     "5+3+4+6"
+     (parselynn-run parser (make-lexer))))
+
+  (assert=
+   '(start (term 5) (cont (comma "+") (term 3) (cont (comma "+") (term 4) (cont (comma "+") (term 6) (cont)))))
+   result))
