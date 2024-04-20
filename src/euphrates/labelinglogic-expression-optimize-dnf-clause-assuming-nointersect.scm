@@ -14,7 +14,7 @@
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
   ;;
 
-  (define _0 (labelinglogic:expression:check expr))
+  (define _0 (labelinglogic:expression:dnf-clause:check expr))
 
   (let loop ((expr expr))
 
@@ -199,10 +199,6 @@
       (cond
        ((equal? type 'and) args)
        (else (list expr))))
-
-    (define _25243
-      (for-each labelinglogic:expression:dnf-clause:check
-                to-optimize))
 
     (define opt-args
       (apply-until-fixpoint optimize-args to-optimize))

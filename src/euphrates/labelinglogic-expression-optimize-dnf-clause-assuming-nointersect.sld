@@ -20,9 +20,6 @@
     (only (euphrates labelinglogic-expression-bottom)
           labelinglogic:expression:bottom))
   (import
-    (only (euphrates labelinglogic-expression-check)
-          labelinglogic:expression:check))
-  (import
     (only (euphrates
             labelinglogic-expression-dnf-clause-check)
           labelinglogic:expression:dnf-clause:check))
@@ -75,7 +72,6 @@
           define
           else
           equal?
-          for-each
           if
           lambda
           length

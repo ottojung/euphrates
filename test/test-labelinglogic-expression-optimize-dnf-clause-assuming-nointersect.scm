@@ -557,6 +557,12 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(tuple (= 5))))
 
+;; Simple case with complex 'tuple
+(assert=
+ '(tuple (and (r7rs even?) (not (= 2))))
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(tuple (and (r7rs even?) (not (= 2))))))
+
 ;; Case with single bottom.
 (assert=
  '(or)
