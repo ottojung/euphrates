@@ -122,10 +122,77 @@
   (define (remove-tops args)
     (filter (negate labelinglogic:expression:top?) args))
 
+  (define (reduce-complex-2 expr-a expr-b)
+    (define type-a (labelinglogic:expression:type expr-a))
+    (define type-b (labelinglogic:expression:type expr-b))
+    (define args-a (labelinglogic:expression:args expr-a))
+    (define args-b (labelinglogic:expression:args expr-b))
+    (define negated-a? (equal? 'not type-a))
+    (define negated-b? (equal? 'not type-b))
+    (define inner-a (if negated-a? (car args-a) expr-a))
+    (define inner-b (if negated-b? (car args-b) expr-b))
+    (define inner-type-a (labelinglogic:expression:type inner-a))
+    (define inner-type-b (labelinglogic:expression:type inner-b))
+    (define inner-args-a (labelinglogic:expression:args inner-a))
+    (define inner-args-b (labelinglogic:expression:args inner-b))
+    (define inner-tuple-a? (equal? 'tuple inner-type-a))
+    (define inner-tuple-b? (equal? 'tuple inner-type-b))
+    (define inner-dimension-a (and inner-tuple-a? (length inner-args-a)))
+    (define inner-dimension-b (and inner-tuple-b? (length inner-args-b)))
+
+    (cond
+     ((and (equal? type-a type-b)
+           (equal? type-a 'tuple)
+           (equal? inner-dimension-a inner-dimension-b))
+
+      (labelinglogic:expression:make
+       type-a
+       (map
+
+        (lambda (arg1 arg2)
+          (labelinglogic:expression:sugarify
+           (labelinglogic:expression:make
+            'and (list arg1 arg2))))
+
+        inner-args-a inner-args-b)))
+
+     (else (values))))
+
+  (define (reduce-complex args)
+    (list-reduce/pairwise/left
+     reduce-complex-2 args))
+
+  (define (reduce-inner-1 expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (define negated? (equal? 'not type))
+    (define inner (if negated? (car args) expr))
+    (define inner-type (labelinglogic:expression:type inner))
+    (define innerrgs (labelinglogic:expression:args inner))
+    (define inner-tuple? (equal? 'tuple inner-type))
+    (define inner-dimension (and inner-tuple? (length innerrgs)))
+
+    (cond
+     ((equal? type 'tuple)
+
+      ;; FIXME: TODO: loopinize.
+      (labelinglogic:expression:make
+       type
+       (map
+        labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+        args)))
+
+     (else expr)))
+
+  (define (reduce-inner args)
+    (map reduce-inner-1 args))
+
   (define optimize-args
     (compose
      consume-subsets
      handle-nulls
+     reduce-complex
+     reduce-inner
      remove-tops
      explode-bottom
      ))
@@ -135,7 +202,9 @@
      ((equal? type 'and) args)
      (else (list expr))))
 
-  (for-each labelinglogic:expression:dnf-clause:check to-optimize)
+  (define _25243
+    (for-each labelinglogic:expression:dnf-clause:check
+              to-optimize))
 
   (define opt-args
     (apply-until-fixpoint optimize-args to-optimize))
@@ -151,7 +220,9 @@
     (labelinglogic:expression:make 'and opt-args))
 
    (else
-    (raisu* :from "labelinglogic:expression:optimize-dnf-clause/assuming-nointersect"
-            :type 'bad-result-length
-            :message "Since input was not an 'and' expression, we expected the result to be singleton, but it is not"
-            :args (list expr opt-args)))))
+    (unless (list-singleton? opt-args)
+      (raisu* :from "labelinglogic:expression:optimize-dnf-clause/assuming-nointersect"
+              :type 'bad-result-length
+              :message "Since input was not an 'and' expression, we expected the result to be singleton, but it is not"
+              :args (list expr opt-args)))
+    (car opt-args))))

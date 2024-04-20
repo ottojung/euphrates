@@ -91,7 +91,7 @@
 
 ;; Different non-intersecting tuples
 (assert=
- '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))
+ '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))))
 

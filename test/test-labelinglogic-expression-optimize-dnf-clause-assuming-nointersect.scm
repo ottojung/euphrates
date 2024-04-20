@@ -33,7 +33,21 @@
 
 ;; Different non-intersecting tuples
 (assert=
- '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))
+ '(or)
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))))
+
+;; Different non-intersecting tuples [1]
+(assert=
+ '(tuple (= 2)
+         (and (r7rs odd?) (not (= 3))))
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(and (tuple (= 2) (r7rs odd?))
+        (tuple (r7rs even?) (not (= 3))))))
+
+;; Different non-intersecting tuples [2]
+(assert=
+ '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))))
 
@@ -276,7 +290,7 @@
 
 ;; Optimizing tuples with different expressions [2]
 (assert=
- '(and (tuple (= 2)) (tuple (r7rs odd?)))
+ '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 2)) (tuple (r7rs odd?)))))
 
@@ -288,7 +302,7 @@
 
 ;; Mixing 'tuple and 'not in a single expression
 (assert=
- '(and (tuple (= 1)) (tuple (not (= 1))))
+ '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1)) (tuple (not (= 1))))))
 
@@ -312,7 +326,7 @@
 
 ;; Complex case with 'tuple and 'not
 (assert=
- '(and (tuple (= 1) (r7rs odd?)) (tuple (not (= 1)) (r7rs odd?)))
+ '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (r7rs odd?)) (tuple (not (= 1)) (r7rs odd?)))))
 
@@ -435,11 +449,11 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1)) (tuple (not (= 1))) (r7rs odd?) (= 2))))
 
-;; ;; Case with 'tuple containing other 'tuple
-;; (assert=
-;;  '(or)
-;;  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-;;   '(and (tuple (= 1) (tuple (r7rs odd?))) (not (tuple (= 1))))))
+;; Case with 'tuple containing other 'tuple
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(and (tuple (= 1) (tuple (r7rs odd?))) (tuple (not (= 1))))))
 
 ;; Case with complex mixture of types
 (assert=
@@ -455,7 +469,7 @@
 
 ;; Case with non-identical 'tuple values
 (assert=
- '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))
+ '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
 

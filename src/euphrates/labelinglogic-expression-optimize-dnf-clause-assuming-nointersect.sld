@@ -38,6 +38,9 @@
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
+    (only (euphrates labelinglogic-expression-sugarify)
+          labelinglogic:expression:sugarify))
+  (import
     (only (euphrates
             labelinglogic-expression-syntactic-equal-huh)
           labelinglogic:expression:syntactic-equal?))
@@ -55,6 +58,9 @@
   (import
     (only (euphrates list-or-map) list-or-map))
   (import
+    (only (euphrates list-reduce-pairwise-left)
+          list-reduce/pairwise/left))
+  (import
     (only (euphrates list-singleton-q)
           list-singleton?))
   (import (only (euphrates negate) negate))
@@ -71,12 +77,16 @@
           equal?
           for-each
           if
+          lambda
           length
           list
+          map
           not
           null?
           or
-          quote))
+          quote
+          unless
+          values))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))
