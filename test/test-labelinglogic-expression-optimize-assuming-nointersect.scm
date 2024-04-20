@@ -77,7 +77,7 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (= 0) (= 1))))
 
-;; Optimizing non-intersecting negated lexeme terms
+;; Optimizing non-intersecting negated lemma terms
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect

@@ -862,8 +862,8 @@
     (only (euphrates labelinglogic-expression-leaf-huh)
           labelinglogic:expression:leaf?))
   (import
-    (only (euphrates labelinglogic-expression-lexeme-huh)
-          labelinglogic:expression:lexeme?))
+    (only (euphrates labelinglogic-expression-lemma-huh)
+          labelinglogic:expression:lemma?))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
@@ -904,8 +904,8 @@
           labelinglogic:expression:replace-variables))
   (import
     (only (euphrates
-            labelinglogic-expression-semilexeme-huh)
-          labelinglogic:expression:semilexeme?))
+            labelinglogic-expression-semilemma-huh)
+          labelinglogic:expression:semilemma?))
   (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))

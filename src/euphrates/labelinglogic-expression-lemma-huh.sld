@@ -1,8 +1,7 @@
 
 (define-library
-  (euphrates
-    labelinglogic-expression-semilexeme-huh)
-  (export labelinglogic:expression:semilexeme?)
+  (euphrates labelinglogic-expression-lemma-huh)
+  (export labelinglogic:expression:lemma?)
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -21,13 +20,12 @@
           define
           equal?
           let
-          not
           or
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-semilexeme-huh.scm")))
+               "euphrates/labelinglogic-expression-lemma-huh.scm")))
     (else (include
-            "labelinglogic-expression-semilexeme-huh.scm"))))
+            "labelinglogic-expression-lemma-huh.scm"))))
