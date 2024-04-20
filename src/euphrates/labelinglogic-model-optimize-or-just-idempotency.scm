@@ -21,4 +21,4 @@
         expr))
 
   (labelinglogic:model:map-expressions
-   (const optimize) model))
+   (const maybe-optimize) model))

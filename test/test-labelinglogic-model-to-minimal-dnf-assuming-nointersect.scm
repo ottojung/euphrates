@@ -218,3 +218,23 @@
    (uid_1 (= #\x)))
 
  )
+
+
+
+
+(testcase
+
+ :model
+ `()
+
+ :bindings
+ '((t1 (tuple (= 1) (= 1) (= 1)))
+   (t2 (tuple (= 2) (= 2) (= 2))))
+
+ :expected
+ '((t1 (tuple uid_1 uid_1 uid_1))
+   (t2 (tuple uid_2 uid_2 uid_2))
+   (uid_1 (= 1))
+   (uid_2 (= 2)))
+
+ )

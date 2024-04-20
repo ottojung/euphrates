@@ -57,6 +57,12 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)))))
 
+;; Tuples with same expressions
+(assert=
+ '(tuple (= 1) (= 1))
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(and (tuple (= 1) (= 1)) (tuple (= 1) (= 1)))))
+
 ;; Tuples with top expressions
 (assert=
  '(tuple (= 1) (= 2))

@@ -52,6 +52,11 @@
   '(or (and (r7rs odd?) (not (= 3)) (not (= 5)))
        (and (r7rs odd?) (not (= 3)) (not (= 5)) (not (= 7))))))
 
+(assert=
+ '(tuple (= 1) (= 1))
+ (labelinglogic:expression:optimize/assuming-nointersect
+  '(and (tuple (= 1) (= 1)) (tuple (= 1) (= 1)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Cases from labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
