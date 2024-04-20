@@ -838,6 +838,9 @@
             labelinglogic-expression-foreach-variable)
           labelinglogic:expression:foreach-variable))
   (import
+    (only (euphrates labelinglogic-expression-ground-huh)
+          labelinglogic:expression:ground?))
+  (import
     (only (euphrates labelinglogic-expression-huh)
           labelinglogic:expression?))
   (import
@@ -864,6 +867,9 @@
   (import
     (only (euphrates labelinglogic-expression-lemma-huh)
           labelinglogic:expression:lemma?))
+  (import
+    (only (euphrates labelinglogic-expression-lexeme-huh)
+          labelinglogic:expression:lexeme?))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
@@ -902,10 +908,6 @@
     (only (euphrates
             labelinglogic-expression-replace-variables)
           labelinglogic:expression:replace-variables))
-  (import
-    (only (euphrates
-            labelinglogic-expression-lexeme-huh)
-          labelinglogic:expression:lexeme?))
   (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
