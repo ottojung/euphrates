@@ -2,7 +2,7 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect expr)
-  ;; This function optimizes an 'and' expression by removing contradicting, redundant and non-intersecting components.
+  ;; This function optimizes a dnf clause by removing contradicting, redundant and non-intersecting components.
   ;;
   ;; The optimization process includes:
   ;;   - Removal of duplicate parts of the expression
@@ -12,13 +12,6 @@
   ;;   - Removal of parts that cannot intersect, either if they are of the same type or of different types
   ;;
   ;; The function keeps applying these transformations until the expression cannot be further optimized.
-  ;;
-  ;; It assumes the input expression is of 'and' type, and all of its elements are of types:
-  ;;   - '=
-  ;;   - 'r7rs
-  ;;   - 'not
-  ;;   - 'tuple
-  ;; Or, in other words, ground terms + negated ground terms. Also known as semiground expressions.
   ;;
 
   (define _0 (labelinglogic:expression:check expr))
@@ -99,17 +92,12 @@
         (same-type-nointersect? expr-a expr-b)
         (different-type-nointersect? expr-a expr-b)))
 
-  (define (explode-bottom expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
+  (define (explode-bottom args)
     (if (list-or-map labelinglogic:expression:bottom? args)
-        labelinglogic:expression:bottom
-        expr))
+        (list labelinglogic:expression:bottom)
+        args))
 
-  (define (consume-subsets expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
+  (define (consume-subsets args)
     (define (fun expr-a expr-b)
       (cond
        ((labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term expr-a expr-b) 'left)
@@ -117,36 +105,52 @@
        (else 'skip)))
 
     (define new-args (list-consume fun args))
-    (labelinglogic:expression:make type new-args))
+    new-args)
 
-  (define (handle-nulls expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
+  (define (handle-nulls args)
     (if (cartesian-any? null-exprs? args args)
-        (labelinglogic:expression:make
-         type (list labelinglogic:expression:bottom))
-        expr))
+        (list labelinglogic:expression:bottom)
+        args))
 
-  (define (remove-tops expr)
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-    (define new-args (filter (negate labelinglogic:expression:top?) args))
-    (labelinglogic:expression:make type new-args))
+  (define (remove-tops args)
+    (filter (negate labelinglogic:expression:top?) args))
 
-  (define optimize
+  (define optimize-args
     (compose
      consume-subsets
      handle-nulls
-     explode-bottom
      remove-tops
+     explode-bottom
      ))
 
-  (unless (equal? type 'and)
-    (raisu* :from "labelinglogic:expression:optimize-dnf-clause/assuming-nointersect"
-            :type 'bad-expr-type
-            :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
-            :args (list type expr)))
+  (define to-optimize
+    (cond
+     ((equal? type 'and) args)
+     (else (list expr))))
 
-  (for-each labelinglogic:expression:dnf-clause:check args)
+  (for-each labelinglogic:expression:dnf-clause:check to-optimize)
 
-  (apply-until-fixpoint optimize expr))
+  (define opt-args
+    (apply-until-fixpoint optimize-args to-optimize))
+
+  (cond
+   ((and (list-singleton? opt-args)
+         (labelinglogic:expression:bottom? (car opt-args)))
+    (car opt-args))
+
+   ((and (list-singleton? opt-args)
+         (labelinglogic:expression:top? (car opt-args)))
+    (car opt-args))
+
+   ((null? opt-args) labelinglogic:expression:top)
+
+   ((equal? type 'and)
+    (labelinglogic:expression:make 'and opt-args))
+
+   (else
+    (unless (equal? 1 (length opt-args))
+      (raisu* :from "labelinglogic:expression:optimize-dnf-clause/assuming-nointersect"
+              :type 'bad-result-length
+              :message "Since input was not an 'and' expression, we expected the result to be singleton, but it is not"
+              :args (list expr opt-args)))
+    (car opt-args))))

@@ -513,10 +513,35 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (and) (or) (and) (and))))
 
-(assert-throw
- 'bad-expr-type
+;; Case with single ground term.
+(assert=
+ '(= 3)
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(= 3)))
+
+;; Case with single tuple term [1].
+(assert=
+ '(tuple (= 3) (= 4))
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(tuple (= 3) (= 4))))
+
+;; Case with single tuple term [2].
+(assert=
+ '(tuple (= 5))
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(tuple (= 5))))
+
+;; Case with single bottom.
+(assert=
+ '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(or)))
+
+;; Case with single top.
+(assert=
+ '(and)
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(and)))
 
 (assert-throw
  'bad-sub-expr-type
@@ -537,8 +562,9 @@
 
 ;; Case with top number
 (assert-throw
- 'bad-expr-type
- (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect 812312))
+ 'bad-sub-expr-type
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  812312))
 
 ;; Case with '((or))'
 (assert-throw

@@ -45,16 +45,20 @@
     (only (euphrates labelinglogic-expression-top-huh)
           labelinglogic:expression:top?))
   (import
+    (only (euphrates labelinglogic-expression-top)
+          labelinglogic:expression:top))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
     (only (euphrates list-consume) list-consume))
   (import
     (only (euphrates list-or-map) list-or-map))
+  (import
+    (only (euphrates list-singleton-q)
+          list-singleton?))
   (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           =
@@ -70,6 +74,7 @@
           length
           list
           not
+          null?
           or
           quote
           unless))
