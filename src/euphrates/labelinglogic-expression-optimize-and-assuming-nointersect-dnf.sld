@@ -27,6 +27,9 @@
             labelinglogic-expression-evaluate-r7rs)
           labelinglogic:expression:evaluate/r7rs))
   (import
+    (only (euphrates labelinglogic-expression-ground-huh)
+          labelinglogic:expression:ground?))
+  (import
     (only (euphrates
             labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-term)
           labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term))
@@ -43,6 +46,8 @@
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
+  (import
+    (only (euphrates list-and-map) list-and-map))
   (import
     (only (euphrates list-consume) list-consume))
   (import

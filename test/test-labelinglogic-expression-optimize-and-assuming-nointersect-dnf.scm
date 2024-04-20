@@ -288,9 +288,9 @@
 
 ;; Mixing 'tuple and 'not in a single expression
 (assert=
- '(or)
+ '(and (tuple (= 1)) (tuple (not (= 1))))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (tuple (= 1)) (not (tuple (= 1))))))
+  '(and (tuple (= 1)) (tuple (not (= 1))))))
 
 ;; Combining '= and 'r7rs with opposite values
 (assert=
@@ -312,9 +312,9 @@
 
 ;; Complex case with 'tuple and 'not
 (assert=
- '(or)
+ '(and (tuple (= 1) (r7rs odd?)) (tuple (not (= 1)) (r7rs odd?)))
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (tuple (= 1) (r7rs odd?)) (not (tuple (= 1) (r7rs odd?))))))
+  '(and (tuple (= 1) (r7rs odd?)) (tuple (not (= 1)) (r7rs odd?)))))
 
 ;; Case with 'tuple and 'r7rs
 (assert=
@@ -403,25 +403,25 @@
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (= 2) (not (tuple (= 2))))))
+  '(and (= 2) (tuple (not (= 2))))))
 
 ;; Case with 'not and negated 'tuple
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (not (= 2)) (not (tuple (= 2))))))
+  '(and (not (= 2)) (tuple (not (= 2))))))
 
 ;; Case with negated 'tuple and 'r7rs
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (not (tuple (= 1))) (r7rs odd?))))
+  '(and (tuple (not (= 1))) (r7rs odd?))))
 
 ;; Case with 'tuple, 'not, '= and 'r7rs values
 (assert=
  '(or)
  (labelinglogic:expression:optimize/and-assuming-nointersect-dnf
-  '(and (tuple (= 1)) (not (tuple (= 1))) (r7rs odd?) (= 2))))
+  '(and (tuple (= 1)) (tuple (not (= 1))) (r7rs odd?) (= 2))))
 
 ;; ;; Case with 'tuple containing other 'tuple
 ;; (assert=

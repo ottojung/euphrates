@@ -54,7 +54,7 @@
     (unless (or (equal? type '=)
                 (equal? type 'r7rs)
                 (and (equal? type 'not)
-                     (for-each check-type args))
+                     (list-and-map labelinglogic:expression:ground? args))
                 (and (equal? type 'tuple)
                      (for-each check-type args))
                 (labelinglogic:expression:bottom? expr)
