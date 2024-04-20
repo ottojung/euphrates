@@ -2,7 +2,7 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (list-reduce/pairwise/left projection lst)
-  ;; The `list-reduce/pairwise` function takes three arguments:
+  ;; The `list-reduce/pairwise` function takes two arguments:
   ;;   projection: a binary function applied to each pair of elements in the list
   ;;   lst: a list of elements to process.
   ;;
@@ -16,7 +16,9 @@
   ;; Note that the list provided as input is retained, and a new list is returned as output.
   ;;
   ;; For example:
-  ;; (list-reduce/pairwise (lambda (x y) (if (equal? x y) 'c (values))) (list 'a 'a 'b 'b))
+  ;; (list-reduce/pairwise/left
+  ;;   (lambda (x y) (if (equal? x y) 'c (values)))
+  ;;   (list 'a 'a 'b 'b))
   ;; will return
   ;; (list 'c 'c), where 'c' replaces both 'a' and first 'b', and second 'b' is ignored.
   ;;
