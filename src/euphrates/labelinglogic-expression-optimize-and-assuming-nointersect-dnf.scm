@@ -83,13 +83,17 @@
     (define inner-b (if negated-b? (car args-b) expr-b))
     (define inner-type-a (labelinglogic:expression:type inner-a))
     (define inner-type-b (labelinglogic:expression:type inner-b))
+    (define inner-args-a (labelinglogic:expression:args inner-a))
+    (define inner-args-b (labelinglogic:expression:args inner-b))
     (define inner-tuple-a? (equal? 'tuple inner-type-a))
     (define inner-tuple-b? (equal? 'tuple inner-type-b))
+    (define inner-dimension-a (and inner-tuple-a? (length inner-args-a)))
+    (define inner-dimension-b (and inner-tuple-b? (length inner-args-b)))
 
     (and (not (labelinglogic:expression:top? expr-a))
          (not (labelinglogic:expression:top? expr-b))
 
-         (or (not (equal? inner-tuple-a? inner-tuple-b?))
+         (or (not (equal? inner-dimension-a inner-dimension-b))
 
              (and (equal? type-a 'r7rs)
                   (equal? type-b '=)

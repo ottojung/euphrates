@@ -68,6 +68,7 @@
           equal?
           for-each
           if
+          length
           list
           not
           or
