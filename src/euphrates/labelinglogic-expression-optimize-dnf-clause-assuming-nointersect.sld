@@ -79,6 +79,7 @@
           if
           lambda
           length
+          let
           list
           map
           not
