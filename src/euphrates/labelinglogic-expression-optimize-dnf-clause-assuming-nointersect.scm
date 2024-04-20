@@ -100,8 +100,8 @@
   (define (consume-subsets args)
     (define (fun expr-a expr-b)
       (cond
-       ((labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term expr-a expr-b) 'left)
-       ((labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term expr-b expr-a) 'right)
+       ((labelinglogic:expression:is-subset?/assuming-nointersect-dnf-clause expr-a expr-b) 'left)
+       ((labelinglogic:expression:is-subset?/assuming-nointersect-dnf-clause expr-b expr-a) 'right)
        (else 'skip)))
 
     (define new-args (list-consume fun args))

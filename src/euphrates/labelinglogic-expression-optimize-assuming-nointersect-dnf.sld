@@ -21,8 +21,8 @@
           labelinglogic:expression:check))
   (import
     (only (euphrates
-            labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-term)
-          labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term))
+            labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-clause)
+          labelinglogic:expression:is-subset?/assuming-nointersect-dnf-clause))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))

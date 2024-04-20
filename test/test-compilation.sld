@@ -856,8 +856,8 @@
           labelinglogic:expression:interpret/r7rs))
   (import
     (only (euphrates
-            labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-term)
-          labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term))
+            labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-clause)
+          labelinglogic:expression:is-subset?/assuming-nointersect-dnf-clause))
   (import
     (only (euphrates labelinglogic-expression-leaf-huh)
           labelinglogic:expression:leaf?))
