@@ -4,4 +4,7 @@
 (define (labelinglogic:expression:leaf? expr)
   (define type (labelinglogic:expression:type expr))
   (or (equal? type '=)
-      (equal? type 'r7rs)))
+      (equal? type 'r7rs)
+      (labelinglogic:expression:top? expr)
+      (labelinglogic:expression:bottom? expr)
+      ))

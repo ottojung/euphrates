@@ -3,6 +3,12 @@
   (euphrates labelinglogic-expression-leaf-huh)
   (export labelinglogic:expression:leaf?)
   (import
+    (only (euphrates labelinglogic-expression-bottom-huh)
+          labelinglogic:expression:bottom?))
+  (import
+    (only (euphrates labelinglogic-expression-top-huh)
+          labelinglogic:expression:top?))
+  (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
