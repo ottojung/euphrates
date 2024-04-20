@@ -107,8 +107,15 @@
     (define new-args (list-consume fun args))
     new-args)
 
+  (define (empty-tuple? expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (and (equal? type 'tuple)
+         (list-or-map labelinglogic:expression:bottom? args)))
+
   (define (handle-nulls args)
-    (if (cartesian-any? null-exprs? args args)
+    (if (or (cartesian-any? null-exprs? args args)
+            (list-or-map empty-tuple? args))
         (list labelinglogic:expression:bottom)
         args))
 

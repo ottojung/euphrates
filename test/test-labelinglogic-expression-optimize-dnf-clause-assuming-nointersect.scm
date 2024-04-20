@@ -328,6 +328,18 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (r7rs odd?)) (not (= 1)) (not (r7rs odd?)))))
 
+;; Case with empty 'tuple [1].
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(and (tuple (or)) (tuple (or)))))
+
+;; Case with empty 'tuple [2].
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(tuple (or))))
+
 ;; Testing with null values
 (assert=
  '(or)
