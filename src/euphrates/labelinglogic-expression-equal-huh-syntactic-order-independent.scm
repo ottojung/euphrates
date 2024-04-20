@@ -25,13 +25,17 @@
      (equal? type-1 type-2)
 
      (cond
-      ((labelinglogic:expression:ground? expr-1)
+      ((labelinglogic:expression:leaf? expr-1)
        (labelinglogic:expression:syntactic-equal? expr-1 expr-2))
 
-      ((member type-1 (list 'or 'and 'xor 'not 'tuple 'r7rs '=))
+      ((member type-1 (list 'or 'and 'xor 'not))
        (and (= (length args-1) (length args-2))
             (eqv-oi args-1 args-2)
             (eqv-oi args-2 args-1)))
+
+      ((equal? type-1 'tuple)
+       (and (= (length args-1) (length args-2))
+            (list-and-map loop args-1 args-2)))
 
       ((equal? type-1 'variable)
        (raisu* :from "labelinglogic:expression:equal?/syntactic/order-independent"

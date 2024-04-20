@@ -6,20 +6,9 @@
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
   (import
-    (only (euphrates labelinglogic-binding-name)
-          labelinglogic:binding:name))
-  (import
-    (only (euphrates labelinglogic-expression-type)
-          labelinglogic:expression:type))
-  (import
-    (only (scheme base)
-          =
-          begin
-          cond
-          define
-          else
-          equal?
-          quote))
+    (only (euphrates labelinglogic-expression-leaf-huh)
+          labelinglogic:expression:leaf?))
+  (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
