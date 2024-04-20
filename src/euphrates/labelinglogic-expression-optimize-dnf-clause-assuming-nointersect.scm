@@ -141,23 +141,17 @@
     (apply-until-fixpoint optimize-args to-optimize))
 
   (cond
-   ((and (list-singleton? opt-args)
-         (labelinglogic:expression:bottom? (car opt-args)))
+   ((list-singleton? opt-args)
     (car opt-args))
 
-   ((and (list-singleton? opt-args)
-         (labelinglogic:expression:top? (car opt-args)))
-    (car opt-args))
-
-   ((null? opt-args) labelinglogic:expression:top)
+   ((null? opt-args)
+    labelinglogic:expression:top)
 
    ((equal? type 'and)
     (labelinglogic:expression:make 'and opt-args))
 
    (else
-    (unless (equal? 1 (length opt-args))
-      (raisu* :from "labelinglogic:expression:optimize-dnf-clause/assuming-nointersect"
-              :type 'bad-result-length
-              :message "Since input was not an 'and' expression, we expected the result to be singleton, but it is not"
-              :args (list expr opt-args)))
-    (car opt-args))))
+    (raisu* :from "labelinglogic:expression:optimize-dnf-clause/assuming-nointersect"
+            :type 'bad-result-length
+            :message "Since input was not an 'and' expression, we expected the result to be singleton, but it is not"
+            :args (list expr opt-args)))))

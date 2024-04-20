@@ -5,12 +5,12 @@
   '(and)))
 
 (assert=
- '(and (= 0))
+ '(= 0)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 0) (= 0))))
 
 (assert=
- '(and (= 0))
+ '(= 0)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 0) (= 0) (= 0) (= 0) (= 0))))
 
@@ -39,13 +39,13 @@
 
 ;; The same tuples
 (assert=
- '(and (tuple (= 1) (= 2)))
+ '(tuple (= 1) (= 2))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)))))
 
 ;; Tuples with top expressions
 (assert=
- '(and (tuple (= 1) (= 2)))
+ '(tuple (= 1) (= 2))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
 
@@ -57,7 +57,7 @@
 
 ;; Combining '=' and 'not =' [1]
 (assert=
- '(and (= 2))
+ '(= 2)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 2) (not (= 3)))))
 
@@ -69,7 +69,7 @@
 
 ;; Combining '=' and 'not =' [3]
 (assert=
- '(and (= 2))
+ '(= 2)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (= 3)) (= 2))))
 
@@ -81,7 +81,7 @@
 
 ;; Combining '=' and 'not =' [5]
 (assert=
- '(and (= 2))
+ '(= 2)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (= 3)) (= 2) (not (= 3)) (not (= 4)))))
 
@@ -93,13 +93,13 @@
 
 ;; Combining 'not =' and 'not =' [2]
 (assert=
- '(and (not (= 2)))
+ '(not (= 2))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (= 2)) (not (= 2)))))
 
 ;; Combining 'r7rs' and 'not r7rs' [1]
 (assert=
- '(and (r7rs even?))
+ '(r7rs even?)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (r7rs even?) (not (r7rs odd?)))))
 
@@ -111,7 +111,7 @@
 
 ;; Combining 'r7rs' and 'not r7rs' [3]
 (assert=
- '(and (r7rs even?))
+ '(r7rs even?)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (r7rs odd?)) (r7rs even?))))
 
@@ -123,7 +123,7 @@
 
 ;; Combining 'r7rs' and 'not r7rs' [5]
 (assert=
- '(and (r7rs even?))
+ '(r7rs even?)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (r7rs odd?)) (r7rs even?) (not (r7rs odd?)) (not (r7rs integer?)))))
 
@@ -144,13 +144,13 @@
 
 ;; Combining '=' and 'r7rs [2]
 (assert=
- '(and (= 2))
+ '(= 2)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (r7rs even?) (= 2))))
 
 ;; Combining '=' and 'r7rs [3]
 (assert=
- '(and (= 2))
+ '(= 2)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 2) (r7rs even?))))
 
@@ -192,19 +192,19 @@
 
 ;; Combining 'not =' and 'r7rs [3]
 (assert=
- '(and (r7rs even?))
+ '(r7rs even?)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (r7rs even?) (not (= 3)))))
 
 ;; Combining 'not =' and 'r7rs [4]
 (assert=
- '(and (r7rs even?))
+ '(r7rs even?)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (= 3)) (r7rs even?))))
 
 ;; Combining 'not =' and 'r7rs [5]
 (assert=
- '(and (r7rs even?))
+ '(r7rs even?)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (= 3)) (r7rs even?) (not (= 3)) (not (= 3)))))
 
@@ -246,13 +246,13 @@
 
 ;; Combining '=' and '(not r7rs) [3]
 (assert=
- '(and (= 3))
+ '(= 3)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 3) (not (r7rs even?)))))
 
 ;; Combining '(not =) and '(not r7rs) [1]
 (assert=
- '(and (not (r7rs even?)))
+ '(not (r7rs even?))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (not (r7rs even?)) (not (= 2)))))
 
@@ -270,7 +270,7 @@
 
 ;; Optimizing tuples with different expressions [1]
 (assert=
- '(and (tuple (= 1)))
+ '(tuple (= 1))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1)) (tuple (r7rs odd?)))))
 
@@ -282,7 +282,7 @@
 
 ;; Optimizing tuples with the same expressions
 (assert=
- '(and (tuple (= 1)))
+ '(tuple (= 1))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1)) (tuple (= 1)))))
 
@@ -300,13 +300,13 @@
 
 ;; More complex case with '= and 'r7rs
 (assert=
- '(and (= 2))
+ '(= 2)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 2) (= 2) (= 2) (r7rs even?))))
 
 ;; More complex case with '= and 'r7rs
 (assert=
- '(and (= 2))
+ '(= 2)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 2) (= 2) (= 2) (r7rs even?) (= 2) (= 2))))
 
@@ -348,7 +348,7 @@
 
 ;; Testing single tuple optimization
 (assert=
- '(and (tuple (= 2)))
+ '(tuple (= 2))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 2)) (tuple (= 2)))))
 
@@ -382,7 +382,7 @@
     (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
      expr))
 
-  (or (equal? result '(and (= 2)))
+  (or (equal? result '(= 2))
       (equal? result '(or))))
 
 (assert (test-1923123 '(and (= 2) (r7rs positive?) (r7rs integer?))))
@@ -449,7 +449,7 @@
 
 ;; Case with identical 'tuple values
 (assert=
- '(and (tuple (= 1) (r7rs odd?)))
+ '(tuple (= 1) (r7rs odd?))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (tuple (= 1) (r7rs odd?)) (tuple (= 1) (r7rs odd?)))))
 
@@ -485,19 +485,19 @@
 
 ;; Case with top. [1]
 (assert=
- '(and (= 3))
+ '(= 3)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (and) (= 3))))
 
 ;; Case with top. [2]
 (assert=
- '(and (= 3))
+ '(= 3)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 3) (and))))
 
 ;; Case with top. [3]
 (assert=
- '(and (= 3))
+ '(= 3)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 3) (and) (= 3))))
 
