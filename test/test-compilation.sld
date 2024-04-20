@@ -907,10 +907,6 @@
             labelinglogic-expression-semilexeme-huh)
           labelinglogic:expression:semilexeme?))
   (import
-    (only (euphrates
-            labelinglogic-expression-simplify-sublexeme-term)
-          labelinglogic:expression:simplify-sublexeme-term))
-  (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
   (import
@@ -934,10 +930,6 @@
   (import
     (only (euphrates labelinglogic-expression-top)
           labelinglogic:expression:top))
-  (import
-    (only (euphrates
-            labelinglogic-expression-try-simplify-sublexeme-term)
-          labelinglogic:expression:try-simplify-sublexeme-term))
   (import
     (only (euphrates
             labelinglogic-expression-type-associative-huh)
