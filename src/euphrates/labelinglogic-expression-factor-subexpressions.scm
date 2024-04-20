@@ -7,7 +7,7 @@
 
   (define type (labelinglogic:expression:type expr))
   (define args
-    (if (labelinglogic:expression:leaf? expr) '()
+    (if (labelinglogic:expression:atom? expr) '()
         (labelinglogic:expression:args expr)))
 
   (define new-args

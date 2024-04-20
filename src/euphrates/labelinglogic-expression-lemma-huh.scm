@@ -3,7 +3,7 @@
 
 (define (labelinglogic:expression:lemma? expr)
   (let loop ((expr expr))
-    (or (labelinglogic:expression:leaf? expr)
+    (or (labelinglogic:expression:atom? expr)
         (let ()
           (define type (labelinglogic:expression:type expr))
           (define args (labelinglogic:expression:args expr))

@@ -745,8 +745,8 @@
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
   (import
-    (only (euphrates labelinglogic-binding-leaf-huh)
-          labelinglogic:binding:leaf?))
+    (only (euphrates labelinglogic-binding-atom-huh)
+          labelinglogic:binding:atom?))
   (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
@@ -862,8 +862,8 @@
             labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-clause)
           labelinglogic:expression:is-subset?/assuming-nointersect-dnf-clause))
   (import
-    (only (euphrates labelinglogic-expression-leaf-huh)
-          labelinglogic:expression:leaf?))
+    (only (euphrates labelinglogic-expression-atom-huh)
+          labelinglogic:expression:atom?))
   (import
     (only (euphrates labelinglogic-expression-lemma-huh)
           labelinglogic:expression:lemma?))
@@ -1051,8 +1051,8 @@
     (only (euphrates labelinglogic-model-reachable-from)
           labelinglogic:model:reachable-from))
   (import
-    (only (euphrates labelinglogic-model-reduce-to-leafs)
-          labelinglogic:model:reduce-to-leafs))
+    (only (euphrates labelinglogic-model-reduce-to-atoms)
+          labelinglogic:model:reduce-to-atoms))
   (import
     (only (euphrates
             labelinglogic-model-reduce-to-names-unsafe)
@@ -1062,8 +1062,8 @@
           labelinglogic:model:reduce-to-names))
   (import
     (only (euphrates
-            labelinglogic-model-reduce-to-nonleafs)
-          labelinglogic:model:reduce-to-nonleafs))
+            labelinglogic-model-reduce-to-nonatoms)
+          labelinglogic:model:reduce-to-nonatoms))
   (import
     (only (euphrates labelinglogic-model-rename-variables)
           labelinglogic:model:rename-variables))

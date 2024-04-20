@@ -25,7 +25,7 @@
      (equal? type-1 type-2)
 
      (cond
-      ((labelinglogic:expression:leaf? expr-1)
+      ((labelinglogic:expression:atom? expr-1)
        (labelinglogic:expression:syntactic-equal? expr-1 expr-2))
 
       ((member type-1 (list 'or 'and 'xor 'not))

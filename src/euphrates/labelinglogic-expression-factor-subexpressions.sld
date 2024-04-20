@@ -11,8 +11,8 @@
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
-    (only (euphrates labelinglogic-expression-leaf-huh)
-          labelinglogic:expression:leaf?))
+    (only (euphrates labelinglogic-expression-atom-huh)
+          labelinglogic:expression:atom?))
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))

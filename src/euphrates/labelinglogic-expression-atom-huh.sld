@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates labelinglogic-expression-leaf-huh)
-  (export labelinglogic:expression:leaf?)
+  (euphrates labelinglogic-expression-atom-huh)
+  (export labelinglogic:expression:atom?)
   (import
     (only (euphrates labelinglogic-expression-bottom-huh)
           labelinglogic:expression:bottom?))
@@ -23,5 +23,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-leaf-huh.scm")))
-    (else (include "labelinglogic-expression-leaf-huh.scm"))))
+               "euphrates/labelinglogic-expression-atom-huh.scm")))
+    (else (include "labelinglogic-expression-atom-huh.scm"))))

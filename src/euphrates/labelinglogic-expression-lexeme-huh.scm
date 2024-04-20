@@ -3,7 +3,7 @@
 
 (define (labelinglogic:expression:lexeme? expr)
   (let loop ((expr expr))
-    (or (labelinglogic:expression:leaf? expr)
+    (or (labelinglogic:expression:atom? expr)
         (let ()
           (define type (labelinglogic:expression:type expr))
           (define args (labelinglogic:expression:args expr))
@@ -11,5 +11,5 @@
                    (list-and-map loop args))
               (and (equal? type 'not)
                    (list-and-map
-                    labelinglogic:expression:leaf?
+                    labelinglogic:expression:atom?
                     args)))))))
