@@ -8,6 +8,34 @@
   (define (make type args)
     (labelinglogic:expression:make type args))
 
+  (define (un-orify-tuple expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+    (define prefix/stack (stack-make))
+
+    (define (as-or expr)
+      (define type (labelinglogic:expression:type expr))
+      (define args (labelinglogic:expression:args expr))
+      (if (equal? type 'or) args (list expr)))
+
+    (define folded
+      (list-fold/semigroup
+
+       (lambda (prefixes arg)
+         (cartesian-product
+          (as-or arg)
+          prefixes))
+
+       (cons '(()) args)))
+
+    (if (list-singleton? folded) expr
+        (let ()
+          (define new-args
+            (map (comp reverse (make type))
+                 folded))
+
+          (make 'or new-args))))
+
   (define (distribute to-right? expr-1 expr-2)
     (define type-1 (labelinglogic:expression:type expr-1))
     (define args-1 (labelinglogic:expression:args expr-1))
@@ -79,7 +107,8 @@
                 (loop ret)))))))
 
      ((equal? type 'tuple)
-      (make type (map loop args)))
+      (un-orify-tuple
+       (make type (map loop args))))
 
      ((member type (list '= 'variable 'r7rs 'not)) expr)
 

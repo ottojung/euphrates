@@ -142,19 +142,34 @@
 
 ;; Complex tuples [1]
 (test
- '(and (tuple (or (= 1) (= 2))) (tuple (not (= 1))))
+ '(or (and (tuple (= 1)) (tuple (not (= 1))))
+      (and (tuple (= 2)) (tuple (not (= 1)))))
  '(and (tuple (or (= 1) (= 2))) (not (tuple (= 1)))))
 
 ;; Complex tuples [2].
 (test
- '(tuple (or (and x y) (and x z)))
+ '(or (tuple (and x y))
+      (tuple (and x z)))
  '(tuple (and x (or y z))))
 
-;; Complex tuples [3]
+;; Complex tuples [3].
 (test
- '(and (tuple (or (and (= 4) (= 1))
-                  (and (= 4) (= 2))))
-       (tuple (not (= 1))))
+ '(or (tuple x m w) (tuple y m w)
+      (tuple x m z) (tuple y m z))
+ '(tuple (or x y) m (or w z)))
+
+;; Complex tuples [4].
+(test
+ '(or (tuple w m (and x y))
+      (tuple w m (and x z)))
+ '(tuple w m (and x (or y z))))
+
+;; Complex tuples [5]
+(test
+ '(or (and (tuple (and (= 4) (= 1)))
+           (tuple (not (= 1))))
+      (and (tuple (and (= 4) (= 2)))
+           (tuple (not (= 1)))))
  '(and (tuple (and (= 4) (or (= 1) (= 2))))
        (not (tuple (= 1)))))
 

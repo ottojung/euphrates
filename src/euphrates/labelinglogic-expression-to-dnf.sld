@@ -3,6 +3,10 @@
   (euphrates labelinglogic-expression-to-dnf)
   (export labelinglogic:expression:to-dnf)
   (import
+    (only (euphrates cartesian-product)
+          cartesian-product))
+  (import (only (euphrates comp) comp))
+  (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
   (import
@@ -16,9 +20,13 @@
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
   (import
+    (only (euphrates list-fold-semigroup)
+          list-fold/semigroup))
+  (import
     (only (euphrates list-singleton-q)
           list-singleton?))
   (import (only (euphrates raisu-star) raisu*))
+  (import (only (euphrates stack) stack-make))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import
@@ -43,7 +51,8 @@
           not
           null?
           or
-          quote))
+          quote
+          reverse))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
