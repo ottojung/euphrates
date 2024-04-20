@@ -18,7 +18,7 @@
   ;;   - 'r7rs
   ;;   - 'not
   ;;   - 'tuple
-  ;; Or, in other words, ground terms + negated ground terms.
+  ;; Or, in other words, ground terms + negated ground terms. Also known as semiground expressions.
   ;;
 
   (define _0 (labelinglogic:expression:check expr))
@@ -51,12 +51,7 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (unless (or (equal? type '=)
-                (equal? type 'r7rs)
-                (and (equal? type 'not)
-                     (list-and-map labelinglogic:expression:ground? args))
-                (and (equal? type 'tuple)
-                     (for-each check-type args))
+    (unless (or (labelinglogic:expression:semiground? expr)
                 (labelinglogic:expression:bottom? expr)
                 (labelinglogic:expression:top? expr))
 
