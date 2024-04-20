@@ -904,8 +904,8 @@
           labelinglogic:expression:replace-variables))
   (import
     (only (euphrates
-            labelinglogic-expression-semilemma-huh)
-          labelinglogic:expression:semilemma?))
+            labelinglogic-expression-lexeme-huh)
+          labelinglogic:expression:lexeme?))
   (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
