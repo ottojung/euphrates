@@ -151,6 +151,12 @@
     (only (euphrates bnf-alist-map-expansion-terms)
           bnf-alist:map-expansion-terms))
   (import
+    (only (euphrates bnf-alist-map-productions-star)
+          bnf-alist:map-productions*))
+  (import
+    (only (euphrates bnf-alist-map-productions)
+          bnf-alist:map-productions))
+  (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
   (import
@@ -791,6 +797,14 @@
     (only (euphrates labelinglogic-expression-desugar)
           labelinglogic:expression:desugar))
   (import
+    (only (euphrates
+            labelinglogic-expression-dnf-clause-check)
+          labelinglogic:expression:dnf-clause:check))
+  (import
+    (only (euphrates
+            labelinglogic-expression-dnf-clause-huh)
+          labelinglogic:expression:dnf-clause?))
+  (import
     (only (euphrates labelinglogic-expression-empty-huh)
           labelinglogic:expression:empty?))
   (import
@@ -824,9 +838,6 @@
             labelinglogic-expression-foreach-variable)
           labelinglogic:expression:foreach-variable))
   (import
-    (only (euphrates labelinglogic-expression-lexeme-huh)
-          labelinglogic:expression:lexeme?))
-  (import
     (only (euphrates labelinglogic-expression-huh)
           labelinglogic:expression?))
   (import
@@ -848,6 +859,12 @@
             labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-term)
           labelinglogic:expression:is-subset?/assuming-nointersect-dnf-term))
   (import
+    (only (euphrates labelinglogic-expression-leaf-huh)
+          labelinglogic:expression:leaf?))
+  (import
+    (only (euphrates labelinglogic-expression-lexeme-huh)
+          labelinglogic:expression:lexeme?))
+  (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
   (import
@@ -860,16 +877,16 @@
           labelinglogic:expression:move-nots-down))
   (import
     (only (euphrates
-            labelinglogic-expression-optimize-dnf-clause-assuming-nointersect)
-          labelinglogic:expression:optimize-dnf-clause/assuming-nointersect))
-  (import
-    (only (euphrates
             labelinglogic-expression-optimize-assuming-nointersect-dnf)
           labelinglogic:expression:optimize/assuming-nointersect-dnf))
   (import
     (only (euphrates
             labelinglogic-expression-optimize-assuming-nointersect)
           labelinglogic:expression:optimize/assuming-nointersect))
+  (import
+    (only (euphrates
+            labelinglogic-expression-optimize-dnf-clause-assuming-nointersect)
+          labelinglogic:expression:optimize-dnf-clause/assuming-nointersect))
   (import
     (only (euphrates
             labelinglogic-expression-optimize-r7rs)
@@ -885,6 +902,10 @@
     (only (euphrates
             labelinglogic-expression-replace-variables)
           labelinglogic:expression:replace-variables))
+  (import
+    (only (euphrates
+            labelinglogic-expression-semilexeme-huh)
+          labelinglogic:expression:semilexeme?))
   (import
     (only (euphrates
             labelinglogic-expression-simplify-sublexeme-term)
@@ -1642,6 +1663,12 @@
   (import
     (only (euphrates parselynn-simple-flatten1)
           parselynn:simple:flatten1))
+  (import
+    (only (euphrates parselynn-simple-handle-calls)
+          parselynn:simple:handle-calls))
+  (import
+    (only (euphrates parselynn-simple-join1)
+          parselynn:simple:join1))
   (import
     (only (euphrates parselynn-simple-postprocess)
           parselynn:simple:postprocess))
