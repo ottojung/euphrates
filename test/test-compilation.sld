@@ -739,14 +739,14 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
+    (only (euphrates labelinglogic-binding-atom-huh)
+          labelinglogic:binding:atom?))
+  (import
     (only (euphrates labelinglogic-binding-check)
           labelinglogic:binding:check))
   (import
     (only (euphrates labelinglogic-binding-expr)
           labelinglogic:binding:expr))
-  (import
-    (only (euphrates labelinglogic-binding-atom-huh)
-          labelinglogic:binding:atom?))
   (import
     (only (euphrates labelinglogic-binding-make)
           labelinglogic:binding:make))
@@ -769,6 +769,9 @@
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-atom-huh)
+          labelinglogic:expression:atom?))
   (import
     (only (euphrates labelinglogic-expression-bottom-huh)
           labelinglogic:expression:bottom?))
@@ -861,9 +864,6 @@
     (only (euphrates
             labelinglogic-expression-is-subset-huh-assuming-nointersect-dnf-clause)
           labelinglogic:expression:is-subset?/assuming-nointersect-dnf-clause))
-  (import
-    (only (euphrates labelinglogic-expression-atom-huh)
-          labelinglogic:expression:atom?))
   (import
     (only (euphrates labelinglogic-expression-lemma-huh)
           labelinglogic:expression:lemma?))
