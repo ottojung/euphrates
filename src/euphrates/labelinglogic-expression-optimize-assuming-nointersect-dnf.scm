@@ -109,7 +109,7 @@
   (define (maybe-optimize-and expr)
     (define type (labelinglogic:expression:type expr))
     (if (equal? type 'and)
-        (labelinglogic:expression:optimize/and-assuming-nointersect-dnf expr)
+        (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect expr)
         expr))
 
   (define simpl

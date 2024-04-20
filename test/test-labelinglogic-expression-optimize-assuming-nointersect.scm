@@ -54,7 +54,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Cases from labelinglogic:expression:optimize/and-assuming-nointersect-dnf
+;; Cases from labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
 ;;
 
 (assert=

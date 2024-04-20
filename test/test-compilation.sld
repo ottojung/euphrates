@@ -860,8 +860,8 @@
           labelinglogic:expression:move-nots-down))
   (import
     (only (euphrates
-            labelinglogic-expression-optimize-and-assuming-nointersect-dnf)
-          labelinglogic:expression:optimize/and-assuming-nointersect-dnf))
+            labelinglogic-expression-optimize-dnf-clause-assuming-nointersect)
+          labelinglogic:expression:optimize-dnf-clause/assuming-nointersect))
   (import
     (only (euphrates
             labelinglogic-expression-optimize-assuming-nointersect-dnf)
