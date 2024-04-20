@@ -69,17 +69,19 @@
          (else
           (let ()
             (define new-args (distribute-args args*))
+            (define ret
+              (if (list-singleton? new-args)
+                  (car new-args)
+                  (make type new-args)))
+
             (if (= (length args) (length new-args))
-                expr
-                (let ()
-                  (define ret
-                    (if (list-singleton? new-args)
-                        (car new-args)
-                        (make type new-args)))
+                ret
+                (loop ret)))))))
 
-                  (loop ret))))))))
+     ((equal? type 'tuple)
+      (make type (map loop args)))
 
-     ((member type (list '= 'variable 'r7rs 'tuple 'not)) expr)
+     ((member type (list '= 'variable 'r7rs 'not)) expr)
 
      (else
       (raisu* :from "labelinglogic:expression:to-dnf"

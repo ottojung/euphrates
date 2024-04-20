@@ -140,6 +140,24 @@
  '(or (= 5) (= 7) (= 8))
  '(and (or (= 5) (= 7) (= 8))))
 
+;; Complex tuples [1]
+(test
+ '(and (tuple (or (= 1) (= 2))) (tuple (not (= 1))))
+ '(and (tuple (or (= 1) (= 2))) (not (tuple (= 1)))))
+
+;; Complex tuples [2].
+(test
+ '(tuple (or (and x y) (and x z)))
+ '(tuple (and x (or y z))))
+
+;; Complex tuples [3]
+(test
+ '(and (tuple (or (and (= 4) (= 1))
+                  (and (= 4) (= 2))))
+       (tuple (not (= 1))))
+ '(and (tuple (and (= 4) (or (= 1) (= 2))))
+       (not (tuple (= 1)))))
+
 ;; Complex expression.
 (test
 
