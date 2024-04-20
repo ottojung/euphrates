@@ -19,7 +19,7 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (= 0) (= 1))))
 
-;; Optimizing non-intersecting negated ground terms
+;; Optimizing non-intersecting negated lexeme terms
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
@@ -513,7 +513,7 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (and) (or) (and) (and))))
 
-;; Case with single ground term.
+;; Case with single lexeme term.
 (assert=
  '(= 3)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect

@@ -90,7 +90,7 @@
             (list-zip args-small args-big))))
 
      (else
-      (raisu* :from "labelinglogic:expression:is-subset?/semiground"
+      (raisu* :from "labelinglogic:expression:is-subset?/semilexeme"
               :type 'bad-sub-expr-type
               :message (stringf "Expression type ~s not permitted here." (~a type-small))
               :args (list type-small expr-small))))))

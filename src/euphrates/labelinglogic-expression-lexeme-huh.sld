@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates labelinglogic-expression-ground-huh)
-  (export labelinglogic:expression:ground?)
+  (euphrates labelinglogic-expression-lexeme-huh)
+  (export labelinglogic:expression:lexeme?)
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
@@ -26,6 +26,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-ground-huh.scm")))
+               "euphrates/labelinglogic-expression-lexeme-huh.scm")))
     (else (include
-            "labelinglogic-expression-ground-huh.scm"))))
+            "labelinglogic-expression-lexeme-huh.scm"))))

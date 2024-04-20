@@ -8,8 +8,8 @@
           labelinglogic:expression:bottom?))
   (import
     (only (euphrates
-            labelinglogic-expression-semiground-huh)
-          labelinglogic:expression:semiground?))
+            labelinglogic-expression-semilexeme-huh)
+          labelinglogic:expression:semilexeme?))
   (import
     (only (euphrates labelinglogic-expression-top-huh)
           labelinglogic:expression:top?))

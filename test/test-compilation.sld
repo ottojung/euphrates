@@ -824,8 +824,8 @@
             labelinglogic-expression-foreach-variable)
           labelinglogic:expression:foreach-variable))
   (import
-    (only (euphrates labelinglogic-expression-ground-huh)
-          labelinglogic:expression:ground?))
+    (only (euphrates labelinglogic-expression-lexeme-huh)
+          labelinglogic:expression:lexeme?))
   (import
     (only (euphrates labelinglogic-expression-huh)
           labelinglogic:expression?))
@@ -887,8 +887,8 @@
           labelinglogic:expression:replace-variables))
   (import
     (only (euphrates
-            labelinglogic-expression-simplify-subground-term)
-          labelinglogic:expression:simplify-subground-term))
+            labelinglogic-expression-simplify-sublexeme-term)
+          labelinglogic:expression:simplify-sublexeme-term))
   (import
     (only (euphrates labelinglogic-expression-sugarify)
           labelinglogic:expression:sugarify))
@@ -915,8 +915,8 @@
           labelinglogic:expression:top))
   (import
     (only (euphrates
-            labelinglogic-expression-try-simplify-subground-term)
-          labelinglogic:expression:try-simplify-subground-term))
+            labelinglogic-expression-try-simplify-sublexeme-term)
+          labelinglogic:expression:try-simplify-sublexeme-term))
   (import
     (only (euphrates
             labelinglogic-expression-type-associative-huh)

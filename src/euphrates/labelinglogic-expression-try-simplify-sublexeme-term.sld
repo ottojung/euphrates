@@ -1,9 +1,9 @@
 
 (define-library
   (euphrates
-    labelinglogic-expression-try-simplify-subground-term)
+    labelinglogic-expression-try-simplify-sublexeme-term)
   (export
-    labelinglogic:expression:try-simplify-subground-term)
+    labelinglogic:expression:try-simplify-sublexeme-term)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -43,6 +43,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/labelinglogic-expression-try-simplify-subground-term.scm")))
+               "euphrates/labelinglogic-expression-try-simplify-sublexeme-term.scm")))
     (else (include
-            "labelinglogic-expression-try-simplify-subground-term.scm"))))
+            "labelinglogic-expression-try-simplify-sublexeme-term.scm"))))
