@@ -24,6 +24,10 @@
           labelinglogic:expression:check))
   (import
     (only (euphrates
+            labelinglogic-expression-dnf-clause-check)
+          labelinglogic:expression:dnf-clause:check))
+  (import
+    (only (euphrates
             labelinglogic-expression-evaluate-r7rs)
           labelinglogic:expression:evaluate/r7rs))
   (import
@@ -33,10 +37,6 @@
   (import
     (only (euphrates labelinglogic-expression-make)
           labelinglogic:expression:make))
-  (import
-    (only (euphrates
-            labelinglogic-expression-semiground-huh)
-          labelinglogic:expression:semiground?))
   (import
     (only (euphrates
             labelinglogic-expression-syntactic-equal-huh)

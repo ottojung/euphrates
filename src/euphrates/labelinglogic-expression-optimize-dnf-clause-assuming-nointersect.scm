@@ -46,20 +46,6 @@
     (and (not (equal? negated-a? negated-b?))
          (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
-  (define (check-type expr)
-    (define _531 (labelinglogic:expression:check expr))
-    (define type (labelinglogic:expression:type expr))
-    (define args (labelinglogic:expression:args expr))
-
-    (unless (or (labelinglogic:expression:semiground? expr)
-                (labelinglogic:expression:bottom? expr)
-                (labelinglogic:expression:top? expr))
-
-      (raisu* :from "labelinglogic:expression:optimize-dnf-clause/assuming-nointersect"
-              :type 'bad-sub-expr-type
-              :message (stringf "Expression type ~s not permitted here." (~a type))
-              :args (list type expr))))
-
   (define (same-type-nointersect? expr-a expr-b)
     (or (different-values-of-same-type? '= expr-a expr-b)
         (different-values-of-same-type? 'r7rs expr-a expr-b)
@@ -161,6 +147,6 @@
             :message (stringf "Expression must be of type 'and, but got type ~s expression." (~a type))
             :args (list type expr)))
 
-  (for-each check-type args)
+  (for-each labelinglogic:expression:dnf-clause:check args)
 
   (apply-until-fixpoint optimize expr))
