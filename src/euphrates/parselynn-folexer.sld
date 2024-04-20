@@ -90,7 +90,6 @@
           or
           quote
           reverse
-          string->list
           string-for-each
           string-length
           string-ref
