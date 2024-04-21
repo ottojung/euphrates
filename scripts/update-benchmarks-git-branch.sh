@@ -7,6 +7,12 @@
 
 set -e
 
+cleanup() {
+    cd ..
+    rm -f "$SSHKEYFILE"
+    rm -fr benchmarks-repo
+}
+
 if test -z "$REPOLOGKEY"
 then
     echo 'Variable $REPOLOGKEY is not set' 1>&2
@@ -35,8 +41,8 @@ git config gpg.format ssh
 git config commit.gpgsign true
 git config user.signingkey "$SSHKEYFILE"
 git remote set-url --add origin pubgit@vau.place:repolog.git
-git remote set-url --add origin git@github.com:ottojung/repolog.git
-git remote set-url --add origin git@codeberg.org:otto/repolog.git
+git remote add mirror git@github.com:ottojung/repolog.git
+git remote set-url --add mirror git@codeberg.org:otto/repolog.git
 
 
 for TRY in $(seq 10)
@@ -49,15 +55,18 @@ do
     git commit --message 'update benchmarks'
 
     if git push origin "$BRANCH"
-    then break
+    then
+        git push mirror --force "$BRANCH" || true
+        cleanup
+        exit 0
     fi
 
     sleep 5
     git fetch origin "$BRANCH"
-    git reset --hard "$BRANCH"
+    git reset --hard origin/"$BRANCH"
+    git pull || true
     git clean -dfx
 done
 
-cd ..
-rm -f "$SSHKEYFILE"
-rm -fr benchmarks-repo
+cleanup
+exit 1
