@@ -9,6 +9,41 @@
                               (~a type))
             :args (list type expression)))
 
+  (define (negate-tuple expr)
+    (define type (labelinglogic:expression:type expr))
+    (define args (labelinglogic:expression:args expr))
+
+    (if (list-singleton? args)
+        (labelinglogic:expression:make
+         type (map move-down-by-1 args))
+
+        (let ()
+          (define n
+            (length args))
+          (define negated-args
+            (map move-down-by-1 args))
+          (define negated-args/vector
+            (list->vector negated-args))
+
+          (define (negate-at index)
+            (vector-ref negated-args/vector index))
+
+          (define (make-arg-list non-top-pos-index)
+            (let loop ((i 0) (buf '()))
+              (cond
+               ((>= i n)
+                (labelinglogic:expression:make
+                 type (reverse buf)))
+               ((= i non-top-pos-index)
+                (loop (+ 1 i) (cons (negate-at i) buf)))
+               (else
+                (loop (+ 1 i) (cons labelinglogic:expression:top buf))))))
+
+          (define new-args
+            (map make-arg-list (iota n)))
+
+          (labelinglogic:expression:make 'or new-args))))
+
   (define (move-down-by-1 expression)
     (define type (labelinglogic:expression:type expression))
     (define args (labelinglogic:expression:args expression))
@@ -27,8 +62,7 @@
        'or (map move-down-by-1 args)))
 
      ((equal? type 'tuple)
-      (labelinglogic:expression:make
-       'tuple (map move-down-by-1 args)))
+      (negate-tuple expression))
 
      ((equal? type 'not)
       (loop (car args)))

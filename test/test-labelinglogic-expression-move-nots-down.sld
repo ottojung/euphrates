@@ -8,13 +8,16 @@
           labelinglogic:expression:move-nots-down))
   (import
     (only (scheme base)
+          _
           and
           begin
           define
+          define-syntax
           let
           not
           or
-          quasiquote))
+          quote
+          syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
