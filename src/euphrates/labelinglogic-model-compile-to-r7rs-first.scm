@@ -44,6 +44,21 @@
               :message (stringf "Expression type ~s not recognized" (~a type))
               :args (list type expr)))))
 
+  (define bindings
+    (labelinglogic:model:bindings
+     inlined-model))
+
+  (define (constant-binding? binding)
+    (define name (labelinglogic:binding:name binding))
+    (define expr (labelinglogic:binding:expr binding))
+    (define type (labelinglogic:expression:type expr))
+    (equal? type '=))
+
+  (define sorted-bindings
+    (append
+     (filter constant-binding? bindings)
+     (filter (negate constant-binding?) bindings)))
+
   (define _loop
     (for-each
      (lambda (binding)
@@ -53,8 +68,7 @@
        (define qname (list 'quote name))
        (stack-push! cond-stack (list predicate qname)))
 
-     (labelinglogic:model:bindings
-      inlined-model)))
+     sorted-bindings))
 
   (define cases (reverse (stack->list cond-stack)))
 

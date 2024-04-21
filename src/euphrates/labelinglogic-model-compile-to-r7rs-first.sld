@@ -22,6 +22,7 @@
   (import
     (only (euphrates labelinglogic-model-inline-all)
           labelinglogic:model:inline-all))
+  (import (only (euphrates negate) negate))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -34,6 +35,7 @@
     (only (scheme base)
           =
           and
+          append
           begin
           car
           cond
@@ -53,6 +55,9 @@
           reverse
           unquote
           unquote-splicing))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
