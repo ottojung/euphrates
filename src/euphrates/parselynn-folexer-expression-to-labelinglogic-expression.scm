@@ -41,6 +41,10 @@
           (labelinglogic:expression:make
            type (map loop args)))
 
+         ((member type (list 'constant))
+          (labelinglogic:expression:make
+           type args))
+
          ((member type (list 'class))
           (unless (list-singleton? args)
             (raisu* :from "parselynn:folexer:expression->labelinglogic:expression"

@@ -25,6 +25,8 @@
          ((member type (list 'or 'and 'not))
           (for-each loop args))
 
+         ((member type (list 'constant)) 'ok)
+
          ((member type (list 'class))
           (unless (list-singleton? args)
             (raisu* :from "parselynn:folexer:expression:check"
