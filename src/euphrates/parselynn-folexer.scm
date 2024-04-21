@@ -6,12 +6,6 @@
   (define singletons-tokens-alist/stack
     (stack-make))
 
-  (define chars-of-strings-map
-    (make-hashmap))
-
-  (define long-strings-alist/stack
-    (stack-make))
-
   (define _64132
     (for-each
      (lambda (p)
@@ -51,11 +45,6 @@
           (cons name value)))))
 
      tokens-alist))
-
-  (define long-strings-alist
-    (reverse
-     (stack->list
-      long-strings-alist/stack)))
 
   (define singletons-tokens-alist
     (reverse
@@ -118,27 +107,6 @@
   (define base-model/stack
     (stack-make))
 
-  (define (dereference-while-variable expr)
-    (let loop ((expr expr))
-      (define type (labelinglogic:expression:type expr))
-      (if (equal? type 'variable)
-          (let ()
-            (define target (labelinglogic:model:assoc expr opt-model))
-            (define target-type (labelinglogic:expression:type target))
-            (if (equal? target-type 'variable)
-                (loop target)
-                expr))
-          expr)))
-
-  (define _123554
-    (for-each
-     (lambda (p)
-       (define-pair (string-name chars-names) p)
-       (define dereferenced-names (map dereference-while-variable chars-names))
-       (define rule (cons string-name (list dereferenced-names)))
-       (stack-push! additional-grammar-rules/stack rule))
-     long-strings-alist))
-
   (define _2341723
     (for-each
      (lambda (binding)
@@ -166,10 +134,9 @@
            (stack-push! additional-grammar-rules/stack rule)))
 
         ((member type (list 'variable))
-         (unless (hashmap-has? chars-of-strings-map class)
-           (let ()
-             (define rule (list class (list expr)))
-             (stack-push! additional-grammar-rules/stack rule))))
+         (let ()
+           (define rule (list class (list expr)))
+           (stack-push! additional-grammar-rules/stack rule)))
 
         (else
          (raisu 'unexpected-expr-type type args binding))))

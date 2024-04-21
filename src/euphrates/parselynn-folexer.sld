@@ -5,10 +5,6 @@
   (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates define-pair) define-pair))
-  (import
-    (only (euphrates hashmap)
-          hashmap-has?
-          make-hashmap))
   (import (only (euphrates hashset) list->hashset))
   (import
     (only (euphrates labelinglogic-binding-expr)
@@ -40,9 +36,6 @@
   (import
     (only (euphrates labelinglogic-model-append)
           labelinglogic:model:append))
-  (import
-    (only (euphrates labelinglogic-model-assoc)
-          labelinglogic:model:assoc))
   (import
     (only (euphrates labelinglogic-model-bindings)
           labelinglogic:model:bindings))
@@ -99,8 +92,7 @@
           string->list
           string-length
           string-ref
-          string?
-          unless))
+          string?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
