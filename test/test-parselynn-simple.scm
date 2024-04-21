@@ -8,6 +8,14 @@
    (parselynn:simple
     `(:grammar ,parser-rules)))
 
+(define (input-stream lst)
+  (lambda _
+    (if (null? lst) (eof-object)
+        (let ()
+          (define current (car lst))
+          (set! lst (cdr lst))
+          current))))
+
 (define-syntax check-parser-result
   (syntax-rules ()
     ((_ parser input expected-output)
@@ -1441,15 +1449,8 @@
                 (constant 8)
                 (constant 9)))))
 
- (let ()
-   (define input '(5   +   3))
-
-   (lambda _
-     (if (null? input) (eof-object)
-         (let ()
-           (define current (car input))
-           (set! input (cdr input))
-           current))))
+ (input-stream
+  '(5   +   3))
 
  '(expr (expr (term (num (dig 5))))
         (operation +)
@@ -1479,18 +1480,70 @@
                 (constant 8)
                 (constant 9)))))
 
- (let ()
-   (define input '(5 #\. #\+ #\. 3))
-
-   (lambda _
-     (if (null? input) (eof-object)
-         (let ()
-           (define current (car input))
-           (set! input (cdr input))
-           current))))
+ (input-stream
+  '(5 #\. #\+ #\. 3))
 
  '(expr (expr (term (num (dig 5))))
         (operation ".+.")
         (expr (term (num (dig 3)))))
+
+ )
+
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( stream = category+
+      category = even / odd
+      even = (r7rs even?)
+      odd = (r7rs odd?)
+      )))
+
+ (input-stream
+  '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19))
+
+ '(stream (category+ (category (odd 1)) (category+ (category (even 2)) (category+ (category (odd 3)) (category+ (category (even 4)) (category+ (category (odd 5)) (category+ (category (even 6)) (category+ (category (odd 7)) (category+ (category (even 8)) (category+ (category (odd 9)) (category+ (category (even 10)) (category+ (category (odd 11)) (category+ (category (even 12)) (category+ (category (odd 13)) (category+ (category (even 14)) (category+ (category (odd 15)) (category+ (category (even 16)) (category+ (category (odd 17)) (category+ (category (even 18)) (category+ (category (odd 19))))))))))))))))))))))
+
+ )
+
+
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( stream = category+
+      category = fizz / buzz / fizzbuzz / none
+
+      fizz = (r7rs (lambda (n)
+                     (and (= 0 (modulo n 3))
+                          (not (= 0 (modulo n 5))))))
+      buzz = (r7rs (lambda (n)
+                     (and (= 0 (modulo n 5))
+                          (not (= 0 (modulo n 3))))))
+      fizzbuzz = (r7rs (lambda (n)
+                         (and (= 0 (modulo n 3))
+                              (= 0 (modulo n 5)))))
+
+      none = (r7rs (lambda (n)
+                     (not (or (= 0 (modulo n 3))
+                              (= 0 (modulo n 5)))))))
+
+    :flatten (stream)
+    :inline (category category+)
+    :skip (none)
+
+    ))
+
+ (input-stream
+  '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19))
+
+ '(stream (fizz 3) (buzz 5) (fizz 6) (fizz 9)
+          (buzz 10) (fizz 12) (fizzbuzz 15) (fizz 18))
 
  )

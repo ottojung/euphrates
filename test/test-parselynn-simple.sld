@@ -32,13 +32,16 @@
           define
           define-syntax
           eof-object
+          even?
           if
           lambda
           let
           list
           list?
+          modulo
           not
           null?
+          odd?
           or
           quasiquote
           quote
@@ -52,6 +55,9 @@
   (cond-expand
     (guile (import (only (srfi srfi-1) any filter)))
     (else (import (only (srfi 1) any filter))))
+  (cond-expand
+    (guile (import (only (srfi srfi-41) stream)))
+    (else (import (only (srfi 41) stream))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
