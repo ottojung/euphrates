@@ -25,33 +25,25 @@
           (cons name (string-ref value 0))))
 
         ((and (string? value)
+              (= 0 (string-length value)))
+
+         (stack-push!
+          singletons-tokens-alist/stack
+          (cons name labelinglogic:expression:bottom)))
+
+        ((and (string? value)
               (not (= 1 (string-length value))))
 
-         (let ()
-           (define parent-stack (stack-make))
-
-           (string-for-each
-            (lambda (c)
-              (define char-name (make-unique-identifier))
-
-              (stack-push! parent-stack char-name)
-
-              (hashmap-set!
-               chars-of-strings-map
-               char-name name)
-
-              (stack-push!
-               singletons-tokens-alist/stack
-               (cons char-name c)))
-
-            value)
-
-           (stack-push!
-            long-strings-alist/stack
-            (cons name
-                  (reverse
-                   (stack->list
-                    parent-stack))))))
+         (stack-push!
+          singletons-tokens-alist/stack
+          (cons name
+                (labelinglogic:expression:make
+                 'tuple
+                 (map
+                  (lambda (c)
+                    (labelinglogic:expression:make
+                     '= (list c)))
+                  (string->list value))))))
 
         (else
          (stack-push!
@@ -84,6 +76,12 @@
           (cadr value))
 
          ((equal? '= (car value))
+          value)
+
+         ((equal? 'tuple (car value))
+          value)
+
+         ((labelinglogic:expression:bottom? value)
           value)
 
          (else
@@ -153,15 +151,26 @@
        (cond
         ((member type (list '= 'r7rs 'and))
          (stack-push! base-model/stack binding))
+
         ((member type (list 'or))
          (let ()
-           (define rule (cons class (map list args)))
+           (define rule
+             (if (null? args)
+                 (list class (list))
+                 (cons class (map list args))))
            (stack-push! additional-grammar-rules/stack rule)))
+
+        ((member type (list 'tuple))
+         (let ()
+           (define rule (list class args))
+           (stack-push! additional-grammar-rules/stack rule)))
+
         ((member type (list 'variable))
          (unless (hashmap-has? chars-of-strings-map class)
            (let ()
              (define rule (list class (list expr)))
              (stack-push! additional-grammar-rules/stack rule))))
+
         (else
          (raisu 'unexpected-expr-type type args binding))))
 

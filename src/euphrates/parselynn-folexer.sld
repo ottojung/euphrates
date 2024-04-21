@@ -8,7 +8,6 @@
   (import
     (only (euphrates hashmap)
           hashmap-has?
-          hashmap-set!
           make-hashmap))
   (import (only (euphrates hashset) list->hashset))
   (import
@@ -23,6 +22,15 @@
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
+  (import
+    (only (euphrates labelinglogic-expression-bottom-huh)
+          labelinglogic:expression:bottom?))
+  (import
+    (only (euphrates labelinglogic-expression-bottom)
+          labelinglogic:expression:bottom))
+  (import
+    (only (euphrates labelinglogic-expression-make)
+          labelinglogic:expression:make))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
@@ -64,9 +72,6 @@
     (only (euphrates unique-identifier-to-symbol-recursive)
           unique-identifier->symbol/recursive))
   (import
-    (only (euphrates unique-identifier)
-          make-unique-identifier))
-  (import
     (only (scheme base)
           =
           and
@@ -87,10 +92,11 @@
           map
           member
           not
+          null?
           or
           quote
           reverse
-          string-for-each
+          string->list
           string-length
           string-ref
           string?
