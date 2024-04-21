@@ -57,6 +57,18 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (tuple (= 1) (= 1)) (tuple (= 1) (= 1)))))
 
+
+(assert=
+
+ '(or (tuple (= 1) (= 2) (= 1))
+      (tuple (= 1) (= 4) (= 1)))
+
+ (labelinglogic:expression:optimize/assuming-nointersect
+  '(and (or (tuple (= 1) (= 2) (= 1))
+            (tuple (= 1) (= 3) (= 1))
+            (tuple (= 1) (= 4) (= 1)))
+        (not (tuple (= 1) (= 3) (= 1))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Cases from labelinglogic:expression:optimize-dnf-clause/assuming-nointersect

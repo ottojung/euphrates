@@ -1303,3 +1303,112 @@
  '(start (term (num (dig "5"))) (cont (comma "+") (term (num (dig "3"))) (cont "")))
 
  )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Test convinience syntax
+;;
+
+
+(test-parser
+ `( expr = expr add expr / term
+    add = "+"
+    term = num
+    num = dig num / dig
+    dig = (or "0" "1" "2" "3" "4" #\5 "6" "7" "8" "9"))
+
+ "5+3"
+
+ '(expr (expr (term (num (dig "5")))) (add "+") (expr (term (num (dig "3"))))))
+
+
+
+
+(test-parser
+ `( expr = expr operation expr / term
+    operation = ".+." / ".-."
+    term = num
+    num = dig num / dig
+    dig = (or "0" "1" "2" "3" "4" #\5 "6" "7" "8" "9"))
+
+ "5.+.3.-.7"
+
+ '(expr (expr (term (num (dig "5")))) (operation ".+.") (expr (expr (term (num (dig "3")))) (operation ".-.") (expr (term (num (dig "7")))))))
+
+
+
+
+
+(test-parser
+ `( expr = expr operation expr / term
+    operation = (or ".+." ".-.")
+    term = num
+    num = dig num / dig
+    dig = (or "0" "1" "2" "3" "4" #\5 "6" "7" "8" "9"))
+
+ "5.+.3.-.7"
+
+ '(expr (expr (term (num (dig "5")))) (operation ".+.") (expr (expr (term (num (dig "3")))) (operation ".-.") (expr (term (num (dig "7")))))))
+
+
+
+
+(test-parser
+ `( expr = expr operation expr / term
+    operation = (and (or "+" "-" "*") (not "-"))
+    term = num
+    num = dig num / dig
+    dig = (or "0" "1" "2" "3" "4" #\5 "6" "7" "8" "9"))
+
+ "5+3+7"
+
+ '(expr (expr (term (num (dig "5")))) (operation "+") (expr (expr (term (num (dig "3")))) (operation "+") (expr (term (num (dig "7"))))))
+
+ )
+
+
+
+
+(test-parser-error
+ `( expr = expr operation expr / term
+    operation = (and (or "+" "-" "*") (not "-"))
+    term = num
+    num = dig num / dig
+    dig = (or "0" "1" "2" "3" "4" #\5 "6" "7" "8" "9"))
+
+ "5+3-7"
+
+ )
+
+
+
+
+
+(test-parser
+ `( expr = expr operation expr / term
+    operation = (and (or ".+." ".-." ".*.") (not ".-."))
+    term = num
+    num = dig num / dig
+    dig = (or "0" "1" "2" "3" "4" #\5 "6" "7" "8" "9"))
+
+ "5.+.3.*.7"
+
+ '(expr (expr (term (num (dig "5")))) (operation ".+.")
+        (expr (expr (term (num (dig "3")))) (operation ".*.")
+              (expr (term (num (dig "7"))))))
+
+ )
+
+
+
+(test-parser-error
+ `( expr = expr operation expr / term
+    operation = (and (or ".+." ".-." ".*.") (not ".-."))
+    term = num
+    num = dig num / dig
+    dig = (or "0" "1" "2" "3" "4" #\5 "6" "7" "8" "9"))
+
+ "5.+.3.-.7"
+
+ )
