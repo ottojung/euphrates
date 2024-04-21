@@ -10,7 +10,8 @@
   (define options
     (keylist->alist arguments))
 
-  (parselynn:simple:check-options options)
+  (define _545123
+    (parselynn:simple:check-options options))
 
   (define translate-option
     (fn-pair
@@ -62,8 +63,35 @@
    (define additional-grammar-rules
      (parselynn:folexer:additional-grammar-rules lexer))
 
+   (define additional-grammar-rules/with-calls
+     (map
+      (lambda (rule)
+        (define name (car rule))
+        (define expansions (cdr rule))
+        (define new-expansions
+          (apply
+           append
+           (map
+            (lambda (expansion)
+              (define n (length expansion))
+              (define args
+                (map
+                 (lambda (i)
+                   (string->symbol
+                    (string-append
+                     "$" (number->string (+ 1 i)))))
+                 (iota n)))
+
+              (if (= n 1)
+                  (list expansion ': '$1)
+                  (list expansion ': (cons 'string args))))
+            expansions)))
+
+        (cons name new-expansions))
+      additional-grammar-rules))
+
    (define rules
-     (append rules/4 additional-grammar-rules))
+     (append rules/4 additional-grammar-rules/with-calls))
 
    (define base-model
      (parselynn:folexer:base-model lexer))
@@ -72,23 +100,20 @@
      (labelinglogic:model:names base-model))
 
    (define lexer-code
-     (parselynn:folexer:compile/iterator
-      lexer))
+     (parselynn:folexer:compile/iterator lexer))
 
    (define hidden-tree-labels
-     (list->hashset
-      (append
-       tokens
-       (map car additional-grammar-rules))))
+     (list->hashset '()))
 
    (define non-terminals
      (list->hashset (map car rules)))
 
-   (when (assq-or 'tokens: options*)
-     (raisu* :from "parselynn:simple"
-             :type 'invalid-argument ;; TODO: make tokens: optionally settable
-             :message "This parser handles tokens automatically, no need to provide them"
-             :args (list (assq-or 'tokens: options*))))
+   (define _174263
+     (when (assq-or 'tokens: options*)
+       (raisu* :from "parselynn:simple"
+               :type 'invalid-argument ;; TODO: make tokens: optionally settable
+               :message "This parser handles tokens automatically, no need to provide them"
+               :args (list (assq-or 'tokens: options*)))))
 
    (define (extract+check key)
      (define-values (ret set-list)

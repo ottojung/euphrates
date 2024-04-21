@@ -69,25 +69,34 @@
           with-unique-identifier-context))
   (import
     (only (scheme base)
+          +
           /
           =
           and
           append
+          apply
           begin
           car
+          cdr
           cons
           define
           define-values
           if
+          lambda
+          length
           list
           map
           memq
           not
+          number->string
           quote
+          string
+          string->symbol
+          string-append
           when))
   (cond-expand
-    (guile (import (only (srfi srfi-1) filter)))
-    (else (import (only (srfi 1) filter))))
+    (guile (import (only (srfi srfi-1) filter iota)))
+    (else (import (only (srfi 1) filter iota))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
