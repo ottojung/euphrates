@@ -14,7 +14,7 @@
        ((member type (list 'or 'and 'not))
         #t)
 
-       ((member type (list 'constant))
+       ((member type (list 'constant 'r7rs))
         #t)
 
        ((member type (list 'class))

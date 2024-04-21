@@ -41,7 +41,7 @@
           (labelinglogic:expression:make
            type (map loop args)))
 
-         ((member type (list 'constant))
+         ((member type (list 'constant 'r7rs))
           (labelinglogic:expression:make
            type args))
 
