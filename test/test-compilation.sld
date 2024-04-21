@@ -1649,8 +1649,8 @@
     (only (euphrates parselynn-simple-extract-alist)
           parselynn:simple:extract-alist))
   (import
-    (only (euphrates parselynn-simple-extract-regexes)
-          parselynn:simple:extract-regexes))
+    (only (euphrates parselynn-simple-extract-lexer-exprs)
+          parselynn:simple:extract-lexer-exprs))
   (import
     (only (euphrates parselynn-simple-extract-set)
           parselynn:simple:extract-set))

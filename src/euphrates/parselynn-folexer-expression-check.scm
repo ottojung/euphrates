@@ -4,49 +4,48 @@
 (define (parselynn:folexer:expression:check expr)
   (define expr0 expr)
 
-  (or (labelinglogic:expression? expr)
-      (let loop ((expr expr))
+  (let loop ((expr expr))
+    (cond
+     ((string? expr) 'ok)
+     ((char? expr) 'ok)
+
+     ((pair? expr)
+
+      (unless (list? expr)
+        (raisu* :from "parselynn:folexer:expression:check"
+                :type 'improper-list
+                :message (stringf "Expression must be a list, but isn't: ~s" expr)
+                :args (list expr expr0)))
+
+      (let ()
+        (define type (car expr))
+        (define args (cdr expr))
         (cond
-         ((string? expr) 'ok)
-         ((char? expr) 'ok)
 
-         ((pair? expr)
+         ((member type (list 'or 'and 'not))
+          (for-each loop args))
 
-          (unless (list? expr)
+         ((member type (list 'class))
+          (unless (list-singleton? args)
             (raisu* :from "parselynn:folexer:expression:check"
-                    :type 'improper-list
-                    :message (stringf "Expression must be a list, but isn't: ~s" expr)
-                    :args (list expr expr0)))
-
-          (let ()
-            (define type (car expr))
-            (define args (cdr expr))
-            (cond
-
-             ((member type (list 'or 'and 'not))
-              (for-each loop args))
-
-             ((member type (list 'class))
-              (unless (list-singleton? args)
-                (raisu* :from "parselynn:folexer:expression:check"
-                        :type 'class-arity-bad
-                        :message (stringf "Expression of type 'class must be have exactly one argument, but it has ~s, : ~s" (length args) expr)
-                        :args (list (length args) expr expr0))))
-
-             (else
-              (raisu* :from "parselynn:folexer:expression:check"
-                      :type 'unknown-type-of-expr
-                      :message (stringf "Expression type ~s unrecognized: ~s" type expr)
-                      :args (list type expr expr0))))))
-
-         ((labelinglogic:expression? expr)
-          (raisu* :from "parselynn:folexer:expression:check"
-                  :type 'expression-type-not-supported
-                  :message (stringf "Expression ~s from labelinglogic is not supported in folexer" expr)
-                  :args (list expr expr0)))
+                    :type 'class-arity-bad
+                    :message (stringf "Expression of type 'class must be have exactly one argument, but it has ~s, : ~s" (length args) expr)
+                    :args (list (length args) expr expr0))))
 
          (else
           (raisu* :from "parselynn:folexer:expression:check"
-                  :type 'unknown-object-type
-                  :message (stringf "Object unrecognized: ~s" expr)
-                  :args (list expr expr0)))))))
+                  :type 'unknown-type-of-expr
+                  :message (stringf "Expression type ~s unrecognized: ~s" type expr)
+                  :args (list type expr expr0))))))
+
+     ((labelinglogic:expression? expr)
+      (raisu* :from "parselynn:folexer:expression:check"
+              :type 'expression-type-not-supported
+              :message (stringf "Expression ~s from labelinglogic is not supported in folexer" expr)
+              :args (list expr expr0)))
+
+     (else
+      (raisu* :from "parselynn:folexer:expression:check"
+              :type 'unknown-object-type
+              :message (stringf "Object unrecognized: ~s" expr)
+              :args (list expr expr0))))))

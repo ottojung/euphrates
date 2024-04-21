@@ -45,7 +45,7 @@
     (ebnf-parser rules/0a))
 
   (define-values (rules/2 taken-token-names-set tokens-map)
-    (parselynn:simple:extract-regexes rules/1))
+    (parselynn:simple:extract-lexer-exprs rules/1))
 
   (with-unique-identifier-context
    :existing-names taken-token-names-set

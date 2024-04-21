@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates parselynn-simple-extract-regexes)
-  (export parselynn:simple:extract-regexes)
+  (euphrates parselynn-simple-extract-lexer-exprs)
+  (export parselynn:simple:extract-lexer-exprs)
   (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates bnf-alist-map-expansion-terms)
@@ -40,5 +40,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-simple-extract-regexes.scm")))
-    (else (include "parselynn-simple-extract-regexes.scm"))))
+               "euphrates/parselynn-simple-extract-lexer-exprs.scm")))
+    (else (include "parselynn-simple-extract-lexer-exprs.scm"))))

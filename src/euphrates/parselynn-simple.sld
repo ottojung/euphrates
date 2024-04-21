@@ -44,8 +44,8 @@
     (only (euphrates parselynn-simple-check-set)
           parselynn:simple:check-set))
   (import
-    (only (euphrates parselynn-simple-extract-regexes)
-          parselynn:simple:extract-regexes))
+    (only (euphrates parselynn-simple-extract-lexer-exprs)
+          parselynn:simple:extract-lexer-exprs))
   (import
     (only (euphrates parselynn-simple-extract-set)
           parselynn:simple:extract-set))
