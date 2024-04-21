@@ -1284,3 +1284,22 @@
  '(start (term (num (dig "5"))) (cont (comma "+") (term (num (dig "3"))) (cont "")))
 
  )
+
+
+
+
+(test-parser
+ ;; Test epsilon production [4].
+
+ `( start = term cont
+    cont = "" / comma term cont
+    comma = "+"
+    term = num
+    num = dig num / dig
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+
+ "5+3"
+
+ '(start (term (num (dig "5"))) (cont (comma "+") (term (num (dig "3"))) (cont "")))
+
+ )
