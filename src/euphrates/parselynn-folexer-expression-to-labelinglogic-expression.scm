@@ -17,7 +17,7 @@
         (labelinglogic:expression:make 'constant (list (string-ref expr 0))))
        (else
         (labelinglogic:expression:make
-         'tuple
+         'list
          (map
           (lambda (c)
             (labelinglogic:expression:make

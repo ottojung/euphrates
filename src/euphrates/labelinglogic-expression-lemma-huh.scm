@@ -7,5 +7,5 @@
         (let ()
           (define type (labelinglogic:expression:type expr))
           (define args (labelinglogic:expression:args expr))
-          (and (equal? type 'tuple)
+          (and (equal? type 'list)
                (list-and-map loop args))))))

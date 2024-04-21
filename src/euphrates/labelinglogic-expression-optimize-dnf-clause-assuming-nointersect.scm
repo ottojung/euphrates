@@ -45,8 +45,8 @@
     (define (same-type-nointersect? expr-a expr-b)
       (or (different-values-of-same-type? 'constant expr-a expr-b)
           (different-values-of-same-type? 'r7rs expr-a expr-b)
-          ;; NOTE: there is no similar check for 'tuple because those can contain arbitrary (non-normalized) expressions as args.
-          ;; TODO: add a similar check for 'tuple type.
+          ;; NOTE: there is no similar check for 'list because those can contain arbitrary (non-normalized) expressions as args.
+          ;; TODO: add a similar check for 'list type.
           ))
 
     (define (different-type-nointersect?/body expr-a expr-b)
@@ -62,10 +62,10 @@
       (define inner-type-b (labelinglogic:expression:type inner-b))
       (define inner-args-a (labelinglogic:expression:args inner-a))
       (define inner-args-b (labelinglogic:expression:args inner-b))
-      (define inner-tuple-a? (equal? 'tuple inner-type-a))
-      (define inner-tuple-b? (equal? 'tuple inner-type-b))
-      (define inner-dimension-a (and inner-tuple-a? (length inner-args-a)))
-      (define inner-dimension-b (and inner-tuple-b? (length inner-args-b)))
+      (define inner-list-a? (equal? 'list inner-type-a))
+      (define inner-list-b? (equal? 'list inner-type-b))
+      (define inner-dimension-a (and inner-list-a? (length inner-args-a)))
+      (define inner-dimension-b (and inner-list-b? (length inner-args-b)))
 
       (and (not (labelinglogic:expression:top? expr-a))
            (not (labelinglogic:expression:top? expr-b))
@@ -110,15 +110,15 @@
       (define new-args (list-consume fun args))
       new-args)
 
-    (define (empty-tuple? expr)
+    (define (empty-list? expr)
       (define type (labelinglogic:expression:type expr))
       (define args (labelinglogic:expression:args expr))
-      (and (equal? type 'tuple)
+      (and (equal? type 'list)
            (list-or-map labelinglogic:expression:bottom? args)))
 
     (define (handle-nulls args)
       (if (or (cartesian-any? null-exprs? args args)
-              (list-or-map empty-tuple? args))
+              (list-or-map empty-list? args))
           (list labelinglogic:expression:bottom)
           args))
 
@@ -138,14 +138,14 @@
       (define inner-type-b (labelinglogic:expression:type inner-b))
       (define inner-args-a (labelinglogic:expression:args inner-a))
       (define inner-args-b (labelinglogic:expression:args inner-b))
-      (define inner-tuple-a? (equal? 'tuple inner-type-a))
-      (define inner-tuple-b? (equal? 'tuple inner-type-b))
-      (define inner-dimension-a (and inner-tuple-a? (length inner-args-a)))
-      (define inner-dimension-b (and inner-tuple-b? (length inner-args-b)))
+      (define inner-list-a? (equal? 'list inner-type-a))
+      (define inner-list-b? (equal? 'list inner-type-b))
+      (define inner-dimension-a (and inner-list-a? (length inner-args-a)))
+      (define inner-dimension-b (and inner-list-b? (length inner-args-b)))
 
       (cond
        ((and (equal? type-a type-b)
-             (equal? type-a 'tuple)
+             (equal? type-a 'list)
              (equal? inner-dimension-a inner-dimension-b))
 
         (labelinglogic:expression:make
@@ -172,11 +172,11 @@
       (define inner (if negated? (car args) expr))
       (define inner-type (labelinglogic:expression:type inner))
       (define innerrgs (labelinglogic:expression:args inner))
-      (define inner-tuple? (equal? 'tuple inner-type))
-      (define inner-dimension (and inner-tuple? (length innerrgs)))
+      (define inner-list? (equal? 'list inner-type))
+      (define inner-dimension (and inner-list? (length innerrgs)))
 
       (cond
-       ((equal? type 'tuple)
+       ((equal? type 'list)
         (labelinglogic:expression:make
          type (map loop args)))
 

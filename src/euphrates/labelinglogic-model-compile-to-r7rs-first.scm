@@ -26,7 +26,7 @@
         (define recursed (map compile-expression args))
         `(,type ,@recursed)))
 
-     ((equal? type 'tuple) ;; TODO: support this
+     ((equal? type 'list) ;; TODO: support this
       (raisu* :from "labelinglogic:model:compile-to-r7rs/first"
               :type 'xor-not-supported
               :message (stringf "Expression type ~s not supported here" (~a type))

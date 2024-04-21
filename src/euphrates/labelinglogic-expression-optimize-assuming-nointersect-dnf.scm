@@ -11,7 +11,7 @@
                 (equal? type 'r7rs)
                 (and (equal? type 'not)
                      (for-each check-type args))
-                (and (equal? type 'tuple)
+                (and (equal? type 'list)
                      (for-each check-type args))
                 (and (equal? type 'and)
                      (for-each check-type args))

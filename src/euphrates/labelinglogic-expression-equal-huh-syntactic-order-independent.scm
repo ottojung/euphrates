@@ -33,7 +33,7 @@
             (eqv-oi args-1 args-2)
             (eqv-oi args-2 args-1)))
 
-      ((equal? type-1 'tuple)
+      ((equal? type-1 'list)
        (and (= (length args-1) (length args-2))
             (list-and-map loop args-1 args-2)))
 

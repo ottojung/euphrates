@@ -34,7 +34,7 @@
       ((equal? 'and type) (recurse args)) ;; any arity is ok.
       ((equal? 'xor type) (recurse args)) ;; any arity is ok.
 
-      ((equal? 'tuple type)
+      ((equal? 'list type)
        (or
 
         (and (not (list-length=<? 1 args))

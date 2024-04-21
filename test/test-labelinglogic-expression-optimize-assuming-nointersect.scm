@@ -53,21 +53,21 @@
        (and (r7rs odd?) (not (constant 3)) (not (constant 5)) (not (constant 7))))))
 
 (assert=
- '(tuple (constant 1) (constant 1))
+ '(list (constant 1) (constant 1))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1) (constant 1)) (tuple (constant 1) (constant 1)))))
+  '(and (list (constant 1) (constant 1)) (list (constant 1) (constant 1)))))
 
 
 (assert=
 
- '(or (tuple (constant 1) (constant 2) (constant 1))
-      (tuple (constant 1) (constant 4) (constant 1)))
+ '(or (list (constant 1) (constant 2) (constant 1))
+      (list (constant 1) (constant 4) (constant 1)))
 
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (tuple (constant 1) (constant 2) (constant 1))
-            (tuple (constant 1) (constant 3) (constant 1))
-            (tuple (constant 1) (constant 4) (constant 1)))
-        (not (tuple (constant 1) (constant 3) (constant 1))))))
+  '(and (or (list (constant 1) (constant 2) (constant 1))
+            (list (constant 1) (constant 3) (constant 1))
+            (list (constant 1) (constant 4) (constant 1)))
+        (not (list (constant 1) (constant 3) (constant 1))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -106,29 +106,29 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (r7rs even?) (r7rs odd?))))
 
-;; Different non-intersecting tuples
+;; Different non-intersecting lists
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 3) (constant 4)))))
+  '(and (list (constant 1) (constant 2)) (list (constant 3) (constant 4)))))
 
-;; The same tuples
+;; The same lists
 (assert=
- '(tuple (constant 1) (constant 2))
+ '(list (constant 1) (constant 2))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)))))
+  '(and (list (constant 1) (constant 2)) (list (constant 1) (constant 2)))))
 
 ;; Tuples with top expressions
 (assert=
- '(tuple (constant 1) (constant 2))
+ '(list (constant 1) (constant 2))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)) (and))))
+  '(and (list (constant 1) (constant 2)) (list (constant 1) (constant 2)) (and))))
 
 ;; Tuples with bottom expressions
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)) (or))))
+  '(and (list (constant 1) (constant 2)) (list (constant 1) (constant 2)) (or))))
 
 ;; Combining 'constant' and 'not =' [1]
 (assert=
@@ -343,30 +343,30 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (r7rs odd?) (not (r7rs odd?)))))
 
-;; Optimizing tuples with different expressions [1]
+;; Optimizing lists with different expressions [1]
 (assert=
  '(constant 1)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1)) (tuple (r7rs odd?)))))
+  '(and (list (constant 1)) (list (r7rs odd?)))))
 
-;; ;; Optimizing tuples with different expressions [2]
+;; ;; Optimizing lists with different expressions [2]
 ;; (assert=
-;;  '(and (tuple (constant 2)) (tuple (r7rs odd?)))
+;;  '(and (list (constant 2)) (list (r7rs odd?)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 2)) (tuple (r7rs odd?)))))
+;;   '(and (list (constant 2)) (list (r7rs odd?)))))
 
-;; ;; Optimizing tuples with the same expressions
+;; ;; Optimizing lists with the same expressions
 ;; (assert=
-;;  '(and (tuple (constant 1)))
+;;  '(and (list (constant 1)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 1)) (tuple (constant 1)))))
+;;   '(and (list (constant 1)) (list (constant 1)))))
 
 ;; TODO
-;; ;; Mixing 'tuple and 'not in a single expression
+;; ;; Mixing 'list and 'not in a single expression
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 1)) (not (tuple (constant 1))))))
+;;   '(and (list (constant 1)) (not (list (constant 1))))))
 
 ;; Combining 'constant and 'r7rs with opposite values
 (assert=
@@ -387,23 +387,23 @@
   '(and (constant 2) (constant 2) (constant 2) (r7rs even?) (constant 2) (constant 2))))
 
 ;; TODO
-;; ;; Complex case with 'tuple and 'not
+;; ;; Complex case with 'list and 'not
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 1) (r7rs odd?)) (not (tuple (constant 1) (r7rs odd?))))))
+;;   '(and (list (constant 1) (r7rs odd?)) (not (list (constant 1) (r7rs odd?))))))
 
-;; Case with 'tuple and 'r7rs
+;; Case with 'list and 'r7rs
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1)) (r7rs even?))))
+  '(and (list (constant 1)) (r7rs even?))))
 
-;; Case with 'tuple and 'not with multiple types
+;; Case with 'list and 'not with multiple types
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (constant 1) (r7rs odd?)) (not (constant 1)) (not (r7rs odd?)))))
+  '(and (list (constant 1) (r7rs odd?)) (not (constant 1)) (not (r7rs odd?)))))
 
 ;; Testing with null values
 (assert=
@@ -411,11 +411,11 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (constant 0) (not (constant 0)))))
 
-;; ;; Testing single tuple optimization
+;; ;; Testing single list optimization
 ;; (assert=
-;;  '(and (tuple (constant 2)))
+;;  '(and (list (constant 2)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 2)) (tuple (constant 2)))))
+;;   '(and (list (constant 2)) (list (constant 2)))))
 
 ;; Testing with multiple 'r7rs expressions
 (assert=
@@ -452,101 +452,101 @@
 
 (assert (test-1923123 '(and (constant 2) (r7rs positive?) (r7rs integer?))))
 
-;; Case with 'constant and 'tuple
+;; Case with 'constant and 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (constant 2) (tuple (constant 1)))))
+  '(and (constant 2) (list (constant 1)))))
 
-;; Case with 'constant and complex 'tuple
+;; Case with 'constant and complex 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (constant 2) (tuple (r7rs even?) (constant 3)))))
+  '(and (constant 2) (list (r7rs even?) (constant 3)))))
 
-;; Case with 'not and 'tuple
+;; Case with 'not and 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (constant 2)) (tuple (constant 2)))))
+  '(and (not (constant 2)) (list (constant 2)))))
 
-;; Case with 'not and complex 'tuple
+;; Case with 'not and complex 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (r7rs even?)) (tuple (r7rs even?) (constant 3)))))
+  '(and (not (r7rs even?)) (list (r7rs even?) (constant 3)))))
 
-;; Case with 'constant and negated 'tuple
+;; Case with 'constant and negated 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (constant 2) (not (tuple (constant 2))))))
+  '(and (constant 2) (not (list (constant 2))))))
 
-;; ;; Case with 'not and negated 'tuple
+;; ;; Case with 'not and negated 'list
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (not (constant 2)) (not (tuple (constant 2))))))
+;;   '(and (not (constant 2)) (not (list (constant 2))))))
 
-;; ;; Case with negated 'tuple and 'r7rs
+;; ;; Case with negated 'list and 'r7rs
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (not (tuple (constant 1))) (r7rs odd?))))
+;;   '(and (not (list (constant 1))) (r7rs odd?))))
 
-;; ;; Case with 'tuple, 'not, 'constant and 'r7rs values
+;; ;; Case with 'list, 'not, 'constant and 'r7rs values
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 1)) (not (tuple (constant 1))) (r7rs odd?) (constant 2))))
+;;   '(and (list (constant 1)) (not (list (constant 1))) (r7rs odd?) (constant 2))))
 
-;; ;; Case with 'tuple containing other 'tuple
+;; ;; Case with 'list containing other 'list
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 1) (tuple (r7rs odd?))) (not (tuple (constant 1))))))
+;;   '(and (list (constant 1) (list (r7rs odd?))) (not (list (constant 1))))))
 
 ;; ;; Case with complex mixture of types
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (r7rs odd?) (not (constant 1)) (not (r7rs odd?)) (tuple (constant 2) (r7rs even?)))))
+;;   '(and (r7rs odd?) (not (constant 1)) (not (r7rs odd?)) (list (constant 2) (r7rs even?)))))
 
-;; ;; Case with identical 'tuple values
+;; ;; Case with identical 'list values
 ;; (assert=
-;;  '(and (tuple (constant 1) (r7rs odd?)))
+;;  '(and (list (constant 1) (r7rs odd?)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 1) (r7rs odd?)))))
+;;   '(and (list (constant 1) (r7rs odd?)) (list (constant 1) (r7rs odd?)))))
 
-;; ;; Case with non-identical 'tuple values
+;; ;; Case with non-identical 'list values
 ;; (assert=
-;;  '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 2) (r7rs even?)))
+;;  '(and (list (constant 1) (r7rs odd?)) (list (constant 2) (r7rs even?)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 2) (r7rs even?)))))
+;;   '(and (list (constant 1) (r7rs odd?)) (list (constant 2) (r7rs even?)))))
 
-;; ;; Case with 'constant, 'tuple and 'r7rs
+;; ;; Case with 'constant, 'list and 'r7rs
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (constant 2) (r7rs even?) (tuple (constant 2) (r7rs even?)))))
+;;   '(and (constant 2) (r7rs even?) (list (constant 2) (r7rs even?)))))
 
 ;; ;; More complex case
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (r7rs positive?) (not (constant 2)) (tuple (constant 2) (r7rs odd?)))))
+;;   '(and (r7rs positive?) (not (constant 2)) (list (constant 2) (r7rs odd?)))))
 
-;; ;; Complex case with 'tuple, 'not and 'r7rs
+;; ;; Complex case with 'list, 'not and 'r7rs
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (r7rs even?)) (constant 2) (not (r7rs odd?)))))
+;;   '(and (list (r7rs even?)) (constant 2) (not (r7rs odd?)))))
 
-;; ;; Complex case with complex 'tuple
+;; ;; Complex case with complex 'list
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (r7rs even?) (constant 2)) (r7rs positive?))))
+;;   '(and (list (r7rs even?) (constant 2)) (r7rs positive?))))
 
 ;; Case with top. [1]
 (assert=
@@ -618,23 +618,23 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '((or))))
 
-;; Case with '((tuple))'
+;; Case with '((list))'
 (assert-throw
  'unknown-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect
-  '((tuple))))
+  '((list))))
 
-;; Complex case with '((tuple))' and '((or))'
+;; Complex case with '((list))' and '((or))'
 (assert-throw
  'unknown-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect
-  '((tuple) (or))))
+  '((list) (or))))
 
-;; Bad tuples.
+;; Bad lists.
 (assert-throw
  'bad-sub-expr-type
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple 1 2))))
+  '(and (list 1 2))))
 
 ;; Bad nots.
 (assert-throw

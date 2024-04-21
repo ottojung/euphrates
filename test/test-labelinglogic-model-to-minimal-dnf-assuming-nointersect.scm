@@ -208,13 +208,13 @@
  '((t_1 (constant #\1))
    (t_2 (constant #\2))
    (t_3 (constant #\3))
-   (t_x (tuple (constant #\x) (constant #\3))))
+   (t_x (list (constant #\x) (constant #\3))))
 
  :expected
  '((t_1 (constant #\1))
    (t_2 (constant #\2))
    (t_3 (constant #\3))
-   (t_x (tuple uid_1 t_3))
+   (t_x (list uid_1 t_3))
    (uid_1 (constant #\x)))
 
  )
@@ -228,12 +228,12 @@
  `()
 
  :bindings
- '((t1 (tuple (constant 1) (constant 1) (constant 1)))
-   (t2 (tuple (constant 2) (constant 2) (constant 2))))
+ '((t1 (list (constant 1) (constant 1) (constant 1)))
+   (t2 (list (constant 2) (constant 2) (constant 2))))
 
  :expected
- '((t1 (tuple uid_1 uid_1 uid_1))
-   (t2 (tuple uid_2 uid_2 uid_2))
+ '((t1 (list uid_1 uid_1 uid_1))
+   (t2 (list uid_2 uid_2 uid_2))
    (uid_1 (constant 1))
    (uid_2 (constant 2)))
 

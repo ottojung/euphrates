@@ -8,7 +8,7 @@
   (define (make type args)
     (labelinglogic:expression:make type args))
 
-  (define (un-orify-tuple expr)
+  (define (un-orify-list expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
     (define prefix/stack (stack-make))
@@ -106,8 +106,8 @@
                 ret
                 (loop ret)))))))
 
-     ((equal? type 'tuple)
-      (un-orify-tuple
+     ((equal? type 'list)
+      (un-orify-list
        (make type (map loop args))))
 
      ((member type (list 'constant 'variable 'r7rs 'not)) expr)

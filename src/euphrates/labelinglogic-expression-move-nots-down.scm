@@ -9,7 +9,7 @@
                               (~a type))
             :args (list type expression)))
 
-  (define (negate-tuple expr)
+  (define (negate-list expr)
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
@@ -61,8 +61,8 @@
       (labelinglogic:expression:make
        'or (map move-down-by-1 args)))
 
-     ((equal? type 'tuple)
-      (negate-tuple expression))
+     ((equal? type 'list)
+      (negate-list expression))
 
      ((equal? type 'not)
       (loop (car args)))
@@ -78,7 +78,7 @@
      ((member type (list 'r7rs 'constant 'variable))
       expression)
 
-     ((member type (list 'or 'and 'tuple))
+     ((member type (list 'or 'and 'list))
       (labelinglogic:expression:make
        type (map loop args)))
 

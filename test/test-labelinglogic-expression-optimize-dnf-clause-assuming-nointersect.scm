@@ -31,49 +31,49 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (r7rs even?) (r7rs odd?))))
 
-;; Different non-intersecting tuples
+;; Different non-intersecting lists
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 3) (constant 4)))))
+  '(and (list (constant 1) (constant 2)) (list (constant 3) (constant 4)))))
 
-;; Different non-intersecting tuples [1]
+;; Different non-intersecting lists [1]
 (assert=
- '(tuple (constant 2)
+ '(list (constant 2)
          (and (r7rs odd?) (not (constant 3))))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 2) (r7rs odd?))
-        (tuple (r7rs even?) (not (constant 3))))))
+  '(and (list (constant 2) (r7rs odd?))
+        (list (r7rs even?) (not (constant 3))))))
 
-;; Different non-intersecting tuples [2]
+;; Different non-intersecting lists [2]
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 3) (constant 4)))))
+  '(and (list (constant 1) (constant 2)) (list (constant 3) (constant 4)))))
 
-;; The same tuples
+;; The same lists
 (assert=
- '(tuple (constant 1) (constant 2))
+ '(list (constant 1) (constant 2))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)))))
+  '(and (list (constant 1) (constant 2)) (list (constant 1) (constant 2)))))
 
 ;; Tuples with same expressions
 (assert=
- '(tuple (constant 1) (constant 1))
+ '(list (constant 1) (constant 1))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (constant 1)) (tuple (constant 1) (constant 1)))))
+  '(and (list (constant 1) (constant 1)) (list (constant 1) (constant 1)))))
 
 ;; Tuples with top expressions
 (assert=
- '(tuple (constant 1) (constant 2))
+ '(list (constant 1) (constant 2))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)) (and))))
+  '(and (list (constant 1) (constant 2)) (list (constant 1) (constant 2)) (and))))
 
 ;; Tuples with bottom expressions
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)) (or))))
+  '(and (list (constant 1) (constant 2)) (list (constant 1) (constant 2)) (or))))
 
 ;; Combining 'constant' and 'not =' [1]
 (assert=
@@ -288,29 +288,29 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (r7rs odd?) (not (r7rs odd?)))))
 
-;; Optimizing tuples with different expressions [1]
+;; Optimizing lists with different expressions [1]
 (assert=
- '(tuple (constant 1))
+ '(list (constant 1))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1)) (tuple (r7rs odd?)))))
+  '(and (list (constant 1)) (list (r7rs odd?)))))
 
-;; Optimizing tuples with different expressions [2]
+;; Optimizing lists with different expressions [2]
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 2)) (tuple (r7rs odd?)))))
+  '(and (list (constant 2)) (list (r7rs odd?)))))
 
-;; Optimizing tuples with the same expressions
+;; Optimizing lists with the same expressions
 (assert=
- '(tuple (constant 1))
+ '(list (constant 1))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1)) (tuple (constant 1)))))
+  '(and (list (constant 1)) (list (constant 1)))))
 
-;; Mixing 'tuple and 'not in a single expression
+;; Mixing 'list and 'not in a single expression
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1)) (tuple (not (constant 1))))))
+  '(and (list (constant 1)) (list (not (constant 1))))))
 
 ;; Combining 'constant and 'r7rs with opposite values
 (assert=
@@ -330,35 +330,35 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (constant 2) (constant 2) (constant 2) (r7rs even?) (constant 2) (constant 2))))
 
-;; Complex case with 'tuple and 'not
+;; Complex case with 'list and 'not
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (r7rs odd?)) (tuple (not (constant 1)) (r7rs odd?)))))
+  '(and (list (constant 1) (r7rs odd?)) (list (not (constant 1)) (r7rs odd?)))))
 
-;; Case with 'tuple and 'r7rs
+;; Case with 'list and 'r7rs
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1)) (r7rs even?))))
+  '(and (list (constant 1)) (r7rs even?))))
 
-;; Case with 'tuple and 'not with multiple types
+;; Case with 'list and 'not with multiple types
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (r7rs odd?)) (not (constant 1)) (not (r7rs odd?)))))
+  '(and (list (constant 1) (r7rs odd?)) (not (constant 1)) (not (r7rs odd?)))))
 
-;; Case with empty 'tuple [1].
+;; Case with empty 'list [1].
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (or)) (tuple (or)))))
+  '(and (list (or)) (list (or)))))
 
-;; Case with empty 'tuple [2].
+;; Case with empty 'list [2].
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(tuple (or))))
+  '(list (or))))
 
 ;; Testing with null values
 (assert=
@@ -366,11 +366,11 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(and (constant 0) (not (constant 0)))))
 
-;; Testing single tuple optimization
+;; Testing single list optimization
 (assert=
- '(tuple (constant 2))
+ '(list (constant 2))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 2)) (tuple (constant 2)))))
+  '(and (list (constant 2)) (list (constant 2)))))
 
 ;; Testing with multiple 'r7rs expressions
 (assert=
@@ -407,101 +407,101 @@
 
 (assert (test-1923123 '(and (constant 2) (r7rs positive?) (r7rs integer?))))
 
-;; Case with 'constant and 'tuple
+;; Case with 'constant and 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (constant 2) (tuple (constant 1)))))
+  '(and (constant 2) (list (constant 1)))))
 
-;; Case with 'constant and complex 'tuple
+;; Case with 'constant and complex 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (constant 2) (tuple (r7rs even?) (constant 3)))))
+  '(and (constant 2) (list (r7rs even?) (constant 3)))))
 
-;; Case with 'not and 'tuple
+;; Case with 'not and 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (not (constant 2)) (tuple (constant 2)))))
+  '(and (not (constant 2)) (list (constant 2)))))
 
-;; Case with 'not and complex 'tuple
+;; Case with 'not and complex 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (not (r7rs even?)) (tuple (r7rs even?) (constant 3)))))
+  '(and (not (r7rs even?)) (list (r7rs even?) (constant 3)))))
 
-;; Case with 'constant and negated 'tuple
+;; Case with 'constant and negated 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (constant 2) (tuple (not (constant 2))))))
+  '(and (constant 2) (list (not (constant 2))))))
 
-;; Case with 'not and negated 'tuple
+;; Case with 'not and negated 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (not (constant 2)) (tuple (not (constant 2))))))
+  '(and (not (constant 2)) (list (not (constant 2))))))
 
-;; Case with negated 'tuple and 'r7rs
+;; Case with negated 'list and 'r7rs
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (not (constant 1))) (r7rs odd?))))
+  '(and (list (not (constant 1))) (r7rs odd?))))
 
-;; Case with 'tuple, 'not, 'constant and 'r7rs values
+;; Case with 'list, 'not, 'constant and 'r7rs values
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1)) (tuple (not (constant 1))) (r7rs odd?) (constant 2))))
+  '(and (list (constant 1)) (list (not (constant 1))) (r7rs odd?) (constant 2))))
 
-;; Case with 'tuple containing other 'tuple
+;; Case with 'list containing other 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (tuple (r7rs odd?))) (tuple (not (constant 1))))))
+  '(and (list (constant 1) (list (r7rs odd?))) (list (not (constant 1))))))
 
 ;; Case with complex mixture of types
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (r7rs odd?) (not (constant 1)) (not (r7rs odd?)) (tuple (constant 2) (r7rs even?)))))
+  '(and (r7rs odd?) (not (constant 1)) (not (r7rs odd?)) (list (constant 2) (r7rs even?)))))
 
-;; Case with identical 'tuple values
+;; Case with identical 'list values
 (assert=
- '(tuple (constant 1) (r7rs odd?))
+ '(list (constant 1) (r7rs odd?))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 1) (r7rs odd?)))))
+  '(and (list (constant 1) (r7rs odd?)) (list (constant 1) (r7rs odd?)))))
 
-;; Case with non-identical 'tuple values
-(assert=
- '(or)
- (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 2) (r7rs even?)))))
-
-;; Case with 'constant, 'tuple and 'r7rs
+;; Case with non-identical 'list values
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (constant 2) (r7rs even?) (tuple (constant 2) (r7rs even?)))))
+  '(and (list (constant 1) (r7rs odd?)) (list (constant 2) (r7rs even?)))))
+
+;; Case with 'constant, 'list and 'r7rs
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
+  '(and (constant 2) (r7rs even?) (list (constant 2) (r7rs even?)))))
 
 ;; More complex case
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (r7rs positive?) (not (constant 2)) (tuple (constant 2) (r7rs odd?)))))
+  '(and (r7rs positive?) (not (constant 2)) (list (constant 2) (r7rs odd?)))))
 
-;; Complex case with 'tuple, 'not and 'r7rs
+;; Complex case with 'list, 'not and 'r7rs
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (r7rs even?)) (constant 2) (not (r7rs odd?)))))
+  '(and (list (r7rs even?)) (constant 2) (not (r7rs odd?)))))
 
-;; Complex case with complex 'tuple
+;; Complex case with complex 'list
 (assert=
  '(or)
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple (r7rs even?) (constant 2)) (r7rs positive?))))
+  '(and (list (r7rs even?) (constant 2)) (r7rs positive?))))
 
 ;; Case with top. [1]
 (assert=
@@ -551,23 +551,23 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '(constant 3)))
 
-;; Case with single tuple term [1].
+;; Case with single list term [1].
 (assert=
- '(tuple (constant 3) (constant 4))
+ '(list (constant 3) (constant 4))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(tuple (constant 3) (constant 4))))
+  '(list (constant 3) (constant 4))))
 
-;; Case with single tuple term [2].
+;; Case with single list term [2].
 (assert=
- '(tuple (constant 5))
+ '(list (constant 5))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(tuple (constant 5))))
+  '(list (constant 5))))
 
-;; Simple case with complex 'tuple
+;; Simple case with complex 'list
 (assert=
- '(tuple (and (r7rs even?) (not (constant 2))))
+ '(list (and (r7rs even?) (not (constant 2))))
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(tuple (and (r7rs even?) (not (constant 2))))))
+  '(list (and (r7rs even?) (not (constant 2))))))
 
 ;; Case with single bottom.
 (assert=
@@ -610,23 +610,23 @@
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
   '((or))))
 
-;; Case with '((tuple))'
+;; Case with '((list))'
 (assert-throw
  'expression-type-error
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '((tuple))))
+  '((list))))
 
-;; Complex case with '((tuple))' and '((or))'
+;; Complex case with '((list))' and '((or))'
 (assert-throw
  'expression-type-error
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '((tuple) (or))))
+  '((list) (or))))
 
-;; Bad tuples.
+;; Bad lists.
 (assert-throw
  'bad-sub-expr-type
  (labelinglogic:expression:optimize-dnf-clause/assuming-nointersect
-  '(and (tuple 1 2))))
+  '(and (list 1 2))))
 
 ;; Bad nots.
 (assert-throw

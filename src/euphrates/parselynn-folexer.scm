@@ -54,7 +54,7 @@
                  (cons class (map list args))))
            (stack-push! additional-grammar-rules/stack rule)))
 
-        ((member type (list 'tuple))
+        ((member type (list 'list))
          (let ()
            (define rule (list class args))
            (stack-push! additional-grammar-rules/stack rule)))

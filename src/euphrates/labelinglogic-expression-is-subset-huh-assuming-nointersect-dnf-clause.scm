@@ -82,8 +82,8 @@
            (equal? inner-type-big 'constant)
            (loop inner-big inner-small)))
 
-     ((equal? type-small 'tuple)
-      (and (equal? type-big 'tuple)
+     ((equal? type-small 'list)
+      (and (equal? type-big 'list)
            (equal? (length args-small) (length args-big))
            (list-and-map
             (lambda (p) (loop (car p) (cdr p)))

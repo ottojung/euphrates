@@ -19,15 +19,15 @@
 
 (let ()
   (assert=
-   '(tuple a)
+   '(list a)
    (labelinglogic:expression:desugar
-    '(tuple a))))
+    '(list a))))
 
 (let ()
   (assert=
-   '(tuple a)
+   '(list a)
    (labelinglogic:expression:desugar
-    '(or (tuple a)))))
+    '(or (list a)))))
 
 (let ()
   (assert=
@@ -43,9 +43,9 @@
 
 (let ()
   (assert=
-   '(or a (or (tuple b) (or z c)))
+   '(or a (or (list b) (or z c)))
    (labelinglogic:expression:desugar
-    '(or a (or (tuple b) z) c))))
+    '(or a (or (list b) z) c))))
 
 (let ()
   (assert=
@@ -74,21 +74,21 @@
 ;; Test with nested operations of different types
 (let ()
   (assert=
-   '(tuple a (tuple b (tuple (and c d) (tuple (or f g) (tuple h i)))))
+   '(list a (list b (list (and c d) (list (or f g) (list h i)))))
    (labelinglogic:expression:desugar
-    '(tuple a (tuple b (tuple (and c d) (tuple (or f g) (tuple h i))))))))
+    '(list a (list b (list (and c d) (list (or f g) (list h i))))))))
 
 (let ()
   (assert=
-   '(tuple a (tuple b (tuple (and c (and d e)) (tuple (or f g) (tuple h i)))))
+   '(list a (list b (list (and c (and d e)) (list (or f g) (list h i)))))
    (labelinglogic:expression:desugar
-    '(tuple a (tuple b (tuple (and c d e) (tuple (or f g) (tuple h i))))))))
+    '(list a (list b (list (and c d e) (list (or f g) (list h i))))))))
 
 (let ()
   (assert=
-   `(and a (and b (and (tuple c (tuple d e)) (and (or f g) (and h i)))))
+   `(and a (and b (and (list c (list d e)) (and (or f g) (and h i)))))
    (labelinglogic:expression:desugar
-    '(and a b (tuple c (tuple d e)) (or f g) h i))))
+    '(and a b (list c (list d e)) (or f g) h i))))
 
 (let ()
   (assert=
@@ -122,15 +122,15 @@
 
 (let ()
   (assert=
-   '(tuple a)
+   '(list a)
    (labelinglogic:expression:desugar
-    '(tuple a))))
+    '(list a))))
 
 (let ()
   (assert=
-   '(tuple a)
+   '(list a)
    (labelinglogic:expression:desugar
-    '(and (tuple a)))))
+    '(and (list a)))))
 
 (let ()
   (assert=
@@ -146,9 +146,9 @@
 
 (let ()
   (assert=
-   '(and a (and (tuple b) (and z c)))
+   '(and a (and (list b) (and z c)))
    (labelinglogic:expression:desugar
-    '(and a (and (tuple b) z) c))))
+    '(and a (and (list b) z) c))))
 
 (let ()
   (assert=
@@ -177,21 +177,21 @@
 ;; Test with nested operations of different types
 (let ()
   (assert=
-   '(tuple a (tuple b (tuple (or c d) (tuple (and f g) (tuple h i)))))
+   '(list a (list b (list (or c d) (list (and f g) (list h i)))))
    (labelinglogic:expression:desugar
-    '(tuple a (tuple b (tuple (or c d) (tuple (and f g) (tuple h i))))))))
+    '(list a (list b (list (or c d) (list (and f g) (list h i))))))))
 
 (let ()
   (assert=
-   '(tuple a (tuple b (tuple (or c (or d e)) (tuple (and f g) (tuple h i)))))
+   '(list a (list b (list (or c (or d e)) (list (and f g) (list h i)))))
    (labelinglogic:expression:desugar
-    '(tuple a (tuple b (tuple (or c d e) (tuple (and f g) (tuple h i))))))))
+    '(list a (list b (list (or c d e) (list (and f g) (list h i))))))))
 
 (let ()
   (assert=
-   `(or a (or b (or (tuple c (tuple d e)) (or (and f g) (or h i)))))
+   `(or a (or b (or (list c (list d e)) (or (and f g) (or h i)))))
    (labelinglogic:expression:desugar
-    '(or a b (tuple c (tuple d e)) (and f g) h i))))
+    '(or a b (list c (list d e)) (and f g) h i))))
 
 (let ()
   (assert=

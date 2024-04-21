@@ -10,7 +10,7 @@
       (labelinglogic:expression:args expr))
 
     (cond
-     ((equal? type 'tuple)
+     ((equal? type 'list)
       (labelinglogic:expression:make
        type (map loop args)))
 

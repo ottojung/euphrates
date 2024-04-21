@@ -46,8 +46,8 @@
            (labelinglogic:expression:make
             'or (cons current rest)))))))
 
-     ((equal? type 'tuple)
-      (cons 'tuple (map loop args)))
+     ((equal? type 'list)
+      (cons 'list (map loop args)))
 
      ((member type (list 'xor 'constant 'r7rs 'variable))
       expr)

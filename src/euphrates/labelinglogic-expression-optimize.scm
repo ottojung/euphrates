@@ -47,7 +47,7 @@
     ((equal? type 'not)
      (labelinglogic:expression:move-nots-down expr))
 
-    ((equal? type 'tuple)
+    ((equal? type 'list)
      (labelinglogic:expression:optimize/recurse-on-args expr))
 
     ((equal? type 'or)

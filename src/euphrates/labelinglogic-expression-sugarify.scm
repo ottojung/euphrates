@@ -32,7 +32,7 @@
   (define args (labelinglogic:expression:args expr))
 
   (cond
-   ((member type (list 'tuple 'and 'or 'not 'xor))
+   ((member type (list 'list 'and 'or 'not 'xor))
     (labelinglogic:expression:make
      type (map labelinglogic:expression:sugarify args)))
 
@@ -56,7 +56,7 @@
     (labelinglogic:expression:make
      type (map labelinglogic:expression:sugarify args)))
 
-   ((equal? type 'tuple)
+   ((equal? type 'list)
     (labelinglogic:expression:sugarify/children expr))
 
    ((labelinglogic:expression:type:associative? type)

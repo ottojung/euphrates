@@ -7,7 +7,7 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((member type (list 'or 'and 'xor 'tuple))
+     ((member type (list 'or 'and 'xor 'list))
       (let ()
         (define args*
           (map loop (labelinglogic:expression:args expr)))

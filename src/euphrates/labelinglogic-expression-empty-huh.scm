@@ -15,7 +15,7 @@
      ((equal? type 'not)
       (not (loop (car args))))
 
-     ((member type (list 'tuple 'or))
+     ((member type (list 'list 'or))
       (list-and-map loop args))
 
      ((equal? type 'variable)

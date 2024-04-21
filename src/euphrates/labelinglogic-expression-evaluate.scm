@@ -53,7 +53,7 @@
               :message (stringf "Expression type ~s not supported here" (~a type))
               :args (list type expr)))
 
-     ((equal? type 'tuple)
+     ((equal? type 'list)
       (raisu* :from "labelinglogic:expression:evaluate" ;; TODO: support this.
               :type 'xor-not-supported
               :message (stringf "Expression type ~s not supported here" (~a type))

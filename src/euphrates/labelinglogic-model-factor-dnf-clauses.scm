@@ -6,7 +6,7 @@
     (define type (labelinglogic:expression:type expr))
     (cond
      ((member type (list 'or 'variable)) #f)
-     ((member type (list 'and 'not 'xor 'tuple 'r7rs 'constant)) #t)
+     ((member type (list 'and 'not 'xor 'list 'r7rs 'constant)) #t)
      (else
       (raisu* :from "labelinglogic:model:factor-dnf-clauses"
               :type 'unknown-expr-type

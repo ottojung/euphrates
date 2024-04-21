@@ -15,7 +15,7 @@
         (let ()
           (define type (labelinglogic:expression:type expr))
           (define args (labelinglogic:expression:args expr))
-          (or (and (equal? type 'tuple)
+          (or (and (equal? type 'list)
                    (list-and-map loop args))
               (and (equal? type 'not)
                    (list-and-map

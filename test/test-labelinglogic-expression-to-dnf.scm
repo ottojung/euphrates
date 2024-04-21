@@ -132,52 +132,52 @@
 
 ;; Tuples + negation
 (test
- '(and (tuple (constant 1)) (tuple (not (constant 1))))
- '(and (tuple (constant 1)) (not (tuple (constant 1)))))
+ '(and (list (constant 1)) (list (not (constant 1))))
+ '(and (list (constant 1)) (not (list (constant 1)))))
 
 ;; Singleton and.
 (test
  '(or (constant 5) (constant 7) (constant 8))
  '(and (or (constant 5) (constant 7) (constant 8))))
 
-;; Complex tuples [1]
+;; Complex lists [1]
 (test
- '(or (and (tuple (constant 1)) (tuple (not (constant 1))))
-      (and (tuple (constant 2)) (tuple (not (constant 1)))))
- '(and (tuple (or (constant 1) (constant 2))) (not (tuple (constant 1)))))
+ '(or (and (list (constant 1)) (list (not (constant 1))))
+      (and (list (constant 2)) (list (not (constant 1)))))
+ '(and (list (or (constant 1) (constant 2))) (not (list (constant 1)))))
 
-;; Complex tuples [2].
+;; Complex lists [2].
 (test
- '(or (tuple (and x y))
-      (tuple (and x z)))
- '(tuple (and x (or y z))))
+ '(or (list (and x y))
+      (list (and x z)))
+ '(list (and x (or y z))))
 
-;; Complex tuples [3].
+;; Complex lists [3].
 (test
- '(or (tuple x m w) (tuple y m w)
-      (tuple x m z) (tuple y m z))
- '(tuple (or x y) m (or w z)))
+ '(or (list x m w) (list y m w)
+      (list x m z) (list y m z))
+ '(list (or x y) m (or w z)))
 
-;; Complex tuples [4].
+;; Complex lists [4].
 (test
- '(or (tuple w m (and x y))
-      (tuple w m (and x z)))
- '(tuple w m (and x (or y z))))
+ '(or (list w m (and x y))
+      (list w m (and x z)))
+ '(list w m (and x (or y z))))
 
-;; Complex tuples [5]
+;; Complex lists [5]
 (test
- '(or (and (tuple (and (constant 4) (constant 1)))
-           (tuple (not (constant 1))))
-      (and (tuple (and (constant 4) (constant 2)))
-           (tuple (not (constant 1)))))
- '(and (tuple (and (constant 4) (or (constant 1) (constant 2))))
-       (not (tuple (constant 1)))))
+ '(or (and (list (and (constant 4) (constant 1)))
+           (list (not (constant 1))))
+      (and (list (and (constant 4) (constant 2)))
+           (list (not (constant 1)))))
+ '(and (list (and (constant 4) (or (constant 1) (constant 2))))
+       (not (list (constant 1)))))
 
-;; Complex tuples [6].
+;; Complex lists [6].
 (test
- '(or (and (and (and (tuple w m x) m) k) u)
-      (and (and (and (tuple w m y) m) k) u))
- '(and (tuple w m (or x y))
+ '(or (and (and (and (list w m x) m) k) u)
+      (and (and (and (list w m y) m) k) u))
+ '(and (list w m (or x y))
        m k u))
 
 ;; Complex expression.

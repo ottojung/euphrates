@@ -191,15 +191,15 @@
 
 (testcase
 
- ;; Simple tuples.
+ ;; Simple lists.
 
  :model
  '((just-5 (constant 5))
-   (some-tuple (tuple (constant 3) (constant 5))))
+   (some-list (list (constant 3) (constant 5))))
 
  :expected
  '((just-5 (constant 5))
-   (some-tuple (tuple (constant 3) just-5)))
+   (some-list (list (constant 3) just-5)))
 
  )
 
@@ -207,19 +207,19 @@
 
 (testcase
 
- ;; Simple tuples [2].
+ ;; Simple lists [2].
 
  :model
  `((t_1 (constant #\1))
    (t_2 (constant #\2))
    (t_3 (constant #\3))
-   (t_x (tuple (constant #\x) (constant #\3))))
+   (t_x (list (constant #\x) (constant #\3))))
 
  :expected
  '((t_1 (constant #\1))
    (t_2 (constant #\2))
    (t_3 (constant #\3))
-   (t_x (tuple (constant #\x) t_3)))
+   (t_x (list (constant #\x) t_3)))
 
  )
 
@@ -228,20 +228,20 @@
 
 (testcase
 
- ;; Embeded tuples.
+ ;; Embeded lists.
 
  :model
  `((t_1 (constant #\1))
    (t_2 (constant #\2))
    (t_3 (constant #\3))
-   (t_x (or (tuple (constant #\x) (constant #\3))
+   (t_x (or (list (constant #\x) (constant #\3))
             (constant #\2))))
 
  :expected
  '((t_1 (constant #\1))
    (t_2 (constant #\2))
    (t_3 (constant #\3))
-   (t_x (or (tuple (constant #\x) t_3) t_2)))
+   (t_x (or (list (constant #\x) t_3) t_2)))
 
  )
 
