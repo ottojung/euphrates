@@ -173,6 +173,13 @@
  '(and (tuple (and (= 4) (or (= 1) (= 2))))
        (not (tuple (= 1)))))
 
+;; Complex tuples [6].
+(test
+ '(or (and (and (and (tuple w m x) m) k) u)
+      (and (and (and (tuple w m y) m) k) u))
+ '(and (tuple w m (or x y))
+       m k u))
+
 ;; Complex expression.
 (test
 
