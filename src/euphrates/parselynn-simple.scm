@@ -102,9 +102,6 @@
    (define lexer-code
      (parselynn:folexer:compile/iterator lexer))
 
-   (define hidden-tree-labels
-     (list->hashset '()))
-
    (define non-terminals
      (list->hashset (map car rules)))
 
@@ -147,5 +144,4 @@
      (parselynn:core options-to-upstream))
 
    (make-parselynn:simple:struct
-    arguments backend-parser
-    hidden-tree-labels transformations)))
+    arguments backend-parser transformations)))

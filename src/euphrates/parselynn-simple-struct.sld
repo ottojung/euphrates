@@ -6,7 +6,6 @@
     parselynn:simple:struct?
     parselynn:simple:struct:arguments
     parselynn:simple:struct:backend-parser
-    parselynn:simple:struct:hidden-tree-labels
     parselynn:simple:struct:transformations)
   (import
     (only (euphrates define-type9) define-type9))

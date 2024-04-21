@@ -7,7 +7,6 @@
           parselynn:simple:do-char->string))
   (import
     (only (euphrates parselynn-simple-struct)
-          parselynn:simple:struct:hidden-tree-labels
           parselynn:simple:struct:transformations))
   (import
     (only (euphrates parselynn-simple-transform-result)

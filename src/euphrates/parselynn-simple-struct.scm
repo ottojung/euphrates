@@ -5,7 +5,6 @@
   (make-parselynn:simple:struct
    arguments
    backend-parser
-   hidden-tree-labels
    transformations)
 
   parselynn:simple:struct?
@@ -13,8 +12,6 @@
   (arguments parselynn:simple:struct:arguments)
 
   (backend-parser parselynn:simple:struct:backend-parser)
-
-  (hidden-tree-labels parselynn:simple:struct:hidden-tree-labels)
 
   (transformations parselynn:simple:struct:transformations)
 
