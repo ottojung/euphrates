@@ -111,12 +111,12 @@
  '(and a (or (not a) b) (or (not b) b)))
 
 (test
- '(and (= 0) (= 0) (= 0) (= 0) (= 0))
- '(and (= 0) (= 0) (= 0) (= 0) (= 0)))
+ '(and (constant 0) (constant 0) (constant 0) (constant 0) (constant 0))
+ '(and (constant 0) (constant 0) (constant 0) (constant 0) (constant 0)))
 
 (test
- '(or (and (= 0) (= 0) (= 0) (= 0) (= 0)))
- '(or (and (= 0) (= 0) (= 0) (= 0) (= 0))))
+ '(or (and (constant 0) (constant 0) (constant 0) (constant 0) (constant 0)))
+ '(or (and (constant 0) (constant 0) (constant 0) (constant 0) (constant 0))))
 
 ;; Test variable.
 (test 'x 'x)
@@ -132,19 +132,19 @@
 
 ;; Tuples + negation
 (test
- '(and (tuple (= 1)) (tuple (not (= 1))))
- '(and (tuple (= 1)) (not (tuple (= 1)))))
+ '(and (tuple (constant 1)) (tuple (not (constant 1))))
+ '(and (tuple (constant 1)) (not (tuple (constant 1)))))
 
 ;; Singleton and.
 (test
- '(or (= 5) (= 7) (= 8))
- '(and (or (= 5) (= 7) (= 8))))
+ '(or (constant 5) (constant 7) (constant 8))
+ '(and (or (constant 5) (constant 7) (constant 8))))
 
 ;; Complex tuples [1]
 (test
- '(or (and (tuple (= 1)) (tuple (not (= 1))))
-      (and (tuple (= 2)) (tuple (not (= 1)))))
- '(and (tuple (or (= 1) (= 2))) (not (tuple (= 1)))))
+ '(or (and (tuple (constant 1)) (tuple (not (constant 1))))
+      (and (tuple (constant 2)) (tuple (not (constant 1)))))
+ '(and (tuple (or (constant 1) (constant 2))) (not (tuple (constant 1)))))
 
 ;; Complex tuples [2].
 (test
@@ -166,12 +166,12 @@
 
 ;; Complex tuples [5]
 (test
- '(or (and (tuple (and (= 4) (= 1)))
-           (tuple (not (= 1))))
-      (and (tuple (and (= 4) (= 2)))
-           (tuple (not (= 1)))))
- '(and (tuple (and (= 4) (or (= 1) (= 2))))
-       (not (tuple (= 1)))))
+ '(or (and (tuple (and (constant 4) (constant 1)))
+           (tuple (not (constant 1))))
+      (and (tuple (and (constant 4) (constant 2)))
+           (tuple (not (constant 1)))))
+ '(and (tuple (and (constant 4) (or (constant 1) (constant 2))))
+       (not (tuple (constant 1)))))
 
 ;; Complex tuples [6].
 (test
@@ -184,34 +184,34 @@
 (test
 
  '(or (or (and (and (r7rs char-numeric?)
-                    (not (= 7))
-                    (not (= 5)))
+                    (not (constant 7))
+                    (not (constant 5)))
                (not (r7rs char-numeric?)))
           (and (and (r7rs char-numeric?)
-                    (not (= 7))
-                    (not (= 5)))
-               (= 5))
+                    (not (constant 7))
+                    (not (constant 5)))
+               (constant 5))
           (and (and (r7rs char-numeric?)
-                    (not (= 7))
-                    (not (= 5)))
-               (= 7))
+                    (not (constant 7))
+                    (not (constant 5)))
+               (constant 7))
           (and (and (r7rs char-numeric?)
-                    (not (= 7))
-                    (not (= 5)))
-               (= 8)))
+                    (not (constant 7))
+                    (not (constant 5)))
+               (constant 8)))
       (and (r7rs char-numeric?)
-           (not (= 5))
-           (not (= 7))
-           (not (= 8))))
+           (not (constant 5))
+           (not (constant 7))
+           (not (constant 8))))
 
  '(or (and (and (r7rs char-numeric?)
-                (not (= 7))
-                (not (= 5)))
+                (not (constant 7))
+                (not (constant 5)))
            (not (or (and (r7rs char-numeric?)
-                         (not (= 5))
-                         (not (= 7))
-                         (not (= 8))))))
+                         (not (constant 5))
+                         (not (constant 7))
+                         (not (constant 8))))))
       (and (r7rs char-numeric?)
-           (not (= 5))
-           (not (= 7))
-           (not (= 8)))))
+           (not (constant 5))
+           (not (constant 7))
+           (not (constant 8)))))

@@ -3,7 +3,7 @@
 
 (define (labelinglogic:expression:atom? expr)
   (define type (labelinglogic:expression:type expr))
-  (or (equal? type '=)
+  (or (equal? type 'constant)
       (equal? type 'r7rs)
       (labelinglogic:expression:top? expr)
       (labelinglogic:expression:bottom? expr)

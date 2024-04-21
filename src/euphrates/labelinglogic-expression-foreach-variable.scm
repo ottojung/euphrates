@@ -8,7 +8,7 @@
 
     (cond
      ((equal? 'variable type) (fun expr))
-     ((equal? '= type) 'pass)
+     ((equal? 'constant type) 'pass)
      ((equal? 'r7rs type) 'pass)
      (else
       (let ()

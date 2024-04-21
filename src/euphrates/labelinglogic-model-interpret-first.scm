@@ -9,7 +9,7 @@
     (define name (labelinglogic:binding:name binding))
     (define expr (labelinglogic:binding:expr binding))
     (define type (labelinglogic:expression:type expr))
-    (equal? type '=))
+    (equal? type 'constant))
 
   (define sorted-bindings
     (append

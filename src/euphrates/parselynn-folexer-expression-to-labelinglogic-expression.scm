@@ -7,21 +7,21 @@
   (let loop ((expr expr))
     (cond
      ((char? expr)
-      (labelinglogic:expression:make '= (list expr)))
+      (labelinglogic:expression:make 'constant (list expr)))
 
      ((string? expr)
       (cond
        ((= 0 (string-length expr))
         labelinglogic:expression:bottom)
        ((= 1 (string-length expr))
-        (labelinglogic:expression:make '= (list (string-ref expr 0))))
+        (labelinglogic:expression:make 'constant (list (string-ref expr 0))))
        (else
         (labelinglogic:expression:make
          'tuple
          (map
           (lambda (c)
             (labelinglogic:expression:make
-             '= (list c)))
+             'constant (list c)))
           (string->list expr))))))
 
      ((pair? expr)

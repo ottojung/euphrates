@@ -9,7 +9,7 @@
     (define args (labelinglogic:expression:args expr))
 
     (cond
-     ((equal? type '=) #f)
+     ((equal? type 'constant) #f)
      ((equal? type 'r7rs) #f)
 
      ((equal? type 'not)

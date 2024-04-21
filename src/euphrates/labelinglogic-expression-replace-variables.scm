@@ -26,7 +26,7 @@
 
     (cond
      ((equal? 'variable type) (cached-replacer expr))
-     ((equal? '= type) expr)
+     ((equal? 'constant type) expr)
      ((equal? 'r7rs type) expr)
      (else
       (labelinglogic:expression:make

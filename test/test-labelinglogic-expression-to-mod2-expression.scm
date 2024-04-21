@@ -17,8 +17,8 @@
 ;; Test a NOT expression conversion.
 (test-eq '(xor (and) x) '(not x))
 
-;; Test a known type that is not modified (assuming '= is a direct mapping).
-(test-eq '(= A B) '(= A B))
+;; Test a known type that is not modified (assuming 'constant is a direct mapping).
+(test-eq '(constant A B) '(constant A B))
 (test-eq '(and (xor (and) x) (and y z)) '(and (not x) (and y z)))
 
 ;; Test an OR expression with an AND expression nested inside.

@@ -1120,12 +1120,12 @@
  (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term
-      add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
+      add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
       term = id / num
       id = idstart idcont / idstart
       idstart = (class alphabetic)
       idcont = idchar idcont / idchar
-      idchar = (class (and alphanum (not (= #\0))))
+      idchar = (class (and alphanum (not (constant #\0))))
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
@@ -1146,12 +1146,12 @@
  (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term / space expr / expr space
-      add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
+      add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
       term = id / num
       id = idstart idcont / idstart
       idstart = (class alphabetic)
       idcont = idchar idcont / idchar
-      idchar = (class (and alphanum (not (= #\0))))
+      idchar = (class (and alphanum (not (constant #\0))))
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = (class whitespace)
@@ -1175,17 +1175,17 @@
  (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term / space expr / expr space
-      add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
+      add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
       term = id / num / string
       id = idstart idcont / idstart
       idstart = (class alphabetic)
       idcont = idchar idcont / idchar
-      idchar = (class (and alphanum (not (= #\0))))
+      idchar = (class (and alphanum (not (constant #\0))))
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = (class whitespace)
       string = "\"" string-inner* "\""
-      string-inner = (class (and any (not (= #\"))))
+      string-inner = (class (and any (not (constant #\"))))
       )
 
     :inline (num id term string add)
@@ -1205,19 +1205,19 @@
  (parselynn:simple
   `(:grammar
     ( expr = expr add expr / term / space expr / expr space
-      add = (class (or (= #\+) (= #\-) (= #\*) (= #\/)))
+      add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
       term = id / num / string
       id = idstart idcont / idstart
       idstart = (class alphabetic)
       idcont = idchar idcont / idchar
-      idchar = (class (and alphanum (not (= #\0))))
+      idchar = (class (and alphanum (not (constant #\0))))
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = (class whitespace)
       string = "\"" string-inner* "\""
       string-inner = "\\" (class any)
       /              string-no-escape
-      string-no-escape = (class (and any (not (= #\")) (not (= #\\))))
+      string-no-escape = (class (and any (not (constant #\")) (not (constant #\\))))
       )
 
     :inline (num id term string add)

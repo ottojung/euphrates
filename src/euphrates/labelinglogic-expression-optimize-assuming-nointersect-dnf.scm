@@ -7,7 +7,7 @@
     (define type (labelinglogic:expression:type expr))
     (define args (labelinglogic:expression:args expr))
 
-    (unless (or (equal? type '=)
+    (unless (or (equal? type 'constant)
                 (equal? type 'r7rs)
                 (and (equal? type 'not)
                      (for-each check-type args))

@@ -43,7 +43,7 @@
            (labelinglogic:expression:syntactic-equal? inner-a inner-b)))
 
     (define (same-type-nointersect? expr-a expr-b)
-      (or (different-values-of-same-type? '= expr-a expr-b)
+      (or (different-values-of-same-type? 'constant expr-a expr-b)
           (different-values-of-same-type? 'r7rs expr-a expr-b)
           ;; NOTE: there is no similar check for 'tuple because those can contain arbitrary (non-normalized) expressions as args.
           ;; TODO: add a similar check for 'tuple type.
@@ -73,12 +73,12 @@
            (or (not (equal? inner-dimension-a inner-dimension-b))
 
                (and (equal? type-a 'r7rs)
-                    (equal? type-b '=)
+                    (equal? type-b 'constant)
                     (not
                      (labelinglogic:expression:evaluate/r7rs
                       expr-a (car args-b))))
 
-               (and (equal? type-a '=)
+               (and (equal? type-a 'constant)
                     (equal? type-b 'not)
                     (equal? inner-type-b 'r7rs)
                     (labelinglogic:expression:evaluate/r7rs

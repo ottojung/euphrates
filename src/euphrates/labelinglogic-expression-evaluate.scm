@@ -32,7 +32,7 @@
      ((equal? type 'r7rs)
       (labelinglogic:expression:evaluate/r7rs expr input))
 
-     ((equal? type '=)
+     ((equal? type 'constant)
       (labelinglogic:expression:evaluate/equal model expr input))
 
      ((equal? type 'or)

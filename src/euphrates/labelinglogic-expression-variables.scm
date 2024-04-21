@@ -8,7 +8,7 @@
 
     (cond
      ((equal? 'variable type) (list expr))
-     ((equal? '= type) (list))
+     ((equal? 'constant type) (list))
      ((equal? 'r7rs type) (list))
      (else
       (let ()

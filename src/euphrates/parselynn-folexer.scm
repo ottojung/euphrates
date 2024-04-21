@@ -43,7 +43,7 @@
        (define args (labelinglogic:expression:args expr))
 
        (cond
-        ((member type (list '= 'r7rs 'and))
+        ((member type (list 'constant 'r7rs 'and))
          (stack-push! base-model/stack binding))
 
         ((member type (list 'or))

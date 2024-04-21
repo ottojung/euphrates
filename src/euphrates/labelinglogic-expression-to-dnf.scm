@@ -110,7 +110,7 @@
       (un-orify-tuple
        (make type (map loop args))))
 
-     ((member type (list '= 'variable 'r7rs 'not)) expr)
+     ((member type (list 'constant 'variable 'r7rs 'not)) expr)
 
      (else
       (raisu* :from "labelinglogic:expression:to-dnf"

@@ -12,7 +12,7 @@
        (labelinglogic:expression:make
         type (map loop args))))
 
-     ((member type (list '= 'variable 'r7rs))
+     ((member type (list 'constant 'variable 'r7rs))
       (fun expr))
 
      (else

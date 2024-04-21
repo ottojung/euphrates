@@ -43,7 +43,7 @@
 
             folded)))
 
-     ((member type (list '= 'variable 'r7rs))
+     ((member type (list 'constant 'variable 'r7rs))
       expr)
 
      (else

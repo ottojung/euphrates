@@ -47,10 +47,10 @@
  ;; Simple noop.
 
  :model
- '((rule1 (or (= 5) (= 6))))
+ '((rule1 (or (constant 5) (constant 6))))
 
  :expected
- '((rule1 (or (= 5) (= 6))))
+ '((rule1 (or (constant 5) (constant 6))))
 
  )
 
@@ -62,11 +62,11 @@
  ;; Simple factor out of duplicates.
 
  :model
- '((rule1 (or (= 5) (= 6) (= 5))))
+ '((rule1 (or (constant 5) (constant 6) (constant 5))))
 
  :expected
- '((rule1 (or uid_1 (= 6) uid_1))
-   (uid_1 (= 5)))
+ '((rule1 (or uid_1 (constant 6) uid_1))
+   (uid_1 (constant 5)))
 
  )
 
@@ -78,13 +78,13 @@
  ;; Nested factor out with duplicates.
 
  :model
- '((rule1 (or (= 5) rule2 (= 6)))
-   (rule2 (or (= 7) (= 5))))
+ '((rule1 (or (constant 5) rule2 (constant 6)))
+   (rule2 (or (constant 7) (constant 5))))
 
  :expected
- '((rule1 (or uid_1 rule2 (= 6)))
-   (rule2 (or (= 7) uid_1))
-   (uid_1 (= 5)))
+ '((rule1 (or uid_1 rule2 (constant 6)))
+   (rule2 (or (constant 7) uid_1))
+   (uid_1 (constant 5)))
 
  )
 
@@ -118,12 +118,12 @@
  ;; Duplicate bindings of equal expressions.
 
  :model
- '((just-5 (= 5))
-   (another-5 (= 5))
+ '((just-5 (constant 5))
+   (another-5 (constant 5))
    )
 
  :expected
- '((just-5 (= 5))
+ '((just-5 (constant 5))
    (another-5 just-5))
 
  )
@@ -135,15 +135,15 @@
  ;; Duplicate bindings of equal expressions [2].
 
  :model
- '((just-5 (= 5))
-   (another-5 (= 5))
-   (something-that-uses-5 (or (= 5) (= 3)))
+ '((just-5 (constant 5))
+   (another-5 (constant 5))
+   (something-that-uses-5 (or (constant 5) (constant 3)))
    )
 
  :expected
- '((just-5 (= 5))
+ '((just-5 (constant 5))
    (another-5 just-5)
-   (something-that-uses-5 (or just-5 (= 3))))
+   (something-that-uses-5 (or just-5 (constant 3))))
 
  )
 
@@ -154,14 +154,14 @@
  ;; Duplicate bindings of equal expressions [3].
 
  :model
- '((something-that-uses-5 (or (= 5) (= 3)))
-   (just-5 (= 5))
-   (another-5 (= 5))
+ '((something-that-uses-5 (or (constant 5) (constant 3)))
+   (just-5 (constant 5))
+   (another-5 (constant 5))
    )
 
  :expected
- '((something-that-uses-5 (or just-5 (= 3)))
-   (just-5 (= 5))
+ '((something-that-uses-5 (or just-5 (constant 3)))
+   (just-5 (constant 5))
    (another-5 just-5))
 
  )
@@ -174,17 +174,17 @@
  ;; Complex nested factor out with duplicates across different rules.
 
  :model
- '((rule1 (or (= 5) rule2 (= 6) rule3))
-   (rule2 (or (= 7) (= 5)))
-   (rule3 (or (= 5) (= 5) (= 8)))
+ '((rule1 (or (constant 5) rule2 (constant 6) rule3))
+   (rule2 (or (constant 7) (constant 5)))
+   (rule3 (or (constant 5) (constant 5) (constant 8)))
    (rule4 (or rule1 rule2 rule3)))
 
  :expected
- '((rule1 (or uid_1 rule2 (= 6) rule3))
-   (rule2 (or (= 7) uid_1))
-   (rule3 (or uid_1 uid_1 (= 8)))
+ '((rule1 (or uid_1 rule2 (constant 6) rule3))
+   (rule2 (or (constant 7) uid_1))
+   (rule3 (or uid_1 uid_1 (constant 8)))
    (rule4 (or rule1 rule2 rule3))
-   (uid_1 (= 5)))
+   (uid_1 (constant 5)))
 
  )
 
@@ -194,12 +194,12 @@
  ;; Simple tuples.
 
  :model
- '((just-5 (= 5))
-   (some-tuple (tuple (= 3) (= 5))))
+ '((just-5 (constant 5))
+   (some-tuple (tuple (constant 3) (constant 5))))
 
  :expected
- '((just-5 (= 5))
-   (some-tuple (tuple (= 3) just-5)))
+ '((just-5 (constant 5))
+   (some-tuple (tuple (constant 3) just-5)))
 
  )
 
@@ -210,16 +210,16 @@
  ;; Simple tuples [2].
 
  :model
- `((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (tuple (= #\x) (= #\3))))
+ `((t_1 (constant #\1))
+   (t_2 (constant #\2))
+   (t_3 (constant #\3))
+   (t_x (tuple (constant #\x) (constant #\3))))
 
  :expected
- '((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (tuple (= #\x) t_3)))
+ '((t_1 (constant #\1))
+   (t_2 (constant #\2))
+   (t_3 (constant #\3))
+   (t_x (tuple (constant #\x) t_3)))
 
  )
 
@@ -231,17 +231,17 @@
  ;; Embeded tuples.
 
  :model
- `((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (or (tuple (= #\x) (= #\3))
-            (= #\2))))
+ `((t_1 (constant #\1))
+   (t_2 (constant #\2))
+   (t_3 (constant #\3))
+   (t_x (or (tuple (constant #\x) (constant #\3))
+            (constant #\2))))
 
  :expected
- '((t_1 (= #\1))
-   (t_2 (= #\2))
-   (t_3 (= #\3))
-   (t_x (or (tuple (= #\x) t_3) t_2)))
+ '((t_1 (constant #\1))
+   (t_2 (constant #\2))
+   (t_3 (constant #\3))
+   (t_x (or (tuple (constant #\x) t_3) t_2)))
 
  )
 
@@ -252,11 +252,11 @@
  ;; Simple ands.
 
  :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5)))))
+ '((just-5 (constant 5))
+   (some-and (and (r7rs odd?) (not (constant 5)))))
 
  :expected
- '((just-5 (= 5))
+ '((just-5 (constant 5))
    (some-and (and (r7rs odd?) (not just-5))))
 
  )
@@ -289,14 +289,14 @@
  ;; Duble ands [2].
 
  :model
- '((some-and (and (r7rs odd?) (not (= 5))))
-   (other-and (and (r7rs odd?) (not (= 5)))))
+ '((some-and (and (r7rs odd?) (not (constant 5))))
+   (other-and (and (r7rs odd?) (not (constant 5)))))
 
  :expected
  '((some-and (and uid_1 uid_3))
    (other-and some-and)
    (uid_1 (r7rs odd?))
-   (uid_2 (= 5))
+   (uid_2 (constant 5))
    (uid_3 (not uid_2)))
 
  )
@@ -309,12 +309,12 @@
  ;; Duble ands [3].
 
  :model
- '((just-5 (= 5))
-   (some-and (and (r7rs odd?) (not (= 5))))
-   (other-and (and (r7rs odd?) (not (= 5)))))
+ '((just-5 (constant 5))
+   (some-and (and (r7rs odd?) (not (constant 5))))
+   (other-and (and (r7rs odd?) (not (constant 5)))))
 
  :expected
- '((just-5 (= 5))
+ '((just-5 (constant 5))
    (some-and (and uid_1 uid_2))
    (other-and some-and)
    (uid_1 (r7rs odd?))
@@ -345,9 +345,9 @@
  ;; Singleton expr model.
 
  :model
- '((just-5 (= 5)))
+ '((just-5 (constant 5)))
 
  :expected
- '((just-5 (= 5)))
+ '((just-5 (constant 5)))
 
  )

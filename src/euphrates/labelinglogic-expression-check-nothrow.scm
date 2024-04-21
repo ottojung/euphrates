@@ -58,7 +58,7 @@
 
         (recurse args)))
 
-      ((equal? '= type)
+      ((equal? 'constant type)
        (and (not (list-length= 1 args))
             (fail-expression-check
              (stringf

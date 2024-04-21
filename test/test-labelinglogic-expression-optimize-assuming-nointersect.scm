@@ -1,73 +1,73 @@
 
 ;; Case with variable.
 (assert=
- '(= 3)
+ '(constant 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(= 3)))
+  '(constant 3)))
 
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (= 6) (= 7)))))
+  '(and (or (constant 2) (constant 3) (constant 4))
+        (or (constant 5) (constant 6) (constant 7)))))
 
 (assert=
- '(= 2)
+ '(constant 2)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (= 2) (= 7)))))
+  '(and (or (constant 2) (constant 3) (constant 4))
+        (or (constant 5) (constant 2) (constant 7)))))
 
 (assert=
- '(= 3)
+ '(constant 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (r7rs odd?) (= 7)))))
+  '(and (or (constant 2) (constant 3) (constant 4))
+        (or (constant 5) (r7rs odd?) (constant 7)))))
 
 (assert=
- '(= 3)
+ '(constant 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (= 2) (= 3) (= 4))
-        (or (= 5) (and (r7rs odd?) (not (= 9))) (= 7)))))
+  '(and (or (constant 2) (constant 3) (constant 4))
+        (or (constant 5) (and (r7rs odd?) (not (constant 9))) (constant 7)))))
 
 (assert=
- '(and (r7rs odd?) (not (= 9)))
+ '(and (r7rs odd?) (not (constant 9)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(or (and (= 3) (not (= 5)))
-       (and (r7rs odd?) (not (= 9))))))
+  '(or (and (constant 3) (not (constant 5)))
+       (and (r7rs odd?) (not (constant 9))))))
 
 (assert=
- '(and (r7rs odd?) (not (= 9)))
+ '(and (r7rs odd?) (not (constant 9)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(or (= 3)
-       (and (r7rs odd?) (not (= 9))))))
+  '(or (constant 3)
+       (and (r7rs odd?) (not (constant 9))))))
 
 (assert=
  '(and)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(or (= 9) (not (= 9)))))
+  '(or (constant 9) (not (constant 9)))))
 
 (assert=
- '(and (r7rs odd?) (not (= 3)) (not (= 5)))
+ '(and (r7rs odd?) (not (constant 3)) (not (constant 5)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(or (and (r7rs odd?) (not (= 3)) (not (= 5)))
-       (and (r7rs odd?) (not (= 3)) (not (= 5)) (not (= 7))))))
+  '(or (and (r7rs odd?) (not (constant 3)) (not (constant 5)))
+       (and (r7rs odd?) (not (constant 3)) (not (constant 5)) (not (constant 7))))))
 
 (assert=
- '(tuple (= 1) (= 1))
+ '(tuple (constant 1) (constant 1))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1) (= 1)) (tuple (= 1) (= 1)))))
+  '(and (tuple (constant 1) (constant 1)) (tuple (constant 1) (constant 1)))))
 
 
 (assert=
 
- '(or (tuple (= 1) (= 2) (= 1))
-      (tuple (= 1) (= 4) (= 1)))
+ '(or (tuple (constant 1) (constant 2) (constant 1))
+      (tuple (constant 1) (constant 4) (constant 1)))
 
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (or (tuple (= 1) (= 2) (= 1))
-            (tuple (= 1) (= 3) (= 1))
-            (tuple (= 1) (= 4) (= 1)))
-        (not (tuple (= 1) (= 3) (= 1))))))
+  '(and (or (tuple (constant 1) (constant 2) (constant 1))
+            (tuple (constant 1) (constant 3) (constant 1))
+            (tuple (constant 1) (constant 4) (constant 1)))
+        (not (tuple (constant 1) (constant 3) (constant 1))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -80,25 +80,25 @@
   '(and)))
 
 (assert=
- '(= 0)
+ '(constant 0)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 0) (= 0))))
+  '(and (constant 0) (constant 0))))
 
 (assert=
- '(= 0)
+ '(constant 0)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 0) (= 0) (= 0) (= 0) (= 0))))
+  '(and (constant 0) (constant 0) (constant 0) (constant 0) (constant 0))))
 
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 0) (= 1))))
+  '(and (constant 0) (constant 1))))
 
 ;; Optimizing non-intersecting negated lemma terms
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 1)) (= 1))))
+  '(and (not (constant 1)) (constant 1))))
 
 ;; Optimizing non-intersecting r7rs terms
 (assert=
@@ -110,67 +110,67 @@
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1) (= 2)) (tuple (= 3) (= 4)))))
+  '(and (tuple (constant 1) (constant 2)) (tuple (constant 3) (constant 4)))))
 
 ;; The same tuples
 (assert=
- '(tuple (= 1) (= 2))
+ '(tuple (constant 1) (constant 2))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)))))
+  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)))))
 
 ;; Tuples with top expressions
 (assert=
- '(tuple (= 1) (= 2))
+ '(tuple (constant 1) (constant 2))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (and))))
+  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)) (and))))
 
 ;; Tuples with bottom expressions
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1) (= 2)) (tuple (= 1) (= 2)) (or))))
+  '(and (tuple (constant 1) (constant 2)) (tuple (constant 1) (constant 2)) (or))))
 
-;; Combining '=' and 'not =' [1]
+;; Combining 'constant' and 'not =' [1]
 (assert=
- '(= 2)
+ '(constant 2)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (not (= 3)))))
+  '(and (constant 2) (not (constant 3)))))
 
-;; Combining '=' and 'not =' [2]
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (not (= 2)))))
-
-;; Combining '=' and 'not =' [3]
-(assert=
- '(= 2)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 3)) (= 2))))
-
-;; Combining '=' and 'not =' [4]
+;; Combining 'constant' and 'not =' [2]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 2)) (= 2))))
+  '(and (constant 2) (not (constant 2)))))
 
-;; Combining '=' and 'not =' [5]
+;; Combining 'constant' and 'not =' [3]
 (assert=
- '(= 2)
+ '(constant 2)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 3)) (= 2) (not (= 3)) (not (= 4)))))
+  '(and (not (constant 3)) (constant 2))))
+
+;; Combining 'constant' and 'not =' [4]
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/assuming-nointersect
+  '(and (not (constant 2)) (constant 2))))
+
+;; Combining 'constant' and 'not =' [5]
+(assert=
+ '(constant 2)
+ (labelinglogic:expression:optimize/assuming-nointersect
+  '(and (not (constant 3)) (constant 2) (not (constant 3)) (not (constant 4)))))
 
 ;; Combining 'not =' and 'not =' [1]
 (assert=
- '(and (not (= 2)) (not (= 3)))
+ '(and (not (constant 2)) (not (constant 3)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 2)) (not (= 3)))))
+  '(and (not (constant 2)) (not (constant 3)))))
 
 ;; Combining 'not =' and 'not =' [2]
 (assert=
- '(not (= 2))
+ '(not (constant 2))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 2)) (not (= 2)))))
+  '(and (not (constant 2)) (not (constant 2)))))
 
 ;; Combining 'r7rs' and 'not r7rs' [1]
 (assert=
@@ -211,131 +211,131 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (not (r7rs even?)) (not (r7rs odd?)))))
 
-;; Combining '=' and 'r7rs [1]
+;; Combining 'constant' and 'r7rs [1]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (r7rs even?) (= 3))))
+  '(and (r7rs even?) (constant 3))))
 
-;; Combining '=' and 'r7rs [2]
+;; Combining 'constant' and 'r7rs [2]
 (assert=
- '(= 2)
+ '(constant 2)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (r7rs even?) (= 2))))
+  '(and (r7rs even?) (constant 2))))
 
-;; Combining '=' and 'r7rs [3]
+;; Combining 'constant' and 'r7rs [3]
 (assert=
- '(= 2)
+ '(constant 2)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (r7rs even?))))
+  '(and (constant 2) (r7rs even?))))
 
-;; Combining '=' and 'r7rs [4]
-(assert=
- '(or)
- (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (r7rs even?) (= 3))))
-
-;; Combining '=' and 'r7rs [4]
+;; Combining 'constant' and 'r7rs [4]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 3) (r7rs even?) (= 2))))
+  '(and (constant 2) (r7rs even?) (constant 3))))
 
-;; Combining '=' and 'r7rs [6]
+;; Combining 'constant' and 'r7rs [4]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (r7rs even?) (= 2) (= 4))))
+  '(and (constant 3) (r7rs even?) (constant 2))))
 
-;; Combining '=' and 'r7rs [7]
+;; Combining 'constant' and 'r7rs [6]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 4) (r7rs even?) (= 2))))
+  '(and (r7rs even?) (constant 2) (constant 4))))
+
+;; Combining 'constant' and 'r7rs [7]
+(assert=
+ '(or)
+ (labelinglogic:expression:optimize/assuming-nointersect
+  '(and (constant 4) (r7rs even?) (constant 2))))
 
 ;; Combining 'not =' and 'r7rs [1]
 (assert=
- '(and (r7rs even?) (not (= 2)))
+ '(and (r7rs even?) (not (constant 2)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (r7rs even?) (not (= 2)))))
+  '(and (r7rs even?) (not (constant 2)))))
 
 ;; Combining 'not =' and 'r7rs [2]
 (assert=
- '(and (not (= 2)) (r7rs even?))
+ '(and (not (constant 2)) (r7rs even?))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 2)) (r7rs even?))))
+  '(and (not (constant 2)) (r7rs even?))))
 
 ;; Combining 'not =' and 'r7rs [3]
 (assert=
  '(r7rs even?)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (r7rs even?) (not (= 3)))))
+  '(and (r7rs even?) (not (constant 3)))))
 
 ;; Combining 'not =' and 'r7rs [4]
 (assert=
  '(r7rs even?)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 3)) (r7rs even?))))
+  '(and (not (constant 3)) (r7rs even?))))
 
 ;; Combining 'not =' and 'r7rs [5]
 (assert=
  '(r7rs even?)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 3)) (r7rs even?) (not (= 3)) (not (= 3)))))
+  '(and (not (constant 3)) (r7rs even?) (not (constant 3)) (not (constant 3)))))
 
 ;; Combining 'not =' and 'r7rs [6]
 (assert=
- '(and (r7rs even?) (not (= 2)))
+ '(and (r7rs even?) (not (constant 2)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 3)) (r7rs even?) (not (= 2)))))
+  '(and (not (constant 3)) (r7rs even?) (not (constant 2)))))
 
 ;; Combining 'not =' and 'r7rs [7]
 (assert=
- '(and (r7rs even?) (not (= 2)))
+ '(and (r7rs even?) (not (constant 2)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (r7rs even?) (not (= 2)) (not (= 3)))))
+  '(and (r7rs even?) (not (constant 2)) (not (constant 3)))))
 
 ;; Combining 'not =' and 'r7rs [8]
 (assert=
- '(and (not (= 4)) (r7rs even?) (not (= 2)))
+ '(and (not (constant 4)) (r7rs even?) (not (constant 2)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 4)) (r7rs even?) (not (= 2)) (not (= 3)))))
+  '(and (not (constant 4)) (r7rs even?) (not (constant 2)) (not (constant 3)))))
 
 ;; Combining 'not =' and 'r7rs [9]
 (assert=
- '(and (not (= 4)) (r7rs even?) (not (= 2)))
+ '(and (not (constant 4)) (r7rs even?) (not (constant 2)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 3)) (not (= 4)) (r7rs even?) (not (= 2)))))
+  '(and (not (constant 3)) (not (constant 4)) (r7rs even?) (not (constant 2)))))
 
-;; Combining '=' and '(not r7rs) [1]
+;; Combining 'constant' and '(not r7rs) [1]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (not (r7rs even?)))))
+  '(and (constant 2) (not (r7rs even?)))))
 
-;; Combining '=' and '(not r7rs) [2]
+;; Combining 'constant' and '(not r7rs) [2]
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (r7rs even?)) (= 2))))
+  '(and (not (r7rs even?)) (constant 2))))
 
-;; Combining '=' and '(not r7rs) [3]
+;; Combining 'constant' and '(not r7rs) [3]
 (assert=
- '(= 3)
+ '(constant 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 3) (not (r7rs even?)))))
+  '(and (constant 3) (not (r7rs even?)))))
 
 ;; Combining '(not =) and '(not r7rs) [1]
 (assert=
  '(not (r7rs even?))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (r7rs even?)) (not (= 2)))))
+  '(and (not (r7rs even?)) (not (constant 2)))))
 
 ;; Combining '(not =) and '(not r7rs) [2]
 (assert=
- '(and (not (r7rs even?)) (not (= 3)))
+ '(and (not (r7rs even?)) (not (constant 3)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (r7rs even?)) (not (= 3)))))
+  '(and (not (r7rs even?)) (not (constant 3)))))
 
 ;; Checking negation of 'r7rs
 (assert=
@@ -345,77 +345,77 @@
 
 ;; Optimizing tuples with different expressions [1]
 (assert=
- '(= 1)
+ '(constant 1)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1)) (tuple (r7rs odd?)))))
+  '(and (tuple (constant 1)) (tuple (r7rs odd?)))))
 
 ;; ;; Optimizing tuples with different expressions [2]
 ;; (assert=
-;;  '(and (tuple (= 2)) (tuple (r7rs odd?)))
+;;  '(and (tuple (constant 2)) (tuple (r7rs odd?)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 2)) (tuple (r7rs odd?)))))
+;;   '(and (tuple (constant 2)) (tuple (r7rs odd?)))))
 
 ;; ;; Optimizing tuples with the same expressions
 ;; (assert=
-;;  '(and (tuple (= 1)))
+;;  '(and (tuple (constant 1)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 1)) (tuple (= 1)))))
+;;   '(and (tuple (constant 1)) (tuple (constant 1)))))
 
 ;; TODO
 ;; ;; Mixing 'tuple and 'not in a single expression
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 1)) (not (tuple (= 1))))))
+;;   '(and (tuple (constant 1)) (not (tuple (constant 1))))))
 
-;; Combining '= and 'r7rs with opposite values
+;; Combining 'constant and 'r7rs with opposite values
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 1) (r7rs even?))))
+  '(and (constant 1) (r7rs even?))))
 
-;; More complex case with '= and 'r7rs
+;; More complex case with 'constant and 'r7rs
 (assert=
- '(= 2)
+ '(constant 2)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (= 2) (= 2) (r7rs even?))))
+  '(and (constant 2) (constant 2) (constant 2) (r7rs even?))))
 
-;; More complex case with '= and 'r7rs
+;; More complex case with 'constant and 'r7rs
 (assert=
- '(= 2)
+ '(constant 2)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (= 2) (= 2) (r7rs even?) (= 2) (= 2))))
+  '(and (constant 2) (constant 2) (constant 2) (r7rs even?) (constant 2) (constant 2))))
 
 ;; TODO
 ;; ;; Complex case with 'tuple and 'not
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 1) (r7rs odd?)) (not (tuple (= 1) (r7rs odd?))))))
+;;   '(and (tuple (constant 1) (r7rs odd?)) (not (tuple (constant 1) (r7rs odd?))))))
 
 ;; Case with 'tuple and 'r7rs
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1)) (r7rs even?))))
+  '(and (tuple (constant 1)) (r7rs even?))))
 
 ;; Case with 'tuple and 'not with multiple types
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (tuple (= 1) (r7rs odd?)) (not (= 1)) (not (r7rs odd?)))))
+  '(and (tuple (constant 1) (r7rs odd?)) (not (constant 1)) (not (r7rs odd?)))))
 
 ;; Testing with null values
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 0) (not (= 0)))))
+  '(and (constant 0) (not (constant 0)))))
 
 ;; ;; Testing single tuple optimization
 ;; (assert=
-;;  '(and (tuple (= 2)))
+;;  '(and (tuple (constant 2)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 2)) (tuple (= 2)))))
+;;   '(and (tuple (constant 2)) (tuple (constant 2)))))
 
 ;; Testing with multiple 'r7rs expressions
 (assert=
@@ -441,136 +441,136 @@
  (labelinglogic:expression:optimize/assuming-nointersect
   '(and (r7rs positive?) (r7rs integer?))))
 
-;; Testing mixture of '= and 'r7rs expression with a common numeric value.
+;; Testing mixture of 'constant and 'r7rs expression with a common numeric value.
 (define (test-1923123 expr)
   (define result
     (labelinglogic:expression:optimize/assuming-nointersect
      expr))
 
-  (or (equal? result '(= 2))
+  (or (equal? result '(constant 2))
       (equal? result '(or))))
 
-(assert (test-1923123 '(and (= 2) (r7rs positive?) (r7rs integer?))))
+(assert (test-1923123 '(and (constant 2) (r7rs positive?) (r7rs integer?))))
 
-;; Case with '= and 'tuple
+;; Case with 'constant and 'tuple
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (tuple (= 1)))))
+  '(and (constant 2) (tuple (constant 1)))))
 
-;; Case with '= and complex 'tuple
+;; Case with 'constant and complex 'tuple
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (tuple (r7rs even?) (= 3)))))
+  '(and (constant 2) (tuple (r7rs even?) (constant 3)))))
 
 ;; Case with 'not and 'tuple
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 2)) (tuple (= 2)))))
+  '(and (not (constant 2)) (tuple (constant 2)))))
 
 ;; Case with 'not and complex 'tuple
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (r7rs even?)) (tuple (r7rs even?) (= 3)))))
+  '(and (not (r7rs even?)) (tuple (r7rs even?) (constant 3)))))
 
-;; Case with '= and negated 'tuple
+;; Case with 'constant and negated 'tuple
 (assert=
  '(or)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 2) (not (tuple (= 2))))))
+  '(and (constant 2) (not (tuple (constant 2))))))
 
 ;; ;; Case with 'not and negated 'tuple
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (not (= 2)) (not (tuple (= 2))))))
+;;   '(and (not (constant 2)) (not (tuple (constant 2))))))
 
 ;; ;; Case with negated 'tuple and 'r7rs
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (not (tuple (= 1))) (r7rs odd?))))
+;;   '(and (not (tuple (constant 1))) (r7rs odd?))))
 
-;; ;; Case with 'tuple, 'not, '= and 'r7rs values
+;; ;; Case with 'tuple, 'not, 'constant and 'r7rs values
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 1)) (not (tuple (= 1))) (r7rs odd?) (= 2))))
+;;   '(and (tuple (constant 1)) (not (tuple (constant 1))) (r7rs odd?) (constant 2))))
 
 ;; ;; Case with 'tuple containing other 'tuple
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 1) (tuple (r7rs odd?))) (not (tuple (= 1))))))
+;;   '(and (tuple (constant 1) (tuple (r7rs odd?))) (not (tuple (constant 1))))))
 
 ;; ;; Case with complex mixture of types
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (r7rs odd?) (not (= 1)) (not (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
+;;   '(and (r7rs odd?) (not (constant 1)) (not (r7rs odd?)) (tuple (constant 2) (r7rs even?)))))
 
 ;; ;; Case with identical 'tuple values
 ;; (assert=
-;;  '(and (tuple (= 1) (r7rs odd?)))
+;;  '(and (tuple (constant 1) (r7rs odd?)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 1) (r7rs odd?)) (tuple (= 1) (r7rs odd?)))))
+;;   '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 1) (r7rs odd?)))))
 
 ;; ;; Case with non-identical 'tuple values
 ;; (assert=
-;;  '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))
+;;  '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 2) (r7rs even?)))
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (= 1) (r7rs odd?)) (tuple (= 2) (r7rs even?)))))
+;;   '(and (tuple (constant 1) (r7rs odd?)) (tuple (constant 2) (r7rs even?)))))
 
-;; ;; Case with '=, 'tuple and 'r7rs
+;; ;; Case with 'constant, 'tuple and 'r7rs
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (= 2) (r7rs even?) (tuple (= 2) (r7rs even?)))))
+;;   '(and (constant 2) (r7rs even?) (tuple (constant 2) (r7rs even?)))))
 
 ;; ;; More complex case
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (r7rs positive?) (not (= 2)) (tuple (= 2) (r7rs odd?)))))
+;;   '(and (r7rs positive?) (not (constant 2)) (tuple (constant 2) (r7rs odd?)))))
 
 ;; ;; Complex case with 'tuple, 'not and 'r7rs
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (r7rs even?)) (= 2) (not (r7rs odd?)))))
+;;   '(and (tuple (r7rs even?)) (constant 2) (not (r7rs odd?)))))
 
 ;; ;; Complex case with complex 'tuple
 ;; (assert=
 ;;  '(or)
 ;;  (labelinglogic:expression:optimize/assuming-nointersect
-;;   '(and (tuple (r7rs even?) (= 2)) (r7rs positive?))))
+;;   '(and (tuple (r7rs even?) (constant 2)) (r7rs positive?))))
 
 ;; Case with top. [1]
 (assert=
- '(= 3)
+ '(constant 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (and) (= 3))))
+  '(and (and) (constant 3))))
 
 ;; Case with top. [2]
 (assert=
- '(= 3)
+ '(constant 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 3) (and))))
+  '(and (constant 3) (and))))
 
 ;; Case with top. [3]
 (assert=
- '(= 3)
+ '(constant 3)
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (= 3) (and) (= 3))))
+  '(and (constant 3) (and) (constant 3))))
 
 ;; Case with top. [4]
 (assert=
- '(and (not (= 3)) (not (= 5)))
+ '(and (not (constant 3)) (not (constant 5)))
  (labelinglogic:expression:optimize/assuming-nointersect
-  '(and (not (= 3)) (and) (not (= 5)))))
+  '(and (not (constant 3)) (and) (not (constant 5)))))
 
 ;; Case with top. [5]
 (assert=

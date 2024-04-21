@@ -41,23 +41,23 @@
      ((equal? type-big 'and)
       (ands-subset? (list expr-small) args-big))
 
-     ((equal? type-small '=)
+     ((equal? type-small 'constant)
       (or
-       (and (equal? type-small '=)
+       (and (equal? type-small 'constant)
             (equal? type-big 'r7rs)
             (labelinglogic:expression:evaluate/r7rs
              expr-big (car args-small)))
 
-       (and (equal? type-small '=)
+       (and (equal? type-small 'constant)
             (equal? type-big 'not)
             (equal? inner-type-big 'r7rs)
             (not
              (labelinglogic:expression:evaluate/r7rs
               inner-big (car args-small))))
 
-       (and (equal? type-small '=)
+       (and (equal? type-small 'constant)
             (equal? type-big 'not)
-            (equal? inner-type-big '=)
+            (equal? inner-type-big 'constant)
             (not (equal? (car inner-smallrgs-small)
                          (car inner-smallrgs-big))))))
 
@@ -65,7 +65,7 @@
       (or
        (and (equal? type-small 'r7rs)
             (equal? type-big 'not)
-            (equal? inner-type-big '=)
+            (equal? inner-type-big 'constant)
             (not
              (labelinglogic:expression:evaluate/r7rs
               expr-small (car inner-smallrgs-big))))
@@ -79,7 +79,7 @@
      ((equal? type-small 'not)
       (and (equal? inner-type-small 'r7rs)
            (equal? type-big 'not)
-           (equal? inner-type-big '=)
+           (equal? inner-type-big 'constant)
            (loop inner-big inner-small)))
 
      ((equal? type-small 'tuple)

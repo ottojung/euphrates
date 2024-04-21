@@ -36,7 +36,7 @@
       (labelinglogic:expression:make
        type (map loop-expr args)))
 
-     ((member type (list '= 'variable 'r7rs))
+     ((member type (list 'constant 'variable 'r7rs))
       expr)
 
      (else
