@@ -5,7 +5,15 @@
   (import
     (only (euphrates labelinglogic-expression-check)
           labelinglogic:expression:check))
-  (import (only (scheme base) begin cons define))
+  (import
+    (only (scheme base)
+          begin
+          car
+          cons
+          define
+          equal?
+          if
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

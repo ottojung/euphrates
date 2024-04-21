@@ -2,7 +2,6 @@
 (define-library
   (euphrates parselynn-folexer)
   (export make-parselynn:folexer)
-  (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates define-pair) define-pair))
   (import (only (euphrates hashset) list->hashset))
@@ -18,15 +17,6 @@
   (import
     (only (euphrates labelinglogic-expression-args)
           labelinglogic:expression:args))
-  (import
-    (only (euphrates labelinglogic-expression-bottom-huh)
-          labelinglogic:expression:bottom?))
-  (import
-    (only (euphrates labelinglogic-expression-bottom)
-          labelinglogic:expression:bottom))
-  (import
-    (only (euphrates labelinglogic-expression-make)
-          labelinglogic:expression:make))
   (import
     (only (euphrates labelinglogic-expression-type)
           labelinglogic:expression:type))
@@ -50,20 +40,21 @@
     (only (euphrates parselynn-folexer-expression-check)
           parselynn:folexer:expression:check))
   (import
+    (only (euphrates
+            parselynn-folexer-expression-to-labelinglogic-expression)
+          parselynn:folexer:expression->labelinglogic:expression))
+  (import
     (only (euphrates parselynn-folexer-model)
           parselynn-folexer-model))
   (import
     (only (euphrates parselynn-folexer-struct)
           make-parselynn:folexer-struct))
-  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import
     (only (euphrates stack)
           stack->list
           stack-make
           stack-push!))
-  (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-a) ~a))
   (import
     (only (euphrates unique-identifier-to-symbol-recursive)
           unique-identifier->symbol/recursive))
@@ -72,14 +63,10 @@
           =
           and
           begin
-          cadr
-          car
-          char?
           cond
           cons
           define
           else
-          equal?
           for-each
           if
           lambda
@@ -87,15 +74,10 @@
           list
           map
           member
-          not
           null?
           or
           quote
-          reverse
-          string->list
-          string-length
-          string-ref
-          string?))
+          reverse))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

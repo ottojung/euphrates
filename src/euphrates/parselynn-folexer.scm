@@ -3,94 +3,14 @@
 
 (define (make-parselynn:folexer tokens-alist)
 
-  (define singletons-tokens-alist/stack
-    (stack-make))
-
-  (define _876361
-    (for-each
-     (lambda (p)
-       (define-pair (name value) p)
-       (parselynn:folexer:expression:check value))
-     tokens-alist))
-
-  (define _64132
-    (for-each
-     (lambda (p)
-       (define-pair (name value) p)
-       (cond
-        ((and (string? value)
-              (= 1 (string-length value)))
-
-         (stack-push!
-          singletons-tokens-alist/stack
-          (cons name (string-ref value 0))))
-
-        ((and (string? value)
-              (= 0 (string-length value)))
-
-         (stack-push!
-          singletons-tokens-alist/stack
-          (cons name labelinglogic:expression:bottom)))
-
-        ((and (string? value)
-              (not (= 1 (string-length value))))
-
-         (stack-push!
-          singletons-tokens-alist/stack
-          (cons name
-                (labelinglogic:expression:make
-                 'tuple
-                 (map
-                  (lambda (c)
-                    (labelinglogic:expression:make
-                     '= (list c)))
-                  (string->list value))))))
-
-        (else
-         (stack-push!
-          singletons-tokens-alist/stack
-          (cons name value)))))
-
-     tokens-alist))
-
-  (define singletons-tokens-alist
-    (reverse
-     (stack->list
-      singletons-tokens-alist/stack)))
-
-  (define (parse-token-pair p)
-    (define-pair (name value) p)
-
-    (define expr
-      (let loop ((value value))
-
-        (cond
-         ((char? value)
-          (list '= value))
-
-         ((equal? 'class (car value))
-          (cadr value))
-
-         ((equal? '= (car value))
-          value)
-
-         ((equal? 'tuple (car value))
-          value)
-
-         ((labelinglogic:expression:bottom? value)
-          value)
-
-         (else
-          (raisu* :from "parselynn:folexer"
-                  :type 'bad-token-type
-                  :message (stringf "Unknown element of ~s in folexer lexer" (~a (quote singletons-tokens-alist)))
-                  :args (list value))))))
-
-    (labelinglogic:binding:make
-     name expr))
-
   (define bindings
-    (map parse-token-pair singletons-tokens-alist))
+    (map
+     (lambda (p)
+       (define-pair (name value) p)
+       (parselynn:folexer:expression:check value)
+       (labelinglogic:binding:make
+        name (parselynn:folexer:expression->labelinglogic:expression value)))
+     tokens-alist))
 
   (define full-model
     (labelinglogic:model:append
@@ -121,7 +41,6 @@
        (define expr (labelinglogic:binding:expr binding))
        (define type (labelinglogic:expression:type expr))
        (define args (labelinglogic:expression:args expr))
-       (define token-value (assoc-or class singletons-tokens-alist #f))
 
        (cond
         ((member type (list '= 'r7rs 'and))
