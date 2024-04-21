@@ -11,7 +11,12 @@
                (hashset-has?
                 hidden-tree-labels
                 (car tree)))
-          (apply string (cdr tree))
+          (let ()
+            (define value (cdr tree))
+            (if (and (pair? value)
+                     (pair? (car value)))
+                (apply string (cdr (car value)))
+                (apply string value)))
           (map loop tree)))
      ((char? tree) (string tree))
      (else tree))))
