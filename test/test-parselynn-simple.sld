@@ -27,16 +27,22 @@
           and
           apply
           begin
+          car
+          cdr
           define
           define-syntax
+          eof-object
           if
+          lambda
           let
           list
           list?
           not
+          null?
           or
           quasiquote
           quote
+          set!
           string
           string->number
           string-append

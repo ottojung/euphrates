@@ -1412,3 +1412,85 @@
  "5.+.3.-.7"
 
  )
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Test non-string.
+;;
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( expr = expr operation expr / term
+      operation = (constant '+)
+      term = num
+      num = dig num / dig
+      dig = (or (constant 0)
+                (constant 1)
+                (constant 2)
+                (constant 3)
+                (constant 4)
+                (constant 5)
+                (constant 6)
+                (constant 7)
+                (constant 8)
+                (constant 9)))))
+
+ (let ()
+   (define input '(5   +   3))
+
+   (lambda _
+     (if (null? input) (eof-object)
+         (let ()
+           (define current (car input))
+           (set! input (cdr input))
+           current))))
+
+ '(expr (expr (term (num (dig 5))))
+        (operation +)
+        (expr (term (num (dig 3)))))
+
+ )
+
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( expr = expr operation expr / term
+      operation = ".+."
+      term = num
+      num = dig num / dig
+      dig = (or (constant 0)
+                (constant 1)
+                (constant 2)
+                (constant 3)
+                (constant 4)
+                (constant 5)
+                (constant 6)
+                (constant 7)
+                (constant 8)
+                (constant 9)))))
+
+ (let ()
+   (define input '(5 #\. #\+ #\. 3))
+
+   (lambda _
+     (if (null? input) (eof-object)
+         (let ()
+           (define current (car input))
+           (set! input (cdr input))
+           current))))
+
+ '(expr (expr (term (num (dig 5))))
+        (operation ".+.")
+        (expr (term (num (dig 3)))))
+
+ )
