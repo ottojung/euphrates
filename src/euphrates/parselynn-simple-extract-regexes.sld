@@ -14,31 +14,23 @@
   (import
     (only (euphrates list-deduplicate)
           list-deduplicate))
-  (import (only (euphrates raisu) raisu))
+  (import
+    (only (euphrates parselynn-folexer-expression-head-huh)
+          parselynn:folexer:expression:head?))
   (import
     (only (euphrates unique-identifier)
-          make-unique-identifier
-          unique-identifier?))
+          make-unique-identifier))
   (import
     (only (scheme base)
-          and
           append
           apply
           begin
           car
           cdr
-          cond
           cons
           define
-          else
-          equal?
           lambda
-          list?
           map
-          or
-          pair?
-          quote
-          string?
           symbol?
           values))
   (cond-expand

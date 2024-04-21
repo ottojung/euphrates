@@ -6,6 +6,13 @@
   (define singletons-tokens-alist/stack
     (stack-make))
 
+  (define _876361
+    (for-each
+     (lambda (p)
+       (define-pair (name value) p)
+       (parselynn:folexer:expression:check value))
+     tokens-alist))
+
   (define _64132
     (for-each
      (lambda (p)

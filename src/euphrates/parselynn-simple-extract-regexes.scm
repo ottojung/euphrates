@@ -12,31 +12,18 @@
     (list->hashset
      (filter symbol? all-expansion-terms)))
 
-  (define (string-terminal? x)
-    (string? x))
-
-  (define (re-terminal? x)
-    (and (list? x)
-         (pair? x)
-         (equal? 'class (car x))))
-
   (define (terminal? x)
-    (or (string-terminal? x)
-        (re-terminal? x)
-        (unique-identifier? x)))
+    (parselynn:folexer:expression:head? x))
 
   (define all-terminals
     (list-deduplicate
      (filter terminal? all-expansion-terms)))
 
   (define (terminal->token t)
-    (cond
-     ((string-terminal? t) (make-unique-identifier))
-     ((re-terminal? t) (make-unique-identifier))
-     (else (raisu 'impossible t))))
+    (make-unique-identifier))
 
   (define terminal->folexer
-    (curry-if re-terminal? identity))
+    (curry-if terminal? identity))
 
   (define tokens-map
     (map (compose-under cons terminal->token terminal->folexer)

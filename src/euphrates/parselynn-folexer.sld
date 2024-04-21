@@ -47,6 +47,9 @@
             labelinglogic-model-to-minimal-dnf-assuming-nointersect)
           labelinglogic:model:to-minimal-dnf/assuming-nointersect))
   (import
+    (only (euphrates parselynn-folexer-expression-check)
+          parselynn:folexer:expression:check))
+  (import
     (only (euphrates parselynn-folexer-model)
           parselynn-folexer-model))
   (import
