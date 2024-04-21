@@ -1555,6 +1555,16 @@
     (only (euphrates parselynn-folexer-compile-iterator)
           parselynn:folexer:compile/iterator))
   (import
+    (only (euphrates parselynn-folexer-expression-check)
+          parselynn:folexer:expression:check))
+  (import
+    (only (euphrates parselynn-folexer-expression-head-huh)
+          parselynn:folexer:expression:head?))
+  (import
+    (only (euphrates
+            parselynn-folexer-expression-to-labelinglogic-expression)
+          parselynn:folexer:expression->labelinglogic:expression))
+  (import
     (only (euphrates parselynn-folexer-model)
           parselynn-folexer-model))
   (import
