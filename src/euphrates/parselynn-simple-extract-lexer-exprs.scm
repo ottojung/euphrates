@@ -36,7 +36,9 @@
           (lambda (rule)
             (define name (car rule))
             (define expansions (cdr rule))
-            (define non-call-expansions (filter (negate call-expansion?) expansions))
+            (define non-call-expansions
+              (map (lambda (expansion) (filter (negate call-expansion?) expansion))
+                   expansions))
             (when (equal? singleton-t-expansions non-call-expansions)
               (hashmap-set! H (list 'class name) t)))
           bnf-alist))
