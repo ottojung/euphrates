@@ -8,12 +8,20 @@
           bnf-alist:map-expansion-terms))
   (import
     (only (euphrates compose-under) compose-under))
-  (import (only (euphrates curry-if) curry-if))
+  (import (only (euphrates fn-cons) fn-cons))
+  (import
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
   (import (only (euphrates hashset) list->hashset))
   (import (only (euphrates identity) identity))
   (import
     (only (euphrates list-deduplicate)
           list-deduplicate))
+  (import
+    (only (euphrates list-length-eq) list-length=))
+  (import (only (euphrates negate) negate))
   (import
     (only (euphrates parselynn-folexer-expression-head-huh)
           parselynn:folexer:expression:head?))
@@ -22,17 +30,28 @@
           make-unique-identifier))
   (import
     (only (scheme base)
+          and
           append
           apply
           begin
           car
           cdr
+          cond
           cons
           define
+          else
+          equal?
+          for-each
           lambda
+          let
+          list
+          list?
           map
+          pair?
+          quote
           symbol?
-          values))
+          values
+          when))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))
@@ -41,4 +60,5 @@
            (begin
              (include-from-path
                "euphrates/parselynn-simple-extract-lexer-exprs.scm")))
-    (else (include "parselynn-simple-extract-lexer-exprs.scm"))))
+    (else (include
+            "parselynn-simple-extract-lexer-exprs.scm"))))
