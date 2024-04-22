@@ -1547,3 +1547,110 @@
           (buzz 10) (fizz 12) (fizzbuzz 15) (fizz 18))
 
  )
+
+
+
+
+;;;;;;;;;;;;
+;;
+;; Lexer classes definitions tests.
+;;
+
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( stream = category+
+      category = pos / neg
+      pos = (r7rs positive?)
+      neg = (r7rs negative?)
+      )))
+
+ (input-stream
+  '(-5 -4 -3 -2 -1 +1 +2 +3 +4 +5))
+
+ '(stream (category+ (category (neg -5)) (category+ (category (neg -4)) (category+ (category (neg -3)) (category+ (category (neg -2)) (category+ (category (neg -1)) (category+ (category (pos 1)) (category+ (category (pos 2)) (category+ (category (pos 3)) (category+ (category (pos 4)) (category+ (category (pos 5)))))))))))))
+
+ )
+
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( stream = category+
+      category = pos / neg / zero
+      pos = (r7rs positive?)
+      neg = (r7rs negative?)
+      zero = (and (not (class pos))
+                  (not (class neg)))
+      )))
+
+ (input-stream
+  '(-5 -4 -3 -2 -1 0 +1 +2 +3 +4 +5))
+
+ '(stream (category+ (category (neg -5)) (category+ (category (neg -4)) (category+ (category (neg -3)) (category+ (category (neg -2)) (category+ (category (neg -1)) (category+ (category (zero 0)) (category+ (category (pos 1)) (category+ (category (pos 2)) (category+ (category (pos 3)) (category+ (category (pos 4)) (category+ (category (pos 5))))))))))))))
+
+ )
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( stream = category+
+      category = pos / neg / zero
+      pos = (r7rs positive?) (call 'pos)
+      neg = (r7rs negative?) (call 'neg)
+      zero = (and (not (class pos))
+                  (not (class neg)))
+      )))
+
+ (input-stream
+  '(-5 -4 -3 -2 -1 0 +1 +2 +3 +4 +5))
+
+ '(stream (category+ (category neg) (category+ (category neg) (category+ (category neg) (category+ (category neg) (category+ (category neg) (category+ (category (zero 0)) (category+ (category pos) (category+ (category pos) (category+ (category pos) (category+ (category pos) (category+ (category pos)))))))))))))
+
+ )
+
+
+
+
+(check-parser-result
+ (parselynn:simple
+  `(:grammar
+    ( stream = category+
+      category = fizz / buzz / fizzbuzz / none
+
+      fizz = (r7rs (lambda (n)
+                     (and (= 0 (modulo n 3))
+                          (not (= 0 (modulo n 5))))))
+      buzz = (r7rs (lambda (n)
+                     (and (= 0 (modulo n 5))
+                          (not (= 0 (modulo n 3))))))
+      fizzbuzz = (r7rs (lambda (n)
+                         (and (= 0 (modulo n 3))
+                              (= 0 (modulo n 5)))))
+
+      none = (not (or (class fizz) (class buzz) (class fizzbuzz))))
+
+    :flatten (stream)
+    :inline (category category+)
+    :skip (none)
+
+    ))
+
+ (input-stream
+  '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19))
+
+ '(stream (fizz 3) (buzz 5) (fizz 6) (fizz 9)
+          (buzz 10) (fizz 12) (fizzbuzz 15) (fizz 18))
+
+ )
+

@@ -39,10 +39,12 @@
           list
           list?
           modulo
+          negative?
           not
           null?
           odd?
           or
+          positive?
           quasiquote
           quote
           set!
