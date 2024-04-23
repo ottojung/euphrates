@@ -81,6 +81,7 @@
           cons
           define
           define-values
+          for-each
           if
           lambda
           length

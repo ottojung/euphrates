@@ -1,9 +1,9 @@
 ;;;; Copyright (C) 2023, 2024  Otto Jung
 ;;;; This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; This is a simplified interface to parselynn.scm
-;; This parser is very fast,
-;; but the original one can be even faster,
+;; This is a simplified interface to parselynn-core.scm
+;; Generates efficient parsers,
+;; but the base one do even better,
 ;; IF you tweak its parameters, like define a more specific lexer.
 
 (define (parselynn:simple arguments)
@@ -25,6 +25,18 @@
 
   (define options*
     (map translate-option options))
+
+  (define _174263
+    (begin
+      (for-each
+       (lambda (opt)
+         (when (assq-or opt options*)
+           (raisu* :from "parselynn:simple"
+                   :type 'invalid-argument ;; TODO: make tokens: optionally settable
+                   :message (stringf "This parser handles ~s automatically, no need to provide them" opt)
+                   :args (list opt options*))))
+
+       (list 'tokens: 'rules: 'lexer-code:))))
 
   (define rules/0
     (assq-or 'grammar: options*
@@ -104,13 +116,6 @@
 
    (define non-terminals
      (list->hashset (map car rules)))
-
-   (define _174263
-     (when (assq-or 'tokens: options*)
-       (raisu* :from "parselynn:simple"
-               :type 'invalid-argument ;; TODO: make tokens: optionally settable
-               :message "This parser handles tokens automatically, no need to provide them"
-               :args (list (assq-or 'tokens: options*)))))
 
    (define (extract+check key)
      (define-values (ret set-list)
