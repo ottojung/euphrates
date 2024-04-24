@@ -6,11 +6,8 @@
   (import
     (only (euphrates fast-parameterizeable-timestamp-p)
           fast-parameterizeable-timestamp/p))
-  (import
-    (only (euphrates
-            time-get-monotonic-nanoseconds-timestamp)
-          time-get-monotonic-nanoseconds-timestamp))
   (import (only (scheme base) begin define or))
+  (import (only (scheme time) current-jiffy))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

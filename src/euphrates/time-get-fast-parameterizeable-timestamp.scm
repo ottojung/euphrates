@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2022, 2021, 2023  Otto Jung
+;;;; Copyright (C) 2021, 2022, 2023, 2024  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -17,4 +17,4 @@
 
 (define (time-get-fast-parameterizeable-timestamp)
   (or (fast-parameterizeable-timestamp/p)
-      (time-get-monotonic-nanoseconds-timestamp)))
+      (current-jiffy)))
