@@ -5,29 +5,14 @@
   (import
     (only (euphrates call-with-output-string)
           call-with-output-string))
+  (import (only (euphrates fprintf) fprintf))
   (import
     (only (scheme base)
+          apply
           begin
-          cadr
-          car
-          case
-          cddr
-          cdr
-          char=?
-          cond
+          cons
           define
-          else
-          error
-          get-output-string
-          if
-          lambda
-          let
-          newline
-          null?
-          quote
-          string->list
-          write-char))
-  (import (only (scheme write) display write))
+          lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
