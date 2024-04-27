@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021, 2022, 2023  Otto Jung
+;;;; Copyright (C) 2021, 2022, 2023, 2024  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -195,7 +195,12 @@
       (unless (equal? 0 i)
         (display "       "))
 
-      (display (path-get-basename (get-current-program-path)))
+      (let ()
+        (define path (get-current-program-path))
+        (define basename (path-get-basename path))
+        (define noext (path-without-extension basename))
+        (display noext))
+
       (display " ")
       (display (show-regex alternative))
       (newline))

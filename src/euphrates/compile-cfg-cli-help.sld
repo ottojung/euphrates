@@ -42,6 +42,9 @@
     (only (euphrates path-get-basename)
           path-get-basename))
   (import
+    (only (euphrates path-without-extension)
+          path-without-extension))
+  (import
     (only (euphrates print-in-window)
           print-in-window))
   (import (only (euphrates range) range))
