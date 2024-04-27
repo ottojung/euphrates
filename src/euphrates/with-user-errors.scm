@@ -7,7 +7,8 @@
     (define default-message "Uknown error.")
     (define message (generic-error:value/unsafe err generic-error:message-key default-message))
     (display message p)
-    (newline p))
+    (newline p)
+    (exit 1))
 
   (catch-many keys body handler))
 
