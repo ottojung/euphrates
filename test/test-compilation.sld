@@ -197,6 +197,7 @@
           cartesian-product))
   (import (only (euphrates caseq) caseq))
   (import (only (euphrates catch-any) catch-any))
+  (import (only (euphrates catch-many) catch-many))
   (import
     (only (euphrates catch-specific) catch-specific))
   (import
@@ -2985,6 +2986,9 @@
   (import
     (only (euphrates with-string-as-input)
           with-string-as-input))
+  (import
+    (only (euphrates with-user-errors)
+          with-user-errors))
   (import
     (only (euphrates words-to-string) words->string))
   (import
