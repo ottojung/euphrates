@@ -527,6 +527,7 @@
   (import (only (euphrates fn-tuple) fn-tuple))
   (import (only (euphrates fn) fn))
   (import (only (euphrates fp) fp))
+  (import (only (euphrates fprintf) fprintf))
   (import
     (only (euphrates general-table) general-table))
   (import
