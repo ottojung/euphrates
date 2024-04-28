@@ -19,6 +19,7 @@
           current-error-port
           current-output-port
           let
+          not
           parameterize
           quote))
   (cond-expand
