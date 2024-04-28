@@ -25,7 +25,7 @@
   (define *bits-per-word* 28)
 
   (define (grammar-error message-fmt . args)
-    (raisu-fmt 'type-error message-fmt args))
+    (apply raisu-fmt (cons 'type-error (cons message-fmt args))))
 
   (define common-definitions-code
     `((define (cadar l) (car (cdr (car l))))
@@ -1396,7 +1396,7 @@
          ((equal? type 'reduce/reduce) (values "Reduce/Reduce" 'reduce 'reduce))
          ((equal? type 'shift/reduce) (values "Shift/Reduce" 'shift 'reduce))
          (else (raisu-fmt 'logic-error "Expected only ~s and ~s, but got ~s"
-                          (list (~a 'reduce/reduce) (~a 'shift/reduce) (~a type/print))))))
+                          (~a 'reduce/reduce) (~a 'shift/reduce) (~a type/print)))))
 
       (define message
         (stringf "%% ~a conflict (~a ~a, ~a ~a) on '~a in state ~s"
@@ -2211,7 +2211,7 @@
        ((equal? driver-name 'glr-driver) (glr-driver-code results-mode))
        (else (raisu-fmt
               'logic-error "Expected either ~s or ~s but got ~s somehow"
-              (list (~a 'lr-driver) (~a 'glr-driver) (~a driver-name))))))
+              (~a 'lr-driver) (~a 'glr-driver) (~a driver-name)))))
 
     (define code
       `(let ()

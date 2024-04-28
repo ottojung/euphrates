@@ -5,15 +5,7 @@
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import
-    (only (scheme base)
-          _
-          apply
-          begin
-          cons
-          define
-          define-syntax
-          let
-          syntax-rules))
+    (only (scheme base) apply begin cons define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
