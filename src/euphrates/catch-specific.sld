@@ -17,8 +17,7 @@
           begin
           define
           equal?
-          guard
-          quote))
+          guard))
   (cond-expand
     (guile (import (only (guile) include-from-path catch))
            (begin
