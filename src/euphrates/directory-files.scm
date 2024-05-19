@@ -33,8 +33,8 @@
 
   (define directory-files
     (case-lambda
-     ((directory) (directory-files directory #f))
-     ((directory include-directories?)
+     ((directory) (directory-files #f directory))
+     ((include-directories? directory)
 
       (define dirs
     (unless include-directories? (make-hash)))
