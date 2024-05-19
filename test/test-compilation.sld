@@ -499,6 +499,7 @@
   (import
     (only (euphrates fast-parameterizeable-timestamp-p)
           fast-parameterizeable-timestamp/p))
+  (import (only (euphrates file-copy) file-copy))
   (import
     (only (euphrates file-delete) file-delete))
   (import
