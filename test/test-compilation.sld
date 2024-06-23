@@ -1132,6 +1132,9 @@
     (only (euphrates list-drop-while)
           list-drop-while))
   (import
+    (only (euphrates list-find-element-index)
+          list-find-element-index))
+  (import
     (only (euphrates list-find-first)
           list-find-first))
   (import
