@@ -2161,6 +2161,9 @@
     (only (euphrates read-string-line)
           read-string-line))
   (import
+    (only (euphrates recursive-table-get)
+          recursive-table:get))
+  (import
     (only (euphrates recursive-table-self-p)
           recursive-table/self/p))
   (import
