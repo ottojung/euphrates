@@ -2155,6 +2155,12 @@
     (only (euphrates read-string-line)
           read-string-line))
   (import
+    (only (euphrates recursive-table-self-p)
+          recursive-table/self/p))
+  (import
+    (only (euphrates recursive-table)
+          recursive-table))
+  (import
     (only (euphrates regex-machine)
           make-regex-machine
           make-regex-machine*
