@@ -58,6 +58,9 @@
     (only (euphrates alphanum-lowercase-alphabet)
           alphanum-lowercase/alphabet))
   (import
+    (only (euphrates annotated-table-assoc)
+          annotated-table-assoc))
+  (import
     (only (euphrates append-posix-path)
           append-posix-path))
   (import
