@@ -25,12 +25,11 @@
 ;;   (zoreslava:set! 'key2 "value2"))
 ;;
 ;; Key functions and macros:
-;; - zoreslava:initialize: Initialize a new Zoreslava structure.
-;; - zoreslava:serialize: Convert a Zoreslava structure to a list.
-;; - zoreslava:deserialize: Restore a Zoreslava structure from a list.
+;; - with-zoreslava: Macro for creating and working with a Zoreslava structure.
 ;; - zoreslava:set!: Set a key-value pair in the current Zoreslava structure.
 ;; - zoreslava:ref: Retrieve a value by key from a Zoreslava structure.
-;; - with-zoreslava: Macro for creating and working with a Zoreslava structure.
+;; - zoreslava:serialize: Convert a Zoreslava structure to a list.
+;; - zoreslava:deserialize: Restore a Zoreslava structure from a list.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
