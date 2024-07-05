@@ -28,6 +28,12 @@
   (with-zoreslava
    (test-serialization)))
 
+(let ()
+  (assert
+   (zoreslava:equal?
+    (with-zoreslava)
+    (with-zoreslava))))
+
 
 (let ()
   (define struct
@@ -46,6 +52,148 @@
 
   (assert= 5 (zoreslava:ref struct "qdtgudtfgpj2ne8fdimxanjg7bdw9ahq"))
   (assert= "hello" (zoreslava:ref struct "xqomq88lo6limci4lh62n9b4dk5iypgs")))
+
+
+(let ()
+  ;; Test serialization with nested structures
+  (with-zoreslava
+    (zoreslava:set! 'nested (with-zoreslava
+                              (zoreslava:set! 'inner-key "inner-value")))
+    (zoreslava:set! 'outer-key "outer-value")
+    (test-serialization)))
+
+
+(let ()
+  ;; Test serialization and deserialization with large number of entries
+  (with-zoreslava
+    (for-each
+      (lambda (i)
+        (zoreslava:set! (string->symbol (number->string i))
+                        (list i (number->string (+ i 1)))))
+      (iota 500))
+    (test-serialization)))
+
+
+(let ()
+  ;; Test zoreslava:ref with a default value
+  (define struct
+    (with-zoreslava
+      (zoreslava:set! 'existing-key "value")))
+
+  (assert= "value" (zoreslava:ref struct 'existing-key 'default-value))
+  (assert= 'default-value (zoreslava:ref struct 'non-existing-key 'default-value)))
+
+
+(let ()
+  ;; Test zoreslava:write and zoreslava:read directly
+  (define struct
+    (with-zoreslava
+     (zoreslava:set! 'key1 "value1")))
+
+  (with-output-stringified
+   (zoreslava:write struct))
+
+  (call-with-input-string
+   (with-output-stringified
+    (zoreslava:write struct))
+
+   (lambda (port)
+     (define read-struct (zoreslava:read port))
+     (assert (zoreslava:equal? read-struct struct)))))
+
+
+(let ()
+  ;; Test zoreslava:write and zoreslava:read directly [2]
+  (define struct
+    (with-zoreslava
+     (zoreslava:set! 'key1 "value1")))
+
+  (with-output-stringified
+   (zoreslava:write struct))
+
+  (call-with-input-string
+   (with-output-stringified
+    (zoreslava:write struct))
+
+   (lambda (port)
+     (define read-struct (zoreslava:read port))
+     (assert (zoreslava:equal? read-struct struct)))))
+
+
+(let ()
+  ;; Test zoreslava:write and zoreslava:read directly [3]
+  (define struct
+    (with-zoreslava
+     (zoreslava:set! 'key1 "value1")
+     (zoreslava:set! 'key2 "value2")))
+
+  (with-output-stringified
+   (zoreslava:write struct))
+
+  (call-with-input-string
+   (with-output-stringified
+    (zoreslava:write struct))
+
+   (lambda (port)
+     (define read-struct (zoreslava:read port))
+     (assert (zoreslava:equal? read-struct struct)))))
+
+
+(let ()
+  ;; Test zoreslava:write and zoreslava:read directly [4]
+  (define struct
+    (with-zoreslava
+      (zoreslava:set! 'key1 "value1")
+      (zoreslava:set! 'key2 "value2")
+      (zoreslava:set! 'key3 "value2")))
+
+  (with-output-stringified
+   (zoreslava:write struct))
+
+  (call-with-input-string
+    (with-output-stringified
+     (zoreslava:write struct))
+
+    (lambda (port)
+      (define read-struct (zoreslava:read port))
+      (assert (zoreslava:equal? read-struct struct)))))
+
+
+(let ()
+  ;; Test an empty key as a string
+  (with-zoreslava
+    (define empty-key "")
+    (zoreslava:set! empty-key "empty-string-key-value")
+
+    (define struct (zoreslava/p))
+
+    (assert= (zoreslava:ref struct empty-key) "empty-string-key-value")
+
+    (test-serialization)))
+
+
+(let ()
+  ;; Test clear and reset of Zoreslava storage
+  (define struct
+    (with-zoreslava
+      (zoreslava:set! 'key "initial-value")))
+
+  (assert (zoreslava:has? struct 'key))
+
+  (define empty-struct (with-zoreslava 0))
+
+  (assert (not (zoreslava:has? empty-struct 'key))))
+
+
+(let ()
+  ;; Test serialization with special characters in keys
+  (with-zoreslava
+    (zoreslava:set! 'key-with-hyphen "value1")
+    (zoreslava:set! 'key_with_underscore "value2")
+    (zoreslava:set! 'keyWithCamelCase "value3")
+
+    (test-serialization)))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;

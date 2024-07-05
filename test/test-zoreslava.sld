@@ -6,16 +6,39 @@
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates assert) assert))
   (import
+    (only (euphrates call-with-input-string)
+          call-with-input-string))
+  (import
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
+  (import
     (only (euphrates zoreslava)
           with-zoreslava
           zoreslava/p
           zoreslava:deserialize
           zoreslava:equal?
+          zoreslava:has?
+          zoreslava:read
           zoreslava:ref
           zoreslava:serialize
-          zoreslava:set!))
+          zoreslava:set!
+          zoreslava:write))
   (import
-    (only (scheme base) begin define let quote))
+    (only (scheme base)
+          +
+          begin
+          define
+          for-each
+          lambda
+          let
+          list
+          not
+          number->string
+          quote
+          string->symbol))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) iota)))
+    (else (import (only (srfi 1) iota))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin (include-from-path "test-zoreslava.scm")))
