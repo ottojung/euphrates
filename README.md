@@ -42,6 +42,7 @@ Here's a snapshot of what Euphrates offers:
   - with an implementaion of non-preemptive portable threads `np-thread.scm`
 - Simple subprocesses `run-asyncproc.scm`
 - JSON parser `json-parse.scm`
+- A flexible serialization `zoreslava.scm`
 - Lots of list functions `list-*.scm`
 - Number conversions `convert-number-base.scm` and `*radix*.scm`
 - Various alphabets `*-alphabet.scm`

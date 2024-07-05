@@ -3012,6 +3012,18 @@
     (only (euphrates write-string-file)
           write-string-file))
   (import
+    (only (euphrates zoreslava)
+          with-zoreslava
+          zoreslava/p
+          zoreslava:deserialize
+          zoreslava:equal?
+          zoreslava:has?
+          zoreslava:read
+          zoreslava:ref
+          zoreslava:serialize
+          zoreslava:set!
+          zoreslava:write))
+  (import
     (only (scheme base)
           *
           +
