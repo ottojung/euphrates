@@ -137,6 +137,11 @@
        struct))))
 
 
+(define (zoreslava:began?)
+  ;; True if called from within `with-zoreslava'. False otherwise.
+  (not (not (zoreslava/p))))
+
+
 (define (zoreslava:set! key value)
   ;; Set a key-value pair in the current Zoreslava structure.
   ;; Ensures valid inputs and no overwriting of existing keys.
