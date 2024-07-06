@@ -131,7 +131,9 @@
     ((_) (with-zoreslava 0))
     ((_ . bodies)
      (let ()
-       (define struct (zoreslava:initialize))
+       (define struct
+         (or (zoreslava/p)
+             (zoreslava:initialize)))
        (parameterize ((zoreslava/p struct))
          (let () . bodies))
        struct))))
