@@ -4,7 +4,6 @@
   (export
     zoreslava/p
     with-zoreslava
-    zoreslava:began?
     zoreslava:equal?
     zoreslava:set!
     zoreslava:ref
@@ -59,7 +58,6 @@
           make-parameter
           map
           newline
-          not
           or
           parameterize
           quote

@@ -3015,7 +3015,6 @@
     (only (euphrates zoreslava)
           with-zoreslava
           zoreslava/p
-          zoreslava:began?
           zoreslava:deserialize
           zoreslava:equal?
           zoreslava:has?
