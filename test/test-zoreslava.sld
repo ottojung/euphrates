@@ -8,6 +8,7 @@
   (import
     (only (euphrates call-with-input-string)
           call-with-input-string))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates with-output-stringified)
           with-output-stringified))
@@ -35,7 +36,8 @@
           not
           number->string
           quote
-          string->symbol))
+          string->symbol
+          unless))
   (cond-expand
     (guile (import (only (srfi srfi-1) iota)))
     (else (import (only (srfi 1) iota))))

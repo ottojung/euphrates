@@ -190,13 +190,21 @@
   ;; Each key-value pair is represented as a list: (key value).
 
   (define order (zoreslava:struct:order struct))
-  (define lst (stack->list order))
-  (map
-   (lambda (element)
-     (define-pair (key value) element)
-     (define key/symbol (zoreslava:cast-key key))
-     (list key/symbol value))
-   lst))
+  (define lst (reverse (stack->list order)))
+  (define elements
+    (map
+     (lambda (element)
+       (define-pair (key value) element)
+       (define key/symbol (zoreslava:cast-key key))
+       (define value/escaped
+         (cond
+          ((number? value) value)
+          ((string? value) value)
+          (else (list 'unquote value))))
+       (list key/symbol value/escaped))
+     lst))
+
+  (list 'quasiquote elements))
 
 
 (define (zoreslava:check-element struct element)
@@ -231,7 +239,7 @@
   (zoreslava:set!/unsafe struct key/symbol value))
 
 
-(define (zoreslava:deserialize lists)
+(define (zoreslava:deserialize/lists lists)
   ;; Deserialize a list of key-value pairs into a new Zoreslava structure.
   ;; Validates the format of the input list and its elements.
 
@@ -245,10 +253,45 @@
 
   (for-each
    (lambda (element)
+     (zoreslava:check-element struct element)
      (zoreslava:decode-element struct element))
    lists)
 
   struct)
+
+
+(define (zoreslava:deserialize code)
+  ;; Deserialize a list of key-value pairs into a new Zoreslava structure.
+  ;; Validates the format of the input list and its elements.
+
+  (define (zoreslava:unwrap value)
+    ;; Unwrap a value if it is wrapped with 'unquote.
+
+    (define value* (car value))
+
+    (define ret
+      (if (and (pair? value*)
+               (equal? (car value*) 'unquote))
+          (list (cadr value*))
+          value))
+
+    ret)
+
+  ;; Ensure the input is a valid list format
+  (unless (and (list? code)
+               (eq? (car code) 'quasiquote))
+    (raisu* :from "zoreslava:deserialize"
+            :type 'serialized-object-bad-format
+            :message "Trying to deserialize something that is not valid zoreslava format."
+            :args (list code)))
+
+  (let ()
+    ;; Extract the actual list of key-value pairs
+    (define lists* (cadr code))
+    (define lists
+      (map (fn-cons identity zoreslava:unwrap) lists*))
+
+    (zoreslava:deserialize/lists lists)))
 
 
 (define zoreslava:write
@@ -256,13 +299,7 @@
   (case-lambda
    ((struct) (zoreslava:write struct (current-output-port)))
    ((struct port)
-    (define lists (zoreslava:serialize struct))
-    (for-each
-     (lambda (element)
-       (define-tuple (key value) element)
-       (write (list key value) port)
-       (newline port))
-     lists))))
+    (write (zoreslava:serialize struct) port))))
 
 
 (define zoreslava:read
@@ -271,5 +308,5 @@
   (case-lambda
    (() (zoreslava:read (current-input-port)))
    ((port)
-    (define lists (read-list port))
+    (define lists (read port))
     (zoreslava:deserialize lists))))

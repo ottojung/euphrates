@@ -8,7 +8,16 @@
      (zoreslava:serialize
       original)))
 
-  (assert (zoreslava:equal? original duplicate)))
+  (define eq-huh
+    (zoreslava:equal? original duplicate))
+
+  (unless eq-huh
+    (debugs original)
+    (debugs (zoreslava:serialize original))
+    (debugs duplicate)
+    )
+
+  (assert eq-huh))
 
 
 (let ()
@@ -20,8 +29,14 @@
   (with-zoreslava
    (zoreslava:set! 'qdtgudtfgpj2ne8fdimxanjg7bdw9ahq 5)
    (zoreslava:set! 'xqomq88lo6limci4lh62n9b4dk5iypgs "hello")
-   (zoreslava:set! "shs18cxueebwhz4u41a93bhjdqafk2kl" 'foo)
-   (zoreslava:set! 'vrm1ikv4dir8ecox9wyki6uat6e22oh3 'bar)
+   (test-serialization)))
+
+(let ()
+  (with-zoreslava
+   (zoreslava:set! 'qdtgudtfgpj2ne8fdimxanjg7bdw9ahq 5)
+   (zoreslava:set! 'xqomq88lo6limci4lh62n9b4dk5iypgs "hello")
+   (zoreslava:set! "shs18cxueebwhz4u41a93bhjdqafk2kl" ''foo)
+   (zoreslava:set! 'vrm1ikv4dir8ecox9wyki6uat6e22oh3 ''bar)
    (test-serialization)))
 
 (let ()
@@ -33,7 +48,6 @@
    (zoreslava:equal?
     (with-zoreslava)
     (with-zoreslava))))
-
 
 (let ()
   (define struct
@@ -265,5 +279,5 @@
 
 (let ()
   (assert-throw
-   'serialized-object-is-not-list
+   'serialized-object-bad-format
    (zoreslava:deserialize 5)))
