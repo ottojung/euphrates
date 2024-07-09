@@ -322,3 +322,12 @@
     (eval expression env))
 
   (zoreslava:deserialize/lists lists))
+
+
+(define (zoreslava:load path)
+  (define env
+    (environment '(scheme base) '(scheme char)))
+  (define lists
+    (load path env))
+
+  (zoreslava:deserialize/lists lists))

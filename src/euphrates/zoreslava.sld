@@ -12,7 +12,8 @@
     zoreslava:deserialize
     zoreslava:write
     zoreslava:read
-    zoreslava:eval)
+    zoreslava:eval
+    zoreslava:load)
   (import
     (only (euphrates define-pair) define-pair))
   (import
@@ -82,6 +83,7 @@
           when))
   (import (only (scheme case-lambda) case-lambda))
   (import (only (scheme eval) environment eval))
+  (import (only (scheme load) load))
   (import (only (scheme read) read))
   (import (only (scheme write) write))
   (cond-expand
