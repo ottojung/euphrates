@@ -18,6 +18,7 @@
           zoreslava/p
           zoreslava:deserialize
           zoreslava:equal?
+          zoreslava:eval
           zoreslava:has?
           zoreslava:read
           zoreslava:ref
@@ -26,6 +27,7 @@
           zoreslava:write))
   (import
     (only (scheme base)
+          *
           +
           begin
           define
@@ -35,6 +37,7 @@
           list
           not
           number->string
+          procedure?
           quote
           string->symbol
           unless))

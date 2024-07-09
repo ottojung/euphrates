@@ -310,3 +310,15 @@
    ((port)
     (define lists (read port))
     (zoreslava:deserialize lists))))
+
+
+(define (zoreslava:eval expression)
+  ;; Deserialize a list of key-value pairs into a new Zoreslava structure.
+  ;; Validates the format of the input list and its elements.
+
+  (define env
+    (environment '(scheme base) '(scheme char)))
+  (define lists
+    (eval expression env))
+
+  (zoreslava:deserialize/lists lists))
