@@ -1984,12 +1984,6 @@
              (and (list? option)
                   (list-length= 2 option))))
 
-     (cons 'sync-to-disk:
-           (lambda (option)
-             (and (list? option)
-                  (list-length= 2 option)
-                  (string? (cadr option)))))
-
      (cons 'on-conflict:
            (lambda (option)
              (and (list? option)
@@ -2072,17 +2066,8 @@
   (define (options-get-load options)
     (car (assq-or 'load: options (list #f))))
 
-  (define (options-get-sync-to-disk options)
-    (car (assq-or 'sync-to-disk: options (list #f))))
-
   (define (options-load-parser options current-code)
     (define load-object (options-get-load options))
-    (define disk-path (options-get-sync-to-disk options))
-
-    (when (and load-object disk-path)
-      (grammar-error
-       (stringf "Cannot specify both ~s and ~s arguments."
-                (~s 'load:) (~s 'sync-to-disk:))))
 
     (cond
      (load-object
@@ -2093,23 +2078,6 @@
         (unless (equal? (parselynn:core:struct:code loaded)
                         current-code)
           (grammar-error "Loaded parser has outdated code."))
-
-        loaded))
-
-     (disk-path
-      (let ()
-        (define loaded/0
-          (and (file-exists? disk-path)
-               (parselynn:core:load-from-disk disk-path)))
-
-        (define up-to-date?
-          (and loaded/0
-               (equal? (parselynn:core:struct:code loaded/0)
-                       current-code)))
-
-        (define loaded
-          (if up-to-date? loaded/0
-              (parselynn:core:load-from-disk disk-path)))
 
         loaded))
 
