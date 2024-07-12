@@ -7,17 +7,18 @@
 ;; Zoreslava Serialization Module
 ;;
 ;; Overview:
-;; The Zoreslava module is designed to provide serialization and deserialization
-;; functionalities to facilitate the storage and retrieval of complex data
-;; structures. It is useful for persisting state between
-;; different sessions or for data transmission.
-;; Zoreslava is composable.
+;; The Zoreslava module provides serialization and deserialization functionalities
+;; to facilitate the storage and retrieval of complex data structures. It is useful
+;; for persisting state between different sessions or for data transmission.
+;; Zoreslava's serialization output is executable Scheme code.
 ;;
 ;; Features:
 ;; - Create and initialize a Zoreslava structure.
 ;; - Serialize a Zoreslava structure to a list form.
 ;; - Deserialize a list form back into a Zoreslava structure.
 ;; - Set and retrieve values within the Zoreslava structure.
+;; - Serialize to and deserialize from executable Scheme code.
+;; - Read and write serialized structures through ports.
 ;;
 ;; Usage:
 ;; (with-zoreslava
@@ -30,6 +31,10 @@
 ;; - zoreslava:ref: Retrieve a value by key from a Zoreslava structure.
 ;; - zoreslava:serialize: Convert a Zoreslava structure to a list.
 ;; - zoreslava:deserialize: Restore a Zoreslava structure from a list.
+;; - zoreslava:write: Serialize and write the structure to a port.
+;; - zoreslava:read: Read and deserialize a structure from a port.
+;; - zoreslava:eval: Evaluate serialized scheme code and deserialize it.
+;; - zoreslava:load: Load and deserialize a structure from a file.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -168,7 +173,7 @@
   (when (zoreslava:has? struct key)
     (raisu* :from "zoreslava:set!"
             :type 'already-defined
-            :message "Trying to add a value with the save key multiple times."
+            :message "Trying to add a value with the same key multiple times."
             :args (list struct key value))))
 
 
@@ -187,7 +192,7 @@
 
 (define (zoreslava:serialize struct)
   ;; Serialize the Zoreslava structure into a list of key-value pairs.
-  ;; Each key-value pair is represented as a list: (key value).
+  ;; Each key-value pair is represented as a list: (key value), where value can be quasiquoted.
 
   (define order (zoreslava:struct:order struct))
   (define lst (reverse (stack->list order)))
@@ -214,20 +219,20 @@
   (unless (list? element)
     (raisu* :from "zoreslava:deserialize"
             :type 'serialized-object-bad-element-type
-            :message "Trying to deserialize something that is not zoreslava."
+            :message "Trying to deserialize something that is not Zoreslava."
             :args (list element)))
 
   (unless (list-length= 2 element)
     (raisu* :from "zoreslava:deserialize"
             :type 'serialized-object-bad-element-length
-            :message "Trying to deserialize something that is not zoreslava."
+            :message "Trying to deserialize something that is not Zoreslava."
             :args (list (length element) element)))
 
   (unless (or (symbol? (car element))
               (string? (car element)))
     (raisu* :from "zoreslava:deserialize"
             :type 'serialized-object-bad-key-type
-            :message "Trying to deserialize something that is not zoreslava."
+            :message "Trying to deserialize something that is not Zoreslava."
             :args (list element))))
 
 
@@ -248,7 +253,7 @@
   (unless (list? lists)
     (raisu* :from "zoreslava:deserialize"
             :type 'serialized-object-is-not-list
-            :message "Trying to deserialize something that is not zoreslava."
+            :message "Trying to deserialize something that is not Zoreslava."
             :args (list lists)))
 
   (for-each
@@ -261,8 +266,8 @@
 
 
 (define (zoreslava:deserialize code)
-  ;; Deserialize a list of key-value pairs into a new Zoreslava structure.
-  ;; Validates the format of the input list and its elements.
+  ;; Deserialize executable Scheme code to restore the Zoreslava structure.
+  ;; Unwraps values if wrapped in 'unquote.
 
   (define (zoreslava:unwrap value)
     ;; Unwrap a value if it is wrapped with 'unquote.
@@ -282,7 +287,7 @@
                (equal? (car code) 'quasiquote))
     (raisu* :from "zoreslava:deserialize"
             :type 'serialized-object-bad-format
-            :message "Trying to deserialize something that is not valid zoreslava format."
+            :message "Trying to deserialize something that is not valid Zoreslava format."
             :args (list code)))
 
   (let ()
@@ -313,8 +318,7 @@
 
 
 (define (zoreslava:eval expression)
-  ;; Deserialize a list of key-value pairs into a new Zoreslava structure.
-  ;; Validates the format of the input list and its elements.
+  ;; Unwrap and evaluate serialized Scheme code, then deserialize it.
 
   (define env
     (environment '(scheme base) '(scheme char)))
@@ -325,6 +329,8 @@
 
 
 (define (zoreslava:load path)
+  ;; Load and evaluate a file containing serialized Scheme code, then deserialize it.
+
   (define env
     (environment '(scheme base) '(scheme char)))
   (define lists
