@@ -2,6 +2,9 @@
 (define-library
   (euphrates parselynn-simple-deserialize)
   (export parselynn:simple:deserialize)
+  (import (only (euphrates fn-cons) fn-cons))
+  (import (only (euphrates hashset) list->hashset))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates parselynn-core-deserialize)
           parselynn:core:deserialize))
@@ -12,7 +15,8 @@
     (only (euphrates zoreslava)
           zoreslava:eval
           zoreslava:ref))
-  (import (only (scheme base) begin define quote))
+  (import
+    (only (scheme base) begin define map quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

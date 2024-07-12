@@ -14,7 +14,9 @@
      (zoreslava:set!
       'h527afc6bh66cls9w1vl
       `(quote
-        ,(parselynn:simple:struct:transformations parser)))
+        ,(map
+          (fn-cons identity hashset->list)
+          (parselynn:simple:struct:transformations parser))))
 
      ))
 

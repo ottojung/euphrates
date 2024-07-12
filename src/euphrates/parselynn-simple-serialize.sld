@@ -2,6 +2,9 @@
 (define-library
   (euphrates parselynn-simple-serialize)
   (export parselynn:simple:serialize)
+  (import (only (euphrates fn-cons) fn-cons))
+  (import (only (euphrates hashset) hashset->list))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates parselynn-core-serialize)
           parselynn:core:serialize))
@@ -21,6 +24,7 @@
     (only (scheme base)
           begin
           define
+          map
           quasiquote
           quote
           unquote))

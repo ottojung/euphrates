@@ -23,6 +23,7 @@
        (define result
          (run-input parser input))
 
+       (check-parser-serialization parser)
        (assert= result expected-output)
        result))))
 
@@ -42,18 +43,31 @@
   ;; (define diff
   ;;   (parselynn:simple:diff struct1 struct2))
 
-  ;; (define diff*
+  ;; (define diff/2
   ;;   (filter
   ;;    (negate
-  ;;     (lambda (p) (equal? (car p) 'maybefun)))
+  ;;     (lambda (p) (member (car p) '(maybefun transformations))))
   ;;    diff))
+
+  ;; (define diff*
+  ;;   (let loop ((obj diff/2))
+  ;;     (cond
+  ;;      ((pair? obj)
+  ;;       (cons (loop (car obj))
+  ;;             (loop (cdr obj))))
+
+  ;;      ((hashset? obj)
+  ;;       (map loop (hashset->list obj)))
+
+  ;;      (else obj))))
 
   (define diff
     (map car
          (parselynn:simple:diff struct1 struct2)))
 
   (define diff*
-    (delete 'maybefun diff))
+    (delete 'transformations
+            (delete 'maybefun diff)))
 
   diff*)
 
@@ -67,7 +81,6 @@
   (define parser
     (make-test-parser parser-rules))
 
-  (check-parser-serialization parser)
   (check-parser-result-and-reverse parser input expected-output))
 
 (define (test-parser-error parser-rules input)

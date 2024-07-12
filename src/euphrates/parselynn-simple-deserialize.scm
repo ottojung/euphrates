@@ -13,7 +13,9 @@
     (parselynn:core:deserialize object))
 
   (define transformations
-    (zoreslava:ref slava 'h527afc6bh66cls9w1vl))
+    (map
+     (fn-cons identity list->hashset)
+     (zoreslava:ref slava 'h527afc6bh66cls9w1vl)))
 
   (define ret
     (make-parselynn:simple:struct
