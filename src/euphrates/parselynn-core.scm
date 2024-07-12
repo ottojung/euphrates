@@ -1979,11 +1979,6 @@
                   (list-length= 2 option)
                   (port? (cadr option)))))
 
-     (cons 'load:
-           (lambda (option)
-             (and (list? option)
-                  (list-length= 2 option))))
-
      (cons 'on-conflict:
            (lambda (option)
              (and (list? option)
@@ -2063,26 +2058,6 @@
   (define (options-get-lexer-code options)
     (assq-or 'lexer-code: options #f))
 
-  (define (options-get-load options)
-    (car (assq-or 'load: options (list #f))))
-
-  (define (options-load-parser options current-code)
-    (define load-object (options-get-load options))
-
-    (cond
-     (load-object
-      (let ()
-        (define loaded
-          (parselynn:core:deserialize load-object))
-
-        (unless (equal? (parselynn:core:struct:code loaded)
-                        current-code)
-          (grammar-error "Loaded parser has outdated code."))
-
-        loaded))
-
-     (else #f)))
-
   ;; -- arguments
 
   (define (extract-arguments lst)
@@ -2159,10 +2134,9 @@
     (define actions (get-code-actions))
     (define maybefun #f)
 
-    (or (options-load-parser options code)
-        (make-parselynn:core:struct
-         results-mode driver-name tokens
-         rules actions code maybefun)))
+    (make-parselynn:core:struct
+     results-mode driver-name tokens
+     rules actions code maybefun))
 
   (define options
     (extract-arguments arguments))

@@ -18,7 +18,7 @@
      (key value)
      (define key* (gkeyword->fkeyword key))
      (define value*
-       (if (memq key* (list 'driver: 'output: 'on-conflict: 'on-error: 'load:))
+       (if (memq key* (list 'driver: 'output: 'on-conflict: 'on-error:))
            (list value)
            value))
      (cons key* value*)))

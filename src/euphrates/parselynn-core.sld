@@ -7,12 +7,8 @@
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
-    (only (euphrates parselynn-core-deserialize)
-          parselynn:core:deserialize))
-  (import
     (only (euphrates parselynn-core-struct)
-          make-parselynn:core:struct
-          parselynn:core:struct:code))
+          make-parselynn:core:struct))
   (import
     (only (euphrates parselynn-token)
           parselynn:token:typetag))
