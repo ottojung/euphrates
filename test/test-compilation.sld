@@ -1691,6 +1691,9 @@
     (only (euphrates parselynn-simple-join1)
           parselynn:simple:join1))
   (import
+    (only (euphrates parselynn-simple-load-from-disk)
+          parselynn:simple:load-from-disk))
+  (import
     (only (euphrates parselynn-simple-postprocess)
           parselynn:simple:postprocess))
   (import
