@@ -279,7 +279,7 @@
 
   ;; Ensure the input is a valid list format
   (unless (and (list? code)
-               (eq? (car code) 'quasiquote))
+               (equal? (car code) 'quasiquote))
     (raisu* :from "zoreslava:deserialize"
             :type 'serialized-object-bad-format
             :message "Trying to deserialize something that is not valid zoreslava format."

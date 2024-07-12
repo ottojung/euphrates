@@ -55,7 +55,6 @@
           define
           define-syntax
           else
-          eq?
           equal?
           for-each
           if
