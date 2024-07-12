@@ -337,3 +337,41 @@
     (load path env))
 
   (zoreslava:deserialize/lists lists))
+
+
+(define (zoreslava:union struct1 struct2)
+  ;; Combine two Zoreslava structures into one.
+  ;; Throws an error if there is an intersection in terms of keys.
+
+  (define table1 (zoreslava:struct:table struct1))
+  (define table2 (zoreslava:struct:table struct2))
+
+  (define order1 (zoreslava:struct:order struct1))
+  (define order2 (zoreslava:struct:order struct2))
+
+  ;; Check for key intersection
+  (define resulting-table
+    (hashmap-merge
+     table1 table2
+
+     (lambda (key value1 value2)
+       (raisu* :from "zoreslava:union"
+               :type 'intersection-error
+               :message "Key intersection found during union operation."
+               :args (list key value1 value2)))))
+
+  (define resulting-order
+    (list->stack
+     (reverse
+      (append
+       (reverse
+        (stack->list order1))
+       (reverse
+        (stack->list order2))))))
+
+  (define resulting-struct
+    (zoreslava:struct:make
+     resulting-order
+     resulting-table))
+
+  resulting-struct)

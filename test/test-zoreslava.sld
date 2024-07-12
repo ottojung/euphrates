@@ -28,6 +28,7 @@
           zoreslava:ref
           zoreslava:serialize
           zoreslava:set!
+          zoreslava:union
           zoreslava:write))
   (import
     (only (scheme base)

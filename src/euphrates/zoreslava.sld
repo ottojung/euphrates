@@ -15,7 +15,8 @@
     zoreslava:write
     zoreslava:read
     zoreslava:eval
-    zoreslava:load)
+    zoreslava:load
+    zoreslava:union)
   (import
     (only (euphrates define-pair) define-pair))
   (import
@@ -26,6 +27,7 @@
   (import
     (only (euphrates hashmap)
           hashmap-has?
+          hashmap-merge
           hashmap-ref
           hashmap-set!
           make-hashmap))
@@ -39,6 +41,7 @@
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
+          list->stack
           stack->list
           stack-make
           stack-push!))
@@ -47,6 +50,7 @@
     (only (scheme base)
           _
           and
+          append
           begin
           cadr
           car

@@ -337,3 +337,62 @@
   (assert-throw
    'serialized-object-bad-format
    (zoreslava:deserialize 5)))
+
+(let ()
+  ;; Test union of two non-overlapping structures
+  (define struct1
+    (with-zoreslava
+      (zoreslava:set! 'key1 "value1")
+      (zoreslava:set! 'key2 "value2")))
+
+  (define struct2
+    (with-zoreslava
+      (zoreslava:set! 'key3 "value3")
+      (zoreslava:set! 'key4 "value4")))
+
+  (define union-struct (zoreslava:union struct1 struct2))
+
+  (assert= "value1" (zoreslava:ref union-struct 'key1))
+  (assert= "value2" (zoreslava:ref union-struct 'key2))
+  (assert= "value3" (zoreslava:ref union-struct 'key3))
+  (assert= "value4" (zoreslava:ref union-struct 'key4)))
+
+(let ()
+  ;; Test union where intersection exists should raise an error
+  (define struct1
+    (with-zoreslava
+      (zoreslava:set! 'key1 "value1")
+      (zoreslava:set! 'key2 "value2")))
+
+  (define struct2
+    (with-zoreslava
+      (zoreslava:set! 'key2 "valueX")
+      (zoreslava:set! 'key3 "value3")))
+
+  (assert-throw
+   'intersection-error
+   (zoreslava:union struct1 struct2)))
+
+(let ()
+  ;; Test union of two empty structures
+  (define struct1 (with-zoreslava))
+  (define struct2 (with-zoreslava))
+  (define union-struct (zoreslava:union struct1 struct2))
+
+  (assert (zoreslava:equal? struct1 union-struct))
+  (assert (zoreslava:equal? struct2 union-struct)))
+
+(let ()
+  ;; Test union where one structure is empty
+  (define struct1 (with-zoreslava))
+  (define struct2
+    (with-zoreslava
+      (zoreslava:set! 'key "value")))
+
+  (define union-struct1 (zoreslava:union struct1 struct2))
+  (define union-struct2 (zoreslava:union struct2 struct1))
+
+  (assert= "value" (zoreslava:ref union-struct1 'key))
+  (assert= "value" (zoreslava:ref union-struct2 'key)))
+
+
