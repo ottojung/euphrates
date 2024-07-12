@@ -2,29 +2,9 @@
 (define (iterate-results iter)
   (let loop () (when (iter) (loop))))
 
-(define (from-disk parser/0 disk-path)
-  ;; TODO: this should be improved for usability of simple parser.
-
-  (define backend-parser/0
-    (parselynn:simple:struct:backend-parser parser/0))
-
-  (define _18273
-    (call-with-output-file
-        disk-path
-      (lambda (port)
-        (write (parselynn:core:serialize backend-parser/0) port))))
-
-  (define backend-parser
-    (parselynn:core:load-from-disk disk-path))
-
-  (define parser
-    (make-parselynn:simple:struct
-     (parselynn:simple:struct:arguments parser/0)
-     backend-parser
-     (parselynn:simple:struct:transformations parser/0)))
-
-  parser)
-
+(define (from-disk parser path)
+  (parselynn:simple:save-to-disk path parser)
+  (parselynn:simple:load-from-disk path))
 
 (define (run/generic parser make-lexer n-runs)
   (let loop ((i n-runs))
