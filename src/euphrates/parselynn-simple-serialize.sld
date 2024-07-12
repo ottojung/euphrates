@@ -16,10 +16,8 @@
   (import
     (only (euphrates zoreslava)
           with-zoreslava
-          zoreslava:deserialize
           zoreslava:serialize
-          zoreslava:set!
-          zoreslava:union))
+          zoreslava:set!))
   (import
     (only (scheme base)
           begin
