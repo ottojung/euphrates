@@ -37,10 +37,37 @@
 
   (assert= input reversed))
 
+(define (get-diff struct1 struct2)
+
+  ;; (define diff
+  ;;   (parselynn:simple:diff struct1 struct2))
+
+  ;; (define diff*
+  ;;   (filter
+  ;;    (negate
+  ;;     (lambda (p) (equal? (car p) 'maybefun)))
+  ;;    diff))
+
+  (define diff
+    (map car
+         (parselynn:simple:diff struct1 struct2)))
+
+  (define diff*
+    (delete 'maybefun diff))
+
+  diff*)
+
+(define (check-parser-serialization parser)
+  (define serialized (parselynn:simple:serialize parser))
+  (define deserialized (parselynn:simple:deserialize serialized))
+  (assert= '() (get-diff parser deserialized))
+  (assert (not (equal? parser serialized))))
+
 (define (test-parser parser-rules input expected-output)
   (define parser
     (make-test-parser parser-rules))
 
+  (check-parser-serialization parser)
   (check-parser-result-and-reverse parser input expected-output))
 
 (define (test-parser-error parser-rules input)
