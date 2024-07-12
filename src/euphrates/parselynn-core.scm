@@ -2088,7 +2088,7 @@
      (load-object
       (let ()
         (define loaded
-          (parselynn:core:load load-object))
+          (parselynn:core:deserialize load-object))
 
         (unless (equal? (parselynn:core:struct:code loaded)
                         current-code)

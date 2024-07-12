@@ -1,6 +1,6 @@
 
 (define-library
-  (test-parselynn-core-load)
+  (test-parselynn-core-deserialize)
   (import
     (only (data parser-branching-glr)
           parser-branching-glr))
@@ -15,8 +15,8 @@
           parser-repeating-lr))
   (import (only (euphrates assert) assert))
   (import
-    (only (euphrates parselynn-core-load)
-          parselynn:core:load))
+    (only (euphrates parselynn-core-deserialize)
+          parselynn:core:deserialize))
   (import
     (only (euphrates parselynn-run) parselynn-run))
   (import
@@ -75,5 +75,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-parselynn-core-load.scm")))
-    (else (include "test-parselynn-core-load.scm"))))
+               "test-parselynn-core-deserialize.scm")))
+    (else (include "test-parselynn-core-deserialize.scm"))))

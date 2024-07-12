@@ -10,8 +10,8 @@
     (only (euphrates parselynn-core-load-from-disk)
           parselynn:core:load-from-disk))
   (import
-    (only (euphrates parselynn-core-load)
-          parselynn:core:load))
+    (only (euphrates parselynn-core-deserialize)
+          parselynn:core:deserialize))
   (import
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct

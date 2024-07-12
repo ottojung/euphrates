@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates parselynn-core-load)
-  (export parselynn:core:load)
+  (euphrates parselynn-core-deserialize)
+  (export parselynn:core:deserialize)
   (import
     (only (euphrates parselynn-core-serialized-typetag)
           parselynn:core:serialized-typetag))
@@ -26,5 +26,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-core-load.scm")))
-    (else (include "parselynn-core-load.scm"))))
+               "euphrates/parselynn-core-deserialize.scm")))
+    (else (include "parselynn-core-deserialize.scm"))))

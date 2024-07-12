@@ -3,8 +3,8 @@
   (euphrates parselynn-core-load-from-disk)
   (export parselynn:core:load-from-disk)
   (import
-    (only (euphrates parselynn-core-load)
-          parselynn:core:load))
+    (only (euphrates parselynn-core-deserialize)
+          parselynn:core:deserialize))
   (import (only (scheme base) begin define quote))
   (import (only (scheme eval) environment))
   (import (only (scheme load) load))

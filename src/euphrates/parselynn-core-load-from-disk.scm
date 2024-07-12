@@ -4,4 +4,4 @@
 (define (parselynn:core:load-from-disk path)
   (define env (environment '(scheme base) '(scheme char))) ;; FIXME: use a standard environment.
   (define serialized (load path env))
-  (parselynn:core:load serialized))
+  (parselynn:core:deserialize serialized))

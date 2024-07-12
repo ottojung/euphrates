@@ -60,11 +60,11 @@
     (define-values (parser-repeating parser-branching)
       (cond
        ((equal? driver "lr")
-        (values (parselynn:core:load parser-repeating-lr)
-                (parselynn:core:load parser-branching-lr)))
+        (values (parselynn:core:deserialize parser-repeating-lr)
+                (parselynn:core:deserialize parser-branching-lr)))
        ((equal? driver "glr")
-        (values (parselynn:core:load parser-repeating-glr)
-                (parselynn:core:load parser-branching-glr)))
+        (values (parselynn:core:deserialize parser-repeating-glr)
+                (parselynn:core:deserialize parser-branching-glr)))
        (else
         (raisu 'bad-driver-type driver))))
 
