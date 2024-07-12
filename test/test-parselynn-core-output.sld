@@ -3,13 +3,14 @@
   (test-parselynn-core-output)
   (import (only (euphrates assert) assert))
   (import
-    (only (euphrates list-length-geq-q)
-          list-length=<?))
-  (import
     (only (euphrates parselynn-core-serialize)
           parselynn:core:serialize))
   (import
     (only (euphrates parselynn-core) parselynn:core))
+  (import
+    (only (euphrates zoreslava)
+          zoreslava:deserialize
+          zoreslava?))
   (import
     (only (scheme base)
           *

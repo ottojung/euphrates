@@ -45,7 +45,7 @@
   ;; - order: A stack that keeps track of insertion order.
   ;; - table: A hashmap for key-value storage.
 
-  (zoreslava:struct:make order table) zoreslava:struct?
+  (zoreslava:struct:make order table) zoreslava?
   (order zoreslava:struct:order)
   (table zoreslava:struct:table))
 

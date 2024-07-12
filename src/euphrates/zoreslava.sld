@@ -3,6 +3,7 @@
   (euphrates zoreslava)
   (export
     zoreslava/p
+    zoreslava?
     with-zoreslava
     zoreslava:equal?
     zoreslava:set!
@@ -10,6 +11,7 @@
     zoreslava:has?
     zoreslava:serialize
     zoreslava:deserialize
+    zoreslava:deserialize/lists
     zoreslava:write
     zoreslava:read
     zoreslava:eval

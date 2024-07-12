@@ -14,14 +14,18 @@
           parselynn:core:struct:rules
           parselynn:core:struct:tokens))
   (import
+    (only (euphrates zoreslava)
+          with-zoreslava
+          zoreslava:serialize
+          zoreslava:set!))
+  (import
     (only (scheme base)
           begin
           define
-          let
+          list
           quasiquote
           quote
-          unquote
-          vector))
+          unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

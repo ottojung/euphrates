@@ -9,15 +9,43 @@
   (define code-actions (parselynn:core:struct:actions parser))
   (define code (parselynn:core:struct:code parser))
 
-  `(let ()
-     (define maybefun0 ,code)
-     (define code-actions ,code-actions)
-     (define maybefun (maybefun0 code-actions))
-     (vector (quote ,parselynn:core:serialized-typetag)
-             (quote ,results-mode)
-             (quote ,driver-name)
-             (quote ,tokens)
-             (quote ,rules)
-             code-actions
-             (quote ,code)
-             maybefun)))
+  (define ret
+
+    (zoreslava:serialize
+     (with-zoreslava
+
+      (zoreslava:set!
+       'cqqn4gukh9w0rx195m2c
+       `(quote ,parselynn:core:serialized-typetag))
+
+      (zoreslava:set!
+       'vasml2yhpvo1iq0ofir7
+       `(quote ,results-mode))
+
+      (zoreslava:set!
+       'nx8lw4j8m9qkhnks1lnb
+       `(quote ,driver-name))
+
+      (zoreslava:set!
+       'ill9vlxm3pyptw40uotx
+       `(quote ,tokens))
+
+      (zoreslava:set!
+       'qofpa1t73vde5nivj6d9
+       `(quote ,rules))
+
+      (zoreslava:set!
+       'obs163lvp06p9m10bwjy
+       code-actions)
+
+      (zoreslava:set!
+       'wgq4fdim7f2kx3zj610r
+       `(quote ,code))
+
+      (zoreslava:set!
+       'i3bpqtlnzqjz8ileyrpt
+       (list code code-actions))
+
+      )))
+
+  ret)
