@@ -3019,6 +3019,7 @@
           with-zoreslava
           zoreslava/p
           zoreslava:deserialize
+          zoreslava:deserialize/lists
           zoreslava:equal?
           zoreslava:eval
           zoreslava:has?
@@ -3028,7 +3029,8 @@
           zoreslava:serialize
           zoreslava:set!
           zoreslava:union
-          zoreslava:write))
+          zoreslava:write
+          zoreslava?))
   (import
     (only (scheme base)
           *
