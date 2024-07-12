@@ -37,31 +37,39 @@
     (check-code name filename))
 
   (define (generate-repating driver)
-    (parselynn:core
-     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (on-conflict: ,ignore)
-       (output-code: ,(comp (save+check "repeating" driver)))
-       (driver: ,(string->symbol driver))
-       (results: ,(if (equal? (~a driver) "glr") 'all 'first))
-       (rules:
-        (expr     (expr add expr) : #t
-                  (term) : #t)
-        (add      (+) : #t)
-        (term     (NUM) : #t)))))
+    (define parser
+      (parselynn:core
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (on-conflict: ,ignore)
+         (driver: ,(string->symbol driver))
+         (results: ,(if (equal? (~a driver) "glr") 'all 'first))
+         (rules:
+          (expr     (expr add expr) : #t
+                    (term) : #t)
+          (add      (+) : #t)
+          (term     (NUM) : #t)))))
+
+    (save+check
+     "repeating" driver
+     (parselynn:core:serialize parser)))
 
   (define (generate-branching driver)
-    (parselynn:core
-     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (driver: ,(string->symbol driver))
-       (results: ,(if (equal? (~a driver) "glr") 'all 'first))
-       (on-conflict: ,ignore)
-       (output-code: ,(comp (save+check "branching" driver)))
-       (rules:
-        (expr     (expr add expr) : #t
-                  (LPAREN expr RPAREN) : #t
-                  (term) : #t)
-        (add      (+) : #t)
-        (term     (NUM) : #t)))))
+    (define parser
+      (parselynn:core
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (driver: ,(string->symbol driver))
+         (results: ,(if (equal? (~a driver) "glr") 'all 'first))
+         (on-conflict: ,ignore)
+         (rules:
+          (expr     (expr add expr) : #t
+                    (LPAREN expr RPAREN) : #t
+                    (term) : #t)
+          (add      (+) : #t)
+          (term     (NUM) : #t)))))
+
+    (save+check
+     "branching" driver
+     (parselynn:core:serialize parser)))
 
   (define (generate driver)
     (generate-repating driver)

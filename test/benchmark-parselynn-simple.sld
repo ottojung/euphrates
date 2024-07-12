@@ -9,12 +9,21 @@
     (only (euphrates keylist-to-alist)
           keylist->alist))
   (import
+    (only (euphrates parselynn-core-load-from-disk)
+          parselynn:core:load-from-disk))
+  (import
+    (only (euphrates parselynn-core-serialize)
+          parselynn:core:serialize))
+  (import
     (only (euphrates
             parselynn-simple-run-with-error-handler)
           parselynn:simple:run/with-error-handler))
   (import
     (only (euphrates parselynn-simple-struct)
-          parselynn:simple:struct:arguments))
+          make-parselynn:simple:struct
+          parselynn:simple:struct:arguments
+          parselynn:simple:struct:backend-parser
+          parselynn:simple:struct:transformations))
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))
@@ -60,8 +69,10 @@
           string-map
           string-ref
           unquote
-          unquote-splicing
           when))
+  (import
+    (only (scheme file) call-with-output-file))
+  (import (only (scheme write) write))
   (cond-expand
     (guile (import (only (srfi srfi-1) any count)))
     (else (import (only (srfi 1) any count))))

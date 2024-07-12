@@ -2,6 +2,29 @@
 (define (iterate-results iter)
   (let loop () (when (iter) (loop))))
 
+(define (from-disk parser/0 disk-path)
+  ;; TODO: this should be improved for usability of simple parser.
+
+  (define backend-parser/0
+    (parselynn:simple:struct:backend-parser parser/0))
+
+  (define _18273
+    (call-with-output-file
+        disk-path
+      (lambda (port)
+        (write (parselynn:core:serialize backend-parser/0) port))))
+
+  (define backend-parser
+    (parselynn:core:load-from-disk disk-path))
+
+  (define parser
+    (make-parselynn:simple:struct
+     (parselynn:simple:struct:arguments parser/0)
+     backend-parser
+     (parselynn:simple:struct:transformations parser/0)))
+
+  parser)
+
 
 (define (run/generic parser make-lexer n-runs)
   (let loop ((i n-runs))
@@ -71,12 +94,7 @@
                 (eof-object)
                 (input-getter count))))))
 
-  (define maybe-load-options
-    (if load?
-        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template.scm")
-        '()))
-
-  (define parser
+  (define parser/0
     (parselynn:simple
      `(:grammar
        ( expr = expr add expr / term
@@ -84,9 +102,14 @@
          term = NUM
          NUM = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-       ,@maybe-load-options
-
        :driver ,(string->symbol driver))))
+
+  (define parser
+    (if load?
+        (from-disk
+         parser/0
+         "/tmp/benchmark-parselynn-simple-repeating-template.scm")
+        parser/0))
 
   (with-benchmark/timestamp "constructed parser")
   (run/generic parser make-lexer n-runs))
@@ -127,12 +150,7 @@
                 (eof-object)
                 (input-getter count))))))
 
-  (define maybe-load-options
-    (if load?
-        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template-2.scm")
-        '()))
-
-  (define parser
+  (define parser/0
     (parselynn:simple
      `(:grammar
        ( expr = expr add expr / term
@@ -145,9 +163,14 @@
          num = dig num / dig
          dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-       ,@maybe-load-options
-
        :driver ,(string->symbol driver))))
+
+  (define parser
+    (if load?
+        (from-disk
+         parser/0
+         "/tmp/benchmark-parselynn-simple-repeating-template-2.scm")
+        parser/0))
 
   (with-benchmark/timestamp "constructed parser")
   (run/generic parser make-lexer n-runs))
@@ -187,12 +210,7 @@
                 (eof-object)
                 (input-getter count))))))
 
-  (define maybe-load-options
-    (if load?
-        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template-3.scm")
-        '()))
-
-  (define parser
+  (define parser/0
     (parselynn:simple
      `(:grammar
        ( expr = expr add expr / term / space expr / expr space
@@ -216,9 +234,14 @@
        :flatten (term expr)
        :skip (space)
 
-       ,@maybe-load-options
-
        :driver ,(string->symbol driver))))
+
+  (define parser
+    (if load?
+        (from-disk
+         parser/0
+          "/tmp/benchmark-parselynn-simple-repeating-template-3.scm")
+        parser/0))
 
   (with-benchmark/timestamp "constructed parser")
   (run/generic parser make-lexer n-runs))
@@ -257,12 +280,7 @@
                 (eof-object)
                 (input-getter count))))))
 
-  (define maybe-load-options
-    (if load?
-        `(:sync-to-disk "/tmp/benchmark-parselynn-simple-repeating-template.scm")
-        '()))
-
-  (define parser
+  (define parser/0
     (parselynn:simple
      `(:grammar
 
@@ -282,9 +300,14 @@
          /     "9" (call #t)
          )
 
-       ,@maybe-load-options
-
        :driver ,(string->symbol driver))))
+
+  (define parser
+    (if load?
+        (from-disk
+         parser/0
+          "/tmp/benchmark-parselynn-simple-repeating-template.scm")
+        parser/0))
 
   (with-benchmark/timestamp "constructed parser")
   (run/generic parser make-lexer n-runs))

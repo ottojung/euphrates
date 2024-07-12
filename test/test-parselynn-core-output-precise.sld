@@ -2,8 +2,10 @@
 (define-library
   (test-parselynn-core-output-precise)
   (import (only (euphrates assert) assert))
-  (import (only (euphrates comp) comp))
   (import (only (euphrates ignore) ignore))
+  (import
+    (only (euphrates parselynn-core-serialize)
+          parselynn:core:serialize))
   (import
     (only (euphrates parselynn-core) parselynn:core))
   (import (only (euphrates printf) printf))

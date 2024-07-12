@@ -1979,12 +1979,6 @@
                   (list-length= 2 option)
                   (port? (cadr option)))))
 
-     (cons 'output-code:
-           (lambda (option)
-             (and (list? option)
-                  (list-length= 2 option)
-                  (procedure? (cadr option)))))
-
      (cons 'load:
            (lambda (option)
              (and (list? option)
@@ -2039,32 +2033,6 @@
     (raisu* :type 'parse-conflict
             :message message
             :args (list type new current on-symbol in-state)))
-
-  (define (output-parser-to-procedure! options code callback)
-    (define tokens (options-get-tokens options))
-    (define rules (options-get-rules options))
-    (define code-actions (get-code-actions))
-    (define code*
-      `(let ()
-         (define maybefun0 ,code)
-         (define code-actions ,code-actions)
-         (define maybefun (maybefun0 code-actions))
-         (vector (quote ,parselynn:core:serialized-typetag)
-                 (quote ,results-mode)
-                 (quote ,driver-name)
-                 (quote ,tokens)
-                 (quote ,rules)
-                 code-actions
-                 (quote ,code)
-                 maybefun)))
-    (callback code*))
-
-  (define (output-parser! options code)
-    (let ((option (assq-or 'output-code: options)))
-      (if option
-          (let ()
-            (define callback (car option))
-            (output-parser-to-procedure! options code callback)))))
 
   (define (output-table! options)
     (let ((option (assq-or 'output-table: options)))
@@ -2138,16 +2106,6 @@
           (and loaded/0
                (equal? (parselynn:core:struct:code loaded/0)
                        current-code)))
-
-        (define _71263
-          (unless up-to-date?
-            (output-parser-to-procedure!
-             options current-code
-             (lambda (serialized-parser)
-               (call-with-output-file
-                   disk-path
-                 (lambda (port)
-                   (write serialized-parser port)))))))
 
         (define loaded
           (if up-to-date? loaded/0
@@ -2228,8 +2186,7 @@
 
     (define _output
       (begin
-        (output-table! options)
-        (output-parser! options code)))
+        (output-table! options)))
 
     (define actions (get-code-actions))
     (define maybefun #f)

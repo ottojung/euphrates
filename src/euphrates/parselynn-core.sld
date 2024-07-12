@@ -13,9 +13,6 @@
     (only (euphrates parselynn-core-load)
           parselynn:core:load))
   (import
-    (only (euphrates parselynn-core-serialized-typetag)
-          parselynn:core:serialized-typetag))
-  (import
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct
           parselynn:core:struct:code))
@@ -117,11 +114,8 @@
           vector?
           when))
   (import (only (scheme cxr) caaar cadar caddr))
-  (import
-    (only (scheme file)
-          call-with-output-file
-          file-exists?))
-  (import (only (scheme write) display write))
+  (import (only (scheme file) file-exists?))
+  (import (only (scheme write) display))
   (cond-expand
     (guile (import
              (only (srfi srfi-1)

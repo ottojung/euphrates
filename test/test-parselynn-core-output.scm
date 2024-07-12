@@ -6,14 +6,16 @@
 
   (define parser
     (parselynn:core
-     `((output-code: ,set-code)
-       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add term)
                   (term))
         (add      (mspace + mspace))
         (term     (mspace NUM mspace))
         (mspace   (SPACE mspace) ())))))
+
+  (set-code
+   (parselynn:core:serialize parser))
 
   (assert current-code)
   (assert (list? current-code))
@@ -24,8 +26,8 @@
 
   (define parser
     (parselynn:core
-     `((output-table: ,out)
-       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (output-table: ,out)
        (rules:
         (expr     (expr add term)
                   (term))
@@ -47,7 +49,6 @@
   (define parser
     (parselynn:core
      `((output-table: ,out)
-       (output-code: ,set-code)
        (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules:
         (expr     (expr add term)
@@ -55,6 +56,10 @@
         (add      (mspace + mspace))
         (term     (mspace NUM mspace))
         (mspace   (SPACE mspace) ())))))
+
+  (define _1723613
+    (set-code
+     (parselynn:core:serialize parser)))
 
   (define out-table (get-output-string out))
 
