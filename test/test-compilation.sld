@@ -3017,7 +3017,9 @@
           zoreslava/p
           zoreslava:deserialize
           zoreslava:equal?
+          zoreslava:eval
           zoreslava:has?
+          zoreslava:load
           zoreslava:read
           zoreslava:ref
           zoreslava:serialize
