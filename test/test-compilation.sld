@@ -1542,6 +1542,12 @@
     (only (euphrates parselynn-core-deserialize-lists)
           parselynn:core:deserialize/lists))
   (import
+    (only (euphrates parselynn-core-deserialize)
+          parselynn:core:deserialize))
+  (import
+    (only (euphrates parselynn-core-diff)
+          parselynn:core:diff))
+  (import
     (only (euphrates parselynn-core-load-from-disk)
           parselynn:core:load-from-disk))
   (import

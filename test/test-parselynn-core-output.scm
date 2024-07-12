@@ -1,4 +1,35 @@
 
+(define (get-diff struct1 struct2)
+
+  ;; (define diff
+  ;;   (parselynn:core:diff struct1 struct2))
+
+  ;; (define diff*
+  ;;   (filter
+  ;;    (negate
+  ;;     (lambda (p) (equal? (car p) 'maybefun)))
+  ;;    diff))
+
+  (define diff
+    (map car
+         (parselynn:core:diff struct1 struct2)))
+
+  (define diff*
+    (delete 'maybefun diff))
+
+  diff*)
+
+(define (test-serialization parser)
+  (define deserialized
+    (parselynn:core:deserialize
+     (parselynn:core:serialize parser)))
+
+  (define diff
+    (get-diff parser deserialized))
+
+  (assert= '() diff))
+
+
 (let ()
   (define current-code #f)
   (define (set-code code)
@@ -19,6 +50,7 @@
 
   (assert current-code)
   (assert (list? current-code))
+  (test-serialization parser)
   (assert (zoreslava? (zoreslava:deserialize current-code))))
 
 (let ()
@@ -38,6 +70,7 @@
   (define out-table (get-output-string out))
 
   (assert (string? out-table))
+  (test-serialization parser)
   (assert (< 10 (string-length out-table))))
 
 (let ()
@@ -67,4 +100,5 @@
   (assert (< 10 (string-length out-table)))
   (assert current-code)
   (assert (list? current-code))
+  (test-serialization parser)
   (assert (zoreslava? (zoreslava:deserialize current-code))))
