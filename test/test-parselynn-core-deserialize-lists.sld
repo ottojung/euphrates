@@ -1,6 +1,6 @@
 
 (define-library
-  (test-parselynn-core-deserialize)
+  (test-parselynn-core-deserialize-lists)
   (import
     (only (data parser-branching-glr)
           parser-branching-glr))
@@ -15,8 +15,8 @@
           parser-repeating-lr))
   (import (only (euphrates assert) assert))
   (import
-    (only (euphrates parselynn-core-deserialize)
-          parselynn:core:deserialize))
+    (only (euphrates parselynn-core-deserialize-lists)
+          parselynn:core:deserialize/lists))
   (import
     (only (euphrates parselynn-run) parselynn-run))
   (import
@@ -75,5 +75,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-parselynn-core-deserialize.scm")))
-    (else (include "test-parselynn-core-deserialize.scm"))))
+               "test-parselynn-core-deserialize-lists.scm")))
+    (else (include "test-parselynn-core-deserialize-lists.scm"))))

@@ -94,9 +94,9 @@
     (if load?
         (cond
          ((equal? driver "lr")
-          (parselynn:core:deserialize parser-repeating-lr))
+          (parselynn:core:deserialize/lists parser-repeating-lr))
          ((equal? driver "glr")
-          (parselynn:core:deserialize parser-repeating-glr))
+          (parselynn:core:deserialize/lists parser-repeating-glr))
          (else
           (raisu 'bad-driver-type driver)))
 
@@ -129,9 +129,9 @@
     (if load?
         (cond
          ((equal? driver "lr")
-          (parselynn:core:deserialize parser-branching-lr))
+          (parselynn:core:deserialize/lists parser-branching-lr))
          ((equal? driver "glr")
-          (parselynn:core:deserialize parser-branching-glr))
+          (parselynn:core:deserialize/lists parser-branching-glr))
          (else
           (raisu 'bad-driver-type driver)))
 

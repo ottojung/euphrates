@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates parselynn-core-deserialize)
-  (export parselynn:core:deserialize)
+  (euphrates parselynn-core-deserialize-lists)
+  (export parselynn:core:deserialize/lists)
   (import
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct))
@@ -14,5 +14,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/parselynn-core-deserialize.scm")))
-    (else (include "parselynn-core-deserialize.scm"))))
+               "euphrates/parselynn-core-deserialize-lists.scm")))
+    (else (include "parselynn-core-deserialize-lists.scm"))))

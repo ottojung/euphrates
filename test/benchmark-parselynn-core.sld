@@ -17,8 +17,8 @@
   (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
-    (only (euphrates parselynn-core-deserialize)
-          parselynn:core:deserialize))
+    (only (euphrates parselynn-core-deserialize-lists)
+          parselynn:core:deserialize/lists))
   (import
     (only (euphrates parselynn-core) parselynn:core))
   (import

@@ -1539,8 +1539,8 @@
   (import
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
-    (only (euphrates parselynn-core-deserialize)
-          parselynn:core:deserialize))
+    (only (euphrates parselynn-core-deserialize-lists)
+          parselynn:core:deserialize/lists))
   (import
     (only (euphrates parselynn-core-load-from-disk)
           parselynn:core:load-from-disk))
