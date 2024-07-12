@@ -1704,6 +1704,9 @@
     (only (euphrates parselynn-simple-run)
           parselynn:simple:run))
   (import
+    (only (euphrates parselynn-simple-save-to-disk)
+          parselynn:simple:save-to-disk))
+  (import
     (only (euphrates parselynn-simple-serialize)
           parselynn:simple:serialize))
   (import
