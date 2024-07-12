@@ -1643,6 +1643,15 @@
     (only (euphrates parselynn-simple-check-set)
           parselynn:simple:check-set))
   (import
+    (only (euphrates parselynn-simple-deserialize-lists)
+          parselynn:simple:deserialize/lists))
+  (import
+    (only (euphrates parselynn-simple-deserialize)
+          parselynn:simple:deserialize))
+  (import
+    (only (euphrates parselynn-simple-diff)
+          parselynn:simple:diff))
+  (import
     (only (euphrates parselynn-simple-do-char-to-string)
           parselynn:simple:do-char->string))
   (import
@@ -1691,6 +1700,9 @@
   (import
     (only (euphrates parselynn-simple-run)
           parselynn:simple:run))
+  (import
+    (only (euphrates parselynn-simple-serialize)
+          parselynn:simple:serialize))
   (import
     (only (euphrates parselynn-simple-struct)
           make-parselynn:simple:struct
