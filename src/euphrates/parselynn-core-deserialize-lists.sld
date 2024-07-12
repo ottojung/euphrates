@@ -8,8 +8,10 @@
   (import
     (only (euphrates zoreslava)
           zoreslava:deserialize/lists
-          zoreslava:ref))
-  (import (only (scheme base) begin define quote))
+          zoreslava:ref
+          zoreslava?))
+  (import
+    (only (scheme base) begin define if quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

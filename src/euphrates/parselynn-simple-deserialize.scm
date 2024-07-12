@@ -3,14 +3,16 @@
 
 (define (parselynn:simple:deserialize object)
   (define slava
-    (zoreslava:eval
-     object))
+    (if (zoreslava? object)
+        object
+        (zoreslava:eval
+         object)))
 
   (define arguments
     (zoreslava:ref slava 'l5d989nov8cra7snamcw))
 
   (define backend-parser
-    (parselynn:core:deserialize object))
+    (parselynn:core:deserialize slava))
 
   (define transformations
     (map

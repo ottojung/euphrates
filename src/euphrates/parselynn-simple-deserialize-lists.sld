@@ -14,9 +14,10 @@
   (import
     (only (euphrates zoreslava)
           zoreslava:deserialize/lists
-          zoreslava:ref))
+          zoreslava:ref
+          zoreslava?))
   (import
-    (only (scheme base) begin define map quote))
+    (only (scheme base) begin define if map quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

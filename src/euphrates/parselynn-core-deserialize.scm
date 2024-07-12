@@ -3,8 +3,10 @@
 
 (define (parselynn:core:deserialize object)
   (define slava
-    (zoreslava:eval
-     object))
+    (if (zoreslava? object)
+        object
+        (zoreslava:eval
+         object)))
 
   (define struct
     (make-parselynn:core:struct
