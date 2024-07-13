@@ -51,22 +51,23 @@
   (make-parameter #f))
 
 (define (make-test-parser parser-rules)
-  (parselynn:core
-   `((driver: ,(if (glr-parser?/p) 'glr 'lr))
-     (results: ,(if (glr-parser?/p) 'all 'first))
-     (on-conflict: ,ignore)
-     (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-     (rules: ,@parser-rules))))
+  (parameterize ((parselynn:core:conflict-handler/p ignore))
+    (parselynn:core
+     `((driver: ,(if (glr-parser?/p) 'glr 'lr))
+       (results: ,(if (glr-parser?/p) 'all 'first))
+       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (rules: ,@parser-rules)))))
 
 (define (also-test-respective-glr parser-rules input expected-output)
   (define conflicting-glr? #f)
   (define parser/glr/first
-    (parselynn:core
-     `((driver: glr)
-       (results: first)
-       (on-conflict: ,(lambda _ (set! conflicting-glr? #t)))
-       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (rules: ,@parser-rules))))
+    (parameterize ((parselynn:core:conflict-handler/p
+                    (lambda _ (set! conflicting-glr? #t))))
+      (parselynn:core
+       `((driver: glr)
+         (results: first)
+         (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (rules: ,@parser-rules)))))
 
   (unless conflicting-glr?
     (let ()

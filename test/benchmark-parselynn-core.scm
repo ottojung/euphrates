@@ -100,16 +100,16 @@
          (else
           (raisu 'bad-driver-type driver)))
 
-        (parselynn:core
-         `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-           (on-conflict: ,ignore)
-           (driver: ,(string->symbol driver))
-           (results: ,(if (equal? driver "glr") 'all 'first))
-           (rules:
-            (expr     (expr add expr) : #t
-                      (term) : #t)
-            (add      (+) : #t)
-            (term     (NUM) : #t))))))
+        (parameterize ((parselynn:core:conflict-handler/p ignore))
+          (parselynn:core
+           `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+             (driver: ,(string->symbol driver))
+             (results: ,(if (equal? driver "glr") 'all 'first))
+             (rules:
+              (expr     (expr add expr) : #t
+                        (term) : #t)
+              (add      (+) : #t)
+              (term     (NUM) : #t)))))))
 
   (with-benchmark/timestamp "constructed parser")
 
@@ -135,17 +135,17 @@
          (else
           (raisu 'bad-driver-type driver)))
 
-        (parselynn:core
-         `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-           (driver: ,(string->symbol driver))
-           (results: ,(if (equal? driver "glr") 'all 'first))
-           (on-conflict: ,ignore)
-           (rules:
-            (expr     (expr add expr) : #t
-                      (LPAREN expr RPAREN) : #t
-                      (term) : #t)
-            (add      (+) : #t)
-            (term     (NUM) : #t))))))
+        (parameterize ((parselynn:core:conflict-handler/p ignore))
+          (parselynn:core
+           `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+             (driver: ,(string->symbol driver))
+             (results: ,(if (equal? driver "glr") 'all 'first))
+             (rules:
+              (expr     (expr add expr) : #t
+                        (LPAREN expr RPAREN) : #t
+                        (term) : #t)
+              (add      (+) : #t)
+              (term     (NUM) : #t)))))))
 
   (with-benchmark/timestamp "constructed parser")
 

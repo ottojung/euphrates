@@ -1979,12 +1979,6 @@
                   (list-length= 2 option)
                   (port? (cadr option)))))
 
-     (cons 'on-conflict:
-           (lambda (option)
-             (and (list? option)
-                  (list-length= 2 option)
-                  (procedure? (cadr option)))))
-
      (cons 'results:
            (lambda (option)
              (and (list? option)
@@ -2018,21 +2012,15 @@
                         option)))
      options))
 
-  (define (conflict-handler message type new current on-symbol in-state)
-    (raisu* :type 'parse-conflict
-            :message message
-            :args (list type new current on-symbol in-state)))
+  (define conflict-handler
+    (or (parselynn:core:conflict-handler/p)
+        parselynn:core:conflict-handler/default))
 
   (define (output-table! options)
     (let ((option (assq-or 'output-table: options)))
       (when option
         (parameterize ((current-output-port (car option)))
           (print-states)))))
-
-  (define (set-conflict-handler! options)
-    (let ((handler (assq-or 'on-conflict: options)))
-      (when handler
-        (set! conflict-handler (car handler)))))
 
   (define (set-results-mode! options)
     (let ((results-type (assq-or 'results: options)))
@@ -2089,8 +2077,7 @@
       (begin
         (validate-options options)
         (set-driver-name! options)
-        (set-results-mode! options)
-        (set-conflict-handler! options)))
+        (set-results-mode! options)))
 
     (define lexer-code
       (options-get-lexer-code options))

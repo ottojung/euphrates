@@ -7,13 +7,19 @@
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
+    (only (euphrates
+            parselynn-core-conflict-handler-default)
+          parselynn:core:conflict-handler/default))
+  (import
+    (only (euphrates parselynn-core-conflict-handler-p)
+          parselynn:core:conflict-handler/p))
+  (import
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct))
   (import
     (only (euphrates parselynn-token)
           parselynn:token:typetag))
   (import (only (euphrates raisu-fmt) raisu-fmt))
-  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))

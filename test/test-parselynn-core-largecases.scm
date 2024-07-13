@@ -226,16 +226,16 @@
 
 (let ()
   (define parser
-    (parselynn:core
-     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (driver: glr)
-       (results: all)
-       (on-conflict: ,ignore)
-       (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
-                  (term) : (,save $1))
-        (add      (+) : (,save $1))
-        (term     (NUM) : (,save $1))))))
+    (parameterize ((parselynn:core:conflict-handler/p ignore))
+      (parselynn:core
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (driver: glr)
+         (results: all)
+         (rules:
+          (expr     (expr add expr) : (,save $1 $2 $3)
+                    (term) : (,save $1))
+          (add      (+) : (,save $1))
+          (term     (NUM) : (,save $1)))))))
 
   (define result
     (parselynn-run
@@ -273,17 +273,17 @@
 
 (let ()
   (define parser
-    (parselynn:core
-     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (driver: glr)
-       (results: all)
-       (on-conflict: ,ignore)
-       (rules:
-        (expr     (expr add expr) : (,save 'expr $1 $2 $3)
-                  (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-                  (term) : (,save 'expr $1))
-        (add      (+) : (,save 'add $1))
-        (term     (NUM) : (,save 'term $1))))))
+    (parameterize ((parselynn:core:conflict-handler/p ignore))
+      (parselynn:core
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (driver: glr)
+         (results: all)
+         (rules:
+          (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+                    (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+                    (term) : (,save 'expr $1))
+          (add      (+) : (,save 'add $1))
+          (term     (NUM) : (,save 'term $1)))))))
 
   (define result
     (parselynn-run
@@ -334,16 +334,16 @@
 
   (let ()
     (define parser
-      (parselynn:core
-       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-         (driver: glr)
-         (results: all)
-         (on-conflict: ,ignore)
-         (rules:
-          (expr     (expr add expr) : (,save $1 $2 $3)
-                    (term) : (,save $1))
-          (add      (+) : (,save $1))
-          (term     (NUM) : (,save $1))))))
+      (parameterize ((parselynn:core:conflict-handler/p ignore))
+        (parselynn:core
+         `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+           (driver: glr)
+           (results: all)
+           (rules:
+            (expr     (expr add expr) : (,save $1 $2 $3)
+                      (term) : (,save $1))
+            (add      (+) : (,save $1))
+            (term     (NUM) : (,save $1)))))))
 
     (define result
       (parselynn-run
@@ -387,17 +387,17 @@
 
   (let ()
     (define parser
-      (parselynn:core
-       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-         (driver: glr)
-         (results: all)
-         (on-conflict: ,ignore)
-         (rules:
-          (expr     (expr add expr) : (,save 'expr $1 $2 $3)
-                    (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-                    (term) : (,save 'expr $1))
-          (add      (+) : (,save 'add $1))
-          (term     (NUM) : (,save 'term $1))))))
+      (parameterize ((parselynn:core:conflict-handler/p ignore))
+        (parselynn:core
+         `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+           (driver: glr)
+           (results: all)
+           (rules:
+            (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+                      (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+                      (term) : (,save 'expr $1))
+            (add      (+) : (,save 'add $1))
+            (term     (NUM) : (,save 'term $1)))))))
 
     (define result
       (parselynn-run

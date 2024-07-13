@@ -4,6 +4,9 @@
   (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
+    (only (euphrates parselynn-core-conflict-handler-p)
+          parselynn:core:conflict-handler/p))
+  (import
     (only (euphrates parselynn-core-serialize)
           parselynn:core:serialize))
   (import
@@ -33,6 +36,7 @@
           lambda
           let
           newline
+          parameterize
           quasiquote
           quote
           string->symbol

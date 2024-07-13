@@ -17,6 +17,9 @@
   (import (only (euphrates assert) assert))
   (import (only (euphrates ignore) ignore))
   (import
+    (only (euphrates parselynn-core-conflict-handler-p)
+          parselynn:core:conflict-handler/p))
+  (import
     (only (euphrates parselynn-core-deserialize-lists)
           parselynn:core:deserialize/lists))
   (import
@@ -55,6 +58,7 @@
           list
           modulo
           null?
+          parameterize
           procedure?
           quasiquote
           quote

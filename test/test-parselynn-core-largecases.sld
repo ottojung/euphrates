@@ -6,6 +6,9 @@
   (import (only (euphrates const) const))
   (import (only (euphrates ignore) ignore))
   (import
+    (only (euphrates parselynn-core-conflict-handler-p)
+          parselynn:core:conflict-handler/p))
+  (import
     (only (euphrates parselynn-core) parselynn:core))
   (import
     (only (euphrates parselynn-run-with-error-handler)
@@ -58,6 +61,7 @@
           modulo
           null?
           or
+          parameterize
           peek-char
           procedure?
           quasiquote
