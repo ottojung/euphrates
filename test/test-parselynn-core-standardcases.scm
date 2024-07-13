@@ -691,6 +691,66 @@ idblb idclb longeridlb"
    (iota 15)))
 
 
+
+
+(let ()
+  ;; Test double list separated.
+
+  (define parser
+    (parselynn:core
+     `((tokens: NUM / SPACE)
+       (rules:
+        (start    (left split right))
+        (left     (term) (term sep left))
+        (right    (term) (term sep left))
+        (split    (/))
+        (sep      (SPACE))
+        (term     (NUM))))))
+
+  (define result
+    (with-string-as-input
+     "5 3/4 6"
+     (parselynn-run parser (make-lexer))))
+
+  (assert=
+   '(start (left (term 5) (sep SPACE) (left (term 3))) (split "/") (right (term 4) (sep SPACE) (left (term 6))))
+   result))
+
+(let ()
+  ;; Test double list separated [2].
+
+  (assert-throw
+   'parse-conflict
+
+    (parselynn:core
+     `((tokens: NUM / SPACE)
+       (rules:
+        (start    (left SPACE / SPACE right))
+        (left     (NUM) (NUM SPACE left))
+        (right    (NUM) (NUM SPACE left)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; FIXME: the following grammar is identical to the previous one,
+;;         but it does not currently throw a conflict error.
+;;         See https://smlweb.cpsc.ucalgary.ca/lr1.php?grammar=S+-%3E+L+space+split+space+R.%0AL+-%3E+num%0A+++%7C+num+space+L.%0AR+-%3E+num%0A+++%7C+num+space+R.%0A&substs=
+
+;; (let ()
+;;   ;; Test double list separated [3].
+
+;;   (assert-throw
+;;    'parse-conflict
+
+;;     (parselynn:core
+;;      `((tokens: NUM / SPACE)
+;;        (rules:
+;;         (start    (left sep split sep right))
+;;         (left     (term) (term sep left))
+;;         (right    (term) (term sep left))
+;;         (sep      (SPACE))
+;;         (split    (/))
+;;         (term     (NUM)))))))
+
+
 (let ()
   ;; Test epsilon production [1].
 
