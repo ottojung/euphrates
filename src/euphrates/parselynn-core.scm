@@ -1973,12 +1973,6 @@
 
   (define *valid-options*
     (list
-     (cons 'output-table:
-           (lambda (option)
-             (and (list? option)
-                  (list-length= 2 option)
-                  (port? (cadr option)))))
-
      (cons 'results:
            (lambda (option)
              (and (list? option)
@@ -2017,10 +2011,10 @@
         parselynn:core:conflict-handler/default))
 
   (define (output-table! options)
-    (let ((option (assq-or 'output-table: options)))
-      (when option
-        (parameterize ((current-output-port (car option)))
-          (print-states)))))
+    (define port (parselynn:core:output-table-port/p))
+    (when port
+      (parameterize ((current-output-port port))
+        (print-states))))
 
   (define (set-results-mode! options)
     (let ((results-type (assq-or 'results: options)))

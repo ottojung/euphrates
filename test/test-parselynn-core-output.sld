@@ -10,6 +10,9 @@
     (only (euphrates parselynn-core-diff)
           parselynn:core:diff))
   (import
+    (only (euphrates parselynn-core-output-table-port-p)
+          parselynn:core:output-table-port/p))
+  (import
     (only (euphrates parselynn-core-serialize)
           parselynn:core:serialize))
   (import
@@ -34,12 +37,12 @@
           list?
           map
           open-output-string
+          parameterize
           quasiquote
           quote
           set!
           string-length
-          string?
-          unquote))
+          string?))
   (cond-expand
     (guile (import (only (srfi srfi-1) delete)))
     (else (import (only (srfi 1) delete))))

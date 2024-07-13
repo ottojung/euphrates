@@ -62,10 +62,8 @@
   (parselynn:core
 
    `(
-     ;; ;; output a parser, called calc-parser, in a separate file - calc.yy.scm,
-     ;; :output-code ,ignore
      ;; ;; output the LALR table to calc.out
-     ;; :output-table ,(open-output-file "/tmp/calc.out")
+     ;; (parameterize ((parselynn:core:output-table-port/p (open-output-file "/tmp/calc.out"))) ...)
 
      (tokens:
       ID NUM = LPAREN RPAREN NEWLINE COMMA

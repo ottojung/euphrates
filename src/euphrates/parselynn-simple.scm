@@ -18,7 +18,7 @@
      (key value)
      (define key* (gkeyword->fkeyword key))
      (define value*
-       (if (memq key* (list 'driver: 'output-table:))
+       (if (memq key* (list 'driver:))
            (list value)
            value))
      (cons key* value*)))

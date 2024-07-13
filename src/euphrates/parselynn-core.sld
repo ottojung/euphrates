@@ -14,6 +14,9 @@
     (only (euphrates parselynn-core-conflict-handler-p)
           parselynn:core:conflict-handler/p))
   (import
+    (only (euphrates parselynn-core-output-table-port-p)
+          parselynn:core:output-table-port/p))
+  (import
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct))
   (import

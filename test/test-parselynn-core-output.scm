@@ -57,15 +57,15 @@
   (define out (open-output-string))
 
   (define parser
-    (parselynn:core
-     `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (output-table: ,out)
-       (rules:
-        (expr     (expr add term)
-                  (term))
-        (add      (mspace + mspace))
-        (term     (mspace NUM mspace))
-        (mspace   (SPACE mspace) ())))))
+    (parameterize ((parselynn:core:output-table-port/p out))
+      (parselynn:core
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (rules:
+          (expr     (expr add term)
+                    (term))
+          (add      (mspace + mspace))
+          (term     (mspace NUM mspace))
+          (mspace   (SPACE mspace) ()))))))
 
   (define out-table (get-output-string out))
 
@@ -80,15 +80,15 @@
     (set! current-code code))
 
   (define parser
-    (parselynn:core
-     `((output-table: ,out)
-       (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (rules:
-        (expr     (expr add term)
-                  (term))
-        (add      (mspace + mspace))
-        (term     (mspace NUM mspace))
-        (mspace   (SPACE mspace) ())))))
+    (parameterize ((parselynn:core:output-table-port/p out))
+      (parselynn:core
+       `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (rules:
+          (expr     (expr add term)
+                    (term))
+          (add      (mspace + mspace))
+          (term     (mspace NUM mspace))
+          (mspace   (SPACE mspace) ()))))))
 
   (define _1723613
     (set-code
