@@ -87,7 +87,6 @@
           or
           pair?
           parameterize
-          port?
           procedure?
           quasiquote
           quote

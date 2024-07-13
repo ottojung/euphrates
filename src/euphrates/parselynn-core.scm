@@ -1417,37 +1417,37 @@
              (actions       (assv symbol state-actions)))
         (if (pair? actions)
             (let ((current-action (cadr actions)))
-              (if (not (= new-action current-action))
-                  ;; -- there is a conflict
-                  (begin
-                    (if (and (<= current-action 0) (<= new-action 0))
-                        ;; --- reduce/reduce conflict
-                        (begin
-                          (add-conflict-message
-                           'reduce/reduce
-                           (- new-action)
-                           (- current-action)
-                           (get-symbol (+ symbol nvars))
-                           state)
-                          (if (glr-driver?)
-                              (set-cdr! (cdr actions) (cons new-action (cddr actions)))
-                              (set-car! (cdr actions) (max current-action new-action))))
-                        ;; --- shift/reduce conflict
-                        ;; can we resolve the conflict using precedences?
-                        (case (resolve-conflict symbol (- current-action))
-                          ;; -- shift
-                          ((shift)   (if (glr-driver?)
-                                         (set-cdr! (cdr actions) (cons new-action (cddr actions)))
-                                         (set-car! (cdr actions) new-action)))
-                          ;; -- reduce
-                          ((reduce)  #f) ; well, nothing to do...
-                          ;; -- signal a conflict!
-                          (else      (add-conflict-message
-                                      'shift/reduce new-action (- current-action)
-                                      (get-symbol (+ symbol nvars)) state)
-                                     (if (glr-driver?)
-                                         (set-cdr! (cdr actions) (cons new-action (cddr actions)))
-                                         (set-car! (cdr actions) new-action))))))))
+              (unless (equal? new-action current-action)
+                ;; -- there is a conflict
+
+                (if (and (<= current-action 0) (<= new-action 0))
+                    ;; --- reduce/reduce conflict
+                    (begin
+                      (add-conflict-message
+                       'reduce/reduce
+                       (- new-action)
+                       (- current-action)
+                       (get-symbol (+ symbol nvars))
+                       state)
+                      (if (glr-driver?)
+                          (set-cdr! (cdr actions) (cons new-action (cddr actions)))
+                          (set-car! (cdr actions) (max current-action new-action))))
+                    ;; --- shift/reduce conflict
+                    ;; can we resolve the conflict using precedences?
+                    (case (resolve-conflict symbol (- current-action))
+                      ;; -- shift
+                      ((shift)   (if (glr-driver?)
+                                     (set-cdr! (cdr actions) (cons new-action (cddr actions)))
+                                     (set-car! (cdr actions) new-action)))
+                      ;; -- reduce
+                      ((reduce)  #f) ; well, nothing to do...
+                      ;; -- signal a conflict!
+                      (else      (add-conflict-message
+                                  'shift/reduce new-action (- current-action)
+                                  (get-symbol (+ symbol nvars)) state)
+                                 (if (glr-driver?)
+                                     (set-cdr! (cdr actions) (cons new-action (cddr actions)))
+                                     (set-car! (cdr actions) new-action)))))))
 
             (vector-set! action-table state (cons (list symbol new-action) state-actions)))
         ))
