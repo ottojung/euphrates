@@ -1,4 +1,4 @@
-;;;; Copyright (C) 2021, 2022, 2023  Otto Jung
+;;;; Copyright (C) 2021, 2022, 2023, 2024  Otto Jung
 ;;;;
 ;;;; This program is free software: you can redistribute it and/or modify
 ;;;; it under the terms of the GNU General Public License as published by
@@ -222,13 +222,37 @@
 (define (make-new-pcontext for-object for-everything?)
   (define old-pctx
     (properties-get-context))
+  (define old-objmap
+    (pcontext-objmap old-pctx))
+  (define key
+    (if for-everything?
+        properties-everything-key
+        for-object))
+  (define old-value
+    (immutable-hashmap-ref
+     old-objmap key #f))
+  (define initial-value
+    (if old-value
+        (if for-everything?
+
+            (let ()
+              ;; The hashmap for "for-everything-key" is a hashmap of hashmaps.
+              ;; Therefore, we have to do this complex copy.
+
+              (define ret (make-hashmap))
+              (hashmap-foreach
+               (lambda (key value)
+                 (hashmap-set! ret key (hashmap-copy value)))
+               old-value)
+              ret)
+
+            ;; Regularly, we just need to copy the existing properties for the object.
+            (hashmap-copy old-value))
+        (make-hashmap)))
   (define objmap
     (immutable-hashmap-set
-     (pcontext-objmap old-pctx)
-     (if for-everything?
-         properties-everything-key
-         for-object)
-     (make-hashmap)))
+     old-objmap
+     key initial-value))
   (define foreverething?
     (if for-everything? #t
         (pcontext-foreverething? old-pctx)))

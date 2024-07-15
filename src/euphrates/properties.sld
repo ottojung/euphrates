@@ -20,7 +20,9 @@
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates hashmap)
+          hashmap-copy
           hashmap-delete!
+          hashmap-foreach
           hashmap-ref
           hashmap-set!
           make-hashmap))

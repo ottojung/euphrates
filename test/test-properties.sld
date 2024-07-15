@@ -31,6 +31,7 @@
           exact
           expt
           if
+          inexact
           lambda
           let
           not

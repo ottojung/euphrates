@@ -205,7 +205,7 @@
     :for object2
 
     (assert= (get-property (absolute object1) 'unknown) 'unknown)
-    (assert= (get-property (absolute object2) 'unknown) 'unknown)
+    (assert= (get-property (absolute object2) 'unknown) 3)
 
     (set-property! (absolute object2) 3)
     (catchu-case
@@ -315,6 +315,79 @@
    (assert= (get-property (evenq object1) 'unknown) 'unknown)
    (assert= (get-property (absolute object2) 'unknown) 'unknown)
    (assert= (get-property (evenq object2) 'unknown) 'unknown)))
+
+
+
+
+(let ()
+
+  ;; Test staging [1].
+
+  (define object1 -3)
+
+  (define-property absolute)
+
+  (with-properties
+   :for object1
+
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+
+   (set-property! (absolute object1) 3)
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+
+   (with-properties
+    :for object1
+
+    (assert= (get-property (absolute object1) 'unknown) 3)
+
+    (set-property! (absolute object1) 4)
+
+    (assert= (get-property (absolute object1) 'unknown) 4)
+
+    )
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+   )
+
+  )
+
+
+(let ()
+
+  ;; Test staging [2].
+
+  (define object1 -3)
+
+  (define-property absolute)
+
+  (with-properties
+   :for-everything
+
+   (assert= (get-property (absolute object1) 'unknown) 'unknown)
+
+   (set-property! (absolute object1) 3)
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+   (with-properties
+    :for-everything
+
+    (assert= (get-property (absolute object1) 'unknown) 3)
+
+    (set-property! (absolute object1) 4)
+
+    (assert= (get-property (absolute object1) 'unknown) 4)
+
+    )
+
+   (assert= (get-property (absolute object1) 'unknown) 3)
+
+   )
+
+  )
 
 
 ;;
