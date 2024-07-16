@@ -396,7 +396,7 @@
          (else (pprovider-evaluate S H property-key best-provider pprop obj))))))
 
 
-(define (make-property updatehook)
+(define (make-property name updatehook)
   (define property-key (make-unique))
   (define (getfn obj)
     (define pctx (properties-get-context))
@@ -417,7 +417,7 @@
     (define ret (getfn obj))
     (cond
      ((eq? ret not-found-obj)
-      (raisu 'object-does-not-have-this-property obj))
+      (raisu 'object-does-not-have-this-property name obj))
      ((eq? ret not-found-storage)
       (storage-not-found-response))
      (else ret)))
@@ -440,7 +440,8 @@
     ((_ getter)
      (define-property getter :on-update #f))
     ((_ getter :on-update updatehook)
-     (define getter (make-property updatehook)))))
+     (define getter
+       (make-property (quote getter) updatehook)))))
 
 
 ;; This is just like the usual call to property,
