@@ -46,8 +46,9 @@
 ;; )
 
 
-(define-type9 <pproperty>
-  (make-pproperty getfn providersin providersou updatehook key) pproperty?
+(define-type9 prop
+  (make-pproperty name getfn providersin providersou updatehook key) pproperty?
+  (name pproperty-name)
   (getfn pproperty-getfn)
   (providersin pproperty-providersin)
   (providersou pproperty-providersou)
@@ -322,7 +323,10 @@
     (updatehook obj)))
 
 
-(define (pprovider-evaluate S H property-key provider pprop obj)
+;;;
+;;; evaluate property "pprop" using provider "provider".
+;;;
+(define (peval pprop S H property-key provider obj)
   (define ev (pprovider-evaluator provider))
   (define vkey (pprovider-key provider))
   (define ret
@@ -393,7 +397,7 @@
         (cond
          ((not best-provider) default)
          ((equal? 'not-evaluatable best-score) default)
-         (else (pprovider-evaluate S H property-key best-provider pprop obj))))))
+         (else (peval pprop S H property-key best-provider obj))))))
 
 
 (define (make-property name updatehook)
@@ -425,7 +429,7 @@
   (define providersin (stack-make))
   (define providersou (stack-make))
   (define pprop
-    (make-pproperty getfn providersin providersou updatehook property-key))
+    (make-pproperty name getfn providersin providersou updatehook property-key))
 
   (unless (or (not updatehook) (procedure? updatehook))
     (raisu 'type-error "Expected a procedure for update hook, but got something else" updatehook))
