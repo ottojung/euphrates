@@ -151,6 +151,15 @@
     (only (euphrates binary-string-to-number)
           binary-string->number))
   (import
+    (only (euphrates bnf-alist-assoc-productions)
+          bnf-alist:assoc-productions))
+  (import
+    (only (euphrates bnf-alist-calculate-first-set)
+          bnf-alist:calculate-first-set))
+  (import
+    (only (euphrates bnf-alist-for-each-production)
+          bnf-alist:for-each-production))
+  (import
     (only (euphrates bnf-alist-map-expansion-terms)
           bnf-alist:map-expansion-terms))
   (import
@@ -159,6 +168,12 @@
   (import
     (only (euphrates bnf-alist-map-productions)
           bnf-alist:map-productions))
+  (import
+    (only (euphrates bnf-alist-nonterminals)
+          bnf-alist:nonterminals))
+  (import
+    (only (euphrates bnf-alist-terminals)
+          bnf-alist:terminals))
   (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
@@ -1539,6 +1554,13 @@
   (import
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
+    (only (euphrates
+            parselynn-core-conflict-handler-default)
+          parselynn:core:conflict-handler/default))
+  (import
+    (only (euphrates parselynn-core-conflict-handler-p)
+          parselynn:core:conflict-handler/p))
+  (import
     (only (euphrates parselynn-core-deserialize-lists)
           parselynn:core:deserialize/lists))
   (import
@@ -1550,6 +1572,9 @@
   (import
     (only (euphrates parselynn-core-load-from-disk)
           parselynn:core:load-from-disk))
+  (import
+    (only (euphrates parselynn-core-output-table-port-p)
+          parselynn:core:output-table-port/p))
   (import
     (only (euphrates parselynn-core-serialize)
           parselynn:core:serialize))
