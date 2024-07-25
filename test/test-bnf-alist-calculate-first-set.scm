@@ -652,3 +652,178 @@
       (C a)))
 
   (test-first grammar expected-first))
+
+
+(let ()
+  ;;
+  ;; Grammar with deep epsilon recursion and terminal at the end.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> A A A a
+  ;; A -> epsilon
+  ;;
+  ;;   Expected FIRST sets:
+  ;;
+  ;; FIRST(S) = { a }
+  ;; FIRST(A) = { epsilon }
+  ;;
+
+  (define grammar
+    '((S (A A A a))
+      (A ())))
+
+  (define expected-first
+    `((S a)
+      (A ,epsilon)))
+
+  (test-first grammar expected-first))
+
+
+(let ()
+  ;;
+  ;; Grammar with epsilon cycles and terminals.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> A B c
+  ;; A -> epsilon
+  ;; B -> epsilon
+  ;; C -> B d
+  ;;
+  ;;   Expected FIRST sets:
+  ;;
+  ;; FIRST(S) = { c }
+  ;; FIRST(A) = { epsilon }
+  ;; FIRST(B) = { epsilon }
+  ;; FIRST(C) = { d, epsilon }
+  ;;
+  (define grammar
+    '((S (A B c))
+      (A ())
+      (B ())
+      (C (B d))))
+
+  (define expected-first
+    `((S c)
+      (A ,epsilon)
+      (B ,epsilon)
+      (C d)))
+
+  (test-first grammar expected-first))
+
+
+(let ()
+  ;;
+  ;; Grammar where derivation depends on epsilon-unreachable production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> A
+  ;; A -> B
+  ;; B -> C
+  ;; C -> D
+  ;; D -> e
+  ;;
+  ;;   Expected FIRST sets:
+  ;;
+  ;; FIRST(S) = { e }
+  ;; FIRST(A) = { e }
+  ;; FIRST(B) = { e }
+  ;; FIRST(C) = { e }
+  ;; FIRST(D) = { e }
+  ;;
+
+  (define grammar
+    '((S (A))
+      (A (B))
+      (B (C))
+      (C (D))
+      (D (e))))
+
+  (define expected-first
+    `((S e)
+      (A e)
+      (B e)
+      (C e)
+      (D e)))
+
+  (test-first grammar expected-first))
+
+
+(let ()
+  ;;
+  ;; Grammar with circular epsilon dependencies.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; A -> B
+  ;; B -> C
+  ;; C -> A
+  ;; C -> epsilon
+  ;;
+  ;;   Expected FIRST sets:
+  ;;
+  ;; FIRST(A) = { epsilon }
+  ;; FIRST(B) = { epsilon }
+  ;; FIRST(C) = { epsilon }
+  ;;
+
+  (define grammar
+    '((A (B))
+      (B (C))
+      (C (A) ())))
+
+  (define expected-first
+    `((A ,epsilon)
+      (B ,epsilon)
+      (C ,epsilon)))
+
+  (test-first grammar expected-first))
+
+
+(let ()
+  ;;
+  ;; Grammar with deep recursion.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> A
+  ;; A -> B
+  ;; B -> C
+  ;; C -> D
+  ;; D -> E
+  ;; E -> epsilon
+  ;; E -> f
+  ;; F -> g
+  ;;
+  ;;   Expected FIRST sets:
+  ;;
+  ;; FIRST(S) = { epsilon, f }
+  ;; FIRST(A) = { epsilon, f }
+  ;; FIRST(B) = { epsilon, f }
+  ;; FIRST(C) = { epsilon, f }
+  ;; FIRST(D) = { epsilon, f }
+  ;; FIRST(E) = { epsilon, f }
+  ;; FIRST(F) = { g }
+  ;;
+
+  (define grammar
+    '((S (A))
+      (A (B))
+      (B (C))
+      (C (D))
+      (D (E))
+      (E () (f))
+      (F (g))))
+
+  (define expected-first
+    `((S ,epsilon f)
+      (A ,epsilon f)
+      (B ,epsilon f)
+      (C ,epsilon f)
+      (D ,epsilon f)
+      (E ,epsilon f)
+      (F g)))
+
+  (test-first grammar expected-first))
