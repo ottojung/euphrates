@@ -2,16 +2,18 @@
 (define-library
   (euphrates assoc-or)
   (export assoc-or)
+  (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)
           _
-          and
           assoc
           begin
           cdr
           define-syntax
           if
           let
+          list
+          quote
           syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))
