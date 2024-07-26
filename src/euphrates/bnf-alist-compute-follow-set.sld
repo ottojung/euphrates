@@ -1,7 +1,9 @@
 
 (define-library
   (euphrates bnf-alist-compute-follow-set)
-  (export bnf-alist:compute-follow-set)
+  (export
+    bnf-alist:compute-follow-set
+    bnf-alist:compute-follow-set/given-first)
   (import
     (only (euphrates bnf-alist-compute-first-set)
           bnf-alist:compute-first-set))
