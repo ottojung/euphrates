@@ -157,6 +157,19 @@
     (only (euphrates bnf-alist-compute-first-set)
           bnf-alist:compute-first-set))
   (import
+    (only (euphrates bnf-alist-compute-follow-set)
+          bnf-alist:compute-follow-set
+          bnf-alist:compute-follow-set/given-first))
+  (import
+    (only (euphrates bnf-alist-empty-huh)
+          bnf-alist:empty?))
+  (import
+    (only (euphrates bnf-alist-end-of-input)
+          bnf-alist:end-of-input))
+  (import
+    (only (euphrates bnf-alist-epsilon)
+          bnf-alist:epsilon))
+  (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))
   (import
@@ -171,6 +184,9 @@
   (import
     (only (euphrates bnf-alist-nonterminals)
           bnf-alist:nonterminals))
+  (import
+    (only (euphrates bnf-alist-start-symbol)
+          bnf-alist:start-symbol))
   (import
     (only (euphrates bnf-alist-terminals)
           bnf-alist:terminals))
