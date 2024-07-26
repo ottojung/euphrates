@@ -25,7 +25,6 @@
           map
           quasiquote
           quote
-          string->symbol
           syntax-rules
           unquote))
   (cond-expand

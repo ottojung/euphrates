@@ -21,8 +21,7 @@
         (map car expected-first))))))
 
 
-(define epsilon
-  (string->symbol ""))
+(define epsilon "")
 
 
 ;;;;;;;;;;;;;;;;;;

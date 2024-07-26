@@ -51,7 +51,6 @@
           map
           or
           set!
-          string->symbol
           unless
           when))
   (cond-expand

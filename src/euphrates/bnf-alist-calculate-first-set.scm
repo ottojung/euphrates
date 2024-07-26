@@ -39,8 +39,7 @@
 (define (bnf-alist:calculate-first-set grammar)
   (define table (make-hashmap))
 
-  (define epsilon
-    (string->symbol ""))
+  (define epsilon "")
 
   (define (epsilon? X)
     (equal? epsilon X))
