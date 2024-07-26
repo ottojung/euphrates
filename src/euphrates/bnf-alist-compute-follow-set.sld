@@ -5,6 +5,9 @@
     bnf-alist:compute-follow-set
     bnf-alist:compute-follow-set/given-first)
   (import
+    (only (euphrates bnf-alist-assoc-productions)
+          bnf-alist:assoc-productions))
+  (import
     (only (euphrates bnf-alist-compute-first-set)
           bnf-alist:compute-first-set))
   (import
@@ -53,14 +56,13 @@
           cond
           define
           equal?
+          for-each
           if
           lambda
           let
           let*
-          not
           null?
           or
-          quote
           set!
           unless
           when))

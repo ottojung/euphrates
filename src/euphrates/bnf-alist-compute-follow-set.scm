@@ -89,7 +89,9 @@
   ;; 2. **Production Rule Iteration**
   ;;
 
-  (define calculated-set (make-hashset))  ;; Keep track of calculated FOLLOW sets
+  (define calculated-set
+    (make-hashset))  ;; Keep track of calculated FOLLOW sets
+                     ;; in order to prevent infinite recursion.
 
   (define (iteration)
     (define change? #f)
@@ -97,6 +99,16 @@
     (define (add-to-follow+record! A X)
       (unless (add-to-follow! A X)
         (set! change? #t)))
+
+    (define (get-follow-of A)
+      (if (hashset-has? calculated-set A)
+          (get-from-follow A)
+          (let ()
+            (define productions
+              (bnf-alist:assoc-productions A grammar))
+            (hashset-add! calculated-set A)
+            (for-each (comp (compute-for-production A)) productions)
+            (get-from-follow A))))
 
     (define (process-follow-rule A alpha)
       (let loop ((alpha alpha))
@@ -111,8 +123,7 @@
                   (let ((X (car beta)))
                     (cond
                      ((terminal? X)
-                      (add-to-follow+record! B X)
-                      (set! beta '())) ;; Stop processing after terminal.
+                      (add-to-follow+record! B X))
                      ((nonterminal? X)
                       (let ((first-X (get-first X)))
                         (hashset-foreach
@@ -120,22 +131,20 @@
                            (unless (epsilon? symbol)
                              (add-to-follow+record! B symbol)))
                          first-X)
-                        (if (hashset-has? first-X bnf-alist:epsilon)
-                            (iterator (cdr beta))
-                            (set! beta '()))))))))
+                        (when (hashset-has? first-X bnf-alist:epsilon)
+                          (iterator (cdr beta)))))))))
 
               ;; 2.(x)(y)(a) and supplemental rule 2.(x)(y)(c)
               (when (or (null? beta)
-                        (and (not (null? beta))
-                             (list-and-map
-                              (lambda (symbol)
-                                (and (nonterminal? symbol)
-                                     (hashset-has? (get-first symbol) bnf-alist:epsilon)))
-                              beta)))
+                        (list-and-map
+                         (lambda (symbol)
+                           (and (nonterminal? symbol)
+                                (hashset-has? (get-first symbol) bnf-alist:epsilon)))
+                         beta))
                 (hashset-foreach
                  (lambda (symbol)
                    (add-to-follow+record! B symbol))
-                 (get-from-follow A)))))
+                 (get-follow-of A)))))
             (loop (cdr alpha))))))
 
     (define (compute-for-production A alpha)
@@ -160,6 +169,5 @@
   table)
 
 (define (bnf-alist:compute-follow-set grammar)
-  ;; Initialize FIRST sets if not already done.
   (define first-sets (bnf-alist:compute-first-set grammar))
   (bnf-alist:compute-follow-set/given-first first-sets grammar))
