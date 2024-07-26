@@ -39,14 +39,11 @@
 (define (bnf-alist:compute-follow-set grammar)
   (define table (make-hashmap))  ;; Follow sets are stored in a hash map
 
-  (define epsilon "")
-  (define end-of-input "$")
-
   (define (epsilon? X)
-    (equal? epsilon X))
+    (equal? bnf-alist:epsilon X))
 
   (define (end-of-input? X)
-    (equal? end-of-input X))
+    (equal? bnf-alist:end-of-input X))
 
   (define (add-to-follow! key value)
     (define existing (hashmap-ref table key #f))
@@ -89,7 +86,7 @@
   (unless (bnf-alist:empty? grammar)
     (let ()
       (define start-symbol (bnf-alist:start-symbol grammar))
-      (add-to-follow! start-symbol end-of-input)))
+      (add-to-follow! start-symbol bnf-alist:end-of-input)))
 
   ;;
   ;; 2. **Production Rule Iteration**
@@ -126,7 +123,7 @@
                            (unless (epsilon? symbol)
                              (add-to-follow+record! B symbol)))
                          first-X)
-                        (if (hashset-has? first-X epsilon)
+                        (if (hashset-has? first-X bnf-alist:epsilon)
                             (iterator (cdr beta))
                             (set! beta '()))))))))
 
@@ -136,7 +133,7 @@
                              (list-and-map
                               (lambda (symbol)
                                 (and (nonterminal? symbol)
-                                     (hashset-has? (get-first symbol) epsilon)))
+                                     (hashset-has? (get-first symbol) bnf-alist:epsilon)))
                               beta)))
                 (hashset-foreach
                  (lambda (symbol)

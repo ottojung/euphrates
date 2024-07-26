@@ -39,10 +39,8 @@
 (define (bnf-alist:compute-first-set grammar)
   (define table (make-hashmap))
 
-  (define epsilon "")
-
   (define (epsilon? X)
-    (equal? epsilon X))
+    (equal? bnf-alist:epsilon X))
 
   (define (add-to-first! key value)
     (define existing (hashmap-ref table key #f))
@@ -91,7 +89,7 @@
        terminals))))
 
   (define epsilon-first
-    (list->hashset (list epsilon)))
+    (list->hashset (list bnf-alist:epsilon)))
 
   (hashset-foreach
    (lambda (nonterminal)
@@ -133,7 +131,7 @@
             (get-first-of X))
 
           (define has-epsilon?
-            (hashset-has? elements epsilon))
+            (hashset-has? elements bnf-alist:epsilon))
 
           (hashset-foreach
            (lambda (X)
@@ -176,11 +174,11 @@
       (define elements
         (get-from-first X))
 
-      (hashset-has? elements epsilon))
+      (hashset-has? elements bnf-alist:epsilon))
 
     (define (complete-for-production A alpha)
       (when (list-and-map has-epsilon? alpha)
-        (add-to-first+record! A epsilon)))
+        (add-to-first+record! A bnf-alist:epsilon)))
 
     (define (complete A)
       (comp (complete-for-production A)))

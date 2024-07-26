@@ -9,6 +9,12 @@
     (only (euphrates bnf-alist-empty-huh)
           bnf-alist:empty?))
   (import
+    (only (euphrates bnf-alist-end-of-input)
+          bnf-alist:end-of-input))
+  (import
+    (only (euphrates bnf-alist-epsilon)
+          bnf-alist:epsilon))
+  (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))
   (import
