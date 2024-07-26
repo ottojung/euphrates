@@ -36,7 +36,7 @@
 ;;    - Repeat until no more changes occur to any FOLLOW set.
 ;;
 
-(define (bnf-alist:calculate-follow-set grammar)
+(define (bnf-alist:compute-follow-set grammar)
   (define table (make-hashmap))  ;; Follow sets are stored in a hash map
 
   (define epsilon "")
@@ -71,7 +71,7 @@
     (hashset-has? nonterminals X))
 
   ;; Initialize FIRST sets if not already done.
-  (define first-sets (bnf-alist:calculate-first-set grammar))
+  (define first-sets (bnf-alist:compute-first-set grammar))
 
   (define (get-first of)
     (hashmap-ref first-sets of (make-hashset)))
@@ -144,11 +144,11 @@
                  (get-from-follow A)))))
             (loop (cdr alpha))))))
 
-    (define (calculate-for-production A alpha)
+    (define (compute-for-production A alpha)
       (process-follow-rule A alpha))
 
     (define (calculate A)
-      (comp (calculate-for-production A)))
+      (comp (compute-for-production A)))
 
     (hashset-clear! calculated-set)
     (bnf-alist:for-each-production calculate grammar)

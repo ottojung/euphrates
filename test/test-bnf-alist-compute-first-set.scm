@@ -5,7 +5,7 @@
      (let ()
        (define computed-first
          (hashmap->alist
-          (bnf-alist:calculate-first-set grammar)))
+          (bnf-alist:compute-first-set grammar)))
 
        (assert=HS
         (map car expected-first)

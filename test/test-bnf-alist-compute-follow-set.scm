@@ -5,7 +5,7 @@
      (let ()
        (define computed-follow
          (hashmap->alist
-          (bnf-alist:calculate-follow-set grammar)))
+          (bnf-alist:compute-follow-set grammar)))
 
        (assert=HS
         (map car expected-follow)

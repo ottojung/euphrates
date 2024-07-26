@@ -36,7 +36,7 @@
 ;;    - Repeat steps 3 and 4 until no more changes occur to any FIRST(A).
 ;;
 
-(define (bnf-alist:calculate-first-set grammar)
+(define (bnf-alist:compute-first-set grammar)
   (define table (make-hashmap))
 
   (define epsilon "")
@@ -118,7 +118,7 @@
             (define productions
               (bnf-alist:assoc-productions A grammar))
             (hashset-add! calculated-set A)
-            (for-each (comp (calculate-for-production A)) productions)
+            (for-each (comp (compute-for-production A)) productions)
             (get-from-first A))))
 
     (define (handle-X A X)
@@ -149,14 +149,14 @@
             #t)))))) ;; Stop processing by returning true.
 
     ;; 2.(x)(y)
-    (define (calculate-for-production A alpha)
+    (define (compute-for-production A alpha)
       (list-find-first
        (comp (handle-X A))
        #f alpha))
 
     ;; 2.(x)
     (define (calculate A)
-      (comp (calculate-for-production A)))
+      (comp (compute-for-production A)))
 
     (hashset-clear! calculated-set)
     (bnf-alist:for-each-production calculate grammar)

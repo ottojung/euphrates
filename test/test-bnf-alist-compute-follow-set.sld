@@ -1,12 +1,12 @@
 
 (define-library
-  (test-bnf-alist-calculate-follow-set)
+  (test-bnf-alist-compute-follow-set)
   (import
     (only (euphrates assert-equal-hs) assert=HS))
   (import (only (euphrates assoc-or) assoc-or))
   (import
-    (only (euphrates bnf-alist-calculate-follow-set)
-          bnf-alist:calculate-follow-set))
+    (only (euphrates bnf-alist-compute-follow-set)
+          bnf-alist:compute-follow-set))
   (import
     (only (euphrates hashmap) hashmap->alist))
   (import (only (euphrates hashset) hashset->list))
@@ -31,6 +31,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-bnf-alist-calculate-follow-set.scm")))
+               "test-bnf-alist-compute-follow-set.scm")))
     (else (include
-            "test-bnf-alist-calculate-follow-set.scm"))))
+            "test-bnf-alist-compute-follow-set.scm"))))

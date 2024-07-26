@@ -154,8 +154,8 @@
     (only (euphrates bnf-alist-assoc-productions)
           bnf-alist:assoc-productions))
   (import
-    (only (euphrates bnf-alist-calculate-first-set)
-          bnf-alist:calculate-first-set))
+    (only (euphrates bnf-alist-compute-first-set)
+          bnf-alist:compute-first-set))
   (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))

@@ -1,12 +1,12 @@
 
 (define-library
-  (test-bnf-alist-calculate-first-set)
+  (test-bnf-alist-compute-first-set)
   (import
     (only (euphrates assert-equal-hs) assert=HS))
   (import (only (euphrates assoc-or) assoc-or))
   (import
-    (only (euphrates bnf-alist-calculate-first-set)
-          bnf-alist:calculate-first-set))
+    (only (euphrates bnf-alist-compute-first-set)
+          bnf-alist:compute-first-set))
   (import
     (only (euphrates hashmap) hashmap->alist))
   (import (only (euphrates hashset) hashset->list))
@@ -31,6 +31,6 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-bnf-alist-calculate-first-set.scm")))
+               "test-bnf-alist-compute-first-set.scm")))
     (else (include
-            "test-bnf-alist-calculate-first-set.scm"))))
+            "test-bnf-alist-compute-first-set.scm"))))

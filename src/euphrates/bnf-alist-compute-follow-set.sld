@@ -1,10 +1,13 @@
 
 (define-library
-  (euphrates bnf-alist-calculate-first-set)
-  (export bnf-alist:calculate-first-set)
+  (euphrates bnf-alist-compute-follow-set)
+  (export bnf-alist:compute-follow-set)
   (import
-    (only (euphrates bnf-alist-assoc-productions)
-          bnf-alist:assoc-productions))
+    (only (euphrates bnf-alist-compute-first-set)
+          bnf-alist:compute-first-set))
+  (import
+    (only (euphrates bnf-alist-empty-huh)
+          bnf-alist:empty?))
   (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))
@@ -12,18 +15,19 @@
     (only (euphrates bnf-alist-nonterminals)
           bnf-alist:nonterminals))
   (import
+    (only (euphrates bnf-alist-start-symbol)
+          bnf-alist:start-symbol))
+  (import
     (only (euphrates bnf-alist-terminals)
           bnf-alist:terminals))
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates hashmap)
-          alist->hashmap
           hashmap-ref
           hashmap-set!
           make-hashmap))
   (import
     (only (euphrates hashset)
-          hashset->list
           hashset-add!
           hashset-clear!
           hashset-foreach
@@ -33,23 +37,22 @@
   (import
     (only (euphrates list-and-map) list-and-map))
   (import
-    (only (euphrates list-find-first)
-          list-find-first))
-  (import
     (only (scheme base)
+          and
           begin
+          car
+          cdr
           cond
-          cons
           define
-          else
           equal?
-          for-each
           if
           lambda
           let
-          list
-          map
+          let*
+          not
+          null?
           or
+          quote
           set!
           unless
           when))
@@ -57,5 +60,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/bnf-alist-calculate-first-set.scm")))
-    (else (include "bnf-alist-calculate-first-set.scm"))))
+               "euphrates/bnf-alist-compute-follow-set.scm")))
+    (else (include "bnf-alist-compute-follow-set.scm"))))
