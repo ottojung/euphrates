@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates bnf-alist-epsilon)
-  (export bnf-alist:epsilon)
+  (export bnf:epsilon)
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))

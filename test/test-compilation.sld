@@ -165,10 +165,9 @@
           bnf-alist:empty?))
   (import
     (only (euphrates bnf-alist-end-of-input)
-          bnf-alist:end-of-input))
+          bnf:end-of-input))
   (import
-    (only (euphrates bnf-alist-epsilon)
-          bnf-alist:epsilon))
+    (only (euphrates bnf-alist-epsilon) bnf:epsilon))
   (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))

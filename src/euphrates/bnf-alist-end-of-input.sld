@@ -1,7 +1,7 @@
 
 (define-library
   (euphrates bnf-alist-end-of-input)
-  (export bnf-alist:end-of-input)
+  (export bnf:end-of-input)
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))

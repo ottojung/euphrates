@@ -6,4 +6,4 @@
 ;; Cannot be included in the grammar, but is often output during computation of FIRST and FOLLOW.
 ;;
 
-(define bnf-alist:epsilon "") ;; Yes, the empty string.
+(define bnf:epsilon "") ;; Yes, the empty string.

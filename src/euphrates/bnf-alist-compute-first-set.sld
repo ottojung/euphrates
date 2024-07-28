@@ -7,7 +7,7 @@
           bnf-alist:assoc-productions))
   (import
     (only (euphrates bnf-alist-epsilon)
-          bnf-alist:epsilon))
+          bnf:epsilon))
   (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))
