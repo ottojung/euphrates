@@ -6,4 +6,4 @@
 ;; Cannot be included in the grammar, but is often output during computation of FIRST and FOLLOW.
 ;;
 
-(define bnf:end-of-input "$") ;; Yes, the string "dollar sign".
+(define parselynn:epsilon "") ;; Yes, the empty string.

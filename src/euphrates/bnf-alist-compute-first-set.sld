@@ -6,9 +6,6 @@
     (only (euphrates bnf-alist-assoc-productions)
           bnf-alist:assoc-productions))
   (import
-    (only (euphrates bnf-alist-epsilon)
-          bnf:epsilon))
-  (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))
   (import
@@ -17,6 +14,8 @@
   (import
     (only (euphrates bnf-alist-terminals)
           bnf-alist:terminals))
+  (import
+    (only (euphrates parselynn-epsilon) parselynn:epsilon))
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates hashmap)

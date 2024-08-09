@@ -164,11 +164,6 @@
     (only (euphrates bnf-alist-empty-huh)
           bnf-alist:empty?))
   (import
-    (only (euphrates bnf-alist-end-of-input)
-          bnf:end-of-input))
-  (import
-    (only (euphrates bnf-alist-epsilon) bnf:epsilon))
-  (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))
   (import
@@ -1610,6 +1605,12 @@
   (import
     (only (euphrates parselynn-core) parselynn:core))
   (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
+    (only (euphrates parselynn-epsilon)
+          parselynn:epsilon))
+  (import
     (only (euphrates parselynn-folexer-compile-iterator)
           parselynn:folexer:compile/iterator))
   (import
@@ -1671,6 +1672,9 @@
   (import
     (only (euphrates parselynn-latin)
           make-parselynn:latin))
+  (import
+    (only (euphrates parselynn-lr-item)
+          parselynn:lr-item))
   (import
     (only (euphrates parselynn-run-with-error-handler)
           parselynn-run/with-error-handler))

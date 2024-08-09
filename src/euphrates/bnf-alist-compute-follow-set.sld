@@ -14,12 +14,6 @@
     (only (euphrates bnf-alist-empty-huh)
           bnf-alist:empty?))
   (import
-    (only (euphrates bnf-alist-end-of-input)
-          bnf:end-of-input))
-  (import
-    (only (euphrates bnf-alist-epsilon)
-          bnf:epsilon))
-  (import
     (only (euphrates bnf-alist-for-each-production)
           bnf-alist:for-each-production))
   (import
@@ -31,6 +25,11 @@
   (import
     (only (euphrates bnf-alist-terminals)
           bnf-alist:terminals))
+  (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
+    (only (euphrates parselynn-epsilon) parselynn:epsilon))
   (import (only (euphrates comp) comp))
   (import
     (only (euphrates hashmap)

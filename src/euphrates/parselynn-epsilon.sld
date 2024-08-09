@@ -1,11 +1,11 @@
 
 (define-library
-  (euphrates bnf-alist-end-of-input)
-  (export bnf:end-of-input)
+  (euphrates parselynn-epsilon)
+  (export parselynn:epsilon)
   (import (only (scheme base) begin define))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/bnf-alist-end-of-input.scm")))
-    (else (include "bnf-alist-end-of-input.scm"))))
+               "euphrates/parselynn-epsilon.scm")))
+    (else (include "parselynn-epsilon.scm"))))

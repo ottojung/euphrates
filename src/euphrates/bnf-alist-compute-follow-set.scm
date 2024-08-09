@@ -40,10 +40,10 @@
   (define table (make-hashmap))  ;; Follow sets are stored in a hash map
 
   (define (epsilon? X)
-    (equal? bnf:epsilon X))
+    (equal? parselynn:epsilon X))
 
   (define (end-of-input? X)
-    (equal? bnf:end-of-input X))
+    (equal? parselynn:end-of-input X))
 
   (define (add-to-follow! key value)
     (define existing (hashmap-ref table key #f))
@@ -83,7 +83,7 @@
   (unless (bnf-alist:empty? grammar)
     (let ()
       (define start-symbol (bnf-alist:start-symbol grammar))
-      (add-to-follow! start-symbol bnf:end-of-input)))
+      (add-to-follow! start-symbol parselynn:end-of-input)))
 
   ;;
   ;; 2. **Production Rule Iteration**
@@ -131,7 +131,7 @@
                            (unless (epsilon? symbol)
                              (add-to-follow+record! B symbol)))
                          first-X)
-                        (when (hashset-has? first-X bnf:epsilon)
+                        (when (hashset-has? first-X parselynn:epsilon)
                           (iterator (cdr beta)))))))))
 
               ;; 2.(x)(y)(a) and supplemental rule 2.(x)(y)(c)
@@ -139,7 +139,7 @@
                         (list-and-map
                          (lambda (symbol)
                            (and (nonterminal? symbol)
-                                (hashset-has? (get-first symbol) bnf:epsilon)))
+                                (hashset-has? (get-first symbol) parselynn:epsilon)))
                          beta))
                 (hashset-foreach
                  (lambda (symbol)

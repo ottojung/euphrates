@@ -119,3 +119,30 @@
  (bnf-tree->alist '( s1 ::= a b c / g f
                      s2 ::= o u
                      s1 ::= g "::=" k)))
+
+(assert=
+ '((s1 (a b c) (g f) (g "::=" k)) (s2 (o u)))
+ (bnf-tree->alist '( s1 ::= a b c / g f
+                     s2 ::= o u
+                     s1 ::= g "::=" k)))
+
+(assert=
+ '((s1 (a b c)
+       (g f)
+       (g "->" k))
+   (s2 (o u)))
+
+ ((generic-bnf-tree->alist '-> '/)
+  '( s1 -> a b c / g f
+     s2 -> o u
+     s1 -> g "->" k)))
+
+(assert=
+ '((s1 (a b c / g f)
+       (g "->" k))
+   (s2 (o u)))
+
+ ((generic-bnf-tree->alist '-> '->)
+  '( s1 -> a b c / g f
+     s2 -> o u
+     s1 -> g "->" k)))
