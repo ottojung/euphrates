@@ -110,11 +110,11 @@
       (display " ")
       (if (equal? X parselynn:epsilon)
           (display "ε")
-          (display (~a X))))
+          (display (object->string X))))
 
     (parameterize ((current-output-port port))
       (display "[")
-      (display lhs)
+      (display (object->string lhs))
       (display " →")
       (for-each print-symbol before-dot)
       (display " •")

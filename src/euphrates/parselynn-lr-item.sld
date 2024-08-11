@@ -22,10 +22,12 @@
   (import
     (only (euphrates list-take-n) list-take-n))
   (import
+    (only (euphrates object-to-string)
+          object->string))
+  (import
     (only (euphrates parselynn-epsilon)
           parselynn:epsilon))
   (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           +
