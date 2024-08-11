@@ -1673,8 +1673,36 @@
     (only (euphrates parselynn-latin)
           make-parselynn:latin))
   (import
+    (only (euphrates parselynn-lr-closure)
+          parselynn:lr-closure))
+  (import
+    (only (euphrates parselynn-lr-item-next-lookaheads)
+          parselynn:lr-item:next-lookaheads))
+  (import
     (only (euphrates parselynn-lr-item)
-          parselynn:lr-item))
+          parselynn:lr-item
+          parselynn:lr-item:advance
+          parselynn:lr-item:after-dot
+          parselynn:lr-item:before-dot
+          parselynn:lr-item:dot-at-end?
+          parselynn:lr-item:dot-position
+          parselynn:lr-item:left-hand-side
+          parselynn:lr-item:lookahead
+          parselynn:lr-item:make
+          parselynn:lr-item:next-symbol
+          parselynn:lr-item:print
+          parselynn:lr-item:right-hand-side
+          parselynn:lr-item?))
+  (import
+    (only (euphrates parselynn-lr-state)
+          parselynn:lr-state
+          parselynn:lr-state:add!
+          parselynn:lr-state:equal?
+          parselynn:lr-state:has?
+          parselynn:lr-state:make
+          parselynn:lr-state:print
+          parselynn:lr-state:set
+          parselynn:lr-state?))
   (import
     (only (euphrates parselynn-run-with-error-handler)
           parselynn-run/with-error-handler))
