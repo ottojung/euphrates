@@ -1,82 +1,4 @@
 
-;;
-;; (WIKIPEDIA REFERENCE)
-;;
-;; The rest of the item sets can be created by the following algorithm
-;;
-;; 1. For each terminal and nonterminal symbol A appearing after a '•' in each already existing item set k,
-;;    create a new item set m by adding to m all the rules of k where '•' is followed by A,
-;;    but only if m will not be the same as an already existing item set after step 3.
-;; 2. shift all the '•'s for each rule in the new item set one symbol to the right
-;; 3. create the closure of the new item set
-;; 4. Repeat from step 1 for all newly created item sets, until no more new sets appear
-;;
-
-(define (parselynn:lr-closure bnf-alist initial-item)
-  (define first-set
-    (bnf-alist:compute-first-set bnf-alist))
-
-  (parselynn:lr-closure/given-first
-   first-set bnf-alist initial-item))
-
-
-(define (parselynn:lr-closure/given-first first-set bnf-alist initial-item)
-  (define ret
-    (parselynn:lr-state:make))
-
-  (define terminals
-    (list->hashset
-     (bnf-alist:terminals bnf-alist)))
-
-  (define nonterminals
-    (list->hashset
-     (bnf-alist:nonterminals bnf-alist)))
-
-  (define (terminal? X)
-    (hashset-has? terminals X))
-
-  (define (nonterminal? X)
-    (hashset-has? nonterminals X))
-
-  (let loop ((item initial-item))
-    (unless (parselynn:lr-state:has? ret item)
-      (let ()
-
-        (define _0
-          (parselynn:lr-state:add! ret item))
-        (define next
-          (parselynn:lr-item:next-symbol item))
-
-        (when (and next (nonterminal? next))
-          (let ()
-            (define productions
-              (bnf-alist:assoc-productions next bnf-alist))
-
-            (define lookaheads
-              (parselynn:lr-item:next-lookaheads
-               terminals nonterminals first-set item))
-
-            (define new-items
-              (cartesian-map
-               (lambda (production lookahead)
-                 (define lhs next)
-                 (define rhs production)
-
-                 (parselynn:lr-item:make
-                  lhs rhs lookahead))
-
-               productions
-               lookaheads))
-
-            (for-each loop new-items))))))
-
-  ret)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Test cases:
-;;
-
 
 (define-syntax test-case
   (syntax-rules ()
@@ -95,6 +17,13 @@
           (parselynn:lr-state:print closure)))
 
        (assert= text expected-closure)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Test cases:
+;;
+
 
 (let ()
   ;;
@@ -917,4 +846,3 @@
     "{ [X → a • X, $] [X → • a X, $] [X → • b, $] }")
 
   (test-case grammar item expected-closure))
-
