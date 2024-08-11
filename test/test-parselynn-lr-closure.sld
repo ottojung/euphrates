@@ -52,7 +52,9 @@
     (only (euphrates words-to-string) words->string))
   (import
     (only (scheme base)
+          *
           +
+          =
           >=
           _
           and

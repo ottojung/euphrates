@@ -692,6 +692,116 @@
 
 (let ()
   ;;
+  ;; Clemson grammar (https://www.cs.clemson.edu/course/cpsc827/material/LRk/LR1.pdf page 3, then closure at page 8).
+  ;; State 0.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; G -> S
+  ;; S -> E = E
+  ;;    | f
+  ;; E -> T
+  ;;    | E + T
+  ;; T -> f
+  ;;    | T * f
+  ;;
+  ;;   Initial item:
+  ;;
+  ;; [G → • S, $]
+  ;;
+
+  (define grammar
+    `((G (S))
+      (S (E = E)
+         (f))
+      (E (T)
+         (E + T))
+      (T (f)
+         (T * f))))
+
+  (define item
+    (parselynn:lr-item:make
+     'G '(S) parselynn:end-of-input))
+
+  (define expected-closure
+    (words->string
+     (list
+      "{"
+      "[E → • E + T, +]"
+      "[E → • E + T, =]"
+      "[E → • T, +]"
+      "[E → • T, =]"
+      "[G → • S, $]"
+      "[S → • E = E, $]"
+      "[S → • f, $]"
+      "[T → • T * f, *]"
+      "[T → • T * f, +]"
+      "[T → • T * f, =]"
+      "[T → • f, *]"
+      "[T → • f, +]"
+      "[T → • f, =]"
+      "}")))
+
+  (test-case grammar item expected-closure))
+
+
+(let ()
+  ;;
+  ;; Clemson grammar (https://www.cs.clemson.edu/course/cpsc827/material/LRk/LR1.pdf page 3, then closure at page 8).
+  ;; State 4.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; G -> S
+  ;; S -> E = E
+  ;;    | f
+  ;; E -> T
+  ;;    | E + T
+  ;; T -> f
+  ;;    | T * f
+  ;;
+  ;;   Initial item:
+  ;;
+  ;; [S → E = • E, $]
+  ;;
+
+  (define grammar
+    `((G (S))
+      (S (E = E)
+         (f))
+      (E (T)
+         (E + T))
+      (T (f)
+         (T * f))))
+
+  (define item
+    (parselynn:lr-item:advance
+     (parselynn:lr-item:advance
+      (parselynn:lr-item:make
+       'S '(E = E) parselynn:end-of-input))))
+
+  (define expected-closure
+    (words->string
+     (list
+      "{"
+      "[E → • E + T, $]"
+      "[E → • E + T, +]"
+      "[E → • T, $]"
+      "[E → • T, +]"
+      "[S → E = • E, $]"
+      "[T → • T * f, $]"
+      "[T → • T * f, *]"
+      "[T → • T * f, +]"
+      "[T → • f, $]"
+      "[T → • f, *]"
+      "[T → • f, +]"
+      "}")))
+
+  (test-case grammar item expected-closure))
+
+
+(let ()
+  ;;
   ;; Umich grammar (https://web.eecs.umich.edu/~weimerw/2009-4610/lectures/weimer-4610-09.pdf page 5, then closure at page 18).
   ;; State 0.
   ;;
@@ -862,38 +972,6 @@
 
   (define expected-closure
     "{ [S → • X X, $] [S* → • S, $] [X → • a X, a] [X → • a X, b] [X → • b, a] [X → • b, b] }")
-
-  (test-case grammar item expected-closure))
-
-
-(let ()
-  ;;
-  ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
-  ;; State 1.
-  ;;
-  ;;   Grammar:
-  ;;
-  ;; S -> X X
-  ;; X -> a X
-  ;; X -> b
-  ;;
-  ;;   Initial item:
-  ;;
-  ;; [S → S •, $]
-  ;;
-
-  (define grammar
-    '((S (X X))
-      (X (a X)
-         (b))))
-
-  (define item
-    (parselynn:lr-item:advance
-     (parselynn:lr-item:make
-      'S '(S) parselynn:end-of-input)))
-
-  (define expected-closure
-    "{ [S → S •, $] }")
 
   (test-case grammar item expected-closure))
 
