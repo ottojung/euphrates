@@ -69,43 +69,42 @@
   ;; Recursive function to compute the closure.
   (let loop ((item initial-item))
     (unless (parselynn:lr-state:has? ret item)
-      (let ()
-        ;; Add the item to the closure state.
-        (define _0
-          (parselynn:lr-state:add! ret item))
+      ;; Add the item to the closure state.
+      (parselynn:lr-state:add! ret item)
+      (unless (parselynn:lr-item:dot-at-end? item)
+        (let ()
+          ;; Get the next symbol after the dot (•) in the item.
+          (define next
+            (parselynn:lr-item:next-symbol item))
 
-        ;; Get the next symbol after the dot (•) in the item.
-        (define next
-          (parselynn:lr-item:next-symbol item))
+          ;; If the next symbol is a non-terminal, expand the closure.
+          (when (nonterminal? next)
+            (let ()
+              ;; Get all productions for the non-terminal.
+              (define productions
+                (bnf-alist:assoc-productions next bnf-alist))
 
-        ;; If the next symbol is a non-terminal, expand the closure.
-        (when (and next (nonterminal? next))
-          (let ()
-            ;; Get all productions for the non-terminal.
-            (define productions
-              (bnf-alist:assoc-productions next bnf-alist))
+              ;; Compute lookahead symbols for new items derived from the current item.
+              (define lookaheads
+                (parselynn:lr-item:next-lookaheads
+                 terminals nonterminals first-set item))
 
-            ;; Compute lookahead symbols for new items derived from the current item.
-            (define lookaheads
-              (parselynn:lr-item:next-lookaheads
-               terminals nonterminals first-set item))
+              ;; Generate new items by combining productions and lookaheads.
+              (define new-items
+                (cartesian-map
+                 (lambda (production lookahead)
+                   (define lhs next)
+                   (define rhs production)
 
-            ;; Generate new items by combining productions and lookaheads.
-            (define new-items
-              (cartesian-map
-               (lambda (production lookahead)
-                 (define lhs next)
-                 (define rhs production)
+                   ;; Create a new LR(1) item with the production and lookahead.
+                   (parselynn:lr-item:make
+                    lhs rhs lookahead))
 
-                 ;; Create a new LR(1) item with the production and lookahead.
-                 (parselynn:lr-item:make
-                  lhs rhs lookahead))
+                 productions
+                 lookaheads))
 
-               productions
-               lookaheads))
-
-            ;; Recursively process the new items to further expand the closure.
-            (for-each loop new-items))))))
+              ;; Recursively process the new items to further expand the closure.
+              (for-each loop new-items)))))))
 
   ;; Return the computed closure state.
   ret)

@@ -54,7 +54,10 @@
   (define len (length rhs))
 
   (if (parselynn:lr-item:dot-at-end? item)
-      #f
+      (raisu* :from "parselynn:lr-item"
+              :type 'cannot-peek-past-end
+              :message "Cannot peek a symbol of LR item past its RHS length."
+              :args (list item))
       (list-ref rhs dot-pos)))
 
 ;;

@@ -25,6 +25,7 @@
           parselynn:lr-item:next-lookaheads))
   (import
     (only (euphrates parselynn-lr-item)
+          parselynn:lr-item:dot-at-end?
           parselynn:lr-item:make
           parselynn:lr-item:next-symbol))
   (import
@@ -34,7 +35,6 @@
           parselynn:lr-state:make))
   (import
     (only (scheme base)
-          and
           begin
           define
           for-each
