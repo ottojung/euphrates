@@ -1,34 +1,43 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;
+;; Define the type <parselynn:lr-state>, which represents a set of LR(1) items.
+;;
 
 (define-type9 <parselynn:lr-state>
   (parselynn:lr-state:constructor
-   set
-   )
+   set)    ;; Set of LR items.
 
   parselynn:lr-state?
 
-  (set parselynn:lr-state:set)       ;; Set of LR items.
+  ;; Field of the LR state
+  (set parselynn:lr-state:set))
 
-  )
-
-
+;;
+;; Create a new, empty LR state.
+;;
 (define (parselynn:lr-state:make)
   (define set (make-hashset))
   (parselynn:lr-state:constructor set))
 
-
+;;
+;; Add an LR(1) item to the LR state.
+;;
 (define (parselynn:lr-state:add! state item)
   (define set (parselynn:lr-state:set state))
   (hashset-add! set item))
 
-
+;;
+;; Check if an LR(1) item is present in the LR state.
+;;
 (define (parselynn:lr-state:has? state item)
   (define set (parselynn:lr-state:set state))
   (hashset-has? set item))
 
-
+;;
+;; Print the LR state in a human-readable format.
+;;
 (define parselynn:lr-state:print
   (case-lambda
    ((state)
@@ -59,7 +68,10 @@
       (display (words->string items))
       (display " }")))))
 
-
+;;
+;; Compare two LR states for equality.
+;; Two LR states are equal if they contain the same set of LR(1) items.
+;;
 (define (parselynn:lr-state:equal? state1 state2)
   (define set1 (parselynn:lr-state:set state1))
   (define set2 (parselynn:lr-state:set state2))
