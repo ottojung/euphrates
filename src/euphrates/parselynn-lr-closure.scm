@@ -4,8 +4,8 @@
 ;;
 ;; This procedure computes the closure of a given LR(1) item for a context-free grammar.
 ;; The closure of an LR(1) item encompasses all the items that can be derived directly
-;; or indirectly from that item. Specifically, for a given LR(1) item [A -> alpha . B beta, a],
-;; where A -> alpha . B beta is a production with a dot (.) marking the current position
+;; or indirectly from that item. Specifically, for a given LR(1) item [A -> alpha • B beta, a],
+;; where A -> alpha • B beta is a production with a dot (•) marking the current position
 ;; in the production, and 'a' is a lookahead terminal.
 ;;
 
@@ -19,14 +19,14 @@
 ;; The "closure" of an item can be defined as follows:
 ;;
 ;; 1. **Initialization:**
-;;    - Start with a given initial item, say [A -> alpha . B beta, a].
-;;    - If the item has a non-terminal B right after the dot (.), this non-terminal needs further expansion.
+;;    - Start with a given initial item, say [A -> alpha • B beta, a].
+;;    - If the item has a non-terminal B right after the dot (•), this non-terminal needs further expansion.
 ;;
 ;; 2. **Expansion:**
 ;;    For each item in the closure:
-;;    - If the dot (.) is immediately before a non-terminal B,
+;;    - If the dot (•) is immediately before a non-terminal B,
 ;;      - For each production rule B -> gamma in the grammar,
-;;        - Create new items [B -> . gamma, b] for all possible lookahead symbols 'b'
+;;        - Create new items [B -> • gamma, b] for all possible lookahead symbols 'b'
 ;;          derived from the first set of (beta a).
 ;;        - Add these new items to the closure if they are not already present.
 ;;
@@ -74,7 +74,7 @@
         (define _0
           (parselynn:lr-state:add! ret item))
 
-        ;; Get the next symbol after the dot (.) in the item.
+        ;; Get the next symbol after the dot (•) in the item.
         (define next
           (parselynn:lr-item:next-symbol item))
 
