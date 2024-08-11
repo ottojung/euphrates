@@ -21,7 +21,6 @@
   (import
     (only (euphrates euphrates-list-sort)
           euphrates:list-sort))
-  (import (only (euphrates hashmap) hashmap-ref))
   (import
     (only (euphrates hashset)
           hashset->list
@@ -31,20 +30,17 @@
           list->hashset
           make-hashset))
   (import
-    (only (euphrates list-drop-n) list-drop-n))
-  (import
-    (only (euphrates list-take-n) list-take-n))
-  (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
   (import
-    (only (euphrates parselynn-epsilon)
-          parselynn:epsilon))
-  (import (only (euphrates raisu-fmt) raisu-fmt))
-  (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-a) ~a))
-  (import (only (euphrates tilda-s) ~s))
+    (only (euphrates parselynn-lr-item-next-lookaheads)
+          parselynn:lr-item:next-lookaheads))
+  (import
+    (only (euphrates parselynn-lr-item)
+          parselynn:lr-item:advance
+          parselynn:lr-item:make
+          parselynn:lr-item:next-symbol
+          parselynn:lr-item:print))
   (import
     (only (euphrates with-output-stringified)
           with-output-stringified))
@@ -55,28 +51,17 @@
           *
           +
           =
-          >=
           _
           and
-          append
           begin
-          car
-          cdr
-          cond
           current-output-port
           define
           define-syntax
-          else
-          equal?
           for-each
-          if
           lambda
-          length
           let
           list
-          list-ref
           map
-          null?
           parameterize
           quasiquote
           quote
@@ -88,9 +73,6 @@
           when))
   (import (only (scheme case-lambda) case-lambda))
   (import (only (scheme write) display))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) first)))
-    (else (import (only (srfi 1) first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
