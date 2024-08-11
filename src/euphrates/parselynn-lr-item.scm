@@ -46,7 +46,7 @@
 
 ;;
 ;; Get the symbol immediately after the dot (•) in the LR(1) item.
-;; Returns #f if the dot is at the end.
+;; Raises an eror if the dot is at the end.
 ;;
 (define (parselynn:lr-item:next-symbol item)
   (define dot-pos (parselynn:lr-item:dot-position item))
