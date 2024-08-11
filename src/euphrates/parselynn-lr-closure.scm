@@ -90,21 +90,21 @@
                  terminals nonterminals first-set item))
 
               ;; Generate new items by combining productions and lookaheads.
-              (define new-items
-                (cartesian-map
-                 (lambda (production lookahead)
-                   (define lhs next)
-                   (define rhs production)
+              (cartesian-each
+               (lambda (production lookahead)
+                 (define lhs next)
+                 (define rhs production)
 
-                   ;; Create a new LR(1) item with the production and lookahead.
+                 ;; Create a new LR(1) item with the production and lookahead.
+                 (define new-item
                    (parselynn:lr-item:make
                     lhs rhs lookahead))
 
-                 productions
-                 lookaheads))
+                 ;; Recursively process the new items to further expand the closure.
+                 (loop new-item))
 
-              ;; Recursively process the new items to further expand the closure.
-              (for-each loop new-items)))))))
+               productions
+               lookaheads)))))))
 
   ;; Return the computed closure state.
   ret)

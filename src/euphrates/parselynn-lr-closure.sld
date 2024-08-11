@@ -15,7 +15,7 @@
     (only (euphrates bnf-alist-terminals)
           bnf-alist:terminals))
   (import
-    (only (euphrates cartesian-map) cartesian-map))
+    (only (euphrates cartesian-each) cartesian-each))
   (import
     (only (euphrates hashset)
           hashset-has?
@@ -37,7 +37,6 @@
     (only (scheme base)
           begin
           define
-          for-each
           lambda
           let
           unless
