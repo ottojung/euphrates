@@ -17,18 +17,9 @@
   (import
     (only (euphrates cartesian-map) cartesian-map))
   (import
-    (only (euphrates define-type9) define-type9))
-  (import
-    (only (euphrates euphrates-list-sort)
-          euphrates:list-sort))
-  (import
     (only (euphrates hashset)
-          hashset->list
-          hashset-add!
-          hashset-equal?
           hashset-has?
-          list->hashset
-          make-hashset))
+          list->hashset))
   (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
@@ -39,8 +30,13 @@
     (only (euphrates parselynn-lr-item)
           parselynn:lr-item:advance
           parselynn:lr-item:make
-          parselynn:lr-item:next-symbol
-          parselynn:lr-item:print))
+          parselynn:lr-item:next-symbol))
+  (import
+    (only (euphrates parselynn-lr-state)
+          parselynn:lr-state:add!
+          parselynn:lr-state:has?
+          parselynn:lr-state:make
+          parselynn:lr-state:print))
   (import
     (only (euphrates with-output-stringified)
           with-output-stringified))
@@ -54,25 +50,19 @@
           _
           and
           begin
-          current-output-port
           define
           define-syntax
           for-each
           lambda
           let
           list
-          map
-          parameterize
           quasiquote
           quote
           string->symbol
-          string<?
           syntax-rules
           unless
           unquote
           when))
-  (import (only (scheme case-lambda) case-lambda))
-  (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
