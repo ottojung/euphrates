@@ -13,9 +13,7 @@
           else
           lambda
           number->string
-          number?
-          symbol->string
-          symbol?))
+          number?))
   (import (only (scheme write) write))
   (cond-expand
     (guile (import (only (guile) include-from-path))
