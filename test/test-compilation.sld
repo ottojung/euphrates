@@ -1485,6 +1485,9 @@
     (only (euphrates number-to-radix3)
           number->radix3))
   (import
+    (only (euphrates object-to-string)
+          object->string))
+  (import
     (only (euphrates octal-string-to-number)
           octal-string->number))
   (import
