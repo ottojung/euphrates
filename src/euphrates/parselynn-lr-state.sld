@@ -19,7 +19,6 @@
     (only (euphrates hashset)
           hashset->list
           hashset-add!
-          hashset-equal?
           hashset-has?
           make-hashset))
   (import
@@ -35,6 +34,7 @@
           begin
           current-output-port
           define
+          equal?
           lambda
           map
           parameterize
