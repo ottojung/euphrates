@@ -16,9 +16,7 @@
           number->string
           number?
           string
-          string?
-          symbol->string
-          symbol?))
+          string?))
   (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))

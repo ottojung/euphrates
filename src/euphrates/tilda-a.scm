@@ -5,7 +5,6 @@
   (cond
    ((string? x) x)
    ((number? x) (number->string x))
-   ((symbol? x) (symbol->string x))
    ((char? x) (string x))
    (else
     (call-with-output-string
