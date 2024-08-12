@@ -5,20 +5,22 @@
     parselynn:lr-state
     parselynn:lr-state?
     parselynn:lr-state:make
-    parselynn:lr-state:set
     parselynn:lr-state:add!
     parselynn:lr-state:has?
     parselynn:lr-state:print
+    parselynn:lr-state:foreach-item
     parselynn:lr-state:equal?)
   (import
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates euphrates-list-sort)
           euphrates:list-sort))
+  (import (only (euphrates fn) fn))
   (import
     (only (euphrates hashset)
           hashset->list
           hashset-add!
+          hashset-foreach
           hashset-has?
           make-hashset))
   (import

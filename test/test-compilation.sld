@@ -1704,10 +1704,10 @@
           parselynn:lr-state
           parselynn:lr-state:add!
           parselynn:lr-state:equal?
+          parselynn:lr-state:foreach-item
           parselynn:lr-state:has?
           parselynn:lr-state:make
           parselynn:lr-state:print
-          parselynn:lr-state:set
           parselynn:lr-state?))
   (import
     (only (euphrates parselynn-run-with-error-handler)

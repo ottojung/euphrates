@@ -19,7 +19,7 @@
     (parselynn:lr-state:make))
 
   ;; Go through each item in the current state.
-  (hashset-foreach
+  (parselynn:lr-state:foreach-item
    (lambda (item)
      (when (and (not (parselynn:lr-item:dot-at-end? item))
                 (equal? (parselynn:lr-item:next-symbol item) symbol))
@@ -31,11 +31,11 @@
          (define closure
            (parselynn:lr-closure bnf-alist advanced-item))
          ;; Add every item in the closure to the next state.
-         (hashset-foreach
+         (parselynn:lr-state:foreach-item
           (lambda (closure-item)
             (parselynn:lr-state:add! next-state closure-item))
-          (parselynn:lr-state:set closure)))))
-   (parselynn:lr-state:set state))
+          closure))))
+   state)
 
   ;; Return the new GOTO state.
   next-state)

@@ -3,8 +3,6 @@
   (euphrates parselynn-lr-goto)
   (export parselynn:lr-goto)
   (import
-    (only (euphrates hashset) hashset-foreach))
-  (import
     (only (euphrates parselynn-lr-closure)
           parselynn:lr-closure))
   (import
@@ -15,8 +13,8 @@
   (import
     (only (euphrates parselynn-lr-state)
           parselynn:lr-state:add!
-          parselynn:lr-state:make
-          parselynn:lr-state:set))
+          parselynn:lr-state:foreach-item
+          parselynn:lr-state:make))
   (import
     (only (scheme base)
           and

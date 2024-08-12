@@ -78,3 +78,10 @@
     (parselynn:lr-state:print state1))
    (with-output-stringified
     (parselynn:lr-state:print state2))))
+
+;;
+;; Iterates through each item in the state.
+;;
+(define (parselynn:lr-state:foreach-item fn state)
+  (hashset-foreach
+   fn (parselynn:lr-state:set state)))
