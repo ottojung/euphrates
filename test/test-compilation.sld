@@ -1679,6 +1679,9 @@
     (only (euphrates parselynn-lr-closure)
           parselynn:lr-closure))
   (import
+    (only (euphrates parselynn-lr-goto)
+          parselynn:lr-goto))
+  (import
     (only (euphrates parselynn-lr-item-next-lookaheads)
           parselynn:lr-item:next-lookaheads))
   (import
@@ -1797,6 +1800,9 @@
   (import
     (only (euphrates parselynn-simple)
           parselynn:simple))
+  (import
+    (only (euphrates parselynn-start-production)
+          parselynn:start-production))
   (import
     (only (euphrates parselynn-token)
           parselynn:token:category
