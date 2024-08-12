@@ -230,3 +230,56 @@
     "{ [A → • a, $] [S → A • A, $] }")
 
   (test-case-goto grammar initial-state symbol expected-state))
+
+
+(let ()
+  ;;
+  ;; Umich grammar (https://web.eecs.umich.edu/~weimerw/2009-4610/lectures/weimer-4610-09.pdf page 5, then closure at page 18).
+  ;; State 3. (https://smlweb.cpsc.ucalgary.ca/lr1.php?grammar=E+-%3E+int.%0AE+-%3E+E+%2B+%28+E+%29.&substs=)
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> int
+  ;; E -> E + ( E )
+  ;;
+  ;;   Initial state:
+  ;;
+  ;; { [E → E + • ( E ), $] [E → E • ( E ), +] }
+  ;;
+  ;;   Symbol: A
+  ;;
+  ;;   Expected GOTO state:
+  ;;
+  ;; { ... }
+  ;;
+
+  (define lb
+    (string->symbol "("))
+
+  (define rb
+    (string->symbol ")"))
+
+  (define grammar
+    `((E (int)
+         (E + ,lb E ,rb))))
+
+  (define initial-state
+    (let ((state (parselynn:lr-state:make)))
+      (parselynn:lr-state:add!
+       state
+       (parselynn:lr-item:advance
+        (parselynn:lr-item:make
+         'E `(E ,lb E ,rb) parselynn:end-of-input)))
+      (parselynn:lr-state:add!
+       state
+       (parselynn:lr-item:advance
+        (parselynn:lr-item:make
+         'E `(E ,lb E ,rb) '+)))
+      state))
+
+  (define symbol lb)
+
+  (define expected-state
+    "{ [E → E ( • E ), $] [E → E ( • E ), +] [E → • E + ( E ), )] [E → • E + ( E ), +] [E → • int, )] [E → • int, +] }")
+
+  (test-case-goto grammar initial-state symbol expected-state))

@@ -10,6 +10,7 @@
           parselynn:lr-goto))
   (import
     (only (euphrates parselynn-lr-item)
+          parselynn:lr-item:advance
           parselynn:lr-item:make))
   (import
     (only (euphrates parselynn-lr-state)
@@ -21,13 +22,17 @@
           with-output-stringified))
   (import
     (only (scheme base)
+          +
           _
           begin
           define
           define-syntax
           let
+          quasiquote
           quote
-          syntax-rules))
+          string->symbol
+          syntax-rules
+          unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
