@@ -3,8 +3,11 @@
   (euphrates parselynn-lr-goto)
   (export parselynn:lr-goto)
   (import
+    (only (euphrates bnf-alist-compute-first-set)
+          bnf-alist:compute-first-set))
+  (import
     (only (euphrates parselynn-lr-closure)
-          parselynn:lr-closure))
+          parselynn:lr-state:close!/given-first))
   (import
     (only (euphrates parselynn-lr-item)
           parselynn:lr-item:advance

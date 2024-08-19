@@ -19,7 +19,7 @@
 ;; The "closure" of an item can be defined as follows:
 ;;
 ;; 1. **Initialization:**
-;;    - Start with a given initial item, say [A -> alpha • B beta, a].
+;;    - Start with a given initial sate, say { [A -> alpha • B beta, a] }.
 ;;    - If the item has a non-terminal B right after the dot (•), this non-terminal needs further expansion.
 ;;
 ;; 2. **Expansion:**
@@ -35,21 +35,17 @@
 ;;
 
 
-(define (parselynn:lr-closure bnf-alist initial-item)
+(define (parselynn:lr-state:close! bnf-alist state)
   (define first-set
     ;; Compute the first set of the grammar, which is essential for closure computation.
     (bnf-alist:compute-first-set bnf-alist))
 
   ;; Compute the closure given the precomputed first sets.
-  (parselynn:lr-closure/given-first
-   first-set bnf-alist initial-item))
+  (parselynn:lr-state:close!/given-first
+   first-set bnf-alist state))
 
 
-(define (parselynn:lr-closure/given-first first-set bnf-alist initial-item)
-  ;; Create an empty state to store the closure.
-  (define ret
-    (parselynn:lr-state:make))
-
+(define (parselynn:lr-state:close!/given-first first-set bnf-alist state)
   ;; Convert terminals and nonterminals to hash sets for easy membership testing.
   (define terminals
     (list->hashset
@@ -66,45 +62,47 @@
   (define (nonterminal? X)
     (hashset-has? nonterminals X))
 
-  ;; Recursive function to compute the closure.
-  (let loop ((item initial-item))
-    (unless (parselynn:lr-state:has? ret item)
+  (define (loop item)
+    (unless (parselynn:lr-state:has? state item)
       ;; Add the item to the closure state.
-      (parselynn:lr-state:add! ret item)
-      (unless (parselynn:lr-item:dot-at-end? item)
-        (let ()
-          ;; Get the next symbol after the dot (•) in the item.
-          (define next
-            (parselynn:lr-item:next-symbol item))
+      (parselynn:lr-state:add! state item)
+      (close item)))
 
-          ;; If the next symbol is a non-terminal, expand the closure.
-          (when (nonterminal? next)
-            (let ()
-              ;; Get all productions for the non-terminal.
-              (define productions
-                (bnf-alist:assoc-productions next bnf-alist))
+  ;; Recursive function to compute the closure.
+  (define (close item)
+    (unless (parselynn:lr-item:dot-at-end? item)
+      (let ()
+        ;; Get the next symbol after the dot (•) in the item.
+        (define next
+          (parselynn:lr-item:next-symbol item))
 
-              ;; Compute lookahead symbols for new items derived from the current item.
-              (define lookaheads
-                (parselynn:lr-item:next-lookaheads
-                 terminals nonterminals first-set item))
+        ;; If the next symbol is a non-terminal, expand the closure.
+        (when (nonterminal? next)
+          (let ()
+            ;; Get all productions for the non-terminal.
+            (define productions
+              (bnf-alist:assoc-productions next bnf-alist))
 
-              ;; Generate new items by combining productions and lookaheads.
-              (cartesian-each
-               (lambda (production lookahead)
-                 (define lhs next)
-                 (define rhs production)
+            ;; Compute lookahead symbols for new items derived from the current item.
+            (define lookaheads
+              (parselynn:lr-item:next-lookaheads
+               terminals nonterminals first-set item))
 
-                 ;; Create a new LR(1) item with the production and lookahead.
-                 (define new-item
-                   (parselynn:lr-item:make
-                    lhs rhs lookahead))
+            ;; Generate new items by combining productions and lookaheads.
+            (cartesian-each
+             (lambda (production lookahead)
+               (define lhs next)
+               (define rhs production)
 
-                 ;; Recursively process the new items to further expand the closure.
-                 (loop new-item))
+               ;; Create a new LR(1) item with the production and lookahead.
+               (define new-item
+                 (parselynn:lr-item:make
+                  lhs rhs lookahead))
 
-               productions
-               lookaheads)))))))
+               ;; Recursively process the new items to further expand the closure.
+               (loop new-item))
 
-  ;; Return the computed closure state.
-  ret)
+             productions
+             lookaheads))))))
+
+  (parselynn:lr-state:foreach-item close state))

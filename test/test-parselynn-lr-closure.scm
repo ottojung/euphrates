@@ -2,19 +2,19 @@
 
 (define-syntax test-case
   (syntax-rules ()
-    ((_ grammar* item* expected-closure*)
+    ((_ grammar* state* expected-closure*)
      (let ()
        (define grammar grammar*)
-       (define item item*)
+       (define state state*)
        (define expected-closure expected-closure*)
 
        (define closure
-         (parselynn:lr-closure
-          grammar item))
+         (parselynn:lr-state:close!
+          grammar state))
 
        (define text
          (with-output-stringified
-          (parselynn:lr-state:print closure)))
+          (parselynn:lr-state:print state)))
 
        (assert= text expected-closure)))))
 
@@ -45,10 +45,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → • a, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -75,10 +81,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [A → •, b] [S → • A B, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -105,10 +117,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [A → • a, b] [S → • A B, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -137,10 +155,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [A → • a, c] [S → • A B, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -166,10 +190,16 @@
      (parselynn:lr-item:make
       'S* '(S) parselynn:end-of-input)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S* → S •, $] }")   ;; Closure remains the same as item.
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -191,10 +221,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -217,10 +253,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → • a Z, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -249,10 +291,16 @@
     (parselynn:lr-item:make
      'A* '(A) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [A → • B, $] [A* → • A, $] [B → • C D, $] [C → • D A, a] [C → •, a] [D → • a, a] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -275,10 +323,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → • S a, $] [S → • S a, a] [S → • b, $] [S → • b, a] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -305,10 +359,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [A → • a, b] [A → •, b] [S → • A B, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -333,10 +393,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [A → • a, b] [S → • A b, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -363,10 +429,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [A → • a, c] [S → • A B, $] [S* → • S, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -402,6 +474,12 @@
     (parselynn:lr-item:make
      'G '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     (words->string
      (list
@@ -421,7 +499,7 @@
       "[T → • f, =]"
       "}")))
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -459,6 +537,12 @@
       (parselynn:lr-item:make
        'S '(E = E) parselynn:end-of-input))))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     (words->string
      (list
@@ -476,7 +560,7 @@
       "[T → • f, +]"
       "}")))
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -507,10 +591,16 @@
     (parselynn:lr-item:make
      'S '(E) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [E → • E + ( E ), $] [E → • E + ( E ), +] [E → • int, $] [E → • int, +] [S → • E, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -542,10 +632,16 @@
      (parselynn:lr-item:make
       'E '(int) parselynn:end-of-input)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [E → int •, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -577,10 +673,16 @@
      (parselynn:lr-item:make
       'S '(E) parselynn:end-of-input)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → E •, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -618,10 +720,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [E → • ( E ), $] [E → • T, $] [S → • E, $] [S* → • S, $] [T → • + T, $] [T → • + T, +] [T → • T + n, $] [T → • T + n, +] [T → • n, $] [T → • n, +] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -649,10 +757,16 @@
     (parselynn:lr-item:make
      'S* '(S) parselynn:end-of-input))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → • X X, $] [S* → • S, $] [X → • a X, a] [X → • a X, b] [X → • b, a] [X → • b, b] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -681,10 +795,16 @@
      (parselynn:lr-item:make
       'S '(S) parselynn:end-of-input)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → S •, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -713,10 +833,16 @@
      (parselynn:lr-item:make
       'S '(X X) parselynn:end-of-input)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → X • X, $] [X → • a X, $] [X → • b, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -745,10 +871,16 @@
      (parselynn:lr-item:make
       'X '(b) 'a)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [X → b •, a] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -777,10 +909,16 @@
      (parselynn:lr-item:make
       'X '(a X) 'b)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [X → a • X, b] [X → • a X, b] [X → • b, b] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -810,10 +948,16 @@
       (parselynn:lr-item:make
        'S '(X X) '$))))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [S → X X •, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))
 
 
 (let ()
@@ -842,7 +986,13 @@
      (parselynn:lr-item:make
       'X '(a X) parselynn:end-of-input)))
 
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+      (parselynn:lr-state:add! ret item)
+      ret))
+
   (define expected-closure
     "{ [X → a • X, $] [X → • a X, $] [X → • b, $] }")
 
-  (test-case grammar item expected-closure))
+  (test-case grammar input expected-closure))

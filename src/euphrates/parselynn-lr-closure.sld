@@ -1,7 +1,9 @@
 
 (define-library
   (euphrates parselynn-lr-closure)
-  (export parselynn:lr-closure)
+  (export
+    parselynn:lr-state:close!
+    parselynn:lr-state:close!/given-first)
   (import
     (only (euphrates bnf-alist-assoc-productions)
           bnf-alist:assoc-productions))
@@ -31,8 +33,8 @@
   (import
     (only (euphrates parselynn-lr-state)
           parselynn:lr-state:add!
-          parselynn:lr-state:has?
-          parselynn:lr-state:make))
+          parselynn:lr-state:foreach-item
+          parselynn:lr-state:has?))
   (import
     (only (scheme base)
           begin

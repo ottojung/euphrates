@@ -7,13 +7,15 @@
           parselynn:end-of-input))
   (import
     (only (euphrates parselynn-lr-closure)
-          parselynn:lr-closure))
+          parselynn:lr-state:close!))
   (import
     (only (euphrates parselynn-lr-item)
           parselynn:lr-item:advance
           parselynn:lr-item:make))
   (import
     (only (euphrates parselynn-lr-state)
+          parselynn:lr-state:add!
+          parselynn:lr-state:make
           parselynn:lr-state:print))
   (import
     (only (euphrates with-output-stringified)

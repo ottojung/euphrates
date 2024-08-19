@@ -14,6 +14,10 @@
 ;;
 
 (define (parselynn:lr-goto state symbol bnf-alist)
+  ;; Compute the first set.
+  (define first-set
+    (bnf-alist:compute-first-set bnf-alist))
+
   ;; Create a new state that will collect the result.
   (define next-state
     (parselynn:lr-state:make))
@@ -27,15 +31,12 @@
          ;; Shift the dot over the symbol.
          (define advanced-item
            (parselynn:lr-item:advance item))
-         ;; Compute the closure of the advanced item.
-         (define closure
-           (parselynn:lr-closure bnf-alist advanced-item))
          ;; Add every item in the closure to the next state.
-         (parselynn:lr-state:foreach-item
-          (lambda (closure-item)
-            (parselynn:lr-state:add! next-state closure-item))
-          closure))))
+         (parselynn:lr-state:add! next-state advanced-item))))
    state)
+
+  ;; Compute the closure of advanced items.
+  (parselynn:lr-state:close!/given-first first-set bnf-alist next-state)
 
   ;; Return the new GOTO state.
   next-state)

@@ -1678,7 +1678,8 @@
           make-parselynn:latin))
   (import
     (only (euphrates parselynn-lr-closure)
-          parselynn:lr-closure))
+          parselynn:lr-state:close!
+          parselynn:lr-state:close!/given-first))
   (import
     (only (euphrates parselynn-lr-goto)
           parselynn:lr-goto))
