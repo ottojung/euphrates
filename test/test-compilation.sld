@@ -1535,9 +1535,10 @@
           olgraph?
           olnode:children
           olnode:children:set!
+          olnode:copy
           olnode:id
-          olnode:meta
-          olnode:meta:set!
+          olnode:meta:get-value
+          olnode:meta:set-value!
           olnode:prepend-child!
           olnode:value
           olnode?))

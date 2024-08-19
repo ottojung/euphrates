@@ -8,10 +8,7 @@
     (or existing
         (let ()
           (define ret
-            (make-olnode/full
-             (olnode:value olnode)
-             '()
-             (olnode:meta olnode)))
+            (olnode:copy olnode))
 
           (define _182313
             (hashmap-set! H (olnode:id olnode) ret))

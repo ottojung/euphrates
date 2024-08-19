@@ -37,8 +37,9 @@
 ;; * ID: A unique identifier for the node. This is used for efficient strong equality (think eq? and hash-eq).
 ;; * Value: This represents the value or data held in the node.
 ;; * Children: List of OLNodes, representing outgoing connections (edges) from the node.
-;; * Meta: A placeholder for additional information associated with the node,
+;; * Meta: A hashmap for additional information associated with the node,
 ;;   this should not be considered part of the node itself.
+;;   It must be indexed by procedures for reasons of uniqueness.
 
 
 (define-type9 olnode
@@ -69,5 +70,61 @@
   (make-olnode/full value children meta))
 
 
+;; This is a shallow copy. Only head is copied.
+(define (olnode:copy node)
+  (make-olnode/full
+   (olnode:value node)
+   (olnode:children node)
+   (olnode:meta node)))
+
+
 (define (olnode:prepend-child! parent child)
   (olnode:children:set! parent (cons child (olnode:children parent))))
+
+
+(define (olnode:meta:set-value! node key value)
+  (define current-meta
+    (let ()
+      (unless (olnode:meta node)
+        (olnode:meta:set! (make-hashmap)))
+      (olnode:meta node)))
+
+  (unless (procedure? key)
+    (raisu* :from "olgraph-set-value"
+            :type 'bad-olnode-meta-key-type
+            :message "Expected key to be a procedure."
+            :args (list key value node)))
+
+  (hashmap-set! current-meta key value))
+
+
+(define (olnode:meta:get-value:prep node key)
+  (define current-meta
+    (let ()
+      (unless (olnode:meta node)
+        (olnode:meta:set! node (make-hashmap)))
+      (olnode:meta node)))
+
+  (unless (procedure? key)
+    (raisu* :from "olgraph-get-value"
+            :type 'bad-olnode-meta-key-type
+            :message "Expected key to be a procedure."
+            :args (list key node)))
+
+  current-meta)
+
+(define-syntax olnode:meta:get-value
+  (syntax-rules ()
+    ((_ node key)
+     (let ()
+       (define key* key)
+       (define current-meta
+         (olnode:meta:get-value:prep node key*))
+       (hashmap-ref current-meta key*)))
+
+    ((_ node key default)
+     (let ()
+       (define key* key)
+       (define current-meta
+         (olnode:meta:get-value:prep node key*))
+       (hashmap-ref current-meta key* default)))))

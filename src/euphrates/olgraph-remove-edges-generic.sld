@@ -17,12 +17,11 @@
     (only (euphrates olgraph)
           make-olgraph
           make-olnode
-          make-olnode/full
           olgraph:initial
           olnode:children
           olnode:children:set!
+          olnode:copy
           olnode:id
-          olnode:meta
           olnode:value))
   (import
     (only (euphrates olnode-eq-huh) olnode-eq?))
@@ -36,8 +35,7 @@
           let
           map
           not
-          or
-          quote))
+          or))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))

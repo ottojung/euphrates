@@ -116,14 +116,20 @@
     (define existing (find-existing-node value))
     (or existing (make-new-node! value)))
 
+  (define (olnode:level node)
+    (olnode:meta:get-value node list->join-semilattice #f))
+
+  (define (olnode:level:set! node level)
+    (olnode:meta:set-value! node list->join-semilattice level))
+
   (define (add-join-point! current-level node-x node-y value)
     (define to-add (make-join-node! value))
-    (define existing-level (olnode:meta to-add))
+    (define existing-level (olnode:level to-add))
 
     (unless (and (number? existing-level)
                  (= existing-level current-level))
       (set! top-layer (cons to-add top-layer))
-      (olnode:meta:set! to-add current-level))
+      (olnode:level:set! to-add current-level))
 
     (prepend-node! node-x to-add)
     (prepend-node! node-y to-add)

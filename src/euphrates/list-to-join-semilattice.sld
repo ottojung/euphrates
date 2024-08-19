@@ -19,8 +19,8 @@
           make-olgraph
           make-olnode
           olnode:children
-          olnode:meta
-          olnode:meta:set!
+          olnode:meta:get-value
+          olnode:meta:set-value!
           olnode:prepend-child!
           olnode:value))
   (import
