@@ -1528,7 +1528,7 @@
     (only (euphrates olgraph)
           make-olgraph
           make-olnode
-          make-olnode/full
+          make-olnode/with-children
           olgraph:initial
           olgraph:initial:set!
           olgraph:prepend-initial!

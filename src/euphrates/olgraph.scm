@@ -64,18 +64,28 @@
       (olnode-constructor id value children meta))))
 
 
+(define (make-olnode/with-children value children)
+  (define meta #f)
+  (make-olnode/full value children #f))
+
+
 (define (make-olnode value)
   (define children '())
-  (define meta #f)
-  (make-olnode/full value children meta))
+  (make-olnode/with-children value children))
 
 
 ;; This is a shallow copy. Only head is copied.
 (define (olnode:copy node)
+  (define ex-meta
+    (olnode:meta node))
+
+  (define meta
+    (and ex-meta (hashmap-copy ex-meta)))
+
   (make-olnode/full
    (olnode:value node)
    (olnode:children node)
-   (olnode:meta node)))
+   meta))
 
 
 (define (olnode:prepend-child! parent child)

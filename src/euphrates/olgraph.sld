@@ -8,8 +8,8 @@
     olgraph:initial:set!
     olgraph:prepend-initial!
     make-olnode
+    make-olnode/with-children
     olnode?
-    make-olnode/full
     olnode:id
     olnode:value
     olnode:children
@@ -22,6 +22,7 @@
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates hashmap)
+          hashmap-copy
           hashmap-ref
           hashmap-set!
           make-hashmap))
@@ -30,6 +31,7 @@
     (only (scheme base)
           +
           _
+          and
           begin
           cons
           define
