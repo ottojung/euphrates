@@ -1682,7 +1682,8 @@
           parselynn:lr-state:close!/given-first))
   (import
     (only (euphrates parselynn-lr-goto)
-          parselynn:lr-goto))
+          parselynn:lr-goto
+          parselynn:lr-goto/given-first))
   (import
     (only (euphrates parselynn-lr-item-next-lookaheads)
           parselynn:lr-item:next-lookaheads))

@@ -1,7 +1,9 @@
 
 (define-library
   (euphrates parselynn-lr-goto)
-  (export parselynn:lr-goto)
+  (export
+    parselynn:lr-goto
+    parselynn:lr-goto/given-first)
   (import
     (only (euphrates bnf-alist-compute-first-set)
           bnf-alist:compute-first-set))

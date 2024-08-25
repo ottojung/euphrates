@@ -13,11 +13,8 @@
 ;; in each item of I over X.
 ;;
 
-(define (parselynn:lr-goto state symbol bnf-alist)
-  ;; Compute the first set.
-  (define first-set
-    (bnf-alist:compute-first-set bnf-alist))
 
+(define (parselynn:lr-goto/given-first first-set state symbol bnf-alist)
   ;; Create a new state that will collect the result.
   (define next-state
     (parselynn:lr-state:make))
@@ -40,3 +37,11 @@
 
   ;; Return the new GOTO state.
   next-state)
+
+
+(define (parselynn:lr-goto state symbol bnf-alist)
+  ;; Compute the first set.
+  (define first-set
+    (bnf-alist:compute-first-set bnf-alist))
+
+  (parselynn:lr-goto/given-first first-set state symbol bnf-alist))
