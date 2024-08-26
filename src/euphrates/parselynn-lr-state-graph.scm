@@ -108,6 +108,7 @@
         (define state (olnode:value current))
 
         (unless (hashset-has? recset id)
+          (hashset-add! recset id)
           (let ()
             (define children-labels
               (lenode:labels current))
@@ -133,8 +134,6 @@
             (parselynn:lr-state:print state)
             (newline)
             (show-transitions)
-
-            (hashset-add! recset id)
             (for-each loop children))))
 
       (values)))))
