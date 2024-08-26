@@ -120,15 +120,15 @@
               (define child-id
                 (parselynn:lr-state-graph:node-id child))
 
-              (write label)
+              (display (object->string label))
               (display " -> ")
-              (write child-id)
+              (display (object->string child-id))
               (newline))
 
             (define (show-transitions)
               (for-each show-transition children-labels))
 
-            (write id)
+            (display (object->string id))
             (display " = ")
             (parselynn:lr-state:print state)
             (newline)

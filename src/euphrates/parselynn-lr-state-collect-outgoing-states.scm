@@ -18,7 +18,7 @@
   (define next-symbols
     (parselynn:lr-state:next-symbols state))
 
-  (hashset-foreach
+  (for-each
 
    (lambda (next-symbol)
      (define next-state

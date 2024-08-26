@@ -8,6 +8,7 @@
           parselynn:end-of-input))
   (import
     (only (euphrates parselynn-lr-item)
+          parselynn:lr-item:advance
           parselynn:lr-item:make))
   (import
     (only (euphrates
@@ -28,15 +29,19 @@
           with-output-stringified))
   (import
     (only (scheme base)
+          +
           _
           begin
           define
           define-syntax
           equal?
           let
+          quasiquote
           quote
+          string->symbol
           syntax-rules
-          unless))
+          unless
+          unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

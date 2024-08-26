@@ -29,6 +29,9 @@
           lenode:labels
           lenode:make))
   (import
+    (only (euphrates object-to-string)
+          object->string))
+  (import
     (only (euphrates olgraph)
           olnode:meta:get-value
           olnode:meta:set-value!
@@ -57,7 +60,7 @@
           unless
           values))
   (import (only (scheme case-lambda) case-lambda))
-  (import (only (scheme write) display write))
+  (import (only (scheme write) display))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

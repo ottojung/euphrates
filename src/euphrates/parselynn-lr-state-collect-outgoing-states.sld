@@ -9,8 +9,6 @@
     (only (euphrates bnf-alist-compute-first-set)
           bnf-alist:compute-first-set))
   (import
-    (only (euphrates hashset) hashset-foreach))
-  (import
     (only (euphrates parselynn-lr-goto)
           parselynn:lr-goto/given-first))
   (import
@@ -20,7 +18,12 @@
     (only (euphrates parselynn-lr-state-next-symbols)
           parselynn:lr-state:next-symbols))
   (import
-    (only (scheme base) begin define lambda values))
+    (only (scheme base)
+          begin
+          define
+          for-each
+          lambda
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
