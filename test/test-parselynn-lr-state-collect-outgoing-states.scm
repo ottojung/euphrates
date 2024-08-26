@@ -158,7 +158,7 @@ c -> 3
   ;;   Grammar:
   ;;
   ;; S -> a x1
-  ;; S ->
+  ;; S -> ε
   ;; S -> c x3
   ;;
   ;;   Initial state:
@@ -376,6 +376,69 @@ A -> 1
 a -> 2
 1 = { [A → • a, $] [S → A • A, $] }
 2 = { [A → a •, $] }
+")
+
+  (test-case-goto grammar initial-state expected-graph))
+
+
+(let ()
+  ;;
+  ;; Empty grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;;
+  ;;   Initial state:
+  ;;
+  ;; { [S → • a, $] }
+  ;;
+  ;;
+
+  (define grammar
+    '())
+
+  (define initial-state
+    (let ((state (parselynn:lr-state:make)))
+      (parselynn:lr-state:add! state
+        (parselynn:lr-item:make 'S '(a) parselynn:end-of-input))
+      state))
+
+  (define expected-graph
+    "
+0 = { [S → • a, $] }
+a -> 1
+1 = { [S → a •, $] }
+")
+
+  (test-case-goto grammar initial-state expected-graph))
+
+
+(let ()
+  ;;
+  ;; Empty grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
+  ;;   Initial state:
+  ;;
+  ;; { [S → •, $] }
+  ;;
+  ;;
+
+  (define grammar
+    '((S ())))
+
+  (define initial-state
+    (let ((state (parselynn:lr-state:make)))
+      (parselynn:lr-state:add! state
+        (parselynn:lr-item:make 'S '() parselynn:end-of-input))
+      state))
+
+  (define expected-graph
+    "
+0 = { [S → •, $] }
 ")
 
   (test-case-goto grammar initial-state expected-graph))
