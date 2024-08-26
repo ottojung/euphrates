@@ -22,7 +22,8 @@
 
    (lambda (next-symbol)
      (define next-state
-       (parselynn:lr-goto/given-first first-set state next-symbol bnf-alist))
+       (parselynn:lr-goto/given-first
+        first-set state next-symbol bnf-alist))
 
      (parselynn:lr-state-graph:add!
       graph state next-symbol next-state))
