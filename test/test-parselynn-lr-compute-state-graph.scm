@@ -69,11 +69,9 @@
 
   (define expected-graph
     "
-0 = { [S → • a, $] [♼ → • S, $] }
-S -> 1
-a -> 2
-1 = { [♼ → S •, $] }
-2 = { [S → a •, $] }
+0 = { [S → • a, $] }
+a -> 1
+1 = { [S → a •, $] }
 ")
 
   (test-case grammar expected-graph))
@@ -95,15 +93,13 @@ a -> 2
 
   (define expected-graph
     "
-0 = { [S → • a, $] [S → • b, $] [S → • c, $] [♼ → • S, $] }
-S -> 1
-a -> 2
-b -> 3
-c -> 4
-1 = { [♼ → S •, $] }
-2 = { [S → a •, $] }
-3 = { [S → b •, $] }
-4 = { [S → c •, $] }
+0 = { [S → • a, $] [S → • b, $] [S → • c, $] }
+a -> 1
+b -> 2
+c -> 3
+1 = { [S → a •, $] }
+2 = { [S → b •, $] }
+3 = { [S → c •, $] }
 ")
 
   (test-case grammar expected-graph))
@@ -125,19 +121,17 @@ c -> 4
 
   (define expected-graph
     "
-0 = { [S → • a x1, $] [S → • b, $] [S → • c x3, $] [♼ → • S, $] }
-S -> 1
-a -> 2
-b -> 3
-c -> 4
-1 = { [♼ → S •, $] }
-2 = { [S → a • x1, $] }
-x1 -> 6
-6 = { [S → a x1 •, $] }
-3 = { [S → b •, $] }
-4 = { [S → c • x3, $] }
-x3 -> 5
-5 = { [S → c x3 •, $] }
+0 = { [S → • a x1, $] [S → • b, $] [S → • c x3, $] }
+a -> 1
+b -> 2
+c -> 3
+1 = { [S → a • x1, $] }
+x1 -> 5
+5 = { [S → a x1 •, $] }
+2 = { [S → b •, $] }
+3 = { [S → c • x3, $] }
+x3 -> 4
+4 = { [S → c x3 •, $] }
 ")
 
   (test-case grammar expected-graph))
@@ -159,17 +153,15 @@ x3 -> 5
 
   (define expected-graph
     "
-0 = { [S → • a x1, $] [S → • c x3, $] [S → •, $] [♼ → • S, $] }
-S -> 1
-a -> 2
-c -> 3
-1 = { [♼ → S •, $] }
-2 = { [S → a • x1, $] }
-x1 -> 5
-5 = { [S → a x1 •, $] }
-3 = { [S → c • x3, $] }
-x3 -> 4
-4 = { [S → c x3 •, $] }
+0 = { [S → • a x1, $] [S → • c x3, $] [S → •, $] }
+a -> 1
+c -> 2
+1 = { [S → a • x1, $] }
+x1 -> 4
+4 = { [S → a x1 •, $] }
+2 = { [S → c • x3, $] }
+x3 -> 3
+3 = { [S → c x3 •, $] }
 ")
 
   (test-case grammar expected-graph))
@@ -193,17 +185,15 @@ x3 -> 4
 
   (define expected-graph
     "
-0 = { [A → • a, b] [S → • A B, $] [♼ → • S, $] }
+0 = { [A → • a, b] [S → • A B, $] }
 A -> 1
-S -> 2
-a -> 3
+a -> 2
 1 = { [B → • b, $] [S → A • B, $] }
-B -> 4
-b -> 5
-4 = { [S → A B •, $] }
-5 = { [B → b •, $] }
-2 = { [♼ → S •, $] }
-3 = { [A → a •, b] }
+B -> 3
+b -> 4
+3 = { [S → A B •, $] }
+4 = { [B → b •, $] }
+2 = { [A → a •, b] }
 ")
 
   (test-case grammar expected-graph))

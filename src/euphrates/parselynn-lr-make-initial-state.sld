@@ -5,6 +5,9 @@
     parselynn:lr-make-initial-state
     parselynn:lr-make-initial-state/given-first)
   (import
+    (only (euphrates bnf-alist-assoc-productions)
+          bnf-alist:assoc-productions))
+  (import
     (only (euphrates bnf-alist-compute-first-set)
           bnf-alist:compute-first-set))
   (import
@@ -24,9 +27,7 @@
           parselynn:lr-state:add!
           parselynn:lr-state:make))
   (import
-    (only (euphrates parselynn-start-symbol)
-          parselynn:start-symbol))
-  (import (only (scheme base) begin define list))
+    (only (scheme base) begin define for-each lambda))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

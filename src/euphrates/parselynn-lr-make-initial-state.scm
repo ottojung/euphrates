@@ -12,14 +12,22 @@
 
 (define (parselynn:lr-make-initial-state/given-first first-set bnf-alist)
   (define state (parselynn:lr-state:make))
-  (define first-production (bnf-alist:start-symbol bnf-alist))
+  (define start-symbol (bnf-alist:start-symbol bnf-alist))
+  (define initial-productions
+    (bnf-alist:assoc-productions
+     start-symbol bnf-alist))
 
-  (parselynn:lr-state:add!
-   state
-   (parselynn:lr-item:make
-    parselynn:start-symbol
-    (list first-production)
-    parselynn:end-of-input))
+  (for-each
+   (lambda (production)
+
+     (parselynn:lr-state:add!
+      state
+      (parselynn:lr-item:make
+       start-symbol
+       production
+       parselynn:end-of-input)))
+
+   initial-productions)
 
   (parselynn:lr-state:close!/given-first
    first-set bnf-alist state)

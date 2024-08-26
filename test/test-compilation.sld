@@ -1691,6 +1691,9 @@
           parselynn:lr-state:close!
           parselynn:lr-state:close!/given-first))
   (import
+    (only (euphrates parselynn-lr-compute-state-graph)
+          parselynn:lr-compute-state-graph))
+  (import
     (only (euphrates parselynn-lr-goto)
           parselynn:lr-goto
           parselynn:lr-goto/given-first))
@@ -1712,6 +1715,10 @@
           parselynn:lr-item:print
           parselynn:lr-item:right-hand-side
           parselynn:lr-item?))
+  (import
+    (only (euphrates parselynn-lr-make-initial-state)
+          parselynn:lr-make-initial-state
+          parselynn:lr-make-initial-state/given-first))
   (import
     (only (euphrates
             parselynn-lr-state-collect-outgoing-states)
