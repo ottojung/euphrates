@@ -27,7 +27,14 @@
           parselynn:lr-state:add!
           parselynn:lr-state:make))
   (import
-    (only (scheme base) begin define for-each lambda))
+    (only (scheme base)
+          begin
+          define
+          for-each
+          lambda
+          let
+          null?
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
