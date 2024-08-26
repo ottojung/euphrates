@@ -32,5 +32,4 @@
            (begin
              (include-from-path
                "test-bnf-alist-compute-first-set.scm")))
-    (else (include
-            "test-bnf-alist-compute-first-set.scm"))))
+    (else (include "test-bnf-alist-compute-first-set.scm"))))

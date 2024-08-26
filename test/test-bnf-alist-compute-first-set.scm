@@ -46,6 +46,28 @@
 
 (let ()
   ;;
+  ;; Grammar with single empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
+  ;;   Expected FIRST sets:
+  ;;
+  ;; FIRST(S) = { ε }
+  ;;
+
+  (define grammar
+    '((S ())))
+
+  (define expected-first
+    `((S ,epsilon)))
+
+  (test-first grammar expected-first))
+
+
+(let ()
+  ;;
   ;; Grammar with single production.
   ;;
   ;;   Grammar:
@@ -189,11 +211,11 @@
   ;;   Grammar:
   ;;
   ;; S -> a S b
-  ;; S -> epsilon
+  ;; S -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { a, epsilon }
+  ;; FIRST(S) = { a, ε }
   ;;
 
   (define grammar
@@ -212,18 +234,18 @@
   ;;   Grammar:
   ;; E  -> T E'
   ;; E' -> + T E'
-  ;; E' -> epsilon
+  ;; E' -> ε
   ;; T  -> F T'
   ;; T' -> * F T'
-  ;; T' -> epsilon
+  ;; T' -> ε
   ;; F  -> id
   ;;
   ;;   Expected FIRST sets:
   ;;
   ;; FIRST(E)  = { id }
-  ;; FIRST(E') = { +, epsilon }
+  ;; FIRST(E') = { +, ε }
   ;; FIRST(T)  = { id }
-  ;; FIRST(T') = { *, epsilon }
+  ;; FIRST(T') = { *, ε }
   ;; FIRST(F)  = { id }
   ;;
 
@@ -252,15 +274,15 @@
   ;;
   ;; S -> A B
   ;; A -> a
-  ;; A -> epsilon
+  ;; A -> ε
   ;; B -> b
-  ;; B -> epsilon
+  ;; B -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { a, b, epsilon }
-  ;; FIRST(A) = { a, epsilon }
-  ;; FIRST(B) = { b, epsilon }
+  ;; FIRST(S) = { a, b, ε }
+  ;; FIRST(A) = { a, ε }
+  ;; FIRST(B) = { b, ε }
   ;;
 
   (define grammar
@@ -278,7 +300,7 @@
 
 (let ()
   ;;
-  ;; Simple recursive grammar with non-epsilon productions.
+  ;; Simple recursive grammar with non-ε productions.
   ;;
   ;;   Grammar:
   ;;
@@ -319,15 +341,15 @@
   ;; S -> A B
   ;; S -> b
   ;; A -> a
-  ;; A -> epsilon
+  ;; A -> ε
   ;; B -> c B
-  ;; B -> epsilon
+  ;; B -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { a, b, c, epsilon }
-  ;; FIRST(A) = { a, epsilon }
-  ;; FIRST(B) = { c, epsilon }
+  ;; FIRST(S) = { a, b, c, ε }
+  ;; FIRST(A) = { a, ε }
+  ;; FIRST(B) = { c, ε }
   ;;
 
   (define grammar
@@ -345,20 +367,20 @@
 
 (let ()
   ;;
-  ;; Complex grammar with mixed epsilon and terminal derivations.
+  ;; Complex grammar with mixed ε and terminal derivations.
   ;;
   ;;   Grammar:
   ;;
   ;; S -> A B
   ;; A -> a A
-  ;; A -> epsilon
+  ;; A -> ε
   ;; B -> b B
   ;; B -> c
   ;;
   ;;   Expected FIRST sets:
   ;;
   ;; FIRST(S) = { a, b, c }
-  ;; FIRST(A) = { a, epsilon }
+  ;; FIRST(A) = { a, ε }
   ;; FIRST(B) = { b, c }
   ;;
 
@@ -377,13 +399,13 @@
 
 (let ()
   ;;
-  ;; Grammar with tricky epsilon derivation.
+  ;; Grammar with tricky ε derivation.
   ;;
   ;;   Grammar:
   ;;
   ;; S -> A C
   ;; A -> a
-  ;; A -> epsilon
+  ;; A -> ε
   ;; B -> b B
   ;; B -> b
   ;; C -> c
@@ -392,7 +414,7 @@
   ;;   Expected FIRST sets:
   ;;
   ;; FIRST(S) = { a, b, c }
-  ;; FIRST(A) = { a, epsilon }
+  ;; FIRST(A) = { a, ε }
   ;; FIRST(B) = { b }
   ;; FIRST(C) = { c, b }
   ;;
@@ -422,14 +444,14 @@
   ;; A -> B
   ;; B -> C
   ;; C -> a C
-  ;; C -> epsilon
+  ;; C -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { a, epsilon }
-  ;; FIRST(A) = { a, epsilon }
-  ;; FIRST(B) = { a, epsilon }
-  ;; FIRST(C) = { a, epsilon }
+  ;; FIRST(S) = { a, ε }
+  ;; FIRST(A) = { a, ε }
+  ;; FIRST(B) = { a, ε }
+  ;; FIRST(C) = { a, ε }
   ;;
 
   (define grammar
@@ -490,13 +512,13 @@
   ;; B -> C
   ;; C -> A
   ;; C -> a
-  ;; C -> epsilon
+  ;; C -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(A) = { a, epsilon }
-  ;; FIRST(B) = { a, epsilon }
-  ;; FIRST(C) = { a, epsilon }
+  ;; FIRST(A) = { a, ε }
+  ;; FIRST(B) = { a, ε }
+  ;; FIRST(C) = { a, ε }
   ;;
 
   (define grammar
@@ -514,22 +536,22 @@
 
 (let ()
   ;;
-  ;; Grammar with indirect epsilon derivation.
+  ;; Grammar with indirect ε derivation.
   ;;
   ;;   Grammar:
   ;;
   ;; S -> A B
   ;; A -> a
-  ;; A -> epsilon
+  ;; A -> ε
   ;; B -> b
-  ;; B -> epsilon
+  ;; B -> ε
   ;; B -> A
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { a, b, epsilon }
-  ;; FIRST(A) = { a, epsilon }
-  ;; FIRST(B) = { b, a, epsilon }
+  ;; FIRST(S) = { a, b, ε }
+  ;; FIRST(A) = { a, ε }
+  ;; FIRST(B) = { b, a, ε }
   ;;
 
   (define grammar
@@ -547,26 +569,26 @@
 
 (let ()
   ;;
-  ;; Grammar with more complex epsilon derivations and recursion.
+  ;; Grammar with more complex ε derivations and recursion.
   ;;
   ;;   Grammar:
   ;;
   ;; S -> A B
   ;; S -> C
   ;; A -> a
-  ;; A -> epsilon
+  ;; A -> ε
   ;; B -> b B
   ;; B -> d
-  ;; B -> epsilon
+  ;; B -> ε
   ;; C -> c
   ;; C -> B
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { a, b, d, c, epsilon }
-  ;; FIRST(A) = { a, epsilon }
-  ;; FIRST(B) = { b, d, epsilon }
-  ;; FIRST(C) = { c, b, d, epsilon }
+  ;; FIRST(S) = { a, b, d, c, ε }
+  ;; FIRST(A) = { a, ε }
+  ;; FIRST(B) = { b, d, ε }
+  ;; FIRST(C) = { c, b, d, ε }
   ;;
 
   (define grammar
@@ -586,21 +608,21 @@
 
 (let ()
   ;;
-  ;; Grammar with epsilon leading to no terminal derivation.
+  ;; Grammar with ε leading to no terminal derivation.
   ;;
   ;;   Grammar:
   ;;
   ;; S -> A
   ;; A -> B
   ;; B -> C
-  ;; C -> epsilon
+  ;; C -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { epsilon }
-  ;; FIRST(A) = { epsilon }
-  ;; FIRST(B) = { epsilon }
-  ;; FIRST(C) = { epsilon }
+  ;; FIRST(S) = { ε }
+  ;; FIRST(A) = { ε }
+  ;; FIRST(B) = { ε }
+  ;; FIRST(C) = { ε }
   ;;
 
   (define grammar
@@ -655,17 +677,17 @@
 
 (let ()
   ;;
-  ;; Grammar with deep epsilon recursion and terminal at the end.
+  ;; Grammar with deep ε recursion and terminal at the end.
   ;;
   ;;   Grammar:
   ;;
   ;; S -> A A A a
-  ;; A -> epsilon
+  ;; A -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
   ;; FIRST(S) = { a }
-  ;; FIRST(A) = { epsilon }
+  ;; FIRST(A) = { ε }
   ;;
 
   (define grammar
@@ -681,21 +703,21 @@
 
 (let ()
   ;;
-  ;; Grammar with epsilon cycles and terminals.
+  ;; Grammar with ε cycles and terminals.
   ;;
   ;;   Grammar:
   ;;
   ;; S -> A B c
-  ;; A -> epsilon
-  ;; B -> epsilon
+  ;; A -> ε
+  ;; B -> ε
   ;; C -> B d
   ;;
   ;;   Expected FIRST sets:
   ;;
   ;; FIRST(S) = { c }
-  ;; FIRST(A) = { epsilon }
-  ;; FIRST(B) = { epsilon }
-  ;; FIRST(C) = { d, epsilon }
+  ;; FIRST(A) = { ε }
+  ;; FIRST(B) = { ε }
+  ;; FIRST(C) = { d, ε }
   ;;
   (define grammar
     '((S (A B c))
@@ -714,7 +736,7 @@
 
 (let ()
   ;;
-  ;; Grammar where derivation depends on epsilon-unreachable production.
+  ;; Grammar where derivation depends on ε-unreachable production.
   ;;
   ;;   Grammar:
   ;;
@@ -752,20 +774,20 @@
 
 (let ()
   ;;
-  ;; Grammar with circular epsilon dependencies.
+  ;; Grammar with circular ε dependencies.
   ;;
   ;;   Grammar:
   ;;
   ;; A -> B
   ;; B -> C
   ;; C -> A
-  ;; C -> epsilon
+  ;; C -> ε
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(A) = { epsilon }
-  ;; FIRST(B) = { epsilon }
-  ;; FIRST(C) = { epsilon }
+  ;; FIRST(A) = { ε }
+  ;; FIRST(B) = { ε }
+  ;; FIRST(C) = { ε }
   ;;
 
   (define grammar
@@ -792,18 +814,18 @@
   ;; B -> C
   ;; C -> D
   ;; D -> E
-  ;; E -> epsilon
+  ;; E -> ε
   ;; E -> f
   ;; F -> g
   ;;
   ;;   Expected FIRST sets:
   ;;
-  ;; FIRST(S) = { epsilon, f }
-  ;; FIRST(A) = { epsilon, f }
-  ;; FIRST(B) = { epsilon, f }
-  ;; FIRST(C) = { epsilon, f }
-  ;; FIRST(D) = { epsilon, f }
-  ;; FIRST(E) = { epsilon, f }
+  ;; FIRST(S) = { ε, f }
+  ;; FIRST(A) = { ε, f }
+  ;; FIRST(B) = { ε, f }
+  ;; FIRST(C) = { ε, f }
+  ;; FIRST(D) = { ε, f }
+  ;; FIRST(E) = { ε, f }
   ;; FIRST(F) = { g }
   ;;
 
