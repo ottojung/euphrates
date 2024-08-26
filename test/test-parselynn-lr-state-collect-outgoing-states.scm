@@ -1,9 +1,9 @@
 
 ;;
-;; Define test-case syntax for GOTO tests.
+;; Define test-case syntax.
 ;;
 
-(define-syntax test-case-goto
+(define-syntax test-1-case
   (syntax-rules ()
     ((_ grammar* state* expected-text*)
      (let ()
@@ -62,7 +62,7 @@ a -> 1
 1 = { [S → a •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -105,7 +105,7 @@ c -> 3
 3 = { [S → c •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -125,30 +125,28 @@ c -> 3
   ;;
 
   (define grammar
-    '((S (a x1) (b) (c x3))))
+    '((S (a x1) () (c x3))))
 
   (define initial-state
     (let ((state (parselynn:lr-state:make)))
       (parselynn:lr-state:add! state
         (parselynn:lr-item:make 'S '(a x1) parselynn:end-of-input))
       (parselynn:lr-state:add! state
-        (parselynn:lr-item:make 'S '(b) parselynn:end-of-input))
+        (parselynn:lr-item:make 'S '() parselynn:end-of-input))
       (parselynn:lr-state:add! state
         (parselynn:lr-item:make 'S '(c x3) parselynn:end-of-input))
       state))
 
   (define expected-graph
     "
-0 = { [S → • a x1, $] [S → • b, $] [S → • c x3, $] }
+0 = { [S → • a x1, $] [S → • c x3, $] [S → •, $] }
 a -> 1
-b -> 2
-c -> 3
+c -> 2
 1 = { [S → a • x1, $] }
-2 = { [S → b •, $] }
-3 = { [S → c • x3, $] }
+2 = { [S → c • x3, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -189,7 +187,7 @@ c -> 2
 2 = { [S → c • x3, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -226,7 +224,7 @@ a -> 2
 2 = { [S → a •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -265,7 +263,7 @@ a -> 2
 2 = { [S → a •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -300,7 +298,7 @@ S -> 1
 1 = { [S* → S •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -340,7 +338,7 @@ a -> 2
 2 = { [A → a •, b] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -378,7 +376,7 @@ a -> 2
 2 = { [A → a •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -410,7 +408,7 @@ a -> 1
 1 = { [S → a •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -441,7 +439,7 @@ a -> 1
 0 = { [S → •, $] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
 
 
 (let ()
@@ -490,4 +488,4 @@ a -> 1
 1 = { [E → E ( • E ), $] [E → E ( • E ), +] [E → • E + ( E ), )] [E → • E + ( E ), +] [E → • int, )] [E → • int, +] }
 ")
 
-  (test-case-goto grammar initial-state expected-graph))
+  (test-1-case grammar initial-state expected-graph))
