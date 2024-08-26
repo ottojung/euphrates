@@ -15,6 +15,9 @@
 (define (parselynn:lr-state:collect-outgoing-states/given-first
          first-set bnf-alist state graph)
 
+  (define ret
+    (stack-make))
+
   (define next-symbols
     (parselynn:lr-state:next-symbols state))
 
@@ -25,9 +28,10 @@
        (parselynn:lr-goto/given-first
         first-set state next-symbol bnf-alist))
 
-     (parselynn:lr-state-graph:add!
-      graph state next-symbol next-state))
+     (when (parselynn:lr-state-graph:add!
+            graph state next-symbol next-state)
+       (stack-push! ret next-state)))
 
    next-symbols)
 
-  (values))
+  (stack->list ret))

@@ -18,12 +18,17 @@
     (only (euphrates parselynn-lr-state-next-symbols)
           parselynn:lr-state:next-symbols))
   (import
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
+  (import
     (only (scheme base)
           begin
           define
           for-each
           lambda
-          values))
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
