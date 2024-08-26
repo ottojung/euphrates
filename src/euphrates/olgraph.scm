@@ -96,7 +96,7 @@
   (define current-meta
     (let ()
       (unless (olnode:meta node)
-        (olnode:meta:set! (make-hashmap)))
+        (olnode:meta:set! node (make-hashmap)))
       (olnode:meta node)))
 
   (unless (procedure? key)

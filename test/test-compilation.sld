@@ -185,6 +185,9 @@
     (only (euphrates bnf-alist-terminals)
           bnf-alist:terminals))
   (import
+    (only (euphrates bnf-alist-to-lr-1-graph)
+          bnf-alist->lr-1-graph))
+  (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
   (import
@@ -1107,6 +1110,13 @@
   (import
     (only (euphrates least-common-multiple)
           least-common-multiple))
+  (import
+    (only (euphrates lenode)
+          lenode:add-child!
+          lenode:get-child
+          lenode:labels
+          lenode:make
+          lenode?))
   (import (only (euphrates letin) letin))
   (import
     (only (euphrates lexical-scope-obj)
@@ -1702,6 +1712,22 @@
           parselynn:lr-item:print
           parselynn:lr-item:right-hand-side
           parselynn:lr-item?))
+  (import
+    (only (euphrates
+            parselynn-lr-state-collect-outgoing-states)
+          parselynn:lr-state:collect-outgoing-states
+          parselynn:lr-state:collect-outgoing-states/given-first))
+  (import
+    (only (euphrates parselynn-lr-state-graph)
+          parselynn:lr-state-graph:add!
+          parselynn:lr-state-graph:make
+          parselynn:lr-state-graph:node-id
+          parselynn:lr-state-graph:print
+          parselynn:lr-state-graph:start
+          parselynn:lr-state-graph?))
+  (import
+    (only (euphrates parselynn-lr-state-next-symbols)
+          parselynn:lr-state:next-symbols))
   (import
     (only (euphrates parselynn-lr-state)
           parselynn:lr-state
