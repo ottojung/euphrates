@@ -7,8 +7,8 @@
    states-set    ;; set of `state id`.
    actions-set   ;; set of terminals.
    goto-set      ;; set of nonterminals.
-   action-table  ;; associative list with `key: (cons state-id (terminal | eoi))`, `value: stack<shift-action | reduce-action>`.
-   goto-table    ;; associative list with `key: state-id`, `value: assoc<nonterminal, goto-action | accept-action>`.
+   action-table  ;; associative list with `key: cons<state-id, terminal | eoi>`, `value: stack<shift-action | reduce-action | accept-action>`.
+   goto-table    ;; associative list with `key: state-id`, `value: assoc<nonterminal, goto-action>`.
 
    )
 
