@@ -78,7 +78,8 @@
              (parselynn:lr-item:lookahead item))
 
            (define action
-             (if (equal? lhs start-symbol)
+             (if (and (equal? lhs start-symbol)
+                      (equal? label parselynn:end-of-input))
                  (parselynn:lr-accept-action:make)
                  (parselynn:lr-reduce-action:make production)))
 

@@ -23,6 +23,9 @@
           hashset-has?
           list->hashset))
   (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
     (only (euphrates parselynn-epsilon)
           parselynn:epsilon))
   (import
@@ -58,6 +61,7 @@
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)
+          and
           begin
           cond
           define

@@ -60,6 +60,97 @@
 
 (let ()
   ;;
+  ;; Start issue grammar [1].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b
+  ;;
+
+  (define grammar
+    '((S (a) (b))))
+
+  (define expected-table
+    "
++ ----------------- +
+!   !   $ !  a !  b !
++ ----------------- +
+! 0 !     ! s1 ! s2 !
++ ----------------- +
+! 1 ! ACC !    !    !
++ ----------------- +
+! 2 ! ACC !    !    !
++ ----------------- +
+")
+
+  (test-case grammar expected-table))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define expected-table
+    "
++ ------------------------- +
+!   !   $ !  a !      b ! S !
++ ------------------------- +
+! 0 !     ! s2 !        ! 1 !
++ ------------------------- +
+! 1 !     !    !     s3 !   !
++ ------------------------- +
+! 2 ! ACC !    !   S← a !   !
++ ------------------------- +
+! 3 ! ACC !    ! S← S b !   !
++ ------------------------- +
+")
+
+  (test-case grammar expected-table))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((S (a) (b S))))
+
+  (define expected-table
+    "
++ --------------------- +
+!   !   $ !  a !  b ! S !
++ --------------------- +
+! 0 !     ! s1 ! s2 !   !
++ --------------------- +
+! 1 ! ACC !    !    !   !
++ --------------------- +
+! 2 !     ! s1 ! s2 ! 3 !
++ --------------------- +
+! 3 ! ACC !    !    !   !
++ --------------------- +
+")
+
+  (test-case grammar expected-table))
+
+
+(let ()
+  ;;
   ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
   ;;
   ;;   Grammar:
