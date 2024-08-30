@@ -121,6 +121,7 @@
               (define child-id
                 (parselynn:lr-state-graph:node-id child))
 
+              (display "    ")
               (display (object->string label))
               (display " -> ")
               (display (object->string child-id))

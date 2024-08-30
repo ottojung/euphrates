@@ -58,7 +58,7 @@
   (define expected-graph
     "
 0 = { [S → • a, $] }
-a -> 1
+    a -> 1
 1 = { [S → a •, $] }
 ")
 
@@ -97,9 +97,9 @@ a -> 1
   (define expected-graph
     "
 0 = { [S → • a, $] [S → • b, $] [S → • c, $] }
-a -> 1
-b -> 2
-c -> 3
+    a -> 1
+    b -> 2
+    c -> 3
 1 = { [S → a •, $] }
 2 = { [S → b •, $] }
 3 = { [S → c •, $] }
@@ -140,8 +140,8 @@ c -> 3
   (define expected-graph
     "
 0 = { [S → • a x1, $] [S → • c x3, $] [S → •, $] }
-a -> 1
-c -> 2
+    a -> 1
+    c -> 2
 1 = { [S → a • x1, $] }
 2 = { [S → c • x3, $] }
 ")
@@ -181,8 +181,8 @@ c -> 2
   (define expected-graph
     "
 0 = { [S → • a x1, $] [S → • c x3, $] [S → •, $] }
-a -> 1
-c -> 2
+    a -> 1
+    c -> 2
 1 = { [S → a • x1, $] }
 2 = { [S → c • x3, $] }
 ")
@@ -218,8 +218,8 @@ c -> 2
   (define expected-graph
     "
 0 = { [S → • a, $] [S* → • S, $] }
-S -> 1
-a -> 2
+    S -> 1
+    a -> 2
 1 = { [S* → S •, $] }
 2 = { [S → a •, $] }
 ")
@@ -257,8 +257,8 @@ a -> 2
   (define expected-graph
     "
 0 = { [S → • a, $] [S* → • S, $] }
-S -> 1
-a -> 2
+    S -> 1
+    a -> 2
 1 = { [S* → S •, $] }
 2 = { [S → a •, $] }
 ")
@@ -294,7 +294,7 @@ a -> 2
   (define expected-graph
     "
 0 = { [S* → • S, $] }
-S -> 1
+    S -> 1
 1 = { [S* → S •, $] }
 ")
 
@@ -332,8 +332,8 @@ S -> 1
   (define expected-graph
     "
 0 = { [A → • a, b] [S → • A B, $] }
-A -> 1
-a -> 2
+    A -> 1
+    a -> 2
 1 = { [B → • b, $] [S → A • B, $] }
 2 = { [A → a •, b] }
 ")
@@ -370,8 +370,8 @@ a -> 2
   (define expected-graph
     "
 0 = { [A → • a, $] [S → • A A, $] }
-A -> 1
-a -> 2
+    A -> 1
+    a -> 2
 1 = { [A → • a, $] [S → A • A, $] }
 2 = { [A → a •, $] }
 ")
@@ -404,7 +404,7 @@ a -> 2
   (define expected-graph
     "
 0 = { [S → • a, $] }
-a -> 1
+    a -> 1
 1 = { [S → a •, $] }
 ")
 
@@ -484,7 +484,7 @@ a -> 1
   (define expected-graph
     "
 0 = { [E → E • ( E ), $] [E → E • ( E ), +] }
-( -> 1
+    ( -> 1
 1 = { [E → E ( • E ), $] [E → E ( • E ), +] [E → • E + ( E ), )] [E → • E + ( E ), +] [E → • int, )] [E → • int, +] }
 ")
 
