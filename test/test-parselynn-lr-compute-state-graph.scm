@@ -3,29 +3,6 @@
 ;; Define test-case syntax.
 ;;
 
-(define-syntax test-1-case
-  (syntax-rules ()
-    ((_ grammar* state* expected-text*)
-     (let ()
-       (define grammar grammar*)
-       (define state state*)
-       (define expected-text (string-strip expected-text*))
-       (define graph (parselynn:lr-state-graph:make state))
-
-       (parselynn:lr-state:collect-outgoing-states
-        grammar state graph)
-
-       (define text
-         (string-strip
-          (with-output-stringified
-           (parselynn:lr-state-graph:print
-            graph))))
-
-       (unless (equal? text expected-text)
-         (debug "\ncorrect:\n~a\n\n" text))
-
-       (assert= text expected-text)))))
-
 
 (define-syntax test-case
   (syntax-rules ()

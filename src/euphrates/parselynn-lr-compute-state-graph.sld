@@ -1,7 +1,9 @@
 
 (define-library
   (euphrates parselynn-lr-compute-state-graph)
-  (export parselynn:lr-compute-state-graph)
+  (export
+    parselynn:lr-compute-state-graph
+    parselynn:lr-compute-state-graph/given-first)
   (import
     (only (euphrates bnf-alist-compute-first-set)
           bnf-alist:compute-first-set))

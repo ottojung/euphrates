@@ -185,9 +185,6 @@
     (only (euphrates bnf-alist-terminals)
           bnf-alist:terminals))
   (import
-    (only (euphrates bnf-alist-to-lr-1-graph)
-          bnf-alist->lr-1-graph))
-  (import
     (only (euphrates bnf-tree-to-alist)
           bnf-tree->alist))
   (import
@@ -1165,6 +1162,9 @@
           list-deduplicate
           list-deduplicate/reverse))
   (import
+    (only (euphrates list-display-as-general-table)
+          list:display-as-general-table))
+  (import
     (only (euphrates list-drop-n) list-drop-n))
   (import
     (only (euphrates list-drop-while)
@@ -1687,12 +1687,29 @@
     (only (euphrates parselynn-latin)
           make-parselynn:latin))
   (import
+    (only (euphrates parselynn-lr-accept-action)
+          parselynn:lr-accept-action:make
+          parselynn:lr-accept-action?))
+  (import
     (only (euphrates parselynn-lr-closure)
           parselynn:lr-state:close!
           parselynn:lr-state:close!/given-first))
   (import
+    (only (euphrates parselynn-lr-compute-parsing-table)
+          parselynn:lr-compute-parsing-table
+          parselynn:lr-compute-parsing-table/given-first))
+  (import
     (only (euphrates parselynn-lr-compute-state-graph)
-          parselynn:lr-compute-state-graph))
+          parselynn:lr-compute-state-graph
+          parselynn:lr-compute-state-graph/given-first))
+  (import
+    (only (euphrates parselynn-lr-goto-action)
+          parselynn:lr-goto-action:make
+          parselynn:lr-goto-action:source-id
+          parselynn:lr-goto-action:source-state
+          parselynn:lr-goto-action:target-id
+          parselynn:lr-goto-action:target-state
+          parselynn:lr-goto-action?))
   (import
     (only (euphrates parselynn-lr-goto)
           parselynn:lr-goto
@@ -1713,6 +1730,7 @@
           parselynn:lr-item:make
           parselynn:lr-item:next-symbol
           parselynn:lr-item:print
+          parselynn:lr-item:production
           parselynn:lr-item:right-hand-side
           parselynn:lr-item?))
   (import
@@ -1720,16 +1738,54 @@
           parselynn:lr-make-initial-state
           parselynn:lr-make-initial-state/given-first))
   (import
+    (only (euphrates parselynn-lr-parsing-table-print)
+          parselynn:lr-parsing-table:print))
+  (import
+    (only (euphrates parselynn-lr-parsing-table)
+          parselynn:lr-parsing-table:action:add!
+          parselynn:lr-parsing-table:action:keys
+          parselynn:lr-parsing-table:action:ref
+          parselynn:lr-parsing-table:goto:keys
+          parselynn:lr-parsing-table:goto:list
+          parselynn:lr-parsing-table:goto:ref
+          parselynn:lr-parsing-table:goto:set!
+          parselynn:lr-parsing-table:make
+          parselynn:lr-parsing-table:state:add!
+          parselynn:lr-parsing-table:state:keys
+          parselynn:lr-parsing-table?))
+  (import
+    (only (euphrates parselynn-lr-reduce-action)
+          parselynn:lr-reduce-action:make
+          parselynn:lr-reduce-action:production
+          parselynn:lr-reduce-action?))
+  (import
+    (only (euphrates parselynn-lr-shift-action)
+          parselynn:lr-shift-action:make
+          parselynn:lr-shift-action:source-id
+          parselynn:lr-shift-action:source-state
+          parselynn:lr-shift-action:target-id
+          parselynn:lr-shift-action:target-state
+          parselynn:lr-shift-action?))
+  (import
     (only (euphrates
             parselynn-lr-state-collect-outgoing-states)
           parselynn:lr-state:collect-outgoing-states
           parselynn:lr-state:collect-outgoing-states/given-first))
   (import
+    (only (euphrates parselynn-lr-state-graph-print)
+          parselynn:lr-state-graph:print))
+  (import
+    (only (euphrates
+            parselynn-lr-state-graph-to-lr-parsing-table)
+          parselynn:lr-state-graph->lr-parsing-table))
+  (import
+    (only (euphrates parselynn-lr-state-graph-traverse)
+          parselynn:lr-state-graph:traverse))
+  (import
     (only (euphrates parselynn-lr-state-graph)
           parselynn:lr-state-graph:add!
           parselynn:lr-state-graph:make
           parselynn:lr-state-graph:node-id
-          parselynn:lr-state-graph:print
           parselynn:lr-state-graph:start
           parselynn:lr-state-graph?))
   (import

@@ -14,6 +14,7 @@
     parselynn:lr-item:advance
     parselynn:lr-item:before-dot
     parselynn:lr-item:after-dot
+    parselynn:lr-item:production
     parselynn:lr-item:print)
   (import
     (only (euphrates define-type9) define-type9))
@@ -33,6 +34,7 @@
           +
           >=
           begin
+          cons
           current-output-port
           define
           equal?

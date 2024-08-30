@@ -1,14 +1,14 @@
 
 (define-library
-  (test-parselynn-lr-compute-state-graph)
+  (test-parselynn-lr-compute-parsing-table)
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debug) debug))
   (import
-    (only (euphrates parselynn-lr-compute-state-graph)
-          parselynn:lr-compute-state-graph))
+    (only (euphrates parselynn-lr-compute-parsing-table)
+          parselynn:lr-compute-parsing-table))
   (import
-    (only (euphrates parselynn-lr-state-graph-print)
-          parselynn:lr-state-graph:print))
+    (only (euphrates parselynn-lr-parsing-table-print)
+          parselynn:lr-parsing-table:print))
   (import
     (only (euphrates string-strip) string-strip))
   (import
@@ -16,25 +16,19 @@
           with-output-stringified))
   (import
     (only (scheme base)
-          *
-          +
-          =
           _
           begin
           define
           define-syntax
           equal?
           let
-          quasiquote
           quote
-          string->symbol
           syntax-rules
-          unless
-          unquote))
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "test-parselynn-lr-compute-state-graph.scm")))
+               "test-parselynn-lr-compute-parsing-table.scm")))
     (else (include
-            "test-parselynn-lr-compute-state-graph.scm"))))
+            "test-parselynn-lr-compute-parsing-table.scm"))))

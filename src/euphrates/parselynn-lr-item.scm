@@ -93,6 +93,14 @@
   (list-drop-n dot-pos rhs))
 
 ;;
+;; Get the original production.
+;;
+(define (parselynn:lr-item:production item)
+  (define lhs (parselynn:lr-item:left-hand-side item))
+  (define rhs (parselynn:lr-item:right-hand-side item))
+  (cons lhs (list rhs)))
+
+;;
 ;; Print the LR(1) item in a human-readable format.
 ;;
 (define parselynn:lr-item:print

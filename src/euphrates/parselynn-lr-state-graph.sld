@@ -6,9 +6,7 @@
     parselynn:lr-state-graph?
     parselynn:lr-state-graph:start
     parselynn:lr-state-graph:add!
-    parselynn:lr-state-graph:node-id
-    parselynn:lr-state-graph:print)
-  (import (only (euphrates comp) comp))
+    parselynn:lr-state-graph:node-id)
   (import
     (only (euphrates define-type9) define-type9))
   (import
@@ -18,19 +16,9 @@
           hashmap-set!
           make-hashmap))
   (import
-    (only (euphrates hashset)
-          hashset-add!
-          hashset-has?
-          make-hashset))
-  (import
     (only (euphrates lenode)
           lenode:add-child!
-          lenode:get-child
-          lenode:labels
           lenode:make))
-  (import
-    (only (euphrates object-to-string)
-          object->string))
   (import
     (only (euphrates olgraph)
           olnode:meta:get-value
@@ -46,21 +34,12 @@
   (import
     (only (scheme base)
           begin
-          current-output-port
           define
-          for-each
           let
           list
-          map
-          newline
           not
           or
-          parameterize
-          quote
-          unless
-          values))
-  (import (only (scheme case-lambda) case-lambda))
-  (import (only (scheme write) display))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

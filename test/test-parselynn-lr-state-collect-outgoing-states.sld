@@ -15,9 +15,11 @@
             parselynn-lr-state-collect-outgoing-states)
           parselynn:lr-state:collect-outgoing-states))
   (import
-    (only (euphrates parselynn-lr-state-graph)
-          parselynn:lr-state-graph:make
+    (only (euphrates parselynn-lr-state-graph-print)
           parselynn:lr-state-graph:print))
+  (import
+    (only (euphrates parselynn-lr-state-graph)
+          parselynn:lr-state-graph:make))
   (import
     (only (euphrates parselynn-lr-state)
           parselynn:lr-state:add!
