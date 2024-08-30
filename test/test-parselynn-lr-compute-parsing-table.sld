@@ -16,6 +16,7 @@
           with-output-stringified))
   (import
     (only (scheme base)
+          /
           _
           begin
           define
