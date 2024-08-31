@@ -14,8 +14,23 @@
        (define table
          (parselynn:lr-compute-parsing-table grammar))
 
-       (define result
+       (define result/raw
          (parselynn:lr-parsing-table:get-conflicts table))
+
+       (define (action->string action)
+         (with-output-stringified
+          (parselynn:lr-action:print action)))
+
+       (define result
+         (map (lambda (p)
+                (define-pair (state conflicts) p)
+                (cons state
+                      (map
+                       (lambda (x)
+                         (define-pair (key actions) x)
+                         (cons key (map action->string actions)))
+                       conflicts)))
+              result/raw))
 
        (unless (equal? result expected)
          (debug "\nactual:\n~s\n\n" result))

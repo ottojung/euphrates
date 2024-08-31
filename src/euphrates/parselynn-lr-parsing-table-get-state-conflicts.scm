@@ -5,15 +5,9 @@
   (define actions-keys
     (parselynn:lr-parsing-table:action:list table state))
 
-  (define (action->string action)
-    (with-output-stringified
-     (parselynn:lr-action:print action)))
-
   (define (get-actions key)
     (define actions
       (parselynn:lr-parsing-table:action:ref table state key))
-    (define strs
-      (map action->string actions))
 
     (unless (pair? actions)
       (raisu-fmt 'type-error "Impossible. Expected a nonempty list."))
@@ -21,7 +15,7 @@
     (if (or (null? actions)
             (list-singleton? actions))
         #f
-        (cons key strs)))
+        (cons key actions)))
 
   (define conflicts
     (filter

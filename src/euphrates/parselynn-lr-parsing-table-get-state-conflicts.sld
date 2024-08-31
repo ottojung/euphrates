@@ -9,16 +9,10 @@
     (only (euphrates list-singleton-q)
           list-singleton?))
   (import
-    (only (euphrates parselynn-lr-action-print)
-          parselynn:lr-action:print))
-  (import
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:list
           parselynn:lr-parsing-table:action:ref))
   (import (only (euphrates raisu-fmt) raisu-fmt))
-  (import
-    (only (euphrates with-output-stringified)
-          with-output-stringified))
   (import
     (only (scheme base)
           begin
