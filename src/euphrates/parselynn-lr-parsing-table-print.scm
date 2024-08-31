@@ -35,7 +35,10 @@
         "ACC")
 
        (else
-        (raisu-fmt 'TODO "TODO SUPPORT NONSHIFT"))))
+        (raisu* :from "parselynn:lr-parsing-table:print"
+                :type 'unknown-action
+                :message (stringf "Unknown action ~s." elem)
+                :args (list table elem)))))
 
     (define (action-list->string state lst)
       (define strs
@@ -58,7 +61,10 @@
        ((parselynn:lr-goto-action? x)
         (parselynn:lr-goto-action:target-id x))
        (else
-        (raisu-fmt 'TODO "TODO SUPPORT NONGOTO"))))
+        (raisu* :from "parselynn:lr-parsing-table:print"
+                :type 'unknown-action
+                :message (stringf "Unknown action ~s." x)
+                :args (list table state x)))))
 
     (define (goto-column->string state key)
       (define x
