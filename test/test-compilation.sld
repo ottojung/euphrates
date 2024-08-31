@@ -1691,6 +1691,9 @@
           parselynn:lr-accept-action:make
           parselynn:lr-accept-action?))
   (import
+    (only (euphrates parselynn-lr-action-print)
+          parselynn:lr-action:print))
+  (import
     (only (euphrates parselynn-lr-closure)
           parselynn:lr-state:close!
           parselynn:lr-state:close!/given-first))

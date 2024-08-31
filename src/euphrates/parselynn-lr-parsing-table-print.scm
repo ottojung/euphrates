@@ -18,27 +18,8 @@
       (parselynn:lr-parsing-table:goto:keys table))
 
     (define (action->string elem)
-      (cond
-       ((parselynn:lr-shift-action? elem)
-        (stringf
-         "s~s"
-         (parselynn:lr-shift-action:target-id elem)))
-
-       ((parselynn:lr-reduce-action? elem)
-        (stringf
-         "~s← ~a"
-         (car (parselynn:lr-reduce-action:production elem))
-         (words->string
-          (map ~s (cadr (parselynn:lr-reduce-action:production elem))))))
-
-       ((parselynn:lr-accept-action? elem)
-        "ACC")
-
-       (else
-        (raisu* :from "parselynn:lr-parsing-table:print"
-                :type 'unknown-action
-                :message (stringf "Unknown action ~s." elem)
-                :args (list table elem)))))
+      (with-output-stringified
+       (parselynn:lr-action:print elem)))
 
     (define (action-list->string state lst)
       (define strs
@@ -56,22 +37,12 @@
 
       (if x (action-list->string state x) ""))
 
-    (define (goto-item->string state x)
-      (cond
-       ((parselynn:lr-goto-action? x)
-        (parselynn:lr-goto-action:target-id x))
-       (else
-        (raisu* :from "parselynn:lr-parsing-table:print"
-                :type 'unknown-action
-                :message (stringf "Unknown action ~s." x)
-                :args (list table state x)))))
-
     (define (goto-column->string state key)
       (define x
         (parselynn:lr-parsing-table:goto:ref
          table state key #f))
 
-      (if x (goto-item->string state x) ""))
+      (if x (action->string x) ""))
 
     (define (state->row state)
       (append
