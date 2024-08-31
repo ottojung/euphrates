@@ -107,7 +107,9 @@
     (hashmap-ref action-lists state '()))
 
   (define new-list
-    (cons key existing-list))
+    (if (member key existing-list)
+        existing-list
+        (cons key existing-list)))
 
   (define existing
     (hashmap-ref
@@ -151,7 +153,9 @@
     (hashmap-ref goto-lists state '()))
 
   (define new-list
-    (cons key existing-list))
+    (if (member key existing-list)
+        existing-list
+        (cons key existing-list)))
 
   (hashmap-set! goto-table hash-key action)
   (hashmap-set! goto-lists state new-list)

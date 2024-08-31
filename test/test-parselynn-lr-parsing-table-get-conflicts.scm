@@ -85,7 +85,7 @@
       (R (num) (num space R))))
 
   (define expected
-    `((2 (space "s3" "L← num") (space "s3" "L← num"))))
+    `((2 (space "s3" "L← num"))))
 
   (test-case grammar expected))
 
@@ -117,6 +117,6 @@
       (term     (NUM))))
 
   (define expected
-    `((3 (SPACE "s4" "left← term") (SPACE "s4" "left← term"))))
+    `((3 (SPACE "s4" "left← term"))))
 
   (test-case grammar expected))
