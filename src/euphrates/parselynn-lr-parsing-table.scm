@@ -7,8 +7,10 @@
    states-set    ;; set of `state id`.
    actions-set   ;; set of terminals.
    goto-set      ;; set of nonterminals.
-   action-table  ;; associative list with `key: cons<state-id, terminal | eoi>`, `value: stack<shift-action | reduce-action | accept-action>`
-   goto-table    ;; associative list with `key: cons<state-id, nonterminal>`, `value: goto-action`.
+   action-table  ;; hashmap with `key: cons<state-id, terminal | eoi>`, `value: stack<shift-action | reduce-action | accept-action>`
+   goto-table    ;; hashmap with `key: cons<state-id, nonterminal>`, `value: goto-action`.
+   action-lists  ;; hashmap with `key: state-id`, value `list<terminal | eoi>`.
+   goto-lists    ;; hashmap with `key: state-id`, value `list<nonterminal>`.
 
    )
 
@@ -19,6 +21,8 @@
   (goto-set parselynn:lr-parsing-table:goto-set)
   (action-table parselynn:lr-parsing-table:action-table)
   (goto-table parselynn:lr-parsing-table:goto-table)
+  (action-lists parselynn:lr-parsing-table:action-lists)
+  (goto-lists parselynn:lr-parsing-table:goto-lists)
 
   )
 
@@ -26,12 +30,16 @@
 (define (parselynn:lr-parsing-table:make)
   (define action-table (make-hashmap))
   (define goto-table (make-hashmap))
+  (define action-lists (make-hashmap))
+  (define goto-lists (make-hashmap))
   (define states-set (make-hashset))
   (define actions-set (make-hashset))
   (define goto-set (make-hashset))
 
   (parselynn:lr-parsing-table:constructor
-   states-set actions-set goto-set action-table goto-table))
+   states-set actions-set goto-set
+   action-table goto-table
+   action-lists goto-lists))
 
 
 (define (parselynn:lr-parsing-table:state:add! table state)
@@ -89,8 +97,17 @@
   (define action-table
     (parselynn:lr-parsing-table:action-table table))
 
+  (define action-lists
+    (parselynn:lr-parsing-table:action-lists table))
+
   (define hash-key
     (cons state key))
+
+  (define existing-list
+    (hashmap-ref action-lists state '()))
+
+  (define new-list
+    (cons key existing-list))
 
   (define existing
     (hashmap-ref
@@ -109,6 +126,7 @@
 
   (parselynn:lr-parsing-table:state:add! table state)
   (hashset-add! actions-set key)
+  (hashmap-set! action-lists state new-list)
 
   (values))
 
@@ -123,10 +141,20 @@
   (define goto-table
     (parselynn:lr-parsing-table:goto-table table))
 
+  (define goto-lists
+    (parselynn:lr-parsing-table:goto-lists table))
+
   (define hash-key
     (cons state key))
 
+  (define existing-list
+    (hashmap-ref goto-lists state '()))
+
+  (define new-list
+    (cons key existing-list))
+
   (hashmap-set! goto-table hash-key action)
+  (hashmap-set! goto-lists state new-list)
   (parselynn:lr-parsing-table:state:add! table state)
   (hashset-add! goto-set key)
 
@@ -192,3 +220,23 @@
          (parselynn:lr-parsing-table:goto-table table*))
 
        (hashmap-ref goto-table hash-key default)))))
+
+
+(define (parselynn:lr-parsing-table:action:list table state)
+  (define action-lists
+    (parselynn:lr-parsing-table:action-lists table))
+
+  (define existing-list
+    (hashmap-ref action-lists state '()))
+
+  existing-list)
+
+
+(define (parselynn:lr-parsing-table:goto:list table state)
+  (define goto-lists
+    (parselynn:lr-parsing-table:goto-lists table))
+
+  (define existing-list
+    (hashmap-ref goto-lists state '()))
+
+  existing-list)

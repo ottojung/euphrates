@@ -1744,8 +1744,10 @@
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:add!
           parselynn:lr-parsing-table:action:keys
+          parselynn:lr-parsing-table:action:list
           parselynn:lr-parsing-table:action:ref
           parselynn:lr-parsing-table:goto:keys
+          parselynn:lr-parsing-table:goto:list
           parselynn:lr-parsing-table:goto:ref
           parselynn:lr-parsing-table:goto:set!
           parselynn:lr-parsing-table:make

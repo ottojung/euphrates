@@ -11,7 +11,9 @@
     parselynn:lr-parsing-table:action:add!
     parselynn:lr-parsing-table:goto:keys
     parselynn:lr-parsing-table:goto:ref
-    parselynn:lr-parsing-table:goto:set!)
+    parselynn:lr-parsing-table:goto:set!
+    parselynn:lr-parsing-table:goto:list
+    parselynn:lr-parsing-table:action:list)
   (import
     (only (euphrates define-type9) define-type9))
   (import
