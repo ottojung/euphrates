@@ -11,9 +11,7 @@
     parselynn:lr-parsing-table:action:add!
     parselynn:lr-parsing-table:goto:keys
     parselynn:lr-parsing-table:goto:ref
-    parselynn:lr-parsing-table:goto:set!
-    parselynn:lr-parsing-table:goto:list)
-  (import (only (euphrates assoc-or) assoc-or))
+    parselynn:lr-parsing-table:goto:set!)
   (import
     (only (euphrates define-type9) define-type9))
   (import
@@ -41,7 +39,6 @@
           <
           _
           begin
-          car
           cons
           define
           define-syntax
@@ -49,7 +46,6 @@
           lambda
           let
           list
-          map
           member
           or
           quote
