@@ -2,8 +2,12 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (parselynn:lr-state-graph->lr-parsing-table bnf-alist graph)
+  (define initial-state
+    (parselynn:lr-state-graph:node-id
+     (parselynn:lr-state-graph:start graph)))
+
   (define ret
-    (parselynn:lr-parsing-table:make))
+    (parselynn:lr-parsing-table:make initial-state))
 
   (define start-symbol
     (if (bnf-alist:empty? bnf-alist)

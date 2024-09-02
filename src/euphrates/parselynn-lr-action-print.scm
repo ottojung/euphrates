@@ -25,6 +25,9 @@
      ((parselynn:lr-accept-action? action)
       (display "ACC" port))
 
+     ((parselynn:lr-reject-action? action)
+      (display "" port))
+
      ((parselynn:lr-goto-action? action)
       (write (parselynn:lr-goto-action:target-id action) port))
 

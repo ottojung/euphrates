@@ -56,6 +56,10 @@
     (only (euphrates parselynn-lr-state-graph-traverse)
           parselynn:lr-state-graph:traverse))
   (import
+    (only (euphrates parselynn-lr-state-graph)
+          parselynn:lr-state-graph:node-id
+          parselynn:lr-state-graph:start))
+  (import
     (only (euphrates parselynn-lr-state)
           parselynn:lr-state:foreach-item))
   (import (only (euphrates raisu-star) raisu*))

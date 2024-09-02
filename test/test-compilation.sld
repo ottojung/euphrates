@@ -179,6 +179,12 @@
     (only (euphrates bnf-alist-nonterminals)
           bnf-alist:nonterminals))
   (import
+    (only (euphrates bnf-alist-production-lhs)
+          bnf-alist:production:lhs))
+  (import
+    (only (euphrates bnf-alist-production-rhs)
+          bnf-alist:production:rhs))
+  (import
     (only (euphrates bnf-alist-start-symbol)
           bnf-alist:start-symbol))
   (import
@@ -761,6 +767,14 @@
           sre->irregex
           string->irregex
           string->sre))
+  (import
+    (only (euphrates iterator-to-list)
+          iterator->list))
+  (import
+    (only (euphrates iterator)
+          iterator:make
+          iterator:next
+          iterator?))
   (import (only (euphrates json-parse) json-parse))
   (import
     (only (euphrates key-value-map)
@@ -1290,6 +1304,9 @@
     (only (euphrates list-take-while)
           list-take-while))
   (import
+    (only (euphrates list-to-iterator)
+          list->iterator))
+  (import
     (only (euphrates list-to-join-semilattice)
           list->join-semilattice))
   (import
@@ -1718,6 +1735,9 @@
           parselynn:lr-goto
           parselynn:lr-goto/given-first))
   (import
+    (only (euphrates parselynn-lr-interpret)
+          parselynn:lr-interpret))
+  (import
     (only (euphrates parselynn-lr-item-next-lookaheads)
           parselynn:lr-item:next-lookaheads))
   (import
@@ -1763,6 +1783,7 @@
           parselynn:lr-parsing-table:goto:set!
           parselynn:lr-parsing-table:make
           parselynn:lr-parsing-table:state:add!
+          parselynn:lr-parsing-table:state:initial
           parselynn:lr-parsing-table:state:keys
           parselynn:lr-parsing-table?))
   (import
@@ -1770,6 +1791,10 @@
           parselynn:lr-reduce-action:make
           parselynn:lr-reduce-action:production
           parselynn:lr-reduce-action?))
+  (import
+    (only (euphrates parselynn-lr-reject-action)
+          parselynn:lr-reject-action:make
+          parselynn:lr-reject-action?))
   (import
     (only (euphrates parselynn-lr-shift-action)
           parselynn:lr-shift-action:make

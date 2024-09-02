@@ -15,6 +15,9 @@
           parselynn:lr-reduce-action:production
           parselynn:lr-reduce-action?))
   (import
+    (only (euphrates parselynn-lr-reject-action)
+          parselynn:lr-reject-action?))
+  (import
     (only (euphrates parselynn-lr-shift-action)
           parselynn:lr-shift-action:target-id
           parselynn:lr-shift-action?))

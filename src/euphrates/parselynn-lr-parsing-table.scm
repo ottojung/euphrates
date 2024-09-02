@@ -4,7 +4,8 @@
 (define-type9 <lr-parsing-table>
   (parselynn:lr-parsing-table:constructor
 
-   states-set    ;; set of `state id`.
+   initial-state ;; value of type `state-id` that corresponds to the initial state.
+   states-set    ;; set of `state-id`.
    actions-set   ;; set of terminals.
    goto-set      ;; set of nonterminals.
    action-table  ;; hashmap with `key: cons<state-id, terminal | eoi>`, `value: stack<shift-action | reduce-action | accept-action>`
@@ -16,6 +17,7 @@
 
   parselynn:lr-parsing-table?
 
+  (initial-state parselynn:lr-parsing-table:initial-state)
   (states-set parselynn:lr-parsing-table:states-set)
   (actions-set parselynn:lr-parsing-table:actions-set)
   (goto-set parselynn:lr-parsing-table:goto-set)
@@ -27,7 +29,7 @@
   )
 
 
-(define (parselynn:lr-parsing-table:make)
+(define (parselynn:lr-parsing-table:make initial-state)
   (define action-table (make-hashmap))
   (define goto-table (make-hashmap))
   (define action-lists (make-hashmap))
@@ -37,9 +39,14 @@
   (define goto-set (make-hashset))
 
   (parselynn:lr-parsing-table:constructor
+   initial-state
    states-set actions-set goto-set
    action-table goto-table
    action-lists goto-lists))
+
+
+(define (parselynn:lr-parsing-table:state:initial table)
+  (parselynn:lr-parsing-table:initial-state table))
 
 
 (define (parselynn:lr-parsing-table:state:add! table state)
