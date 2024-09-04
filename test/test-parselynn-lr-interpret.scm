@@ -129,7 +129,7 @@
     '())
 
   (define expected
-    `(S ()))
+    `(S))
 
   (test-case grammar input expected))
 
@@ -171,7 +171,7 @@
     '(a))
 
   (define expected
-    '(S (a)))
+    '(S a))
 
   (test-case grammar input expected))
 
@@ -234,7 +234,7 @@
     '(a b))
 
   (define expected
-    `(S (a b)))
+    `(S a b))
 
   (test-case grammar input expected))
 
@@ -255,7 +255,7 @@
     '(a b c))
 
   (define expected
-    `(S (a b c)))
+    `(S a b c))
 
   (test-case grammar input expected))
 
@@ -277,7 +277,7 @@
     '(x))
 
   (define expected
-    `(S (x)))
+    `(S x))
 
   (test-case grammar input expected))
 
@@ -299,7 +299,7 @@
     '(x))
 
   (define expected
-    `(S (x)))
+    `(S x))
 
   (test-case grammar input expected))
 
@@ -344,7 +344,7 @@
     '(a))
 
   (define expected
-    `(S ((E (a)))))
+    `(S (E a)))
 
   (test-case grammar input expected))
 
@@ -367,7 +367,7 @@
     '(a b))
 
   (define expected
-    `(S ((E (a b)))))
+    `(S (E a b)))
 
   (test-case grammar input expected))
 
@@ -390,7 +390,7 @@
     '(a b))
 
   (define expected
-    `(S ((E (a)) b)))
+    `(S (E a) b))
 
   (test-case grammar input expected))
 
@@ -413,7 +413,7 @@
     '(a b c))
 
   (define expected
-    `(S ((E (a b)) c)))
+    `(S (E a b) c))
 
   (test-case grammar input expected))
 
@@ -436,7 +436,7 @@
     '(a b a b))
 
   (define expected
-    `(S ((E (a b)) (E (a b)))))
+    `(S (E a b) (E a b)))
 
   (test-case grammar input expected))
 
@@ -459,7 +459,7 @@
     '(a b a b))
 
   (define expected
-    `(S ((E (a b)) (E (a b)))))
+    `(S (E a b) (E a b)))
 
   (test-case grammar input expected))
 
@@ -482,7 +482,7 @@
     '(a b a b a b))
 
   (define expected
-    `(S ((E (a b)) (E (a b)) (E (a b)))))
+    `(S (E a b) (E a b) (E a b)))
 
   (test-case grammar input expected))
 
@@ -505,7 +505,7 @@
     '(a b c))
 
   (define expected
-    `(S ((E (a b)) c)))
+    `(S (E a b) c))
 
   (test-case grammar input expected))
 
@@ -528,7 +528,7 @@
     '(c))
 
   (define expected
-    `(S ((E ()) c)))
+    `(S (E) c))
 
   (test-case grammar input expected))
 
@@ -551,7 +551,7 @@
     '(a b c))
 
   (define expected
-    `(S ((E (a b)) c)))
+    `(S (E a b) c))
 
   (test-case grammar input expected))
 
@@ -574,7 +574,7 @@
     '(a))
 
   (define expected
-    `(S (a)))
+    `(S a))
 
   (test-case grammar input expected))
 
@@ -597,7 +597,7 @@
     '(b))
 
   (define expected
-    `(S (b)))
+    `(S b))
 
   (test-case grammar input expected))
 
@@ -620,7 +620,7 @@
     '(c))
 
   (define expected
-    `(S (c)))
+    `(S c))
 
   (test-case grammar input expected))
 
@@ -666,7 +666,7 @@
     '(a x1))
 
   (define expected
-    (list 'S input))
+    (cons 'S input))
 
   (test-case grammar input expected))
 
@@ -689,7 +689,7 @@
     '(b))
 
   (define expected
-    (list 'S input))
+    (cons 'S input))
 
   (test-case grammar input expected))
 
@@ -712,7 +712,7 @@
     '(a x1))
 
   (define expected
-    (list 'S input))
+    (cons 'S input))
 
   (test-case grammar input expected))
 
@@ -735,7 +735,7 @@
     '())
 
   (define expected
-    (list 'S input))
+    (cons 'S input))
 
   (test-case grammar input expected))
 
@@ -758,7 +758,7 @@
     '(c x3))
 
   (define expected
-    (list 'S input))
+    (cons 'S input))
 
   (test-case grammar input expected))
 
@@ -806,7 +806,7 @@
     '(a b))
 
   (define expected
-    `(S ((A (a)) (B (b)))))
+    `(S (A a) (B b)))
 
   (test-case grammar input expected))
 
@@ -988,7 +988,7 @@
     `(a))
 
   (define expected
-    `(S (a)))
+    `(S a))
 
   (test-case grammar input expected))
 
@@ -1010,7 +1010,7 @@
     `(a b))
 
   (define expected
-    `(S ((S (a)) b)))
+    `(S (S a) b))
 
   (test-case grammar input expected))
 
@@ -1054,7 +1054,7 @@
     `(a b b))
 
   (define expected
-    `(S ((S ((S (a)) b)) b)))
+    `(S (S (S a) b) b))
 
   (test-case grammar input expected))
 
@@ -1076,6 +1076,6 @@
     `(a b b b b b))
 
   (define expected
-    `(S ((S ((S ((S ((S ((S (a)) b)) b)) b)) b)) b)))
+    `(S (S (S (S (S (S a) b) b) b) b) b))
 
   (test-case grammar input expected))

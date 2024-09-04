@@ -62,6 +62,7 @@
           begin
           car
           cond
+          cons
           define
           else
           for-each

@@ -19,11 +19,11 @@
     (only (scheme base)
           _
           begin
+          cons
           define
           define-syntax
           equal?
           let
-          list
           quasiquote
           quote
           syntax-rules

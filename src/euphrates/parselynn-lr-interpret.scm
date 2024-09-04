@@ -32,7 +32,7 @@
 
     ;; Construct a new AST node.
     (define new-node
-      (list lhs (stack-pop-multiple! ret (length rhs))))
+      (cons lhs (stack-pop-multiple! ret (length rhs))))
 
     ;; Push the LHS and new node onto the stack.
     (stack-push! ret new-node)
@@ -108,7 +108,7 @@
      (stack->list ret)))
 
   (define derivation
-    (list start-symbol args))
+    (cons start-symbol args))
 
   (if (parselynn:lr-reject-action? result)
       reject
