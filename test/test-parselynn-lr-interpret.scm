@@ -73,6 +73,90 @@
 
 (let ()
   ;;
+  ;; Minimal self referential grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;;
+
+  (define grammar
+    '((S (S))))
+
+  (define input
+    '())
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Minimal self referential grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;;
+
+  (define grammar
+    '((S (S))))
+
+  (define input
+    '(S))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Minimal grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
+
+  (define grammar
+    '((S ())))
+
+  (define input
+    '())
+
+  (define expected
+    `(S ()))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Minimal grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
+
+  (define grammar
+    '((S ())))
+
+  (define input
+    '(a))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
   ;; Simple grammar with single production.
   ;;
   ;;   Grammar:
@@ -140,30 +224,6 @@
   ;;
   ;;   Grammar:
   ;;
-  ;; S -> E
-  ;; E -> a
-  ;;
-
-  (define grammar
-    '((S (E))
-      (E (a))))
-
-  (define input
-    '(a))
-
-  (define expected
-    `(S ((E (a)))))
-
-  (test-case grammar input expected))
-
-
-
-(let ()
-  ;;
-  ;; Simple grammar with two productions.
-  ;;
-  ;;   Grammar:
-  ;;
   ;; S -> a b
   ;;
 
@@ -196,6 +256,95 @@
 
   (define expected
     `(S (a b c)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;; S -> x
+  ;;
+
+  (define grammar
+    '((S (S) (x))))
+
+  (define input
+    '(x))
+
+  (define expected
+    `(S (x)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> x
+  ;; S -> S
+  ;;
+
+  (define grammar
+    '((S (x) (S))))
+
+  (define input
+    '(x))
+
+  (define expected
+    `(S (x)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> x
+  ;; S -> S
+  ;;
+
+  (define grammar
+    '((S (x) (S))))
+
+  (define input
+    '())
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E
+  ;; E -> a
+  ;;
+
+  (define grammar
+    '((S (E))
+      (E (a))))
+
+  (define input
+    '(a))
+
+  (define expected
+    `(S ((E (a)))))
 
   (test-case grammar input expected))
 
@@ -541,5 +690,392 @@
 
   (define expected
     (list 'S input))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a x1
+  ;; S -> ε
+  ;; S -> c x3
+  ;;
+
+  (define grammar
+    '((S (a x1) () (c x3))))
+
+  (define input
+    '(a x1))
+
+  (define expected
+    (list 'S input))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a x1
+  ;; S -> ε
+  ;; S -> c x3
+  ;;
+
+  (define grammar
+    '((S (a x1) () (c x3))))
+
+  (define input
+    '())
+
+  (define expected
+    (list 'S input))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a x1
+  ;; S -> ε
+  ;; S -> c x3
+  ;;
+
+  (define grammar
+    '((S (a x1) () (c x3))))
+
+  (define input
+    '(c x3))
+
+  (define expected
+    (list 'S input))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a x1
+  ;; S -> ε
+  ;; S -> c x3
+  ;;
+
+  (define grammar
+    '((S (a x1) () (c x3))))
+
+  (define input
+    '(b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Grammar with nested non-terminals.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> A B
+  ;; A -> a
+  ;; B -> b
+  ;;
+
+  (define grammar
+    '((S (A B))
+      (A (a))
+      (B (b))))
+
+  (define input
+    '(a b))
+
+  (define expected
+    `(S ((A (a)) (B (b)))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Grammar with nested non-terminals.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> A B
+  ;; A -> a
+  ;; B -> b
+  ;;
+
+  (define grammar
+    '((S (A B))
+      (A (a))
+      (B (b))))
+
+  (define input
+    '(b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Grammar with nested non-terminals.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> A B
+  ;; A -> a
+  ;; B -> b
+  ;;
+
+  (define grammar
+    '((S (A B))
+      (A (a))
+      (B (b))))
+
+  (define input
+    '(b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;; S -> x S
+  ;;
+
+  (define grammar
+    '((S (S) (x S))))
+
+  (define input
+    '(x))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;; S -> x S
+  ;;
+
+  (define grammar
+    '((S (S) (x S))))
+
+  (define input
+    '(x x))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;; S -> x S
+  ;;
+
+  (define grammar
+    '((S (S) (x S))))
+
+  (define input
+    '())
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;; S -> x S
+  ;;
+
+  (define grammar
+    '((S (S) (x S))))
+
+  (define input
+    '(b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    '(b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(a))
+
+  (define expected
+    `(S (a)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(a b))
+
+  (define expected
+    `(S ((S (a)) b)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(a a b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(a b b))
+
+  (define expected
+    `(S ((S ((S (a)) b)) b)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(a b b b b b))
+
+  (define expected
+    `(S ((S ((S ((S ((S ((S (a)) b)) b)) b)) b)) b)))
 
   (test-case grammar input expected))

@@ -226,7 +226,7 @@
 
 (let ()
   ;;
-  ;; Empty grammar with empty production.
+  ;; Minimal grammar with empty production.
   ;;
   ;;   Grammar:
   ;;
