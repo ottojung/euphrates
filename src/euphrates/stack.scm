@@ -71,3 +71,10 @@
 
 (define (stack-copy S)
   (list->stack (stack->list S)))
+
+(define (stack-pop-multiple! stack n)
+  (let loop ((n n) (buf '()))
+    (if (<= n 0) buf
+        (let ()
+          (define top (stack-pop! stack))
+          (loop (- n 1) (cons top buf))))))

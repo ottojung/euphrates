@@ -13,6 +13,7 @@
     stack->list
     list->stack
     stack-unload!
+    stack-pop-multiple!
     stack-copy)
   (import (only (euphrates raisu) raisu))
   (import
@@ -23,6 +24,8 @@
           stack-predicate))
   (import
     (only (scheme base)
+          -
+          <=
           begin
           car
           cdr

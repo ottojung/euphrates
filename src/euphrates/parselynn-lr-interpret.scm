@@ -18,75 +18,87 @@
   (define reject
     (parselynn:lr-reject-action:make))
 
-  (define eoi
-    parselynn:end-of-input)
+  (define (process-reduce state input action)
+    (define production (parselynn:lr-reduce-action:production action))
+    (define lhs (bnf-alist:production:lhs production))
+    (define rhs (bnf-alist:production:rhs production))
 
-  (define (stack-pop-multiple! stack n)
-    (let loop ((n n))
-      (if (<= n 0) '()
-          (let ()
-            (define top (stack-pop! stack))
-            (cons top (loop (- n 1)))))))
+    ;; Pop the RHS items from the stack.
+    (define _1233
+      (for-each (lambda _ (stack-pop! state-stack)) rhs))
 
-  ;; Push the initial state on the state stack
-  (stack-push! state-stack initial-state)
+    ;; Construct a new AST node.
+    (define new-node
+      (list lhs (stack-pop-multiple! ret (length rhs))))
 
-  ;; Main parsing loop
+    ;; Push the LHS and new node onto the stack.
+    (stack-push! ret new-node)
+
+    ;; Get the next state after this reduction.
+    (define goto-state
+      (parselynn:lr-parsing-table:goto:ref
+       parsing-table (stack-peek state-stack) lhs reject))
+
+    (if (parselynn:lr-reject-action? goto-state)
+        reject
+        (let ()
+          (define new-state
+            (parselynn:lr-goto-action:target-id goto-state))
+          (loop-with-input new-state input))))
+
+  (define (process-action state input action)
+    (cond
+     ((parselynn:lr-accept-action? action)
+      (stack-peek ret))
+
+     ((parselynn:lr-shift-action? action)
+      (stack-push! ret input)
+      (loop (parselynn:lr-shift-action:target-id action)))
+
+     ((parselynn:lr-reduce-action? action)
+      (process-reduce state input action))
+
+     (else
+      (raisu* :from "parselynn:lr-interpret"
+              :type 'unknown-action-type
+              :message "Unknown action type"
+              :args (list action state input)))))
+
+  (define (action->string action)
+    (with-output-stringified
+     (parselynn:lr-action:print action)))
+
+  (define (get-input)
+    (iterator:next input-tokens-iterator parselynn:end-of-input))
+
+  ;; Main parsing loop.
+  (define (loop-with-input state input)
+    ;; Push state on the state stack.
+    (stack-push! state-stack state)
+
+    (define lookup
+      (parselynn:lr-parsing-table:action:ref
+       parsing-table state input reject))
+
+    (cond
+     ((parselynn:lr-reject-action? lookup)
+      reject)
+
+     ((list-singleton? lookup)
+      (process-action state input (car lookup)))
+
+     (else
+      (raisu* :from "parselynn:lr-interpret"
+              :type 'parse-conflict
+              :message (stringf "Parsing conflict: ~s" lookup)
+              :args (list lookup)))))
+
+  (define (loop state)
+    (define input (get-input))
+    (loop-with-input state input))
+
   (define result
-    (let loop ((state initial-state))
-      (define input
-        (iterator:next input-tokens-iterator eoi))
-
-      (define lookup
-        (parselynn:lr-parsing-table:action:ref
-         parsing-table state input reject))
-
-      (cond
-       ((parselynn:lr-reject-action? lookup)
-        reject)
-
-       ((parselynn:lr-shift-action? (car lookup))
-        (let ((action (car lookup))
-              (rest-actions (cdr lookup)))
-          (stack-push! state-stack (parselynn:lr-shift-action:target-id action))
-          (stack-push! ret input)
-          (loop (parselynn:lr-shift-action:target-id action))))
-
-       ((parselynn:lr-reduce-action? (car lookup))
-        (let ((action (car lookup))
-              (rest-actions (cdr lookup)))
-          (define production (parselynn:lr-reduce-action:production action))
-          (define lhs (bnf-alist:production:lhs production))
-          (define rhs (bnf-alist:production:rhs production))
-
-          ;; Pop the RHS items from the stack
-          (for-each (lambda (_) (stack-pop! state-stack)) rhs)
-
-          ;; Construct a new AST node
-          (define new-node
-            (list
-             lhs
-             (stack-pop-multiple! ret (length rhs))))
-
-          ;; Push the LHS and new node onto the stack
-          (stack-push! ret new-node)
-
-          ;; Get the next state after this reduction
-          (define goto-state
-            (parselynn:lr-parsing-table:goto:ref
-             parsing-table (stack-peek state-stack) lhs reject))
-
-          (if (parselynn:lr-reject-action? goto-state)
-              reject
-              (begin
-                (stack-push! state-stack goto-state)
-                (loop goto-state)))))
-
-       ((parselynn:lr-accept-action? (car lookup))
-        (stack-peek ret))
-
-       (else
-        reject))))
+    (loop initial-state))
 
   (if (parselynn:lr-reject-action? result)
       reject

@@ -11,11 +11,20 @@
   (import
     (only (euphrates iterator) iterator:next))
   (import
+    (only (euphrates list-singleton-q)
+          list-singleton?))
+  (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
   (import
     (only (euphrates parselynn-lr-accept-action)
           parselynn:lr-accept-action?))
+  (import
+    (only (euphrates parselynn-lr-action-print)
+          parselynn:lr-action:print))
+  (import
+    (only (euphrates parselynn-lr-goto-action)
+          parselynn:lr-goto-action:target-id))
   (import
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:ref
@@ -33,23 +42,25 @@
     (only (euphrates parselynn-lr-shift-action)
           parselynn:lr-shift-action:target-id
           parselynn:lr-shift-action?))
+  (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
           stack->list
           stack-make
           stack-peek
           stack-pop!
+          stack-pop-multiple!
           stack-push!))
+  (import (only (euphrates stringf) stringf))
+  (import
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
   (import
     (only (scheme base)
-          -
-          <=
           _
           begin
           car
-          cdr
           cond
-          cons
           define
           else
           for-each

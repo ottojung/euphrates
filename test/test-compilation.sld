@@ -2568,6 +2568,7 @@
           stack-make
           stack-peek
           stack-pop!
+          stack-pop-multiple!
           stack-push!
           stack-unload!
           stack?))
