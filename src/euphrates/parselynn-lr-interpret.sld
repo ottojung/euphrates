@@ -29,6 +29,7 @@
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:ref
           parselynn:lr-parsing-table:goto:ref
+          parselynn:lr-parsing-table:start-symbol
           parselynn:lr-parsing-table:state:initial))
   (import
     (only (euphrates parselynn-lr-reduce-action)

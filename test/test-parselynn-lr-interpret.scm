@@ -87,7 +87,7 @@
     '(a))
 
   (define expected
-    '(a))
+    '(S (a)))
 
   (test-case grammar input expected))
 
@@ -152,7 +152,7 @@
     '(a))
 
   (define expected
-    `((E (a))))
+    `(S ((E (a)))))
 
   (test-case grammar input expected))
 
@@ -174,7 +174,7 @@
     '(a b))
 
   (define expected
-    `(a b))
+    `(S (a b)))
 
   (test-case grammar input expected))
 
@@ -195,7 +195,7 @@
     '(a b c))
 
   (define expected
-    `(a b c))
+    `(S (a b c)))
 
   (test-case grammar input expected))
 
@@ -218,7 +218,7 @@
     '(a b))
 
   (define expected
-    `((E (a b))))
+    `(S ((E (a b)))))
 
   (test-case grammar input expected))
 
@@ -241,7 +241,7 @@
     '(a b))
 
   (define expected
-    `((E (a)) b))
+    `(S ((E (a)) b)))
 
   (test-case grammar input expected))
 
@@ -264,7 +264,7 @@
     '(a b c))
 
   (define expected
-    `((E (a b)) c))
+    `(S ((E (a b)) c)))
 
   (test-case grammar input expected))
 
@@ -287,7 +287,7 @@
     '(a b a b))
 
   (define expected
-    `((E (a b)) (E (a b))))
+    `(S ((E (a b)) (E (a b)))))
 
   (test-case grammar input expected))
 
@@ -310,7 +310,7 @@
     '(a b a b))
 
   (define expected
-    `((E (a b)) (E (a b))))
+    `(S ((E (a b)) (E (a b)))))
 
   (test-case grammar input expected))
 
@@ -333,7 +333,7 @@
     '(a b a b a b))
 
   (define expected
-    `((E (a b)) (E (a b)) (E (a b))))
+    `(S ((E (a b)) (E (a b)) (E (a b)))))
 
   (test-case grammar input expected))
 
@@ -356,7 +356,7 @@
     '(a b c))
 
   (define expected
-    `((E (a b)) c))
+    `(S ((E (a b)) c)))
 
   (test-case grammar input expected))
 
@@ -379,6 +379,167 @@
     '(c))
 
   (define expected
-    `((E ()) c))
+    `(S ((E ()) c)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with 3 productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E c
+  ;; E -> a b
+  ;;
+
+  (define grammar
+    '((S (E c))
+      (E (a b))))
+
+  (define input
+    '(a b c))
+
+  (define expected
+    `(S ((E (a b)) c)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with multiple production 1.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b
+  ;; S -> c
+  ;;
+
+  (define grammar
+    '((S (a) (b) (c))))
+
+  (define input
+    '(a))
+
+  (define expected
+    `(S (a)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with multiple production 1.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b
+  ;; S -> c
+  ;;
+
+  (define grammar
+    '((S (a) (b) (c))))
+
+  (define input
+    '(b))
+
+  (define expected
+    `(S (b)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with multiple production 1.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b
+  ;; S -> c
+  ;;
+
+  (define grammar
+    '((S (a) (b) (c))))
+
+  (define input
+    '(c))
+
+  (define expected
+    `(S (c)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with multiple production 1.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b
+  ;; S -> c
+  ;;
+
+  (define grammar
+    '((S (a) (b) (c))))
+
+  (define input
+    '(d))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with multiple production 2.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a x1
+  ;; S -> b
+  ;; S -> c x3
+  ;;
+
+  (define grammar
+    '((S (a x1) (b) (c x3))))
+
+  (define input
+    '(a x1))
+
+  (define expected
+    (list 'S input))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with multiple production 2.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a x1
+  ;; S -> b
+  ;; S -> c x3
+  ;;
+
+  (define grammar
+    '((S (a x1) (b) (c x3))))
+
+  (define input
+    '(b))
+
+  (define expected
+    (list 'S input))
 
   (test-case grammar input expected))

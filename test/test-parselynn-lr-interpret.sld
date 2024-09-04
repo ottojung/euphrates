@@ -23,6 +23,7 @@
           define-syntax
           equal?
           let
+          list
           quasiquote
           quote
           syntax-rules

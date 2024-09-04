@@ -6,13 +6,13 @@
     (parselynn:lr-state-graph:node-id
      (parselynn:lr-state-graph:start graph)))
 
-  (define ret
-    (parselynn:lr-parsing-table:make initial-state))
-
   (define start-symbol
     (if (bnf-alist:empty? bnf-alist)
         parselynn:epsilon
         (bnf-alist:start-symbol bnf-alist)))
+
+  (define ret
+    (parselynn:lr-parsing-table:make start-symbol initial-state))
 
   ;; Convert terminals and nonterminals to hash sets for easy membership testing.
   (define terminals

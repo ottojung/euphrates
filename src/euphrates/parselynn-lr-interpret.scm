@@ -15,6 +15,9 @@
   (define initial-state
     (parselynn:lr-parsing-table:state:initial parsing-table))
 
+  (define start-symbol
+    (parselynn:lr-parsing-table:start-symbol parsing-table))
+
   (define reject
     (parselynn:lr-reject-action:make))
 
@@ -49,7 +52,7 @@
   (define (process-action state input action)
     (cond
      ((parselynn:lr-accept-action? action)
-      (stack-peek ret))
+      #t)
 
      ((parselynn:lr-shift-action? action)
       (stack-push! ret input)
@@ -100,7 +103,13 @@
   (define result
     (loop initial-state))
 
+  (define args
+    (reverse
+     (stack->list ret)))
+
+  (define derivation
+    (list start-symbol args))
+
   (if (parselynn:lr-reject-action? result)
       reject
-      (reverse
-       (stack->list ret))))
+      derivation))
