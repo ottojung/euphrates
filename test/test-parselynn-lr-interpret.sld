@@ -13,9 +13,6 @@
     (only (euphrates parselynn-lr-interpret)
           parselynn:lr-interpret))
   (import
-    (only (euphrates parselynn-lr-parsing-table-print)
-          parselynn:lr-parsing-table:print))
-  (import
     (only (euphrates parselynn-lr-reject-action)
           parselynn:lr-reject-action:make))
   (import

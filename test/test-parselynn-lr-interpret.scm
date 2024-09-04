@@ -15,12 +15,6 @@
        (define table
          (parselynn:lr-compute-parsing-table grammar))
 
-       (debug "")
-       (debug "")
-       (debug "")
-       (debug "")
-       (parselynn:lr-parsing-table:print table)
-
        (define input-iterator
          (list->iterator input))
 
@@ -29,8 +23,6 @@
 
        (unless (equal? result expected)
          (debug "\n\n\n----------------------------------\nactual:\n~s\n\n" result))
-
-       ;; (exit 0)
 
        (assert= result expected)))))
 
