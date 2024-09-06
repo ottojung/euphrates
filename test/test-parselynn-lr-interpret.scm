@@ -260,70 +260,74 @@
   (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Self referential grammar [2].
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> S
-;;   ;; S -> x
-;;   ;;
+(let ()
+  ;;
+  ;; Self referential grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;; S -> x
+  ;;
 
-;;   (define grammar
-;;     '((S (S) (x))))
+  (define grammar
+    '((S (S) (x))))
 
-;;   (define input
-;;     '(x))
+  (define input
+    '(x))
 
-;;   (define expected
-;;     `(S x))
+  (define expected
+    `(S x))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Self referential grammar [2].
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> x
-;;   ;; S -> S
-;;   ;;
-
-;;   (define grammar
-;;     '((S (x) (S))))
-
-;;   (define input
-;;     '(x))
-
-;;   (define expected
-;;     `(S x))
-
-;;   (test-case grammar input expected))
+  (assert-throw
+   'parse-conflict
+   (test-case grammar input expected)))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Self referential grammar [2].
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> x
-;;   ;; S -> S
-;;   ;;
+(let ()
+  ;;
+  ;; Self referential grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> x
+  ;; S -> S
+  ;;
 
-;;   (define grammar
-;;     '((S (x) (S))))
+  (define grammar
+    '((S (x) (S))))
 
-;;   (define input
-;;     '())
+  (define input
+    '(x))
 
-;;   (define expected
-;;     (parselynn:lr-reject-action:make))
+  (define expected
+    `(S x))
 
-;;   (test-case grammar input expected))
+  (assert-throw
+   'parse-conflict
+   (test-case grammar input expected)))
+
+
+(let ()
+  ;;
+  ;; Self referential grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> x
+  ;; S -> S
+  ;;
+
+  (define grammar
+    '((S (x) (S))))
+
+  (define input
+    '())
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
 
 
 (let ()

@@ -2,6 +2,8 @@
 (define-library
   (test-parselynn-lr-interpret)
   (import (only (euphrates assert-equal) assert=))
+  (import
+    (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates debug) debug))
   (import
     (only (euphrates list-to-iterator)
