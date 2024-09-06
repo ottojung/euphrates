@@ -20,9 +20,6 @@
     (only (euphrates parselynn-lr-accept-action)
           parselynn:lr-accept-action?))
   (import
-    (only (euphrates parselynn-lr-action-print)
-          parselynn:lr-action:print))
-  (import
     (only (euphrates parselynn-lr-goto-action)
           parselynn:lr-goto-action:target-id))
   (import
@@ -51,9 +48,6 @@
           stack-pop-multiple!
           stack-push!))
   (import (only (euphrates stringf) stringf))
-  (import
-    (only (euphrates with-output-stringified)
-          with-output-stringified))
   (import
     (only (scheme base)
           _

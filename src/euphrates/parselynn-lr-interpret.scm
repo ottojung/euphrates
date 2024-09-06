@@ -71,13 +71,6 @@
               :message "Unknown action type"
               :args (list action state input)))))
 
-  (define (action->string action)
-    (with-output-stringified
-     (parselynn:lr-action:print action)))
-
-  (define (get-input)
-    (iterator:next input-tokens-iterator parselynn:end-of-input))
-
   (define (loop-with-input state input)
     (define lookup
       (parselynn:lr-parsing-table:action:ref
@@ -95,6 +88,9 @@
               :type 'parse-conflict
               :message (stringf "Parsing conflict: ~s" lookup)
               :args (list lookup)))))
+
+  (define (get-input)
+    (iterator:next input-tokens-iterator parselynn:end-of-input))
 
   ;; Main parsing loop.
   (define (loop state)
