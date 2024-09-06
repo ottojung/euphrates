@@ -15,9 +15,6 @@
   (define initial-state
     (parselynn:lr-parsing-table:state:initial parsing-table))
 
-  (define start-symbol
-    (parselynn:lr-parsing-table:start-symbol parsing-table))
-
   (define reject
     (parselynn:lr-reject-action:make))
 

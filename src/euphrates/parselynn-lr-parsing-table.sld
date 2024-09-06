@@ -4,7 +4,6 @@
   (export
     parselynn:lr-parsing-table:make
     parselynn:lr-parsing-table?
-    parselynn:lr-parsing-table:start-symbol
     parselynn:lr-parsing-table:state:initial
     parselynn:lr-parsing-table:state:keys
     parselynn:lr-parsing-table:state:add!

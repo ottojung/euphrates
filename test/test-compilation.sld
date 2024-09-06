@@ -1788,7 +1788,6 @@
           parselynn:lr-parsing-table:goto:ref
           parselynn:lr-parsing-table:goto:set!
           parselynn:lr-parsing-table:make
-          parselynn:lr-parsing-table:start-symbol
           parselynn:lr-parsing-table:state:add!
           parselynn:lr-parsing-table:state:initial
           parselynn:lr-parsing-table:state:keys

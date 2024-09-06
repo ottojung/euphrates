@@ -23,7 +23,7 @@
          (olnode:value final-node)))
 
   (define ret
-    (parselynn:lr-parsing-table:make start-symbol initial-state))
+    (parselynn:lr-parsing-table:make initial-state))
 
   ;; Convert terminals and nonterminals to hash sets for easy membership testing.
   (define terminals

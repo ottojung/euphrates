@@ -4,7 +4,6 @@
 (define-type9 <lr-parsing-table>
   (parselynn:lr-parsing-table:constructor
 
-   start-symbol  ;; the start symbol of input grammar.
    initial-state ;; value of type `state-id` that corresponds to the initial state.
    states-set    ;; set of `state-id`.
    actions-set   ;; set of terminals.
@@ -18,7 +17,6 @@
 
   parselynn:lr-parsing-table?
 
-  (start-symbol parselynn:lr-parsing-table:start-symbol)
   (initial-state parselynn:lr-parsing-table:initial-state)
   (states-set parselynn:lr-parsing-table:states-set)
   (actions-set parselynn:lr-parsing-table:actions-set)
@@ -31,7 +29,7 @@
   )
 
 
-(define (parselynn:lr-parsing-table:make start-symbol initial-state)
+(define (parselynn:lr-parsing-table:make initial-state)
   (define action-table (make-hashmap))
   (define goto-table (make-hashmap))
   (define action-lists (make-hashmap))
@@ -41,7 +39,7 @@
   (define goto-set (make-hashset))
 
   (parselynn:lr-parsing-table:constructor
-   start-symbol initial-state
+   initial-state
    states-set actions-set goto-set
    action-table goto-table
    action-lists goto-lists))
