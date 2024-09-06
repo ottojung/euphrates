@@ -23,24 +23,16 @@
     (define lhs (bnf-alist:production:lhs production))
     (define rhs (bnf-alist:production:rhs production))
 
-    ;; Pop the RHS items from the stack.
-    (define _7336
-      (for-each (lambda _ (stack-pop! state-stack)) rhs))
-
-    ;; Construct a new AST node.
-    (define new-node
-      (cons lhs (stack-pop-multiple! ret (length rhs))))
-
     (define togo-state
-      (stack-peek state-stack))
+      (let ()
+        (stack-push! state-stack state)
+        (for-each (lambda _ (stack-pop! state-stack)) rhs)
+        (stack-peek state-stack)))
 
     ;; Get the next state after this reduction.
     (define goto-state
       (parselynn:lr-parsing-table:goto:ref
        parsing-table togo-state lhs reject))
-
-    ;; Push the LHS and new node onto the stack.
-    (stack-push! ret new-node)
 
     (cond
      ((parselynn:lr-reject-action? goto-state)
@@ -48,8 +40,16 @@
 
      (else
       (let ()
+        ;; Calculate new state.
         (define new-state
           (parselynn:lr-goto-action:target-id goto-state))
+
+        ;; Construct a new AST node.
+        (define new-node
+          (cons lhs (stack-pop-multiple! ret (length rhs))))
+
+        ;; Push the LHS and new node onto the stack.
+        (stack-push! ret new-node)
         (loop-with-input new-state input)))))
 
   (define (process-action state input action)
@@ -58,6 +58,7 @@
       (stack-peek ret))
 
      ((parselynn:lr-shift-action? action)
+      (stack-push! state-stack state)
       (stack-push! ret input)
       (loop (parselynn:lr-shift-action:target-id action)))
 
@@ -77,11 +78,7 @@
   (define (get-input)
     (iterator:next input-tokens-iterator parselynn:end-of-input))
 
-  ;; Main parsing loop.
   (define (loop-with-input state input)
-    ;; Push state on the state stack.
-    (stack-push! state-stack state)
-
     (define lookup
       (parselynn:lr-parsing-table:action:ref
        parsing-table state input reject))
@@ -99,6 +96,7 @@
               :message (stringf "Parsing conflict: ~s" lookup)
               :args (list lookup)))))
 
+  ;; Main parsing loop.
   (define (loop state)
     (define input (get-input))
     (loop-with-input state input))
@@ -106,9 +104,6 @@
   (define result
     (loop initial-state))
 
-  (define args
-    result)
-
   (if (parselynn:lr-reject-action? result)
       reject
-      args))
+      result))
