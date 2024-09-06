@@ -58,12 +58,6 @@
        parsing-table state input reject))
 
     (cond
-     ((parselynn:lr-reject-action? action)
-      reject)
-
-     ((parselynn:lr-accept-action? action)
-      (stack-peek ret))
-
      ((parselynn:lr-shift-action? action)
       (stack-push! state-stack state)
       (stack-push! ret input)
@@ -71,6 +65,12 @@
 
      ((parselynn:lr-reduce-action? action)
       (process-reduce state input action))
+
+     ((parselynn:lr-accept-action? action)
+      (stack-peek ret))
+
+     ((parselynn:lr-reject-action? action)
+      reject)
 
      ((parselynn:lr-parse-conflict? action)
       (raisu* :from "parselynn:lr-interpret"
@@ -81,7 +81,7 @@
      (else
       (raisu* :from "parselynn:lr-interpret"
               :type 'unknown-action-type
-              :message "Unknown action type"
+              :message "Unknown action type."
               :args (list action state input)))))
 
   (define (get-input)
