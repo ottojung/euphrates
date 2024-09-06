@@ -1083,6 +1083,72 @@
 
 (let ()
   ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(a b b b a))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> S b
+  ;;
+
+  (define grammar
+    '((S (a) (S b))))
+
+  (define input
+    `(a b b b x))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
   ;; Start issue grammar [3].
   ;;
   ;;   Grammar:
@@ -1153,6 +1219,72 @@
   ;;
   ;;   Grammar:
   ;;
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((S (a) (b S))))
+
+  (define input
+    `(b b b b a b))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((S (a) (b S))))
+
+  (define input
+    `(b b b b a a))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((S (a) (b S))))
+
+  (define input
+    `(b b b b a x))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
   ;; G -> S
   ;; S -> a
   ;; S -> b S
@@ -1166,5 +1298,386 @@
 
   (define expected
     `(G (S b (S b (S b (S b (S a)))))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Umich grammar (https://web.eecs.umich.edu/~weimerw/2009-4610/lectures/weimer-4610-09.pdf page 5).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> int
+  ;; E -> E + ( E )
+  ;;
+
+  (define lb
+    (string->symbol "("))
+
+  (define rb
+    (string->symbol ")"))
+
+  (define grammar
+    `((E (int)
+         (E + ,lb E ,rb))))
+
+  (define input
+    `(int + ,lb int ,rb))
+
+  (define expected
+    `(E (E int) + ,lb (E int) ,rb))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Umich grammar (https://web.eecs.umich.edu/~weimerw/2009-4610/lectures/weimer-4610-09.pdf page 5).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> int
+  ;; E -> E + ( E )
+  ;;
+
+  (define lb
+    (string->symbol "("))
+
+  (define rb
+    (string->symbol ")"))
+
+  (define grammar
+    `((E (int)
+         (E + ,lb E ,rb))))
+
+  (define input
+    `(int))
+
+  (define expected
+    `(E int))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Umich grammar (https://web.eecs.umich.edu/~weimerw/2009-4610/lectures/weimer-4610-09.pdf page 5).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> int
+  ;; E -> E + ( E )
+  ;;
+
+  (define lb
+    (string->symbol "("))
+
+  (define rb
+    (string->symbol ")"))
+
+  (define grammar
+    `((E (int)
+         (E + ,lb E ,rb))))
+
+  (define input
+    `(int + ,lb int + ,lb int ,rb ,rb))
+
+  (define expected
+    `(E (E int) + ,lb (E (E int) + ,lb (E int) ,rb) ,rb))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Clemson grammar (https://www.cs.clemson.edu/course/cpsc827/material/LRk/LR1.pdf page 3).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; G -> S
+  ;; S -> E = E
+  ;;    | f
+  ;; E -> T
+  ;;    | E + T
+  ;; T -> f
+  ;;    | T * f
+  ;;
+
+  (define grammar
+    `((G (S))
+      (S (E = E)
+         (f))
+      (E (T)
+         (E + T))
+      (T (f)
+         (T * f))))
+
+  (define input
+    `(f = f * f))
+
+  (define expected
+    `(G (S (E (T f)) = (E (T (T f) * f)))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Modified Clemson grammar (https://www.cs.clemson.edu/course/cpsc827/material/LRk/LR1.pdf page 3).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E = E
+  ;;    | f
+  ;; E -> T
+  ;;    | E + T
+  ;; T -> f
+  ;;    | T * f
+  ;;
+
+  (define grammar
+    `((S (E = E)
+         (f))
+      (E (T)
+         (E + T))
+      (T (f)
+         (T * f))))
+
+  (define input
+    `(f = f * f))
+
+  (define expected
+    `(S (E (T f)) = (E (T (T f) * f))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Modified Clemson grammar (https://www.cs.clemson.edu/course/cpsc827/material/LRk/LR1.pdf page 3).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E = E
+  ;;    | f
+  ;; E -> T
+  ;;    | E + T
+  ;; T -> f
+  ;;    | T * f
+  ;;
+
+  (define grammar
+    `((S (E = E)
+         (f))
+      (E (T)
+         (E + T))
+      (T (f)
+         (T * f))))
+
+  (define input
+    `(f + f = f * f))
+
+  (define expected
+    `(S (E (E (T f)) + (T f)) = (E (T (T f) * f))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Modified Clemson grammar (https://www.cs.clemson.edu/course/cpsc827/material/LRk/LR1.pdf page 3).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E = E
+  ;;    | f
+  ;; E -> T
+  ;;    | E + T
+  ;; T -> f
+  ;;    | T * f
+  ;;
+
+  (define grammar
+    `((S (E = E)
+         (f))
+      (E (T)
+         (E + T))
+      (T (f)
+         (T * f))))
+
+  (define input
+    `(f + f * f + f  = f * f))
+
+  (define expected
+    `(S (E (E (E (T f)) + (T (T f) * f)) + (T f)) = (E (T (T f) * f))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Modified Clemson grammar (https://www.cs.clemson.edu/course/cpsc827/material/LRk/LR1.pdf page 3).
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E = E
+  ;;    | f
+  ;; E -> T
+  ;;    | E + T
+  ;; T -> f
+  ;;    | T * f
+  ;;
+
+  (define grammar
+    `((S (E = E)
+         (f))
+      (E (T)
+         (E + T))
+      (T (f)
+         (T * f))))
+
+  (define input
+    `(f + = f))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
+
+  (define grammar
+    '((S (X X))
+      (X (a X)
+         (b))))
+
+  (define input
+    `(a b a b))
+
+  (define expected
+    `(S (X a (X b)) (X a (X b))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
+
+  (define grammar
+    '((S (X X))
+      (X (a X)
+         (b))))
+
+  (define input
+    `(a a a b a b))
+
+  (define expected
+    `(S (X a (X a (X a (X b)))) (X a (X b))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Nested grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; Y -> W | c
+  ;; W -> S S
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
+
+  (define grammar
+    '((Y (W) (c))
+      (W (S S))
+      (S (X X))
+      (X (a X)
+         (b))))
+
+  (define input
+    `(c))
+
+  (define expected
+    `(Y c))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Nested grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; Y -> W | c
+  ;; W -> S S
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
+
+  (define grammar
+    '((Y (W) (c))
+      (W (S S))
+      (S (X X))
+      (X (a X)
+         (b))))
+
+  (define input
+    `(a b a b a b a b))
+
+  (define expected
+    `(Y (W (S (X a (X b)) (X a (X b))) (S (X a (X b)) (X a (X b))))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Nested grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; Y -> W | c
+  ;; W -> S S
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
+
+  (define grammar
+    '((Y (W) (c))
+      (W (S S))
+      (S (X X))
+      (X (a X)
+         (b))))
+
+  (define input
+    `(a b a a a a b a b a b))
+
+  (define expected
+    `(Y (W (S (X a (X b)) (X a (X a (X a (X a (X b)))))) (S (X a (X b)) (X a (X b))))))
 
   (test-case grammar input expected))

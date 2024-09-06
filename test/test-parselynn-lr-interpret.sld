@@ -17,6 +17,9 @@
           parselynn:lr-reject-action:make))
   (import
     (only (scheme base)
+          *
+          +
+          =
           _
           begin
           cons
@@ -26,8 +29,10 @@
           let
           quasiquote
           quote
+          string->symbol
           syntax-rules
-          unless))
+          unless
+          unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
