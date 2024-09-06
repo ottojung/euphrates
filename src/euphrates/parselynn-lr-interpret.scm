@@ -27,32 +27,38 @@
     (define rhs (bnf-alist:production:rhs production))
 
     ;; Pop the RHS items from the stack.
-    (define _1233
+    (define _7336
       (for-each (lambda _ (stack-pop! state-stack)) rhs))
 
     ;; Construct a new AST node.
     (define new-node
       (cons lhs (stack-pop-multiple! ret (length rhs))))
 
-    ;; Push the LHS and new node onto the stack.
-    (stack-push! ret new-node)
+    (define togo-state
+      (stack-peek state-stack))
 
     ;; Get the next state after this reduction.
     (define goto-state
       (parselynn:lr-parsing-table:goto:ref
-       parsing-table (stack-peek state-stack) lhs reject))
+       parsing-table togo-state lhs reject))
 
-    (if (parselynn:lr-reject-action? goto-state)
-        reject
-        (let ()
-          (define new-state
-            (parselynn:lr-goto-action:target-id goto-state))
-          (loop-with-input new-state input))))
+    ;; Push the LHS and new node onto the stack.
+    (stack-push! ret new-node)
+
+    (cond
+     ((parselynn:lr-reject-action? goto-state)
+      reject)
+
+     (else
+      (let ()
+        (define new-state
+          (parselynn:lr-goto-action:target-id goto-state))
+        (loop-with-input new-state input)))))
 
   (define (process-action state input action)
     (cond
      ((parselynn:lr-accept-action? action)
-      #t)
+      (stack-peek ret))
 
      ((parselynn:lr-shift-action? action)
       (stack-push! ret input)
@@ -104,12 +110,8 @@
     (loop initial-state))
 
   (define args
-    (reverse
-     (stack->list ret)))
-
-  (define derivation
-    (cons start-symbol args))
+    result)
 
   (if (parselynn:lr-reject-action? result)
       reject
-      derivation))
+      args))

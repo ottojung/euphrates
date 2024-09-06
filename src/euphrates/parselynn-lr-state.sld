@@ -5,6 +5,7 @@
     parselynn:lr-state
     parselynn:lr-state?
     parselynn:lr-state:make
+    parselynn:lr-state:empty?
     parselynn:lr-state:add!
     parselynn:lr-state:has?
     parselynn:lr-state:print
@@ -22,6 +23,7 @@
           hashset-add!
           hashset-foreach
           hashset-has?
+          hashset-null?
           make-hashset))
   (import
     (only (euphrates parselynn-lr-item)

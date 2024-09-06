@@ -22,6 +22,13 @@
   (parselynn:lr-state:constructor set))
 
 ;;
+;; Check if this LR state is empty.
+;;
+(define (parselynn:lr-state:empty? state)
+  (define set (parselynn:lr-state:set state))
+  (hashset-null? set))
+
+;;
 ;; Add an LR(1) item to the LR state.
 ;;
 (define (parselynn:lr-state:add! state item)

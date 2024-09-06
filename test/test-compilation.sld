@@ -151,6 +151,9 @@
     (only (euphrates binary-string-to-number)
           binary-string->number))
   (import
+    (only (euphrates bnf-alist-add-production)
+          bnf-alist:add-production))
+  (import
     (only (euphrates bnf-alist-assoc-productions)
           bnf-alist:assoc-productions))
   (import
@@ -181,6 +184,9 @@
   (import
     (only (euphrates bnf-alist-production-lhs)
           bnf-alist:production:lhs))
+  (import
+    (only (euphrates bnf-alist-production-make)
+          bnf-alist:production:make))
   (import
     (only (euphrates bnf-alist-production-rhs)
           bnf-alist:production:rhs))
@@ -1833,6 +1839,7 @@
     (only (euphrates parselynn-lr-state)
           parselynn:lr-state
           parselynn:lr-state:add!
+          parselynn:lr-state:empty?
           parselynn:lr-state:equal?
           parselynn:lr-state:foreach-item
           parselynn:lr-state:has?

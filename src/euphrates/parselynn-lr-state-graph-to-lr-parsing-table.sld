@@ -23,6 +23,9 @@
           hashset-has?
           list->hashset))
   (import
+    (only (euphrates lenode) lenode:get-child))
+  (import (only (euphrates olgraph) olnode:value))
+  (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
   (import

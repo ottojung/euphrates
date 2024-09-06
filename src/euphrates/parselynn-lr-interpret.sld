@@ -46,7 +46,6 @@
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
-          stack->list
           stack-make
           stack-peek
           stack-pop!
@@ -71,8 +70,7 @@
           length
           let
           list
-          quote
-          reverse))
+          quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

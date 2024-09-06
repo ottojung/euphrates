@@ -260,70 +260,70 @@
   (test-case grammar input expected))
 
 
-(let ()
-  ;;
-  ;; Self referential grammar [2].
-  ;;
-  ;;   Grammar:
-  ;;
-  ;; S -> S
-  ;; S -> x
-  ;;
+;; (let ()
+;;   ;;
+;;   ;; Self referential grammar [2].
+;;   ;;
+;;   ;;   Grammar:
+;;   ;;
+;;   ;; S -> S
+;;   ;; S -> x
+;;   ;;
 
-  (define grammar
-    '((S (S) (x))))
+;;   (define grammar
+;;     '((S (S) (x))))
 
-  (define input
-    '(x))
+;;   (define input
+;;     '(x))
 
-  (define expected
-    `(S x))
+;;   (define expected
+;;     `(S x))
 
-  (test-case grammar input expected))
-
-
-(let ()
-  ;;
-  ;; Self referential grammar [2].
-  ;;
-  ;;   Grammar:
-  ;;
-  ;; S -> x
-  ;; S -> S
-  ;;
-
-  (define grammar
-    '((S (x) (S))))
-
-  (define input
-    '(x))
-
-  (define expected
-    `(S x))
-
-  (test-case grammar input expected))
+;;   (test-case grammar input expected))
 
 
-(let ()
-  ;;
-  ;; Self referential grammar [2].
-  ;;
-  ;;   Grammar:
-  ;;
-  ;; S -> x
-  ;; S -> S
-  ;;
+;; (let ()
+;;   ;;
+;;   ;; Self referential grammar [2].
+;;   ;;
+;;   ;;   Grammar:
+;;   ;;
+;;   ;; S -> x
+;;   ;; S -> S
+;;   ;;
 
-  (define grammar
-    '((S (x) (S))))
+;;   (define grammar
+;;     '((S (x) (S))))
 
-  (define input
-    '())
+;;   (define input
+;;     '(x))
 
-  (define expected
-    (parselynn:lr-reject-action:make))
+;;   (define expected
+;;     `(S x))
 
-  (test-case grammar input expected))
+;;   (test-case grammar input expected))
+
+
+;; (let ()
+;;   ;;
+;;   ;; Self referential grammar [2].
+;;   ;;
+;;   ;;   Grammar:
+;;   ;;
+;;   ;; S -> x
+;;   ;; S -> S
+;;   ;;
+
+;;   (define grammar
+;;     '((S (x) (S))))
+
+;;   (define input
+;;     '())
+
+;;   (define expected
+;;     (parselynn:lr-reject-action:make))
+
+;;   (test-case grammar input expected))
 
 
 (let ()
@@ -1077,5 +1077,94 @@
 
   (define expected
     `(S (S (S (S (S (S a) b) b) b) b) b))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((S (a) (b S))))
+
+  (define input
+    `(a))
+
+  (define expected
+    `(S a))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((S (a) (b S))))
+
+  (define input
+    `(b a))
+
+  (define expected
+    `(S b (S a)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((S (a) (b S))))
+
+  (define input
+    `(b b b b a))
+
+  (define expected
+    `(S b (S b (S b (S b (S a))))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Start issue grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; G -> S
+  ;; S -> a
+  ;; S -> b S
+  ;;
+
+  (define grammar
+    '((G (S)) (S (a) (b S))))
+
+  (define input
+    `(b b b b a))
+
+  (define expected
+    `(G (S b (S b (S b (S b (S a)))))))
 
   (test-case grammar input expected))

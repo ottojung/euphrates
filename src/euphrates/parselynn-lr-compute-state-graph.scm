@@ -24,4 +24,21 @@
 
     (for-each loop rec))
 
+  (unless (bnf-alist:empty? bnf-alist)
+    (let ()
+      (define start-symbol
+        (bnf-alist:start-symbol bnf-alist))
+
+      (define start-node
+        (parselynn:lr-state-graph:start graph))
+
+      (define final-node
+        (lenode:get-child
+         start-node start-symbol #f))
+
+      (unless final-node
+        (parselynn:lr-state-graph:add!
+         graph initial-state start-symbol
+         (parselynn:lr-state:make)))))
+
   graph)

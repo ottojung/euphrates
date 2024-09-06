@@ -11,6 +11,17 @@
         parselynn:epsilon
         (bnf-alist:start-symbol bnf-alist)))
 
+  (define start-node
+    (parselynn:lr-state-graph:start graph))
+
+  (define final-node
+    (lenode:get-child
+     start-node start-symbol #f))
+
+  (define final-state
+    (and final-node
+         (olnode:value final-node)))
+
   (define ret
     (parselynn:lr-parsing-table:make start-symbol initial-state))
 
@@ -30,8 +41,16 @@
   (define (nonterminal? X)
     (hashset-has? nonterminals X))
 
+  (define (final-state? state)
+    (equal? state final-state))
+
   (define (process-state parent-id parent-state mapped-children)
     (parselynn:lr-parsing-table:state:add! ret parent-id)
+
+    (when (final-state? parent-state)
+      (parselynn:lr-parsing-table:action:add!
+       ret parent-id parselynn:end-of-input
+       (parselynn:lr-accept-action:make)))
 
     (define (process-child mapped-child)
       (define-tuple (label child-id child-state) mapped-child)
@@ -82,10 +101,7 @@
              (parselynn:lr-item:lookahead item))
 
            (define action
-             (if (and (equal? lhs start-symbol)
-                      (equal? label parselynn:end-of-input))
-                 (parselynn:lr-accept-action:make)
-                 (parselynn:lr-reduce-action:make production)))
+             (parselynn:lr-reduce-action:make production))
 
            (parselynn:lr-parsing-table:action:add!
             ret parent-id label action))))
