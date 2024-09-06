@@ -64,7 +64,6 @@
           define
           else
           for-each
-          if
           lambda
           length
           let

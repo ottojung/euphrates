@@ -101,9 +101,4 @@
     (define input (get-input))
     (loop-with-input state input))
 
-  (define result
-    (loop initial-state))
-
-  (if (parselynn:lr-reject-action? result)
-      reject
-      result))
+  (loop initial-state))
