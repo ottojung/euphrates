@@ -1,23 +1,19 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(define (parselynn:lr-parsing-table:get-state-conflicts table state)
-  (define actions-keys
-    (parselynn:lr-parsing-table:action:list table state))
+(define parselynn:lr-parse-conflict:print
+  (case-lambda
+   ((conflict)
+    (parselynn:lr-parse-conflict:print
+     conflict (current-output-port)))
 
-  (define (get-actions key)
-    (define action
-      (parselynn:lr-parsing-table:action:ref table state key))
+   ((conflict port)
+    (define actions
+      (parselynn:lr-parse-conflict:actions conflict))
 
-    (and (parselynn:lr-parse-conflict? action)
-         (let ()
-           (define actions
-             (parselynn:lr-parse-conflict:actions action))
-           (cons key actions))))
-
-  (define conflicts
-    (filter
-     identity
-     (map get-actions actions-keys)))
-
-  conflicts)
+    (parselynn:lr-action:print (car actions) port)
+    (for-each
+     (lambda (action)
+       (display "/" port)
+       (parselynn:lr-action:print action port))
+     (cdr actions)))))

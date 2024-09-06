@@ -8,6 +8,9 @@
 
    ((table port)
 
+    (define reject
+      (parselynn:lr-reject-action:make))
+
     (define states
       (parselynn:lr-parsing-table:state:keys table))
 
@@ -17,32 +20,27 @@
     (define goto
       (parselynn:lr-parsing-table:goto:keys table))
 
-    (define (action->string elem)
-      (with-output-stringified
-       (parselynn:lr-action:print elem)))
-
-    (define (action-list->string state lst)
-      (define strs
-        (map action->string lst))
-
-      (define int
-        (list-intersperse "/" strs))
-
-      (apply string-append int))
-
     (define (action-column->string state key)
       (define x
         (parselynn:lr-parsing-table:action:ref
-         table state key #f))
+         table state key reject))
 
-      (if x (action-list->string state x) ""))
+      (with-output-stringified
+       (cond
+        ((parselynn:lr-parse-conflict? x)
+         (parselynn:lr-parse-conflict:print x))
+
+        (else
+         (parselynn:lr-action:print x)))))
 
     (define (goto-column->string state key)
       (define x
         (parselynn:lr-parsing-table:goto:ref
          table state key #f))
 
-      (if x (action->string x) ""))
+      (with-output-stringified
+       (when x
+         (parselynn:lr-action:print x))))
 
     (define (state->row state)
       (append

@@ -6,25 +6,21 @@
     parselynn:lr-parsing-table:get-state-conflicts)
   (import (only (euphrates identity) identity))
   (import
-    (only (euphrates list-singleton-q)
-          list-singleton?))
+    (only (euphrates parselynn-lr-parse-conflict)
+          parselynn:lr-parse-conflict:actions
+          parselynn:lr-parse-conflict?))
   (import
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:list
           parselynn:lr-parsing-table:action:ref))
-  (import (only (euphrates raisu-fmt) raisu-fmt))
   (import
     (only (scheme base)
+          and
           begin
           cons
           define
-          if
-          map
-          null?
-          or
-          pair?
-          quote
-          unless))
+          let
+          map))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))

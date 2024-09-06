@@ -11,9 +11,6 @@
   (import
     (only (euphrates iterator) iterator:next))
   (import
-    (only (euphrates list-singleton-q)
-          list-singleton?))
-  (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
   (import
@@ -22,6 +19,9 @@
   (import
     (only (euphrates parselynn-lr-goto-action)
           parselynn:lr-goto-action:target-id))
+  (import
+    (only (euphrates parselynn-lr-parse-conflict)
+          parselynn:lr-parse-conflict?))
   (import
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:ref
@@ -52,7 +52,6 @@
     (only (scheme base)
           _
           begin
-          car
           cond
           cons
           define

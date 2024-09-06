@@ -1767,6 +1767,15 @@
           parselynn:lr-make-initial-state
           parselynn:lr-make-initial-state/given-first))
   (import
+    (only (euphrates parselynn-lr-parse-conflict-print)
+          parselynn:lr-parse-conflict:print))
+  (import
+    (only (euphrates parselynn-lr-parse-conflict)
+          parselynn:lr-parse-conflict:actions
+          parselynn:lr-parse-conflict:add!
+          parselynn:lr-parse-conflict:make
+          parselynn:lr-parse-conflict?))
+  (import
     (only (euphrates
             parselynn-lr-parsing-table-get-conflicts)
           parselynn:lr-parsing-table:get-conflicts))

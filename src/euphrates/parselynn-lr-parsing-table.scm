@@ -8,7 +8,7 @@
    states-set    ;; set of `state-id`.
    actions-set   ;; set of terminals.
    goto-set      ;; set of nonterminals.
-   action-table  ;; hashmap with `key: cons<state-id, terminal | eoi>`, `value: stack<shift-action | reduce-action | accept-action>`
+   action-table  ;; hashmap with `key: cons<state-id, terminal | eoi>`, `value: shift-action | reduce-action | accept-action | parse-conflict`
    goto-table    ;; hashmap with `key: cons<state-id, nonterminal>`, `value: goto-action`.
    action-lists  ;; hashmap with `key: state-id`, value `list<terminal | eoi>`.
    goto-lists    ;; hashmap with `key: state-id`, value `list<nonterminal>`.
@@ -110,6 +110,27 @@
   (define hash-key
     (cons state key))
 
+  (define existing
+    (hashmap-ref
+     action-table hash-key
+     #f))
+
+  (cond
+   ((parselynn:lr-parse-conflict? existing)
+    (parselynn:lr-parse-conflict:add! existing action))
+
+   ((equal? existing #f)
+    (hashmap-set! action-table hash-key action))
+
+   ((equal? action existing)
+    'pass)
+
+   (else
+    (hashmap-set!
+     action-table hash-key
+     (parselynn:lr-parse-conflict:make
+      existing action))))
+
   (define existing-list
     (hashmap-ref action-lists state '()))
 
@@ -117,21 +138,6 @@
     (if (member key existing-list)
         existing-list
         (cons key existing-list)))
-
-  (define existing
-    (hashmap-ref
-     action-table hash-key
-     #f))
-
-  (define stack
-    (or existing
-        (let ()
-          (define new (stack-make))
-          (hashmap-set! action-table hash-key new)
-          new)))
-
-  (unless (member action (stack->list stack))
-    (stack-push! stack action))
 
   (parselynn:lr-parsing-table:state:add! table state)
   (hashset-add! actions-set key)
@@ -197,12 +203,7 @@
        (define action-table
          (parselynn:lr-parsing-table:action-table table*))
 
-       (define existing
-         (hashmap-ref action-table hash-key #f))
-
-       (if existing
-           (stack->list existing)
-           default)))))
+       (hashmap-ref action-table hash-key default)))))
 
 
 (define-syntax parselynn:lr-parsing-table:goto:ref

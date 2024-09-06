@@ -52,8 +52,15 @@
         (stack-push! ret new-node)
         (loop-with-input new-state input)))))
 
-  (define (process-action state input action)
+  (define (loop-with-input state input)
+    (define action
+      (parselynn:lr-parsing-table:action:ref
+       parsing-table state input reject))
+
     (cond
+     ((parselynn:lr-reject-action? action)
+      reject)
+
      ((parselynn:lr-accept-action? action)
       (stack-peek ret))
 
@@ -65,29 +72,17 @@
      ((parselynn:lr-reduce-action? action)
       (process-reduce state input action))
 
+     ((parselynn:lr-parse-conflict? action)
+      (raisu* :from "parselynn:lr-interpret"
+              :type 'parse-conflict
+              :message (stringf "Parsing conflict: ~s." action)
+              :args (list action state input)))
+
      (else
       (raisu* :from "parselynn:lr-interpret"
               :type 'unknown-action-type
               :message "Unknown action type"
               :args (list action state input)))))
-
-  (define (loop-with-input state input)
-    (define lookup
-      (parselynn:lr-parsing-table:action:ref
-       parsing-table state input reject))
-
-    (cond
-     ((parselynn:lr-reject-action? lookup)
-      reject)
-
-     ((list-singleton? lookup)
-      (process-action state input (car lookup)))
-
-     (else
-      (raisu* :from "parselynn:lr-interpret"
-              :type 'parse-conflict
-              :message (stringf "Parsing conflict: ~s" lookup)
-              :args (list lookup)))))
 
   (define (get-input)
     (iterator:next input-tokens-iterator parselynn:end-of-input))

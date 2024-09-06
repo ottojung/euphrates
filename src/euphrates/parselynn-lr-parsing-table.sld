@@ -30,31 +30,32 @@
           hashset->list
           hashset-add!
           make-hashset))
-  (import (only (euphrates raisu-star) raisu*))
   (import
-    (only (euphrates stack)
-          stack->list
-          stack-make
-          stack-push!))
+    (only (euphrates parselynn-lr-parse-conflict)
+          parselynn:lr-parse-conflict:add!
+          parselynn:lr-parse-conflict:make
+          parselynn:lr-parse-conflict?))
+  (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
           <
           _
           begin
+          cond
           cons
           define
           define-syntax
+          else
+          equal?
           if
           lambda
           let
           list
           member
-          or
           quote
           string<?
           syntax-rules
-          unless
           values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
