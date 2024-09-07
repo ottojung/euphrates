@@ -4,16 +4,12 @@
   (export
     parselynn:lr-reduce-action:make
     parselynn:lr-reduce-action?
-    parselynn:lr-reduce-action:production
-    parselynn:lr-reduce-action:callback)
+    parselynn:lr-reduce-action:production)
   (import
     (only (euphrates bnf-alist-production-huh)
           bnf-alist:production?))
   (import
     (only (euphrates define-type9) define-type9))
-  (import
-    (only (euphrates parselynn-compile-callback)
-          parselynn:compile-callback))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
   (import

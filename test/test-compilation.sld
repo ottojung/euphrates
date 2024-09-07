@@ -1803,7 +1803,6 @@
           parselynn:lr-parsing-table?))
   (import
     (only (euphrates parselynn-lr-reduce-action)
-          parselynn:lr-reduce-action:callback
           parselynn:lr-reduce-action:make
           parselynn:lr-reduce-action:production
           parselynn:lr-reduce-action?))

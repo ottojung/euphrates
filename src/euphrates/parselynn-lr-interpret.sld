@@ -2,6 +2,7 @@
 (define-library
   (euphrates parselynn-lr-interpret)
   (export parselynn:lr-interpret)
+  (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates bnf-alist-production-lhs)
           bnf-alist:production:lhs))
@@ -37,7 +38,6 @@
           parselynn:lr-parsing-table:state:initial))
   (import
     (only (euphrates parselynn-lr-reduce-action)
-          parselynn:lr-reduce-action:callback
           parselynn:lr-reduce-action:production
           parselynn:lr-reduce-action?))
   (import

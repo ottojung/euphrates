@@ -11,6 +11,7 @@
        (define grammar grammar*)
        (define input input*)
        (define expected expected*)
+       (define callback-alist '())
 
        (define table
          (parselynn:lr-compute-parsing-table grammar))
@@ -19,7 +20,7 @@
          (list->iterator input))
 
        (define result
-         (parselynn:lr-interpret table input-iterator))
+         (parselynn:lr-interpret table callback-alist input-iterator))
 
        (unless (equal? result expected)
          (debug "\n\n\n----------------------------------\nactual:\n~s\n\n" result))

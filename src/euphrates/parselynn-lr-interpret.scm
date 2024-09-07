@@ -5,7 +5,7 @@
 ;; Constructs a parse tree given a parsing table and input tokens interator.
 ;; Throws exceptions if parsing table contains conflicts.
 ;;
-(define (parselynn:lr-interpret parsing-table input-tokens-iterator)
+(define (parselynn:lr-interpret parsing-table callback-alist input-tokens-iterator)
   (define ret
     (stack-make))
 
@@ -21,14 +21,13 @@
   (define compiled-table
     (make-hashmap))
 
-  (define (compile-reduction action)
-    (define existing (hashmap-ref compiled-table action #f))
+  (define (compile-reduction production)
+    (define existing (hashmap-ref compiled-table production #f))
     (or existing
         (let ()
-          (define production (parselynn:lr-reduce-action:callback action))
-          (define callback (parselynn:lr-reduce-action:callback action))
+          (define callback (assoc-or production callback-alist 'list))
           (define new (parselynn:compile-callback production callback))
-          (hashmap-set! compiled-table action new)
+          (hashmap-set! compiled-table production new)
           new)))
 
   (define (process-reduce state input action)
@@ -58,7 +57,7 @@
           (parselynn:lr-goto-action:target-id goto-state))
 
         (define compiled
-          (compile-reduction action))
+          (compile-reduction production))
 
         ;; Construct a new AST node.
         (define new-node

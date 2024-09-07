@@ -4,27 +4,20 @@
 (define-type9 <reduce>
   (parselynn:lr-reduce-action:construct
    production
-   callback
    )
 
   parselynn:lr-reduce-action?
 
   (production parselynn:lr-reduce-action:production)
-  (callback parselynn:lr-reduce-action:callback)
 
   )
 
 
-(define (parselynn:lr-reduce-action:make
-         production callback)
-
+(define (parselynn:lr-reduce-action:make production)
   (unless (bnf-alist:production? production)
     (raisu* :from "parselynn:lr-reduce-action"
             :type 'expected-a-production
             :message (stringf "Expected a production, got ~s." production)
             :args (list production)))
 
-  (parselynn:compile-callback production callback)
-
-  (parselynn:lr-reduce-action:construct
-   production callback))
+  (parselynn:lr-reduce-action:construct production))
