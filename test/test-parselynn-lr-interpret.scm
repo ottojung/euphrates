@@ -11,10 +11,9 @@
        (define grammar grammar*)
        (define input input*)
        (define expected expected*)
-       (define callback-alist '())
 
        (define table
-         (parselynn:lr-compute-parsing-table grammar callback-alist))
+         (parselynn:lr-compute-parsing-table grammar))
 
        (define input-iterator
          (list->iterator input))

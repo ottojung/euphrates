@@ -182,9 +182,6 @@
     (only (euphrates bnf-alist-nonterminals)
           bnf-alist:nonterminals))
   (import
-    (only (euphrates bnf-alist-production-huh)
-          bnf-alist:production?))
-  (import
     (only (euphrates bnf-alist-production-lhs)
           bnf-alist:production:lhs))
   (import
@@ -1604,9 +1601,6 @@
   (import
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
-    (only (euphrates parselynn-compile-callback)
-          parselynn:compile-callback))
-  (import
     (only (euphrates
             parselynn-core-conflict-handler-default)
           parselynn:core:conflict-handler/default))
@@ -1647,10 +1641,6 @@
           parselynn:core:struct?))
   (import
     (only (euphrates parselynn-core) parselynn:core))
-  (import
-    (only (euphrates
-            parselynn-default-compilation-environment)
-          parselynn:default-compilation-environment))
   (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
