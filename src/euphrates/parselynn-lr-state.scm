@@ -4,14 +4,12 @@
 ;;
 ;; Define the type <parselynn:lr-state>, which represents a set of LR(1) items.
 ;;
-
 (define-type9 <parselynn:lr-state>
   (parselynn:lr-state:constructor
    set)    ;; Set of LR items.
 
   parselynn:lr-state?
 
-  ;; Field of the LR state
   (set parselynn:lr-state:set))
 
 ;;
@@ -41,7 +39,6 @@
 (define (parselynn:lr-state:has? state item)
   (define set (parselynn:lr-state:set state))
   (hashset-has? set item))
-
 
 ;;
 ;; Print the LR state in a human-readable format.
