@@ -5,6 +5,7 @@
   (import
     (only (euphrates bnf-alist-production-rhs)
           bnf-alist:production:rhs))
+  (import (only (euphrates const) const))
   (import
     (only (euphrates
             parselynn-default-compilation-environment)
@@ -17,10 +18,12 @@
           +
           and
           begin
+          cadr
           car
           cond
           define
           else
+          equal?
           lambda
           length
           let
