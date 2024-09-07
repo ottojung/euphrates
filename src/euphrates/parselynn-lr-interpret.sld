@@ -9,7 +9,15 @@
     (only (euphrates bnf-alist-production-rhs)
           bnf-alist:production:rhs))
   (import
+    (only (euphrates hashmap)
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates iterator) iterator:next))
+  (import
+    (only (euphrates parselynn-compile-callback)
+          parselynn:compile-callback))
   (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
@@ -63,6 +71,7 @@
           length
           let
           list
+          or
           quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))

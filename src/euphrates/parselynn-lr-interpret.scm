@@ -18,9 +18,21 @@
   (define reject
     (parselynn:lr-reject-action:make))
 
+  (define compiled-table
+    (make-hashmap))
+
+  (define (compile-reduction action)
+    (define existing (hashmap-ref compiled-table action #f))
+    (or existing
+        (let ()
+          (define production (parselynn:lr-reduce-action:callback action))
+          (define callback (parselynn:lr-reduce-action:callback action))
+          (define new (parselynn:compile-callback production callback))
+          (hashmap-set! compiled-table action new)
+          new)))
+
   (define (process-reduce state input action)
     (define production (parselynn:lr-reduce-action:production action))
-    (define callback (parselynn:lr-reduce-action:callback action))
     (define lhs (bnf-alist:production:lhs production))
     (define rhs (bnf-alist:production:rhs production))
 
@@ -45,9 +57,12 @@
         (define new-state
           (parselynn:lr-goto-action:target-id goto-state))
 
+        (define compiled
+          (compile-reduction action))
+
         ;; Construct a new AST node.
         (define new-node
-          (apply callback
+          (apply compiled
                  (cons lhs (stack-pop-multiple! ret (length rhs)))))
 
         ;; Push the LHS and new node onto the stack.

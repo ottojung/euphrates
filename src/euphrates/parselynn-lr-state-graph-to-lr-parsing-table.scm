@@ -101,7 +101,7 @@
              (parselynn:lr-item:lookahead item))
 
            (define action
-             (parselynn:lr-reduce-action:make production list))
+             (parselynn:lr-reduce-action:make production 'list))
 
            (parselynn:lr-parsing-table:action:add!
             ret parent-id label action))))
