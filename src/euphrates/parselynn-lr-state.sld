@@ -21,6 +21,7 @@
     (only (euphrates hashset)
           hashset->list
           hashset-add!
+          hashset-equal?
           hashset-foreach
           hashset-has?
           hashset-null?
@@ -36,7 +37,6 @@
           begin
           current-output-port
           define
-          equal?
           for-each
           if
           lambda

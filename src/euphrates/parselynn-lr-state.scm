@@ -87,11 +87,9 @@
 ;; Two LR states are equal if they contain the same set of LR(1) items.
 ;;
 (define (parselynn:lr-state:equal? state1 state2)
-  (equal?
-   (with-output-stringified
-    (parselynn:lr-state:print state1))
-   (with-output-stringified
-    (parselynn:lr-state:print state2))))
+  (hashset-equal?
+   (parselynn:lr-state:set state1)
+   (parselynn:lr-state:set state2)))
 
 ;;
 ;; Iterates through each item in the state.
