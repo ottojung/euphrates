@@ -21,7 +21,9 @@
     (only (scheme base)
           *
           +
+          <
           =
+          >
           _
           begin
           cons
@@ -29,6 +31,7 @@
           define-syntax
           equal?
           let
+          make-parameter
           quasiquote
           quote
           string->symbol

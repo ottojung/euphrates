@@ -3,6 +3,8 @@
 ;; Define test-case syntax.
 ;;
 
+(define callback-alist/p
+  (make-parameter '()))
 
 (define-syntax test-case
   (syntax-rules ()
@@ -11,7 +13,7 @@
        (define grammar grammar*)
        (define input input*)
        (define expected expected*)
-       (define callback-alist '())
+       (define callback-alist (callback-alist/p))
 
        (define table
          (parselynn:lr-compute-parsing-table grammar))
@@ -1684,5 +1686,163 @@
 
   (define expected
     `(Y (W (S (X a (X b)) (X a (X a (X a (X a (X b)))))) (S (X a (X b)) (X a (X b))))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Ambiguous arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
+  ;; E -> E + E
+  ;; E -> E * E
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (< E >) (E + E) (E * E))
+      (T (x) (y) (z))))
+
+  (define input
+    `(x * y + y))
+
+  (define expected
+    `(E (T x) * (E (T y) + (E (T y)))))
+
+  (assert-throw
+   'parse-conflict
+   (test-case grammar input expected)))
+
+
+(let ()
+  ;;
+  ;; Simple arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
+  ;; E -> T + E
+  ;; E -> T * E
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (< E >) (T + E) (T * E))
+      (T (x) (y) (z))))
+
+  (define input
+    `(x + y))
+
+  (define expected
+    `(E (T x) + (E (T y))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
+  ;; E -> T + E
+  ;; E -> T * E
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (< E >) (T + E) (T * E))
+      (T (x) (y) (z))))
+
+  (define input
+    `(x * < y + y >))
+
+  (define expected
+    `(E (T x) * (E < (E (T y) + (E (T y))) >)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
+  ;; E -> T + E
+  ;; E -> T * E
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (< E >) (T + E) (T * E))
+      (T (x) (y) (z))))
+
+  (define input
+    `(x * y + y))
+
+  (define expected
+    `(E (T x) * (E (T y) + (E (T y)))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
+  ;; E -> T + E
+  ;; E -> T * E
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (< E >) (T + E) (T * E))
+      (T (x) (y) (z))))
+
+  (define input
+    `(x + y + y + z))
+
+  (define expected
+    `(E (T x) + (E (T y) + (E (T y) + (E (T z))))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
+  ;; E -> T + E
+  ;; E -> T * E
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (< E >) (T + E) (T * E))
+      (T (x) (y) (z))))
+
+  (define input
+    `(< x + y > + y + z))
+
+  (define expected
+    (parselynn:lr-reject-action:make))
 
   (test-case grammar input expected))
