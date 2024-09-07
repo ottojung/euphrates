@@ -71,10 +71,16 @@
        stringified-items
        string<?))
 
-    (parameterize ((current-output-port port))
-      (display "{ ")
-      (display (words->string items))
-      (display " }")))))
+    (if (null? items)
+        (display "{}" port)
+        (begin
+          (display "{ ")
+          (for-each
+           (lambda (item)
+             (display item port)
+             (display " " port))
+           items)
+          (display "}" port))))))
 
 ;;
 ;; Compare two LR states for equality.

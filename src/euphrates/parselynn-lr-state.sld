@@ -32,16 +32,16 @@
     (only (euphrates with-output-stringified)
           with-output-stringified))
   (import
-    (only (euphrates words-to-string) words->string))
-  (import
     (only (scheme base)
           begin
           current-output-port
           define
           equal?
+          for-each
+          if
           lambda
           map
-          parameterize
+          null?
           string<?))
   (import (only (scheme case-lambda) case-lambda))
   (import (only (scheme write) display))
