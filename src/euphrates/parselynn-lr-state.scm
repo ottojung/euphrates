@@ -52,9 +52,6 @@
     (parselynn:lr-state:print state (current-output-port)))
 
    ((state port)
-    (define (print-item item)
-      (parselynn:lr-item:print item))
-
     (define unsorted-items
       (hashset->list
        (parselynn:lr-state:set state)))
@@ -63,7 +60,7 @@
       (map
        (lambda (item)
          (with-output-stringified
-          (print-item item)))
+          (parselynn:lr-item:print item)))
        unsorted-items))
 
     (define items
