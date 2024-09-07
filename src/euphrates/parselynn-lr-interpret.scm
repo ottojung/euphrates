@@ -20,6 +20,7 @@
 
   (define (process-reduce state input action)
     (define production (parselynn:lr-reduce-action:production action))
+    (define callback (parselynn:lr-reduce-action:callback action))
     (define lhs (bnf-alist:production:lhs production))
     (define rhs (bnf-alist:production:rhs production))
 
@@ -46,7 +47,8 @@
 
         ;; Construct a new AST node.
         (define new-node
-          (cons lhs (stack-pop-multiple! ret (length rhs))))
+          (apply callback
+                 (cons lhs (stack-pop-multiple! ret (length rhs)))))
 
         ;; Push the LHS and new node onto the stack.
         (stack-push! ret new-node)

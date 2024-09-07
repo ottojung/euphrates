@@ -4,7 +4,8 @@
   (export
     parselynn:lr-reduce-action:make
     parselynn:lr-reduce-action?
-    parselynn:lr-reduce-action:production)
+    parselynn:lr-reduce-action:production
+    parselynn:lr-reduce-action:callback)
   (import
     (only (euphrates define-type9) define-type9))
   (import (only (scheme base) begin))

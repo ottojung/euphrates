@@ -29,6 +29,7 @@
           parselynn:lr-parsing-table:state:initial))
   (import
     (only (euphrates parselynn-lr-reduce-action)
+          parselynn:lr-reduce-action:callback
           parselynn:lr-reduce-action:production
           parselynn:lr-reduce-action?))
   (import
@@ -51,6 +52,7 @@
   (import
     (only (scheme base)
           _
+          apply
           begin
           cond
           cons

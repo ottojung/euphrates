@@ -3,8 +3,13 @@
 
 (define-type9 <reduce>
   (parselynn:lr-reduce-action:make
-   production)
+   production
+   callback
+   )
 
   parselynn:lr-reduce-action?
 
-  (production parselynn:lr-reduce-action:production))
+  (production parselynn:lr-reduce-action:production)
+  (callback parselynn:lr-reduce-action:callback)
+
+  )
