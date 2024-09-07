@@ -10,9 +10,10 @@
      (let ()
        (define grammar grammar*)
        (define expected-text (string-strip expected-text*))
+       (define callback-alist '())
 
        (define result
-         (parselynn:lr-compute-parsing-table grammar))
+         (parselynn:lr-compute-parsing-table grammar callback-alist))
 
        (define text
          (string-strip

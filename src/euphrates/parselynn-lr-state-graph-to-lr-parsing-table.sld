@@ -4,6 +4,7 @@
     parselynn-lr-state-graph-to-lr-parsing-table)
   (export
     parselynn:lr-state-graph->lr-parsing-table)
+  (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates bnf-alist-empty-huh)
           bnf-alist:empty?))
