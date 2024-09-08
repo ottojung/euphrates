@@ -2119,11 +2119,11 @@
 
   (define callback-alist
     (list
-     (cons '(T (x)) '(const 5))
-     (cons '(T (y)) '(const 7))
-     (cons '(T (z)) '(const 3))
-     (cons '(E (T)) '(const $1))
-     (cons '(T (< E >)) '(const $2))
+     (cons '(T (x)) '5)
+     (cons '(T (y)) '7)
+     (cons '(T (z)) '3)
+     (cons '(E (T)) '$1)
+     (cons '(T (< E >)) '$2)
      ))
 
   (define input
@@ -2155,11 +2155,11 @@
 
   (define callback-alist
     (list
-     (cons '(T (x)) '(const 5))
-     (cons '(T (y)) '(const 7))
-     (cons '(T (z)) '(const 3))
-     (cons '(E (T)) '(const $1))
-     (cons '(T (< E >)) '(const $2))
+     (cons '(T (x)) '5)
+     (cons '(T (y)) '7)
+     (cons '(T (z)) '3)
+     (cons '(E (T)) '$1)
+     (cons '(T (< E >)) '$2)
      (cons '(E (T + E)) '(+ $1 $3))
      (cons '(E (T * E)) '(* $1 $3))
      ))
@@ -2193,11 +2193,11 @@
 
   (define callback-alist
     (list
-     (cons '(T (x)) '(const 5))
-     (cons '(T (y)) '(const 7))
-     (cons '(T (z)) '(const 3))
-     (cons '(E (T)) '(const $1))
-     (cons '(T (< E >)) '(const $2))
+     (cons '(T (x)) '5)
+     (cons '(T (y)) '7)
+     (cons '(T (z)) '3)
+     (cons '(E (T)) '$1)
+     (cons '(T (< E >)) '$2)
      (cons '(E (T + E)) '(list '+ $1 $3))
      (cons '(E (T * E)) '(list '* $1 $3))
      ))
@@ -2231,11 +2231,11 @@
 
   (define callback-alist
     (list
-     (cons '(T (x)) '(const 5))
-     (cons '(T (y)) '(const 7))
-     (cons '(T (z)) '(const 3))
-     (cons '(E (T)) '(const $1))
-     (cons '(T (< E >)) '(const $2))
+     (cons '(T (x)) '5)
+     (cons '(T (y)) '7)
+     (cons '(T (z)) '3)
+     (cons '(E (T)) '$1)
+     (cons '(T (< E >)) '$2)
      (cons '(E (T + E)) '(+ $1 $3))
      (cons '(E (T * E)) '(* $1 $3))
      ))

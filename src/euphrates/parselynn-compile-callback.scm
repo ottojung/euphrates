@@ -5,13 +5,5 @@
   (define (get-args)
     (bnf-alist:production:get-argument-bindings production))
 
-  (cond
-   ((and (list? callback)
-         (equal? 2 (length callback))
-         (equal? 'const (car callback)))
-    (eval `(lambda ,(get-args) ,(cadr callback))
-          parselynn:default-compilation-environment))
-
-   (else
-    (eval `(lambda ,(get-args) ,callback)
-          parselynn:default-compilation-environment))))
+  (eval `(lambda ,(get-args) ,callback)
+        parselynn:default-compilation-environment))
