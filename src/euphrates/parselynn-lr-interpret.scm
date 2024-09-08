@@ -6,7 +6,7 @@
 ;; Throws exceptions if parsing table contains conflicts.
 ;;
 (define (parselynn:lr-interpret parsing-table callback-alist input-tokens-iterator)
-  (define ret
+  (define parse-stack
     (stack-make))
 
   (define state-stack
@@ -62,10 +62,10 @@
         ;; Construct a new AST node.
         (define new-node
           (apply compiled
-                 (cons lhs (stack-pop-multiple! ret (length rhs)))))
+                 (cons lhs (stack-pop-multiple! parse-stack (length rhs)))))
 
         ;; Push the LHS and new node onto the stack.
-        (stack-push! ret new-node)
+        (stack-push! parse-stack new-node)
         (loop-with-input new-state category source value)))))
 
   (define (loop-with-input state category source value)
@@ -76,14 +76,14 @@
     (cond
      ((parselynn:lr-shift-action? action)
       (stack-push! state-stack state)
-      (stack-push! ret value)
+      (stack-push! parse-stack value)
       (loop (parselynn:lr-shift-action:target-id action)))
 
      ((parselynn:lr-reduce-action? action)
       (process-reduce state category source value action))
 
      ((parselynn:lr-accept-action? action)
-      (stack-peek ret))
+      (stack-peek parse-stack))
 
      ((parselynn:lr-reject-action? action)
       reject)
