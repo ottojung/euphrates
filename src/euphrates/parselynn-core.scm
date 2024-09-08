@@ -554,6 +554,8 @@
     (equal? driver-normalized-name 'glr-driver))
   (define (lr-driver?)
     (equal? driver-normalized-name 'lr-driver))
+  (define (lr-1-driver?)
+    (equal? driver-normalized-name 'lr-1-driver))
 
   (define (gen-tables! tokens gram )
     (initialize-all)
@@ -1363,6 +1365,21 @@
                     (loop i1 (get-symbol-precedence (- item nvars)))
                     (loop i1 prec)))))))))
 
+  (define (signal-conflict type new current on-symbol in-state)
+    (define-values (type/print action1 action2)
+      (cond
+       ((equal? type 'reduce/reduce) (values "Reduce/Reduce" 'reduce 'reduce))
+       ((equal? type 'shift/reduce) (values "Shift/Reduce" 'shift 'reduce))
+       (else (raisu-fmt 'logic-error "Expected only ~s and ~s, but got ~s"
+                        (~a 'reduce/reduce) (~a 'shift/reduce) (~a type/print)))))
+
+    (define message
+      (stringf "%% ~a conflict (~a ~a, ~a ~a) on '~a in state ~s"
+               type/print action1 new action2 current on-symbol in-state))
+
+    (apply conflict-handler
+           (cons message (list type new current on-symbol in-state))))
+
   ;; ----------------------------------------------------------------------
   ;; Build the various tables
   ;; ----------------------------------------------------------------------
@@ -1384,21 +1401,6 @@
 
     (define (add-conflict-message type new current on-symbol in-state)
       (set! conflict-messages (cons (list type new current on-symbol in-state) conflict-messages)))
-
-    (define (signal-conflict type new current on-symbol in-state)
-      (define-values (type/print action1 action2)
-        (cond
-         ((equal? type 'reduce/reduce) (values "Reduce/Reduce" 'reduce 'reduce))
-         ((equal? type 'shift/reduce) (values "Shift/Reduce" 'shift 'reduce))
-         (else (raisu-fmt 'logic-error "Expected only ~s and ~s, but got ~s"
-                          (~a 'reduce/reduce) (~a 'shift/reduce) (~a type/print)))))
-
-      (define message
-        (stringf "%% ~a conflict (~a ~a, ~a ~a) on '~a in state ~s"
-                 type/print action1 new action2 current on-symbol in-state))
-
-      (apply conflict-handler
-             (cons message (list type new current on-symbol in-state))))
 
     (define (log-conflicts)
       (for-each
@@ -2109,6 +2111,7 @@
       (cond
        ((lr-driver?) (lr-driver-code results-mode))
        ((glr-driver?) (glr-driver-code results-mode))
+       ((lr-1-driver?) `((___errorp 'no-code-sorry "Actually this is a TODO, ~s" 'really-what)))
        (else
         (raisu-fmt
          'logic-error "Expected either of ~a but got ~s somehow."
@@ -2136,7 +2139,136 @@
         (output-table! options)))
 
     (define actions (get-code-actions))
-    (define maybefun #f)
+    (define maybefun
+      ;; FIXME: do the actual compilation. Remove this special case check.
+      (and (lr-1-driver?)
+           (let ()
+             (define (rules->bnf-alist rules)
+
+               (define something
+
+                 (bnf-alist:map-grouped-productions
+                  (lambda (name)
+                    (lambda (group)
+                      (let loop ((group group))
+                        (if (null? group) group
+                            (let ()
+                              (define production (car group))
+                              (if (equal? ': production)
+                                  (loop (cdr (cdr group)))
+                                  (cons production (loop (cdr group)))))))))
+
+                  rules))
+
+               something)
+
+             (define (rules->callback-alist rules)
+               (define H (make-hashmap))
+
+               (bnf-alist:map-grouped-productions
+                (lambda (name)
+                  (lambda (group)
+                    (unless (null? group)
+                      (let loop ((group (cdr group))
+                                 (prev (car group)))
+                        (unless (null? group)
+                          (let ()
+                            (define current (car group))
+                            (when (equal? ': current)
+                              (hashmap-set!
+                               H (list name prev)
+                               (car (cdr group))))
+
+                            (loop (cdr group) current)))))))
+
+                rules)
+
+               (hashmap->alist H))
+
+             ;; (debugs rules)
+
+             (define bnf-alist
+               (rules->bnf-alist rules))
+
+             ;; (debugs bnf-alist)
+
+             (define callback-alist
+               (rules->callback-alist rules))
+
+             ;; (debugs callback-alist)
+
+             (define table
+               (parselynn:lr-compute-parsing-table bnf-alist))
+
+             ;; (debug "parsing table now:")
+             ;; (parselynn:lr-parsing-table:print table)
+             ;; (debug "")
+             ;; (debug "")
+
+             (define conflicts
+               (parselynn:lr-parsing-table:get-conflicts table))
+
+             (for-each
+              (lambda (conflict)
+                (define state (car conflict))
+                (define symbol-alist (cdr conflict))
+                (for-each
+                 (lambda (symbol-actions-pair)
+                   (define-pair (symbol actions) symbol-actions-pair)
+                   (define first2 (list-take-n 2 actions))
+                   (define-tuple (action1 action2) first2)
+
+                   (define (get-type action)
+                     (cond
+                      ((parselynn:lr-shift-action? action)
+                       "shift")
+                      ((parselynn:lr-reduce-action? action)
+                       "reduce")
+                      (else
+                       (raisu-fmt 'impossible-6123513 "Expected either shift or reduce here, but got ~s." action))))
+
+                   (define type1
+                     (get-type action1))
+                   (define type2
+                     (get-type action2))
+                   (define overall-type
+                     (string->symbol
+                      (string-append type1 "/" type2)))
+                   (define new
+                     (with-output-stringified
+                      (parselynn:lr-action:print action1)))
+                   (define current
+                     (with-output-stringified
+                      (parselynn:lr-action:print action2)))
+
+                   (signal-conflict overall-type new current symbol state))
+                 symbol-alist))
+
+              conflicts)
+
+             (lambda (input-iterator errorp)
+               (define token-iterator
+                 (let ()
+                   (define generic
+                     (eval `(lambda (___scanner ___errorp)
+                              ,@all-lexer-code)
+                           parselynn:default-compilation-environment))
+
+                   (generic input-iterator errorp)))
+
+               (define (generator)
+                 (define token (token-iterator))
+                 (if token (values token #f) (values #t #t)))
+               (define iterator
+                 (iterator:make generator))
+
+               (define result
+                 (parselynn:lr-interpret
+                  table callback-alist iterator errorp))
+
+               (if (parselynn:lr-reject-action? result)
+                   #f
+                   result)))))
 
     (make-parselynn:core:struct
      results-mode driver-normalized-name tokens

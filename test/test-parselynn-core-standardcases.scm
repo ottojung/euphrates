@@ -53,7 +53,8 @@
 (define (make-test-parser parser-rules)
   (parameterize ((parselynn:core:conflict-handler/p ignore))
     (parselynn:core
-     `((driver: ,(if (glr-parser?/p) 'glr 'lr))
+     `((driver: ,(if (glr-parser?/p) 'glr '(LR 1))) ;; FIXME: DEBUG, change to 'lr.
+     ;; `((driver: ,(if (glr-parser?/p) 'glr 'lr))
        (results: ,(if (glr-parser?/p) 'all 'first))
        (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
        (rules: ,@parser-rules)))))
@@ -83,29 +84,39 @@
   (define result
     (run-input parser input))
 
+  (unless (equal? expected-output result)
+    (debug "\n\nactual:\n~s\n" result))
+
   (assert= expected-output result)
 
   (unless (glr-parser?/p)
     (also-test-respective-glr parser-rules input expected-output)))
 
 
-(define (test-parser-error parser-rules input)
-  (define parser
-    (make-test-parser parser-rules))
+(define-syntax test-parser-error
+  (syntax-rules ()
+    ((_ parser-rules input)
+     (let ()
+       (define parser
+         (make-test-parser parser-rules))
 
-  (assert-throw
-   'parse-error
-   (run-input parser input)))
+       (assert-throw
+        'parse-error
+        (run-input parser input))))))
 
-(define (run-input parser input)
-  (with-string-as-input
-   input
+(define-syntax run-input
+  (syntax-rules ()
+    ((_ parser input)
+     (let ()
+       (define parser* parser)
+       (with-string-as-input
+        input
 
-   (if (glr-parser?/p)
-       (let ()
-         (define iter (parselynn-run parser (make-lexer)))
-         (collect-iterator iter))
-       (parselynn-run parser (make-lexer)))))
+        (if (glr-parser?/p)
+            (let ()
+              (define iter (parselynn-run parser* (make-lexer)))
+              (collect-iterator iter))
+            (parselynn-run parser* (make-lexer))))))))
 
 (define save list)
 
@@ -114,82 +125,106 @@
 ;;;;;;;;;;;;;;;;
 
 (test-parser
+ `((expr     (expr add term)
+             (term))
+   (add      (mspace + mspace))
+   (term     (NUM))
+   (mspace   (SPACE mspace)
+             ()))
+
+ "5+3"
+
+ `(expr (expr (term 5)) (add (mspace) "+" (mspace)) (term 3)))
+
+(test-parser
+ `((expr     (expr add term)
+             (term))
+   (add      (mspace + mspace))
+   (term     (NUM))
+   (mspace   (SPACE mspace)
+             ()))
+
+ "5   +   3"
+
+ `(expr (expr (term 5)) (add (mspace SPACE (mspace SPACE (mspace SPACE (mspace)))) "+" (mspace SPACE (mspace SPACE (mspace SPACE (mspace))))) (term 3)))
+
+(test-parser
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
  "5+3"
 
- '(expr (expr (term (mspace) 5 (mspace))) (add (mspace) "+" (mspace)) (term (mspace) 3 (mspace))))
+ `(expr (expr (term 5)) (add (mspace) "+" (mspace)) (term 3)))
+
+(test-parser
+ `((expr     (expr add term) : (+ $1 $3)
+             (term) : (+ $1))
+   (add      (mspace + mspace) : (+ 0))
+   (term     (NUM) : (+ $1))
+   (mspace   (SPACE mspace) : (+ 0)
+             () : (+ 0)))
+
+ "5+3"
+
+ 8)
 
 (test-parser
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
  "5 + 3"
 
- '(expr (expr (term (mspace) 5 (mspace SPACE (mspace)))) (add (mspace) "+" (mspace SPACE (mspace))) (term (mspace) 3 (mspace))))
+ `(expr (expr (term 5)) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (term 3)))
 
 (test-parser
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
  "54 + 382176"
 
- '(expr (expr (term (mspace) 54 (mspace SPACE (mspace)))) (add (mspace) "+" (mspace SPACE (mspace))) (term (mspace) 382176 (mspace))))
+ `(expr (expr (term 54)) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (term 382176)))
 
 (test-parser
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
-   (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
-             () : (,save 'mspace)))
-
- "  5   + 3  "
-
- '(expr (expr (term (mspace SPACE (mspace SPACE (mspace))) 5 (mspace SPACE (mspace SPACE (mspace SPACE (mspace)))))) (add (mspace) "+" (mspace SPACE (mspace))) (term (mspace) 3 (mspace SPACE (mspace SPACE (mspace))))))
-
-(test-parser
- `((expr     (expr add term) : (,save 'expr $1 $2 $3)
-             (term) : (,save 'expr $1))
-   (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
  "5 + 3 + 4 + 7"
 
- '(expr (expr (expr (expr (term (mspace) 5 (mspace SPACE (mspace)))) (add (mspace) "+" (mspace SPACE (mspace))) (term (mspace) 3 (mspace SPACE (mspace)))) (add (mspace) "+" (mspace SPACE (mspace))) (term (mspace) 4 (mspace SPACE (mspace)))) (add (mspace) "+" (mspace SPACE (mspace))) (term (mspace) 7 (mspace))))
+ `(expr (expr (expr (expr (term 5)) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (term 3)) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (term 4)) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (term 7)))
 
 (test-parser
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
  "5"
 
- '(expr (term (mspace) 5 (mspace))))
+ `(expr (term 5)))
 
 (test-parser-error
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
@@ -199,7 +234,17 @@
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
+   (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
+             () : (,save 'mspace)))
+
+ "  5   + 3  ")
+
+(test-parser-error
+ `((expr     (expr add term) : (,save 'expr $1 $2 $3)
+             (term) : (,save 'expr $1))
+   (add      (mspace + mspace) : (,save 'add $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
@@ -209,7 +254,7 @@
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace NUM mspace) : (,save 'term $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
@@ -280,22 +325,7 @@
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace term mspace) : (,save 'term $1 $2 $3)
-             (LPAREN term RPAREN) : (,save 'term $1 $2 $3)
-             (NUM) : (,save 'term $1))
-   (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
-             () : (,save 'mspace)))
-
- "9 + 2"
-
- '(expr (expr (term 9)) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (term 2)))
-
-(test-parser
- `((expr     (expr add term) : (,save 'expr $1 $2 $3)
-             (term) : (,save 'expr $1))
-   (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace term mspace) : (,save 'term $1 $2 $3)
-             (LPAREN term RPAREN) : (,save 'term $1 $2 $3)
+   (term     (LPAREN term RPAREN) : (,save 'term $1 $2 $3)
              (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
@@ -329,11 +359,9 @@
 (test-parser
  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
              (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-             (mspace expr mspace) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace term mspace) : (,save 'term $1 $2 $3)
-             (NUM) : (,save 'term $1))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
@@ -341,55 +369,72 @@
 
  '(expr (term 9) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr "(" (expr (term 6) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr (term 8))) ")")))
 
-(test-parser
+(test-parser-error
  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
              (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-             (mspace expr mspace) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace term mspace) : (,save 'term $1 $2 $3)
-             (NUM) : (,save 'term $1))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
- "  9 + (  6 + 8)  "
+ "  9 + (  6 + 8)  ")
 
- '(expr (mspace SPACE (mspace SPACE (mspace))) (expr (term 9) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr "(" (expr (mspace SPACE (mspace SPACE (mspace))) (expr (term 6) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr (term 8))) (mspace)) ")")) (mspace SPACE (mspace SPACE (mspace)))))
+(assert-throw
+ 'parse-conflict
+ (test-parser-error
+  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
+              (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+              (mspace expr mspace) : (,save 'expr $1 $2 $3)
+              (term) : (,save 'expr $1))
+    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
+    (term     (term) : (,save 'term $1)
+              (NUM) : (,save 'term $1))
+    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
+              () : (,save 'mspace)))
 
-(test-parser
- `((expr     (term add expr) : (,save 'expr $1 $2 $3)
-             (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-             (mspace expr mspace) : (,save 'expr $1 $2 $3)
-             (term) : (,save 'expr $1))
-   (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace term mspace) : (,save 'term $1 $2 $3)
-             (NUM) : (,save 'term $1))
-   (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
-             () : (,save 'mspace)))
-
- "  9 + (  6+ 8)  "
-
- '(expr (mspace SPACE (mspace SPACE (mspace))) (expr (term 9) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr "(" (expr (mspace SPACE (mspace SPACE (mspace))) (expr (term 6) (add (mspace) "+" (mspace SPACE (mspace))) (expr (term 8))) (mspace)) ")")) (mspace SPACE (mspace SPACE (mspace)))))
+  "  9 + (  6+ 8)  "))
 
 (test-parser-error
  `((expr     (term add expr) : (,save 'expr $1 $2 $3)
              (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
-             (mspace expr mspace) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace term mspace) : (,save 'term $1 $2 $3)
-             (NUM) : (,save 'term $1))
+   (term     (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
 
- "  (9) + (  ( 1+ 6) + 8)  ")
+ "(9) + ((1+ 6) + 8)")
+
+(test-parser-error
+ `((expr     (term add expr) : (,save 'expr $1 $2 $3)
+             (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+             (term) : (,save 'expr $1))
+   (add      (mspace + mspace) : (,save 'add $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
+   (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
+             () : (,save 'mspace)))
+
+ "9 + ((1 + 6) + 8)")
+
+(test-parser
+ `((expr     (term add expr) : (,save 'expr $1 $2 $3)
+             (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
+             (term) : (,save 'expr $1))
+   (add      (mspace + mspace) : (,save 'add $1 $2 $3))
+   (term     (NUM) : (,save 'term $1))
+   (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
+             () : (,save 'mspace)))
+
+ "9 + (8 + (1 + 6))"
+
+ `(expr (term 9) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr "(" (expr (term 8) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr "(" (expr (term 1) (add (mspace SPACE (mspace)) "+" (mspace SPACE (mspace))) (expr (term 6))) ")")) ")")))
 
 (test-parser-error
  `((expr     (expr add term) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (mspace + mspace) : (,save 'add $1 $2 $3))
-   (term     (mspace term mspace) : (,save 'term $1 $2 $3)
-             (LPAREN term RPAREN) : (,save 'term $1 $2 $3)
+   (term     (LPAREN term RPAREN) : (,save 'term $1 $2 $3)
              (NUM) : (,save 'term $1))
    (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
              () : (,save 'mspace)))
@@ -428,38 +473,34 @@
 
 
 (test-parser
- `((lines    (line lines) : (,save 'lines $1 $2)
-             (line)       : (,save 'lines $1)
-             (exprs)      : (,save 'lines $1))
-   (line     (exprs line) : (,save 'line $1 $2)
-             (NEWLINE)    : (,save 'line $1))
-   (exprs    (exprs expr) : (,save 'exprs $1 $2)
-             (expr) : (,save 'exprs $1))
+ `((lines    (line)       : (,save 'lines $1)
+             (line lines) : (,save 'lines $1 $2))
+   (line     (exprs NEWLINE) : (,save 'line $1 $2))
+   (exprs    (expr)       : (,save 'exprs $1)
+             (exprs expr) : (,save 'exprs $1 $2))
    (expr     (SPACE) : (,save 'expr $1)
              (ID) : (,save 'expr $1)))
 
  "a b c
-d e f"
+d e f
+"
 
- '(lines (line (exprs (exprs (exprs (exprs (exprs (expr "a")) (expr SPACE)) (expr "b")) (expr SPACE)) (expr "c")) (line NEWLINE)) (lines (exprs (exprs (exprs (exprs (exprs (expr "d")) (expr SPACE)) (expr "e")) (expr SPACE)) (expr "f")))))
+ `(lines (line (exprs (exprs (exprs (exprs (exprs (expr "a")) (expr SPACE)) (expr "b")) (expr SPACE)) (expr "c")) NEWLINE) (lines (line (exprs (exprs (exprs (exprs (exprs (expr "d")) (expr SPACE)) (expr "e")) (expr SPACE)) (expr "f")) NEWLINE))))
 
 (test-parser
- `((lines    (line lines) : (,save 'lines $1 $2)
-             (line)       : (,save 'lines $1)
-             (exprs)      : (,save 'lines $1))
-   (line     (exprs line) : (,save 'line $1 $2)
-             (NEWLINE)    : (,save 'line $1))
-   (exprs    (exprs expr) : (,save 'exprs $1 $2)
-             (expr) : (,save 'exprs $1))
+ `((lines    (line)       : (,save 'lines $1)
+             (line lines) : (,save 'lines $1 $2))
+   (line     (exprs NEWLINE) : (,save 'line $1 $2))
+   (exprs    (expr)       : (,save 'exprs $1)
+             (exprs expr) : (,save 'exprs $1 $2))
    (expr     (SPACE) : (,save 'expr $1)
              (ID) : (,save 'expr $1)))
 
  "idala idbla idcla longeridla
-idblb idclb longeridlb"
+idblb idclb longeridlb
+"
 
- '(lines (line (exprs (exprs (exprs (exprs (exprs (exprs (exprs (expr "idala")) (expr SPACE)) (expr "idbla")) (expr SPACE)) (expr "idcla")) (expr SPACE)) (expr "longeridla")) (line NEWLINE)) (lines (exprs (exprs (exprs (exprs (exprs (expr "idblb")) (expr SPACE)) (expr "idclb")) (expr SPACE)) (expr "longeridlb")))))
-
-
+ `(lines (line (exprs (exprs (exprs (exprs (exprs (exprs (exprs (expr "idala")) (expr SPACE)) (expr "idbla")) (expr SPACE)) (expr "idcla")) (expr SPACE)) (expr "longeridla")) NEWLINE) (lines (line (exprs (exprs (exprs (exprs (exprs (expr "idblb")) (expr SPACE)) (expr "idclb")) (expr SPACE)) (expr "longeridlb")) NEWLINE))))
 
 
 (parameterize ((glr-parser?/p #t))
@@ -475,27 +516,41 @@ idblb idclb longeridlb"
 
 
 
+(assert-throw
+ 'parse-conflict
+ (test-parser
+  `((expr     (expr add expr) : (,save 'expr $1 $2 $3)
+              (term) : (,save 'expr $1))
+    (add      (+) : (,save 'add $1))
+    (term     (NUM) : (,save 'term $1)))
+
+  "5+3+4"
+
+  '(expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (term 4))))))
+
+
+
 (test-parser
- `((expr     (expr add expr) : (,save 'expr $1 $2 $3)
+ `((expr     (term add expr) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (+) : (,save 'add $1))
    (term     (NUM) : (,save 'term $1)))
 
  "5+3+4"
 
- '(expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (term 4)))))
+ `(expr (term 5) (add "+") (expr (term 3) (add "+") (expr (term 4)))))
 
 
 
 
 (test-parser
- `((expr     (expr add expr) : (,save 'expr $1 $2 $3)
+ `((expr     (term add expr) : (,save 'expr $1 $2 $3)
              (term) : (,save 'expr $1))
    (add      (+) : (,save 'add $1))
    (term     (NUM) : (,save 'term $1)))
 
  "5+3+4+7"
- '(expr (expr (term 5)) (add "+") (expr (expr (term 3)) (add "+") (expr (expr (term 4)) (add "+") (expr (term 7))))))
+ `(expr (term 5) (add "+") (expr (term 3) (add "+") (expr (term 4) (add "+") (expr (term 7))))))
 
 
 
@@ -544,13 +599,13 @@ idblb idclb longeridlb"
  `((expr     (expr add term)
              (term))
    (add      (mspace + mspace))
-   (term     (mspace NUM mspace))
+   (term     (NUM))
    (mspace   (SPACE mspace) : (,save 'mspace-start $1 $2)
              () : (,save 'mspace-end)))
 
  "5+3"
 
- '(expr (expr (term (mspace-end) 5 (mspace-end))) (add (mspace-end) "+" (mspace-end)) (term (mspace-end) 3 (mspace-end))))
+ `(expr (expr (term 5)) (add (mspace-end) "+" (mspace-end)) (term 3)))
 
 
 
@@ -559,13 +614,13 @@ idblb idclb longeridlb"
    `((expr     (expr add term)
                (term))
      (add      (mspace + mspace))
-     (term     (mspace NUM mspace))
+     (term     (NUM))
      (mspace   (SPACE mspace) : (,save 'mspace-start)
                () : (,save 'mspace-end)))
 
    "5+3"
 
-   '((expr (expr (term (mspace-end) 5 (mspace-end))) (add (mspace-end) "+" (mspace-end)) (term (mspace-end) 3 (mspace-end))))))
+   `((expr (expr (term 5)) (add (mspace-end) "+" (mspace-end)) (term 3)))))
 
 
 
@@ -573,6 +628,7 @@ idblb idclb longeridlb"
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
         (expr     (expr add term)
                   (term))
@@ -592,6 +648,7 @@ idblb idclb longeridlb"
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
         (expr     (expr add term)
                   (term))
@@ -619,6 +676,7 @@ idblb idclb longeridlb"
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
         (expr     (expr add term)
                   (term))
@@ -646,6 +704,7 @@ idblb idclb longeridlb"
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
         (expr     (expr add term)
                   (term))
@@ -699,6 +758,7 @@ idblb idclb longeridlb"
   (define parser
     (parselynn:core
      `((tokens: NUM / SPACE)
+       (driver: (LR 1))
        (rules:
         (start    (left split right))
         (left     (term) (term sep left))
@@ -724,31 +784,42 @@ idblb idclb longeridlb"
 
     (parselynn:core
      `((tokens: NUM / SPACE)
+       (driver: lr)
        (rules:
         (start    (left SPACE / SPACE right))
         (left     (NUM) (NUM SPACE left))
         (right    (NUM) (NUM SPACE left)))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; FIXME: the following grammar is identical to the previous one,
-;;         but it does not currently throw a conflict error.
-;;         See https://smlweb.cpsc.ucalgary.ca/lr1.php?grammar=S+-%3E+L+space+split+space+R.%0AL+-%3E+num%0A+++%7C+num+space+L.%0AR+-%3E+num%0A+++%7C+num+space+R.%0A&substs=
+(let ()
+  ;; Test double list separated [2].
 
-;; (let ()
-;;   ;; Test double list separated [3].
+  (assert-throw
+   'parse-conflict
 
-;;   (assert-throw
-;;    'parse-conflict
+    (parselynn:core
+     `((tokens: NUM / SPACE)
+       (driver: (LR 1))
+       (rules:
+        (start    (left SPACE / SPACE right))
+        (left     (NUM) (NUM SPACE left))
+        (right    (NUM) (NUM SPACE left)))))))
 
-;;     (parselynn:core
-;;      `((tokens: NUM / SPACE)
-;;        (rules:
-;;         (start    (left sep split sep right))
-;;         (left     (term) (term sep left))
-;;         (right    (term) (term sep left))
-;;         (sep      (SPACE))
-;;         (split    (/))
-;;         (term     (NUM)))))))
+(let ()
+  ;; Test double list separated [3].
+
+  (assert-throw
+   'parse-conflict
+
+    (parselynn:core
+     `((tokens: NUM / SPACE)
+       (driver: (LR 1))
+       (rules:
+        (start    (left sep split sep right))
+        (left     (term) (term sep left))
+        (right    (term) (term sep left))
+        (sep      (SPACE))
+        (split    (/))
+        (term     (NUM)))))))
 
 
 (let ()
@@ -757,6 +828,7 @@ idblb idclb longeridlb"
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
         (start    (term cont))
         (cont     (comma term cont) ())
@@ -781,6 +853,7 @@ idblb idclb longeridlb"
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
         (start    (term cont))
         (cont     (comma term cont) ())

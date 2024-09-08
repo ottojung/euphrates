@@ -173,6 +173,9 @@
     (only (euphrates bnf-alist-map-expansion-terms)
           bnf-alist:map-expansion-terms))
   (import
+    (only (euphrates bnf-alist-map-grouped-productions)
+          bnf-alist:map-grouped-productions))
+  (import
     (only (euphrates bnf-alist-map-productions-star)
           bnf-alist:map-productions*))
   (import
@@ -181,6 +184,10 @@
   (import
     (only (euphrates bnf-alist-nonterminals)
           bnf-alist:nonterminals))
+  (import
+    (only (euphrates
+            bnf-alist-production-get-argument-bindings)
+          bnf-alist:production:get-argument-bindings))
   (import
     (only (euphrates bnf-alist-production-huh)
           bnf-alist:production?))
@@ -1863,6 +1870,7 @@
           parselynn:lr-state:has?
           parselynn:lr-state:make
           parselynn:lr-state:print
+          parselynn:lr-state:serialize
           parselynn:lr-state?))
   (import
     (only (euphrates parselynn-run-with-error-handler)

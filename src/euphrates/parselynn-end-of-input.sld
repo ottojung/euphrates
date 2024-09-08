@@ -2,7 +2,7 @@
 (define-library
   (euphrates parselynn-end-of-input)
   (export parselynn:end-of-input)
-  (import (only (scheme base) begin define))
+  (import (only (scheme base) begin define quote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

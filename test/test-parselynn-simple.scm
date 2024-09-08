@@ -5,8 +5,9 @@
           :args (list type token)))
 
 (define (make-test-parser parser-rules)
-   (parselynn:simple
-    `(:grammar ,parser-rules)))
+  (parselynn:simple
+   `(:grammar ,parser-rules
+     :driver (LR 1))))
 
 (define (input-stream lst)
   (lambda _
@@ -24,7 +25,13 @@
          (run-input parser input))
 
        (check-parser-serialization parser)
+
+       (unless (equal? result expected-output)
+         (debug "actual:\n~s\n\n" result)
+         (exit 1))
+
        (assert= result expected-output)
+
        result))))
 
 (define (check-parser-result-and-reverse parser input expected-output)
@@ -113,6 +120,37 @@
 
 
 (test-parser
+ `( expr = "a" / "b" )
+
+ "a"
+ '(expr "a"))
+
+
+
+
+
+(test-parser
+ `( expr = "a" / "b" expr)
+
+ "a"
+ '(expr "a"))
+
+
+
+
+
+(test-parser
+ `( expr = "a" / "b" expr)
+
+ "bbbbbba"
+ '(expr "b" (expr "b" (expr "b" (expr "b" (expr "b" (expr "b" (expr "a"))))))))
+
+
+
+
+
+
+(test-parser
  `( expr = term add expr / term
     add = "+"
     term = num
@@ -127,16 +165,18 @@
 
 
 
-(test-parser
- `( expr = expr add expr / term
-    add = "+"
-    term = num
-    num = dig num / dig
-    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
+(assert-throw
+ 'parse-conflict
+ (test-parser
+  `( expr = expr add expr / term
+     add = "+"
+     term = num
+     num = dig num / dig
+     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
- "5+3"
+  "5+3"
 
- '(expr (expr (term (num (dig "5")))) (add "+") (expr (term (num (dig "3"))))))
+  '(expr (expr (term (num (dig "5")))) (add "+") (expr (term (num (dig "3")))))))
 
 
 
@@ -144,14 +184,57 @@
 
 (test-parser
  `( expr = term add expr / term
-    add = "+" / space add / add space
-    term = num / space term / term space
+    add = "+"
+    term = num / space num / num space
     num = dig num / dig
     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
     space = " ")
 
- " 5 + 3 "
- '(expr (term (space " ") (term (term (num (dig "5"))) (space " "))) (add "+") (expr (term (space " ") (term (term (num (dig "3"))) (space " "))))))
+ "5+3"
+ `(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
+
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num / space num / num space
+    num = dig num / dig
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+    space = " ")
+
+ "5+3 "
+ `(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3")) (space " ")))))
+
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num / sspace num / num sspace / sspace num sspace
+    num = dig num / dig
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+    sspace = space / space sspace
+    space = " ")
+
+ "5+3 "
+ `(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3")) (sspace (space " "))))))
+
+
+
+
+(test-parser
+ `( expr = term add expr / term
+    add = "+"
+    term = num / space num / num space
+    num = dig num / dig
+    dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
+    space = " ")
+
+ "5 + 3"
+ `(expr (term (num (dig "5")) (space " ")) (add "+") (expr (term (space " ") (num (dig "3"))))))
 
 
 
@@ -182,14 +265,14 @@
 
 ;; note the duplicated lexical unit "1"
 (test-parser
- `( expr = term add expr / term
+ `( expr = term " " add " " expr / term
     add = "+" / "1"
     term = num
     num = dig+
     dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
- "72+8"
- '(expr (term (num (dig+ (dig "7") (dig+ (dig "2"))))) (add "+") (expr (term (num (dig+ (dig "8")))))))
+ "72 + 8"
+ `(expr (term (num (dig+ (dig "7") (dig+ (dig "2"))))) " " (add "+") " " (expr (term (num (dig+ (dig "8")))))))
 
 
 
@@ -309,8 +392,8 @@
  'parse-conflict
 
  (parselynn:simple
-  `(:grammar
-
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num / "42"
@@ -325,7 +408,8 @@
 
 (check-parser-result-and-reverse
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num
@@ -343,7 +427,8 @@
 
 (check-parser-result-and-reverse
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num
@@ -361,7 +446,8 @@
 
 (check-parser-result-and-reverse
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num
@@ -380,19 +466,20 @@
 
 (check-parser-result-and-reverse
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num / id
       num = dig num / dig
-      id = id1
-      id1 = "x" / "y" / id1 dig / id1 id1
+      id = id1 / id1 num
+      id1 = "x" / "y"
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :join (id1)))
+    :join (id)))
 
  "35+x7"
- '(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id (id1 "x7"))))))
+ `(expr (term (num (dig "3") (num (dig "5")))) (add "+") (expr (term (id "x7")))))
 
 
 
@@ -401,20 +488,21 @@
 
 (check-parser-result-and-reverse
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num / id
       num = num1
       num1 = dig num / dig
-      id = id1
-      id1 = "x" / "y" / id1 dig / id1 id1
+      id = id1 / id1 num
+      id1 = "x" / "y"
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
 
-    :join (id1 num1)))
+    :join (id num1)))
 
  "35+x7"
- '(expr (term (num (num1 "35"))) (add "+") (expr (term (id (id1 "x7"))))))
+ `(expr (term (num (num1 "35"))) (add "+") (expr (term (id "x7")))))
 
 
 
@@ -423,7 +511,8 @@
 (assert-throw
  'invalid-set
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num
@@ -439,7 +528,8 @@
 (assert-throw
  'invalid-set
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
       add = "+"
       term = num
@@ -455,10 +545,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space num / num space / space num space
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -466,17 +557,18 @@
     :skip (space)))
 
  " 5 + 3 "
- '(expr (term (term (term (num (dig "5"))))) (add "+") (expr (term (term (term (num (dig "3"))))))))
+ `(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
 
 
 
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -484,7 +576,7 @@
     :skip (space)))
 
  "  5    + 3    "
- '(expr (term (term (term (term (term (term (term (num (dig "5"))))))))) (add "+") (expr (term (term (term (term (term (term (num (dig "3")))))))))))
+ `(expr (term (space+ (space+)) (num (dig "5")) (space+ (space+ (space+ (space+))))) (add "+") (expr (term (space+) (num (dig "3")) (space+ (space+ (space+ (space+))))))))
 
 
 
@@ -492,10 +584,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -511,10 +604,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -530,10 +624,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -547,10 +642,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -565,10 +661,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -609,7 +706,8 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr (call (+ $1 $3)) / term (call $1)
       add = "+"
       term = num (call (string->number (,parselynn:simple:join1 $1)))
@@ -631,8 +729,9 @@
 (check-parser-result
 
  (parselynn:simple
-  `(:grammar
-    ( expr = expr add expr (call #t)
+  `(:driver (LR 1)
+    :grammar
+    ( expr = term add expr (call #t)
       /      term (call #t)
       add = "+" (call #t)
       term = NUM (call #t)
@@ -664,16 +763,17 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  5    + 3    "
  '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
@@ -684,16 +784,17 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  5    + 3    "
  '(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
@@ -705,10 +806,11 @@
 (assert-throw
  'invalid-set
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -719,16 +821,17 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
 
     :flatten (num term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
 
@@ -740,10 +843,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -758,10 +862,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig num / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -778,10 +883,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = num1
       num1 = dig num1 / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
@@ -790,7 +896,7 @@
     :inline (term num1)
     :flatten (term)
     :join (num1)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (num "83712") (add "+") (expr (num "371673"))))
@@ -801,10 +907,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = num1
       num1 = dig num1 / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
@@ -812,7 +919,7 @@
 
     :inline (term add)
     :join (term add)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr "83712" "+" (expr "371673")))
@@ -824,11 +931,12 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( root = expr
       expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = num1
       num1 = dig num1 / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
@@ -836,7 +944,7 @@
 
     :inline (expr)
     :join (expr)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(root "83712+371673"))
@@ -846,10 +954,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = num1
       num1 = dig num1 / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
@@ -858,7 +967,7 @@
     :inline (term add)
     :join (term add)
     :flatten (expr)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr "83712" "+" "371673"))
@@ -868,10 +977,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = num1
       num1 = dig num1 / dig
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
@@ -880,7 +990,7 @@
     :inline (num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (term "83712") (add "+") (expr (term "371673"))))
@@ -892,10 +1002,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -903,7 +1014,7 @@
     :inline (num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (term "83712") (add "+") (expr (term "371673"))))
@@ -914,10 +1025,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9"
       space = " ")
@@ -925,7 +1037,7 @@
     :inline (expr num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (term "83712") (add "+") (term "371673")))
@@ -952,15 +1064,17 @@
 
 
 (test-parser
- `( expr = term add expr / term
+ `( expr = term " " add " " expr / term
     add = "+" / "1"
     term = num
     num = dig+
     dig = (class numeric))
 
- "3+8"
- '(expr (term (num (dig+ (dig "3"))))
+ "3 + 8"
+ `(expr (term (num (dig+ (dig "3"))))
+        " "
         (add "+")
+        " "
         (expr (term (num (dig+ (dig "8")))))))
 
 
@@ -968,10 +1082,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric)
       space = (class whitespace))
@@ -979,7 +1094,7 @@
     :inline (num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (term "83712") (add "+") (expr (term "371673"))))
@@ -987,10 +1102,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric)
       space = (class whitespace))
@@ -998,7 +1114,7 @@
     :inline (add num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (term "83712") "+" (expr (term "371673"))))
@@ -1009,10 +1125,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric) / (class alphabetic)
       space = (class whitespace))
@@ -1020,7 +1137,7 @@
     :inline (add num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712b2    + 0x371673    "
  '(expr (term "83712b2") "+" (expr (term "0x371673"))))
@@ -1032,10 +1149,11 @@
  'parse-conflict
 
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric) / (class alphabetic) / (class alphanum)
       space = (class whitespace))
@@ -1043,7 +1161,7 @@
     :inline (add num)
     :join (num)
     :flatten (term)
-    :skip (space))))
+    :skip (space space+))))
 
 
 
@@ -1051,10 +1169,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class alphanum)
       space = (class whitespace))
@@ -1062,7 +1181,7 @@
     :inline (add num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712b2    + 0x371673    "
  '(expr (term "83712b2") "+" (expr (term "0x371673"))))
@@ -1074,10 +1193,11 @@
  'parse-conflict
 
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric) / (class numeric)
       space = (class whitespace))
@@ -1085,7 +1205,7 @@
     :inline (num)
     :join (num)
     :flatten (term)
-    :skip (space))))
+    :skip (space space+))))
 
 
 
@@ -1093,10 +1213,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric)
       dig/unused = (class numeric)
@@ -1105,7 +1226,7 @@
     :inline (num)
     :join (num)
     :flatten (term)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (term "83712") (add "+") (expr (term "371673"))))
@@ -1123,10 +1244,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric)
       space = (class whitespace))
@@ -1134,7 +1256,7 @@
     :inline (term)
     :join (num)
     :flatten (term expr)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr (num "83712") (add "+") (num "371673")))
@@ -1144,10 +1266,11 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( expr = term add expr / term
-      add = "+" / space add / add space
-      term = num / space term / term space
+      add = "+"
+      term = num / space+ num / num space+ / space+ num space+
       num = dig+
       dig = (class numeric)
       space = (class whitespace))
@@ -1155,7 +1278,7 @@
     :inline (num term add)
     :join (num)
     :flatten (term expr)
-    :skip (space)))
+    :skip (space space+)))
 
  "  83712    + 371673    "
  '(expr "83712" "+" "371673"))
@@ -1166,8 +1289,9 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
-    ( expr = expr add expr / term
+  `(:driver (LR 1)
+    :grammar
+    ( expr = term add expr / term
       add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
       term = id / num
       id = idstart idcont / idstart
@@ -1180,7 +1304,7 @@
     :inline (num id term add)
     :join (num id)
     :flatten (term expr)
-    ;; :skip (space)
+    ;; :skip (space space+)
 
     ))
 
@@ -1192,10 +1316,12 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
-    ( expr = expr add expr / term / space expr / expr space
+  `(:driver (LR 1)
+    :grammar
+    ( expr = term add expr / term
       add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
-      term = id / num
+      term = baseterm / space+ baseterm / baseterm space+ / space+ baseterm space+
+      baseterm = id / num
       id = idstart idcont / idstart
       idstart = (class alphabetic)
       idcont = idchar idcont / idchar
@@ -1205,10 +1331,10 @@
       space = (class whitespace)
       )
 
-    :inline (num id term add)
+    :inline (num id term add baseterm)
     :join (num id)
     :flatten (term expr)
-    :skip (space)
+    :skip (space space+)
 
     ))
 
@@ -1221,10 +1347,12 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
-    ( expr = expr add expr / term / space expr / expr space
+  `(:driver (LR 1)
+    :grammar
+    ( expr = term add expr / term
       add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
-      term = id / num / string
+      term = baseterm / space+ baseterm / baseterm space+ / space+ baseterm space+
+      baseterm = id / num / string
       id = idstart idcont / idstart
       idstart = (class alphabetic)
       idcont = idchar idcont / idchar
@@ -1236,10 +1364,10 @@
       string-inner = (class (and any (not (constant #\"))))
       )
 
-    :inline (num id term string add)
+    :inline (num id term string add baseterm)
     :join (num id string)
     :flatten (term expr)
-    :skip (space)
+    :skip (space space+)
 
     ))
 
@@ -1251,10 +1379,12 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
-    ( expr = expr add expr / term / space expr / expr space
+  `(:driver (LR 1)
+    :grammar
+    ( expr = term add expr / term
       add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
-      term = id / num / string
+      term = baseterm / space+ baseterm / baseterm space+ / space+ baseterm space+
+      baseterm = id / num / string
       id = idstart idcont / idstart
       idstart = (class alphabetic)
       idcont = idchar idcont / idchar
@@ -1268,10 +1398,10 @@
       string-no-escape = (class (and any (not (constant #\")) (not (constant #\\))))
       )
 
-    :inline (num id term string add)
+    :inline (num id term string add baseterm)
     :join (num id string)
     :flatten (term expr)
-    :skip (space)
+    :skip (space space+)
 
     ))
 
@@ -1360,7 +1490,7 @@
 
 
 (test-parser
- `( expr = expr add expr / term
+ `( expr = term add expr / term
     add = "+"
     term = num
     num = dig num / dig
@@ -1368,13 +1498,13 @@
 
  "5+3"
 
- '(expr (expr (term (num (dig "5")))) (add "+") (expr (term (num (dig "3"))))))
+ `(expr (term (num (dig "5"))) (add "+") (expr (term (num (dig "3"))))))
 
 
 
 
 (test-parser
- `( expr = expr operation expr / term
+ `( expr = term operation expr / term
     operation = ".+." / ".-."
     term = num
     num = dig num / dig
@@ -1382,14 +1512,14 @@
 
  "5.+.3.-.7"
 
- '(expr (expr (term (num (dig "5")))) (operation ".+.") (expr (expr (term (num (dig "3")))) (operation ".-.") (expr (term (num (dig "7")))))))
+ `(expr (term (num (dig "5"))) (operation ".+.") (expr (term (num (dig "3"))) (operation ".-.") (expr (term (num (dig "7")))))))
 
 
 
 
 
 (test-parser
- `( expr = expr operation expr / term
+ `( expr = term operation expr / term
     operation = (or ".+." ".-.")
     term = num
     num = dig num / dig
@@ -1397,13 +1527,13 @@
 
  "5.+.3.-.7"
 
- '(expr (expr (term (num (dig "5")))) (operation ".+.") (expr (expr (term (num (dig "3")))) (operation ".-.") (expr (term (num (dig "7")))))))
+ `(expr (term (num (dig "5"))) (operation ".+.") (expr (term (num (dig "3"))) (operation ".-.") (expr (term (num (dig "7")))))))
 
 
 
 
 (test-parser
- `( expr = expr operation expr / term
+ `( expr = term operation expr / term
     operation = (and (or "+" "-" "*") (not "-"))
     term = num
     num = dig num / dig
@@ -1411,7 +1541,7 @@
 
  "5+3+7"
 
- '(expr (expr (term (num (dig "5")))) (operation "+") (expr (expr (term (num (dig "3")))) (operation "+") (expr (term (num (dig "7"))))))
+ `(expr (term (num (dig "5"))) (operation "+") (expr (term (num (dig "3"))) (operation "+") (expr (term (num (dig "7"))))))
 
  )
 
@@ -1419,7 +1549,7 @@
 
 
 (test-parser-error
- `( expr = expr operation expr / term
+ `( expr = term operation expr / term
     operation = (and (or "+" "-" "*") (not "-"))
     term = num
     num = dig num / dig
@@ -1434,7 +1564,7 @@
 
 
 (test-parser
- `( expr = expr operation expr / term
+ `( expr = term operation expr / term
     operation = (and (or ".+." ".-." ".*.") (not ".-."))
     term = num
     num = dig num / dig
@@ -1442,8 +1572,10 @@
 
  "5.+.3.*.7"
 
- '(expr (expr (term (num (dig "5")))) (operation ".+.")
-        (expr (expr (term (num (dig "3")))) (operation ".*.")
+ `(expr (term (num (dig "5")))
+        (operation ".+.")
+        (expr (term (num (dig "3")))
+              (operation ".*.")
               (expr (term (num (dig "7"))))))
 
  )
@@ -1451,7 +1583,7 @@
 
 
 (test-parser-error
- `( expr = expr operation expr / term
+ `( expr = term operation expr / term
     operation = (and (or ".+." ".-." ".*.") (not ".-."))
     term = num
     num = dig num / dig
@@ -1473,8 +1605,9 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
-    ( expr = expr operation expr / term
+  `(:driver (LR 1)
+    :grammar
+    ( expr = term operation expr / term
       operation = (constant '+)
       term = num
       num = dig num / dig
@@ -1492,7 +1625,7 @@
  (input-stream
   '(5   +   3))
 
- '(expr (expr (term (num (dig 5))))
+ `(expr (term (num (dig 5)))
         (operation +)
         (expr (term (num (dig 3)))))
 
@@ -1504,8 +1637,9 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
-    ( expr = expr operation expr / term
+  `(:driver (LR 1)
+    :grammar
+    ( expr = term operation expr / term
       operation = ".+."
       term = num
       num = dig num / dig
@@ -1523,7 +1657,7 @@
  (input-stream
   '(5 #\. #\+ #\. 3))
 
- '(expr (expr (term (num (dig 5))))
+ `(expr (term (num (dig 5)))
         (operation ".+.")
         (expr (term (num (dig 3)))))
 
@@ -1535,7 +1669,8 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( stream = category+
       category = even / odd
       even = (r7rs even?)
@@ -1556,7 +1691,8 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( stream = category+
       category = fizz / buzz / fizzbuzz / none
 
@@ -1602,7 +1738,8 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( stream = category+
       category = pos / neg
       pos = (r7rs positive?)
@@ -1622,7 +1759,8 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( stream = category+
       category = pos / neg / zero
       pos = (r7rs positive?)
@@ -1643,7 +1781,8 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( stream = category+
       category = pos / neg / zero
       pos = (r7rs positive?) (call 'pos)
@@ -1664,7 +1803,8 @@
 
 (check-parser-result
  (parselynn:simple
-  `(:grammar
+  `(:driver (LR 1)
+    :grammar
     ( stream = category+
       category = fizz / buzz / fizzbuzz / none
 

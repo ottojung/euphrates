@@ -5,6 +5,7 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates assert) assert))
+  (import (only (euphrates debug) debug))
   (import
     (only (euphrates list-collapse) list-collapse))
   (import
@@ -65,7 +66,9 @@
           string-append
           string?
           syntax-rules
+          unless
           unquote))
+  (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (srfi srfi-1) any delete filter)))
     (else (import (only (srfi 1) any delete filter))))

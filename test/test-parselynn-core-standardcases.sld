@@ -5,6 +5,7 @@
   (import
     (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates assert) assert))
+  (import (only (euphrates debug) debug))
   (import (only (euphrates ignore) ignore))
   (import
     (only (euphrates parselynn-core-conflict-handler-p)
@@ -43,8 +44,10 @@
           cond
           cons
           define
+          define-syntax
           else
           eof-object?
+          equal?
           for-each
           if
           lambda
@@ -63,6 +66,7 @@
           set!
           string
           string->number
+          syntax-rules
           unless
           unquote
           unquote-splicing))
