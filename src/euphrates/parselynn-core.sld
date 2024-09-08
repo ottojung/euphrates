@@ -2,8 +2,12 @@
 (define-library
   (euphrates parselynn-core)
   (export parselynn:core)
+  (import (only (euphrates assoc-or) assoc-or))
   (import (only (euphrates assq-or) assq-or))
   (import (only (euphrates fkeyword) fkeyword?))
+  (import
+    (only (euphrates list-intersperse)
+          list-intersperse))
   (import
     (only (euphrates list-length-eq) list-length=))
   (import
@@ -26,6 +30,7 @@
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
+  (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
           *

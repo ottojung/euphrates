@@ -546,6 +546,7 @@
   (define token-set-size  #f)
 
   (define driver-name     'lr-driver)
+  (define driver-type     '(lr))
   (define results-mode    'first)
 
   (define (glr-driver?)
@@ -1927,7 +1928,7 @@
         ,@(map
            (lambda (p)
              (let ((act (cdr p)))
-               `(lambda ,(if (equal? driver-name 'lr-driver)
+               `(lambda ,(if (lr-driver?)
                              '(___stack ___sp ___goto-table ___push yypushback)
                              '(___sp ___goto-table ___push))
                   ,(let* ((nt (caar p)) (rhs (cdar p)) (n (length rhs)))
@@ -1937,7 +1938,7 @@
                                          (let ((rest (cdr l))
                                                (ns (number->string (+ (- n i) 1))))
                                            (cons
-                                            `(tok ,(if (equal? driver-name 'lr-driver)
+                                            `(tok ,(if (lr-driver?)
                                                        `(vector-ref ___stack (- ___sp ,(- (* i 2) 1)))
                                                        `(list-ref ___sp ,(+ (* (- i 1) 2) 1))))
                                             (cons
@@ -1951,8 +1952,8 @@
                                    '()))
                         ,(if (= nt 0)
                              '$1
-                             `(___push ,n ,nt ,(cdr p) ,@(if (equal? driver-name 'lr-driver) '() '(___sp))
-                                       ,(if (equal? driver-name 'lr-driver)
+                             `(___push ,n ,nt ,(cdr p) ,@(if (lr-driver?) '() '(___sp))
+                                       ,(if (lr-driver?)
                                             `(vector-ref ___stack (- ___sp ,(length rhs)))
                                             `(list-ref ___sp ,(length rhs))))))))))
 
@@ -1961,6 +1962,17 @@
 
 
   ;; Options
+
+  (define driver-name->type-alist
+    `((lr-driver lr)
+      (glr-driver glr)
+      (lr-1-driver (LR 1))))
+
+  (define driver-type->name-alist
+    (map reverse driver-name->type-alist))
+
+  (define valid-driver-types
+    (map car driver-type->name-alist))
 
   (define *valid-options*
     (list
@@ -1981,8 +1993,7 @@
            (lambda (option)
              (and (list? option)
                   (list-length= 2 option)
-                  (symbol? (cadr option))
-                  (memq (cadr option) '(lr glr)))))))
+                  (member (cadr option) valid-driver-types))))))
 
 
   (define (validate-options options)
@@ -2013,9 +2024,24 @@
         (set! results-mode (car results-type)))))
 
   (define (set-driver-name! options)
-    (let ((driver-type (assq-or 'driver: options)))
-      (when driver-type
-        (set! driver-name (if (equal? (car driver-type) 'glr) 'glr-driver 'lr-driver)))))
+    (set! driver-type
+          (car (assq-or 'driver: options driver-type)))
+
+    (set!
+     driver-name
+
+     (car
+      (assoc-or
+       driver-type
+       driver-type->name-alist
+
+       (raisu-fmt
+        'logic-error "Expected either of ~a but got ~s somehow."
+        (apply
+         string-append
+         (list-intersperse
+          ", " (map ~s valid-driver-types)))
+        driver-type)))))
 
   (define (options-get-rules options)
     (assq-or 'rules: options
@@ -2080,11 +2106,16 @@
 
     (define driver-code
       (cond
-       ((equal? driver-name 'lr-driver) (lr-driver-code results-mode))
-       ((equal? driver-name 'glr-driver) (glr-driver-code results-mode))
-       (else (raisu-fmt
-              'logic-error "Expected either ~s or ~s but got ~s somehow"
-              (~a 'lr-driver) (~a 'glr-driver) (~a driver-name)))))
+       ((lr-driver?) (lr-driver-code results-mode))
+       ((glr-driver?) (glr-driver-code results-mode))
+       (else
+        (raisu-fmt
+         'logic-error "Expected either of ~a but got ~s somehow."
+         (apply
+          string-append
+          (list-intersperse
+           ", " (map ~s (map car driver-name->type-alist))))
+         driver-name))))
 
     (define code
       `(let ()
