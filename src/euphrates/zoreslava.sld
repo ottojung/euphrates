@@ -47,6 +47,9 @@
           stack-push!))
   (import (only (euphrates stringf) stringf))
   (import
+    (only (euphrates zoreslava-loading-environment-p)
+          zoreslava:loading-environment/p))
+  (import
     (only (scheme base)
           _
           and

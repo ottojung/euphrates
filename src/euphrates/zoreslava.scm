@@ -317,11 +317,21 @@
     (zoreslava:deserialize lists))))
 
 
+(define zoreslava:default-loading-environment
+  (environment
+   '(only (scheme base) begin quasiquote unquote quote)))
+
+
+(define (zoreslava:get-loading-environment)
+  (or (zoreslava:loading-environment/p)
+      zoreslava:default-loading-environment))
+
+
 (define (zoreslava:eval expression)
   ;; Unwrap and evaluate serialized Scheme code, then deserialize it.
 
   (define env
-    (environment '(scheme base) '(scheme char)))
+    (zoreslava:get-loading-environment))
   (define lists
     (eval expression env))
 
@@ -332,7 +342,7 @@
   ;; Load and evaluate a file containing serialized Scheme code, then deserialize it.
 
   (define env
-    (environment '(scheme base) '(scheme char)))
+    (zoreslava:get-loading-environment))
   (define lists
     (load path env))
 

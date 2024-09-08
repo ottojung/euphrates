@@ -16,6 +16,9 @@
     (only (euphrates with-output-stringified)
           with-output-stringified))
   (import
+    (only (euphrates zoreslava-loading-environment-p)
+          zoreslava:loading-environment/p))
+  (import
     (only (euphrates zoreslava)
           with-zoreslava
           zoreslava/p
@@ -42,10 +45,12 @@
           list
           not
           number->string
+          parameterize
           procedure?
           quote
           string->symbol
           unless))
+  (import (only (scheme eval) environment))
   (import
     (only (scheme file) call-with-output-file))
   (cond-expand

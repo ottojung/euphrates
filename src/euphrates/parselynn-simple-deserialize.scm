@@ -5,8 +5,8 @@
   (define slava
     (if (zoreslava? object)
         object
-        (zoreslava:eval
-         object)))
+        (parameterize ((zoreslava:loading-environment/p (parselynn:get-compilation-environment)))
+          (zoreslava:eval object))))
 
   (define arguments
     (zoreslava:ref slava 'l5d989nov8cra7snamcw))

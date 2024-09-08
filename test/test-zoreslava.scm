@@ -224,7 +224,31 @@
 
   (let ()
     (define serialized (zoreslava:serialize obj))
-    (define evaled (zoreslava:eval serialized))
+    (define evaled
+      ;; Binding 'lambda not found in the eval environment.
+      (assert-throw #t (zoreslava:eval serialized)))
+
+    0))
+
+(let ()
+  (define obj
+    (with-zoreslava
+     (zoreslava:set! 'qdtgudtfgpj2ne8fdimxanjg7bdw9ahq 5)
+     (zoreslava:set! 'xqomq88lo6limci4lh62n9b4dk5iypgs "hello")
+     (zoreslava:set! "shs18cxueebwhz4u41a93bhjdqafk2kl" ''foo)
+     (zoreslava:set! 'vrm1ikv4dir8ecox9wyki6uat6e22oh3 '(lambda (x) (* x x)))))
+
+  (assert= 5 (zoreslava:ref obj 'qdtgudtfgpj2ne8fdimxanjg7bdw9ahq))
+  (assert= "hello" (zoreslava:ref obj 'xqomq88lo6limci4lh62n9b4dk5iypgs))
+  (assert= ''foo (zoreslava:ref obj "shs18cxueebwhz4u41a93bhjdqafk2kl"))
+  (assert= '(lambda (x) (* x x)) (zoreslava:ref obj 'vrm1ikv4dir8ecox9wyki6uat6e22oh3))
+
+  (let ()
+    (define serialized (zoreslava:serialize obj))
+    (define evaled
+      (parameterize ((zoreslava:loading-environment/p
+                      (environment '(scheme base))))
+        (zoreslava:eval serialized)))
 
     (assert= 5 (zoreslava:ref evaled 'qdtgudtfgpj2ne8fdimxanjg7bdw9ahq))
     (assert= "hello" (zoreslava:ref evaled 'xqomq88lo6limci4lh62n9b4dk5iypgs))
@@ -256,7 +280,10 @@
       (zoreslava:write obj port)))
 
   (let ()
-    (define evaled (zoreslava:load path))
+    (define evaled
+      (parameterize ((zoreslava:loading-environment/p
+                      (environment '(scheme base))))
+        (zoreslava:load path)))
 
     (assert= 5 (zoreslava:ref evaled 'qdtgudtfgpj2ne8fdimxanjg7bdw9ahq))
     (assert= "hello" (zoreslava:ref evaled 'xqomq88lo6limci4lh62n9b4dk5iypgs))
