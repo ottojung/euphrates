@@ -14,6 +14,7 @@
        (define input input*)
        (define expected expected*)
        (define callback-alist (callback-alist/p))
+       (define error-procedure (lambda _ 0))
 
        (define table
          (parselynn:lr-compute-parsing-table grammar))
@@ -27,7 +28,7 @@
          (list->iterator (map make-token input)))
 
        (define result
-         (parselynn:lr-interpret table callback-alist input-iterator))
+         (parselynn:lr-interpret table callback-alist input-iterator error-procedure))
 
        (unless (equal? result expected)
          (debug "\n\n\n----------------------------------\nactual:\n~s\n\n" result))

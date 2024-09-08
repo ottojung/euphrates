@@ -5,7 +5,10 @@
 ;; Constructs a parse tree given a parsing table and input tokens interator.
 ;; Throws exceptions if parsing table contains conflicts.
 ;;
-(define (parselynn:lr-interpret parsing-table callback-alist input-tokens-iterator)
+(define (parselynn:lr-interpret
+         parsing-table callback-alist
+         input-tokens-iterator error-procedure)
+
   (define parse-stack
     (stack-make))
 
@@ -17,6 +20,14 @@
 
   (define reject
     (parselynn:lr-reject-action:make))
+
+  (define (do-reject token)
+    (if (equal? token parselynn:end-of-input)
+        (error-procedure
+         'end-of-input "Syntax error: unexpected end of input: ~s" token)
+        (error-procedure
+         'unexpected-token "Syntax error: unexpected token: ~s" token))
+    reject)
 
   (define compiled-table
     (make-hashmap))
@@ -30,7 +41,7 @@
           (hashmap-set! compiled-table production new)
           new)))
 
-  (define (process-reduce state category source value action)
+  (define (process-reduce state token category source value action)
     (define production (parselynn:lr-reduce-action:production action))
     (define lhs (bnf-alist:production:lhs production))
     (define rhs (bnf-alist:production:rhs production))
@@ -48,7 +59,7 @@
 
     (cond
      ((parselynn:lr-reject-action? goto-state)
-      reject)
+      (do-reject token))
 
      (else
       (let ()
@@ -66,9 +77,9 @@
 
         ;; Push the LHS and new node onto the stack.
         (stack-push! parse-stack new-node)
-        (loop-with-input new-state category source value)))))
+        (loop-with-input new-state token category source value)))))
 
-  (define (loop-with-input state category source value)
+  (define (loop-with-input state token category source value)
     (define action
       (parselynn:lr-parsing-table:action:ref
        parsing-table state category reject))
@@ -80,13 +91,13 @@
       (loop (parselynn:lr-shift-action:target-id action)))
 
      ((parselynn:lr-reduce-action? action)
-      (process-reduce state category source value action))
+      (process-reduce state token category source value action))
 
      ((parselynn:lr-accept-action? action)
       (stack-peek parse-stack))
 
      ((parselynn:lr-reject-action? action)
-      reject)
+      (do-reject token))
 
      ((parselynn:lr-parse-conflict? action)
       (raisu* :from "parselynn:lr-interpret"
@@ -105,7 +116,7 @@
       (iterator:next input-tokens-iterator parselynn:end-of-input))
 
     (if (equal? token parselynn:end-of-input)
-        (values token token token)
+        (values token token token token)
         (let ()
           (define category
             (parselynn:token:category token))
@@ -116,11 +127,11 @@
           (define value
             (parselynn:token:value token))
 
-          (values category source value))))
+          (values token category source value))))
 
   ;; Main parsing loop.
   (define (loop state)
-    (define-values (category source value) (get-input))
-    (loop-with-input state category source value))
+    (define-values (token category source value) (get-input))
+    (loop-with-input state token category source value))
 
   (loop initial-state))
