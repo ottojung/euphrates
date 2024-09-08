@@ -106,7 +106,7 @@
              (driver: ,(string->symbol driver))
              (results: ,(if (equal? driver "glr") 'all 'first))
              (rules:
-              (expr     (expr add expr) : #t
+              (expr     (term add expr) : #t
                         (term) : #t)
               (add      (+) : #t)
               (term     (NUM) : #t)))))))
@@ -141,7 +141,7 @@
              (driver: ,(string->symbol driver))
              (results: ,(if (equal? driver "glr") 'all 'first))
              (rules:
-              (expr     (expr add expr) : #t
+              (expr     (term add expr) : #t
                         (LPAREN expr RPAREN) : #t
                         (term) : #t)
               (add      (+) : #t)

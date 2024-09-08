@@ -77,7 +77,7 @@
   (define parser/0
     (parselynn:simple
      `(:grammar
-       ( expr = expr add expr / term
+       ( expr = term add expr / term
          add = "+"
          term = NUM
          NUM = "0" / "1" / "2" / "3" / "4" / "5" / "6" / "7" / "8" / "9")
@@ -133,7 +133,7 @@
   (define parser/0
     (parselynn:simple
      `(:grammar
-       ( expr = expr add expr / term
+       ( expr = term add expr / term
          add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
          term = id / num
          id = idstart idcont / idstart
@@ -193,9 +193,10 @@
   (define parser/0
     (parselynn:simple
      `(:grammar
-       ( expr = expr add expr / term / space expr / expr space
+       ( expr = term add expr / term
          add = (class (or (constant #\+) (constant #\-) (constant #\*) (constant #\/)))
-         term = id / num / string
+         term = baseterm / space+ baseterm / baseterm space+ / space+ baseterm space+
+         baseterm = id / num / string
          id = idstart idcont / idstart
          idstart = (class alphabetic)
          idcont = idchar idcont / idchar
@@ -209,10 +210,10 @@
          string-no-escape = (class (and any (not (constant #\")) (not (constant #\\))))
          )
 
-       :inline (num id term string add)
+       :inline (num id term string add baseterm)
        :join (num id string)
        :flatten (term expr)
-       :skip (space)
+       :skip (space space+)
 
        :driver ,(string->symbol driver))))
 
@@ -264,7 +265,7 @@
     (parselynn:simple
      `(:grammar
 
-       ( expr = expr add expr (call #t)
+       ( expr = term add expr (call #t)
          /      term (call #t)
          add = "+" (call #t)
          term = NUM (call #t)
