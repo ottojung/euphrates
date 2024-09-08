@@ -8,7 +8,7 @@
   parselynn:core:struct?
 
   (results     parselynn:core:struct:results)
-  (driver      parselynn:core:struct:driver)
+  (driver      parselynn:core:struct:driver)    ;; the driver's normalized name.
   (tokens      parselynn:core:struct:tokens)
   (rules       parselynn:core:struct:rules)
   (actions     parselynn:core:struct:actions)

@@ -545,14 +545,15 @@
   (define ngotos          #f)
   (define token-set-size  #f)
 
-  (define driver-name     'lr-driver)
-  (define driver-type     '(lr))
-  (define results-mode    'first)
+  ;; Default values.
+  (define driver-normalized-name     'lr-driver)
+  (define driver-user-name           '(lr))
+  (define results-mode               'first)
 
   (define (glr-driver?)
-    (equal? driver-name 'glr-driver))
+    (equal? driver-normalized-name 'glr-driver))
   (define (lr-driver?)
-    (equal? driver-name 'lr-driver))
+    (equal? driver-normalized-name 'lr-driver))
 
   (define (gen-tables! tokens gram )
     (initialize-all)
@@ -1963,16 +1964,16 @@
 
   ;; Options
 
-  (define driver-name->type-alist
+  (define driver-normalized-name->type-alist
     `((lr-driver lr)
       (glr-driver glr)
       (lr-1-driver (LR 1))))
 
-  (define driver-type->name-alist
-    (map reverse driver-name->type-alist))
+  (define driver-user-name->normalized-name-alist
+    (map reverse driver-normalized-name->type-alist))
 
-  (define valid-driver-types
-    (map car driver-type->name-alist))
+  (define valid-driver-user-names
+    (map car driver-user-name->normalized-name-alist))
 
   (define *valid-options*
     (list
@@ -1993,7 +1994,7 @@
            (lambda (option)
              (and (list? option)
                   (list-length= 2 option)
-                  (member (cadr option) valid-driver-types))))))
+                  (member (cadr option) valid-driver-user-names))))))
 
 
   (define (validate-options options)
@@ -2023,25 +2024,25 @@
       (when results-type
         (set! results-mode (car results-type)))))
 
-  (define (set-driver-name! options)
-    (set! driver-type
-          (car (assq-or 'driver: options driver-type)))
+  (define (set-driver-normalized-name! options)
+    (set! driver-user-name
+          (car (assq-or 'driver: options driver-user-name)))
 
     (set!
-     driver-name
+     driver-normalized-name
 
      (car
       (assoc-or
-       driver-type
-       driver-type->name-alist
+       driver-user-name
+       driver-user-name->normalized-name-alist
 
        (raisu-fmt
         'logic-error "Expected either of ~a but got ~s somehow."
         (apply
          string-append
          (list-intersperse
-          ", " (map ~s valid-driver-types)))
-        driver-type)))))
+          ", " (map ~s valid-driver-user-names)))
+        driver-user-name)))))
 
   (define (options-get-rules options)
     (assq-or 'rules: options
@@ -2087,7 +2088,7 @@
     (define _val
       (begin
         (validate-options options)
-        (set-driver-name! options)
+        (set-driver-normalized-name! options)
         (set-results-mode! options)))
 
     (define lexer-code
@@ -2114,8 +2115,8 @@
          (apply
           string-append
           (list-intersperse
-           ", " (map ~s (map car driver-name->type-alist))))
-         driver-name))))
+           ", " (map ~s (map car driver-normalized-name->type-alist))))
+         driver-normalized-name))))
 
     (define code
       `(let ()
@@ -2138,7 +2139,7 @@
     (define maybefun #f)
 
     (make-parselynn:core:struct
-     results-mode driver-name tokens
+     results-mode driver-normalized-name tokens
      rules actions code maybefun))
 
   (define options
