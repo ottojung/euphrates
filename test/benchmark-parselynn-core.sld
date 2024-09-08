@@ -30,6 +30,7 @@
     (only (euphrates parselynn-token)
           parselynn:token:make))
   (import (only (euphrates raisu) raisu))
+  (import (only (euphrates un-tilda-s) un~s))
   (import
     (only (euphrates with-benchmark-simple)
           with-benchmark/simple
@@ -56,6 +57,7 @@
           lambda
           let
           list
+          member
           modulo
           null?
           parameterize
@@ -63,7 +65,6 @@
           quasiquote
           quote
           set!
-          string->symbol
           unquote
           vector-length
           vector-ref

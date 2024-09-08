@@ -80,7 +80,7 @@
             (let ()
               (with-benchmark/timestamp "parsed input")
               (cond
-               ((equal? driver 'lr)
+               ((member driver (list 'lr '(LR 1)))
                 (assert= #t result))
                ((equal? driver 'glr)
                 (assert (procedure? result))
@@ -97,19 +97,25 @@
           (parselynn:core:deserialize/lists parser-repeating-lr))
          ((equal? driver "glr")
           (parselynn:core:deserialize/lists parser-repeating-glr))
+         ((equal? driver "(LR 1)")
+          (raisu 'lr-1-does-not-support-loading-yet)) ;; TODO: implement it.
          (else
           (raisu 'bad-driver-type driver)))
 
-        (parameterize ((parselynn:core:conflict-handler/p ignore))
-          (parselynn:core
-           `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-             (driver: ,(string->symbol driver))
-             (results: ,(if (equal? driver "glr") 'all 'first))
-             (rules:
-              (expr     (term add expr) : #t
-                        (term) : #t)
-              (add      (+) : #t)
-              (term     (NUM) : #t)))))))
+        (let ()
+          (define driver-user-name
+            (un~s driver))
+
+          (parameterize ((parselynn:core:conflict-handler/p ignore))
+            (parselynn:core
+             `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+               (driver: ,driver-user-name)
+               (results: ,(if (equal? driver "glr") 'all 'first))
+               (rules:
+                (expr     (term add expr) : #t
+                          (term) : #t)
+                (add      (+) : #t)
+                (term     (NUM) : #t))))))))
 
   (with-benchmark/timestamp "constructed parser")
 
@@ -120,7 +126,7 @@
        (list (parselynn:token:make 'NUM #f "5")
              (parselynn:token:make '+ #f "+")))))
 
-  (run/generic (string->symbol driver)
+  (run/generic (un~s driver)
                parser make-lexer n-runs))
 
 
@@ -132,13 +138,15 @@
           (parselynn:core:deserialize/lists parser-branching-lr))
          ((equal? driver "glr")
           (parselynn:core:deserialize/lists parser-branching-glr))
+         ((equal? driver "(LR 1)")
+          (raisu 'lr-1-does-not-support-loading-yet)) ;; TODO: implement it.
          (else
           (raisu 'bad-driver-type driver)))
 
         (parameterize ((parselynn:core:conflict-handler/p ignore))
           (parselynn:core
            `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-             (driver: ,(string->symbol driver))
+             (driver: ,(un~s driver))
              (results: ,(if (equal? driver "glr") 'all 'first))
              (rules:
               (expr     (term add expr) : #t
@@ -159,12 +167,12 @@
 
   (with-benchmark/timestamp "got first result")
 
- (if (equal? driver "lr")
-     (assert= #t result)
-     (begin
-       (assert (procedure? result))
-       (assert= #t (result 'get))
-       (iterate-results result))))
+  (if (equal? driver "glr")
+      (begin
+        (assert (procedure? result))
+        (assert= #t (result 'get))
+        (iterate-results result))
+      (assert= #t result)))
 
 
 ;;;;;
@@ -261,4 +269,22 @@
 (with-benchmark/simple
  :name "benchmark-parselynn-15"
  :inputs ((driver "lr") (load? #t) (seq-len 41) (n-runs 3000))
+ (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-16"
+ :inputs ((driver "(LR 1)") (load? #f) (seq-len 300000) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-17"
+ :inputs ((driver "(LR 1)") (load? #f) (tree-depth 50000) (n-runs 1))
+ (brackets-template driver load? tree-depth))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-18"
+ :inputs ((driver "(LR 1)") (load? #f) (seq-len 41) (n-runs 3000))
  (repeating-template driver load? seq-len n-runs))
