@@ -44,14 +44,6 @@
         (define-values (args bodies) (unpack-lambda code))
         (pack-lambda args (map loop bodies))))
 
-     ;; ((is-or? code)
-     ;;  (let ()
-     ;;    ;; FIXME: this actually does not work.
-     ;;    (define sugared (labelinglogic:expression:sugarify code))
-     ;;    (assert (is-or? sugared))
-     ;;    (define args (unpack-or sugared))
-     ;;    (pack-or (map loop args))))
-
      ((is-application? code)
       (let ()
         (define-values (lam inputs) (unpack-application code))
