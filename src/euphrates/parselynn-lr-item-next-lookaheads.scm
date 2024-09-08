@@ -54,7 +54,9 @@
 
               (define to-add-terminals
                 (euphrates:list-sort
-                 (hashset->list first)
+                 (filter
+                  (negate (comp (equal? parselynn:epsilon)))
+                  (hashset->list first))
                  (lambda (a b)
                    (string<? (~s a) (~s b)))))
 

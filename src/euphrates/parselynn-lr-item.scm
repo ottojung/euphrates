@@ -119,9 +119,13 @@
       (parselynn:lr-item:lookahead item))
     (define (print-symbol X)
       (display " ")
-      (if (equal? X parselynn:epsilon)
-          (display "ε")
-          (display (object->string X))))
+      (cond
+       ((equal? X parselynn:epsilon)
+        (display "ε"))
+       ((equal? X parselynn:end-of-input)
+        (display "$"))
+       (else
+        (display (object->string X)))))
 
     (parameterize ((current-output-port port))
       (display "[")

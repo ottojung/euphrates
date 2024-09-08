@@ -2,6 +2,7 @@
 (define-library
   (euphrates parselynn-lr-item-next-lookaheads)
   (export parselynn:lr-item:next-lookaheads)
+  (import (only (euphrates comp) comp))
   (import
     (only (euphrates euphrates-list-sort)
           euphrates:list-sort))
@@ -10,6 +11,7 @@
     (only (euphrates hashset)
           hashset->list
           hashset-has?))
+  (import (only (euphrates negate) negate))
   (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
@@ -41,8 +43,8 @@
           quote
           string<?))
   (cond-expand
-    (guile (import (only (srfi srfi-1) first)))
-    (else (import (only (srfi 1) first))))
+    (guile (import (only (srfi srfi-1) filter first)))
+    (else (import (only (srfi 1) filter first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

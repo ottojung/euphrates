@@ -26,6 +26,9 @@
     (only (euphrates object-to-string)
           object->string))
   (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
     (only (euphrates parselynn-epsilon)
           parselynn:epsilon))
   (import (only (euphrates raisu-star) raisu*))
@@ -34,9 +37,11 @@
           +
           >=
           begin
+          cond
           cons
           current-output-port
           define
+          else
           equal?
           for-each
           if
