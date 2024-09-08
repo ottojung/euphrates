@@ -1908,6 +1908,68 @@
 
 (let ()
   ;;
+  ;; Ambiguous arithmetic expression grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E →    E A T
+  ;; |      T.
+  ;; A →    S + S.
+  ;; T →    S num S.
+  ;; S →    space S | .
+  ;;
+  ;; Note: see conflicts at https://smlweb.cpsc.ucalgary.ca/lr1.php?grammar=E+-%3E+E+A+T+%7C+T.%0AA+-%3E+S+%2B+S.%0AT+-%3E+S+num+S.%0AS+-%3E+space+S+%7C+.&substs=
+  ;;
+
+  (define grammar
+    `((E (E A T) (T))
+      (A (S + S))
+      (T (S num S))
+      (S (space S) ())))
+
+  (define input
+    `(num space + space num))
+
+  (define expected
+    `(E (E (T (S) num (S))) (A (S) + (S)) (T (S) num (S))))
+
+  (assert-throw
+   'parse-conflict
+   (test-case grammar input expected)))
+
+
+(let ()
+  ;;
+  ;; Ambiguous arithmetic expression grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E →    E A T
+  ;; |      T.
+  ;; A →    S + S.
+  ;; T →    S num S.
+  ;; S →    space S | .
+  ;;
+  ;; Note: see conflicts at https://smlweb.cpsc.ucalgary.ca/lr1.php?grammar=E+-%3E+E+A+T+%7C+T.%0AA+-%3E+S+%2B+S.%0AT+-%3E+S+num+S.%0AS+-%3E+space+S+%7C+.&substs=
+  ;;
+
+  (define grammar
+    `((E (E A T) (T))
+      (A (S + S))
+      (T (S num S))
+      (S (space S) ())))
+
+  (define input
+    `(num + num))
+
+  (define expected
+    `(E (E (T (S) num (S))) (A (S) + (S)) (T (S) num (S))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
   ;; Attributed arithmetic expression grammar.
   ;;
   ;;   Grammar:

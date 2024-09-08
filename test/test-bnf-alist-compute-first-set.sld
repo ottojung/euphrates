@@ -11,6 +11,9 @@
     (only (euphrates hashmap) hashmap->alist))
   (import (only (euphrates hashset) hashset->list))
   (import
+    (only (euphrates parselynn-epsilon)
+          parselynn:epsilon))
+  (import
     (only (scheme base)
           *
           +

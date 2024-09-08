@@ -21,7 +21,7 @@
         (map car expected-first))))))
 
 
-(define epsilon "")
+(define epsilon parselynn:epsilon)
 
 
 ;;;;;;;;;;;;;;;;;;
@@ -846,5 +846,41 @@
       (D ,epsilon f)
       (E ,epsilon f)
       (F g)))
+
+  (test-first grammar expected-first))
+
+
+(let ()
+  ;;
+  ;; Grammar with nullable.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> E A T | T.
+  ;; A -> S + S.
+  ;; T -> S T S | e T r | n.
+  ;; S -> p S | .
+  ;;
+  ;;   Expected FIRST sets:
+  ;;
+  ;; FIRST(E) = { e, n, p }
+  ;; FIRST(A) = { +, p }
+  ;; FIRST(T) = { e, n, p }
+  ;; FIRST(S) = { p, ε }
+  ;;
+
+  (define grammar
+    `((E (E A T) (T))
+      (A (S + S))
+      (T (S T S)
+         (e T r)
+         (n))
+      (S (p S) ())))
+
+  (define expected-first
+    `((S ,epsilon p)
+      (A + p)
+      (E e n p)
+      (T e n p)))
 
   (test-first grammar expected-first))

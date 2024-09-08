@@ -11,6 +11,12 @@
     (only (euphrates hashmap) hashmap->alist))
   (import (only (euphrates hashset) hashset->list))
   (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
+    (only (euphrates parselynn-epsilon)
+          parselynn:epsilon))
+  (import
     (only (scheme base)
           *
           +
@@ -32,5 +38,4 @@
            (begin
              (include-from-path
                "test-bnf-alist-compute-follow-set.scm")))
-    (else (include
-            "test-bnf-alist-compute-follow-set.scm"))))
+    (else (include "test-bnf-alist-compute-follow-set.scm"))))

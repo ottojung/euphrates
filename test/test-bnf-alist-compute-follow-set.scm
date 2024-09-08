@@ -20,8 +20,8 @@
 
 
 
-(define epsilon "")
-(define end-of-input "$")
+(define epsilon parselynn:epsilon)
+(define end-of-input parselynn:end-of-input)
 
 
 ;;;;;;;;;;;;;;;;;;

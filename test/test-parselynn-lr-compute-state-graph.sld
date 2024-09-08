@@ -16,9 +16,6 @@
           with-output-stringified))
   (import
     (only (scheme base)
-          *
-          +
-          =
           _
           begin
           define
@@ -26,11 +23,8 @@
           equal?
           let
           quasiquote
-          quote
-          string->symbol
           syntax-rules
-          unless
-          unquote))
+          unless))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

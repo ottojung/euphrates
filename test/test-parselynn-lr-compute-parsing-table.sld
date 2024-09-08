@@ -23,6 +23,7 @@
           define-syntax
           equal?
           let
+          quasiquote
           quote
           syntax-rules
           unless))
