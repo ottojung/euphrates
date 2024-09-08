@@ -2,6 +2,8 @@
 (define-library
   (test-parselynn-lr-interpret)
   (import (only (euphrates assert-equal) assert=))
+  (import
+    (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates const) const))
   (import (only (euphrates debug) debug))
   (import
@@ -14,10 +16,14 @@
     (only (euphrates parselynn-lr-interpret)
           parselynn:lr-interpret))
   (import
+    (only (euphrates parselynn-lr-reject-action)
+          parselynn:lr-reject-action:make))
+  (import
     (only (scheme base)
           *
           +
           <
+          =
           >
           _
           begin
@@ -29,11 +35,14 @@
           let
           list
           make-parameter
+          map
           parameterize
           quasiquote
           quote
+          string->symbol
           syntax-rules
           unless
+          unquote
           vector))
   (cond-expand
     (guile (import (only (guile) include-from-path))

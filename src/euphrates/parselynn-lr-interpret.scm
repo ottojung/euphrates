@@ -30,7 +30,7 @@
           (hashmap-set! compiled-table production new)
           new)))
 
-  (define (process-reduce state input action)
+  (define (process-reduce state category source value action)
     (define production (parselynn:lr-reduce-action:production action))
     (define lhs (bnf-alist:production:lhs production))
     (define rhs (bnf-alist:production:rhs production))
@@ -66,21 +66,21 @@
 
         ;; Push the LHS and new node onto the stack.
         (stack-push! ret new-node)
-        (loop-with-input new-state input)))))
+        (loop-with-input new-state category source value)))))
 
-  (define (loop-with-input state input)
+  (define (loop-with-input state category source value)
     (define action
       (parselynn:lr-parsing-table:action:ref
-       parsing-table state input reject))
+       parsing-table state category reject))
 
     (cond
      ((parselynn:lr-shift-action? action)
       (stack-push! state-stack state)
-      (stack-push! ret input)
+      (stack-push! ret category)
       (loop (parselynn:lr-shift-action:target-id action)))
 
      ((parselynn:lr-reduce-action? action)
-      (process-reduce state input action))
+      (process-reduce state category source value action))
 
      ((parselynn:lr-accept-action? action)
       (stack-peek ret))
@@ -92,20 +92,22 @@
       (raisu* :from "parselynn:lr-interpret"
               :type 'parse-conflict
               :message (stringf "Parsing conflict: ~s." action)
-              :args (list action state input)))
+              :args (list action state category source value)))
 
      (else
       (raisu* :from "parselynn:lr-interpret"
               :type 'unknown-action-type
               :message "Unknown action type."
-              :args (list action state input)))))
+              :args (list action state category source value)))))
 
   (define (get-input)
-    (iterator:next input-tokens-iterator parselynn:end-of-input))
+    (define token
+      (iterator:next input-tokens-iterator parselynn:end-of-input))
+    (values token #f #f))
 
   ;; Main parsing loop.
   (define (loop state)
-    (define input (get-input))
-    (loop-with-input state input))
+    (define-values (category source value) (get-input))
+    (loop-with-input state category source value))
 
   (loop initial-state))

@@ -65,6 +65,7 @@
           cond
           cons
           define
+          define-values
           else
           for-each
           lambda
@@ -72,7 +73,8 @@
           let
           list
           or
-          quote))
+          quote
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
