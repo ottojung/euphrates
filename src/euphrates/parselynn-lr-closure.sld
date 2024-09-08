@@ -18,6 +18,7 @@
           bnf-alist:terminals))
   (import
     (only (euphrates cartesian-each) cartesian-each))
+  (import (only (euphrates comp) comp))
   (import
     (only (euphrates hashset)
           hashset-has?
@@ -36,9 +37,15 @@
           parselynn:lr-state:foreach-item
           parselynn:lr-state:has?))
   (import
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
+  (import
     (only (scheme base)
           begin
           define
+          for-each
           lambda
           let
           unless

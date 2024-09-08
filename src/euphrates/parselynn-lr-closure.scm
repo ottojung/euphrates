@@ -105,4 +105,13 @@
              productions
              lookaheads))))))
 
-  (parselynn:lr-state:foreach-item close state))
+  ;; Below we copy the item set.
+  ;; Reason: cannot modify the state while iterating over it (in lr-state:foreach-item).
+  (define todo
+    (let ()
+      (define st (stack-make))
+      (parselynn:lr-state:foreach-item
+       (comp (stack-push! st)) state)
+      (stack->list st)))
+
+  (for-each close todo))

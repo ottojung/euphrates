@@ -996,3 +996,67 @@
     "{ [X → a • X, $] [X → • a X, $] [X → • b, $] }")
 
   (test-case grammar input expected-closure))
+
+
+(let ()
+  ;;
+  ;; A large grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;;  ((expr (term add expr) (term))
+  ;;   (add (uid_1))
+  ;;   (term (num))
+  ;;   (num (dig num) (dig))
+  ;;   (dig (uid_2)
+  ;;        (uid_3)
+  ;;        (uid_4)
+  ;;        (uid_5)
+  ;;        (uid_6)
+  ;;        (uid_7)
+  ;;        (uid_8)
+  ;;        (uid_9)
+  ;;        (uid_10)
+  ;;        (uid_11)))
+  ;;
+  ;;   Notes:
+  ;;
+  ;; This sometimes produced different parsing tables, nondeterministically.
+  ;;
+
+  (define grammar
+    `((expr (term add expr) (term))
+      (add (uid_1))
+      (term (num))
+      (num (dig num) (dig))
+      (dig (uid_2)
+           (uid_3)
+           (uid_4)
+           (uid_5)
+           (uid_6)
+           (uid_7)
+           (uid_8)
+           (uid_9)
+           (uid_10)
+           (uid_11))))
+
+  (define input
+    (let ()
+      (define ret (parselynn:lr-state:make))
+
+      (parselynn:lr-state:add!
+       ret
+       (parselynn:lr-item:make
+        'expr '(term add expr) parselynn:end-of-input))
+
+      (parselynn:lr-state:add!
+       ret
+       (parselynn:lr-item:make
+        'expr '(term) parselynn:end-of-input))
+
+      ret))
+
+  (define expected-closure
+    "{ [dig → • uid_10, $] [dig → • uid_10, uid_10] [dig → • uid_10, uid_11] [dig → • uid_10, uid_1] [dig → • uid_10, uid_2] [dig → • uid_10, uid_3] [dig → • uid_10, uid_4] [dig → • uid_10, uid_5] [dig → • uid_10, uid_6] [dig → • uid_10, uid_7] [dig → • uid_10, uid_8] [dig → • uid_10, uid_9] [dig → • uid_11, $] [dig → • uid_11, uid_10] [dig → • uid_11, uid_11] [dig → • uid_11, uid_1] [dig → • uid_11, uid_2] [dig → • uid_11, uid_3] [dig → • uid_11, uid_4] [dig → • uid_11, uid_5] [dig → • uid_11, uid_6] [dig → • uid_11, uid_7] [dig → • uid_11, uid_8] [dig → • uid_11, uid_9] [dig → • uid_2, $] [dig → • uid_2, uid_10] [dig → • uid_2, uid_11] [dig → • uid_2, uid_1] [dig → • uid_2, uid_2] [dig → • uid_2, uid_3] [dig → • uid_2, uid_4] [dig → • uid_2, uid_5] [dig → • uid_2, uid_6] [dig → • uid_2, uid_7] [dig → • uid_2, uid_8] [dig → • uid_2, uid_9] [dig → • uid_3, $] [dig → • uid_3, uid_10] [dig → • uid_3, uid_11] [dig → • uid_3, uid_1] [dig → • uid_3, uid_2] [dig → • uid_3, uid_3] [dig → • uid_3, uid_4] [dig → • uid_3, uid_5] [dig → • uid_3, uid_6] [dig → • uid_3, uid_7] [dig → • uid_3, uid_8] [dig → • uid_3, uid_9] [dig → • uid_4, $] [dig → • uid_4, uid_10] [dig → • uid_4, uid_11] [dig → • uid_4, uid_1] [dig → • uid_4, uid_2] [dig → • uid_4, uid_3] [dig → • uid_4, uid_4] [dig → • uid_4, uid_5] [dig → • uid_4, uid_6] [dig → • uid_4, uid_7] [dig → • uid_4, uid_8] [dig → • uid_4, uid_9] [dig → • uid_5, $] [dig → • uid_5, uid_10] [dig → • uid_5, uid_11] [dig → • uid_5, uid_1] [dig → • uid_5, uid_2] [dig → • uid_5, uid_3] [dig → • uid_5, uid_4] [dig → • uid_5, uid_5] [dig → • uid_5, uid_6] [dig → • uid_5, uid_7] [dig → • uid_5, uid_8] [dig → • uid_5, uid_9] [dig → • uid_6, $] [dig → • uid_6, uid_10] [dig → • uid_6, uid_11] [dig → • uid_6, uid_1] [dig → • uid_6, uid_2] [dig → • uid_6, uid_3] [dig → • uid_6, uid_4] [dig → • uid_6, uid_5] [dig → • uid_6, uid_6] [dig → • uid_6, uid_7] [dig → • uid_6, uid_8] [dig → • uid_6, uid_9] [dig → • uid_7, $] [dig → • uid_7, uid_10] [dig → • uid_7, uid_11] [dig → • uid_7, uid_1] [dig → • uid_7, uid_2] [dig → • uid_7, uid_3] [dig → • uid_7, uid_4] [dig → • uid_7, uid_5] [dig → • uid_7, uid_6] [dig → • uid_7, uid_7] [dig → • uid_7, uid_8] [dig → • uid_7, uid_9] [dig → • uid_8, $] [dig → • uid_8, uid_10] [dig → • uid_8, uid_11] [dig → • uid_8, uid_1] [dig → • uid_8, uid_2] [dig → • uid_8, uid_3] [dig → • uid_8, uid_4] [dig → • uid_8, uid_5] [dig → • uid_8, uid_6] [dig → • uid_8, uid_7] [dig → • uid_8, uid_8] [dig → • uid_8, uid_9] [dig → • uid_9, $] [dig → • uid_9, uid_10] [dig → • uid_9, uid_11] [dig → • uid_9, uid_1] [dig → • uid_9, uid_2] [dig → • uid_9, uid_3] [dig → • uid_9, uid_4] [dig → • uid_9, uid_5] [dig → • uid_9, uid_6] [dig → • uid_9, uid_7] [dig → • uid_9, uid_8] [dig → • uid_9, uid_9] [expr → • term add expr, $] [expr → • term, $] [num → • dig num, $] [num → • dig num, uid_1] [num → • dig, $] [num → • dig, uid_1] [term → • num, $] [term → • num, uid_1] }")
+
+  (test-case grammar input expected-closure))
