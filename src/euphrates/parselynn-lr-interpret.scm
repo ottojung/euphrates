@@ -8,6 +8,27 @@
 (define (parselynn:lr-interpret
          parsing-table callback-alist)
 
+  (define initial-state
+    (parselynn:lr-parsing-table:state:initial parsing-table))
+
+  (define reject
+    (parselynn:lr-reject-action:make))
+
+  (define compiled-table
+    (make-hashmap))
+
+  (define (compile-reduction production)
+    (define existing (hashmap-ref compiled-table production #f))
+    (or existing
+        (let ()
+          (define callback
+            (assoc-or
+             production callback-alist
+             (cons 'list (bnf-alist:production:get-argument-bindings production))))
+          (define new (parselynn:compile-callback production callback))
+          (hashmap-set! compiled-table production new)
+          new)))
+
   (lambda (input-tokens-iterator error-procedure)
 
     (define parse-stack
@@ -16,12 +37,6 @@
     (define state-stack
       (stack-make))
 
-    (define initial-state
-      (parselynn:lr-parsing-table:state:initial parsing-table))
-
-    (define reject
-      (parselynn:lr-reject-action:make))
-
     (define (do-reject token)
       (if (equal? token parselynn:end-of-input)
           (error-procedure
@@ -29,21 +44,6 @@
           (error-procedure
            'unexpected-token "Syntax error: unexpected token: ~s" token))
       reject)
-
-    (define compiled-table
-      (make-hashmap))
-
-    (define (compile-reduction production)
-      (define existing (hashmap-ref compiled-table production #f))
-      (or existing
-          (let ()
-            (define callback
-              (assoc-or
-               production callback-alist
-               (cons 'list (bnf-alist:production:get-argument-bindings production))))
-            (define new (parselynn:compile-callback production callback))
-            (hashmap-set! compiled-table production new)
-            new)))
 
     (define (process-reduce state token category source value action)
       (define production (parselynn:lr-reduce-action:production action))
