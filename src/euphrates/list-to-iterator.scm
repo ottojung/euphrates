@@ -11,4 +11,4 @@
           (set! rest (cdr rest))
           (values ret #f))))
 
-  (iterator:make generator))
+  (iterator:make generator #f))

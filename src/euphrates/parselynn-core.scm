@@ -2260,7 +2260,7 @@
                  (define token (token-iterator))
                  (if token (values token #f) (values #t #t)))
                (define iterator
-                 (iterator:make generator))
+                 (iterator:make generator #f))
 
                (define result
                  ((parselynn:lr-interpret
