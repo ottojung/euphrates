@@ -7,6 +7,9 @@
     (only (euphrates list-display-as-general-table)
           list:display-as-general-table))
   (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
     (only (euphrates parselynn-lr-action-print)
           parselynn:lr-action:print))
   (import
@@ -37,6 +40,9 @@
           current-output-port
           define
           else
+          equal?
+          if
+          lambda
           list
           map
           values

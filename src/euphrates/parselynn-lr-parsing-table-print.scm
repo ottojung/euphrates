@@ -51,7 +51,10 @@
     (define lst-header
       (append
        (list "")
-       actions
+       (map
+        (lambda (action)
+          (if (equal? action parselynn:end-of-input) "$" action))
+        actions)
        goto))
 
     (define lst-body
