@@ -1611,6 +1611,9 @@
   (import
     (only (euphrates parse-cfg-cli) CFG-CLI->CFG-AST))
   (import
+    (only (euphrates parselynn-compilation-environment-p)
+          parselynn:compilation-environment/p))
+  (import
     (only (euphrates parselynn-compile-callback)
           parselynn:compile-callback))
   (import
@@ -1705,6 +1708,9 @@
   (import
     (only (euphrates parselynn-folexer)
           make-parselynn:folexer))
+  (import
+    (only (euphrates parselynn-get-compilation-environment)
+          parselynn:get-compilation-environment))
   (import
     (only (euphrates parselynn-irregex)
           make-parselynn:irregex-factory))

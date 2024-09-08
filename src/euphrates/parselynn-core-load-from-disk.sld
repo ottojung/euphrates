@@ -5,8 +5,10 @@
   (import
     (only (euphrates parselynn-core-deserialize-lists)
           parselynn:core:deserialize/lists))
-  (import (only (scheme base) begin define quote))
-  (import (only (scheme eval) environment))
+  (import
+    (only (euphrates parselynn-get-compilation-environment)
+          parselynn:get-compilation-environment))
+  (import (only (scheme base) begin define))
   (import (only (scheme load) load))
   (cond-expand
     (guile (import (only (guile) include-from-path))
