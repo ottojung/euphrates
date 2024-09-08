@@ -3,34 +3,15 @@
 
 (define (parselynn:compile-callback production callback)
   (define (get-args)
-    (map (lambda (i) (string->symbol (string-append "$" (~a i))))
-         (iota (+ 1 (length (bnf-alist:production:rhs production))))))
+    (bnf-alist:production:get-argument-bindings production))
 
   (cond
-   ((symbol? callback)
-    (let ()
-      (define ret (eval callback parselynn:default-compilation-environment))
-      (unless (procedure? ret)
-        (raisu* :from "parselynn:compile-callback"
-                :type 'expected-procedure-code-for-callback
-                :message "Expected callback code that compiles into a procedure."
-                :args (list callback)))
-      ret))
-
    ((and (list? callback)
          (equal? 2 (length callback))
          (equal? 'const (car callback)))
     (eval `(lambda ,(get-args) ,(cadr callback))
           parselynn:default-compilation-environment))
 
-   ((and (pair? callback)
-         (list? callback))
-
-    (eval `(lambda ,(get-args) ,callback)
-          parselynn:default-compilation-environment))
-
    (else
-    (raisu* :from "parselynn:compile-callback"
-            :type 'expected-code-for-callback
-            :message (stringf "Expected code for callback, got ~s." callback)
-            :args (list callback)))))
+    (eval `(lambda ,(get-args) ,callback)
+          parselynn:default-compilation-environment))))

@@ -4,6 +4,10 @@
   (export parselynn:lr-interpret)
   (import (only (euphrates assoc-or) assoc-or))
   (import
+    (only (euphrates
+            bnf-alist-production-get-argument-bindings)
+          bnf-alist:production:get-argument-bindings))
+  (import
     (only (euphrates bnf-alist-production-lhs)
           bnf-alist:production:lhs))
   (import

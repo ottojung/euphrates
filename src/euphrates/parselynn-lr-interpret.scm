@@ -36,7 +36,10 @@
     (define existing (hashmap-ref compiled-table production #f))
     (or existing
         (let ()
-          (define callback (assoc-or production callback-alist 'list))
+          (define callback
+            (assoc-or
+             production callback-alist
+             (cons 'list (bnf-alist:production:get-argument-bindings production))))
           (define new (parselynn:compile-callback production callback))
           (hashmap-set! compiled-table production new)
           new)))

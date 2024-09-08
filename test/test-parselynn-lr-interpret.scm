@@ -1987,7 +1987,7 @@
 
   (define callback-alist
     (list
-     (cons '(T (x)) 'vector)))
+     (cons '(T (x)) '(vector $0 $1))))
 
   (define input
     `(< x + y > + y + z))
