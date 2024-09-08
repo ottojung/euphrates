@@ -9,6 +9,7 @@
     parselynn:lr-state:add!
     parselynn:lr-state:has?
     parselynn:lr-state:print
+    parselynn:lr-state:serialize
     parselynn:lr-state:foreach-item
     parselynn:lr-state:equal?)
   (import
@@ -35,6 +36,9 @@
   (import
     (only (scheme base)
           begin
+          car
+          cdr
+          cons
           current-output-port
           define
           for-each

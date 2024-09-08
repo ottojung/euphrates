@@ -91,3 +91,27 @@
 (define (parselynn:lr-state:foreach-item fn state)
   (hashset-foreach
    fn (parselynn:lr-state:set state)))
+
+;;
+;; Serializes this state into something that can be compared.
+;;
+(define (parselynn:lr-state:serialize state)
+  (define unsorted-items
+    (hashset->list
+     (parselynn:lr-state:set state)))
+
+  (define stringified-items
+    (map
+     (lambda (item)
+       (cons item
+             (with-output-stringified
+              (parselynn:lr-item:print item))))
+     unsorted-items))
+
+  (define items
+    (euphrates:list-sort
+     stringified-items
+     (lambda (a b)
+       (string<? (cdr a) (cdr b)))))
+
+  (map car items))

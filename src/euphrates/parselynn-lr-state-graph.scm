@@ -40,8 +40,7 @@
     (olnode:value node))
 
   (define key
-    (with-output-stringified
-     (parselynn:lr-state:print state)))
+    (parselynn:lr-state:serialize state))
 
   (define index
     (hashmap-count hash))
@@ -61,8 +60,7 @@
     (parselynn:lr-state-graph:hash graph))
 
   (define source-key
-    (with-output-stringified
-     (parselynn:lr-state:print source-state)))
+    (parselynn:lr-state:serialize source-state))
 
   (define source-node
     (hashmap-ref
@@ -73,8 +71,7 @@
              :args (list graph source-state label target-state))))
 
   (define target-key
-    (with-output-stringified
-     (parselynn:lr-state:print target-state)))
+    (parselynn:lr-state:serialize target-state))
 
   (define existing-target-node
     (hashmap-ref hash target-key #f))

@@ -26,11 +26,8 @@
           olnode:value))
   (import
     (only (euphrates parselynn-lr-state)
-          parselynn:lr-state:print))
+          parselynn:lr-state:serialize))
   (import (only (euphrates raisu-star) raisu*))
-  (import
-    (only (euphrates with-output-stringified)
-          with-output-stringified))
   (import
     (only (scheme base)
           begin
