@@ -28,7 +28,8 @@
          (list->iterator (map make-token input)))
 
        (define result
-         (parselynn:lr-interpret table callback-alist input-iterator error-procedure))
+         ((parselynn:lr-interpret table callback-alist)
+          input-iterator error-procedure))
 
        (unless (equal? result expected)
          (debug "\n\n\n----------------------------------\nactual:\n~s\n\n" result))

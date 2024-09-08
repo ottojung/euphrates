@@ -2263,8 +2263,9 @@
                  (iterator:make generator))
 
                (define result
-                 (parselynn:lr-interpret
-                  table callback-alist iterator errorp))
+                 ((parselynn:lr-interpret
+                   table callback-alist)
+                  iterator errorp))
 
                (if (parselynn:lr-reject-action? result)
                    #f
