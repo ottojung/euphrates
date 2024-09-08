@@ -19,6 +19,9 @@
     (only (euphrates parselynn-lr-reject-action)
           parselynn:lr-reject-action:make))
   (import
+    (only (euphrates parselynn-token)
+          parselynn:token:make))
+  (import
     (only (scheme base)
           *
           +

@@ -48,6 +48,11 @@
     (only (euphrates parselynn-lr-shift-action)
           parselynn:lr-shift-action:target-id
           parselynn:lr-shift-action?))
+  (import
+    (only (euphrates parselynn-token)
+          parselynn:token:category
+          parselynn:token:source
+          parselynn:token:value))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -67,7 +72,9 @@
           define
           define-values
           else
+          equal?
           for-each
+          if
           lambda
           length
           let

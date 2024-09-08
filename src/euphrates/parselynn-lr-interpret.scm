@@ -76,7 +76,7 @@
     (cond
      ((parselynn:lr-shift-action? action)
       (stack-push! state-stack state)
-      (stack-push! ret category)
+      (stack-push! ret value)
       (loop (parselynn:lr-shift-action:target-id action)))
 
      ((parselynn:lr-reduce-action? action)
@@ -103,7 +103,20 @@
   (define (get-input)
     (define token
       (iterator:next input-tokens-iterator parselynn:end-of-input))
-    (values token #f #f))
+
+    (if (equal? token parselynn:end-of-input)
+        (values token token token)
+        (let ()
+          (define category
+            (parselynn:token:category token))
+
+          (define source
+            (parselynn:token:source token))
+
+          (define value
+            (parselynn:token:value token))
+
+          (values category source value))))
 
   ;; Main parsing loop.
   (define (loop state)

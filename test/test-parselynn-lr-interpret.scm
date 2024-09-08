@@ -18,13 +18,10 @@
        (define table
          (parselynn:lr-compute-parsing-table grammar))
 
-       ;; (define (make-token category)
-       ;;   (define source 'no-source)
-       ;;   (define value category)
-       ;;   (parselynn:token:make category source value))
-
        (define (make-token category)
-         category)
+         (define source 'no-source)
+         (define value category)
+         (parselynn:token:make category source value))
 
        (define input-iterator
          (list->iterator (map make-token input)))
