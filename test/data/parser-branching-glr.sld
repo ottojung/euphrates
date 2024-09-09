@@ -1,7 +1,7 @@
 (define-library
   (data parser-branching-glr)
   (export parser-branching-glr)
-  (import (scheme base))
+  (import (scheme base) (euphrates stack))
   (begin
     (define parser-branching-glr
       `((cqqn4gukh9w0rx195m2c

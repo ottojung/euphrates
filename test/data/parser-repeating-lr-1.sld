@@ -1,7 +1,7 @@
 (define-library
   (data parser-repeating-lr-1)
   (export parser-repeating-lr-1)
-  (import (scheme base))
+  (import (scheme base) (euphrates stack))
   (begin
     (define parser-repeating-lr-1
       `((cqqn4gukh9w0rx195m2c
