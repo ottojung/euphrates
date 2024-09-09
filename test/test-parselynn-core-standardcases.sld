@@ -13,6 +13,9 @@
   (import
     (only (euphrates parselynn-core) parselynn:core))
   (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
     (only (euphrates parselynn-run-with-error-handler)
           parselynn-run/with-error-handler))
   (import
@@ -35,10 +38,13 @@
           -
           /
           =
+          >
           _
           and
           apply
           begin
+          car
+          cdr
           char=?
           char?
           cond
@@ -55,8 +61,13 @@
           let*
           letrec
           list
+          list->vector
           make-parameter
+          map
+          modulo
+          null?
           or
+          pair?
           parameterize
           peek-char
           quasiquote
@@ -69,7 +80,9 @@
           syntax-rules
           unless
           unquote
-          unquote-splicing))
+          unquote-splicing
+          vector-ref
+          when))
   (import
     (only (scheme char)
           char-alphabetic?
