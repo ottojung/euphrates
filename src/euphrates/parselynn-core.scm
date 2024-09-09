@@ -125,25 +125,14 @@
 
       (hashmap->alist H))
 
-    ;; (debugs rules)
-
     (define bnf-alist
       (rules->bnf-alist rules))
-
-    ;; (debugs bnf-alist)
 
     (define callback-alist
       (rules->callback-alist rules))
 
-    ;; (debugs callback-alist)
-
     (define table
       (parselynn:lr-compute-parsing-table bnf-alist))
-
-    ;; (debug "parsing table now:")
-    ;; (parselynn:lr-parsing-table:print table)
-    ;; (debug "")
-    ;; (debug "")
 
     (define conflicts
       (parselynn:lr-parsing-table:get-conflicts table))
@@ -2265,35 +2254,6 @@
     (define actions (get-code-actions))
     (define maybefun
       #f)
-
-      ;; ;; FIXME: do the actual compilation. Remove this special case check.
-      ;; (and (lr-1-driver?)
-      ;;      (let ()
-
-      ;;        (lambda (input-iterator errorp)
-      ;;          (define token-iterator
-      ;;            (let ()
-      ;;              (define generic
-      ;;                (eval `(lambda (___scanner ___errorp)
-      ;;                         ,@all-lexer-code)
-      ;;                      parselynn:default-compilation-environment))
-
-      ;;              (generic input-iterator errorp)))
-
-      ;;          (define (generator)
-      ;;            (define token (token-iterator))
-      ;;            (if token (values token #f) (values #t #t)))
-      ;;          (define iterator
-      ;;            (iterator:make generator #f))
-
-      ;;          (define result
-      ;;            ((parselynn:lr-interpret
-      ;;              table callback-alist)
-      ;;             iterator errorp))
-
-      ;;          (if (parselynn:lr-reject-action? result)
-      ;;              #f
-      ;;              result)))))
 
     (make-parselynn:core:struct
      results-mode driver-normalized-name tokens
