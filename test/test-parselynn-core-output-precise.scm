@@ -31,7 +31,7 @@
       (lambda (p)
         (write `(define-library (data ,name)
                   (export ,name)
-                  (import (scheme base) (euphrates stack))
+                  (import (scheme base) (euphrates stack)) ;; FIXME: remove the import.
                   (begin (define ,name ,code)))
                p)
         (newline p)))
