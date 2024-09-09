@@ -1733,6 +1733,9 @@
     (only (euphrates parselynn-latin)
           make-parselynn:latin))
   (import
+    (only (euphrates parselynn-lr-1-compile)
+          parselynn:lr-1-compile))
+  (import
     (only (euphrates parselynn-lr-accept-action)
           parselynn:lr-accept-action:make
           parselynn:lr-accept-action?))
@@ -1798,6 +1801,9 @@
           parselynn:lr-parse-conflict:add!
           parselynn:lr-parse-conflict:make
           parselynn:lr-parse-conflict?))
+  (import
+    (only (euphrates parselynn-lr-parsing-table-compile)
+          parselynn:lr-parsing-table:compile))
   (import
     (only (euphrates
             parselynn-lr-parsing-table-get-conflicts)
@@ -3289,6 +3295,9 @@
   (import
     (only (euphrates write-string-file)
           write-string-file))
+  (import
+    (only (euphrates zoreslava-loading-environment-p)
+          zoreslava:loading-environment/p))
   (import
     (only (euphrates zoreslava)
           with-zoreslava

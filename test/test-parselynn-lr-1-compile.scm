@@ -37,14 +37,44 @@
        (unless (equal? result expected)
          (debug "\n\n\n----------------------------------\nactual:\n~s\n\n" result))
 
-       (assert= result expected)))))
+       (assert= result expected)
+
+       (unless (pair? (parselynn:lr-parsing-table:get-conflicts table))
+         (let ()
+           (define compiled
+             (parselynn:lr-1-compile table callback-alist))
+
+           (define evaluated
+             (eval compiled
+                   (environment
+                    '(scheme base)
+                    '(euphrates stack)
+                    )))
+
+           (define input-iterator2
+             (let ()
+               (define base
+                 (list->iterator (map make-token input)))
+               (lambda _
+                 (iterator:next base parselynn:end-of-input))))
+
+           (define compiled-result
+             (evaluated input-iterator2 error-procedure))
+
+           (define to-compare
+             (if (parselynn:lr-reject-action? result)
+                 #f
+                 result))
+
+           (assert= compiled-result to-compare)
+
+           (values)))))))
 
 
 ;;;;;;;;;;;;;;;;;
 ;;
 ;; Test cases:
 ;;
-
 
 
 (let ()

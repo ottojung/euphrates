@@ -1,0 +1,148 @@
+;;;; Copyright (C) 2024  Otto Jung
+;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+(define (parselynn:lr-parsing-table:compile table callback-alist)
+  (define compiled-table
+    (make-hashmap))
+
+  (define (compile-reduction production)
+    (define existing (hashmap-ref compiled-table production #f))
+    (or existing
+        (let ()
+          (define callback
+            (assoc-or
+             production callback-alist
+             (cons 'list (bnf-alist:production:get-argument-bindings production))))
+          (hashmap-set! compiled-table production callback)
+          callback)))
+
+  (define reject
+    (parselynn:lr-reject-action:make))
+
+  (define states
+    (parselynn:lr-parsing-table:state:keys table))
+
+  (define (action-column->string state key)
+    (define x
+      (parselynn:lr-parsing-table:action:ref
+       table state key reject))
+
+    (cond
+     ((parselynn:lr-shift-action? x)
+      (let ()
+        (define target-id
+          (parselynn:lr-shift-action:target-id x))
+
+        `((,key)
+          (process-shift ,target-id))))
+
+     ((parselynn:lr-reduce-action? x)
+      (let ()
+        (define production (parselynn:lr-reduce-action:production x))
+        (define lhs (bnf-alist:production:lhs production))
+        (define rhs (bnf-alist:production:rhs production))
+        (define length-of-rhs (length rhs))
+
+        (define compiled
+          (compile-reduction production))
+
+        (define arguments-list
+          (bnf-alist:production:get-argument-bindings production))
+
+        (define args-code
+          (map
+           (lambda (arg)
+             `(define ,arg (stack-pop! parse-stack)))
+           (reverse (cdr arguments-list))))
+
+        `((,key)
+          (stack-push!
+           parse-stack
+           (let ()
+             (define $0 (quote ,lhs))
+             ,@args-code
+             ,compiled))
+
+          (stack-push! state-stack state)
+          (stack-pop-multiple! state-stack ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
+          (process-goto (quote ,lhs)))))
+
+     ((parselynn:lr-accept-action? x)
+      `((,key)
+        (process-accept)))
+
+     ((parselynn:lr-parse-conflict? x)
+      (raisu-fmt 'conflict-here "TODO: please deal with it: ~s" x))
+
+     ((parselynn:lr-reject-action? x)
+      (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
+
+     (else
+      (raisu-fmt 'unknown-action-type "This action is not expected" x))))
+
+  (define (goto-column->string state key)
+    (define x
+      (parselynn:lr-parsing-table:goto:ref
+       table state key reject))
+
+    (cond
+     ((parselynn:lr-goto-action? x)
+      (let ()
+        (define new-state (parselynn:lr-goto-action:target-id x))
+        `((,key)
+          (loop-with-input ,new-state token category source value)))) ;; TODO: make the code size smaller by not passing all these arguments.
+
+     ((parselynn:lr-parse-conflict? x)
+      (raisu-fmt 'conflict-here "TODO: please deal with it: ~s" x))
+
+     ((parselynn:lr-reject-action? x)
+      (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
+
+     (else
+      (raisu-fmt 'unknown-action-type "This action is not expected" x))))
+
+  (define (actions->cases state)
+    (define actions
+      (parselynn:lr-parsing-table:action:list table state))
+
+    (define single-case-code
+      (map (comp (action-column->string state)) actions))
+
+    `((,state)
+      (case category
+        ,@single-case-code
+        (else reject))))
+
+  (define (goto->cases state)
+    (define goto
+      (parselynn:lr-parsing-table:goto:list table state))
+
+    (define single-case-code
+      (map (comp (goto-column->string state)) goto))
+
+    ;; TODO: optimize: skip this state from the upper case if `single-case-code' is empty.
+
+    `((,state)
+      (case lhs
+        ,@single-case-code
+        (else reject))))
+
+  (define action-case-code
+    (map actions->cases states))
+
+  (define goto-case-code
+    (map goto->cases states))
+
+  (define code
+    `(begin
+       (define (process-goto lhs)
+         (define togo-state (stack-peek state-stack))
+         (case togo-state
+           ,@goto-case-code
+           (else reject)))
+
+       (case state
+         ,@action-case-code
+         (else reject))))
+
+  code)
