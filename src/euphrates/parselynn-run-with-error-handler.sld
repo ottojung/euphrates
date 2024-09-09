@@ -3,14 +3,15 @@
   (euphrates parselynn-run-with-error-handler)
   (export parselynn-run/with-error-handler)
   (import
-    (only (euphrates labelinglogic-interpret-r7rs-code)
-          labelinglogic:interpret-r7rs-code))
-  (import
     (only (euphrates parselynn-core-struct)
           parselynn:core:struct:actions
           parselynn:core:struct:code
           parselynn:core:struct:maybefun))
+  (import
+    (only (euphrates parselynn-get-compilation-environment)
+          parselynn:get-compilation-environment))
   (import (only (scheme base) begin define if let))
+  (import (only (scheme eval) eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

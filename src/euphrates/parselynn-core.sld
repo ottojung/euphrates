@@ -18,8 +18,6 @@
           hashmap-set!
           make-hashmap))
   (import
-    (only (euphrates iterator) iterator:make))
-  (import
     (only (euphrates list-intersperse)
           list-intersperse))
   (import
@@ -40,9 +38,8 @@
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct))
   (import
-    (only (euphrates
-            parselynn-default-compilation-environment)
-          parselynn:default-compilation-environment))
+    (only (euphrates parselynn-lr-1-compile-for-core)
+          parselynn:lr-1-compile/for-core))
   (import
     (only (euphrates parselynn-lr-action-print)
           parselynn:lr-action:print))
@@ -50,18 +47,12 @@
     (only (euphrates parselynn-lr-compute-parsing-table)
           parselynn:lr-compute-parsing-table))
   (import
-    (only (euphrates parselynn-lr-interpret)
-          parselynn:lr-interpret))
-  (import
     (only (euphrates
             parselynn-lr-parsing-table-get-conflicts)
           parselynn:lr-parsing-table:get-conflicts))
   (import
     (only (euphrates parselynn-lr-reduce-action)
           parselynn:lr-reduce-action?))
-  (import
-    (only (euphrates parselynn-lr-reject-action)
-          parselynn:lr-reject-action?))
   (import
     (only (euphrates parselynn-lr-shift-action)
           parselynn:lr-shift-action?))
@@ -163,7 +154,6 @@
           vector?
           when))
   (import (only (scheme cxr) caaar cadar caddr))
-  (import (only (scheme eval) eval))
   (import (only (scheme write) display))
   (cond-expand
     (guile (import

@@ -15,19 +15,34 @@
           bnf-alist:production:rhs))
   (import (only (euphrates comp) comp))
   (import
+    (only (euphrates define-tuple) define-tuple))
+  (import
     (only (euphrates hashmap)
           hashmap-ref
           hashmap-set!
           make-hashmap))
   (import
+    (only (euphrates list-take-n) list-take-n))
+  (import
+    (only (euphrates
+            parselynn-core-conflict-handler-default)
+          parselynn:core:conflict-handler/default))
+  (import
+    (only (euphrates parselynn-core-conflict-handler-p)
+          parselynn:core:conflict-handler/p))
+  (import
     (only (euphrates parselynn-lr-accept-action)
           parselynn:lr-accept-action?))
+  (import
+    (only (euphrates parselynn-lr-action-print)
+          parselynn:lr-action:print))
   (import
     (only (euphrates parselynn-lr-goto-action)
           parselynn:lr-goto-action:target-id
           parselynn:lr-goto-action?))
   (import
     (only (euphrates parselynn-lr-parse-conflict)
+          parselynn:lr-parse-conflict:actions
           parselynn:lr-parse-conflict?))
   (import
     (only (euphrates parselynn-lr-parsing-table)
@@ -55,8 +70,13 @@
           stack-pop!
           stack-pop-multiple!
           stack-push!))
+  (import (only (euphrates stringf) stringf))
+  (import
+    (only (euphrates with-output-stringified)
+          with-output-stringified))
   (import
     (only (scheme base)
+          apply
           begin
           case
           cdr
@@ -73,6 +93,8 @@
           quasiquote
           quote
           reverse
+          string->symbol
+          string-append
           unquote
           unquote-splicing))
   (cond-expand

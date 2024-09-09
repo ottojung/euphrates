@@ -9,5 +9,5 @@
       (let ()
         (define code (parselynn:core:struct:code parser-struct))
         (define actions (parselynn:core:struct:actions parser-struct))
-        (define compiled (labelinglogic:interpret-r7rs-code code))
+        (define compiled (eval code (parselynn:get-compilation-environment)))
         ((compiled actions) token-iterator errorp))))

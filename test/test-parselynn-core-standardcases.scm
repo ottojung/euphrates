@@ -51,13 +51,18 @@
   (make-parameter #f))
 
 (define (make-test-parser parser-rules)
-  (parameterize ((parselynn:core:conflict-handler/p ignore))
+  (define (build)
     (parselynn:core
      `((driver: ,(if (glr-parser?/p) 'glr '(LR 1))) ;; FIXME: DEBUG, change to 'lr.
-     ;; `((driver: ,(if (glr-parser?/p) 'glr 'lr))
+       ;; `((driver: ,(if (glr-parser?/p) 'glr 'lr))
        (results: ,(if (glr-parser?/p) 'all 'first))
        (tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-       (rules: ,@parser-rules)))))
+       (rules: ,@parser-rules))))
+
+  (if (glr-parser?/p)
+      (parameterize ((parselynn:core:conflict-handler/p ignore))
+        (build))
+      (build)))
 
 (define (also-test-respective-glr parser-rules input expected-output)
   (define conflicting-glr? #f)
@@ -382,7 +387,7 @@
 
 (assert-throw
  'parse-conflict
- (test-parser-error
+ (test-parser
   `((expr     (term add expr) : (,save 'expr $1 $2 $3)
               (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
               (mspace expr mspace) : (,save 'expr $1 $2 $3)
@@ -393,7 +398,9 @@
     (mspace   (SPACE mspace) : (,save 'mspace $1 $2)
               () : (,save 'mspace)))
 
-  "  9 + (  6+ 8)  "))
+  "  9 + (  6+ 8)  "
+
+ '()))
 
 (test-parser-error
  `((expr     (term add expr) : (,save 'expr $1 $2 $3)

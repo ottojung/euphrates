@@ -16,6 +16,48 @@
           (hashmap-set! compiled-table production callback)
           callback)))
 
+  (define conflict-handler
+    (or (parselynn:core:conflict-handler/p)
+        parselynn:core:conflict-handler/default))
+
+  (define (handle-conflict state key x)
+    (define actions
+      (parselynn:lr-parse-conflict:actions x))
+    (define first2 (list-take-n 2 actions))
+    (define on-symbol key)
+    (define in-state state)
+    (define-tuple (action1 action2) first2)
+
+    (define (get-type action)
+      (cond
+       ((parselynn:lr-shift-action? action)
+        "shift")
+       ((parselynn:lr-reduce-action? action)
+        "reduce")
+       (else
+        (raisu-fmt 'impossible-6123513 "Expected either shift or reduce here, but got ~s." action))))
+
+    (define type1
+      (get-type action1))
+    (define type2
+      (get-type action2))
+    (define type/print
+      (string->symbol
+       (string-append type1 "/" type2)))
+    (define new
+      (with-output-stringified
+       (parselynn:lr-action:print action1)))
+    (define current
+      (with-output-stringified
+       (parselynn:lr-action:print action2)))
+
+    (define message
+      (stringf "%% ~a conflict (~a ~a, ~a ~a) on '~a in state ~s"
+               type/print action1 new action2 current on-symbol in-state))
+
+    (apply conflict-handler
+           (list message type/print new current on-symbol in-state)))
+
   (define reject
     (parselynn:lr-reject-action:make))
 
@@ -72,7 +114,9 @@
         (process-accept)))
 
      ((parselynn:lr-parse-conflict? x)
-      (raisu-fmt 'conflict-here "TODO: please deal with it: ~s" x))
+      (handle-conflict state key x)
+      `((,key)
+        (do-reject token)))
 
      ((parselynn:lr-reject-action? x)
       (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
@@ -93,7 +137,7 @@
           (loop-with-input ,new-state token category source value)))) ;; TODO: make the code size smaller by not passing all these arguments.
 
      ((parselynn:lr-parse-conflict? x)
-      (raisu-fmt 'conflict-here "TODO: please deal with it: ~s" x))
+      (handle-conflict state key x))
 
      ((parselynn:lr-reject-action? x)
       (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
@@ -111,7 +155,7 @@
     `((,state)
       (case category
         ,@single-case-code
-        (else reject))))
+        (else (do-reject token)))))
 
   (define (goto->cases state)
     (define goto
@@ -125,7 +169,7 @@
     `((,state)
       (case lhs
         ,@single-case-code
-        (else reject))))
+        (else (do-reject token)))))
 
   (define action-case-code
     (map actions->cases states))
@@ -139,10 +183,10 @@
          (define togo-state (stack-peek state-stack))
          (case togo-state
            ,@goto-case-code
-           (else reject)))
+           (else (do-reject token))))
 
        (case state
          ,@action-case-code
-         (else reject))))
+         (else (do-reject token)))))
 
   code)
