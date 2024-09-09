@@ -20,7 +20,7 @@
           stack-make
           stack-push!))
   (import (only (euphrates stringf) stringf))
-  (import (only (euphrates tilda-a) ~a))
+  (import (only (euphrates un-tilda-s) un~s))
   (import
     (only (scheme base)
           *

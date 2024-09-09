@@ -18,9 +18,11 @@
       (stack-push! failures name)))
 
   (define (save+check type driver code)
+    (define driver*
+      (if (equal? "(LR 1)" driver) "lr-1" driver))
     (define name
       (string->symbol
-       (stringf "parser-~a-~a" type driver)))
+       (stringf "parser-~a-~a" type driver*)))
     (define filename
       (stringf "scripts/generated/~a.sld" name))
 
@@ -41,10 +43,10 @@
       (parameterize ((parselynn:core:conflict-handler/p ignore))
         (parselynn:core
          `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-           (driver: ,(string->symbol driver))
-           (results: ,(if (equal? (~a driver) "glr") 'all 'first))
+           (driver: ,(un~s driver))
+           (results: ,(if (equal? driver "glr") 'all 'first))
            (rules:
-            (expr     (expr add expr) : #t
+            (expr     (term add expr) : #t
                       (term) : #t)
             (add      (+) : #t)
             (term     (NUM) : #t))))))
@@ -58,10 +60,10 @@
       (parameterize ((parselynn:core:conflict-handler/p ignore))
         (parselynn:core
          `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
-           (driver: ,(string->symbol driver))
-           (results: ,(if (equal? (~a driver) "glr") 'all 'first))
+           (driver: ,(un~s driver))
+           (results: ,(if (equal? driver "glr") 'all 'first))
            (rules:
-            (expr     (expr add expr) : #t
+            (expr     (term add expr) : #t
                       (LPAREN expr RPAREN) : #t
                       (term) : #t)
             (add      (+) : #t)
@@ -75,7 +77,7 @@
     (generate-repating driver)
     (generate-branching driver))
 
-  (for-each generate '("lr" "glr"))
+  (for-each generate '("lr" "glr" "(LR 1)"))
 
   (for-each
    (lambda (failure)
