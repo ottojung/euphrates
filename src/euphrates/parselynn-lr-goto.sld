@@ -18,7 +18,7 @@
   (import
     (only (euphrates parselynn-lr-state)
           parselynn:lr-state:add!
-          parselynn:lr-state:foreach-item
+          parselynn:lr-state:foreach-item/nondeterministic
           parselynn:lr-state:make))
   (import
     (only (scheme base)

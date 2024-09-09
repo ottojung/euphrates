@@ -64,7 +64,7 @@
           parselynn:lr-state-graph:start))
   (import
     (only (euphrates parselynn-lr-state)
-          parselynn:lr-state:foreach-item))
+          parselynn:lr-state:items))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (scheme base)

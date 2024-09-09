@@ -1733,6 +1733,9 @@
     (only (euphrates parselynn-latin)
           make-parselynn:latin))
   (import
+    (only (euphrates parselynn-lr-1-compile-for-core)
+          parselynn:lr-1-compile/for-core))
+  (import
     (only (euphrates parselynn-lr-1-compile)
           parselynn:lr-1-compile))
   (import
@@ -1878,8 +1881,9 @@
           parselynn:lr-state:add!
           parselynn:lr-state:empty?
           parselynn:lr-state:equal?
-          parselynn:lr-state:foreach-item
+          parselynn:lr-state:foreach-item/nondeterministic
           parselynn:lr-state:has?
+          parselynn:lr-state:items
           parselynn:lr-state:make
           parselynn:lr-state:print
           parselynn:lr-state:serialize

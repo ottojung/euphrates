@@ -86,7 +86,7 @@
                 :message "Label is neither a terminal nor a nonterminal."
                 :args (list label graph bnf-alist)))))
 
-    (parselynn:lr-state:foreach-item
+    (for-each
 
      (lambda (item)
        (when (parselynn:lr-item:dot-at-end? item)
@@ -106,7 +106,7 @@
            (parselynn:lr-parsing-table:action:add!
             ret parent-id label action))))
 
-     parent-state)
+     (parselynn:lr-state:items parent-state))
 
     (for-each process-child mapped-children))
 

@@ -20,7 +20,7 @@
     (parselynn:lr-state:make))
 
   ;; Go through each item in the current state.
-  (parselynn:lr-state:foreach-item
+  (parselynn:lr-state:foreach-item/nondeterministic
    (lambda (item)
      (when (and (not (parselynn:lr-item:dot-at-end? item))
                 (equal? (parselynn:lr-item:next-symbol item) symbol))

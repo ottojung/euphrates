@@ -88,9 +88,26 @@
 ;;
 ;; Iterates through each item in the state.
 ;;
-(define (parselynn:lr-state:foreach-item fn state)
+(define (parselynn:lr-state:foreach-item/nondeterministic fn state)
   (hashset-foreach
    fn (parselynn:lr-state:set state)))
+
+;;
+;; Returns a list of every item in the state.
+;;
+(define (parselynn:lr-state:items state)
+  (define unordered-lst
+    (hashset->list (parselynn:lr-state:set state)))
+
+  (define lst
+    (euphrates:list-sort
+     unordered-lst
+     (lambda (a b)
+       (string<? (~s a)
+                 (~s b)))))
+
+  lst)
+
 
 ;;
 ;; Serializes this state into something that can be compared.

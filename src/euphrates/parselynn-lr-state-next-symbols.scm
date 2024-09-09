@@ -8,7 +8,7 @@
   (define ret
     (make-hashset))
 
-  (parselynn:lr-state:foreach-item
+  (parselynn:lr-state:foreach-item/nondeterministic
 
    (lambda (item)
      (unless (parselynn:lr-item:dot-at-end? item)

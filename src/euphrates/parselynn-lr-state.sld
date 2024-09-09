@@ -10,7 +10,8 @@
     parselynn:lr-state:has?
     parselynn:lr-state:print
     parselynn:lr-state:serialize
-    parselynn:lr-state:foreach-item
+    parselynn:lr-state:items
+    parselynn:lr-state:foreach-item/nondeterministic
     parselynn:lr-state:equal?)
   (import
     (only (euphrates define-type9) define-type9))
@@ -30,6 +31,7 @@
   (import
     (only (euphrates parselynn-lr-item)
           parselynn:lr-item:print))
+  (import (only (euphrates tilda-s) ~s))
   (import
     (only (euphrates with-output-stringified)
           with-output-stringified))

@@ -16,7 +16,7 @@
           parselynn:lr-item:next-symbol))
   (import
     (only (euphrates parselynn-lr-state)
-          parselynn:lr-state:foreach-item))
+          parselynn:lr-state:foreach-item/nondeterministic))
   (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
