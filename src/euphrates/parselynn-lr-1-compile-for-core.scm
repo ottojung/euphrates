@@ -2,6 +2,7 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (define (parselynn:lr-1-compile/for-core
+         get-next-token-code
          parsing-table callback-alist)
 
   (define table-based-code
@@ -14,9 +15,6 @@
     ;;
     ;; Library.
     ;;
-
-    (define input-tokens-iterator get-next-token)
-    (define error-procedure ___errorp)
 
     (define (parselynn:lr-shift-action:target-id x)
       x)
@@ -55,53 +53,58 @@
     (define reject
       (parselynn:lr-reject-action:make))
 
-    (define parse-stack
-      (stack-make))
+    (lambda (___scanner ___errorp)
+      ,@get-next-token-code
+      (define input-tokens-iterator get-next-token)
+      (define error-procedure ___errorp)
 
-    (define state-stack
-      (stack-make))
+      (define parse-stack
+        (stack-make))
 
-    ;; TODO: move down to make 'token a captured variable to reduce code size.
-    (define (do-reject token)
-      (if (equal? token parselynn:end-of-input)
-          (error-procedure
-           'end-of-input "Syntax error: unexpected end of input: ~s" token)
-          (error-procedure
-           'unexpected-token "Syntax error: unexpected token: ~s" token))
-      reject)
+      (define state-stack
+        (stack-make))
 
-    (define (process-accept)
-      (stack-peek parse-stack))
+      ;; TODO: move down to make 'token a captured variable to reduce code size.
+      (define (do-reject token)
+        (if (equal? token parselynn:end-of-input)
+            (error-procedure
+             'end-of-input "Syntax error: unexpected end of input: ~s" token)
+            (error-procedure
+             'unexpected-token "Syntax error: unexpected token: ~s" token))
+        reject)
 
-    (define (loop-with-input state token category source value)
-      (define (process-shift action)
-        (stack-push! state-stack state)
-        (stack-push! parse-stack value)
-        (loop (parselynn:lr-shift-action:target-id action)))
+      (define (process-accept)
+        (stack-peek parse-stack))
 
-      ,table-based-code)
+      (define (loop-with-input state token category source value)
+        (define (process-shift action)
+          (stack-push! state-stack state)
+          (stack-push! parse-stack value)
+          (loop (parselynn:lr-shift-action:target-id action)))
 
-    (define (get-input)
-      (define token
-        (iterator:next input-tokens-iterator parselynn:end-of-input))
+        ,table-based-code)
 
-      (if (equal? token parselynn:end-of-input)
-          (values token token token token)
-          (let ()
-            (define category
-              (parselynn:token:category token))
+      (define (get-input)
+        (define token
+          (iterator:next input-tokens-iterator parselynn:end-of-input))
 
-            (define source
-              (parselynn:token:source token))
+        (if (equal? token parselynn:end-of-input)
+            (values token token token token)
+            (let ()
+              (define category
+                (parselynn:token:category token))
 
-            (define value
-              (parselynn:token:value token))
+              (define source
+                (parselynn:token:source token))
 
-            (values token category source value))))
+              (define value
+                (parselynn:token:value token))
 
-    ;; Main parsing loop.
-    (define (loop state)
-      (define-values (token category source value) (get-input))
-      (loop-with-input state token category source value))
+              (values token category source value))))
 
-    (loop initial-state)))
+      ;; Main parsing loop.
+      (define (loop state)
+        (define-values (token category source value) (get-input))
+        (loop-with-input state token category source value))
+
+      (loop initial-state))))

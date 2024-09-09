@@ -9,7 +9,6 @@
     (only (scheme base)
           begin
           define
-          lambda
           let
           quasiquote
           unquote-splicing))

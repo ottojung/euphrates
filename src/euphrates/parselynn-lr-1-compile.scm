@@ -4,10 +4,13 @@
 (define (parselynn:lr-1-compile
          parsing-table callback-alist)
 
-  (define core-code
+  (define get-next-token-code
+    `((define get-next-token ___scanner)))
+
+  (define code
     (parselynn:lr-1-compile/for-core
+     get-next-token-code
      parsing-table callback-alist))
 
   `(let ()
-     (lambda (get-next-token ___errorp)
-       ,@core-code)))
+     ,@code))

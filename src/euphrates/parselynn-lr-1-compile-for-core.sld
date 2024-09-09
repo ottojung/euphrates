@@ -39,11 +39,13 @@
           define-values
           equal?
           if
+          lambda
           let
           quasiquote
           quote
           syntax-rules
           unquote
+          unquote-splicing
           values
           vector-ref))
   (cond-expand

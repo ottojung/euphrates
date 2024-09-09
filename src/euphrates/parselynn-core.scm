@@ -74,7 +74,7 @@
 ;;;;  LR(1) driver
 ;;;
 
-  (define (lr-1-driver-code rules results-mode)
+  (define (lr-1-driver-code all-lexer-code rules results-mode)
     (cond
      ((equal? results-mode 'first) 'fine)
      ((equal? results-mode 'all)
@@ -176,11 +176,19 @@
 
        conflicts))
 
+    (define get-next-token-code
+      `((define get-next-token
+          (let () ,@all-lexer-code))))
+
     (define code
       (parameterize ((parselynn:core:conflict-handler/p (lambda _ 0)))
-        (parselynn:lr-1-compile/for-core table callback-alist)))
+        (parselynn:lr-1-compile/for-core
+         get-next-token-code
+         table callback-alist)))
 
-    code)
+    `(let ()
+       (lambda (actions)
+         ,@code)))
 
 
 ;;;
@@ -2076,7 +2084,6 @@
            gram/actions))))
 
 
-
   ;; Options
 
   (define driver-normalized-name->type-alist
@@ -2220,21 +2227,7 @@
     (define goto-table (build-goto-table))
     (define reduction-table (build-reduction-table gram/actions))
 
-    (define driver-code
-      (cond
-       ((lr-driver?) (lr-driver-code results-mode))
-       ((glr-driver?) (glr-driver-code results-mode))
-       ((lr-1-driver?) (lr-1-driver-code rules results-mode))
-       (else
-        (raisu-fmt
-         'logic-error "Expected either of ~a but got ~s somehow."
-         (apply
-          string-append
-          (list-intersperse
-           ", " (map ~s (map car driver-normalized-name->type-alist))))
-         driver-normalized-name))))
-
-    (define code
+    (define (legacy-code driver-code)
       `(let ()
          ,@common-definitions-code
          (define action-table (quote ,action-table))
@@ -2246,6 +2239,28 @@
              (define get-next-token
                (let () ,@all-lexer-code))
              ,@driver-code))))
+
+    (define code
+      (cond
+       ((lr-driver?)
+        (legacy-code
+         (lr-driver-code results-mode)))
+
+       ((glr-driver?)
+        (legacy-code
+         (glr-driver-code results-mode)))
+
+       ((lr-1-driver?)
+        (lr-1-driver-code all-lexer-code rules results-mode))
+
+       (else
+        (raisu-fmt
+         'logic-error "Expected either of ~a but got ~s somehow."
+         (apply
+          string-append
+          (list-intersperse
+           ", " (map ~s (map car driver-normalized-name->type-alist))))
+         driver-normalized-name))))
 
     (define _output
       (begin
