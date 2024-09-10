@@ -66,6 +66,12 @@
     (define (pop-state!)
       (stack-pop! state-stack))
 
+    (define (state-stack-peek)
+      (stack-peek state-stack))
+
+    (define (parse-stack-peek)
+      (stack-peek parse-stack))
+
     (define (process-accept)
       'ACCEPT)
 
@@ -86,7 +92,7 @@
         (loop (parselynn:lr-shift-action:target-id action)))
 
       (define (process-goto lhs)
-        (define togo-state (stack-peek state-stack))
+        (define togo-state (state-stack-peek))
 
         ;; Get the next state after this reduction.
         (define goto-state
@@ -161,5 +167,5 @@
       (loop-with-input state category source value))
 
     (if (equal? 'ACCEPT (loop initial-state))
-        (stack-peek parse-stack)
+        (parse-stack-peek)
         (do-reject))))
