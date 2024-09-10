@@ -67,7 +67,13 @@
           parselynn:lr-shift-action?))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu) raisu))
+  (import
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import (only (euphrates stringf) stringf))
+  (import (only (euphrates tilda-a) ~a))
   (import
     (only (euphrates with-output-stringified)
           with-output-stringified))

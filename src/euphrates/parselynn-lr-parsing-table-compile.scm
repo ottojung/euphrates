@@ -70,6 +70,42 @@
   (define states
     (parselynn:lr-parsing-table:state:keys table))
 
+  ;;
+  ;; This hashmap is used for deduplication of code that operates on the parse-stack.
+  ;;
+  (define parse-stack-code-dedup-hashmap
+    (make-hashmap))
+
+  (define parse-stack-code-dedup-stack
+    (stack-make))
+
+  (define (generate-parse-stack-function implementation)
+    (define existing
+      (hashmap-ref
+       parse-stack-code-dedup-hashmap
+       implementation #f))
+
+    (or existing
+        (let ()
+          (define newname
+            (string->symbol
+             (string-append
+              "parse-stack-"
+              (~a (length (stack->list parse-stack-code-dedup-stack))))))
+          (define full-function-definition
+            `(define (,newname)
+               ,@implementation))
+
+          (hashmap-set!
+           parse-stack-code-dedup-hashmap
+           implementation newname)
+
+          (stack-push!
+           parse-stack-code-dedup-stack
+           full-function-definition)
+
+          newname)))
+
   (define (compile-action-for-keystate state key)
     (define x
       (parselynn:lr-parsing-table:action:ref
@@ -110,7 +146,20 @@
              (compile-goto-for-lhs lhs)
              (generate-goto-function-name lhs)))
 
-         (define stack-code
+         (define parse-stack-code-implementation
+           `((push-parse!
+              (let ()
+                (define $0 (quote ,lhs))
+                ,@args-code
+                ,compiled))))
+
+         (define parse-stack-code-function
+           (generate-parse-stack-function parse-stack-code-implementation))
+
+         (define parse-stack-code
+           `((,parse-stack-code-function)))
+
+         (define state-stack-code
            (cond
             ((= 0 length-of-rhs)
              `((push-state! state)))
@@ -120,14 +169,8 @@
              `((state-discard-multiple! ,(- length-of-rhs 1))))))
 
          `((,key)
-           ;; TODO: optimize by factoring code below, and then literally check if any factored function duplicates syntantically.
-           (push-parse!
-            (let ()
-              (define $0 (quote ,lhs))
-              ,@args-code
-              ,compiled))
-
-           ,@stack-code
+           ,@parse-stack-code
+           ,@state-stack-code
            (,goto-function-name)))))
 
      ((parselynn:lr-accept-action? x)
@@ -242,7 +285,9 @@
       (parselynn:lr-parsing-table:goto:keys table))))
 
   (define shared-procedures
-    (map create-procedure-definition goto-code))
+    (append
+     (map create-procedure-definition goto-code)
+     (stack->list parse-stack-code-dedup-stack)))
 
   (define code
     (if (null? action-case-code)
