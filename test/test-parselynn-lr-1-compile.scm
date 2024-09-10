@@ -73,6 +73,7 @@
 ;;
 
 
+
 (let ()
   ;;
   ;; Empty grammar.
@@ -1933,6 +1934,75 @@
 
   (define expected
     `(E (T < (E (T x) + (E (T y))) >) + (E (T y) + (E (T < (E (T z) * (E (T y) + (E (T < (E (T y) + (E (T x))) >)))) >)))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Arithmetic expression grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T | T + E
+  ;; T -> n0 | n1 | n2 | n3 | n4 | n5 | n6 | n7 | n8 | n9
+  ;;
+
+  (define grammar
+    `((E (T) (T + E))
+      (T (n0) (n1) (n2) (n3) (n4) (n5) (n6) (n7) (n8) (n9))))
+
+  (define input
+    `(n0 + n1 + n2 + n3))
+
+  (define expected
+    `(E (T n0) + (E (T n1) + (E (T n2) + (E (T n3))))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Arithmetic expression grammar [3].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T | E + T
+  ;; T -> n0 | n1 | n2 | n3 | n4 | n5 | n6 | n7 | n8 | n9
+  ;;
+
+  (define grammar
+    `((E (T) (E + T))
+      (T (n0) (n1) (n2) (n3) (n4) (n5) (n6) (n7) (n8) (n9))))
+
+  (define input
+    `(n0 + n1 + n2 + n3))
+
+  (define expected
+    `(E (E (E (E (T n0)) + (T n1)) + (T n2)) + (T n3)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Arithmetic expression grammar [4].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T | T + E
+  ;; T -> n0 y0 | n1 y1 | n2 y2 | n3 y3 | n4 y4 | n5 y5 | n6 y6 | n7 y7 | n8 y8 | n9 y9
+  ;;
+
+  (define grammar
+    `((E (T) (T + E))
+      (T (n0 y0) (n1 y1) (n2 y2) (n3 y3) (n4 y4) (n5 y5) (n6 y6) (n7 y7) (n8 y8) (n9 y9))))
+
+  (define input
+    `(n0 y0 + n1 y1 + n2 y2 + n3 y3))
+
+  (define expected
+    `(E (T n0 y0) + (E (T n1 y1) + (E (T n2 y2) + (E (T n3 y3))))))
 
   (test-case grammar input expected))
 
