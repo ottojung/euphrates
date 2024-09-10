@@ -16,6 +16,12 @@
           (hashmap-set! compiled-table production callback)
           callback)))
 
+  (define (generate-goto-function-name lhs)
+    (string->symbol
+     (string-append
+      "process-goto-"
+      (symbol->string lhs))))
+
   (define conflict-handler
     (or (parselynn:core:conflict-handler/p)
         parselynn:core:conflict-handler/default))
@@ -97,6 +103,11 @@
              `(define ,arg (stack-pop! parse-stack)))
            (reverse (cdr arguments-list))))
 
+        (define goto-function-name
+          (begin
+            (compile-goto-for-lhs lhs)
+            (generate-goto-function-name lhs)))
+
         `((,key)
           (stack-push!
            parse-stack
@@ -107,7 +118,7 @@
 
           (stack-push! state-stack state)
           (stack-pop-multiple! state-stack ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
-          (process-goto (quote ,lhs)))))
+          (,goto-function-name))))
 
      ((parselynn:lr-accept-action? x)
       `((,key)
@@ -117,27 +128,6 @@
       (handle-conflict state key x)
       `((,key)
         (do-reject token)))
-
-     ((parselynn:lr-reject-action? x)
-      (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
-
-     (else
-      (raisu-fmt 'unknown-action-type "This action is not expected" x))))
-
-  (define (goto-column->string state key)
-    (define x
-      (parselynn:lr-parsing-table:goto:ref
-       table state key reject))
-
-    (cond
-     ((parselynn:lr-goto-action? x)
-      (let ()
-        (define new-state (parselynn:lr-goto-action:target-id x))
-        `((,key)
-          (loop-with-input ,new-state token category source value)))) ;; TODO: make the code size smaller by not passing all these arguments.
-
-     ((parselynn:lr-parse-conflict? x)
-      (handle-conflict state key x))
 
      ((parselynn:lr-reject-action? x)
       (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
@@ -157,33 +147,56 @@
         ,@single-case-code
         (else (do-reject token)))))
 
-  (define (goto->cases state)
-    (define goto
-      (parselynn:lr-parsing-table:goto:list table state))
+  (define (goto-column->string key state)
+    (define x
+      (parselynn:lr-parsing-table:goto:ref
+       table state key reject))
 
-    (define single-case-code
-      (map (comp (goto-column->string state)) goto))
+    (cond
+     ((parselynn:lr-goto-action? x)
+      (let ()
+        (define new-state (parselynn:lr-goto-action:target-id x))
+        `((,state)
+          (loop-with-input ,new-state token category source value)))) ;; TODO: make the code size smaller by not passing all these arguments.
 
-    ;; TODO: optimize: skip this state from the upper case if `single-case-code' is empty.
+     ((parselynn:lr-parse-conflict? x)
+      (handle-conflict state key x))
 
-    `((,state)
-      (case lhs
-        ,@single-case-code
-        (else (do-reject token)))))
+     ((parselynn:lr-reject-action? x)
+      `((,state)
+        (do-reject token))) ;; TODO: generate nothing if state is reject.
+
+     (else
+      (raisu-fmt 'unknown-action-type "This action is not expected" x))))
+
+  (define goto-procedures-code-hashmap
+    (make-hashmap))
+
+  (define (compile-goto-for-lhs lhs)
+    (or (hashmap-ref goto-procedures-code-hashmap lhs #f)
+        (let ()
+          (define name (generate-goto-function-name lhs))
+          (define new-cases (map (comp (goto-column->string lhs)) states))
+          (define new
+            `(define (,name)
+               (define togo-state (stack-peek state-stack))
+               (case togo-state ,@new-cases (else (do-reject token)))))
+          (hashmap-set! goto-procedures-code-hashmap lhs new)
+          new)))
 
   (define action-case-code
     (map actions->cases states))
 
-  (define goto-case-code
-    (map goto->cases states))
+  (define goto-code
+    (filter
+     identity
+     (map
+      compile-goto-for-lhs
+      (parselynn:lr-parsing-table:goto:keys table))))
 
   (define code
     `(begin
-       (define (process-goto lhs)
-         (define togo-state (stack-peek state-stack))
-         (case togo-state
-           ,@goto-case-code
-           (else (do-reject token))))
+       ,@goto-code
 
        (case state
          ,@action-case-code

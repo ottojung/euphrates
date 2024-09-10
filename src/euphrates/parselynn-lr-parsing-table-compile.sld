@@ -21,6 +21,7 @@
           hashmap-ref
           hashmap-set!
           make-hashmap))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates list-take-n) list-take-n))
   (import
@@ -48,7 +49,7 @@
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:list
           parselynn:lr-parsing-table:action:ref
-          parselynn:lr-parsing-table:goto:list
+          parselynn:lr-parsing-table:goto:keys
           parselynn:lr-parsing-table:goto:ref
           parselynn:lr-parsing-table:state:keys))
   (import
@@ -95,8 +96,12 @@
           reverse
           string->symbol
           string-append
+          symbol->string
           unquote
           unquote-splicing))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) filter)))
+    (else (import (only (srfi 1) filter))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
