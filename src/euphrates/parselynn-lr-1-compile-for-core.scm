@@ -64,19 +64,18 @@
       (define state-stack
         (stack-make))
 
-      ;; TODO: move down to make 'token a captured variable to reduce code size.
-      (define (do-reject token)
-        (if (equal? token parselynn:end-of-input)
-            (error-procedure
-             'end-of-input "Syntax error: unexpected end of input: ~s" token)
-            (error-procedure
-             'unexpected-token "Syntax error: unexpected token: ~s" token))
-        reject)
-
       (define (process-accept)
-        (stack-peek parse-stack))
+        'ACCEPT)
 
       (define (loop-with-input state token category source value)
+        (define (do-reject token)
+          (if (equal? token parselynn:end-of-input)
+              (error-procedure
+               'end-of-input "Syntax error: unexpected end of input: ~s" token)
+              (error-procedure
+               'unexpected-token "Syntax error: unexpected token: ~s" token))
+          reject)
+
         (define (process-shift action)
           (stack-push! state-stack state)
           (stack-push! parse-stack value)
@@ -107,4 +106,6 @@
         (define-values (token category source value) (get-input))
         (loop-with-input state token category source value))
 
-      (loop initial-state))))
+      (if (equal? 'ACCEPT (loop initial-state))
+          (stack-peek parse-stack)
+          reject))))

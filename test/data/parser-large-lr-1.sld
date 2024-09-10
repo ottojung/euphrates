@@ -643,25 +643,24 @@
                   (define error-procedure ___errorp)
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
-                  (define (do-reject token)
-                    (if (equal? token parselynn:end-of-input)
-                      (error-procedure
-                        'end-of-input
-                        "Syntax error: unexpected end of input: ~s"
-                        token)
-                      (error-procedure
-                        'unexpected-token
-                        "Syntax error: unexpected token: ~s"
-                        token))
-                    reject)
-                  (define (process-accept)
-                    (stack-peek parse-stack))
+                  (define (process-accept) 'ACCEPT)
                   (define (loop-with-input
                            state
                            token
                            category
                            source
                            value)
+                    (define (do-reject token)
+                      (if (equal? token parselynn:end-of-input)
+                        (error-procedure
+                          'end-of-input
+                          "Syntax error: unexpected end of input: ~s"
+                          token)
+                        (error-procedure
+                          'unexpected-token
+                          "Syntax error: unexpected token: ~s"
+                          token))
+                      reject)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -35272,7 +35271,9 @@
                       category
                       source
                       value))
-                  (loop initial-state)))))
+                  (if (equal? 'ACCEPT (loop initial-state))
+                    (stack-peek parse-stack)
+                    reject)))))
         (i3bpqtlnzqjz8ileyrpt
           ,((let ()
               (lambda (actions)
@@ -35299,25 +35300,24 @@
                   (define error-procedure ___errorp)
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
-                  (define (do-reject token)
-                    (if (equal? token parselynn:end-of-input)
-                      (error-procedure
-                        'end-of-input
-                        "Syntax error: unexpected end of input: ~s"
-                        token)
-                      (error-procedure
-                        'unexpected-token
-                        "Syntax error: unexpected token: ~s"
-                        token))
-                    reject)
-                  (define (process-accept)
-                    (stack-peek parse-stack))
+                  (define (process-accept) 'ACCEPT)
                   (define (loop-with-input
                            state
                            token
                            category
                            source
                            value)
+                    (define (do-reject token)
+                      (if (equal? token parselynn:end-of-input)
+                        (error-procedure
+                          'end-of-input
+                          "Syntax error: unexpected end of input: ~s"
+                          token)
+                        (error-procedure
+                          'unexpected-token
+                          "Syntax error: unexpected token: ~s"
+                          token))
+                      reject)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -69928,6 +69928,8 @@
                       category
                       source
                       value))
-                  (loop initial-state))))
+                  (if (equal? 'ACCEPT (loop initial-state))
+                    (stack-peek parse-stack)
+                    reject))))
             #()))))))
 
