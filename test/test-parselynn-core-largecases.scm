@@ -115,8 +115,9 @@
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
+        (expr     (term add expr) : (,save $1 $2 $3)
                   (term) : (,save $1))
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
@@ -135,8 +136,9 @@
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
+        (expr     (term add expr) : (,save $1 $2 $3)
                   (term) : (,save $1))
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
@@ -157,8 +159,9 @@
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
+        (expr     (term add expr) : (,save $1 $2 $3)
                   (term) : (,save $1))
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
@@ -180,8 +183,9 @@
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
+        (expr     (term add expr) : (,save $1 $2 $3)
                   (term) : (,save $1))
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
@@ -202,8 +206,9 @@
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
-        (expr     (expr add expr) : (,save $1 $2 $3)
+        (expr     (term add expr) : (,save $1 $2 $3)
                   (term) : (,save $1))
         (add      (+) : (,save $1))
         (term     (NUM) : (,save $1))))))
@@ -232,7 +237,7 @@
          (driver: glr)
          (results: all)
          (rules:
-          (expr     (expr add expr) : (,save $1 $2 $3)
+          (expr     (term add expr) : (,save $1 $2 $3)
                     (term) : (,save $1))
           (add      (+) : (,save $1))
           (term     (NUM) : (,save $1)))))))
@@ -254,8 +259,9 @@
   (define parser
     (parselynn:core
      `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+       (driver: (LR 1))
        (rules:
-        (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+        (expr     (term add expr) : (,save 'expr $1 $2 $3)
                   (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
                   (term) : (,save 'expr $1))
         (add      (+) : (,save 'add $1))
@@ -279,7 +285,7 @@
          (driver: glr)
          (results: all)
          (rules:
-          (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+          (expr     (term add expr) : (,save 'expr $1 $2 $3)
                     (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
                     (term) : (,save 'expr $1))
           (add      (+) : (,save 'add $1))
@@ -310,8 +316,9 @@
     (define parser
       (parselynn:core
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (driver: (LR 1))
          (rules:
-          (expr     (expr add expr) : (,save $1 $2 $3)
+          (expr     (term add expr) : (,save $1 $2 $3)
                     (term) : (,save $1))
           (add      (+) : (,save $1))
           (term     (NUM) : (,save $1))))))
@@ -340,7 +347,7 @@
            (driver: glr)
            (results: all)
            (rules:
-            (expr     (expr add expr) : (,save $1 $2 $3)
+            (expr     (term add expr) : (,save $1 $2 $3)
                       (term) : (,save $1))
             (add      (+) : (,save $1))
             (term     (NUM) : (,save $1)))))))
@@ -367,8 +374,9 @@
     (define parser
       (parselynn:core
        `((tokens: ID NUM = + - * / LPAREN RPAREN SPACE NEWLINE COMMA)
+         (driver: (LR 1))
          (rules:
-          (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+          (expr     (term add expr) : (,save 'expr $1 $2 $3)
                     (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
                     (term) : (,save 'expr $1))
           (add      (+) : (,save 'add $1))
@@ -393,7 +401,7 @@
            (driver: glr)
            (results: all)
            (rules:
-            (expr     (expr add expr) : (,save 'expr $1 $2 $3)
+            (expr     (term add expr) : (,save 'expr $1 $2 $3)
                       (LPAREN expr RPAREN) : (,save 'expr $1 $2 $3)
                       (term) : (,save 'expr $1))
             (add      (+) : (,save 'add $1))
