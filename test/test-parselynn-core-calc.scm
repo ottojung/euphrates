@@ -65,11 +65,9 @@
      ;; ;; output the LALR table to calc.out
      ;; (parameterize ((parselynn:core:output-table-port/p (open-output-file "/tmp/calc.out"))) ...)
 
-     (tokens:
-      ID NUM = LPAREN RPAREN NEWLINE COMMA
-      (left: + -)
-      (left: * /)
-      (nonassoc: uminus))
+     (driver: (LR 1))
+
+     (tokens: ID NUM = LPAREN RPAREN NEWLINE COMMA + - * /)
 
      (rules:
       (lines    (lines line) : (,display-result $2)
@@ -84,12 +82,15 @@
 
       (assign   (ID = expr)             : (,add-binding $1 $3))
 
-      (expr     (expr + expr)           : (+ $1 $3)
-                (expr - expr)           : (- $1 $3)
-                (expr * expr)           : (* $1 $3)
-                (expr / expr)           : (/ $1 $3)
-                (- expr (prec: uminus)) : (- $2)
-                (ID)                    : (,get-binding $1)
+      (expr     (term + expr)           : (+ $1 $3)
+                (term - expr)           : (- $1 $3)
+                (term * expr)           : (* $1 $3)
+                (term / expr)           : (/ $1 $3)
+                ;; (- expr)                : (- $2)
+                (term)                  : $1
+                )
+
+      (term     (ID)                    : (,get-binding $1)
                 (ID LPAREN args RPAREN) : (,invoke-proc $1 $3)
                 (NUM)                   : $1
                 (LPAREN expr RPAREN)    : $2)
