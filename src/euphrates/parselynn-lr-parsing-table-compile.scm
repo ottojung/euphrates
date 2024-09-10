@@ -188,6 +188,7 @@
              append
              (map (comp (compile-goto-for-keystate lhs)) states)))
           (define new
+            ;; TODO: optimize by literally checking if any function duplicates syntantically.
             `(define (,name)
                (define togo-state (stack-peek state-stack))
                (case togo-state ,@new-cases)))
