@@ -60,6 +60,12 @@
     (define (push-state! x)
       (stack-push! state-stack x))
 
+    (define (pop-parse! n)
+      (stack-pop-multiple! parse-stack n))
+
+    (define (pop-state!)
+      (stack-pop! state-stack))
+
     (define (process-accept)
       'ACCEPT)
 
@@ -105,13 +111,13 @@
         ;; Construct a new AST node.
         (define new-node
           (apply compiled
-                 (cons lhs (stack-pop-multiple! parse-stack (length rhs)))))
+                 (cons lhs (pop-parse! (length rhs)))))
 
         ;; Push the LHS and new node onto the stack.
         (push-parse! new-node)
 
         (push-state! state)
-        (for-each (lambda _ (stack-pop! state-stack)) rhs)
+        (for-each (lambda _ (pop-state!)) rhs)
         (process-goto lhs))
 
       (define action
