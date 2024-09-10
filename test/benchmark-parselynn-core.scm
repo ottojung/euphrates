@@ -98,7 +98,7 @@
          ((equal? driver "glr")
           (parselynn:core:deserialize/lists parser-repeating-glr))
          ((equal? driver "(LR 1)")
-          (raisu 'lr-1-does-not-support-loading-yet)) ;; TODO: implement it.
+          (parselynn:core:deserialize/lists parser-repeating-lr-1))
          (else
           (raisu 'bad-driver-type driver)))
 
@@ -139,7 +139,7 @@
          ((equal? driver "glr")
           (parselynn:core:deserialize/lists parser-branching-glr))
          ((equal? driver "(LR 1)")
-          (raisu 'lr-1-does-not-support-loading-yet)) ;; TODO: implement it.
+          (parselynn:core:deserialize/lists parser-branching-lr-1))
          (else
           (raisu 'bad-driver-type driver)))
 
@@ -288,3 +288,28 @@
  :name "benchmark-parselynn-18"
  :inputs ((driver "(LR 1)") (load? #f) (seq-len 41) (n-runs 3000))
  (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-19"
+ :inputs ((driver "(LR 1)") (load? #t) (seq-len 300000) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-20"
+ :inputs ((driver "(LR 1)") (load? #t) (tree-depth 50000) (n-runs 1))
+ (brackets-template driver load? tree-depth))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-21"
+ :inputs ((driver "(LR 1)") (load? #t) (seq-len 41) (n-runs 3000))
+ (repeating-template driver load? seq-len n-runs))
+
+
+(with-benchmark/simple
+ :name "benchmark-parselynn-22"
+ :inputs ((driver "(LR 1)") (load? #t) (seq-len 30000000) (n-runs 1))
+ (repeating-template driver load? seq-len n-runs))
+
