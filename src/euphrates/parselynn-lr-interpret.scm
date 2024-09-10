@@ -58,7 +58,7 @@
       'ACCEPT)
 
     (define (loop-with-input state token category source value)
-      (define (do-reject token)
+      (define (do-reject)
         (if (equal? token parselynn:end-of-input)
             (error-procedure
              'end-of-input "Syntax error: unexpected end of input: ~s" token)
@@ -122,7 +122,7 @@
 
        (else
         (abort action state category source value)
-        (do-reject token))))
+        (do-reject))))
 
     (define (get-input)
       (define token
