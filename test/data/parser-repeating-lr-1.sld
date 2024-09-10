@@ -147,7 +147,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))
                            ((*eoi*)
                             (push-parse!
@@ -155,7 +154,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))))
                         ((2)
                          (case category
@@ -166,7 +164,6 @@
                                 (define $0 'expr)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-expr))))
                         ((3)
                          (case category
@@ -176,7 +173,6 @@
                                 (define $0 'add)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-add))))
                         ((4) (case category ((NUM) (process-shift 1))))
                         ((5)
@@ -335,7 +331,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))
                            ((*eoi*)
                             (push-parse!
@@ -343,7 +338,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))))
                         ((2)
                          (case category
@@ -354,7 +348,6 @@
                                 (define $0 'expr)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-expr))))
                         ((3)
                          (case category
@@ -364,7 +357,6 @@
                                 (define $0 'add)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-add))))
                         ((4) (case category ((NUM) (process-shift 1))))
                         ((5)

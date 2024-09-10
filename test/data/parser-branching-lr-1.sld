@@ -170,7 +170,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))
                            ((*eoi*)
                             (push-parse!
@@ -178,7 +177,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))))
                         ((3)
                          (case category
@@ -189,7 +187,6 @@
                                 (define $0 'expr)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-expr))))
                         ((4)
                          (case category
@@ -199,7 +196,6 @@
                                 (define $0 'add)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-add))
                            ((LPAREN)
                             (push-parse!
@@ -207,7 +203,6 @@
                                 (define $0 'add)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-add))))
                         ((5)
                          (case category
@@ -237,7 +232,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))
                            ((+)
                             (push-parse!
@@ -245,7 +239,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))))
                         ((9)
                          (case category ((RPAREN) (process-shift 13))))
@@ -258,7 +251,6 @@
                                 (define $0 'expr)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-expr))))
                         ((11)
                          (case category
@@ -461,7 +453,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))
                            ((*eoi*)
                             (push-parse!
@@ -469,7 +460,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))))
                         ((3)
                          (case category
@@ -480,7 +470,6 @@
                                 (define $0 'expr)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-expr))))
                         ((4)
                          (case category
@@ -490,7 +479,6 @@
                                 (define $0 'add)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-add))
                            ((LPAREN)
                             (push-parse!
@@ -498,7 +486,6 @@
                                 (define $0 'add)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-add))))
                         ((5)
                          (case category
@@ -528,7 +515,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))
                            ((+)
                             (push-parse!
@@ -536,7 +522,6 @@
                                 (define $0 'term)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-term))))
                         ((9)
                          (case category ((RPAREN) (process-shift 13))))
@@ -549,7 +534,6 @@
                                 (define $0 'expr)
                                 (define $1 (parse-pop!))
                                 #t))
-                            (state-discard-multiple! 0)
                             (process-goto-expr))))
                         ((11)
                          (case category

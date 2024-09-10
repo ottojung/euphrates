@@ -111,9 +111,13 @@
              (generate-goto-function-name lhs)))
 
          (define stack-code
-           (if (= 0 length-of-rhs)
-               `((push-state! state))
-               `((state-discard-multiple! ,(- length-of-rhs 1)))))
+           (cond
+            ((= 0 length-of-rhs)
+             `((push-state! state)))
+            ((= 1 length-of-rhs)
+             '())
+            (else
+             `((state-discard-multiple! ,(- length-of-rhs 1))))))
 
          `((,key)
            ;; TODO: optimize by factoring code below, and then literally check if any factored function duplicates syntantically.
