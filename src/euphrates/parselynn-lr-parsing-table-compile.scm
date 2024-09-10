@@ -148,10 +148,11 @@
        (map (comp (compile-action-for-keystate state)) actions)))
 
     (if (null? single-case-code)
-        `((,state) #f) ;; TODO: remove this code completely.
-        `((,state)
-          (case category
-            ,@single-case-code))))
+        '()
+        (list
+         `((,state)
+           (case category
+             ,@single-case-code)))))
 
   (define (compile-goto-for-keystate key state)
     (define x
@@ -194,7 +195,9 @@
           new)))
 
   (define action-case-code
-    (map actions->cases states))
+    (apply
+     append
+     (map actions->cases states)))
 
   (define goto-code
     (filter
@@ -204,15 +207,17 @@
       (parselynn:lr-parsing-table:goto:keys table))))
 
   (define code
-    `(let inner-loop-with-input ((state state))
-       (define (process-shift action)
-         (stack-push! state-stack state)
-         (stack-push! parse-stack value)
-         (loop (parselynn:lr-shift-action:target-id action)))
+    (if (null? action-case-code)
+        'reject
+        `(let inner-loop-with-input ((state state))
+           (define (process-shift action)
+             (stack-push! state-stack state)
+             (stack-push! parse-stack value)
+             (loop (parselynn:lr-shift-action:target-id action)))
 
-       ,@goto-code
+           ,@goto-code
 
-       (case state
-         ,@action-case-code)))
+           (case state
+             ,@action-case-code))))
 
   code)
