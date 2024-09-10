@@ -77,58 +77,60 @@
 
     (cond
      ((parselynn:lr-shift-action? x)
-      (let ()
-        (define target-id
-          (parselynn:lr-shift-action:target-id x))
+      (list
+       (let ()
+         (define target-id
+           (parselynn:lr-shift-action:target-id x))
 
-        `((,key)
-          (process-shift ,target-id))))
+         `((,key)
+           (process-shift ,target-id)))))
 
      ((parselynn:lr-reduce-action? x)
-      (let ()
-        (define production (parselynn:lr-reduce-action:production x))
-        (define lhs (bnf-alist:production:lhs production))
-        (define rhs (bnf-alist:production:rhs production))
-        (define length-of-rhs (length rhs))
+      (list
+       (let ()
+         (define production (parselynn:lr-reduce-action:production x))
+         (define lhs (bnf-alist:production:lhs production))
+         (define rhs (bnf-alist:production:rhs production))
+         (define length-of-rhs (length rhs))
 
-        (define compiled
-          (compile-reduction production))
+         (define compiled
+           (compile-reduction production))
 
-        (define arguments-list
-          (bnf-alist:production:get-argument-bindings production))
+         (define arguments-list
+           (bnf-alist:production:get-argument-bindings production))
 
-        (define args-code
-          (map
-           (lambda (arg)
-             `(define ,arg (stack-pop! parse-stack)))
-           (reverse (cdr arguments-list))))
+         (define args-code
+           (map
+            (lambda (arg)
+              `(define ,arg (stack-pop! parse-stack)))
+            (reverse (cdr arguments-list))))
 
-        (define goto-function-name
-          (begin
-            (compile-goto-for-lhs lhs)
-            (generate-goto-function-name lhs)))
+         (define goto-function-name
+           (begin
+             (compile-goto-for-lhs lhs)
+             (generate-goto-function-name lhs)))
 
-        `((,key)
-          ;; TODO: optimize by factoring code below, and then literally check if any factored function duplicates syntantically.
-          (stack-push!
-           parse-stack
-           (let ()
-             (define $0 (quote ,lhs))
-             ,@args-code
-             ,compiled))
+         `((,key)
+           ;; TODO: optimize by factoring code below, and then literally check if any factored function duplicates syntantically.
+           (stack-push!
+            parse-stack
+            (let ()
+              (define $0 (quote ,lhs))
+              ,@args-code
+              ,compiled))
 
-          (stack-push! state-stack state)
-          (stack-pop-multiple! state-stack ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
-          (,goto-function-name))))
+           (stack-push! state-stack state)
+           (stack-pop-multiple! state-stack ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
+           (,goto-function-name)))))
 
      ((parselynn:lr-accept-action? x)
-      `((,key)
-        (process-accept)))
+      (list
+       `((,key)
+         (process-accept))))
 
      ((parselynn:lr-parse-conflict? x)
       (handle-conflict state key x)
-      `((,key)
-        #f)) ;; TODO: remove this completely.
+      '())
 
      ((parselynn:lr-reject-action? x)
       (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
@@ -141,7 +143,9 @@
       (parselynn:lr-parsing-table:action:list table state))
 
     (define single-case-code
-      (map (comp (compile-action-for-keystate state)) actions))
+      (apply
+       append
+       (map (comp (compile-action-for-keystate state)) actions)))
 
     (if (null? single-case-code)
         `((,state) #f) ;; TODO: remove this code completely.
