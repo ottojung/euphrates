@@ -147,11 +147,9 @@
              (generate-goto-function-name lhs)))
 
          (define parse-stack-code-implementation
-           `((push-parse!
-              (let ()
-                ,@args-code
-                (define $0 (quote ,lhs))
-                ,compiled))))
+           `(,@args-code
+             (define $0 (quote ,lhs))
+             (push-parse! ,compiled)))
 
          (define parse-stack-code-function
            (generate-parse-stack-function parse-stack-code-implementation))
