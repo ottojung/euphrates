@@ -175,23 +175,50 @@
      (else
       (raisu-fmt 'unknown-action-type "This action is not expected" x))))
 
+  (define (recompile-goto-for-lhs lhs)
+    (define new-cases
+      (apply
+       append
+       (map (comp (compile-goto-for-keystate lhs)) states)))
+
+    `((define togo-state (state-stack-peek))
+      (case togo-state ,@new-cases)))
+
+  (define code-name-hashmap
+    (make-hashmap))
+
+  (define (register-code-for-dedup code suggested-name)
+    (define existing (hashmap-ref code-name-hashmap code #f))
+    (define (make-new-name)
+      (string->symbol
+       (string-append
+        "dup-"
+        (number->string
+         (hashmap-count code-name-hashmap)))))
+    (define name
+      (if existing (make-new-name) suggested-name))
+    (hashmap-set! code-name-hashmap code name))
+
+  (define (get-code-name code)
+    (hashmap-ref
+     code-name-hashmap code
+     (raisu 'impossible:must-have-code code)))
+
+  (define (create-procedure-definition code)
+    (define name (get-code-name code))
+    `(define (,name) ,@code))
+
   (define goto-procedures-code-hashmap
     (make-hashmap))
 
   (define (compile-goto-for-lhs lhs)
     (or (hashmap-ref goto-procedures-code-hashmap lhs #f)
         (let ()
+          ;; TODO: optimize by literally checking if any function duplicates syntantically.
+          (define new (recompile-goto-for-lhs lhs))
           (define name (generate-goto-function-name lhs))
-          (define new-cases
-            (apply
-             append
-             (map (comp (compile-goto-for-keystate lhs)) states)))
-          (define new
-            ;; TODO: optimize by literally checking if any function duplicates syntantically.
-            `(define (,name)
-               (define togo-state (state-stack-peek))
-               (case togo-state ,@new-cases)))
           (hashmap-set! goto-procedures-code-hashmap lhs new)
+          (register-code-for-dedup new name)
           new)))
 
   (define action-case-code
@@ -206,6 +233,9 @@
       compile-goto-for-lhs
       (parselynn:lr-parsing-table:goto:keys table))))
 
+  (define shared-procedures
+    (map create-procedure-definition goto-code))
+
   (define code
     (if (null? action-case-code)
         'reject
@@ -215,7 +245,7 @@
              (push-parse! value)
              (loop (parselynn:lr-shift-action:target-id action)))
 
-           ,@goto-code
+           ,@shared-procedures
 
            (case state
              ,@action-case-code))))

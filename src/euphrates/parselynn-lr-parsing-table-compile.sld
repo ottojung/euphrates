@@ -18,6 +18,7 @@
     (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates hashmap)
+          hashmap-count
           hashmap-ref
           hashmap-set!
           make-hashmap))
@@ -65,6 +66,7 @@
           parselynn:lr-shift-action:target-id
           parselynn:lr-shift-action?))
   (import (only (euphrates raisu-fmt) raisu-fmt))
+  (import (only (euphrates raisu) raisu))
   (import (only (euphrates stringf) stringf))
   (import
     (only (euphrates with-output-stringified)
@@ -87,6 +89,7 @@
           list
           map
           null?
+          number->string
           or
           quasiquote
           quote
