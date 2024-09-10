@@ -10,7 +10,7 @@
      parsing-table callback-alist))
 
   (define initial-stack-capacity
-    16)
+    1)
 
   `(
 
