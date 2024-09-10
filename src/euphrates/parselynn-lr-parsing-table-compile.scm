@@ -160,7 +160,7 @@
         (define new-state (parselynn:lr-goto-action:target-id x))
         (list
          `((,state)
-           (loop-with-input ,new-state category source value))))) ;; TODO: make the code size smaller by not passing all these arguments.
+           (inner-loop-with-input ,new-state)))))
 
      ((parselynn:lr-parse-conflict? x)
       (handle-conflict state key x))
@@ -200,7 +200,12 @@
       (parselynn:lr-parsing-table:goto:keys table))))
 
   (define code
-    `(begin
+    `(let inner-loop-with-input ((state state))
+       (define (process-shift action)
+         (stack-push! state-stack state)
+         (stack-push! parse-stack value)
+         (loop (parselynn:lr-shift-action:target-id action)))
+
        ,@goto-code
 
        (case state

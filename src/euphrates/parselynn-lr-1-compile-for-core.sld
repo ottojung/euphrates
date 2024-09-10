@@ -26,10 +26,7 @@
           parselynn:token:source
           parselynn:token:value))
   (import
-    (only (euphrates stack)
-          stack-make
-          stack-peek
-          stack-push!))
+    (only (euphrates stack) stack-make stack-peek))
   (import
     (only (scheme base)
           _

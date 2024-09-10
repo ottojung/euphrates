@@ -78,11 +78,6 @@
         reject)
 
       (define (loop-with-input state category source value)
-        (define (process-shift action)
-          (stack-push! state-stack state)
-          (stack-push! parse-stack value)
-          (loop (parselynn:lr-shift-action:target-id action)))
-
         ,table-based-code)
 
       (define (get-input)
