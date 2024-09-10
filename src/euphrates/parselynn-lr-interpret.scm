@@ -64,7 +64,7 @@
              'end-of-input "Syntax error: unexpected end of input: ~s" token)
             (error-procedure
              'unexpected-token "Syntax error: unexpected token: ~s" token))
-        reject)
+        #f)
 
       (define (process-shift action)
         (stack-push! state-stack state)
