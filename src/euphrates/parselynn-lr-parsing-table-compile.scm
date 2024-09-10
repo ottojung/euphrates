@@ -109,6 +109,7 @@
             (generate-goto-function-name lhs)))
 
         `((,key)
+          ;; TODO: optimize by factoring code below, and then literally check if any factored function duplicates syntantically.
           (stack-push!
            parse-stack
            (let ()
