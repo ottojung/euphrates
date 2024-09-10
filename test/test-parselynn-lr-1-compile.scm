@@ -45,11 +45,7 @@
              (parselynn:lr-1-compile table callback-alist))
 
            (define evaluated
-             (eval compiled
-                   (environment
-                    '(scheme base)
-                    '(euphrates stack)
-                    )))
+             (eval compiled parselynn:default-compilation-environment))
 
            (define input-iterator2
              (let ()

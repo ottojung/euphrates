@@ -11,6 +11,10 @@
     (only (euphrates list-to-iterator)
           list->iterator))
   (import
+    (only (euphrates
+            parselynn-default-compilation-environment)
+          parselynn:default-compilation-environment))
+  (import
     (only (euphrates parselynn-end-of-input)
           parselynn:end-of-input))
   (import
@@ -63,7 +67,7 @@
           unquote
           values
           vector))
-  (import (only (scheme eval) environment eval))
+  (import (only (scheme eval) eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
