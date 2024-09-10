@@ -35,13 +35,16 @@
           if
           lambda
           let
+          list
+          map
           newline
           parameterize
           quasiquote
           quote
           string->symbol
           unless
-          unquote))
+          unquote
+          unquote-splicing))
   (import
     (only (scheme file)
           call-with-input-file
