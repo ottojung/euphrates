@@ -620,7 +620,7 @@
         (wgq4fdim7f2kx3zj610r
           ,'(let ()
               (lambda (actions)
-                (define (stack-make) (make-vector 1))
+                (define (stack-make) (make-vector 16))
                 (define (parselynn:lr-shift-action:target-id x)
                   x)
                 (define (parselynn:token:category x)
@@ -31700,7 +31700,7 @@
         (i3bpqtlnzqjz8ileyrpt
           ,((let ()
               (lambda (actions)
-                (define (stack-make) (make-vector 1))
+                (define (stack-make) (make-vector 16))
                 (define (parselynn:lr-shift-action:target-id x)
                   x)
                 (define (parselynn:token:category x)
