@@ -54,6 +54,12 @@
     (define state-stack
       (stack-make))
 
+    (define (push-parse! x)
+      (stack-push! parse-stack x))
+
+    (define (push-state! x)
+      (stack-push! state-stack x))
+
     (define (process-accept)
       'ACCEPT)
 
@@ -69,8 +75,8 @@
 
     (define (loop-with-input state category source value)
       (define (process-shift action)
-        (stack-push! state-stack state)
-        (stack-push! parse-stack value)
+        (push-state! state)
+        (push-parse! value)
         (loop (parselynn:lr-shift-action:target-id action)))
 
       (define (process-goto lhs)
@@ -102,9 +108,9 @@
                  (cons lhs (stack-pop-multiple! parse-stack (length rhs)))))
 
         ;; Push the LHS and new node onto the stack.
-        (stack-push! parse-stack new-node)
+        (push-parse! new-node)
 
-        (stack-push! state-stack state)
+        (push-state! state)
         (for-each (lambda _ (stack-pop! state-stack)) rhs)
         (process-goto lhs))
 

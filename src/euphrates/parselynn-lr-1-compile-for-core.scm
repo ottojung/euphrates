@@ -64,6 +64,12 @@
       (define state-stack
         (stack-make))
 
+      (define (push-parse! x)
+        (stack-push! parse-stack x))
+
+      (define (push-state! x)
+        (stack-push! state-stack x))
+
       (define (process-accept)
         'ACCEPT)
 

@@ -119,7 +119,7 @@
               ,@args-code
               ,compiled))
 
-           (stack-push! state-stack state)
+           (push-state! state)
            (stack-pop-multiple! state-stack ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
            (,goto-function-name)))))
 
@@ -212,8 +212,8 @@
         'reject
         `(let inner-loop-with-input ((state state))
            (define (process-shift action)
-             (stack-push! state-stack state)
-             (stack-push! parse-stack value)
+             (push-state! state)
+             (push-parse! value)
              (loop (parselynn:lr-shift-action:target-id action)))
 
            ,@goto-code
