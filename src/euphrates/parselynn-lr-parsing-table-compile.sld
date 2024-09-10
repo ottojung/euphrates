@@ -77,6 +77,7 @@
           with-output-stringified))
   (import
     (only (scheme base)
+          append
           apply
           begin
           case

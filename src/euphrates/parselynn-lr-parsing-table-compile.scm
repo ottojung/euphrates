@@ -156,15 +156,15 @@
      ((parselynn:lr-goto-action? x)
       (let ()
         (define new-state (parselynn:lr-goto-action:target-id x))
-        `((,state)
-          (loop-with-input ,new-state token category source value)))) ;; TODO: make the code size smaller by not passing all these arguments.
+        (list
+         `((,state)
+           (loop-with-input ,new-state token category source value))))) ;; TODO: make the code size smaller by not passing all these arguments.
 
      ((parselynn:lr-parse-conflict? x)
       (handle-conflict state key x))
 
      ((parselynn:lr-reject-action? x)
-      `((,state)
-        (do-reject token))) ;; TODO: generate nothing if state is reject.
+      '()) ;; Handled by upper reject.
 
      (else
       (raisu-fmt 'unknown-action-type "This action is not expected" x))))
@@ -176,7 +176,10 @@
     (or (hashmap-ref goto-procedures-code-hashmap lhs #f)
         (let ()
           (define name (generate-goto-function-name lhs))
-          (define new-cases (map (comp (compile-goto-for-keystate lhs)) states))
+          (define new-cases
+            (apply
+             append
+             (map (comp (compile-goto-for-keystate lhs)) states)))
           (define new
             `(define (,name)
                (define togo-state (stack-peek state-stack))
