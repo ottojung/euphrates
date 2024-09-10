@@ -67,7 +67,7 @@
                            source
                            value)
                     (define (do-reject token)
-                      (if (equal? token parselynn:end-of-input)
+                      (if (equal? category parselynn:end-of-input)
                         (error-procedure
                           'end-of-input
                           "Syntax error: unexpected end of input: ~s"
@@ -374,7 +374,7 @@
                            source
                            value)
                     (define (do-reject token)
-                      (if (equal? token parselynn:end-of-input)
+                      (if (equal? category parselynn:end-of-input)
                         (error-procedure
                           'end-of-input
                           "Syntax error: unexpected end of input: ~s"
