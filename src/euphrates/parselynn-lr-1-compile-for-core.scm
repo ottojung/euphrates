@@ -9,12 +9,18 @@
     (parselynn:lr-parsing-table:compile
      parsing-table callback-alist))
 
+  (define initial-stack-capacity
+    16)
+
   `(
 
     ;;;;;;;;;;;;;;;;;;;
     ;;
     ;; Library.
     ;;
+
+    (define (stack-make)
+      (make-vector ,initial-stack-capacity))
 
     (define (parselynn:lr-shift-action:target-id x)
       x)
@@ -64,11 +70,48 @@
       (define state-stack
         (stack-make))
 
+      (define parse-stack-capacity (vector-length parse-stack))
+      (define parse-stack-size 0)
       (define (push-parse! x)
-        (stack-push! parse-stack x))
+        (if (< parse-stack-size parse-stack-capacity)
+            (begin
+              (vector-set! parse-stack parse-stack-size x)
+              (set! parse-stack-size (+ 1 parse-stack-size)))
+            (begin
+              (set! parse-stack-capacity (* 2 parse-stack-capacity))
+              (let ((parse-stack-new (make-vector parse-stack-capacity)))
+                (vector-copy! parse-stack-new 0 parse-stack 0 parse-stack-size)
+                (set! parse-stack parse-stack-new))
+              (vector-set! parse-stack parse-stack-size x)
+              (set! parse-stack-size (+ 1 parse-stack-size)))))
 
+      (define state-stack-capacity (vector-length state-stack))
+      (define state-stack-size 0)
       (define (push-state! x)
-        (stack-push! state-stack x))
+        (if (< state-stack-size state-stack-capacity)
+            (begin
+              (vector-set! state-stack state-stack-size x)
+              (set! state-stack-size (+ 1 state-stack-size)))
+            (begin
+              (set! state-stack-capacity (* 2 state-stack-capacity))
+              (let ((state-stack-new (make-vector state-stack-capacity)))
+                (vector-copy! state-stack-new 0 state-stack 0 state-stack-size)
+                (set! state-stack state-stack-new))
+              (vector-set! state-stack state-stack-size x)
+              (set! state-stack-size (+ 1 state-stack-size)))))
+
+      (define (state-stack-peek)
+        (vector-ref state-stack (- state-stack-size 1)))
+
+      (define (parse-stack-peek)
+        (vector-ref parse-stack (- parse-stack-size 1)))
+
+      (define (parse-pop!)
+        (set! parse-stack-size (- parse-stack-size 1))
+        (vector-ref parse-stack parse-stack-size))
+
+      (define (state-discard-multiple! n)
+        (set! state-stack-size (- state-stack-size n)))
 
       (define (process-accept)
         'ACCEPT)
@@ -110,5 +153,5 @@
         (loop-with-input state category source value))
 
       (if (equal? 'ACCEPT (loop initial-state))
-          (stack-peek parse-stack)
+          (parse-stack-peek)
           (do-reject)))))

@@ -28,6 +28,7 @@
         (wgq4fdim7f2kx3zj610r
           ,'(let ()
               (lambda (actions)
+                (define (stack-make) (make-vector 16))
                 (define (parselynn:lr-shift-action:target-id x)
                   x)
                 (define (parselynn:token:category x)
@@ -51,10 +52,59 @@
                   (define error-procedure ___errorp)
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
+                  (define parse-stack-capacity
+                    (vector-length parse-stack))
+                  (define parse-stack-size 0)
                   (define (push-parse! x)
-                    (stack-push! parse-stack x))
+                    (if (< parse-stack-size parse-stack-capacity)
+                      (begin
+                        (vector-set! parse-stack parse-stack-size x)
+                        (set! parse-stack-size (+ 1 parse-stack-size)))
+                      (begin
+                        (set! parse-stack-capacity
+                          (* 2 parse-stack-capacity))
+                        (let ((parse-stack-new
+                                (make-vector parse-stack-capacity)))
+                          (vector-copy!
+                            parse-stack-new
+                            0
+                            parse-stack
+                            0
+                            parse-stack-size)
+                          (set! parse-stack parse-stack-new))
+                        (vector-set! parse-stack parse-stack-size x)
+                        (set! parse-stack-size (+ 1 parse-stack-size)))))
+                  (define state-stack-capacity
+                    (vector-length state-stack))
+                  (define state-stack-size 0)
                   (define (push-state! x)
-                    (stack-push! state-stack x))
+                    (if (< state-stack-size state-stack-capacity)
+                      (begin
+                        (vector-set! state-stack state-stack-size x)
+                        (set! state-stack-size (+ 1 state-stack-size)))
+                      (begin
+                        (set! state-stack-capacity
+                          (* 2 state-stack-capacity))
+                        (let ((state-stack-new
+                                (make-vector state-stack-capacity)))
+                          (vector-copy!
+                            state-stack-new
+                            0
+                            state-stack
+                            0
+                            state-stack-size)
+                          (set! state-stack state-stack-new))
+                        (vector-set! state-stack state-stack-size x)
+                        (set! state-stack-size (+ 1 state-stack-size)))))
+                  (define (state-stack-peek)
+                    (vector-ref state-stack (- state-stack-size 1)))
+                  (define (parse-stack-peek)
+                    (vector-ref parse-stack (- parse-stack-size 1)))
+                  (define (parse-pop!)
+                    (set! parse-stack-size (- parse-stack-size 1))
+                    (vector-ref parse-stack parse-stack-size))
+                  (define (state-discard-multiple! n)
+                    (set! state-stack-size (- state-stack-size n)))
                   (define (process-accept) 'ACCEPT)
                   (define token #f)
                   (define (do-reject)
@@ -75,15 +125,15 @@
                         (push-parse! value)
                         (loop (parselynn:lr-shift-action:target-id action)))
                       (define (process-goto-add)
-                        (define togo-state (stack-peek state-stack))
+                        (define togo-state (state-stack-peek))
                         (case togo-state ((2) (inner-loop-with-input 4))))
                       (define (process-goto-expr)
-                        (define togo-state (stack-peek state-stack))
+                        (define togo-state (state-stack-peek))
                         (case togo-state
                           ((0) (inner-loop-with-input 6))
                           ((4) (inner-loop-with-input 5))))
                       (define (process-goto-term)
-                        (define togo-state (stack-peek state-stack))
+                        (define togo-state (state-stack-peek))
                         (case togo-state
                           ((0) (inner-loop-with-input 2))
                           ((4) (inner-loop-with-input 2))))
@@ -92,64 +142,59 @@
                         ((1)
                          (case category
                            ((+)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'term)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-term))
                            ((*eoi*)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'term)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-term))))
                         ((2)
                          (case category
                            ((+) (process-shift 3))
                            ((*eoi*)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'expr)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-expr))))
                         ((3)
                          (case category
                            ((NUM)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'add)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-add))))
                         ((4) (case category ((NUM) (process-shift 1))))
                         ((5)
                          (case category
                            ((*eoi*)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'expr)
-                                (define $3 (stack-pop! parse-stack))
-                                (define $2 (stack-pop! parse-stack))
-                                (define $1 (stack-pop! parse-stack))
+                                (define $3 (parse-pop!))
+                                (define $2 (parse-pop!))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 3)
+                            (state-discard-multiple! 3)
                             (process-goto-expr))))
                         ((6) (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
@@ -171,11 +216,12 @@
                       (get-input))
                     (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
-                    (stack-peek parse-stack)
+                    (parse-stack-peek)
                     (do-reject))))))
         (i3bpqtlnzqjz8ileyrpt
           ,((let ()
               (lambda (actions)
+                (define (stack-make) (make-vector 16))
                 (define (parselynn:lr-shift-action:target-id x)
                   x)
                 (define (parselynn:token:category x)
@@ -199,10 +245,59 @@
                   (define error-procedure ___errorp)
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
+                  (define parse-stack-capacity
+                    (vector-length parse-stack))
+                  (define parse-stack-size 0)
                   (define (push-parse! x)
-                    (stack-push! parse-stack x))
+                    (if (< parse-stack-size parse-stack-capacity)
+                      (begin
+                        (vector-set! parse-stack parse-stack-size x)
+                        (set! parse-stack-size (+ 1 parse-stack-size)))
+                      (begin
+                        (set! parse-stack-capacity
+                          (* 2 parse-stack-capacity))
+                        (let ((parse-stack-new
+                                (make-vector parse-stack-capacity)))
+                          (vector-copy!
+                            parse-stack-new
+                            0
+                            parse-stack
+                            0
+                            parse-stack-size)
+                          (set! parse-stack parse-stack-new))
+                        (vector-set! parse-stack parse-stack-size x)
+                        (set! parse-stack-size (+ 1 parse-stack-size)))))
+                  (define state-stack-capacity
+                    (vector-length state-stack))
+                  (define state-stack-size 0)
                   (define (push-state! x)
-                    (stack-push! state-stack x))
+                    (if (< state-stack-size state-stack-capacity)
+                      (begin
+                        (vector-set! state-stack state-stack-size x)
+                        (set! state-stack-size (+ 1 state-stack-size)))
+                      (begin
+                        (set! state-stack-capacity
+                          (* 2 state-stack-capacity))
+                        (let ((state-stack-new
+                                (make-vector state-stack-capacity)))
+                          (vector-copy!
+                            state-stack-new
+                            0
+                            state-stack
+                            0
+                            state-stack-size)
+                          (set! state-stack state-stack-new))
+                        (vector-set! state-stack state-stack-size x)
+                        (set! state-stack-size (+ 1 state-stack-size)))))
+                  (define (state-stack-peek)
+                    (vector-ref state-stack (- state-stack-size 1)))
+                  (define (parse-stack-peek)
+                    (vector-ref parse-stack (- parse-stack-size 1)))
+                  (define (parse-pop!)
+                    (set! parse-stack-size (- parse-stack-size 1))
+                    (vector-ref parse-stack parse-stack-size))
+                  (define (state-discard-multiple! n)
+                    (set! state-stack-size (- state-stack-size n)))
                   (define (process-accept) 'ACCEPT)
                   (define token #f)
                   (define (do-reject)
@@ -223,15 +318,15 @@
                         (push-parse! value)
                         (loop (parselynn:lr-shift-action:target-id action)))
                       (define (process-goto-add)
-                        (define togo-state (stack-peek state-stack))
+                        (define togo-state (state-stack-peek))
                         (case togo-state ((2) (inner-loop-with-input 4))))
                       (define (process-goto-expr)
-                        (define togo-state (stack-peek state-stack))
+                        (define togo-state (state-stack-peek))
                         (case togo-state
                           ((0) (inner-loop-with-input 6))
                           ((4) (inner-loop-with-input 5))))
                       (define (process-goto-term)
-                        (define togo-state (stack-peek state-stack))
+                        (define togo-state (state-stack-peek))
                         (case togo-state
                           ((0) (inner-loop-with-input 2))
                           ((4) (inner-loop-with-input 2))))
@@ -240,64 +335,59 @@
                         ((1)
                          (case category
                            ((+)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'term)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-term))
                            ((*eoi*)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'term)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-term))))
                         ((2)
                          (case category
                            ((+) (process-shift 3))
                            ((*eoi*)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'expr)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-expr))))
                         ((3)
                          (case category
                            ((NUM)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'add)
-                                (define $1 (stack-pop! parse-stack))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 1)
+                            (state-discard-multiple! 1)
                             (process-goto-add))))
                         ((4) (case category ((NUM) (process-shift 1))))
                         ((5)
                          (case category
                            ((*eoi*)
-                            (stack-push!
-                              parse-stack
+                            (push-parse!
                               (let ()
                                 (define $0 'expr)
-                                (define $3 (stack-pop! parse-stack))
-                                (define $2 (stack-pop! parse-stack))
-                                (define $1 (stack-pop! parse-stack))
+                                (define $3 (parse-pop!))
+                                (define $2 (parse-pop!))
+                                (define $1 (parse-pop!))
                                 #t))
                             (push-state! state)
-                            (stack-pop-multiple! state-stack 3)
+                            (state-discard-multiple! 3)
                             (process-goto-expr))))
                         ((6) (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
@@ -319,7 +409,7 @@
                       (get-input))
                     (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
-                    (stack-peek parse-stack)
+                    (parse-stack-peek)
                     (do-reject)))))
             #()))))))
 

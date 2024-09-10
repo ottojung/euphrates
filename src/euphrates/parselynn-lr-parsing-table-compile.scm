@@ -102,7 +102,7 @@
          (define args-code
            (map
             (lambda (arg)
-              `(define ,arg (stack-pop! parse-stack)))
+              `(define ,arg (parse-pop!)))
             (reverse (cdr arguments-list))))
 
          (define goto-function-name
@@ -112,15 +112,14 @@
 
          `((,key)
            ;; TODO: optimize by factoring code below, and then literally check if any factored function duplicates syntantically.
-           (stack-push!
-            parse-stack
+           (push-parse!
             (let ()
               (define $0 (quote ,lhs))
               ,@args-code
               ,compiled))
 
            (push-state! state)
-           (stack-pop-multiple! state-stack ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
+           (state-discard-multiple! ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
            (,goto-function-name)))))
 
      ((parselynn:lr-accept-action? x)
@@ -190,7 +189,7 @@
           (define new
             ;; TODO: optimize by literally checking if any function duplicates syntantically.
             `(define (,name)
-               (define togo-state (stack-peek state-stack))
+               (define togo-state (state-stack-peek))
                (case togo-state ,@new-cases)))
           (hashmap-set! goto-procedures-code-hashmap lhs new)
           new)))

@@ -25,13 +25,13 @@
           parselynn:token:category
           parselynn:token:source
           parselynn:token:value))
-  (import
-    (only (euphrates stack)
-          stack-make
-          stack-peek
-          stack-push!))
+  (import (only (euphrates stack) stack-make))
   (import
     (only (scheme base)
+          *
+          +
+          -
+          <
           _
           begin
           define
@@ -41,6 +41,7 @@
           if
           lambda
           let
+          make-vector
           quasiquote
           quote
           set!
@@ -48,7 +49,10 @@
           unquote
           unquote-splicing
           values
-          vector-ref))
+          vector-copy!
+          vector-length
+          vector-ref
+          vector-set!))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -5,5 +5,4 @@
   (environment
    '(scheme base)
    '(scheme char)
-   '(euphrates stack) ;; FIXME: remove this.
    ))

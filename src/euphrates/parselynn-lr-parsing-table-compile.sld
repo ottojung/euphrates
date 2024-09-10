@@ -65,12 +65,6 @@
           parselynn:lr-shift-action:target-id
           parselynn:lr-shift-action?))
   (import (only (euphrates raisu-fmt) raisu-fmt))
-  (import
-    (only (euphrates stack)
-          stack-peek
-          stack-pop!
-          stack-pop-multiple!
-          stack-push!))
   (import (only (euphrates stringf) stringf))
   (import
     (only (euphrates with-output-stringified)
