@@ -5,11 +5,17 @@
     (only (data parser-branching-glr)
           parser-branching-glr))
   (import
+    (only (data parser-branching-lr-1)
+          parser-branching-lr-1))
+  (import
     (only (data parser-branching-lr)
           parser-branching-lr))
   (import
     (only (data parser-repeating-glr)
           parser-repeating-glr))
+  (import
+    (only (data parser-repeating-lr-1)
+          parser-repeating-lr-1))
   (import
     (only (data parser-repeating-lr)
           parser-repeating-lr))
