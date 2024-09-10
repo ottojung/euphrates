@@ -149,8 +149,8 @@
          (define parse-stack-code-implementation
            `((push-parse!
               (let ()
-                (define $0 (quote ,lhs))
                 ,@args-code
+                (define $0 (quote ,lhs))
                 ,compiled))))
 
          (define parse-stack-code-function
@@ -287,7 +287,8 @@
   (define shared-procedures
     (append
      (map create-procedure-definition goto-code)
-     (stack->list parse-stack-code-dedup-stack)))
+     (reverse
+      (stack->list parse-stack-code-dedup-stack))))
 
   (define code
     (if (null? action-case-code)

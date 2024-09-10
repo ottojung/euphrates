@@ -730,32 +730,32 @@
                         (case togo-state
                           ((0) (inner-loop-with-input 301))
                           ((307) (inner-loop-with-input 301))))
-                      (define (parse-stack-3)
+                      (define (parse-stack-0)
                         (push-parse!
                           (let ()
-                            (define $0 'expr)
-                            (define $3 (parse-pop!))
-                            (define $2 (parse-pop!))
                             (define $1 (parse-pop!))
-                            (list $0 $1 $2 $3))))
-                      (define (parse-stack-2)
-                        (push-parse!
-                          (let ()
-                            (define $0 'op)
-                            (define $1 (parse-pop!))
+                            (define $0 'term)
                             (list $0 $1))))
                       (define (parse-stack-1)
                         (push-parse!
                           (let ()
-                            (define $0 'expr)
                             (define $1 (parse-pop!))
+                            (define $0 'expr)
                             (list $0 $1))))
-                      (define (parse-stack-0)
+                      (define (parse-stack-2)
                         (push-parse!
                           (let ()
-                            (define $0 'term)
                             (define $1 (parse-pop!))
+                            (define $0 'op)
                             (list $0 $1))))
+                      (define (parse-stack-3)
+                        (push-parse!
+                          (let ()
+                            (define $3 (parse-pop!))
+                            (define $2 (parse-pop!))
+                            (define $1 (parse-pop!))
+                            (define $0 'expr)
+                            (list $0 $1 $2 $3))))
                       (case state
                         ((0)
                          (case category
@@ -5421,32 +5421,32 @@
                         (case togo-state
                           ((0) (inner-loop-with-input 301))
                           ((307) (inner-loop-with-input 301))))
-                      (define (parse-stack-3)
+                      (define (parse-stack-0)
                         (push-parse!
                           (let ()
-                            (define $0 'expr)
-                            (define $3 (parse-pop!))
-                            (define $2 (parse-pop!))
                             (define $1 (parse-pop!))
-                            (list $0 $1 $2 $3))))
-                      (define (parse-stack-2)
-                        (push-parse!
-                          (let ()
-                            (define $0 'op)
-                            (define $1 (parse-pop!))
+                            (define $0 'term)
                             (list $0 $1))))
                       (define (parse-stack-1)
                         (push-parse!
                           (let ()
-                            (define $0 'expr)
                             (define $1 (parse-pop!))
+                            (define $0 'expr)
                             (list $0 $1))))
-                      (define (parse-stack-0)
+                      (define (parse-stack-2)
                         (push-parse!
                           (let ()
-                            (define $0 'term)
                             (define $1 (parse-pop!))
+                            (define $0 'op)
                             (list $0 $1))))
+                      (define (parse-stack-3)
+                        (push-parse!
+                          (let ()
+                            (define $3 (parse-pop!))
+                            (define $2 (parse-pop!))
+                            (define $1 (parse-pop!))
+                            (define $0 'expr)
+                            (list $0 $1 $2 $3))))
                       (case state
                         ((0)
                          (case category
