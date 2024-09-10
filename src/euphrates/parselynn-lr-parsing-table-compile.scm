@@ -110,6 +110,11 @@
              (compile-goto-for-lhs lhs)
              (generate-goto-function-name lhs)))
 
+         (define stack-code
+           (if (= 0 length-of-rhs)
+               `((push-state! state))
+               `((state-discard-multiple! ,(- length-of-rhs 1)))))
+
          `((,key)
            ;; TODO: optimize by factoring code below, and then literally check if any factored function duplicates syntantically.
            (push-parse!
@@ -118,8 +123,7 @@
               ,@args-code
               ,compiled))
 
-           (push-state! state)
-           (state-discard-multiple! ,length-of-rhs)  ;; TODO: optimize by simply discarding n - 1?
+           ,@stack-code
            (,goto-function-name)))))
 
      ((parselynn:lr-accept-action? x)
