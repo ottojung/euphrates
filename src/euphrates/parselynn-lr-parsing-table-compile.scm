@@ -127,7 +127,7 @@
      ((parselynn:lr-parse-conflict? x)
       (handle-conflict state key x)
       `((,key)
-        (do-reject token)))
+        #f)) ;; TODO: remove this completely.
 
      ((parselynn:lr-reject-action? x)
       (raisu-fmt 'impossible-172387436 "I asked for non-reject actions."))
@@ -142,10 +142,11 @@
     (define single-case-code
       (map (comp (compile-action-for-keystate state)) actions))
 
-    `((,state)
-      (case category
-        ,@single-case-code
-        (else (do-reject token)))))
+    (if (null? single-case-code)
+        `((,state) #f) ;; TODO: remove this code completely.
+        `((,state)
+          (case category
+            ,@single-case-code))))
 
   (define (compile-goto-for-keystate key state)
     (define x
@@ -158,7 +159,7 @@
         (define new-state (parselynn:lr-goto-action:target-id x))
         (list
          `((,state)
-           (loop-with-input ,new-state token category source value))))) ;; TODO: make the code size smaller by not passing all these arguments.
+           (loop-with-input ,new-state category source value))))) ;; TODO: make the code size smaller by not passing all these arguments.
 
      ((parselynn:lr-parse-conflict? x)
       (handle-conflict state key x))
@@ -183,7 +184,7 @@
           (define new
             `(define (,name)
                (define togo-state (stack-peek state-stack))
-               (case togo-state ,@new-cases (else (do-reject token)))))
+               (case togo-state ,@new-cases)))
           (hashmap-set! goto-procedures-code-hashmap lhs new)
           new)))
 
@@ -202,7 +203,6 @@
        ,@goto-code
 
        (case state
-         ,@action-case-code
-         (else (do-reject token)))))
+         ,@action-case-code)))
 
   code)

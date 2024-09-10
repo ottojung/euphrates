@@ -52,23 +52,19 @@
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
                   (define (process-accept) 'ACCEPT)
-                  (define (loop-with-input
-                           state
-                           token
-                           category
-                           source
-                           value)
-                    (define (do-reject token)
-                      (if (equal? category parselynn:end-of-input)
-                        (error-procedure
-                          'end-of-input
-                          "Syntax error: unexpected end of input: ~s"
-                          token)
-                        (error-procedure
-                          'unexpected-token
-                          "Syntax error: unexpected token: ~s"
-                          token))
-                      reject)
+                  (define token #f)
+                  (define (do-reject)
+                    (if (equal? token parselynn:end-of-input)
+                      (error-procedure
+                        'end-of-input
+                        "Syntax error: unexpected end of input: ~s"
+                        token)
+                      (error-procedure
+                        'unexpected-token
+                        "Syntax error: unexpected token: ~s"
+                        token))
+                    reject)
+                  (define (loop-with-input state category source value)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -77,30 +73,19 @@
                       (define (process-goto-add)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((2)
-                           (loop-with-input 4 token category source value))
-                          (else (do-reject token))))
+                          ((2) (loop-with-input 4 category source value))))
                       (define (process-goto-expr)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 6 token category source value))
-                          ((4)
-                           (loop-with-input 5 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 6 category source value))
+                          ((4) (loop-with-input 5 category source value))))
                       (define (process-goto-term)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 2 token category source value))
-                          ((4)
-                           (loop-with-input 2 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 2 category source value))
+                          ((4) (loop-with-input 2 category source value))))
                       (case state
-                        ((0)
-                         (case category
-                           ((NUM) (process-shift 1))
-                           (else (do-reject token))))
+                        ((0) (case category ((NUM) (process-shift 1))))
                         ((1)
                          (case category
                            ((+)
@@ -122,8 +107,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((2)
                          (case category
                            ((+) (process-shift 3))
@@ -136,8 +120,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((3)
                          (case category
                            ((NUM)
@@ -149,12 +132,8 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-add))
-                           (else (do-reject token))))
-                        ((4)
-                         (case category
-                           ((NUM) (process-shift 1))
-                           (else (do-reject token))))
+                            (process-goto-add))))
+                        ((4) (case category ((NUM) (process-shift 1))))
                         ((5)
                          (case category
                            ((*eoi*)
@@ -168,39 +147,29 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
-                        ((6)
-                         (case category
-                           ((*eoi*) (process-accept))
-                           (else (do-reject token))))
-                        (else (do-reject token)))))
+                            (process-goto-expr))))
+                        ((6) (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
-                    (define token
+                    (set! token
                       (iterator:next
                         input-tokens-iterator
                         parselynn:end-of-input))
                     (if (equal? token parselynn:end-of-input)
-                      (values token token token token)
+                      (values token token token)
                       (let ()
                         (define category
                           (parselynn:token:category token))
                         (define source (parselynn:token:source token))
                         (define value (parselynn:token:value token))
-                        (values token category source value))))
+                        (values category source value))))
                   (define (loop state)
                     (define-values
-                      (token category source value)
+                      (category source value)
                       (get-input))
-                    (loop-with-input
-                      state
-                      token
-                      category
-                      source
-                      value))
+                    (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
                     (stack-peek parse-stack)
-                    reject)))))
+                    (do-reject))))))
         (i3bpqtlnzqjz8ileyrpt
           ,((let ()
               (lambda (actions)
@@ -228,23 +197,19 @@
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
                   (define (process-accept) 'ACCEPT)
-                  (define (loop-with-input
-                           state
-                           token
-                           category
-                           source
-                           value)
-                    (define (do-reject token)
-                      (if (equal? category parselynn:end-of-input)
-                        (error-procedure
-                          'end-of-input
-                          "Syntax error: unexpected end of input: ~s"
-                          token)
-                        (error-procedure
-                          'unexpected-token
-                          "Syntax error: unexpected token: ~s"
-                          token))
-                      reject)
+                  (define token #f)
+                  (define (do-reject)
+                    (if (equal? token parselynn:end-of-input)
+                      (error-procedure
+                        'end-of-input
+                        "Syntax error: unexpected end of input: ~s"
+                        token)
+                      (error-procedure
+                        'unexpected-token
+                        "Syntax error: unexpected token: ~s"
+                        token))
+                    reject)
+                  (define (loop-with-input state category source value)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -253,30 +218,19 @@
                       (define (process-goto-add)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((2)
-                           (loop-with-input 4 token category source value))
-                          (else (do-reject token))))
+                          ((2) (loop-with-input 4 category source value))))
                       (define (process-goto-expr)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 6 token category source value))
-                          ((4)
-                           (loop-with-input 5 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 6 category source value))
+                          ((4) (loop-with-input 5 category source value))))
                       (define (process-goto-term)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 2 token category source value))
-                          ((4)
-                           (loop-with-input 2 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 2 category source value))
+                          ((4) (loop-with-input 2 category source value))))
                       (case state
-                        ((0)
-                         (case category
-                           ((NUM) (process-shift 1))
-                           (else (do-reject token))))
+                        ((0) (case category ((NUM) (process-shift 1))))
                         ((1)
                          (case category
                            ((+)
@@ -298,8 +252,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((2)
                          (case category
                            ((+) (process-shift 3))
@@ -312,8 +265,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((3)
                          (case category
                            ((NUM)
@@ -325,12 +277,8 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-add))
-                           (else (do-reject token))))
-                        ((4)
-                         (case category
-                           ((NUM) (process-shift 1))
-                           (else (do-reject token))))
+                            (process-goto-add))))
+                        ((4) (case category ((NUM) (process-shift 1))))
                         ((5)
                          (case category
                            ((*eoi*)
@@ -344,38 +292,28 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
-                        ((6)
-                         (case category
-                           ((*eoi*) (process-accept))
-                           (else (do-reject token))))
-                        (else (do-reject token)))))
+                            (process-goto-expr))))
+                        ((6) (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
-                    (define token
+                    (set! token
                       (iterator:next
                         input-tokens-iterator
                         parselynn:end-of-input))
                     (if (equal? token parselynn:end-of-input)
-                      (values token token token token)
+                      (values token token token)
                       (let ()
                         (define category
                           (parselynn:token:category token))
                         (define source (parselynn:token:source token))
                         (define value (parselynn:token:value token))
-                        (values token category source value))))
+                        (values category source value))))
                   (define (loop state)
                     (define-values
-                      (token category source value)
+                      (category source value)
                       (get-input))
-                    (loop-with-input
-                      state
-                      token
-                      category
-                      source
-                      value))
+                    (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
                     (stack-peek parse-stack)
-                    reject))))
+                    (do-reject)))))
             #()))))))
 

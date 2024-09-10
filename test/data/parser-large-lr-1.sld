@@ -644,23 +644,19 @@
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
                   (define (process-accept) 'ACCEPT)
-                  (define (loop-with-input
-                           state
-                           token
-                           category
-                           source
-                           value)
-                    (define (do-reject token)
-                      (if (equal? category parselynn:end-of-input)
-                        (error-procedure
-                          'end-of-input
-                          "Syntax error: unexpected end of input: ~s"
-                          token)
-                        (error-procedure
-                          'unexpected-token
-                          "Syntax error: unexpected token: ~s"
-                          token))
-                      reject)
+                  (define token #f)
+                  (define (do-reject)
+                    (if (equal? token parselynn:end-of-input)
+                      (error-procedure
+                        'end-of-input
+                        "Syntax error: unexpected end of input: ~s"
+                        token)
+                      (error-procedure
+                        'unexpected-token
+                        "Syntax error: unexpected token: ~s"
+                        token))
+                    reject)
+                  (define (loop-with-input state category source value)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -669,25 +665,20 @@
                       (define (process-goto-expr)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 309 token category source value))
+                          ((0) (loop-with-input 309 category source value))
                           ((307)
-                           (loop-with-input 308 token category source value))
-                          (else (do-reject token))))
+                           (loop-with-input 308 category source value))))
                       (define (process-goto-op)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
                           ((301)
-                           (loop-with-input 307 token category source value))
-                          (else (do-reject token))))
+                           (loop-with-input 307 category source value))))
                       (define (process-goto-term)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 301 token category source value))
+                          ((0) (loop-with-input 301 category source value))
                           ((307)
-                           (loop-with-input 301 token category source value))
-                          (else (do-reject token))))
+                           (loop-with-input 301 category source value))))
                       (case state
                         ((0)
                          (case category
@@ -990,8 +981,7 @@
                            ((n101) (process-shift 4))
                            ((n100) (process-shift 3))
                            ((n10) (process-shift 2))
-                           ((n1) (process-shift 1))
-                           (else (do-reject token))))
+                           ((n1) (process-shift 1))))
                         ((1)
                          (case category
                            ((^)
@@ -1053,8 +1043,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((2)
                          (case category
                            ((^)
@@ -1116,8 +1105,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((3)
                          (case category
                            ((^)
@@ -1179,8 +1167,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((4)
                          (case category
                            ((^)
@@ -1242,8 +1229,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((5)
                          (case category
                            ((^)
@@ -1305,8 +1291,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((6)
                          (case category
                            ((^)
@@ -1368,8 +1353,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((7)
                          (case category
                            ((^)
@@ -1431,8 +1415,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((8)
                          (case category
                            ((^)
@@ -1494,8 +1477,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((9)
                          (case category
                            ((^)
@@ -1557,8 +1539,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((10)
                          (case category
                            ((^)
@@ -1620,8 +1601,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((11)
                          (case category
                            ((^)
@@ -1683,8 +1663,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((12)
                          (case category
                            ((^)
@@ -1746,8 +1725,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((13)
                          (case category
                            ((^)
@@ -1809,8 +1787,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((14)
                          (case category
                            ((^)
@@ -1872,8 +1849,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((15)
                          (case category
                            ((^)
@@ -1935,8 +1911,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((16)
                          (case category
                            ((^)
@@ -1998,8 +1973,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((17)
                          (case category
                            ((^)
@@ -2061,8 +2035,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((18)
                          (case category
                            ((^)
@@ -2124,8 +2097,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((19)
                          (case category
                            ((^)
@@ -2187,8 +2159,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((20)
                          (case category
                            ((^)
@@ -2250,8 +2221,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((21)
                          (case category
                            ((^)
@@ -2313,8 +2283,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((22)
                          (case category
                            ((^)
@@ -2376,8 +2345,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((23)
                          (case category
                            ((^)
@@ -2439,8 +2407,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((24)
                          (case category
                            ((^)
@@ -2502,8 +2469,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((25)
                          (case category
                            ((^)
@@ -2565,8 +2531,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((26)
                          (case category
                            ((^)
@@ -2628,8 +2593,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((27)
                          (case category
                            ((^)
@@ -2691,8 +2655,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((28)
                          (case category
                            ((^)
@@ -2754,8 +2717,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((29)
                          (case category
                            ((^)
@@ -2817,8 +2779,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((30)
                          (case category
                            ((^)
@@ -2880,8 +2841,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((31)
                          (case category
                            ((^)
@@ -2943,8 +2903,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((32)
                          (case category
                            ((^)
@@ -3006,8 +2965,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((33)
                          (case category
                            ((^)
@@ -3069,8 +3027,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((34)
                          (case category
                            ((^)
@@ -3132,8 +3089,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((35)
                          (case category
                            ((^)
@@ -3195,8 +3151,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((36)
                          (case category
                            ((^)
@@ -3258,8 +3213,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((37)
                          (case category
                            ((^)
@@ -3321,8 +3275,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((38)
                          (case category
                            ((^)
@@ -3384,8 +3337,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((39)
                          (case category
                            ((^)
@@ -3447,8 +3399,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((40)
                          (case category
                            ((^)
@@ -3510,8 +3461,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((41)
                          (case category
                            ((^)
@@ -3573,8 +3523,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((42)
                          (case category
                            ((^)
@@ -3636,8 +3585,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((43)
                          (case category
                            ((^)
@@ -3699,8 +3647,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((44)
                          (case category
                            ((^)
@@ -3762,8 +3709,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((45)
                          (case category
                            ((^)
@@ -3825,8 +3771,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((46)
                          (case category
                            ((^)
@@ -3888,8 +3833,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((47)
                          (case category
                            ((^)
@@ -3951,8 +3895,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((48)
                          (case category
                            ((^)
@@ -4014,8 +3957,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((49)
                          (case category
                            ((^)
@@ -4077,8 +4019,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((50)
                          (case category
                            ((^)
@@ -4140,8 +4081,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((51)
                          (case category
                            ((^)
@@ -4203,8 +4143,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((52)
                          (case category
                            ((^)
@@ -4266,8 +4205,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((53)
                          (case category
                            ((^)
@@ -4329,8 +4267,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((54)
                          (case category
                            ((^)
@@ -4392,8 +4329,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((55)
                          (case category
                            ((^)
@@ -4455,8 +4391,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((56)
                          (case category
                            ((^)
@@ -4518,8 +4453,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((57)
                          (case category
                            ((^)
@@ -4581,8 +4515,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((58)
                          (case category
                            ((^)
@@ -4644,8 +4577,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((59)
                          (case category
                            ((^)
@@ -4707,8 +4639,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((60)
                          (case category
                            ((^)
@@ -4770,8 +4701,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((61)
                          (case category
                            ((^)
@@ -4833,8 +4763,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((62)
                          (case category
                            ((^)
@@ -4896,8 +4825,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((63)
                          (case category
                            ((^)
@@ -4959,8 +4887,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((64)
                          (case category
                            ((^)
@@ -5022,8 +4949,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((65)
                          (case category
                            ((^)
@@ -5085,8 +5011,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((66)
                          (case category
                            ((^)
@@ -5148,8 +5073,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((67)
                          (case category
                            ((^)
@@ -5211,8 +5135,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((68)
                          (case category
                            ((^)
@@ -5274,8 +5197,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((69)
                          (case category
                            ((^)
@@ -5337,8 +5259,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((70)
                          (case category
                            ((^)
@@ -5400,8 +5321,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((71)
                          (case category
                            ((^)
@@ -5463,8 +5383,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((72)
                          (case category
                            ((^)
@@ -5526,8 +5445,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((73)
                          (case category
                            ((^)
@@ -5589,8 +5507,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((74)
                          (case category
                            ((^)
@@ -5652,8 +5569,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((75)
                          (case category
                            ((^)
@@ -5715,8 +5631,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((76)
                          (case category
                            ((^)
@@ -5778,8 +5693,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((77)
                          (case category
                            ((^)
@@ -5841,8 +5755,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((78)
                          (case category
                            ((^)
@@ -5904,8 +5817,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((79)
                          (case category
                            ((^)
@@ -5967,8 +5879,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((80)
                          (case category
                            ((^)
@@ -6030,8 +5941,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((81)
                          (case category
                            ((^)
@@ -6093,8 +6003,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((82)
                          (case category
                            ((^)
@@ -6156,8 +6065,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((83)
                          (case category
                            ((^)
@@ -6219,8 +6127,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((84)
                          (case category
                            ((^)
@@ -6282,8 +6189,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((85)
                          (case category
                            ((^)
@@ -6345,8 +6251,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((86)
                          (case category
                            ((^)
@@ -6408,8 +6313,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((87)
                          (case category
                            ((^)
@@ -6471,8 +6375,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((88)
                          (case category
                            ((^)
@@ -6534,8 +6437,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((89)
                          (case category
                            ((^)
@@ -6597,8 +6499,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((90)
                          (case category
                            ((^)
@@ -6660,8 +6561,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((91)
                          (case category
                            ((^)
@@ -6723,8 +6623,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((92)
                          (case category
                            ((^)
@@ -6786,8 +6685,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((93)
                          (case category
                            ((^)
@@ -6849,8 +6747,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((94)
                          (case category
                            ((^)
@@ -6912,8 +6809,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((95)
                          (case category
                            ((^)
@@ -6975,8 +6871,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((96)
                          (case category
                            ((^)
@@ -7038,8 +6933,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((97)
                          (case category
                            ((^)
@@ -7101,8 +6995,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((98)
                          (case category
                            ((^)
@@ -7164,8 +7057,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((99)
                          (case category
                            ((^)
@@ -7227,8 +7119,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((100)
                          (case category
                            ((^)
@@ -7290,8 +7181,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((101)
                          (case category
                            ((^)
@@ -7353,8 +7243,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((102)
                          (case category
                            ((^)
@@ -7416,8 +7305,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((103)
                          (case category
                            ((^)
@@ -7479,8 +7367,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((104)
                          (case category
                            ((^)
@@ -7542,8 +7429,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((105)
                          (case category
                            ((^)
@@ -7605,8 +7491,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((106)
                          (case category
                            ((^)
@@ -7668,8 +7553,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((107)
                          (case category
                            ((^)
@@ -7731,8 +7615,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((108)
                          (case category
                            ((^)
@@ -7794,8 +7677,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((109)
                          (case category
                            ((^)
@@ -7857,8 +7739,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((110)
                          (case category
                            ((^)
@@ -7920,8 +7801,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((111)
                          (case category
                            ((^)
@@ -7983,8 +7863,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((112)
                          (case category
                            ((^)
@@ -8046,8 +7925,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((113)
                          (case category
                            ((^)
@@ -8109,8 +7987,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((114)
                          (case category
                            ((^)
@@ -8172,8 +8049,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((115)
                          (case category
                            ((^)
@@ -8235,8 +8111,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((116)
                          (case category
                            ((^)
@@ -8298,8 +8173,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((117)
                          (case category
                            ((^)
@@ -8361,8 +8235,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((118)
                          (case category
                            ((^)
@@ -8424,8 +8297,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((119)
                          (case category
                            ((^)
@@ -8487,8 +8359,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((120)
                          (case category
                            ((^)
@@ -8550,8 +8421,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((121)
                          (case category
                            ((^)
@@ -8613,8 +8483,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((122)
                          (case category
                            ((^)
@@ -8676,8 +8545,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((123)
                          (case category
                            ((^)
@@ -8739,8 +8607,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((124)
                          (case category
                            ((^)
@@ -8802,8 +8669,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((125)
                          (case category
                            ((^)
@@ -8865,8 +8731,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((126)
                          (case category
                            ((^)
@@ -8928,8 +8793,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((127)
                          (case category
                            ((^)
@@ -8991,8 +8855,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((128)
                          (case category
                            ((^)
@@ -9054,8 +8917,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((129)
                          (case category
                            ((^)
@@ -9117,8 +8979,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((130)
                          (case category
                            ((^)
@@ -9180,8 +9041,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((131)
                          (case category
                            ((^)
@@ -9243,8 +9103,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((132)
                          (case category
                            ((^)
@@ -9306,8 +9165,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((133)
                          (case category
                            ((^)
@@ -9369,8 +9227,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((134)
                          (case category
                            ((^)
@@ -9432,8 +9289,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((135)
                          (case category
                            ((^)
@@ -9495,8 +9351,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((136)
                          (case category
                            ((^)
@@ -9558,8 +9413,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((137)
                          (case category
                            ((^)
@@ -9621,8 +9475,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((138)
                          (case category
                            ((^)
@@ -9684,8 +9537,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((139)
                          (case category
                            ((^)
@@ -9747,8 +9599,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((140)
                          (case category
                            ((^)
@@ -9810,8 +9661,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((141)
                          (case category
                            ((^)
@@ -9873,8 +9723,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((142)
                          (case category
                            ((^)
@@ -9936,8 +9785,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((143)
                          (case category
                            ((^)
@@ -9999,8 +9847,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((144)
                          (case category
                            ((^)
@@ -10062,8 +9909,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((145)
                          (case category
                            ((^)
@@ -10125,8 +9971,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((146)
                          (case category
                            ((^)
@@ -10188,8 +10033,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((147)
                          (case category
                            ((^)
@@ -10251,8 +10095,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((148)
                          (case category
                            ((^)
@@ -10314,8 +10157,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((149)
                          (case category
                            ((^)
@@ -10377,8 +10219,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((150)
                          (case category
                            ((^)
@@ -10440,8 +10281,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((151)
                          (case category
                            ((^)
@@ -10503,8 +10343,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((152)
                          (case category
                            ((^)
@@ -10566,8 +10405,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((153)
                          (case category
                            ((^)
@@ -10629,8 +10467,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((154)
                          (case category
                            ((^)
@@ -10692,8 +10529,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((155)
                          (case category
                            ((^)
@@ -10755,8 +10591,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((156)
                          (case category
                            ((^)
@@ -10818,8 +10653,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((157)
                          (case category
                            ((^)
@@ -10881,8 +10715,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((158)
                          (case category
                            ((^)
@@ -10944,8 +10777,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((159)
                          (case category
                            ((^)
@@ -11007,8 +10839,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((160)
                          (case category
                            ((^)
@@ -11070,8 +10901,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((161)
                          (case category
                            ((^)
@@ -11133,8 +10963,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((162)
                          (case category
                            ((^)
@@ -11196,8 +11025,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((163)
                          (case category
                            ((^)
@@ -11259,8 +11087,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((164)
                          (case category
                            ((^)
@@ -11322,8 +11149,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((165)
                          (case category
                            ((^)
@@ -11385,8 +11211,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((166)
                          (case category
                            ((^)
@@ -11448,8 +11273,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((167)
                          (case category
                            ((^)
@@ -11511,8 +11335,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((168)
                          (case category
                            ((^)
@@ -11574,8 +11397,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((169)
                          (case category
                            ((^)
@@ -11637,8 +11459,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((170)
                          (case category
                            ((^)
@@ -11700,8 +11521,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((171)
                          (case category
                            ((^)
@@ -11763,8 +11583,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((172)
                          (case category
                            ((^)
@@ -11826,8 +11645,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((173)
                          (case category
                            ((^)
@@ -11889,8 +11707,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((174)
                          (case category
                            ((^)
@@ -11952,8 +11769,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((175)
                          (case category
                            ((^)
@@ -12015,8 +11831,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((176)
                          (case category
                            ((^)
@@ -12078,8 +11893,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((177)
                          (case category
                            ((^)
@@ -12141,8 +11955,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((178)
                          (case category
                            ((^)
@@ -12204,8 +12017,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((179)
                          (case category
                            ((^)
@@ -12267,8 +12079,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((180)
                          (case category
                            ((^)
@@ -12330,8 +12141,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((181)
                          (case category
                            ((^)
@@ -12393,8 +12203,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((182)
                          (case category
                            ((^)
@@ -12456,8 +12265,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((183)
                          (case category
                            ((^)
@@ -12519,8 +12327,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((184)
                          (case category
                            ((^)
@@ -12582,8 +12389,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((185)
                          (case category
                            ((^)
@@ -12645,8 +12451,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((186)
                          (case category
                            ((^)
@@ -12708,8 +12513,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((187)
                          (case category
                            ((^)
@@ -12771,8 +12575,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((188)
                          (case category
                            ((^)
@@ -12834,8 +12637,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((189)
                          (case category
                            ((^)
@@ -12897,8 +12699,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((190)
                          (case category
                            ((^)
@@ -12960,8 +12761,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((191)
                          (case category
                            ((^)
@@ -13023,8 +12823,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((192)
                          (case category
                            ((^)
@@ -13086,8 +12885,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((193)
                          (case category
                            ((^)
@@ -13149,8 +12947,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((194)
                          (case category
                            ((^)
@@ -13212,8 +13009,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((195)
                          (case category
                            ((^)
@@ -13275,8 +13071,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((196)
                          (case category
                            ((^)
@@ -13338,8 +13133,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((197)
                          (case category
                            ((^)
@@ -13401,8 +13195,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((198)
                          (case category
                            ((^)
@@ -13464,8 +13257,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((199)
                          (case category
                            ((^)
@@ -13527,8 +13319,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((200)
                          (case category
                            ((^)
@@ -13590,8 +13381,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((201)
                          (case category
                            ((^)
@@ -13653,8 +13443,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((202)
                          (case category
                            ((^)
@@ -13716,8 +13505,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((203)
                          (case category
                            ((^)
@@ -13779,8 +13567,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((204)
                          (case category
                            ((^)
@@ -13842,8 +13629,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((205)
                          (case category
                            ((^)
@@ -13905,8 +13691,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((206)
                          (case category
                            ((^)
@@ -13968,8 +13753,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((207)
                          (case category
                            ((^)
@@ -14031,8 +13815,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((208)
                          (case category
                            ((^)
@@ -14094,8 +13877,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((209)
                          (case category
                            ((^)
@@ -14157,8 +13939,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((210)
                          (case category
                            ((^)
@@ -14220,8 +14001,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((211)
                          (case category
                            ((^)
@@ -14283,8 +14063,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((212)
                          (case category
                            ((^)
@@ -14346,8 +14125,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((213)
                          (case category
                            ((^)
@@ -14409,8 +14187,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((214)
                          (case category
                            ((^)
@@ -14472,8 +14249,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((215)
                          (case category
                            ((^)
@@ -14535,8 +14311,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((216)
                          (case category
                            ((^)
@@ -14598,8 +14373,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((217)
                          (case category
                            ((^)
@@ -14661,8 +14435,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((218)
                          (case category
                            ((^)
@@ -14724,8 +14497,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((219)
                          (case category
                            ((^)
@@ -14787,8 +14559,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((220)
                          (case category
                            ((^)
@@ -14850,8 +14621,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((221)
                          (case category
                            ((^)
@@ -14913,8 +14683,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((222)
                          (case category
                            ((^)
@@ -14976,8 +14745,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((223)
                          (case category
                            ((^)
@@ -15039,8 +14807,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((224)
                          (case category
                            ((^)
@@ -15102,8 +14869,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((225)
                          (case category
                            ((^)
@@ -15165,8 +14931,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((226)
                          (case category
                            ((^)
@@ -15228,8 +14993,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((227)
                          (case category
                            ((^)
@@ -15291,8 +15055,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((228)
                          (case category
                            ((^)
@@ -15354,8 +15117,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((229)
                          (case category
                            ((^)
@@ -15417,8 +15179,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((230)
                          (case category
                            ((^)
@@ -15480,8 +15241,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((231)
                          (case category
                            ((^)
@@ -15543,8 +15303,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((232)
                          (case category
                            ((^)
@@ -15606,8 +15365,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((233)
                          (case category
                            ((^)
@@ -15669,8 +15427,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((234)
                          (case category
                            ((^)
@@ -15732,8 +15489,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((235)
                          (case category
                            ((^)
@@ -15795,8 +15551,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((236)
                          (case category
                            ((^)
@@ -15858,8 +15613,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((237)
                          (case category
                            ((^)
@@ -15921,8 +15675,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((238)
                          (case category
                            ((^)
@@ -15984,8 +15737,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((239)
                          (case category
                            ((^)
@@ -16047,8 +15799,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((240)
                          (case category
                            ((^)
@@ -16110,8 +15861,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((241)
                          (case category
                            ((^)
@@ -16173,8 +15923,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((242)
                          (case category
                            ((^)
@@ -16236,8 +15985,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((243)
                          (case category
                            ((^)
@@ -16299,8 +16047,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((244)
                          (case category
                            ((^)
@@ -16362,8 +16109,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((245)
                          (case category
                            ((^)
@@ -16425,8 +16171,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((246)
                          (case category
                            ((^)
@@ -16488,8 +16233,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((247)
                          (case category
                            ((^)
@@ -16551,8 +16295,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((248)
                          (case category
                            ((^)
@@ -16614,8 +16357,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((249)
                          (case category
                            ((^)
@@ -16677,8 +16419,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((250)
                          (case category
                            ((^)
@@ -16740,8 +16481,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((251)
                          (case category
                            ((^)
@@ -16803,8 +16543,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((252)
                          (case category
                            ((^)
@@ -16866,8 +16605,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((253)
                          (case category
                            ((^)
@@ -16929,8 +16667,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((254)
                          (case category
                            ((^)
@@ -16992,8 +16729,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((255)
                          (case category
                            ((^)
@@ -17055,8 +16791,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((256)
                          (case category
                            ((^)
@@ -17118,8 +16853,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((257)
                          (case category
                            ((^)
@@ -17181,8 +16915,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((258)
                          (case category
                            ((^)
@@ -17244,8 +16977,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((259)
                          (case category
                            ((^)
@@ -17307,8 +17039,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((260)
                          (case category
                            ((^)
@@ -17370,8 +17101,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((261)
                          (case category
                            ((^)
@@ -17433,8 +17163,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((262)
                          (case category
                            ((^)
@@ -17496,8 +17225,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((263)
                          (case category
                            ((^)
@@ -17559,8 +17287,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((264)
                          (case category
                            ((^)
@@ -17622,8 +17349,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((265)
                          (case category
                            ((^)
@@ -17685,8 +17411,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((266)
                          (case category
                            ((^)
@@ -17748,8 +17473,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((267)
                          (case category
                            ((^)
@@ -17811,8 +17535,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((268)
                          (case category
                            ((^)
@@ -17874,8 +17597,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((269)
                          (case category
                            ((^)
@@ -17937,8 +17659,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((270)
                          (case category
                            ((^)
@@ -18000,8 +17721,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((271)
                          (case category
                            ((^)
@@ -18063,8 +17783,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((272)
                          (case category
                            ((^)
@@ -18126,8 +17845,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((273)
                          (case category
                            ((^)
@@ -18189,8 +17907,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((274)
                          (case category
                            ((^)
@@ -18252,8 +17969,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((275)
                          (case category
                            ((^)
@@ -18315,8 +18031,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((276)
                          (case category
                            ((^)
@@ -18378,8 +18093,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((277)
                          (case category
                            ((^)
@@ -18441,8 +18155,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((278)
                          (case category
                            ((^)
@@ -18504,8 +18217,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((279)
                          (case category
                            ((^)
@@ -18567,8 +18279,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((280)
                          (case category
                            ((^)
@@ -18630,8 +18341,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((281)
                          (case category
                            ((^)
@@ -18693,8 +18403,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((282)
                          (case category
                            ((^)
@@ -18756,8 +18465,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((283)
                          (case category
                            ((^)
@@ -18819,8 +18527,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((284)
                          (case category
                            ((^)
@@ -18882,8 +18589,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((285)
                          (case category
                            ((^)
@@ -18945,8 +18651,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((286)
                          (case category
                            ((^)
@@ -19008,8 +18713,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((287)
                          (case category
                            ((^)
@@ -19071,8 +18775,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((288)
                          (case category
                            ((^)
@@ -19134,8 +18837,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((289)
                          (case category
                            ((^)
@@ -19197,8 +18899,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((290)
                          (case category
                            ((^)
@@ -19260,8 +18961,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((291)
                          (case category
                            ((^)
@@ -19323,8 +19023,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((292)
                          (case category
                            ((^)
@@ -19386,8 +19085,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((293)
                          (case category
                            ((^)
@@ -19449,8 +19147,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((294)
                          (case category
                            ((^)
@@ -19512,8 +19209,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((295)
                          (case category
                            ((^)
@@ -19575,8 +19271,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((296)
                          (case category
                            ((^)
@@ -19638,8 +19333,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((297)
                          (case category
                            ((^)
@@ -19701,8 +19395,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((298)
                          (case category
                            ((^)
@@ -19764,8 +19457,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((299)
                          (case category
                            ((^)
@@ -19827,8 +19519,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((300)
                          (case category
                            ((^)
@@ -19890,8 +19581,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((301)
                          (case category
                            ((^) (process-shift 306))
@@ -19908,8 +19598,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((302)
                          (case category
                            ((n9)
@@ -22911,8 +22600,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((303)
                          (case category
                            ((n9)
@@ -25914,8 +25602,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((304)
                          (case category
                            ((n9)
@@ -28917,8 +28604,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((305)
                          (case category
                            ((n9)
@@ -31920,8 +31606,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((306)
                          (case category
                            ((n9)
@@ -34923,8 +34608,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((307)
                          (case category
                            ((n99) (process-shift 300))
@@ -35226,8 +34910,7 @@
                            ((n101) (process-shift 4))
                            ((n100) (process-shift 3))
                            ((n10) (process-shift 2))
-                           ((n1) (process-shift 1))
-                           (else (do-reject token))))
+                           ((n1) (process-shift 1))))
                         ((308)
                          (case category
                            ((*eoi*)
@@ -35241,39 +34924,30 @@
                                 (list $0 $1 $2 $3)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((309)
-                         (case category
-                           ((*eoi*) (process-accept))
-                           (else (do-reject token))))
-                        (else (do-reject token)))))
+                         (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
-                    (define token
+                    (set! token
                       (iterator:next
                         input-tokens-iterator
                         parselynn:end-of-input))
                     (if (equal? token parselynn:end-of-input)
-                      (values token token token token)
+                      (values token token token)
                       (let ()
                         (define category
                           (parselynn:token:category token))
                         (define source (parselynn:token:source token))
                         (define value (parselynn:token:value token))
-                        (values token category source value))))
+                        (values category source value))))
                   (define (loop state)
                     (define-values
-                      (token category source value)
+                      (category source value)
                       (get-input))
-                    (loop-with-input
-                      state
-                      token
-                      category
-                      source
-                      value))
+                    (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
                     (stack-peek parse-stack)
-                    reject)))))
+                    (do-reject))))))
         (i3bpqtlnzqjz8ileyrpt
           ,((let ()
               (lambda (actions)
@@ -35301,23 +34975,19 @@
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
                   (define (process-accept) 'ACCEPT)
-                  (define (loop-with-input
-                           state
-                           token
-                           category
-                           source
-                           value)
-                    (define (do-reject token)
-                      (if (equal? category parselynn:end-of-input)
-                        (error-procedure
-                          'end-of-input
-                          "Syntax error: unexpected end of input: ~s"
-                          token)
-                        (error-procedure
-                          'unexpected-token
-                          "Syntax error: unexpected token: ~s"
-                          token))
-                      reject)
+                  (define token #f)
+                  (define (do-reject)
+                    (if (equal? token parselynn:end-of-input)
+                      (error-procedure
+                        'end-of-input
+                        "Syntax error: unexpected end of input: ~s"
+                        token)
+                      (error-procedure
+                        'unexpected-token
+                        "Syntax error: unexpected token: ~s"
+                        token))
+                    reject)
+                  (define (loop-with-input state category source value)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -35326,25 +34996,20 @@
                       (define (process-goto-expr)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 309 token category source value))
+                          ((0) (loop-with-input 309 category source value))
                           ((307)
-                           (loop-with-input 308 token category source value))
-                          (else (do-reject token))))
+                           (loop-with-input 308 category source value))))
                       (define (process-goto-op)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
                           ((301)
-                           (loop-with-input 307 token category source value))
-                          (else (do-reject token))))
+                           (loop-with-input 307 category source value))))
                       (define (process-goto-term)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 301 token category source value))
+                          ((0) (loop-with-input 301 category source value))
                           ((307)
-                           (loop-with-input 301 token category source value))
-                          (else (do-reject token))))
+                           (loop-with-input 301 category source value))))
                       (case state
                         ((0)
                          (case category
@@ -35647,8 +35312,7 @@
                            ((n101) (process-shift 4))
                            ((n100) (process-shift 3))
                            ((n10) (process-shift 2))
-                           ((n1) (process-shift 1))
-                           (else (do-reject token))))
+                           ((n1) (process-shift 1))))
                         ((1)
                          (case category
                            ((^)
@@ -35710,8 +35374,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((2)
                          (case category
                            ((^)
@@ -35773,8 +35436,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((3)
                          (case category
                            ((^)
@@ -35836,8 +35498,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((4)
                          (case category
                            ((^)
@@ -35899,8 +35560,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((5)
                          (case category
                            ((^)
@@ -35962,8 +35622,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((6)
                          (case category
                            ((^)
@@ -36025,8 +35684,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((7)
                          (case category
                            ((^)
@@ -36088,8 +35746,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((8)
                          (case category
                            ((^)
@@ -36151,8 +35808,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((9)
                          (case category
                            ((^)
@@ -36214,8 +35870,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((10)
                          (case category
                            ((^)
@@ -36277,8 +35932,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((11)
                          (case category
                            ((^)
@@ -36340,8 +35994,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((12)
                          (case category
                            ((^)
@@ -36403,8 +36056,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((13)
                          (case category
                            ((^)
@@ -36466,8 +36118,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((14)
                          (case category
                            ((^)
@@ -36529,8 +36180,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((15)
                          (case category
                            ((^)
@@ -36592,8 +36242,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((16)
                          (case category
                            ((^)
@@ -36655,8 +36304,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((17)
                          (case category
                            ((^)
@@ -36718,8 +36366,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((18)
                          (case category
                            ((^)
@@ -36781,8 +36428,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((19)
                          (case category
                            ((^)
@@ -36844,8 +36490,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((20)
                          (case category
                            ((^)
@@ -36907,8 +36552,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((21)
                          (case category
                            ((^)
@@ -36970,8 +36614,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((22)
                          (case category
                            ((^)
@@ -37033,8 +36676,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((23)
                          (case category
                            ((^)
@@ -37096,8 +36738,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((24)
                          (case category
                            ((^)
@@ -37159,8 +36800,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((25)
                          (case category
                            ((^)
@@ -37222,8 +36862,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((26)
                          (case category
                            ((^)
@@ -37285,8 +36924,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((27)
                          (case category
                            ((^)
@@ -37348,8 +36986,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((28)
                          (case category
                            ((^)
@@ -37411,8 +37048,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((29)
                          (case category
                            ((^)
@@ -37474,8 +37110,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((30)
                          (case category
                            ((^)
@@ -37537,8 +37172,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((31)
                          (case category
                            ((^)
@@ -37600,8 +37234,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((32)
                          (case category
                            ((^)
@@ -37663,8 +37296,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((33)
                          (case category
                            ((^)
@@ -37726,8 +37358,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((34)
                          (case category
                            ((^)
@@ -37789,8 +37420,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((35)
                          (case category
                            ((^)
@@ -37852,8 +37482,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((36)
                          (case category
                            ((^)
@@ -37915,8 +37544,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((37)
                          (case category
                            ((^)
@@ -37978,8 +37606,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((38)
                          (case category
                            ((^)
@@ -38041,8 +37668,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((39)
                          (case category
                            ((^)
@@ -38104,8 +37730,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((40)
                          (case category
                            ((^)
@@ -38167,8 +37792,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((41)
                          (case category
                            ((^)
@@ -38230,8 +37854,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((42)
                          (case category
                            ((^)
@@ -38293,8 +37916,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((43)
                          (case category
                            ((^)
@@ -38356,8 +37978,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((44)
                          (case category
                            ((^)
@@ -38419,8 +38040,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((45)
                          (case category
                            ((^)
@@ -38482,8 +38102,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((46)
                          (case category
                            ((^)
@@ -38545,8 +38164,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((47)
                          (case category
                            ((^)
@@ -38608,8 +38226,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((48)
                          (case category
                            ((^)
@@ -38671,8 +38288,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((49)
                          (case category
                            ((^)
@@ -38734,8 +38350,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((50)
                          (case category
                            ((^)
@@ -38797,8 +38412,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((51)
                          (case category
                            ((^)
@@ -38860,8 +38474,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((52)
                          (case category
                            ((^)
@@ -38923,8 +38536,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((53)
                          (case category
                            ((^)
@@ -38986,8 +38598,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((54)
                          (case category
                            ((^)
@@ -39049,8 +38660,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((55)
                          (case category
                            ((^)
@@ -39112,8 +38722,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((56)
                          (case category
                            ((^)
@@ -39175,8 +38784,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((57)
                          (case category
                            ((^)
@@ -39238,8 +38846,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((58)
                          (case category
                            ((^)
@@ -39301,8 +38908,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((59)
                          (case category
                            ((^)
@@ -39364,8 +38970,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((60)
                          (case category
                            ((^)
@@ -39427,8 +39032,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((61)
                          (case category
                            ((^)
@@ -39490,8 +39094,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((62)
                          (case category
                            ((^)
@@ -39553,8 +39156,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((63)
                          (case category
                            ((^)
@@ -39616,8 +39218,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((64)
                          (case category
                            ((^)
@@ -39679,8 +39280,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((65)
                          (case category
                            ((^)
@@ -39742,8 +39342,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((66)
                          (case category
                            ((^)
@@ -39805,8 +39404,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((67)
                          (case category
                            ((^)
@@ -39868,8 +39466,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((68)
                          (case category
                            ((^)
@@ -39931,8 +39528,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((69)
                          (case category
                            ((^)
@@ -39994,8 +39590,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((70)
                          (case category
                            ((^)
@@ -40057,8 +39652,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((71)
                          (case category
                            ((^)
@@ -40120,8 +39714,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((72)
                          (case category
                            ((^)
@@ -40183,8 +39776,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((73)
                          (case category
                            ((^)
@@ -40246,8 +39838,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((74)
                          (case category
                            ((^)
@@ -40309,8 +39900,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((75)
                          (case category
                            ((^)
@@ -40372,8 +39962,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((76)
                          (case category
                            ((^)
@@ -40435,8 +40024,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((77)
                          (case category
                            ((^)
@@ -40498,8 +40086,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((78)
                          (case category
                            ((^)
@@ -40561,8 +40148,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((79)
                          (case category
                            ((^)
@@ -40624,8 +40210,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((80)
                          (case category
                            ((^)
@@ -40687,8 +40272,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((81)
                          (case category
                            ((^)
@@ -40750,8 +40334,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((82)
                          (case category
                            ((^)
@@ -40813,8 +40396,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((83)
                          (case category
                            ((^)
@@ -40876,8 +40458,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((84)
                          (case category
                            ((^)
@@ -40939,8 +40520,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((85)
                          (case category
                            ((^)
@@ -41002,8 +40582,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((86)
                          (case category
                            ((^)
@@ -41065,8 +40644,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((87)
                          (case category
                            ((^)
@@ -41128,8 +40706,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((88)
                          (case category
                            ((^)
@@ -41191,8 +40768,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((89)
                          (case category
                            ((^)
@@ -41254,8 +40830,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((90)
                          (case category
                            ((^)
@@ -41317,8 +40892,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((91)
                          (case category
                            ((^)
@@ -41380,8 +40954,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((92)
                          (case category
                            ((^)
@@ -41443,8 +41016,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((93)
                          (case category
                            ((^)
@@ -41506,8 +41078,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((94)
                          (case category
                            ((^)
@@ -41569,8 +41140,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((95)
                          (case category
                            ((^)
@@ -41632,8 +41202,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((96)
                          (case category
                            ((^)
@@ -41695,8 +41264,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((97)
                          (case category
                            ((^)
@@ -41758,8 +41326,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((98)
                          (case category
                            ((^)
@@ -41821,8 +41388,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((99)
                          (case category
                            ((^)
@@ -41884,8 +41450,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((100)
                          (case category
                            ((^)
@@ -41947,8 +41512,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((101)
                          (case category
                            ((^)
@@ -42010,8 +41574,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((102)
                          (case category
                            ((^)
@@ -42073,8 +41636,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((103)
                          (case category
                            ((^)
@@ -42136,8 +41698,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((104)
                          (case category
                            ((^)
@@ -42199,8 +41760,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((105)
                          (case category
                            ((^)
@@ -42262,8 +41822,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((106)
                          (case category
                            ((^)
@@ -42325,8 +41884,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((107)
                          (case category
                            ((^)
@@ -42388,8 +41946,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((108)
                          (case category
                            ((^)
@@ -42451,8 +42008,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((109)
                          (case category
                            ((^)
@@ -42514,8 +42070,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((110)
                          (case category
                            ((^)
@@ -42577,8 +42132,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((111)
                          (case category
                            ((^)
@@ -42640,8 +42194,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((112)
                          (case category
                            ((^)
@@ -42703,8 +42256,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((113)
                          (case category
                            ((^)
@@ -42766,8 +42318,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((114)
                          (case category
                            ((^)
@@ -42829,8 +42380,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((115)
                          (case category
                            ((^)
@@ -42892,8 +42442,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((116)
                          (case category
                            ((^)
@@ -42955,8 +42504,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((117)
                          (case category
                            ((^)
@@ -43018,8 +42566,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((118)
                          (case category
                            ((^)
@@ -43081,8 +42628,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((119)
                          (case category
                            ((^)
@@ -43144,8 +42690,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((120)
                          (case category
                            ((^)
@@ -43207,8 +42752,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((121)
                          (case category
                            ((^)
@@ -43270,8 +42814,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((122)
                          (case category
                            ((^)
@@ -43333,8 +42876,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((123)
                          (case category
                            ((^)
@@ -43396,8 +42938,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((124)
                          (case category
                            ((^)
@@ -43459,8 +43000,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((125)
                          (case category
                            ((^)
@@ -43522,8 +43062,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((126)
                          (case category
                            ((^)
@@ -43585,8 +43124,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((127)
                          (case category
                            ((^)
@@ -43648,8 +43186,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((128)
                          (case category
                            ((^)
@@ -43711,8 +43248,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((129)
                          (case category
                            ((^)
@@ -43774,8 +43310,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((130)
                          (case category
                            ((^)
@@ -43837,8 +43372,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((131)
                          (case category
                            ((^)
@@ -43900,8 +43434,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((132)
                          (case category
                            ((^)
@@ -43963,8 +43496,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((133)
                          (case category
                            ((^)
@@ -44026,8 +43558,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((134)
                          (case category
                            ((^)
@@ -44089,8 +43620,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((135)
                          (case category
                            ((^)
@@ -44152,8 +43682,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((136)
                          (case category
                            ((^)
@@ -44215,8 +43744,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((137)
                          (case category
                            ((^)
@@ -44278,8 +43806,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((138)
                          (case category
                            ((^)
@@ -44341,8 +43868,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((139)
                          (case category
                            ((^)
@@ -44404,8 +43930,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((140)
                          (case category
                            ((^)
@@ -44467,8 +43992,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((141)
                          (case category
                            ((^)
@@ -44530,8 +44054,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((142)
                          (case category
                            ((^)
@@ -44593,8 +44116,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((143)
                          (case category
                            ((^)
@@ -44656,8 +44178,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((144)
                          (case category
                            ((^)
@@ -44719,8 +44240,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((145)
                          (case category
                            ((^)
@@ -44782,8 +44302,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((146)
                          (case category
                            ((^)
@@ -44845,8 +44364,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((147)
                          (case category
                            ((^)
@@ -44908,8 +44426,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((148)
                          (case category
                            ((^)
@@ -44971,8 +44488,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((149)
                          (case category
                            ((^)
@@ -45034,8 +44550,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((150)
                          (case category
                            ((^)
@@ -45097,8 +44612,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((151)
                          (case category
                            ((^)
@@ -45160,8 +44674,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((152)
                          (case category
                            ((^)
@@ -45223,8 +44736,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((153)
                          (case category
                            ((^)
@@ -45286,8 +44798,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((154)
                          (case category
                            ((^)
@@ -45349,8 +44860,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((155)
                          (case category
                            ((^)
@@ -45412,8 +44922,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((156)
                          (case category
                            ((^)
@@ -45475,8 +44984,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((157)
                          (case category
                            ((^)
@@ -45538,8 +45046,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((158)
                          (case category
                            ((^)
@@ -45601,8 +45108,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((159)
                          (case category
                            ((^)
@@ -45664,8 +45170,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((160)
                          (case category
                            ((^)
@@ -45727,8 +45232,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((161)
                          (case category
                            ((^)
@@ -45790,8 +45294,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((162)
                          (case category
                            ((^)
@@ -45853,8 +45356,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((163)
                          (case category
                            ((^)
@@ -45916,8 +45418,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((164)
                          (case category
                            ((^)
@@ -45979,8 +45480,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((165)
                          (case category
                            ((^)
@@ -46042,8 +45542,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((166)
                          (case category
                            ((^)
@@ -46105,8 +45604,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((167)
                          (case category
                            ((^)
@@ -46168,8 +45666,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((168)
                          (case category
                            ((^)
@@ -46231,8 +45728,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((169)
                          (case category
                            ((^)
@@ -46294,8 +45790,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((170)
                          (case category
                            ((^)
@@ -46357,8 +45852,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((171)
                          (case category
                            ((^)
@@ -46420,8 +45914,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((172)
                          (case category
                            ((^)
@@ -46483,8 +45976,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((173)
                          (case category
                            ((^)
@@ -46546,8 +46038,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((174)
                          (case category
                            ((^)
@@ -46609,8 +46100,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((175)
                          (case category
                            ((^)
@@ -46672,8 +46162,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((176)
                          (case category
                            ((^)
@@ -46735,8 +46224,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((177)
                          (case category
                            ((^)
@@ -46798,8 +46286,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((178)
                          (case category
                            ((^)
@@ -46861,8 +46348,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((179)
                          (case category
                            ((^)
@@ -46924,8 +46410,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((180)
                          (case category
                            ((^)
@@ -46987,8 +46472,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((181)
                          (case category
                            ((^)
@@ -47050,8 +46534,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((182)
                          (case category
                            ((^)
@@ -47113,8 +46596,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((183)
                          (case category
                            ((^)
@@ -47176,8 +46658,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((184)
                          (case category
                            ((^)
@@ -47239,8 +46720,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((185)
                          (case category
                            ((^)
@@ -47302,8 +46782,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((186)
                          (case category
                            ((^)
@@ -47365,8 +46844,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((187)
                          (case category
                            ((^)
@@ -47428,8 +46906,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((188)
                          (case category
                            ((^)
@@ -47491,8 +46968,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((189)
                          (case category
                            ((^)
@@ -47554,8 +47030,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((190)
                          (case category
                            ((^)
@@ -47617,8 +47092,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((191)
                          (case category
                            ((^)
@@ -47680,8 +47154,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((192)
                          (case category
                            ((^)
@@ -47743,8 +47216,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((193)
                          (case category
                            ((^)
@@ -47806,8 +47278,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((194)
                          (case category
                            ((^)
@@ -47869,8 +47340,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((195)
                          (case category
                            ((^)
@@ -47932,8 +47402,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((196)
                          (case category
                            ((^)
@@ -47995,8 +47464,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((197)
                          (case category
                            ((^)
@@ -48058,8 +47526,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((198)
                          (case category
                            ((^)
@@ -48121,8 +47588,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((199)
                          (case category
                            ((^)
@@ -48184,8 +47650,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((200)
                          (case category
                            ((^)
@@ -48247,8 +47712,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((201)
                          (case category
                            ((^)
@@ -48310,8 +47774,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((202)
                          (case category
                            ((^)
@@ -48373,8 +47836,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((203)
                          (case category
                            ((^)
@@ -48436,8 +47898,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((204)
                          (case category
                            ((^)
@@ -48499,8 +47960,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((205)
                          (case category
                            ((^)
@@ -48562,8 +48022,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((206)
                          (case category
                            ((^)
@@ -48625,8 +48084,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((207)
                          (case category
                            ((^)
@@ -48688,8 +48146,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((208)
                          (case category
                            ((^)
@@ -48751,8 +48208,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((209)
                          (case category
                            ((^)
@@ -48814,8 +48270,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((210)
                          (case category
                            ((^)
@@ -48877,8 +48332,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((211)
                          (case category
                            ((^)
@@ -48940,8 +48394,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((212)
                          (case category
                            ((^)
@@ -49003,8 +48456,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((213)
                          (case category
                            ((^)
@@ -49066,8 +48518,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((214)
                          (case category
                            ((^)
@@ -49129,8 +48580,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((215)
                          (case category
                            ((^)
@@ -49192,8 +48642,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((216)
                          (case category
                            ((^)
@@ -49255,8 +48704,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((217)
                          (case category
                            ((^)
@@ -49318,8 +48766,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((218)
                          (case category
                            ((^)
@@ -49381,8 +48828,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((219)
                          (case category
                            ((^)
@@ -49444,8 +48890,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((220)
                          (case category
                            ((^)
@@ -49507,8 +48952,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((221)
                          (case category
                            ((^)
@@ -49570,8 +49014,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((222)
                          (case category
                            ((^)
@@ -49633,8 +49076,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((223)
                          (case category
                            ((^)
@@ -49696,8 +49138,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((224)
                          (case category
                            ((^)
@@ -49759,8 +49200,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((225)
                          (case category
                            ((^)
@@ -49822,8 +49262,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((226)
                          (case category
                            ((^)
@@ -49885,8 +49324,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((227)
                          (case category
                            ((^)
@@ -49948,8 +49386,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((228)
                          (case category
                            ((^)
@@ -50011,8 +49448,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((229)
                          (case category
                            ((^)
@@ -50074,8 +49510,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((230)
                          (case category
                            ((^)
@@ -50137,8 +49572,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((231)
                          (case category
                            ((^)
@@ -50200,8 +49634,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((232)
                          (case category
                            ((^)
@@ -50263,8 +49696,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((233)
                          (case category
                            ((^)
@@ -50326,8 +49758,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((234)
                          (case category
                            ((^)
@@ -50389,8 +49820,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((235)
                          (case category
                            ((^)
@@ -50452,8 +49882,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((236)
                          (case category
                            ((^)
@@ -50515,8 +49944,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((237)
                          (case category
                            ((^)
@@ -50578,8 +50006,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((238)
                          (case category
                            ((^)
@@ -50641,8 +50068,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((239)
                          (case category
                            ((^)
@@ -50704,8 +50130,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((240)
                          (case category
                            ((^)
@@ -50767,8 +50192,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((241)
                          (case category
                            ((^)
@@ -50830,8 +50254,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((242)
                          (case category
                            ((^)
@@ -50893,8 +50316,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((243)
                          (case category
                            ((^)
@@ -50956,8 +50378,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((244)
                          (case category
                            ((^)
@@ -51019,8 +50440,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((245)
                          (case category
                            ((^)
@@ -51082,8 +50502,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((246)
                          (case category
                            ((^)
@@ -51145,8 +50564,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((247)
                          (case category
                            ((^)
@@ -51208,8 +50626,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((248)
                          (case category
                            ((^)
@@ -51271,8 +50688,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((249)
                          (case category
                            ((^)
@@ -51334,8 +50750,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((250)
                          (case category
                            ((^)
@@ -51397,8 +50812,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((251)
                          (case category
                            ((^)
@@ -51460,8 +50874,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((252)
                          (case category
                            ((^)
@@ -51523,8 +50936,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((253)
                          (case category
                            ((^)
@@ -51586,8 +50998,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((254)
                          (case category
                            ((^)
@@ -51649,8 +51060,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((255)
                          (case category
                            ((^)
@@ -51712,8 +51122,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((256)
                          (case category
                            ((^)
@@ -51775,8 +51184,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((257)
                          (case category
                            ((^)
@@ -51838,8 +51246,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((258)
                          (case category
                            ((^)
@@ -51901,8 +51308,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((259)
                          (case category
                            ((^)
@@ -51964,8 +51370,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((260)
                          (case category
                            ((^)
@@ -52027,8 +51432,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((261)
                          (case category
                            ((^)
@@ -52090,8 +51494,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((262)
                          (case category
                            ((^)
@@ -52153,8 +51556,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((263)
                          (case category
                            ((^)
@@ -52216,8 +51618,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((264)
                          (case category
                            ((^)
@@ -52279,8 +51680,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((265)
                          (case category
                            ((^)
@@ -52342,8 +51742,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((266)
                          (case category
                            ((^)
@@ -52405,8 +51804,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((267)
                          (case category
                            ((^)
@@ -52468,8 +51866,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((268)
                          (case category
                            ((^)
@@ -52531,8 +51928,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((269)
                          (case category
                            ((^)
@@ -52594,8 +51990,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((270)
                          (case category
                            ((^)
@@ -52657,8 +52052,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((271)
                          (case category
                            ((^)
@@ -52720,8 +52114,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((272)
                          (case category
                            ((^)
@@ -52783,8 +52176,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((273)
                          (case category
                            ((^)
@@ -52846,8 +52238,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((274)
                          (case category
                            ((^)
@@ -52909,8 +52300,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((275)
                          (case category
                            ((^)
@@ -52972,8 +52362,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((276)
                          (case category
                            ((^)
@@ -53035,8 +52424,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((277)
                          (case category
                            ((^)
@@ -53098,8 +52486,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((278)
                          (case category
                            ((^)
@@ -53161,8 +52548,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((279)
                          (case category
                            ((^)
@@ -53224,8 +52610,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((280)
                          (case category
                            ((^)
@@ -53287,8 +52672,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((281)
                          (case category
                            ((^)
@@ -53350,8 +52734,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((282)
                          (case category
                            ((^)
@@ -53413,8 +52796,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((283)
                          (case category
                            ((^)
@@ -53476,8 +52858,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((284)
                          (case category
                            ((^)
@@ -53539,8 +52920,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((285)
                          (case category
                            ((^)
@@ -53602,8 +52982,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((286)
                          (case category
                            ((^)
@@ -53665,8 +53044,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((287)
                          (case category
                            ((^)
@@ -53728,8 +53106,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((288)
                          (case category
                            ((^)
@@ -53791,8 +53168,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((289)
                          (case category
                            ((^)
@@ -53854,8 +53230,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((290)
                          (case category
                            ((^)
@@ -53917,8 +53292,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((291)
                          (case category
                            ((^)
@@ -53980,8 +53354,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((292)
                          (case category
                            ((^)
@@ -54043,8 +53416,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((293)
                          (case category
                            ((^)
@@ -54106,8 +53478,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((294)
                          (case category
                            ((^)
@@ -54169,8 +53540,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((295)
                          (case category
                            ((^)
@@ -54232,8 +53602,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((296)
                          (case category
                            ((^)
@@ -54295,8 +53664,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((297)
                          (case category
                            ((^)
@@ -54358,8 +53726,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((298)
                          (case category
                            ((^)
@@ -54421,8 +53788,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((299)
                          (case category
                            ((^)
@@ -54484,8 +53850,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((300)
                          (case category
                            ((^)
@@ -54547,8 +53912,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((301)
                          (case category
                            ((^) (process-shift 306))
@@ -54565,8 +53929,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((302)
                          (case category
                            ((n9)
@@ -57568,8 +56931,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((303)
                          (case category
                            ((n9)
@@ -60571,8 +59933,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((304)
                          (case category
                            ((n9)
@@ -63574,8 +62935,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((305)
                          (case category
                            ((n9)
@@ -66577,8 +65937,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((306)
                          (case category
                            ((n9)
@@ -69580,8 +68939,7 @@
                                 (list $0 $1)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-op))
-                           (else (do-reject token))))
+                            (process-goto-op))))
                         ((307)
                          (case category
                            ((n99) (process-shift 300))
@@ -69883,8 +69241,7 @@
                            ((n101) (process-shift 4))
                            ((n100) (process-shift 3))
                            ((n10) (process-shift 2))
-                           ((n1) (process-shift 1))
-                           (else (do-reject token))))
+                           ((n1) (process-shift 1))))
                         ((308)
                          (case category
                            ((*eoi*)
@@ -69898,38 +69255,29 @@
                                 (list $0 $1 $2 $3)))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((309)
-                         (case category
-                           ((*eoi*) (process-accept))
-                           (else (do-reject token))))
-                        (else (do-reject token)))))
+                         (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
-                    (define token
+                    (set! token
                       (iterator:next
                         input-tokens-iterator
                         parselynn:end-of-input))
                     (if (equal? token parselynn:end-of-input)
-                      (values token token token token)
+                      (values token token token)
                       (let ()
                         (define category
                           (parselynn:token:category token))
                         (define source (parselynn:token:source token))
                         (define value (parselynn:token:value token))
-                        (values token category source value))))
+                        (values category source value))))
                   (define (loop state)
                     (define-values
-                      (token category source value)
+                      (category source value)
                       (get-input))
-                    (loop-with-input
-                      state
-                      token
-                      category
-                      source
-                      value))
+                    (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
                     (stack-peek parse-stack)
-                    reject))))
+                    (do-reject)))))
             #()))))))
 

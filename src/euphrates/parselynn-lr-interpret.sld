@@ -86,6 +86,7 @@
           list
           or
           quote
+          set!
           values))
   (cond-expand
     (guile (import (only (guile) include-from-path))

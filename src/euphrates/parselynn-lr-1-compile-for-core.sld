@@ -43,6 +43,7 @@
           let
           quasiquote
           quote
+          set!
           syntax-rules
           unquote
           unquote-splicing

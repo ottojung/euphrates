@@ -60,23 +60,19 @@
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
                   (define (process-accept) 'ACCEPT)
-                  (define (loop-with-input
-                           state
-                           token
-                           category
-                           source
-                           value)
-                    (define (do-reject token)
-                      (if (equal? category parselynn:end-of-input)
-                        (error-procedure
-                          'end-of-input
-                          "Syntax error: unexpected end of input: ~s"
-                          token)
-                        (error-procedure
-                          'unexpected-token
-                          "Syntax error: unexpected token: ~s"
-                          token))
-                      reject)
+                  (define token #f)
+                  (define (do-reject)
+                    (if (equal? token parselynn:end-of-input)
+                      (error-procedure
+                        'end-of-input
+                        "Syntax error: unexpected end of input: ~s"
+                        token)
+                      (error-procedure
+                        'unexpected-token
+                        "Syntax error: unexpected token: ~s"
+                        token))
+                    reject)
+                  (define (loop-with-input state category source value)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -85,50 +81,33 @@
                       (define (process-goto-add)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((3)
-                           (loop-with-input 5 token category source value))
-                          ((10)
-                           (loop-with-input 11 token category source value))
-                          (else (do-reject token))))
+                          ((3) (loop-with-input 5 category source value))
+                          ((10) (loop-with-input 11 category source value))))
                       (define (process-goto-expr)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 16 token category source value))
-                          ((1)
-                           (loop-with-input 9 token category source value))
-                          ((5)
-                           (loop-with-input 6 token category source value))
-                          ((7)
-                           (loop-with-input 14 token category source value))
-                          ((11)
-                           (loop-with-input 12 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 16 category source value))
+                          ((1) (loop-with-input 9 category source value))
+                          ((5) (loop-with-input 6 category source value))
+                          ((7) (loop-with-input 14 category source value))
+                          ((11) (loop-with-input 12 category source value))))
                       (define (process-goto-term)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 3 token category source value))
-                          ((1)
-                           (loop-with-input 10 token category source value))
-                          ((5)
-                           (loop-with-input 3 token category source value))
-                          ((7)
-                           (loop-with-input 10 token category source value))
-                          ((11)
-                           (loop-with-input 10 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 3 category source value))
+                          ((1) (loop-with-input 10 category source value))
+                          ((5) (loop-with-input 3 category source value))
+                          ((7) (loop-with-input 10 category source value))
+                          ((11) (loop-with-input 10 category source value))))
                       (case state
                         ((0)
                          (case category
                            ((NUM) (process-shift 2))
-                           ((LPAREN) (process-shift 1))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 1))))
                         ((1)
                          (case category
                            ((NUM) (process-shift 8))
-                           ((LPAREN) (process-shift 7))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 7))))
                         ((2)
                          (case category
                            ((+)
@@ -150,8 +129,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((3)
                          (case category
                            ((+) (process-shift 4))
@@ -164,8 +142,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((4)
                          (case category
                            ((NUM)
@@ -187,13 +164,11 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-add))
-                           (else (do-reject token))))
+                            (process-goto-add))))
                         ((5)
                          (case category
                            ((NUM) (process-shift 2))
-                           ((LPAREN) (process-shift 1))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 1))))
                         ((6)
                          (case category
                            ((*eoi*)
@@ -207,13 +182,11 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((7)
                          (case category
                            ((NUM) (process-shift 8))
-                           ((LPAREN) (process-shift 7))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 7))))
                         ((8)
                          (case category
                            ((RPAREN)
@@ -235,12 +208,9 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((9)
-                         (case category
-                           ((RPAREN) (process-shift 13))
-                           (else (do-reject token))))
+                         (case category ((RPAREN) (process-shift 13))))
                         ((10)
                          (case category
                            ((+) (process-shift 4))
@@ -253,13 +223,11 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((11)
                          (case category
                            ((NUM) (process-shift 8))
-                           ((LPAREN) (process-shift 7))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 7))))
                         ((12)
                          (case category
                            ((RPAREN)
@@ -273,8 +241,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((13)
                          (case category
                            ((*eoi*)
@@ -288,12 +255,9 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((14)
-                         (case category
-                           ((RPAREN) (process-shift 15))
-                           (else (do-reject token))))
+                         (case category ((RPAREN) (process-shift 15))))
                         ((15)
                          (case category
                            ((RPAREN)
@@ -307,39 +271,29 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
-                        ((16)
-                         (case category
-                           ((*eoi*) (process-accept))
-                           (else (do-reject token))))
-                        (else (do-reject token)))))
+                            (process-goto-expr))))
+                        ((16) (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
-                    (define token
+                    (set! token
                       (iterator:next
                         input-tokens-iterator
                         parselynn:end-of-input))
                     (if (equal? token parselynn:end-of-input)
-                      (values token token token token)
+                      (values token token token)
                       (let ()
                         (define category
                           (parselynn:token:category token))
                         (define source (parselynn:token:source token))
                         (define value (parselynn:token:value token))
-                        (values token category source value))))
+                        (values category source value))))
                   (define (loop state)
                     (define-values
-                      (token category source value)
+                      (category source value)
                       (get-input))
-                    (loop-with-input
-                      state
-                      token
-                      category
-                      source
-                      value))
+                    (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
                     (stack-peek parse-stack)
-                    reject)))))
+                    (do-reject))))))
         (i3bpqtlnzqjz8ileyrpt
           ,((let ()
               (lambda (actions)
@@ -367,23 +321,19 @@
                   (define parse-stack (stack-make))
                   (define state-stack (stack-make))
                   (define (process-accept) 'ACCEPT)
-                  (define (loop-with-input
-                           state
-                           token
-                           category
-                           source
-                           value)
-                    (define (do-reject token)
-                      (if (equal? category parselynn:end-of-input)
-                        (error-procedure
-                          'end-of-input
-                          "Syntax error: unexpected end of input: ~s"
-                          token)
-                        (error-procedure
-                          'unexpected-token
-                          "Syntax error: unexpected token: ~s"
-                          token))
-                      reject)
+                  (define token #f)
+                  (define (do-reject)
+                    (if (equal? token parselynn:end-of-input)
+                      (error-procedure
+                        'end-of-input
+                        "Syntax error: unexpected end of input: ~s"
+                        token)
+                      (error-procedure
+                        'unexpected-token
+                        "Syntax error: unexpected token: ~s"
+                        token))
+                    reject)
+                  (define (loop-with-input state category source value)
                     (define (process-shift action)
                       (stack-push! state-stack state)
                       (stack-push! parse-stack value)
@@ -392,50 +342,33 @@
                       (define (process-goto-add)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((3)
-                           (loop-with-input 5 token category source value))
-                          ((10)
-                           (loop-with-input 11 token category source value))
-                          (else (do-reject token))))
+                          ((3) (loop-with-input 5 category source value))
+                          ((10) (loop-with-input 11 category source value))))
                       (define (process-goto-expr)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 16 token category source value))
-                          ((1)
-                           (loop-with-input 9 token category source value))
-                          ((5)
-                           (loop-with-input 6 token category source value))
-                          ((7)
-                           (loop-with-input 14 token category source value))
-                          ((11)
-                           (loop-with-input 12 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 16 category source value))
+                          ((1) (loop-with-input 9 category source value))
+                          ((5) (loop-with-input 6 category source value))
+                          ((7) (loop-with-input 14 category source value))
+                          ((11) (loop-with-input 12 category source value))))
                       (define (process-goto-term)
                         (define togo-state (stack-peek state-stack))
                         (case togo-state
-                          ((0)
-                           (loop-with-input 3 token category source value))
-                          ((1)
-                           (loop-with-input 10 token category source value))
-                          ((5)
-                           (loop-with-input 3 token category source value))
-                          ((7)
-                           (loop-with-input 10 token category source value))
-                          ((11)
-                           (loop-with-input 10 token category source value))
-                          (else (do-reject token))))
+                          ((0) (loop-with-input 3 category source value))
+                          ((1) (loop-with-input 10 category source value))
+                          ((5) (loop-with-input 3 category source value))
+                          ((7) (loop-with-input 10 category source value))
+                          ((11) (loop-with-input 10 category source value))))
                       (case state
                         ((0)
                          (case category
                            ((NUM) (process-shift 2))
-                           ((LPAREN) (process-shift 1))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 1))))
                         ((1)
                          (case category
                            ((NUM) (process-shift 8))
-                           ((LPAREN) (process-shift 7))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 7))))
                         ((2)
                          (case category
                            ((+)
@@ -457,8 +390,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((3)
                          (case category
                            ((+) (process-shift 4))
@@ -471,8 +403,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((4)
                          (case category
                            ((NUM)
@@ -494,13 +425,11 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-add))
-                           (else (do-reject token))))
+                            (process-goto-add))))
                         ((5)
                          (case category
                            ((NUM) (process-shift 2))
-                           ((LPAREN) (process-shift 1))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 1))))
                         ((6)
                          (case category
                            ((*eoi*)
@@ -514,13 +443,11 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((7)
                          (case category
                            ((NUM) (process-shift 8))
-                           ((LPAREN) (process-shift 7))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 7))))
                         ((8)
                          (case category
                            ((RPAREN)
@@ -542,12 +469,9 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-term))
-                           (else (do-reject token))))
+                            (process-goto-term))))
                         ((9)
-                         (case category
-                           ((RPAREN) (process-shift 13))
-                           (else (do-reject token))))
+                         (case category ((RPAREN) (process-shift 13))))
                         ((10)
                          (case category
                            ((+) (process-shift 4))
@@ -560,13 +484,11 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 1)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((11)
                          (case category
                            ((NUM) (process-shift 8))
-                           ((LPAREN) (process-shift 7))
-                           (else (do-reject token))))
+                           ((LPAREN) (process-shift 7))))
                         ((12)
                          (case category
                            ((RPAREN)
@@ -580,8 +502,7 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((13)
                          (case category
                            ((*eoi*)
@@ -595,12 +516,9 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
+                            (process-goto-expr))))
                         ((14)
-                         (case category
-                           ((RPAREN) (process-shift 15))
-                           (else (do-reject token))))
+                         (case category ((RPAREN) (process-shift 15))))
                         ((15)
                          (case category
                            ((RPAREN)
@@ -614,38 +532,28 @@
                                 #t))
                             (stack-push! state-stack state)
                             (stack-pop-multiple! state-stack 3)
-                            (process-goto-expr))
-                           (else (do-reject token))))
-                        ((16)
-                         (case category
-                           ((*eoi*) (process-accept))
-                           (else (do-reject token))))
-                        (else (do-reject token)))))
+                            (process-goto-expr))))
+                        ((16) (case category ((*eoi*) (process-accept)))))))
                   (define (get-input)
-                    (define token
+                    (set! token
                       (iterator:next
                         input-tokens-iterator
                         parselynn:end-of-input))
                     (if (equal? token parselynn:end-of-input)
-                      (values token token token token)
+                      (values token token token)
                       (let ()
                         (define category
                           (parselynn:token:category token))
                         (define source (parselynn:token:source token))
                         (define value (parselynn:token:value token))
-                        (values token category source value))))
+                        (values category source value))))
                   (define (loop state)
                     (define-values
-                      (token category source value)
+                      (category source value)
                       (get-input))
-                    (loop-with-input
-                      state
-                      token
-                      category
-                      source
-                      value))
+                    (loop-with-input state category source value))
                   (if (equal? 'ACCEPT (loop initial-state))
                     (stack-peek parse-stack)
-                    reject))))
+                    (do-reject)))))
             #()))))))
 

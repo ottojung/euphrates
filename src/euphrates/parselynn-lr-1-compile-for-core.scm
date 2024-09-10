@@ -67,15 +67,17 @@
       (define (process-accept)
         'ACCEPT)
 
-      (define (loop-with-input state token category source value)
-        (define (do-reject token)
-          (if (equal? category parselynn:end-of-input)
-              (error-procedure
-               'end-of-input "Syntax error: unexpected end of input: ~s" token)
-              (error-procedure
-               'unexpected-token "Syntax error: unexpected token: ~s" token))
-          reject)
+      (define token #f)
 
+      (define (do-reject)
+        (if (equal? token parselynn:end-of-input)
+            (error-procedure
+             'end-of-input "Syntax error: unexpected end of input: ~s" token)
+            (error-procedure
+             'unexpected-token "Syntax error: unexpected token: ~s" token))
+        reject)
+
+      (define (loop-with-input state category source value)
         (define (process-shift action)
           (stack-push! state-stack state)
           (stack-push! parse-stack value)
@@ -84,11 +86,11 @@
         ,table-based-code)
 
       (define (get-input)
-        (define token
-          (iterator:next input-tokens-iterator parselynn:end-of-input))
+        (set! token
+              (iterator:next input-tokens-iterator parselynn:end-of-input))
 
         (if (equal? token parselynn:end-of-input)
-            (values token token token token)
+            (values token token token)
             (let ()
               (define category
                 (parselynn:token:category token))
@@ -99,13 +101,13 @@
               (define value
                 (parselynn:token:value token))
 
-              (values token category source value))))
+              (values category source value))))
 
       ;; Main parsing loop.
       (define (loop state)
-        (define-values (token category source value) (get-input))
-        (loop-with-input state token category source value))
+        (define-values (category source value) (get-input))
+        (loop-with-input state category source value))
 
       (if (equal? 'ACCEPT (loop initial-state))
           (stack-peek parse-stack)
-          reject))))
+          (do-reject)))))

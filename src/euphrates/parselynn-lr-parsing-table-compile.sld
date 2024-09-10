@@ -86,11 +86,13 @@
           cons
           define
           else
+          if
           lambda
           length
           let
           list
           map
+          null?
           or
           quasiquote
           quote
