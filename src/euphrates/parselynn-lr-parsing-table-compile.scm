@@ -70,7 +70,7 @@
   (define states
     (parselynn:lr-parsing-table:state:keys table))
 
-  (define (action-column->string state key)
+  (define (compile-action-for-keystate state key)
     (define x
       (parselynn:lr-parsing-table:action:ref
        table state key reject))
@@ -140,14 +140,14 @@
       (parselynn:lr-parsing-table:action:list table state))
 
     (define single-case-code
-      (map (comp (action-column->string state)) actions))
+      (map (comp (compile-action-for-keystate state)) actions))
 
     `((,state)
       (case category
         ,@single-case-code
         (else (do-reject token)))))
 
-  (define (goto-column->string key state)
+  (define (compile-goto-for-keystate key state)
     (define x
       (parselynn:lr-parsing-table:goto:ref
        table state key reject))
@@ -176,7 +176,7 @@
     (or (hashmap-ref goto-procedures-code-hashmap lhs #f)
         (let ()
           (define name (generate-goto-function-name lhs))
-          (define new-cases (map (comp (goto-column->string lhs)) states))
+          (define new-cases (map (comp (compile-goto-for-keystate lhs)) states))
           (define new
             `(define (,name)
                (define togo-state (stack-peek state-stack))
