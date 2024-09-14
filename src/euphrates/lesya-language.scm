@@ -62,21 +62,6 @@
      (else
       term))))
 
-(define (lesya:language:beta-reduce initial-term qvarname qreplcement)
-  (unless (symbol? qvarname)
-    (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
-
-  (let loop ((term initial-term))
-    (cond
-     ((null? term)
-      term)
-     ((list? term)
-      (cons (car term) (map loop (cdr term))))
-     ((equal? term qvarname)
-      qreplcement)
-     (else
-      term))))
-
 (define (lesya:error type . args)
   (define struct (lesya:language:state/p))
   (define stack (lesya:language:state:callstack struct))
