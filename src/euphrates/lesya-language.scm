@@ -40,7 +40,6 @@
 (define-syntax lesya:language:axiom
   (syntax-rules ()
     ((_ term)
-     ;; FIXME: check if on toplevel.
      (quote term))))
 
 (define (lesya:language:alpha-convert initial-term qvarname qreplcement)
