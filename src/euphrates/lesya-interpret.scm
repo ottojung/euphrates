@@ -6,7 +6,7 @@
   (environment
    '(rename (euphrates lesya-language)
             (lesya:language:when when)
-            (lesya:language:cons cons)
+            (lesya:language:define define)
             (lesya:language:begin begin)
             )))
 

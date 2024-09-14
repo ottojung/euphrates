@@ -5,11 +5,11 @@
   (import
     (only (euphrates lesya-language)
           lesya:language:begin
-          lesya:language:cons
+          lesya:language:define
           lesya:language:run
           lesya:language:when))
   (import
-    (only (scheme base) begin cons define quote when))
+    (only (scheme base) begin define quote when))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

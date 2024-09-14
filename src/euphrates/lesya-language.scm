@@ -124,7 +124,7 @@
     ((_ (app implication argument))
      (lesya:language:modus-ponens implication argument))))
 
-(define-syntax lesya:language:cons
+(define-syntax lesya:language:define
   (syntax-rules ()
     ((_ name arg)
      (define name

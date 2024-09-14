@@ -1157,7 +1157,7 @@
     (only (euphrates lesya-language)
           lesya:language
           lesya:language:begin
-          lesya:language:cons
+          lesya:language:define
           lesya:language:run
           lesya:language:when))
   (import (only (euphrates letin) letin))

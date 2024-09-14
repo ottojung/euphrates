@@ -38,11 +38,11 @@
     (when x (if (pair? P) (pair? Q)))
     (when y (if (pair? Q) (pair? R)))
 
-    (cons z
+    (define z
           (suppose (m (pair? M))
-                   (cons refl1 (set (m M) P))
-                   (cons v1 (app x refl1))
-                   (cons v2 (app y v1))
+                   (define refl1 (set (m M) P))
+                   (define v1 (app x refl1))
+                   (define v2 (app y v1))
                    v2))
 
     0)

@@ -6,7 +6,7 @@
     lesya:language:run
     lesya:language:begin
     lesya:language:when
-    lesya:language:cons)
+    lesya:language:define)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import

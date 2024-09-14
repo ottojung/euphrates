@@ -14,7 +14,6 @@
           begin
           car
           cdr
-          cons
           define
           define-syntax
           equal?
