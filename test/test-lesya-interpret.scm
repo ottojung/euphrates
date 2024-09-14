@@ -32,6 +32,10 @@
 
 
 (test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
 
  '(begin
 
@@ -45,3 +49,25 @@
                v2)))
 
  '((z (if (P) (R)))))
+
+
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
+
+ '(begin
+
+    (when x (if (P) (if (Q) (R))))
+
+    (define z
+      (suppose (q (Q))
+               (define k
+                 (suppose (p (P))
+                          (define v1 (app x p))
+                          (define v2 (app y q))
+                          v2))
+               k)))
+
+ '((z (if (Q) (if (P) (R))))))
