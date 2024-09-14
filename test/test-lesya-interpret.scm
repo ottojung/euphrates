@@ -35,16 +35,13 @@
 
  '(begin
 
-    (when x (if (pair? P) (pair? Q)))
-    (when y (if (pair? Q) (pair? R)))
+    (when x (if (P) (Q)))
+    (when y (if (Q) (R)))
 
     (define z
-          (suppose (m (pair? M))
-                   (define refl1 (set (m M) P))
-                   (define v1 (app x refl1))
-                   (define v2 (app y v1))
-                   v2))
+      (suppose (p (P))
+               (define v1 (app x p))
+               (define v2 (app y v1))
+               v2)))
 
-    0)
-
- '((z (if (pair? M) (pair? R)))))
+ '((z (if (P) (R)))))

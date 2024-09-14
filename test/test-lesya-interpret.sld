@@ -22,7 +22,6 @@
           let
           list
           map
-          pair?
           quote
           syntax-rules
           unless
