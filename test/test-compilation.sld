@@ -1150,6 +1150,16 @@
           lenode:labels
           lenode:make
           lenode?))
+  (import
+    (only (euphrates lesya-interpret)
+          lesya:interpret))
+  (import
+    (only (euphrates lesya-language)
+          lesya:language
+          lesya:language:begin
+          lesya:language:cons
+          lesya:language:run
+          lesya:language:when))
   (import (only (euphrates letin) letin))
   (import
     (only (euphrates lexical-scope-obj)
