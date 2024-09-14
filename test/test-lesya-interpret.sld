@@ -11,7 +11,6 @@
   (import
     (only (scheme base)
           _
-          apply
           begin
           car
           cdr

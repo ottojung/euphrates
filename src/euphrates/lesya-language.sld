@@ -29,7 +29,6 @@
   (import
     (only (scheme base)
           _
-          apply
           begin
           car
           cdr
@@ -37,7 +36,6 @@
           cons
           define
           define-syntax
-          do
           else
           equal?
           if
@@ -56,6 +54,9 @@
           unless
           unquote
           when))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) reduce)))
+    (else (import (only (srfi 1) reduce))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

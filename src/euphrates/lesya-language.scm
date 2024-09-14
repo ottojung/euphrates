@@ -42,9 +42,12 @@
     ((_ name term)
      (define name (quote term)))))
 
-(define (lesya:language:replace-var initial-term qvarname qreplcement)
+(define (lesya:language:alpha-convert initial-term qvarname qreplcement)
+  (unless (symbol? qvarname)
+    (lesya:error 'non-symbol-1-in-alpha-convert qvarname initial-term qreplcement))
+
   (unless (symbol? qreplcement)
-    (lesya:error 'non-symbol-in-replacement qreplcement initial-term qvarname))
+    (lesya:error 'non-symbol-2-in-alpha-convert qreplcement initial-term qvarname))
 
   (let loop ((term initial-term))
     (cond
@@ -56,6 +59,21 @@
       qreplcement)
      ((equal? term qreplcement)
       (lesya:error 'replacement-object-found-in-the-replacement-subject qreplcement initial-term))
+     (else
+      term))))
+
+(define (lesya:language:beta-reduce initial-term qvarname qreplcement)
+  (unless (symbol? qvarname)
+    (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
+
+  (let loop ((term initial-term))
+    (cond
+     ((null? term)
+      term)
+     ((list? term)
+      (cons (car term) (map loop (cdr term))))
+     ((equal? term qvarname)
+      qreplcement)
      (else
       term))))
 
@@ -94,16 +112,16 @@
     conclusion))
 
 (define-syntax lesya:language:define-arg
-  (syntax-rules (suppose set do)
+  (syntax-rules (suppose set reduce app)
     ((_  (suppose (x shape) . bodies))
      (let ((x (quote shape)))
        `(if ,x
             ,(let () . bodies))))
 
     ((_ (set (term varname) replacement))
-     (lesya:language:replace-var term (quote varname) (quote replacement)))
+     (lesya:language:alpha-convert term (quote varname) (quote replacement)))
 
-    ((_ (apply implication argument))
+    ((_ (app implication argument))
      (lesya:language:modus-ponens implication argument))))
 
 (define-syntax lesya:language:cons

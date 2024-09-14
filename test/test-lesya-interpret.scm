@@ -41,8 +41,8 @@
     (cons z
           (suppose (m (pair? M))
                    (cons refl1 (set (m M) P))
-                   (cons v1 (apply x refl1))
-                   (cons v2 (apply y v1))
+                   (cons v1 (app x refl1))
+                   (cons v2 (app y v1))
                    v2))
 
     0)
