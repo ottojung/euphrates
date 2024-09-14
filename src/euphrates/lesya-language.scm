@@ -37,10 +37,11 @@
   (syntax-rules ()
     ((_ . args) (begin . args))))
 
-(define-syntax lesya:language:when
+(define-syntax lesya:language:axiom
   (syntax-rules ()
-    ((_ name term)
-     (define name (quote term)))))
+    ((_ term)
+     ;; FIXME: check if on toplevel.
+     (quote term))))
 
 (define (lesya:language:alpha-convert initial-term qvarname qreplcement)
   (unless (symbol? qvarname)
@@ -111,18 +112,21 @@
 
     conclusion))
 
-(define-syntax lesya:language:define-arg
-  (syntax-rules (suppose set reduce app)
-    ((_  (suppose (x shape) . bodies))
+(define-syntax lesya:language:lambda
+  (syntax-rules ()
+    ((_  (x shape) . bodies)
      (let ((x (quote shape)))
        `(if ,x
-            ,(let () . bodies))))
+            ,(let () . bodies))))))
 
-    ((_ (set (term varname) replacement))
-     (lesya:language:alpha-convert term (quote varname) (quote replacement)))
+(define-syntax lesya:language:set!
+  (syntax-rules ()
+    ((_ (term varname) replacement)
+     (lesya:language:alpha-convert
+      term (quote varname) (quote replacement)))))
 
-    ((_ (app implication argument))
-     (lesya:language:modus-ponens implication argument))))
+(define (lesya:language:apply implication argument)
+  (lesya:language:modus-ponens implication argument))
 
 (define-syntax lesya:language:define
   (syntax-rules ()
@@ -133,7 +137,7 @@
          (define stack (lesya:language:state:callstack state))
          (define mapping (lesya:language:state:mapping state))
          (define _res (stack-push! stack (quote name)))
-         (define result (lesya:language:define-arg arg))
+         (define result arg)
          (stack-pop! stack)
          (when (stack-empty? stack)
            (hashmap-set! mapping (quote name) result))

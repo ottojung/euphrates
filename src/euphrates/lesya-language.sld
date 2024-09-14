@@ -5,7 +5,10 @@
     lesya:language
     lesya:language:run
     lesya:language:begin
-    lesya:language:when
+    lesya:language:axiom
+    lesya:language:set!
+    lesya:language:lambda
+    lesya:language:apply
     lesya:language:define)
   (import
     (only (euphrates define-tuple) define-tuple))
@@ -54,9 +57,6 @@
           unless
           unquote
           when))
-  (cond-expand
-    (guile (import (only (srfi srfi-1) reduce)))
-    (else (import (only (srfi 1) reduce))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

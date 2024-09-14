@@ -11,6 +11,7 @@
   (import
     (only (scheme base)
           _
+          apply
           begin
           car
           cdr
@@ -22,10 +23,10 @@
           let
           list
           map
+          quasiquote
           quote
           syntax-rules
-          unless
-          when))
+          unless))
   (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))

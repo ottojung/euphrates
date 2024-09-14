@@ -39,16 +39,20 @@
 
  '(begin
 
-    (when x (if (P) (Q)))
-    (when y (if (Q) (R)))
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (axiom (if (Q) (R))))
 
     (define z
-      (suppose (p (P))
-               (define v1 (app x p))
-               (define v2 (app y v1))
-               v2)))
+      (lambda (p (P))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2)))
 
- '((z (if (P) (R)))))
+ `((x (if (P) (Q)))
+   (z (if (P) (R)))
+   (y (if (Q) (R)))))
 
 
 (test-case
@@ -59,15 +63,17 @@
 
  '(begin
 
-    (when x (if (P) (if (Q) (R))))
+    (define y
+      (axiom (if (P) (if (Q) (R)))))
 
     (define z
-      (suppose (q (Q))
-               (define k
-                 (suppose (p (P))
-                          (define v1 (app x p))
-                          (define v2 (app y q))
-                          v2))
-               k)))
+      (lambda (q (Q))
+        (define k
+          (lambda (p (P))
+            (define v1 (apply y p))
+            (define v2 (apply v1 q))
+            v2))
+        k)))
 
- '((z (if (Q) (if (P) (R))))))
+ `((z (if (Q) (if (P) (R))))
+   (y (if (P) (if (Q) (R))))))

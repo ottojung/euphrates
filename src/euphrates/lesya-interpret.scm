@@ -5,8 +5,11 @@
 (define lesya:environment
   (environment
    '(rename (euphrates lesya-language)
-            (lesya:language:when when)
+            (lesya:language:axiom axiom)
+            (lesya:language:set! set!)
             (lesya:language:define define)
+            (lesya:language:lambda lambda)
+            (lesya:language:apply apply)
             (lesya:language:begin begin)
             )))
 
