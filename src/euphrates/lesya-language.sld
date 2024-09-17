@@ -6,9 +6,11 @@
     lesya:language:run
     lesya:language:begin
     lesya:language:axiom
-    lesya:language:set!
+    lesya:language:and
     lesya:language:lambda
     lesya:language:apply
+    lesya:language:alpha
+    lesya:language:beta
     lesya:language:define)
   (import
     (only (euphrates define-tuple) define-tuple))
@@ -32,6 +34,7 @@
   (import
     (only (scheme base)
           _
+          and
           begin
           car
           cdr

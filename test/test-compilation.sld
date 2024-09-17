@@ -1156,13 +1156,15 @@
   (import
     (only (euphrates lesya-language)
           lesya:language
+          lesya:language:alpha
+          lesya:language:and
           lesya:language:apply
           lesya:language:axiom
           lesya:language:begin
+          lesya:language:beta
           lesya:language:define
           lesya:language:lambda
-          lesya:language:run
-          lesya:language:set!))
+          lesya:language:run))
   (import (only (euphrates letin) letin))
   (import
     (only (euphrates lexical-scope-obj)

@@ -11,7 +11,10 @@
 
        (define actual
          (map (lambda (p) (list (car p) (cdr p)))
-              (hashmap->alist result)))
+              (euphrates:list-sort
+               (hashmap->alist result)
+               (lambda (a b)
+                 (string<? (~s (car a)) (~s (car b)))))))
 
        (unless (equal? actual expected-mapping*)
          (debugs actual)
@@ -51,8 +54,8 @@
         v2)))
 
  `((x (if (P) (Q)))
-   (z (if (P) (R)))
-   (y (if (Q) (R)))))
+   (y (if (Q) (R)))
+   (z (if (P) (R)))))
 
 
 (test-case
@@ -68,12 +71,154 @@
 
     (define z
       (lambda (q (Q))
-        (define k
-          (lambda (p (P))
-            (define v1 (apply y p))
-            (define v2 (apply v1 q))
-            v2))
-        k)))
+        (lambda (p (P))
+          (define v1 (apply y p))
+          (apply v1 q)))))
 
- `((z (if (Q) (if (P) (R))))
-   (y (if (P) (if (Q) (R))))))
+ `((y (if (P) (if (Q) (R))))
+   (z (if (Q) (if (P) (R))))))
+
+
+(test-case
+ ;;
+ ;; Basic proof with disjunction.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define x
+      (lambda (y (P))
+        (lambda (w (Q))
+          (and y w))))
+
+    )
+
+ `((and-elim (if (and X Y) X))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (x (if (P) (if (Q) (and (P) (Q)))))))
+
+
+(test-case
+ ;;
+ ;; Basic proof with disjunction.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define x
+      (lambda (m (and (P) (Q)))
+        (define r1 (beta (and-elim X) (P)))
+        (define r2 (beta (r1 Y) (Q)))
+        (apply r2 m)))
+
+    )
+
+ `((and-elim (if (and X Y) X))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (x (if (and (P) (Q)) (P)))))
+
+
+(test-case
+ ;;
+ ;; Basic proof with disjunction 2.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define x
+      (lambda (m (and (P) (Q)))
+        (define s1 (beta (and-symmetric X) (P)))
+        (define s2 (beta (s1 Y) (Q)))
+        (define swapped (apply s2 m))
+        (define r1 (beta (and-elim X) (Q)))
+        (define r2 (beta (r1 Y) (P)))
+        (apply r2 swapped)))
+
+    )
+
+ `((and-elim (if (and X Y) X))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (x (if (and (P) (Q)) (Q)))))
+
+
+(test-case
+ ;;
+ ;; Basic proof trivial.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(define x (lambda (p (P)) p))
+
+ `((x (if (P) (P)))))
+
+
+(test-case
+ ;;
+ ;; Basic proof via reductio ad absurdum.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+    (define RAA
+      (axiom (if (false) X)))
+    (define Abs
+      (axiom (if (and X (not X)) (false))))
+    (define premise-1
+      (axiom (if (P) (Q))))
+
+    (define r1 (beta (and-elim X) (P)))
+    (define r2 (beta (r1 Y) (not (Q))))
+    (define s1 (beta (and-symmetric X) (P)))
+    (define s2 (beta (s1 Y) (not (Q))))
+    (define sr1 (beta (and-elim X) (not (Q))))
+    (define sr2 (beta (sr1 Y) (P)))
+    (define Abs-q (beta (Abs X) (Q)))
+    (define RAA-target (beta (RAA X) (not (and (P) (not (Q))))))
+
+    (define x
+      (lambda (m (and (P) (not (Q))))
+        (define p (apply r2 m))
+        (define swapped (apply s2 m))
+        (define notq (apply sr2 swapped))
+        (define q (apply premise-1 p))
+        (define q-and-notq (and q notq))
+        (define bot (apply Abs-q q-and-notq))
+        (apply RAA-target bot)))
+
+    )
+
+ `((Abs (if (and X (not X)) (false)))
+   (Abs-q (if (and (Q) (not (Q))) (false)))
+   (RAA (if (false) X))
+   (RAA-target
+    (if (false) (not (and (P) (not (Q))))))
+   (and-elim (if (and X Y) X))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (premise-1 (if (P) (Q)))
+   (r1 (if (and (P) Y) (P)))
+   (r2 (if (and (P) (not (Q))) (P)))
+   (s1 (if (and (P) Y) (and Y (P))))
+   (s2 (if (and (P) (not (Q))) (and (not (Q)) (P))))
+   (sr1 (if (and (not (Q)) Y) (not (Q))))
+   (sr2 (if (and (not (Q)) (P)) (not (Q))))
+   (x (if (and (P) (not (Q)))
+          (not (and (P) (not (Q))))))))

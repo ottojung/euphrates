@@ -6,7 +6,9 @@
   (environment
    '(rename (euphrates lesya-language)
             (lesya:language:axiom axiom)
-            (lesya:language:set! set!)
+            (lesya:language:alpha alpha)
+            (lesya:language:beta beta)
+            (lesya:language:and and)
             (lesya:language:define define)
             (lesya:language:lambda lambda)
             (lesya:language:apply apply)

@@ -4,13 +4,18 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debugs) debugs))
   (import
+    (only (euphrates euphrates-list-sort)
+          euphrates:list-sort))
+  (import
     (only (euphrates hashmap) hashmap->alist))
   (import
     (only (euphrates lesya-interpret)
           lesya:interpret))
+  (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
           _
+          and
           apply
           begin
           car
@@ -23,8 +28,10 @@
           let
           list
           map
+          not
           quasiquote
           quote
+          string<?
           syntax-rules
           unless))
   (import (only (scheme process-context) exit))

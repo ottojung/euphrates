@@ -55,10 +55,27 @@
       term)
      ((list? term)
       (cons (car term) (map loop (cdr term))))
-     ((equal? term qvarname)
-      qreplcement)
      ((equal? term qreplcement)
       (lesya:error 'replacement-object-found-in-the-replacement-subject qreplcement initial-term))
+     ((equal? term qvarname)
+      qreplcement)
+     (else
+      term))))
+
+(define (lesya:language:beta-reduce initial-term qvarname qreplcement)
+  (unless (symbol? qvarname)
+    (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
+
+  (let loop ((term initial-term))
+    (cond
+     ((null? term)
+      term)
+     ((list? term)
+      (cons (car term) (map loop (cdr term))))
+     ((equal? term qreplcement)
+      (lesya:error 'replacement-object-found-in-the-replacement-subject qreplcement initial-term))
+     ((equal? term qvarname)
+      qreplcement)
      (else
       term))))
 
@@ -103,10 +120,16 @@
        `(if ,x
             ,(let () . bodies))))))
 
-(define-syntax lesya:language:set!
+(define-syntax lesya:language:alpha
   (syntax-rules ()
     ((_ (term varname) replacement)
      (lesya:language:alpha-convert
+      term (quote varname) (quote replacement)))))
+
+(define-syntax lesya:language:beta
+  (syntax-rules ()
+    ((_ (term varname) replacement)
+     (lesya:language:beta-reduce
       term (quote varname) (quote replacement)))))
 
 (define (lesya:language:apply implication argument)
@@ -126,3 +149,6 @@
          (when (stack-empty? stack)
            (hashmap-set! mapping (quote name) result))
          result)))))
+
+(define (lesya:language:and a b)
+  `(and ,a ,b))
