@@ -105,8 +105,7 @@
       term))))
 
 (define (lesya:error type . args)
-  (define struct (lesya:language:state/p))
-  (define stack (lesya:language:state:callstack struct))
+  (define stack (lesya:get-current-stack))
 
   (raisu* :from "lesya:language"
           :type type
