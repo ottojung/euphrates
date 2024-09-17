@@ -33,7 +33,6 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
-          <
           _
           and
           begin
@@ -46,12 +45,12 @@
           else
           equal?
           if
-          length
           let
           list
           list?
           make-parameter
           map
+          not
           null?
           pair?
           parameterize

@@ -3,14 +3,16 @@
 
 (define-type9 <lesya:struct>
   (lesya:language:state:struct:construct
-   mapping      ;; A hashmap that associates [top-level] names of constructed terms, with their syntactic representation.
-   callstack    ;; Just names of variables being defined.
+   mapping       ;; A hashmap that associates [top-level] names of constructed terms, with their syntactic representation.
+   callstack     ;; Just names of variables being defined.
+   supposedterms ;; The hypothetical terms introduced by `lambda` in this scope so far.
    )
 
   lesya:language:state:struct?
 
   (mapping lesya:language:state:mapping)
   (callstack lesya:language:state:callstack)
+  (supposedterms lesya:language:state:supposedterms)
 
   )
 
@@ -18,8 +20,9 @@
 (define (lesya:language:state:make)
   (define mapping (make-hashmap))
   (define callstack (stack-make))
+  (define supposedterms (stack-make))
   (lesya:language:state:struct:construct
-   mapping callstack))
+   mapping callstack supposedterms))
 
 (define lesya:language:state/p
   (make-parameter #f))
@@ -43,15 +46,16 @@
   (lesya:language:state:callstack struct))
 
 
-(define (lesya:get-current-stack-depth)
-  (define stack (lesya:get-current-stack))
-  (length (stack->list stack)))
+(define (lesya:is-currently-hyphothetical?)
+  (define struct (lesya:language:state/p))
+  (define supposedterms (lesya:language:state:supposedterms struct))
+  (not (stack-empty? supposedterms)))
 
 
 (define-syntax lesya:check-that-on-toplevel
   (syntax-rules ()
     ((_ body)
-     (if (< 1 (lesya:get-current-stack-depth))
+     (if (lesya:is-currently-hyphothetical?)
          (lesya:error 'only-allowed-on-top-level
                       (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
          body))))
