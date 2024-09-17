@@ -116,6 +116,24 @@
 (define lesya:implication:name
   'if)
 
+(define lesya:negation:name
+  'not)
+
+(define lesya:conjunction:name
+  'and)
+
+(define (lesya:negation:make term)
+  `(,lesya:negation:name ,term))
+
+(define (lesya:implication:make supposition conclusion)
+  `(,lesya:implication:name ,supposition ,conclusion))
+
+(define (lesya:conjunction:make left right)
+  `(,lesya:conjunction:name ,left ,right))
+
+(define (lesya:false? term)
+  (equal? term '(false)))
+
 (define (lesya:language:modus-ponens implication argument)
   (unless (list? implication)
     (lesya:error 'not-a-term-in-implication implication))
@@ -140,9 +158,12 @@
 (define-syntax lesya:language:lambda
   (syntax-rules ()
     ((_  (x shape) . bodies)
-     (let ((x (quote shape)))
-       `(if ,x
-            ,(let () . bodies))))))
+     (let ()
+       (define x (quote shape))
+       (define result (let () . bodies))
+       (if (lesya:false? result)
+           (lesya:negation:make x)
+           (lesya:implication:make x result))))))
 
 (define-syntax lesya:language:alpha
   (syntax-rules ()

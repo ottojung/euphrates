@@ -279,3 +279,55 @@
    (premise-1 (if (P) (Q)))
    (x (if (and (P) (not (Q)))
           (not (and (P) (not (Q))))))))
+
+(test-case
+ ;;
+ ;; Basic proof via reductio ad absurdum [2].
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+    (define RAA
+      (axiom (if (false) X)))
+    (define Abs
+      (axiom (if (and X (not X)) (false))))
+    (define DN
+      (axiom (if (not (not X)) X)))
+    (define premise-1
+      (axiom (not (and (P) (not (Q))))))
+
+    (define x
+      (let ()
+        (define r1 (beta (and-elim X) (P)))
+        (define r2 (beta (r1 Y) (not (Q))))
+        (define s1 (beta (and-symmetric X) (P)))
+        (define s2 (beta (s1 Y) (not (Q))))
+        (define sr1 (beta (and-elim X) (not (Q))))
+        (define sr2 (beta (sr1 Y) (P)))
+        (define Abs-p-and-notq (beta (Abs X) (and (P) (not (Q)))))
+        (define RAA-target (beta (RAA X) (not (not (Q)))))
+        (define DN-q (beta (DN X) (Q)))
+
+        (lambda (p (P))
+          (define raa
+            (lambda (notq (not (Q)))
+              (define and-p-notq (and p notq))
+              (define contr1 (and and-p-notq premise-1))
+              (define abs1 (apply Abs-p-and-notq contr1))
+              abs1))
+          (define fin (apply DN-q raa))
+          fin)))
+
+    )
+
+ `((Abs (if (and X (not X)) (false)))
+   (DN (if (not (not X)) X))
+   (RAA (if (false) X))
+   (and-elim (if (and X Y) X))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (premise-1 (not (and (P) (not (Q)))))
+   (x (if (P) (Q)))))
