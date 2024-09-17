@@ -295,6 +295,10 @@
       (axiom (if (false) X)))
     (define Abs
       (axiom (if (and X (not X)) (false))))
+    (define Abs-I-1
+      (axiom (if (if X (not X)) (false))))
+    (define Abs-I-2
+      (axiom (if (if (not X) X) (false))))
     (define DN
       (axiom (if (not (not X)) X)))
     (define premise-1
@@ -308,23 +312,27 @@
         (define s2 (beta (s1 Y) (not (Q))))
         (define sr1 (beta (and-elim X) (not (Q))))
         (define sr2 (beta (sr1 Y) (P)))
-        (define Abs-p-and-notq (beta (Abs X) (and (P) (not (Q)))))
-        (define RAA-target (beta (RAA X) (not (not (Q)))))
-        (define DN-q (beta (DN X) (Q)))
+        (define Abs-1 (beta (Abs X) (and (P) (not (Q)))))
+        (define RAA-target (beta (RAA X) (Q)))
+        (define Abs-notq-impl-1 (beta (Abs-I-2 X) (Q)))
 
         (let ((p (P)))
-          (define raa
+          (define contr1
             (let ((notq (not (Q))))
               (define and-p-notq (and p notq))
               (define contr1 (and and-p-notq premise-1))
-              (define abs1 (apply Abs-p-and-notq contr1))
-              abs1))
-          (define fin (apply DN-q raa))
-          fin)))
+              (define abs1 (apply Abs-1 contr1))
+              (define q (apply RAA-target abs1))
+              q))
+
+          (define abs2 (apply Abs-notq-impl-1 contr1))
+          (apply RAA-target abs2))))
 
     )
 
  `((Abs (if (and X (not X)) (false)))
+   (Abs-I-1 (if (if X (not X)) (false)))
+   (Abs-I-2 (if (if (not X) X) (false)))
    (DN (if (not (not X)) X))
    (RAA (if (false) X))
    (and-elim (if (and X Y) X))

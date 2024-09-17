@@ -205,9 +205,7 @@
        (define _re (stack-push! supposedterms x))
        (define result (lesya:language:let lets . bodies))
        (stack-pop! supposedterms)
-       (if (lesya:false? result)
-           (lesya:negation:make x)
-           (lesya:implication:make x result))))))
+       (lesya:implication:make x result)))))
 
 (define (lesya:language:and a b)
   (lesya:conjunction:make a b))
