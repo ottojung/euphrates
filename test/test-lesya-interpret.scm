@@ -48,7 +48,7 @@
       (axiom (if (Q) (R))))
 
     (define z
-      (lambda (p (P))
+      (let ((p (P)))
         (define v1 (apply x p))
         (define v2 (apply y v1))
         v2)))
@@ -70,8 +70,8 @@
       (axiom (if (P) (if (Q) (R)))))
 
     (define z
-      (lambda (q (Q))
-        (lambda (p (P))
+      (let ((q (Q)))
+        (let ((p (P)))
           (define v1 (apply y p))
           (apply v1 q)))))
 
@@ -92,8 +92,8 @@
       (axiom (if (and X Y) (and Y X))))
 
     (define x
-      (lambda (y (P))
-        (lambda (w (Q))
+      (let ((y (P)))
+        (let ((w (Q)))
           (and y w))))
 
     )
@@ -119,7 +119,7 @@
     (define r2 (beta (r1 Y) (Q)))
 
     (define x
-      (lambda (m (and (P) (Q)))
+      (let ((m (and (P) (Q))))
         (apply r2 m)))
 
     )
@@ -149,7 +149,7 @@
     (define r2 (beta (r1 Y) (P)))
 
     (define x
-      (lambda (m (and (P) (Q)))
+      (let ((m (and (P) (Q))))
         (define swapped (apply s2 m))
         (apply r2 swapped)))
 
@@ -170,7 +170,7 @@
  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
  ;;
 
- '(define x (lambda (p (P)) p))
+ '(define x (let ((p (P))) p))
 
  `((x (if (P) (P)))))
 
@@ -203,7 +203,7 @@
     (define RAA-target (beta (RAA X) (not (and (P) (not (Q))))))
 
     (define x
-      (lambda (m (and (P) (not (Q))))
+      (let ((m (and (P) (not (Q)))))
         (define p (apply r2 m))
         (define swapped (apply s2 m))
         (define notq (apply sr2 swapped))
@@ -261,7 +261,7 @@
         (define Abs-q (beta (Abs X) (Q)))
         (define RAA-target (beta (RAA X) (not (and (P) (not (Q))))))
 
-        (lambda (m (and (P) (not (Q))))
+        (let ((m (and (P) (not (Q)))))
           (define p (apply r2 m))
           (define swapped (apply s2 m))
           (define notq (apply sr2 swapped))
@@ -312,9 +312,9 @@
         (define RAA-target (beta (RAA X) (not (not (Q)))))
         (define DN-q (beta (DN X) (Q)))
 
-        (lambda (p (P))
+        (let ((p (P)))
           (define raa
-            (lambda (notq (not (Q)))
+            (let ((notq (not (Q))))
               (define and-p-notq (and p notq))
               (define contr1 (and and-p-notq premise-1))
               (define abs1 (apply Abs-p-and-notq contr1))

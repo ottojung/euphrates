@@ -10,7 +10,6 @@
             (lesya:language:beta beta)
             (lesya:language:and and)
             (lesya:language:define define)
-            (lesya:language:lambda lambda)
             (lesya:language:apply apply)
             (lesya:language:begin begin)
             (lesya:language:let let)

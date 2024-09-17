@@ -7,7 +7,6 @@
     lesya:language:begin
     lesya:language:axiom
     lesya:language:and
-    lesya:language:lambda
     lesya:language:apply
     lesya:language:alpha
     lesya:language:beta

@@ -155,16 +155,6 @@
 
     conclusion))
 
-(define-syntax lesya:language:lambda
-  (syntax-rules ()
-    ((_  (x shape) . bodies)
-     (let ()
-       (define x (quote shape))
-       (define result (let () . bodies))
-       (if (lesya:false? result)
-           (lesya:negation:make x)
-           (lesya:implication:make x result))))))
-
 (define-syntax lesya:language:alpha
   (syntax-rules ()
     ((_ (term varname) replacement)
@@ -205,7 +195,15 @@
 (define-syntax lesya:language:let
   (syntax-rules ()
     ((_ () . bodies)
-     (let () . bodies))))
+     (let () . bodies))
+
+    ((_  ((x shape)) . bodies)
+     (let ()
+       (define x (quote shape))
+       (define result (let () . bodies))
+       (if (lesya:false? result)
+           (lesya:negation:make x)
+           (lesya:implication:make x result))))))
 
 (define (lesya:language:and a b)
   `(and ,a ,b))
