@@ -20,6 +20,7 @@
           begin
           define
           lambda
+          let
           quote))
   (import (only (scheme eval) environment eval))
   (cond-expand

@@ -13,6 +13,7 @@
             (lesya:language:lambda lambda)
             (lesya:language:apply apply)
             (lesya:language:begin begin)
+            (lesya:language:let let)
             )))
 
 (define (lesya:interpret program)

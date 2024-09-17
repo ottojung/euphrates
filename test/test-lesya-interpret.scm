@@ -230,3 +230,52 @@
    (sr2 (if (and (not (Q)) (P)) (not (Q))))
    (x (if (and (P) (not (Q)))
           (not (and (P) (not (Q))))))))
+
+
+(test-case
+ ;;
+ ;; Basic proof via reductio ad absurdum. Reduce export by using `let`.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+    (define RAA
+      (axiom (if (false) X)))
+    (define Abs
+      (axiom (if (and X (not X)) (false))))
+    (define premise-1
+      (axiom (if (P) (Q))))
+
+    (define x
+      (let ()
+        (define r1 (beta (and-elim X) (P)))
+        (define r2 (beta (r1 Y) (not (Q))))
+        (define s1 (beta (and-symmetric X) (P)))
+        (define s2 (beta (s1 Y) (not (Q))))
+        (define sr1 (beta (and-elim X) (not (Q))))
+        (define sr2 (beta (sr1 Y) (P)))
+        (define Abs-q (beta (Abs X) (Q)))
+        (define RAA-target (beta (RAA X) (not (and (P) (not (Q))))))
+
+        (lambda (m (and (P) (not (Q))))
+          (define p (apply r2 m))
+          (define swapped (apply s2 m))
+          (define notq (apply sr2 swapped))
+          (define q (apply premise-1 p))
+          (define q-and-notq (and q notq))
+          (define bot (apply Abs-q q-and-notq))
+          (apply RAA-target bot))))
+
+    )
+
+ `((Abs (if (and X (not X)) (false)))
+   (RAA (if (false) X))
+   (and-elim (if (and X Y) X))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (premise-1 (if (P) (Q)))
+   (x (if (and (P) (not (Q)))
+          (not (and (P) (not (Q))))))))

@@ -176,5 +176,10 @@
            (hashmap-set! mapping (quote name) result))
          result)))))
 
+(define-syntax lesya:language:let
+  (syntax-rules ()
+    ((_ () . bodies)
+     (let () . bodies))))
+
 (define (lesya:language:and a b)
   `(and ,a ,b))

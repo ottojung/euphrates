@@ -11,6 +11,7 @@
     lesya:language:apply
     lesya:language:alpha
     lesya:language:beta
+    lesya:language:let
     lesya:language:define)
   (import
     (only (euphrates define-tuple) define-tuple))
