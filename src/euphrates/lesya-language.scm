@@ -46,7 +46,7 @@
   (lesya:language:state:callstack struct))
 
 
-(define (lesya:is-currently-hyphothetical?)
+(define (lesya:currently-hyphothetical?)
   (define struct (lesya:language:state/p))
   (define supposedterms (lesya:language:state:supposedterms struct))
   (not (stack-empty? supposedterms)))
@@ -55,7 +55,7 @@
 (define-syntax lesya:check-that-on-toplevel
   (syntax-rules ()
     ((_ body)
-     (if (lesya:is-currently-hyphothetical?)
+     (if (lesya:currently-hyphothetical?)
          (lesya:error 'only-allowed-on-top-level
                       (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
          body))))
@@ -161,6 +161,11 @@
 (define (lesya:language:apply implication argument)
   (lesya:language:modus-ponens implication argument))
 
+(define (lesya:currently-at-toplevel?)
+  (define stack (lesya:get-current-stack))
+  (and (stack-empty? stack)
+       (not (lesya:currently-hyphothetical?))))
+
 (define-syntax lesya:language:define
   (syntax-rules ()
     ((_ name arg)
@@ -172,7 +177,7 @@
          (define _res (stack-push! stack (quote name)))
          (define result arg)
          (stack-pop! stack)
-         (when (stack-empty? stack)
+         (when (lesya:currently-at-toplevel?)
            (hashmap-set! mapping (quote name) result))
          result)))))
 
