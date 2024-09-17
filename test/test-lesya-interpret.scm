@@ -115,16 +115,19 @@
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
 
+    (define r1 (beta (and-elim X) (P)))
+    (define r2 (beta (r1 Y) (Q)))
+
     (define x
       (lambda (m (and (P) (Q)))
-        (define r1 (beta (and-elim X) (P)))
-        (define r2 (beta (r1 Y) (Q)))
         (apply r2 m)))
 
     )
 
  `((and-elim (if (and X Y) X))
    (and-symmetric (if (and X Y) (and Y X)))
+   (r1 (if (and (P) Y) (P)))
+   (r2 (if (and (P) (Q)) (P)))
    (x (if (and (P) (Q)) (P)))))
 
 
@@ -140,19 +143,24 @@
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
 
+    (define s1 (beta (and-symmetric X) (P)))
+    (define s2 (beta (s1 Y) (Q)))
+    (define r1 (beta (and-elim X) (Q)))
+    (define r2 (beta (r1 Y) (P)))
+
     (define x
       (lambda (m (and (P) (Q)))
-        (define s1 (beta (and-symmetric X) (P)))
-        (define s2 (beta (s1 Y) (Q)))
         (define swapped (apply s2 m))
-        (define r1 (beta (and-elim X) (Q)))
-        (define r2 (beta (r1 Y) (P)))
         (apply r2 swapped)))
 
     )
 
  `((and-elim (if (and X Y) X))
    (and-symmetric (if (and X Y) (and Y X)))
+   (r1 (if (and (Q) Y) (Q)))
+   (r2 (if (and (Q) (P)) (Q)))
+   (s1 (if (and (P) Y) (and Y (P))))
+   (s2 (if (and (P) (Q)) (and (Q) (P))))
    (x (if (and (P) (Q)) (Q)))))
 
 

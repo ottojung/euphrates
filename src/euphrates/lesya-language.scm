@@ -37,10 +37,31 @@
   (syntax-rules ()
     ((_ . args) (begin . args))))
 
+
+(define (lesya:get-current-stack)
+  (define struct (lesya:language:state/p))
+  (lesya:language:state:callstack struct))
+
+
+(define (lesya:get-current-stack-depth)
+  (define stack (lesya:get-current-stack))
+  (length (stack->list stack)))
+
+
+(define-syntax lesya:check-that-on-toplevel
+  (syntax-rules ()
+    ((_ body)
+     (if (< 1 (lesya:get-current-stack-depth))
+         (lesya:error 'only-allowed-on-top-level
+                      (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
+         body))))
+
+
 (define-syntax lesya:language:axiom
   (syntax-rules ()
     ((_ term)
-     (quote term))))
+     (lesya:check-that-on-toplevel
+      (quote term)))))
 
 (define (lesya:language:alpha-convert initial-term qvarname qreplcement)
   (unless (symbol? qvarname)
@@ -123,14 +144,16 @@
 (define-syntax lesya:language:alpha
   (syntax-rules ()
     ((_ (term varname) replacement)
-     (lesya:language:alpha-convert
-      term (quote varname) (quote replacement)))))
+     (lesya:check-that-on-toplevel
+      (lesya:language:alpha-convert
+       term (quote varname) (quote replacement))))))
 
 (define-syntax lesya:language:beta
   (syntax-rules ()
     ((_ (term varname) replacement)
-     (lesya:language:beta-reduce
-      term (quote varname) (quote replacement)))))
+     (lesya:check-that-on-toplevel
+      (lesya:language:beta-reduce
+       term (quote varname) (quote replacement))))))
 
 (define (lesya:language:apply implication argument)
   (lesya:language:modus-ponens implication argument))
