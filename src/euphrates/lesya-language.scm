@@ -206,4 +206,4 @@
            (lesya:implication:make x result))))))
 
 (define (lesya:language:and a b)
-  `(and ,a ,b))
+  (lesya:conjunction:make a b))
