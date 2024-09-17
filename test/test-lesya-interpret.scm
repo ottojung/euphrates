@@ -92,9 +92,9 @@
       (axiom (if (and X Y) (and Y X))))
 
     (define x
-      (let ((y (P)))
-        (let ((w (Q)))
-          (and y w))))
+      (let ((y (P))
+            (w (Q)))
+          (and y w)))
 
     )
 

@@ -197,10 +197,10 @@
     ((_ () . bodies)
      (let () . bodies))
 
-    ((_  ((x shape)) . bodies)
+    ((_  ((x shape) . lets) . bodies)
      (let ()
        (define x (quote shape))
-       (define result (let () . bodies))
+       (define result (lesya:language:let lets . bodies))
        (if (lesya:false? result)
            (lesya:negation:make x)
            (lesya:implication:make x result))))))
