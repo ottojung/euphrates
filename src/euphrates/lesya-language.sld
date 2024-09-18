@@ -6,7 +6,6 @@
     lesya:language:run
     lesya:language:begin
     lesya:language:axiom
-    lesya:language:and
     lesya:language:when
     lesya:language:apply
     lesya:language:alpha

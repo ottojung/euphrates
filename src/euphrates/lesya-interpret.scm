@@ -8,7 +8,6 @@
             (lesya:language:axiom axiom)
             (lesya:language:alpha alpha)
             (lesya:language:beta beta)
-            (lesya:language:and and)
             (lesya:language:define define)
             (lesya:language:apply apply)
             (lesya:language:begin begin)
@@ -17,5 +16,10 @@
             )))
 
 (define (lesya:interpret program)
+  (define escaped
+    ;; Following escape is needed to not polute the toplevel environment of Lesya.
+    ;; Zero at the end is just to allow `program` to end with `define`.
+    `(let () ,program 0))
+
   (lesya:language:run
-   (eval program lesya:environment)))
+   (eval escaped lesya:environment)))

@@ -90,15 +90,22 @@
       (axiom (if (and X Y) X)))
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
+    (define and-intro
+      (axiom (if X (if Y (and X Y)))))
 
     (define x
-      (let ((y (P))
-            (w (Q)))
-          (and y w)))
+      (let ()
+        (define and-intro-p-q
+          (beta ((beta (and-intro X) (P)) Y) (Q)))
+
+        (let ((y (P))
+              (w (Q)))
+          (apply (apply and-intro-p-q y) w))))
 
     )
 
  `((and-elim (if (and X Y) X))
+   (and-intro (if X (if Y (and X Y))))
    (and-symmetric (if (and X Y) (and Y X)))
    (x (if (P) (if (Q) (and (P) (Q)))))))
 
@@ -186,6 +193,8 @@
       (axiom (if (and X Y) X)))
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
+    (define and-intro
+      (axiom (if X (if Y (and X Y)))))
     (define Abs ;; The "absurdity rule" law.
       (axiom (if (and X (not X)) (false))))
     (define RAA ;; The "reductio ad absurdum" law.
@@ -206,6 +215,7 @@
         (define sr2 (beta (sr1 Y) (P)))
         (define Abs-q (beta (Abs X) (Q)))
         (define RAA-target (beta (RAA X) (and (P) (not (Q)))))
+        (define and-intro-q-notq (beta ((beta (and-intro X) (Q)) Y) (not (Q))))
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
@@ -213,7 +223,7 @@
             (define swapped (apply s2 m))
             (define notq (apply sr2 swapped))
             (define q (apply premise-1 p))
-            (define q-and-notq (and q notq))
+            (define q-and-notq (apply (apply and-intro-q-notq q) notq))
             (define bot (apply Abs-q q-and-notq))
             bot))
 
@@ -225,6 +235,7 @@
    (DN (if (not (not X)) X))
    (RAA (if (if X (false)) (not X)))
    (and-elim (if (and X Y) X))
+   (and-intro (if X (if Y (and X Y))))
    (and-symmetric (if (and X Y) (and Y X)))
    (premise-1 (if (P) (Q)))
    (x (not (and (P) (not (Q)))))))
@@ -241,12 +252,17 @@
       (axiom (if (and X Y) X)))
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
+    (define and-intro
+      (axiom (if X (if Y (and X Y)))))
     (define Abs ;; The "absurdity rule" law.
       (axiom (if (and X (not X)) (false))))
     (define RAA ;; The "reductio ad absurdum" law.
       (axiom (if (if X (false)) (not X))))
     (define DN ;; The "double negation" law.
       (axiom (if (not (not X)) X)))
+
+    (define premise-1
+      (axiom (if (P) (Q))))
 
     (define x
       (let ()
@@ -258,6 +274,7 @@
         (define sr2 (beta (sr1 Y) (P)))
         (define Abs-q (beta (Abs X) (Q)))
         (define RAA-target (beta (RAA X) (and (P) (not (Q)))))
+        (define and-intro-q-notq (beta ((beta (and-intro X) (Q)) Y) (not (Q))))
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
@@ -265,7 +282,7 @@
             (define swapped (apply s2 m))
             (define notq (apply sr2 swapped))
             (define q (apply premise-1 p))
-            (define q-and-notq (and q notq))
+            (define q-and-notq (apply (apply and-intro-q-notq q) notq))
             (define bot (apply Abs-q q-and-notq))
             bot))
 
@@ -277,7 +294,9 @@
    (DN (if (not (not X)) X))
    (RAA (if (if X (false)) (not X)))
    (and-elim (if (and X Y) X))
+   (and-intro (if X (if Y (and X Y))))
    (and-symmetric (if (and X Y) (and Y X)))
+   (premise-1 (if (P) (Q)))
    (x (not (and (P) (not (Q)))))))
 
 
@@ -292,6 +311,8 @@
       (axiom (if (and X Y) X)))
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
+    (define and-intro
+      (axiom (if X (if Y (and X Y)))))
     (define EFQ ;; The "ex-falso-quodlibet" law.
       (axiom (if (false) X)))
     (define Abs ;; The "absurdity rule" law.
@@ -315,12 +336,15 @@
         (define Abs-1 (beta (Abs X) (and (P) (not (Q)))))
         (define RAA-target (beta (RAA X) (not (Q))))
         (define DN-target (beta (DN X) (Q)))
+        (define and-intro-p-notq (beta ((beta (and-intro X) (P)) Y) (not (Q))))
+        (define and-intro-p-notq-premise-1 (beta ((beta (and-intro X) (and (P) (not (Q)))) Y) (not (and (P) (not (Q))))))
 
         (let ((p (P)))
           (define contr1
             (let ((notq (not (Q))))
-              (define and-p-notq (and p notq))
-              (define contr1 (and and-p-notq premise-1))
+              (define and-p-notq (apply (apply and-intro-p-notq p) notq))
+              ;; (define contr1 (and and-p-notq premise-1))
+              (define contr1 (apply (apply and-intro-p-notq-premise-1 and-p-notq) premise-1))
               (define abs1 (apply Abs-1 contr1))
               abs1))
 
@@ -334,6 +358,7 @@
    (EFQ (if (false) X))
    (RAA (if (if X (false)) (not X)))
    (and-elim (if (and X Y) X))
+   (and-intro (if X (if Y (and X Y))))
    (and-symmetric (if (and X Y) (and Y X)))
    (premise-1 (not (and (P) (not (Q)))))
    (x (if (P) (Q)))))
@@ -381,7 +406,7 @@
         (define and-intro-p-r (beta ((beta (and-intro X) (P)) Y) (R)))
         (define or-intro-p-q-p-r-1 (beta ((beta (or-intro-left X) (and (P) (Q))) Y) (and (P) (R))))
         (define or-intro-p-q-p-r-2 (beta ((beta (or-intro-right X) (and (P) (Q))) Y) (and (P) (R))))
-        (define p (apply (beta ((beta (and-elim X) (P)) Y) (or (Q) (R)))
+        (define p (apply (beta ((beta (and-elim-left X) (P)) Y) (or (Q) (R)))
                          premise-1))
         (define reversed (apply (beta ((beta (and-symmetric X) (P)) Y) (or (Q) (R)))
                                 premise-1))
@@ -393,7 +418,7 @@
             (define c (beta (b Z) (or (and (P) (Q)) (and (P) (R)))))
             c))
 
-        (define or-q-r (apply (beta ((beta (and-elim Y) (P)) X) (or (Q) (R)))
+        (define or-q-r (apply (beta ((beta (and-elim-left Y) (P)) X) (or (Q) (R)))
                               reversed))
 
         (define q-><p-&-q/p-&-r>

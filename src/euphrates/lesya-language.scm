@@ -119,17 +119,11 @@
 (define lesya:negation:name
   'not)
 
-(define lesya:conjunction:name
-  'and)
-
 (define (lesya:negation:make term)
   `(,lesya:negation:name ,term))
 
 (define (lesya:implication:make supposition conclusion)
   `(,lesya:implication:name ,supposition ,conclusion))
-
-(define (lesya:conjunction:make left right)
-  `(,lesya:conjunction:name ,left ,right))
 
 (define (lesya:false? term)
   (equal? term '(false)))
@@ -206,9 +200,6 @@
        (define result (lesya:language:let lets . bodies))
        (stack-pop! supposedterms)
        (lesya:implication:make x result)))))
-
-(define (lesya:language:and a b)
-  (lesya:conjunction:make a b))
 
 
 (define-syntax lesya:language:when
