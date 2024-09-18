@@ -360,7 +360,7 @@
     (define and-elim-left
       (axiom (if (and X Y) X)))
     (define and-elim-right
-      (axiom (if (and X Y) X)))
+      (axiom (if (and X Y) Y)))
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
     (define EFQ ;; The "ex-falso-quodlibet" law.
@@ -428,7 +428,7 @@
    (EFQ (if (false) X))
    (RAA (if (if X (false)) (not X)))
    (and-elim-left (if (and X Y) X))
-   (and-elim-right (if (and X Y) X))
+   (and-elim-right (if (and X Y) Y))
    (and-intro (if X (if Y (and X Y))))
    (and-symmetric (if (and X Y) (and Y X)))
    (or-elim
@@ -438,3 +438,133 @@
    (or-symmetric (if (or X Y) (or Y X)))
    (premise-1 (and (P) (or (Q) (R))))
    (x (or (and (P) (Q)) (and (P) (R))))))
+
+
+(test-case
+ ;;
+ ;; Derivation of ((P /\ ~P) -> Q) without EFQ law.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 11.
+ ;;
+
+ '(begin
+    (define or-intro-left
+      (axiom (if X (or X Y))))
+    (define or-intro-right
+      (axiom (if Y (or X Y))))
+    (define or-symmetric
+      (axiom (if (or X Y) (or Y X))))
+    (define or-elim
+      (axiom (if (or X Y) (if (if X Z) (if (if Y Z) Z)))))
+    (define and-intro
+      (axiom (if X (if Y (and X Y)))))
+    (define and-elim-left
+      (axiom (if (and X Y) X)))
+    (define and-elim-right
+      (axiom (if (and X Y) Y)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+    ;; (define EFQ ;; The "ex-falso-quodlibet" law.
+    ;;   (axiom (if (false) X)))
+    (define Abs ;; The "absurdity rule" law.
+      (axiom (if (and X (not X)) (false))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (axiom (if (if X (false)) (not X))))
+    (define DN ;; The "double negation" law.
+      (axiom (if (not (not X)) X)))
+
+    (define x
+      (let ()
+
+        (define and-elim-left-notp-notq
+          (beta ((beta (and-elim-left X) (not P)) Y) (not Q)))
+
+        (define and-elim-left-p-notp
+          (beta ((beta (and-elim-left X) P) Y) (not P)))
+
+        (define and-elim-right-p-notp
+          (beta ((beta (and-elim-right X) P) Y) (not P)))
+
+        (define and-intro-p-notp
+          (beta ((beta (and-intro X) P) Y) (not P)))
+
+        (define abs-p
+          (beta (Abs X) P))
+
+        (define raa1-rule (beta (RAA X) (and (not P) (not Q))))
+
+        (define and-intro-notp-notq
+          (when (beta ((beta (and-intro X) (not P)) Y) (not Q))
+            (if (not P) (if (not Q) (and (not P) (not Q))))))
+
+        (define and-intro-1
+          (when (beta ((beta (and-intro X) (and (not P) (not Q))) Y)
+                      (not (and (not P) (not Q))))
+            (if (and (not P) (not Q))
+                (if (not (and (not P) (not Q)))
+                    (and (and (not P) (not Q)) (not (and (not P) (not Q))))))))
+
+        (define abs-1
+          (when (beta (Abs X) (and (not P) (not Q)))
+            (if (and (and (not P) (not Q)) (not (and (not P) (not Q)))) (false))))
+
+        (define notq-raa
+          (when (beta (RAA X) (not Q))
+            (if (if (not Q) (false)) (not (not Q)))))
+
+        (define DN-q
+          (alpha (DN X) Q))
+
+        (let ((p-and-notp (and P (not P))))
+
+          (define p (apply and-elim-left-p-notp p-and-notp))
+          (define notp (apply and-elim-right-p-notp p-and-notp))
+
+          (define false1
+            (let ((not-p-and-not-q (and (not P) (not Q))))
+              (define and-p-notp (apply (apply and-intro-p-notp p) notp))
+              (apply abs-p and-p-notp)))
+
+          (define raa1
+            (when (apply raa1-rule false1)
+              (not (and (not P) (not Q)))))
+
+          (define not<q>->false
+            (let ((notq (not Q)))
+              (define and-p-notp
+                (when (apply (apply and-intro-notp-notq notp) notq)
+                  (and (not P) (not Q))))
+
+              (define y
+                (when (apply (apply and-intro-1 and-p-notp) raa1)
+                  (and (and (not P) (not Q)) (not (and (not P) (not Q))))))
+
+              (define yabs
+                (when (apply abs-1 y)
+                  (false)))
+
+              yabs))
+
+          (when not<q>->false
+            (if (not Q) (false)))
+
+          (define not<not<q>>
+            (when (apply notq-raa not<q>->false)
+              (not (not Q))))
+
+          (apply DN-q not<not<q>>))))
+
+    )
+
+ `((Abs (if (and X (not X)) (false)))
+   (DN (if (not (not X)) X))
+   (RAA (if (if X (false)) (not X)))
+   (and-elim-left (if (and X Y) X))
+   (and-elim-right (if (and X Y) Y))
+   (and-intro (if X (if Y (and X Y))))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (or-elim
+    (if (or X Y) (if (if X Z) (if (if Y Z) Z))))
+   (or-intro-left (if X (or X Y)))
+   (or-intro-right (if Y (or X Y)))
+   (or-symmetric (if (or X Y) (or Y X)))
+   (x (if (and P (not P)) Q))))
