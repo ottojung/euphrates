@@ -190,7 +190,7 @@
       (axiom (if (and X (not X)) (false))))
     (define RAA ;; The "reductio ad absurdum" law.
       (axiom (if (if X (false)) (not X))))
-    (define DN ;; The "double negation" law;
+    (define DN ;; The "double negation" law.
       (axiom (if (not (not X)) X)))
 
     (define premise-1
@@ -245,7 +245,7 @@
       (axiom (if (and X (not X)) (false))))
     (define RAA ;; The "reductio ad absurdum" law.
       (axiom (if (if X (false)) (not X))))
-    (define DN ;; The "double negation" law;
+    (define DN ;; The "double negation" law.
       (axiom (if (not (not X)) X)))
 
     (define x
@@ -298,7 +298,7 @@
       (axiom (if (and X (not X)) (false))))
     (define RAA ;; The "reductio ad absurdum" law.
       (axiom (if (if X (false)) (not X))))
-    (define DN ;; The "double negation" law;
+    (define DN ;; The "double negation" law.
       (axiom (if (not (not X)) X)))
 
     (define premise-1
@@ -337,3 +337,104 @@
    (and-symmetric (if (and X Y) (and Y X)))
    (premise-1 (not (and (P) (not (Q)))))
    (x (if (P) (Q)))))
+
+
+(test-case
+ ;;
+ ;; Basic case-proof. (Proving distributivity of conjunction over disjunction).
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 9.
+ ;; Note: the proof there seems to be wrong, actually.
+ ;;
+
+ '(begin
+    (define or-intro-left
+      (axiom (if X (or X Y))))
+    (define or-intro-right
+      (axiom (if Y (or X Y))))
+    (define or-symmetric
+      (axiom (if (or X Y) (or Y X))))
+    (define or-elim
+      (axiom (if (or X Y) (if (if X Z) (if (if Y Z) Z)))))
+    (define and-intro
+      (axiom (if X (if Y (and X Y)))))
+    (define and-elim-left
+      (axiom (if (and X Y) X)))
+    (define and-elim-right
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+    (define EFQ ;; The "ex-falso-quodlibet" law.
+      (axiom (if (false) X)))
+    (define Abs ;; The "absurdity rule" law.
+      (axiom (if (and X (not X)) (false))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (axiom (if (if X (false)) (not X))))
+    (define DN ;; The "double negation" law.
+      (axiom (if (not (not X)) X)))
+
+    (define premise-1
+      (axiom (and (P) (or (Q) (R)))))
+
+    (define x
+      (let ()
+        (define and-intro-p-q (beta ((beta (and-intro X) (P)) Y) (Q)))
+        (define and-intro-p-r (beta ((beta (and-intro X) (P)) Y) (R)))
+        (define or-intro-p-q-p-r-1 (beta ((beta (or-intro-left X) (and (P) (Q))) Y) (and (P) (R))))
+        (define or-intro-p-q-p-r-2 (beta ((beta (or-intro-right X) (and (P) (Q))) Y) (and (P) (R))))
+        (define p (apply (beta ((beta (and-elim X) (P)) Y) (or (Q) (R)))
+                         premise-1))
+        (define reversed (apply (beta ((beta (and-symmetric X) (P)) Y) (or (Q) (R)))
+                                premise-1))
+
+        (define or-elim-target
+          (let ()
+            (define a (beta (or-elim X) (Q)))
+            (define b (beta (a Y) (R)))
+            (define c (beta (b Z) (or (and (P) (Q)) (and (P) (R)))))
+            c))
+
+        (define or-q-r (apply (beta ((beta (and-elim Y) (P)) X) (or (Q) (R)))
+                              reversed))
+
+        (define q-><p-&-q/p-&-r>
+          (let ((q (Q)))
+            (define p-and-q
+              (apply (apply and-intro-p-q p) q))
+
+            (apply or-intro-p-q-p-r-1 p-and-q)))
+
+        (define r-><p-&-q/p-&-r>
+          (let ((r (R)))
+            (define p-and-r
+              (apply (apply and-intro-p-r p) r))
+
+            (apply or-intro-p-q-p-r-2 p-and-r)))
+
+        (define or-elim-target-1
+          (apply or-elim-target or-q-r))
+
+        (define or-elim-target-2
+          (apply or-elim-target-1 q-><p-&-q/p-&-r>))
+
+        (define or-elim-target-3
+          (apply or-elim-target-2 r-><p-&-q/p-&-r>))
+
+        or-elim-target-3))
+
+    )
+
+ `((Abs (if (and X (not X)) (false)))
+   (DN (if (not (not X)) X))
+   (EFQ (if (false) X))
+   (RAA (if (if X (false)) (not X)))
+   (and-elim-left (if (and X Y) X))
+   (and-elim-right (if (and X Y) X))
+   (and-intro (if X (if Y (and X Y))))
+   (and-symmetric (if (and X Y) (and Y X)))
+   (or-elim
+    (if (or X Y) (if (if X Z) (if (if Y Z) Z))))
+   (or-intro-left (if X (or X Y)))
+   (or-intro-right (if Y (or X Y)))
+   (or-symmetric (if (or X Y) (or Y X)))
+   (premise-1 (and (P) (or (Q) (R))))
+   (x (or (and (P) (Q)) (and (P) (R))))))

@@ -29,6 +29,7 @@
           list
           map
           not
+          or
           quasiquote
           quote
           string<?
