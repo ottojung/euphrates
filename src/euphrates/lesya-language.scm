@@ -5,7 +5,7 @@
   (lesya:language:state:struct:construct
    mapping       ;; A hashmap that associates [top-level] names of constructed terms, with their syntactic representation.
    callstack     ;; Just names of variables being defined.
-   supposedterms ;; The hypothetical terms introduced by `lambda` in this scope so far.
+   supposedterms ;; The hypothetical terms introduced by `let` in this scope so far.
    )
 
   lesya:language:state:struct?
