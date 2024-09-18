@@ -12,7 +12,8 @@
           lesya:language:beta
           lesya:language:define
           lesya:language:let
-          lesya:language:run))
+          lesya:language:run
+          lesya:language:when))
   (import
     (only (scheme base)
           and
@@ -20,7 +21,8 @@
           begin
           define
           let
-          quote))
+          quote
+          when))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

@@ -209,3 +209,14 @@
 
 (define (lesya:language:and a b)
   (lesya:conjunction:make a b))
+
+
+(define-syntax lesya:language:when
+  (syntax-rules ()
+    ((_ a b)
+     (let ()
+       (define a* a)
+       (define b* (quote b))
+       (if (equal? a* b*)
+           a*
+           (lesya:error 'terms-are-not-equal a* b*))))))

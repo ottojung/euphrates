@@ -1164,7 +1164,8 @@
           lesya:language:beta
           lesya:language:define
           lesya:language:let
-          lesya:language:run))
+          lesya:language:run
+          lesya:language:when))
   (import (only (euphrates letin) letin))
   (import
     (only (euphrates lexical-scope-obj)
