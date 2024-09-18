@@ -116,12 +116,6 @@
 (define lesya:implication:name
   'if)
 
-(define lesya:negation:name
-  'not)
-
-(define (lesya:negation:make term)
-  `(,lesya:negation:name ,term))
-
 (define (lesya:implication:make supposition conclusion)
   `(,lesya:implication:name ,supposition ,conclusion))
 
