@@ -1,6 +1,17 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;
+;;
+;;
+;; Throughout a lasting night of darkness
+;; Ne'er shall I rest my own eyes,
+;; Always searching for the guiding star,
+;; The bright empress of the dark night skies.
+;;
+;;
+
+
 (define-type9 <lesya:struct>
   (lesya:language:state:struct:construct
    mapping       ;; A hashmap that associates [top-level] names of constructed terms, with their syntactic representation.
