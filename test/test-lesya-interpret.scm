@@ -593,3 +593,25 @@
    (or-intro-right (if Y (or X Y)))
    (or-symmetric (if (or X Y) (or Y X)))
    (x (if (and P (not P)) Q))))
+
+(test-case
+ ;;
+ ;; Test for unquote.
+ ;;
+
+ '(begin
+    (define x
+      (axiom (P)))
+
+    (define y
+      (axiom (and x ,x)))
+
+    (define z
+      (axiom (and x (unquote x))))
+
+    )
+
+
+ `((x (P))
+   (y (and x (P)))
+   (z (and x (P)))))

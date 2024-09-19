@@ -35,6 +35,7 @@
           string<?
           syntax-rules
           unless
+          unquote
           when))
   (import (only (scheme process-context) exit))
   (cond-expand

@@ -76,7 +76,7 @@
   (syntax-rules ()
     ((_ term)
      (lesya:check-that-on-toplevel
-      (quote term)))))
+      (quasiquote term)))))
 
 (define (lesya:language:alpha-convert initial-term qvarname qreplcement)
   (unless (symbol? qvarname)

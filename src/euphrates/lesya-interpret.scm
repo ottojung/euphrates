@@ -4,6 +4,7 @@
 
 (define lesya:environment
   (environment
+   '(only (scheme base) unquote)
    '(rename (euphrates lesya-language)
             (lesya:language:axiom axiom)
             (lesya:language:alpha alpha)
