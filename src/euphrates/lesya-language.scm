@@ -130,9 +130,6 @@
 (define (lesya:implication:make supposition conclusion)
   `(,lesya:implication:name ,supposition ,conclusion))
 
-(define (lesya:false? term)
-  (equal? term '(false)))
-
 (define (lesya:language:modus-ponens implication argument)
   (unless (list? implication)
     (lesya:error 'not-a-term-in-implication implication))
