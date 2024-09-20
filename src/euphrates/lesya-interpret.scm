@@ -14,6 +14,7 @@
             (lesya:language:begin begin)
             (lesya:language:let let)
             (lesya:language:when when)
+            (lesya:language:map map)
             )))
 
 (define (lesya:interpret program)

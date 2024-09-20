@@ -49,8 +49,8 @@
 
     (define z
       (let ((p (P)))
-        (define v1 (apply x p))
-        (define v2 (apply y v1))
+        (define v1 (map x p))
+        (define v2 (map y v1))
         v2)))
 
  `((x (if (P) (Q)))
@@ -72,8 +72,8 @@
     (define z
       (let ((q (Q)))
         (let ((p (P)))
-          (define v1 (apply y p))
-          (apply v1 q)))))
+          (define v1 (map y p))
+          (map v1 q)))))
 
  `((y (if (P) (if (Q) (R))))
    (z (if (Q) (if (P) (R))))))
@@ -100,7 +100,7 @@
 
         (let ((y (P))
               (w (Q)))
-          (apply (apply and-intro-p-q y) w))))
+          (map (map and-intro-p-q y) w))))
 
     )
 
@@ -127,7 +127,7 @@
 
     (define x
       (let ((m (and (P) (Q))))
-        (apply r2 m)))
+        (map r2 m)))
 
     )
 
@@ -157,8 +157,8 @@
 
     (define x
       (let ((m (and (P) (Q))))
-        (define swapped (apply s2 m))
-        (apply r2 swapped)))
+        (define swapped (map s2 m))
+        (map r2 swapped)))
 
     )
 
@@ -219,15 +219,15 @@
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
-            (define p (apply r2 m))
-            (define swapped (apply s2 m))
-            (define notq (apply sr2 swapped))
-            (define q (apply premise-1 p))
-            (define q-and-notq (apply (apply and-intro-q-notq q) notq))
-            (define bot (apply Abs-q q-and-notq))
+            (define p (map r2 m))
+            (define swapped (map s2 m))
+            (define notq (map sr2 swapped))
+            (define q (map premise-1 p))
+            (define q-and-notq (map (map and-intro-q-notq q) notq))
+            (define bot (map Abs-q q-and-notq))
             bot))
 
-        (apply RAA-target tofalse)))
+        (map RAA-target tofalse)))
 
     )
 
@@ -278,15 +278,15 @@
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
-            (define p (apply r2 m))
-            (define swapped (apply s2 m))
-            (define notq (apply sr2 swapped))
-            (define q (apply premise-1 p))
-            (define q-and-notq (apply (apply and-intro-q-notq q) notq))
-            (define bot (apply Abs-q q-and-notq))
+            (define p (map r2 m))
+            (define swapped (map s2 m))
+            (define notq (map sr2 swapped))
+            (define q (map premise-1 p))
+            (define q-and-notq (map (map and-intro-q-notq q) notq))
+            (define bot (map Abs-q q-and-notq))
             bot))
 
-        (apply RAA-target tofalse)))
+        (map RAA-target tofalse)))
 
     )
 
@@ -342,14 +342,14 @@
         (let ((p (P)))
           (define contr1
             (let ((notq (not (Q))))
-              (define and-p-notq (apply (apply and-intro-p-notq p) notq))
+              (define and-p-notq (map (map and-intro-p-notq p) notq))
               ;; (define contr1 (and and-p-notq premise-1))
-              (define contr1 (apply (apply and-intro-p-notq-premise-1 and-p-notq) premise-1))
-              (define abs1 (apply Abs-1 contr1))
+              (define contr1 (map (map and-intro-p-notq-premise-1 and-p-notq) premise-1))
+              (define abs1 (map Abs-1 contr1))
               abs1))
 
-          (define nnq (apply RAA-target contr1))
-          (apply DN-target nnq))))
+          (define nnq (map RAA-target contr1))
+          (map DN-target nnq))))
 
     )
 
@@ -406,9 +406,9 @@
         (define and-intro-p-r (beta ((beta (and-intro X) (P)) Y) (R)))
         (define or-intro-p-q-p-r-1 (beta ((beta (or-intro-left X) (and (P) (Q))) Y) (and (P) (R))))
         (define or-intro-p-q-p-r-2 (beta ((beta (or-intro-right X) (and (P) (Q))) Y) (and (P) (R))))
-        (define p (apply (beta ((beta (and-elim-left X) (P)) Y) (or (Q) (R)))
+        (define p (map (beta ((beta (and-elim-left X) (P)) Y) (or (Q) (R)))
                          premise-1))
-        (define reversed (apply (beta ((beta (and-symmetric X) (P)) Y) (or (Q) (R)))
+        (define reversed (map (beta ((beta (and-symmetric X) (P)) Y) (or (Q) (R)))
                                 premise-1))
 
         (define or-elim-target
@@ -418,31 +418,31 @@
             (define c (beta (b Z) (or (and (P) (Q)) (and (P) (R)))))
             c))
 
-        (define or-q-r (apply (beta ((beta (and-elim-left Y) (P)) X) (or (Q) (R)))
+        (define or-q-r (map (beta ((beta (and-elim-left Y) (P)) X) (or (Q) (R)))
                               reversed))
 
         (define q-><p-&-q/p-&-r>
           (let ((q (Q)))
             (define p-and-q
-              (apply (apply and-intro-p-q p) q))
+              (map (map and-intro-p-q p) q))
 
-            (apply or-intro-p-q-p-r-1 p-and-q)))
+            (map or-intro-p-q-p-r-1 p-and-q)))
 
         (define r-><p-&-q/p-&-r>
           (let ((r (R)))
             (define p-and-r
-              (apply (apply and-intro-p-r p) r))
+              (map (map and-intro-p-r p) r))
 
-            (apply or-intro-p-q-p-r-2 p-and-r)))
+            (map or-intro-p-q-p-r-2 p-and-r)))
 
         (define or-elim-target-1
-          (apply or-elim-target or-q-r))
+          (map or-elim-target or-q-r))
 
         (define or-elim-target-2
-          (apply or-elim-target-1 q-><p-&-q/p-&-r>))
+          (map or-elim-target-1 q-><p-&-q/p-&-r>))
 
         (define or-elim-target-3
-          (apply or-elim-target-2 r-><p-&-q/p-&-r>))
+          (map or-elim-target-2 r-><p-&-q/p-&-r>))
 
         or-elim-target-3))
 
@@ -541,30 +541,30 @@
 
         (let ((p-and-notp (and P (not P))))
 
-          (define p (apply and-elim-left-p-notp p-and-notp))
-          (define notp (apply and-elim-right-p-notp p-and-notp))
+          (define p (map and-elim-left-p-notp p-and-notp))
+          (define notp (map and-elim-right-p-notp p-and-notp))
 
           (define false1
             (let ((not-p-and-not-q (and (not P) (not Q))))
-              (define and-p-notp (apply (apply and-intro-p-notp p) notp))
-              (apply abs-p and-p-notp)))
+              (define and-p-notp (map (map and-intro-p-notp p) notp))
+              (map abs-p and-p-notp)))
 
           (define raa1
-            (when (apply raa1-rule false1)
+            (when (map raa1-rule false1)
               (not (and (not P) (not Q)))))
 
           (define not<q>->false
             (let ((notq (not Q)))
               (define and-p-notp
-                (when (apply (apply and-intro-notp-notq notp) notq)
+                (when (map (map and-intro-notp-notq notp) notq)
                   (and (not P) (not Q))))
 
               (define y
-                (when (apply (apply and-intro-1 and-p-notp) raa1)
+                (when (map (map and-intro-1 and-p-notp) raa1)
                   (and (and (not P) (not Q)) (not (and (not P) (not Q))))))
 
               (define yabs
-                (when (apply abs-1 y)
+                (when (map abs-1 y)
                   (false)))
 
               yabs))
@@ -573,10 +573,10 @@
             (if (not Q) (false)))
 
           (define not<not<q>>
-            (when (apply notq-raa not<q>->false)
+            (when (map notq-raa not<q>->false)
               (not (not Q))))
 
-          (apply DN-q not<not<q>>))))
+          (map DN-q not<not<q>>))))
 
     )
 
@@ -593,6 +593,7 @@
    (or-intro-right (if Y (or X Y)))
    (or-symmetric (if (or X Y) (or Y X)))
    (x (if (and P (not P)) Q))))
+
 
 (test-case
  ;;
@@ -615,3 +616,71 @@
  `((x (P))
    (y (and x (P)))
    (z (and x (P)))))
+
+
+;; (test-case
+;;  ;;
+;;  ;; Case for Universal Instantiation rule.
+;;  ;;
+
+;;  '(begin
+;;     (define x
+;;       (axiom (c1)))
+
+;;     (define y
+;;       (axiom (forall (m) (P (m)))))
+
+;;     (define beta-rule ;; This is like generalized ((X /\ ~X) -> Y)
+;;       (if (not X) (if B (map B (if X Y)))))
+
+;;     (define universal-instantiation
+;;       (axiom (if t (if (forall x B) (map B (if x t))))))
+
+;;     (define universal-generalization
+;;       (axiom (if c (if (if P Q) (map (forall c Q) (if P c))))))
+
+;;     (define existential-generalization
+;;       (axiom (if c (if B (if x (exists c (map B (if x c))))))))
+
+;;     (define existential-instantiation
+;;       (axiom (if (exists x B) (map B (if x B)))))
+
+;;       ;; (axiom (if k (if (forall m X) (if m k)))))
+
+
+
+;;     )
+
+
+;;  `((x (P))
+;;    (y (and x (P)))
+;;    (z (and x (P)))))
+
+
+;; ;;;;;;;;;;;;;;;;;;
+;; ;;
+;; ;;  Using MAP here...
+;; ;;
+
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
+
+ '(begin
+
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (axiom (if (Q) (R))))
+
+    (define z
+      (let ((p (P)))
+        (define v1 (map x p))
+        (define v2 (map y v1))
+        v2)))
+
+ `((x (if (P) (Q)))
+   (y (if (Q) (R)))
+   (z (if (P) (R)))))

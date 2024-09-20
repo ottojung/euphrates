@@ -6,6 +6,7 @@
     lesya:language:run
     lesya:language:begin
     lesya:language:axiom
+    lesya:language:map
     lesya:language:when
     lesya:language:apply
     lesya:language:alpha
@@ -42,6 +43,7 @@
           cons
           define
           define-syntax
+          define-values
           else
           equal?
           if
@@ -60,6 +62,7 @@
           syntax-rules
           unless
           unquote
+          values
           when))
   (cond-expand
     (guile (import (only (guile) include-from-path))

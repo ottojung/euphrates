@@ -16,7 +16,6 @@
     (only (scheme base)
           _
           and
-          apply
           begin
           car
           cdr

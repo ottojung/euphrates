@@ -11,6 +11,7 @@
           lesya:language:beta
           lesya:language:define
           lesya:language:let
+          lesya:language:map
           lesya:language:run
           lesya:language:when))
   (import
@@ -19,6 +20,7 @@
           begin
           define
           let
+          map
           quasiquote
           quote
           unquote

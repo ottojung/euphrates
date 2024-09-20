@@ -99,19 +99,16 @@
       term))))
 
 (define (lesya:language:beta-reduce initial-term qvarname qreplcement)
-  (unless (symbol? qvarname)
-    (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
-
   (let loop ((term initial-term))
     (cond
+     ((equal? term qvarname)
+      qreplcement)
      ((null? term)
       term)
      ((list? term)
       (cons (car term) (map loop (cdr term))))
      ((equal? term qreplcement)
       (lesya:error 'replacement-object-found-in-the-replacement-subject qreplcement initial-term))
-     ((equal? term qvarname)
-      qreplcement)
      (else
       term))))
 
@@ -130,7 +127,7 @@
 (define (lesya:implication:make supposition conclusion)
   `(,lesya:implication:name ,supposition ,conclusion))
 
-(define (lesya:language:modus-ponens implication argument)
+(define (lesya:implication:destruct implication)
   (unless (list? implication)
     (lesya:error 'not-a-term-in-implication implication))
 
@@ -146,10 +143,16 @@
     (unless (equal? predicate lesya:implication:name)
       (lesya:error 'non-implication-in-modus-ponens implication))
 
-    (unless (equal? premise argument)
-      (lesya:error 'non-matching-modus-ponens argument implication))
+    (values premise conclusion)))
 
-    conclusion))
+(define (lesya:language:modus-ponens implication argument)
+  (define-values (premise conclusion)
+    (lesya:implication:destruct implication))
+
+  (unless (equal? premise argument)
+    (lesya:error 'non-matching-modus-ponens argument implication))
+
+  conclusion)
 
 (define-syntax lesya:language:alpha
   (syntax-rules ()
@@ -162,8 +165,14 @@
   (syntax-rules ()
     ((_ (term varname) replacement)
      (lesya:check-that-on-toplevel
-      (lesya:language:beta-reduce
-       term (quote varname) (quote replacement))))))
+      (let ()
+        (define qvarname (quote varname))
+
+        (unless (symbol? qvarname)
+          (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
+
+        (lesya:language:beta-reduce
+         term qvarname (quote replacement)))))))
 
 (define (lesya:language:apply implication argument)
   (lesya:language:modus-ponens implication argument))
@@ -213,3 +222,11 @@
        (if (equal? a* b*)
            a*
            (lesya:error 'terms-are-not-equal a* b*))))))
+
+
+(define (lesya:language:map implication body)
+  (define-values (premise conclusion)
+    (lesya:implication:destruct implication))
+
+  (lesya:language:beta-reduce
+   body premise conclusion))
