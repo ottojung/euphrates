@@ -662,7 +662,6 @@
 ;;  Using MAP here...
 ;;
 
-
 (test-case
  ;;
  ;; Basic proof with disjunction.
@@ -679,102 +678,16 @@
 
     (define x
       (let ()
-        (define or-intro-left
-          (axiom (if X (or X Y))))
-
-        (define excluded-middle
-          (axiom (or X (not X))))
-
-        (define and-intro-p-q
-          (beta ((beta (and-intro X) (P)) Y) (Q)))
-
-        (when and-intro-p-q
-          (if (P) (if (Q) (and (P) (Q)))))
-
-        (define EFQ ;; The "ex-falso-quodlibet" law.
-          (axiom (if (false) X)))
-
-        (define or-intro-left-p-q
-          (beta ((beta (or-intro-left X) (P)) Y) (Q)))
-
-        (when or-intro-left-p-q
-          (if (P) (or (P) (Q))))
-
-        (define impl
-          (let ()
-
-            (define xxx
-              (let ((p (P)))
-                (define false->p (let ((w (false))) p))
-                (map false->p EFQ)))
-
-            (when xxx
-              (if (P) (if (P) X)))
-
-            ;; (define impl1
-            ;;   (let ((x->p (if X (P))))
-            ;;     (define ret
-            ;;       (map x->p or-intro-left))
-
-            ;;     (when ret (if (P) (or (P) Y)))
-
-            ;;     ret))
-
-            (define impl1
-              (let ((x X))
-                (let ((p (P)))
-                  (define x->p (let ((x X)) p))
-
-                  (map x->p or-intro-left))))
-
-            (when impl1
-              (if X (if (P) (if (P) (or (P) Y)))))
-
-            (define direct
-              (let ((p (P)))
-                (define x->p (let ((x X)) p))
-                (map x->p or-intro-left)))
-
-            (when direct
-              (if (P) (if (P) (or (P) Y))))
-
-            (define direct-rename
-              (let ((w W))
-                (define x->p (let ((x X)) w))
-                (map x->p or-intro-left)))
-
-            (when direct-rename
-              (if W (if W (or W Y))))
-
-            ;; (when impl1
-            ;;   (if X (if (P) (if (P) (or (P) Y)))))
-
-
-                ;;     (define ret
-                ;;   (map x->p or-intro-left))
-
-                ;; (when ret (if (P) (or (P) Y)))
-
-                ;; ret))
-
-            ;; (when impl1
-            ;;   (if (if X (P))
-            ;;       (if (P) (or (P) Y))))
-
-            ;; (define impl1
-            ;;   (axiom (if X (if (P) (if (P) (or (P) Y))))))
-
-            ;; (define impl2
-            ;;   (axiom (if (not X) (if (P) (if (P) (or (P) Y))))))
-
-            ;; (define conclusion
-            ;;   (axiom (if (P) (if (P) (or (P) Y)))))
-
-            0))
-
         (let ((y (P))
               (w (Q)))
-          (map (map and-intro-p-q y) w))))
+
+          (define and-intro-p-q
+            (let ()
+              (define x->p (let ((x X)) y))
+              (define y->q (let ((y Y)) w))
+              (map y->q (map x->p and-intro))))
+
+          (apply (apply and-intro-p-q y) w))))
 
     )
 
@@ -782,3 +695,125 @@
    (and-intro (if X (if Y (and X Y))))
    (and-symmetric (if (and X Y) (and Y X)))
    (x (if (P) (if (Q) (and (P) (Q)))))))
+
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof with disjunction.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+;;     (define and-intro
+;;       (axiom (if X (if Y (and X Y)))))
+
+;;     (define x
+;;       (let ()
+;;         (define or-intro-left
+;;           (axiom (if X (or X Y))))
+
+;;         (define excluded-middle
+;;           (axiom (or X (not X))))
+
+;;         (define and-intro-p-q
+;;           (beta ((beta (and-intro X) (P)) Y) (Q)))
+
+;;         (when and-intro-p-q
+;;           (if (P) (if (Q) (and (P) (Q)))))
+
+;;         (define EFQ ;; The "ex-falso-quodlibet" law.
+;;           (axiom (if (false) X)))
+
+;;         (define or-intro-left-p-q
+;;           (beta ((beta (or-intro-left X) (P)) Y) (Q)))
+
+;;         (when or-intro-left-p-q
+;;           (if (P) (or (P) (Q))))
+
+;;         (define impl
+;;           (let ()
+
+;;             (define xxx
+;;               (let ((p (P)))
+;;                 (define false->p (let ((w (false))) p))
+;;                 (map false->p EFQ)))
+
+;;             (when xxx
+;;               (if (P) (if (P) X)))
+
+;;             ;; (define impl1
+;;             ;;   (let ((x->p (if X (P))))
+;;             ;;     (define ret
+;;             ;;       (map x->p or-intro-left))
+
+;;             ;;     (when ret (if (P) (or (P) Y)))
+
+;;             ;;     ret))
+
+;;             (define impl1
+;;               (let ((x X))
+;;                 (let ((p (P)))
+;;                   (define x->p (let ((x X)) p))
+
+;;                   (map x->p or-intro-left))))
+
+;;             (when impl1
+;;               (if X (if (P) (if (P) (or (P) Y)))))
+
+;;             (define direct
+;;               (let ((p (P)))
+;;                 (define x->p (let ((x X)) p))
+;;                 (map x->p or-intro-left)))
+
+;;             (when direct
+;;               (if (P) (if (P) (or (P) Y))))
+
+;;             (define direct-rename
+;;               (let ((w W))
+;;                 (define x->p (let ((x X)) w))
+;;                 (map x->p or-intro-left)))
+
+;;             (when direct-rename
+;;               (if W (if W (or W Y))))
+
+;;             ;; (when impl1
+;;             ;;   (if X (if (P) (if (P) (or (P) Y)))))
+
+
+;;                 ;;     (define ret
+;;                 ;;   (map x->p or-intro-left))
+
+;;                 ;; (when ret (if (P) (or (P) Y)))
+
+;;                 ;; ret))
+
+;;             ;; (when impl1
+;;             ;;   (if (if X (P))
+;;             ;;       (if (P) (or (P) Y))))
+
+;;             ;; (define impl1
+;;             ;;   (axiom (if X (if (P) (if (P) (or (P) Y))))))
+
+;;             ;; (define impl2
+;;             ;;   (axiom (if (not X) (if (P) (if (P) (or (P) Y))))))
+
+;;             ;; (define conclusion
+;;             ;;   (axiom (if (P) (if (P) (or (P) Y)))))
+
+;;             0))
+
+;;         (let ((y (P))
+;;               (w (Q)))
+;;           (map (map and-intro-p-q y) w))))
+
+;;     )
+
+;;  `((and-elim (if (and X Y) X))
+;;    (and-intro (if X (if Y (and X Y))))
+;;    (and-symmetric (if (and X Y) (and Y X)))
+;;    (x (if (P) (if (Q) (and (P) (Q)))))))
