@@ -714,6 +714,9 @@
         (when and-intro-p-q
           (if (P) (if (Q) (and (P) (Q)))))
 
+        (define EFQ ;; The "ex-falso-quodlibet" law.
+          (axiom (if (false) X)))
+
         (define or-intro-left-p-q
           (beta ((beta (or-intro-left X) (P)) Y) (Q)))
 
@@ -722,6 +725,14 @@
 
         (define impl
           (let ()
+
+            (define xxx
+              (let ((p (P)))
+                (define false->p (let ((w (false))) p))
+                (map false->p EFQ)))
+
+            (when xxx
+              (if (P) (if (P) X)))
 
             ;; (define impl1
             ;;   (let ((x->p (if X (P))))
@@ -749,6 +760,14 @@
 
             (when direct
               (if (P) (if (P) (or (P) Y))))
+
+            (define direct-rename
+              (let ((w W))
+                (define x->p (let ((x X)) w))
+                (map x->p or-intro-left)))
+
+            (when direct-rename
+              (if W (if W (or W Y))))
 
             ;; (when impl1
             ;;   (if X (if (P) (if (P) (or (P) Y)))))
