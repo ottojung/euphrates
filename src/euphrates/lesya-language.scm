@@ -99,6 +99,9 @@
       term))))
 
 (define (lesya:language:beta-reduce initial-term qvarname qreplcement)
+  (unless (symbol? qvarname)
+    (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
+
   (let loop ((term initial-term))
     (cond
      ((equal? term qvarname)
@@ -163,14 +166,8 @@
   (syntax-rules ()
     ((_ (term varname) replacement)
      (lesya:check-that-on-toplevel
-      (let ()
-        (define qvarname (quote varname))
-
-        (unless (symbol? qvarname)
-          (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
-
-        (lesya:language:beta-reduce
-         term qvarname (quote replacement)))))))
+      (lesya:language:beta-reduce
+       term (quote varname) (quote replacement))))))
 
 (define (lesya:language:apply implication argument)
   (lesya:language:modus-ponens implication argument))
