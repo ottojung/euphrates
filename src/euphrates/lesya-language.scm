@@ -107,8 +107,6 @@
       term)
      ((list? term)
       (cons (car term) (map loop (cdr term))))
-     ((equal? term qreplcement)
-      (lesya:error 'replacement-object-found-in-the-replacement-subject qreplcement initial-term))
      (else
       term))))
 
