@@ -16,6 +16,7 @@
     (only (scheme base)
           _
           and
+          apply
           begin
           car
           cdr
@@ -34,6 +35,7 @@
           string<?
           syntax-rules
           unless
+          unquote
           when))
   (import (only (scheme process-context) exit))
   (cond-expand
