@@ -726,3 +726,35 @@
    (r1 (if (and (P) Y) (P)))
    (r2 (if (and (P) (Q)) (P)))
    (x (if (and (P) (Q)) (P)))))
+
+
+(assert-throw
+ 'only-allowed-on-top-level
+
+ (test-case
+  ;;
+  ;; Check error with `map` not on toplevel.
+  ;;
+
+  '(begin
+     (define and-elim
+       (axiom (if (and X Y) X)))
+     (define and-symmetric
+       (axiom (if (and X Y) (and Y X))))
+
+     (define r1 (map (if X (P)) and-elim))
+     ;; (define r2 (map (if Y (Q)) r1)) ;; equivalent to one below:
+     (define r2 (eval (axiom (map (if Y (Q)) ,r1))))
+
+     (define x
+       (let ((m (and (P) (Q))))
+         (define r1-internal (map (if X (P)) and-elim))
+         (eval (list r2 m))))
+
+     )
+
+  `((and-elim (if (and X Y) X))
+    (and-symmetric (if (and X Y) (and Y X)))
+    (r1 (if (and (P) Y) (P)))
+    (r2 (if (and (P) (Q)) (P)))
+    (x (if (and (P) (Q)) (P))))))

@@ -2,6 +2,8 @@
 (define-library
   (test-lesya-interpret)
   (import (only (euphrates assert-equal) assert=))
+  (import
+    (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates euphrates-list-sort)

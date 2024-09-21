@@ -225,7 +225,7 @@
      (lesya:check-that-on-toplevel
       (let ()
         (define-values (premise conclusion)
-          (lesya:implication:destruct (quote implication)))
+          (lesya:implication:destruct (quasiquote implication)))
 
         (unless (symbol? premise)
           (lesya:error 'non-symbol-1-in-map premise conclusion body))
