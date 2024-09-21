@@ -256,7 +256,7 @@
       (cond
        ((equal? operation lesya:substitution:name)
         (let ()
-          (define-tuple (operation body implication) expr)
+          (define-tuple (operation implication body) expr)
           (define-values (premise conclusion)
             (lesya:implication:destruct implication))
 

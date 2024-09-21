@@ -712,7 +712,8 @@
       (axiom (if (and X Y) (and Y X))))
 
     (define r1 (map (if X (P)) and-elim))
-    (define r2 (map (if Y (Q)) r1))
+    ;; (define r2 (map (if Y (Q)) r1)) ;; equivalent to one below:
+    (define r2 (eval (axiom (map (if Y (Q)) ,r1))))
 
     (define x
       (let ((m (and (P) (Q))))
