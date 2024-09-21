@@ -618,87 +618,6 @@
    (z (and x (P)))))
 
 
-;; (test-case
-;;  ;;
-;;  ;; Case for Universal Instantiation rule.
-;;  ;;
-
-;;  '(begin
-;;     (define x
-;;       (axiom (c1)))
-
-;;     (define y
-;;       (axiom (forall (m) (P (m)))))
-
-;;     (define beta-rule ;; This is like generalized ((X /\ ~X) -> Y)
-;;       (axiom (if (not X) (if B (map B (if X Y))))))
-
-;;     (define universal-instantiation
-;;       (axiom (if t (if (forall x B) (map B (if x t))))))
-
-;;     (define universal-generalization
-;;       (axiom (if c (if (if x Q) (if (if x c) (map (forall c Q) (if x c)))))))
-
-;;     (define existential-generalization
-;;       (axiom (if c (if B (map (exists c B) (if t c))))))) ;; NOTE: cannot instantiate axiom via `map` because it requires to have `t`.
-;; ;;       (axiom (if c (if B (exists c (map B (if t c))))))) ;; NOTE: cannot instantiate axiom via `map` because it requires to have `t`.
-
-;;     (define existential-instantiation
-;;       (axiom (if (exists x B) (map B (if x B)))))
-
-;;       ;; (axiom (if k (if (forall m X) (if m k)))))
-
-
-
-;;     )
-
-
-;;  `((x (P))
-;;    (y (and x (P)))
-;;    (z (and x (P)))))
-
-
-;;;;;;;;;;;;;;;;;;
-;;
-;;  Using MAP here...
-;;
-
-;; (test-case
-;;  ;;
-;;  ;; Basic proof with disjunction.
-;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
-;;  ;;
-
-;;  '(begin
-;;     (define and-elim
-;;       (axiom (if (and X Y) X)))
-;;     (define and-symmetric
-;;       (axiom (if (and X Y) (and Y X))))
-;;     (define and-intro
-;;       (axiom (if X (if Y (and X Y)))))
-
-;;     (define x
-;;       (let ()
-;;         (let ((y (P))
-;;               (w (Q)))
-
-;;           (define and-intro-p-q
-;;             (let ()
-;;               (define x->p (let ((x X)) y))
-;;               (define y->q (let ((y Y)) w))
-;;               (map y->q (map x->p and-intro))))
-
-;;           (apply (apply and-intro-p-q y) w))))
-
-;;     )
-
-;;  `((and-elim (if (and X Y) X))
-;;    (and-intro (if X (if Y (and X Y))))
-;;    (and-symmetric (if (and X Y) (and Y X)))
-;;    (x (if (P) (if (Q) (and (P) (Q)))))))
-
-
-
 (test-case
  ;;
  ;; Basic proof with disjunction. With `eval` style.
@@ -758,3 +677,170 @@
     (r1 (if (and (P) Y) (P)))
     (r2 (if (and (P) (Q)) (P)))
     (x (if (and (P) (Q)) (P))))))
+
+
+(test-case
+ ;;
+ ;; Derivation of ~(P /\ Q) -> ~P \/ ~Q (De-Morgan's law 1)
+ ;;
+
+ '(begin
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Propositional axioms:
+    ;;
+
+    (define MP ;; The "modus ponens" law.
+      (axiom (if P (if (if P Q) Q))))
+    (define DN ;; The "double negation" law.
+      (axiom (if (not (not P)) P)))
+    (define EFQ ;; The "ex-falso-quodlibet" law.
+      (axiom (if (false) P)))
+    (define Abs ;; The "absurdity rule" law.
+      (axiom (if (and P (not P)) (false))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (axiom (if (if P (false)) (not P))))
+    (define CP ;; The "contraposition" law.
+      (axiom (if (if P Q) (if (not P) (not Q)))))
+    (define LEM ;; The "law of excluded middle".
+      (axiom (or P (not P))))
+
+    (define and-intro
+      (axiom (if P (if Q (and P Q)))))
+    (define and-elim-left
+      (axiom (if (and P Q) P)))
+    (define and-elim-right
+      (axiom (if (and P Q) Q)))
+
+    (define or-intro-left
+      (axiom (if P (or P Q))))
+    (define or-intro-right
+      (axiom (if Q (or P Q))))
+    (define or-elim
+      (axiom (if (or P Q) (if (if P R) (if (if Q R) R)))))
+
+    (define implication-intro
+      (axiom (if (or (not P) Q) (if P Q))))
+    (define implication-elim
+      (axiom (if (if P Q) (or (not P) Q))))
+
+    (define not-intro
+      RAA)
+    (define not-elim
+      DN)
+
+    (define true-intro
+      (axiom (if P (true))))
+    (define true-elim
+      (axiom (if (not (true)) (false))))
+    (define false-intro
+      Abs)
+    (define false-elim
+      EFQ)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Quantifier rules:
+    ;;
+
+    (define universal-instantiation
+      (axiom (if t (if (forall x B) (map B (if x t))))))
+
+    (define universal-generalization
+      (axiom (if c (if (if x Q) (if (if x c) (map (forall c Q) (if x c)))))))
+
+    (define existential-generalization
+      (axiom (if c (if B (map (exists c B) (if t c))))))
+
+    (define existential-instantiation
+      (axiom (if (exists x B) (map B (if x B)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Theorem:
+    ;;
+
+    (define de-morgan-&
+      (let ()
+        (define contr-1a (map (if P (and P Q)) Abs))
+        (define abs-1a (map (if P Q) Abs))
+        (define and-intro-xy (map (if Q Y) (map (if P X) and-intro)))
+        (define and-intro-andpq (map (if Y (not (and P Q)))
+                                     (map (if X (and P Q)) and-intro-xy)))
+        (define or-intro-right-xy (map (if Q Y) (map (if P X) or-intro-right)))
+        (define or-intro-right-notq (map (if Y (not Q)) (map (if X (not P)) or-intro-right-xy)))
+        (define or-intro-left-xy (map (if Q Y) (map (if P X) or-intro-left)))
+        (define or-intro-left-notq (map (if Y (not Q)) (map (if X (not P)) or-intro-left-xy)))
+        (define raa-notq (map (if P Q) RAA))
+        (define ret (map (if R (or (not P) (not Q))) (map (if Q (not P)) or-elim)))
+
+        (let ((premise (not (and P Q))))
+
+          (define x
+            (let ((p P))
+
+              (define q->false
+                (let ((q Q))
+                  (define andpq
+                    (eval (list and-intro p q)))
+
+                  (define contr-1a-input
+                    (eval (list and-intro-andpq andpq premise)))
+
+                  (eval (list contr-1a contr-1a-input))))
+
+              (define notq->ret
+                (let ((notq (not Q)))
+                  (eval (list or-intro-right-notq notq))))
+
+              (define notq
+                (eval (list raa-notq q->false)))
+
+              (eval (list notq->ret notq))))
+
+          (define y
+            (let ((notp (not P)))
+              (eval (list or-intro-left-notq notp))))
+
+          (define z
+            (eval (list ret LEM x y)))
+
+          z)))
+
+    )
+
+ `((Abs (if (and P (not P)) (false)))
+   (CP (if (if P Q) (if (not P) (not Q))))
+   (DN (if (not (not P)) P))
+   (EFQ (if (false) P))
+   (LEM (or P (not P)))
+   (MP (if P (if (if P Q) Q)))
+   (RAA (if (if P (false)) (not P)))
+   (and-elim-left (if (and P Q) P))
+   (and-elim-right (if (and P Q) Q))
+   (and-intro (if P (if Q (and P Q))))
+   (de-morgan-&
+    (if (not (and P Q)) (or (not P) (not Q))))
+   (existential-generalization
+    (if c (if B (map (exists c B) (if t c)))))
+   (existential-instantiation
+    (if (exists x B) (map B (if x B))))
+   (false-elim (if (false) P))
+   (false-intro (if (and P (not P)) (false)))
+   (implication-elim (if (if P Q) (or (not P) Q)))
+   (implication-intro (if (or (not P) Q) (if P Q)))
+   (not-elim (if (not (not P)) P))
+   (not-intro (if (if P (false)) (not P)))
+   (or-elim
+    (if (or P Q) (if (if P R) (if (if Q R) R))))
+   (or-intro-left (if P (or P Q)))
+   (or-intro-right (if Q (or P Q)))
+   (true-elim (if (not (true)) (false)))
+   (true-intro (if P (true)))
+   (universal-generalization
+    (if c
+        (if (if x Q)
+            (if (if x c) (map (forall c Q) (if x c))))))
+   (universal-instantiation
+    (if t (if (forall x B) (map B (if x t)))))))

@@ -235,19 +235,23 @@
 
 
 (define-type9 <lesya:list>
-  (lesya:language:list a b) lesya:language:list?
-  (a lesya:language:list:a)
-  (b lesya:language:list:b)
+  (lesya:language:list:constructor args) lesya:language:list?
+  (args lesya:language:list:args)
   )
+
+
+(define (lesya:language:list . args)
+  (lesya:language:list:constructor args))
 
 
 (define (lesya:language:eval expr)
   (cond
    ((lesya:language:list? expr)
     (let ()
-      (define fun (lesya:language:list:a expr))
-      (define argument (lesya:language:list:b expr))
-      (lesya:language:modus-ponens fun argument)))
+      (define arguments (lesya:language:list:args expr))
+      (list-fold/semigroup
+       lesya:language:modus-ponens
+       arguments)))
 
    ((and (pair? expr) (list? expr))
     (let ()

@@ -24,6 +24,9 @@
           hashmap-set!
           make-hashmap))
   (import
+    (only (euphrates list-fold-semigroup)
+          list-fold/semigroup))
+  (import
     (only (euphrates list-length-eq) list-length=))
   (import (only (euphrates raisu-star) raisu*))
   (import
