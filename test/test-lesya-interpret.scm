@@ -640,7 +640,8 @@
 ;;       (axiom (if c (if (if x Q) (if (if x c) (map (forall c Q) (if x c)))))))
 
 ;;     (define existential-generalization
-;;       (axiom (if c (if B (exists c (map B (if t c))))))) ;; NOTE: cannot instantiate axiom via `map` because it requires to have `t`.
+;;       (axiom (if c (if B (map (exists c B) (if t c))))))) ;; NOTE: cannot instantiate axiom via `map` because it requires to have `t`.
+;; ;;       (axiom (if c (if B (exists c (map B (if t c))))))) ;; NOTE: cannot instantiate axiom via `map` because it requires to have `t`.
 
 ;;     (define existential-instantiation
 ;;       (axiom (if (exists x B) (map B (if x B)))))
