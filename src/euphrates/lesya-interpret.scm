@@ -15,6 +15,8 @@
             (lesya:language:let let)
             (lesya:language:when when)
             (lesya:language:map map)
+            (lesya:language:eval eval)
+            (lesya:language:list list)
             )))
 
 (define (lesya:interpret program)

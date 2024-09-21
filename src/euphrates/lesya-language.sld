@@ -7,6 +7,8 @@
     lesya:language:begin
     lesya:language:axiom
     lesya:language:map
+    lesya:language:eval
+    lesya:language:list
     lesya:language:when
     lesya:language:apply
     lesya:language:alpha

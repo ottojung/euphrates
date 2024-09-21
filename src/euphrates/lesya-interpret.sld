@@ -10,7 +10,9 @@
           lesya:language:begin
           lesya:language:beta
           lesya:language:define
+          lesya:language:eval
           lesya:language:let
+          lesya:language:list
           lesya:language:map
           lesya:language:run
           lesya:language:when))
@@ -20,6 +22,7 @@
           begin
           define
           let
+          list
           map
           quasiquote
           quote

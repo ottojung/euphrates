@@ -99,9 +99,6 @@
       term))))
 
 (define (lesya:language:beta-reduce initial-term qvarname qreplcement)
-  (unless (symbol? qvarname)
-    (lesya:error 'non-symbol-1-in-beta-reduce qvarname initial-term qreplcement))
-
   (let loop ((term initial-term))
     (cond
      ((equal? term qvarname)
@@ -124,6 +121,9 @@
 
 (define lesya:implication:name
   'if)
+
+(define lesya:substitution:name
+  'map)
 
 (define (lesya:implication:make supposition conclusion)
   `(,lesya:implication:name ,supposition ,conclusion))
@@ -219,9 +219,52 @@
            (lesya:error 'terms-are-not-equal a* b*))))))
 
 
-(define (lesya:language:map implication body)
-  (define-values (premise conclusion)
-    (lesya:implication:destruct implication))
+(define-syntax lesya:language:map
+  (syntax-rules ()
+    ((_ implication body)
+     (lesya:check-that-on-toplevel
+      (let ()
+        (define-values (premise conclusion)
+          (lesya:implication:destruct (quote implication)))
 
-  (lesya:language:beta-reduce
-   body premise conclusion))
+        (unless (symbol? premise)
+          (lesya:error 'non-symbol-1-in-map premise conclusion body))
+
+        (lesya:language:beta-reduce
+         body premise conclusion))))))
+
+
+(define-type9 <lesya:list>
+  (lesya:language:list a b) lesya:language:list?
+  (a lesya:language:list:a)
+  (b lesya:language:list:b)
+  )
+
+
+(define (lesya:language:eval expr)
+  (cond
+   ((lesya:language:list? expr)
+    (let ()
+      (define fun (lesya:language:list:a expr))
+      (define argument (lesya:language:list:b expr))
+      (lesya:language:modus-ponens fun argument)))
+
+   ((and (pair? expr) (list? expr))
+    (let ()
+      (define operation (car expr))
+
+      (cond
+       ((equal? operation lesya:substitution:name)
+        (let ()
+          (define-tuple (operation body implication) expr)
+          (define-values (premise conclusion)
+            (lesya:implication:destruct implication))
+
+          (lesya:language:beta-reduce
+           body premise conclusion)))
+
+       (else
+        (lesya:error 'unknown-operation-in-eval operation expr)))))
+
+   (else
+    (lesya:error 'non-expression-in-eval expr))))
