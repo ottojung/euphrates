@@ -959,63 +959,63 @@
       (let ()
 
         (define universal-instantiation-1
-          (= (map (if t (exists (x) (not (P (x)))))
+          (= (map (if t (exists (x) (not P)))
                   (map (if x (x))
-                       (map (if B (P (x)))
+                       (map (if B P)
                             universal-instantiation)))
-             (if (exists (x) (not (P (x))))
-                 (if (forall (x) (P (x)))
-                     (map (if (x) (exists (x) (not (P (x))))) (P (x)))))))
+             (if (exists (x) (not P))
+                 (if (forall (x) P)
+                     (map (if (x) (exists (x) (not P))) P)))))
 
         (define existential-instantiation-1
-          (= (map (if x (x)) (map (if B (not (P (x)))) existential-instantiation))
-             (if (exists (x) (not (P (x))))
-                 (map (if (x) (exists (x) (not (P (x)))))
-                      (not (P (x)))))))
+          (= (map (if x (x)) (map (if B (not P)) existential-instantiation))
+             (if (exists (x) (not P))
+                 (map (if (x) (exists (x) (not P)))
+                      (not P)))))
 
         (define and-intro-1
-          (= (map (if Q (not (P (exists (x) (not (P (x)))))))
-                  (map (if P (P (exists (x) (not (P (x))))))
+          (= (map (if Q (not P))
+                  (map (if P P)
                        and-intro))
-             (if (P (exists (x) (not (P (x)))))
-                 (if (not (P (exists (x) (not (P (x))))))
-                     (and (P (exists (x) (not (P (x)))))
-                          (not (P (exists (x) (not (P (x)))))))))))
+             (if P
+                 (if (not P)
+                     (and P
+                          (not P))))))
 
         (define abs-1
-          (= (map (if P (P (exists (x) (not (P (x)))))) Abs)
-             (if (and (P (exists (x) (not (P (x)))))
-                      (not (P (exists (x) (not (P (x)))))))
+          (= (map (if P P) Abs)
+             (if (and P
+                      (not P))
                  (false))))
 
         (define raa-1
-          (= (map (if P (exists (x) (not (P (x))))) RAA)
-             (if (if (exists (x) (not (P (x)))) (false))
-                 (not (exists (x) (not (P (x))))))))
+          (= (map (if P (exists (x) (not P))) RAA)
+             (if (if (exists (x) (not P)) (false))
+                 (not (exists (x) (not P))))))
 
-        (let ((premise (forall (x) (P (x)))))
+        (let ((premise (forall (x) P)))
 
           (define conclusion->false
-            (let ((not-conclusion (exists (x) (not (P (x))))))
+            (let ((not-conclusion (exists (x) (not P))))
 
               (define c not-conclusion)
 
               (define instance/text
                 (= (eval (list existential-instantiation-1 not-conclusion))
-                   (map (if (x) (exists (x) (not (P (x)))))
-                        (not (P (x))))))
+                   (map (if (x) (exists (x) (not P)))
+                        (not P))))
 
               (define instance
                 (= (eval instance/text)
-                   (not (P (exists (x) (not (P (x))))))))
+                   (not P)))
 
               (define instance-2/text
                 (= (eval (list universal-instantiation-1 c premise))
-                   (map (if (x) (exists (x) (not (P (x))))) (P (x)))))
+                   (map (if (x) (exists (x) (not P))) P)))
 
               (define instance-2
                 (= (eval instance-2/text)
-                   (P (exists (x) (not (P (x)))))))
+                   P))
 
               (define both-instances
                 (eval (list and-intro-1 instance-2 instance)))
@@ -1029,9 +1029,10 @@
           (eval (list raa-1 conclusion->false)))))
 
     (= theorem
-       (if (forall (x) (P (x)))
-           (not (exists (x) (not (P (x)))))))
+       (if (forall (x) P)
+           (not (exists (x) (not P)))))
 
     )
 
  'ignore-ok)
+
