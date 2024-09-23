@@ -120,12 +120,6 @@
 
   (escape (list 'error type args (stack->list stack))))
 
-  ;; (raisu* :from "lesya:language"
-  ;;         :type type
-  ;;         :message (stringf "Lesya error of type ~s and arguments ~s at ~s."
-  ;;                           type args (stack->list stack))
-  ;;         :args (list args (stack->list stack))))
-
 (define lesya:implication:name
   'if)
 
@@ -158,7 +152,11 @@
     (lesya:implication:destruct implication))
 
   (unless (equal? premise argument)
-    (lesya:error 'non-matching-modus-ponens argument implication))
+    (lesya:error 'non-matching-modus-ponens
+                 (list 'context:
+                       'argument: argument
+                       'implication: implication
+                       'endcontext:)))
 
   conclusion)
 

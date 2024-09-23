@@ -688,6 +688,39 @@
 
 (test-case
  ;;
+ ;; Check bad modus ponens.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define thm
+      (let ()
+        (define thm2
+          (let ()
+            (define thm3
+              (let ((t (and X Y Z)))
+                (eval (list and-elim t))))
+            thm3))
+        thm2))
+
+    )
+
+ `(error non-matching-modus-ponens
+         ((context:
+           argument:
+           (and X Y Z)
+           implication:
+           (if (and X Y) X)
+           endcontext:))
+         (thm3 thm2 thm)))
+
+
+(test-case
+ ;;
  ;; Derivation of ~(P /\ Q) -> ~P \/ ~Q (De-Morgan's law 1)
  ;;
 
