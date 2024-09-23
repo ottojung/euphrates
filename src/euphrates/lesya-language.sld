@@ -9,7 +9,7 @@
     lesya:language:map
     lesya:language:eval
     lesya:language:list
-    lesya:language:when
+    lesya:language:=
     lesya:language:apply
     lesya:language:alpha
     lesya:language:beta

@@ -530,23 +530,23 @@
         (define raa1-rule (beta (RAA X) (and (not P) (not Q))))
 
         (define and-intro-notp-notq
-          (when (beta ((beta (and-intro X) (not P)) Y) (not Q))
-            (if (not P) (if (not Q) (and (not P) (not Q))))))
+          (= (beta ((beta (and-intro X) (not P)) Y) (not Q))
+             (if (not P) (if (not Q) (and (not P) (not Q))))))
 
         (define and-intro-1
-          (when (beta ((beta (and-intro X) (and (not P) (not Q))) Y)
-                      (not (and (not P) (not Q))))
-            (if (and (not P) (not Q))
-                (if (not (and (not P) (not Q)))
-                    (and (and (not P) (not Q)) (not (and (not P) (not Q))))))))
+          (= (beta ((beta (and-intro X) (and (not P) (not Q))) Y)
+                   (not (and (not P) (not Q))))
+             (if (and (not P) (not Q))
+                 (if (not (and (not P) (not Q)))
+                     (and (and (not P) (not Q)) (not (and (not P) (not Q))))))))
 
         (define abs-1
-          (when (beta (Abs X) (and (not P) (not Q)))
-            (if (and (and (not P) (not Q)) (not (and (not P) (not Q)))) (false))))
+          (= (beta (Abs X) (and (not P) (not Q)))
+             (if (and (and (not P) (not Q)) (not (and (not P) (not Q)))) (false))))
 
         (define notq-raa
-          (when (beta (RAA X) (not Q))
-            (if (if (not Q) (false)) (not (not Q)))))
+          (= (beta (RAA X) (not Q))
+             (if (if (not Q) (false)) (not (not Q)))))
 
         (define DN-q
           (alpha (DN X) Q))
@@ -562,31 +562,31 @@
               (apply abs-p and-p-notp)))
 
           (define raa1
-            (when (apply raa1-rule false1)
-              (not (and (not P) (not Q)))))
+            (= (apply raa1-rule false1)
+               (not (and (not P) (not Q)))))
 
           (define not<q>->false
             (let ((notq (not Q)))
               (define and-p-notp
-                (when (apply (apply and-intro-notp-notq notp) notq)
-                  (and (not P) (not Q))))
+                (= (apply (apply and-intro-notp-notq notp) notq)
+                   (and (not P) (not Q))))
 
               (define y
-                (when (apply (apply and-intro-1 and-p-notp) raa1)
-                  (and (and (not P) (not Q)) (not (and (not P) (not Q))))))
+                (= (apply (apply and-intro-1 and-p-notp) raa1)
+                   (and (and (not P) (not Q)) (not (and (not P) (not Q))))))
 
               (define yabs
-                (when (apply abs-1 y)
-                  (false)))
+                (= (apply abs-1 y)
+                   (false)))
 
               yabs))
 
-          (when not<q>->false
-            (if (not Q) (false)))
+          (= not<q>->false
+             (if (not Q) (false)))
 
           (define not<not<q>>
-            (when (apply notq-raa not<q>->false)
-              (not (not Q))))
+            (= (apply notq-raa not<q>->false)
+               (not (not Q))))
 
           (apply DN-q not<not<q>>))))
 

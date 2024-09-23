@@ -15,6 +15,7 @@
   (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
+          =
           and
           apply
           begin

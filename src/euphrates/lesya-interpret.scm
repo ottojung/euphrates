@@ -13,7 +13,7 @@
             (lesya:language:apply apply)
             (lesya:language:begin begin)
             (lesya:language:let let)
-            (lesya:language:when when)
+            (lesya:language:= =)
             (lesya:language:map map)
             (lesya:language:eval eval)
             (lesya:language:list list)

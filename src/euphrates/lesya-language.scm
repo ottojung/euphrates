@@ -213,7 +213,7 @@
        (lesya:implication:make x result)))))
 
 
-(define-syntax lesya:language:when
+(define-syntax lesya:language:=
   (syntax-rules ()
     ((_ a b)
      (let ()

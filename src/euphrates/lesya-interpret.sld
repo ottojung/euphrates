@@ -4,6 +4,7 @@
   (export lesya:interpret)
   (import
     (only (euphrates lesya-language)
+          lesya:language:=
           lesya:language:alpha
           lesya:language:apply
           lesya:language:axiom
@@ -14,10 +15,10 @@
           lesya:language:let
           lesya:language:list
           lesya:language:map
-          lesya:language:run
-          lesya:language:when))
+          lesya:language:run))
   (import
     (only (scheme base)
+          =
           apply
           begin
           define
@@ -26,8 +27,7 @@
           map
           quasiquote
           quote
-          unquote
-          when))
+          unquote))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))
