@@ -219,9 +219,13 @@
      (let ()
        (define a* a)
        (define b* (quote b))
-       (if (equal? a* b*)
-           a*
-           (lesya:error 'terms-are-not-equal a* b*))))))
+       (if (equal? a* b*) a*
+           (lesya:error
+            'terms-are-not-equal
+            (list 'context:
+                  'actual: a*
+                  'expected: b*
+                  'endcontext:)))))))
 
 
 (define-syntax lesya:language:map
