@@ -28,7 +28,6 @@
           list-fold/semigroup))
   (import
     (only (euphrates list-length-eq) list-length=))
-  (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
           stack->list
@@ -42,6 +41,7 @@
           _
           and
           begin
+          call-with-current-continuation
           car
           cdr
           cond
@@ -51,7 +51,9 @@
           define-values
           else
           equal?
+          error
           if
+          lambda
           let
           list
           list?

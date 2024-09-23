@@ -2,8 +2,6 @@
 (define-library
   (test-lesya-interpret)
   (import (only (euphrates assert-equal) assert=))
-  (import
-    (only (euphrates assert-throw) assert-throw))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates euphrates-list-sort)
@@ -13,18 +11,21 @@
   (import
     (only (euphrates lesya-interpret)
           lesya:interpret))
+  (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
-          _
           and
           apply
           begin
           car
           cdr
+          cond
           define
-          define-syntax
+          define-values
+          else
           equal?
+          error
           if
           lambda
           let
@@ -35,9 +36,9 @@
           quasiquote
           quote
           string<?
-          syntax-rules
           unless
           unquote
+          values
           when))
   (import (only (scheme eval) eval))
   (import (only (scheme process-context) exit))

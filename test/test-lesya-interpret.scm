@@ -1,26 +1,38 @@
 
-(define-syntax test-case
-  (syntax-rules ()
-    ((_ program expected-mapping)
-     (let ()
-       (define program* program)
-       (define expected-mapping* expected-mapping)
 
-       (define result
-         (lesya:interpret program*))
+(define (test-case program expected-mapping)
+  (define result/wrapped
+    (lesya:interpret program))
 
-       (define actual
-         (map (lambda (p) (list (car p) (cdr p)))
-              (euphrates:list-sort
-               (hashmap->alist result)
-               (lambda (a b)
-                 (string<? (~s (car a)) (~s (car b)))))))
+  (define-values (type result)
+    (values (car result/wrapped) (cdr result/wrapped)))
 
-       (unless (equal? actual expected-mapping*)
-         (debugs actual)
-         (exit 1))
+  (define actual
+    (cond
+     ((equal? expected-mapping 'ignore-ok)
+      (assert= type 'ok)
+      #f)
+     ((equal? expected-mapping 'ignore-error)
+      (assert= type 'error)
+      #f)
+     ((equal? type 'error)
+      result/wrapped)
+     ((equal? type 'ok)
+      (map (lambda (p) (list (car p) (cdr p)))
+           (euphrates:list-sort
+            (hashmap->alist result)
+            (lambda (a b)
+              (string<? (~s (car a)) (~s (car b)))))))
 
-       (assert= actual expected-mapping*)))))
+     (else
+      (raisu-fmt 'unknown-type "Unknown type of result: ~s" type))))
+
+  (when actual
+    (unless (equal? actual expected-mapping)
+      (debugs actual)
+      (exit 1))
+
+    (assert= actual expected-mapping)))
 
 
 
@@ -647,36 +659,31 @@
    (x (if (and (P) (Q)) (P)))))
 
 
-(assert-throw
- 'only-allowed-on-top-level
+(test-case
+ ;;
+ ;; Check error with `map` not on toplevel.
+ ;;
 
- (test-case
-  ;;
-  ;; Check error with `map` not on toplevel.
-  ;;
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
 
-  '(begin
-     (define and-elim
-       (axiom (if (and X Y) X)))
-     (define and-symmetric
-       (axiom (if (and X Y) (and Y X))))
+    (define r1 (map (if X (P)) and-elim))
+    ;; (define r2 (map (if Y (Q)) r1)) ;; equivalent to one below:
+    (define r2 (eval (axiom (map (if Y (Q)) ,r1))))
 
-     (define r1 (map (if X (P)) and-elim))
-     ;; (define r2 (map (if Y (Q)) r1)) ;; equivalent to one below:
-     (define r2 (eval (axiom (map (if Y (Q)) ,r1))))
+    (define x
+      (let ((m (and (P) (Q))))
+        (define r1-internal (map (if X (P)) and-elim))
+        (eval (list r2 m))))
 
-     (define x
-       (let ((m (and (P) (Q))))
-         (define r1-internal (map (if X (P)) and-elim))
-         (eval (list r2 m))))
+    )
 
-     )
-
-  `((and-elim (if (and X Y) X))
-    (and-symmetric (if (and X Y) (and Y X)))
-    (r1 (if (and (P) Y) (P)))
-    (r2 (if (and (P) (Q)) (P)))
-    (x (if (and (P) (Q)) (P))))))
+ `(error only-allowed-on-top-level
+         ("This operation is only allowed on toplevel: (let () (define-values (premise conclusion) (lesya:implication:destruct (quasiquote (if X (P))))) (unless (symbol? premise) (lesya:error (quote non-symbol-1-in-map) premise conclusion and-elim)) (lesya:language:beta-reduce and-elim premise conclusion)).")
+         (r1-internal x)))
 
 
 (test-case
