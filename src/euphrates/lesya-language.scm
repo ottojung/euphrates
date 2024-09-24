@@ -165,14 +165,14 @@
     ((_ (term varname) replacement)
      (lesya:check-that-on-toplevel
       (lesya:language:alpha-convert
-       term (quote varname) (quote replacement))))))
+       term (quasiquote varname) (quasiquote replacement))))))
 
 (define-syntax lesya:language:beta
   (syntax-rules ()
     ((_ (term varname) replacement)
      (lesya:check-that-on-toplevel
       (lesya:language:beta-reduce
-       term (quote varname) (quote replacement))))))
+       term (quasiquote varname) (quasiquote replacement))))))
 
 (define (lesya:language:apply implication argument)
   (lesya:language:modus-ponens implication argument))
@@ -190,11 +190,11 @@
          (define state (lesya:language:state/p))
          (define stack (lesya:language:state:callstack state))
          (define mapping (lesya:language:state:mapping state))
-         (define _res (stack-push! stack (quote name)))
+         (define _res (stack-push! stack (quasiquote name)))
          (define result arg)
          (stack-pop! stack)
          (when (lesya:currently-at-toplevel?)
-           (hashmap-set! mapping (quote name) result))
+           (hashmap-set! mapping (quasiquote name) result))
          result)))))
 
 (define-syntax lesya:language:let
@@ -204,7 +204,7 @@
 
     ((_  ((x shape) . lets) . bodies)
      (let ()
-       (define x (quote shape))
+       (define x (quasiquote shape))
        (define state (lesya:language:state/p))
        (define supposedterms (lesya:language:state:supposedterms state))
        (define _re (stack-push! supposedterms x))
@@ -218,7 +218,7 @@
     ((_ a b)
      (let ()
        (define a* a)
-       (define b* (quote b))
+       (define b* (quasiquote b))
        (if (equal? a* b*) a*
            (lesya:error
             'terms-are-not-equal
