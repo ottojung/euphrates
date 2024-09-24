@@ -498,7 +498,7 @@
              (if (if (not Q) (false)) (not (not Q)))))
 
         (define DN-q
-          (alpha (DN X) Q))
+          (map (if X Q) DN))
 
         (let ((p-and-notp (and P (not P))))
 

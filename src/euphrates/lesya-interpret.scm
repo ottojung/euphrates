@@ -7,7 +7,6 @@
    '(only (scheme base) unquote)
    '(rename (euphrates lesya-language)
             (lesya:language:axiom axiom)
-            (lesya:language:alpha alpha)
             (lesya:language:beta beta)
             (lesya:language:define define)
             (lesya:language:apply apply)
