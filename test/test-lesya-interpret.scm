@@ -1036,3 +1036,173 @@
 
  'ignore-ok)
 
+
+(test-case
+ ;;
+ ;;  Proof of negation rule for universal quantifier.
+ ;;
+
+ '(begin
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Propositional axioms:
+    ;;
+
+    (define MP ;; The "modus ponens" law.
+      (axiom (if P (if (if P Q) Q))))
+    (define DN ;; The "double negation" law.
+      (axiom (if (not (not P)) P)))
+    (define EFQ ;; The "ex-falso-quodlibet" law.
+      (axiom (if (false) P)))
+    (define Abs ;; The "absurdity rule" law.
+      (axiom (if (and P (not P)) (false))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (axiom (if (if P (false)) (not P))))
+    (define CP ;; The "contraposition" law.
+      (axiom (if (if P Q) (if (not P) (not Q)))))
+    (define LEM ;; The "law of excluded middle".
+      (axiom (or P (not P))))
+
+    (define and-intro
+      (axiom (if P (if Q (and P Q)))))
+    (define and-elim-left
+      (axiom (if (and P Q) P)))
+    (define and-elim-right
+      (axiom (if (and P Q) Q)))
+
+    (define or-intro-left
+      (axiom (if P (or P Q))))
+    (define or-intro-right
+      (axiom (if Q (or P Q))))
+    (define or-elim
+      (axiom (if (or P Q) (if (if P R) (if (if Q R) R)))))
+
+    (define implication-intro
+      (axiom (if (or (not P) Q) (if P Q))))
+    (define implication-elim
+      (axiom (if (if P Q) (or (not P) Q))))
+
+    (define not-intro
+      RAA)
+    (define not-elim
+      DN)
+
+    (define true-intro
+      (axiom (if P (true))))
+    (define true-elim
+      (axiom (if (not (true)) (false))))
+    (define false-intro
+      Abs)
+    (define false-elim
+      EFQ)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Quantifier rules:
+    ;;
+
+    (define universal-instantiation
+      (axiom (if t (if (forall x B) (map (if x t) B)))))
+
+    (define universal-generalization
+      (axiom (if c (if (if x Q) (if (if x c) (map (if x c) (forall c Q)))))))
+
+    (define existential-generalization
+      (axiom (if c (if B (map (if t c) (exists c B))))))
+
+    (define existential-instantiation
+      (axiom (if (exists x B) (map (if x (exists x B)) B))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Useful theorems:
+    ;;
+
+    (define de-morgan-/
+      (axiom (if (not (or P Q)) (and (not P) (not Q)))))
+
+    (define if-negation
+      (axiom (if (not (if P Q)) (and P (not Q)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Theorem:
+    ;;
+
+    (define theorem
+      (let ()
+
+        (define universal-instantiation-1
+          (= (map (if t P)
+                  (map (if x (x))
+                       (map (if B (not P))
+                            universal-instantiation)))
+             (if P
+                 (if (forall (x) (not P))
+                     (map (if (x) P) (not P))))))
+
+        (define existential-instantiation-1
+          (= (map (if x (x)) (map (if B P) existential-instantiation))
+             (if (exists (x) P)
+                 (map (if (x) (exists (x) P)) P))))
+
+        (define and-intro-1
+          (= (map (if Q (not P))
+                  (map (if P P)
+                       and-intro))
+             (if P
+                 (if (not P)
+                     (and P
+                          (not P))))))
+
+        (define abs-1
+          (= (map (if P P) Abs)
+             (if (and P
+                      (not P))
+                 (false))))
+
+        (define raa-1
+          (= (map (if P (forall (x) (not P))) RAA)
+             (if (if (forall (x) (not P)) (false))
+                 (not (forall (x) (not P))))))
+
+        (let ((premise (exists (x) P)))
+
+          (define conclusion->false
+            (let ((not-conclusion (forall (x) (not P))))
+
+              (define instance-2/text
+                (= (eval (list existential-instantiation-1 premise))
+                   (map (if (x) (exists (x) P)) P)))
+
+              (define instance-2
+                (= (eval instance-2/text)
+                   P))
+
+              (define instance/text
+                (= (eval (list universal-instantiation-1 instance-2 not-conclusion))
+                   (map (if (x) P) (not P))))
+
+              (define instance
+                (= (eval instance/text)
+                   (not P)))
+
+              (define both-instances
+                (eval (list and-intro-1 instance-2 instance)))
+
+              (define false
+                (= (eval (list abs-1 both-instances))
+                   (false)))
+
+              false))
+
+          (eval (list raa-1 conclusion->false)))))
+
+    (= theorem
+       (if (exists (x) P)
+           (not (forall (x) (not P)))))
+
+    )
+
+ 'ignore-ok)
