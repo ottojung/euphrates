@@ -400,7 +400,7 @@
         (define q-><p-&-q/p-&-r>
           (let ((q (Q)))
             (define p-and-q
-              (apply (apply and-intro-p-q p) q))
+              (apply and-intro-p-q p q))
 
             (apply or-intro-p-q-p-r-1 p-and-q)))
 

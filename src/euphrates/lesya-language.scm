@@ -137,8 +137,8 @@
 
   conclusion)
 
-(define (lesya:language:apply implication argument)
-  (lesya:language:modus-ponens implication argument))
+(define (lesya:language:apply . arguments)
+  (list-fold/semigroup lesya:language:modus-ponens arguments))
 
 (define (lesya:currently-at-toplevel?)
   (define stack (lesya:get-current-stack))
@@ -217,9 +217,7 @@
    ((lesya:language:list? expr)
     (let ()
       (define arguments (lesya:language:list:args expr))
-      (list-fold/semigroup
-       lesya:language:modus-ponens
-       arguments)))
+      (apply lesya:language:apply arguments)))
 
    ((and (pair? expr) (list? expr))
     (let ()

@@ -34,6 +34,7 @@
     (only (scheme base)
           _
           and
+          apply
           begin
           call-with-current-continuation
           car
