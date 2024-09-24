@@ -137,13 +137,6 @@
 
   conclusion)
 
-(define-syntax lesya:language:beta
-  (syntax-rules ()
-    ((_ (term varname) replacement)
-     (lesya:check-that-on-toplevel
-      (lesya:language:beta-reduce
-       term (quasiquote varname) (quasiquote replacement))))))
-
 (define (lesya:language:apply implication argument)
   (lesya:language:modus-ponens implication argument))
 

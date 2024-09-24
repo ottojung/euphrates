@@ -1160,7 +1160,6 @@
           lesya:language:apply
           lesya:language:axiom
           lesya:language:begin
-          lesya:language:beta
           lesya:language:define
           lesya:language:eval
           lesya:language:let
