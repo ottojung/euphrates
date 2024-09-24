@@ -106,7 +106,7 @@
     (define x
       (let ()
         (define and-intro-p-q
-          (beta ((beta (and-intro X) (P)) Y) (Q)))
+          (map (if Y (Q)) (map (if X (P)) and-intro)))
 
         (let ((y (P))
               (w (Q)))
@@ -129,8 +129,8 @@
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
 
-    (define r1 (beta (and-elim X) (P)))
-    (define r2 (beta (r1 Y) (Q)))
+    (define r1 (map (if X (P)) and-elim))
+    (define r2 (map (if Y (Q)) r1))
 
     (define x
       (let ((m (and (P) (Q))))
@@ -153,10 +153,10 @@
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
 
-    (define s1 (beta (and-symmetric X) (P)))
-    (define s2 (beta (s1 Y) (Q)))
-    (define r1 (beta (and-elim X) (Q)))
-    (define r2 (beta (r1 Y) (P)))
+    (define s1 (map (if X (P)) and-symmetric))
+    (define s2 (map (if Y (Q)) s1))
+    (define r1 (map (if X (Q)) and-elim))
+    (define r2 (map (if Y (P)) r1))
 
     (define x
       (let ((m (and (P) (Q))))
@@ -204,15 +204,15 @@
 
     (define x
       (let ()
-        (define r1 (beta (and-elim X) (P)))
-        (define r2 (beta (r1 Y) (not (Q))))
-        (define s1 (beta (and-symmetric X) (P)))
-        (define s2 (beta (s1 Y) (not (Q))))
-        (define sr1 (beta (and-elim X) (not (Q))))
-        (define sr2 (beta (sr1 Y) (P)))
-        (define Abs-q (beta (Abs X) (Q)))
-        (define RAA-target (beta (RAA X) (and (P) (not (Q)))))
-        (define and-intro-q-notq (beta ((beta (and-intro X) (Q)) Y) (not (Q))))
+        (define r1 (map (if X (P)) and-elim))
+        (define r2 (map (if Y (not (Q))) r1))
+        (define s1 (map (if X (P)) and-symmetric))
+        (define s2 (map (if Y (not (Q))) s1))
+        (define sr1 (map (if X (not (Q))) and-elim))
+        (define sr2 (map (if Y (P)) sr1))
+        (define Abs-q (map (if X (Q)) Abs))
+        (define RAA-target (map (if X (and (P) (not (Q)))) RAA))
+        (define and-intro-q-notq (map (if Y (not (Q))) (map (if X (Q)) and-intro)))
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
@@ -256,15 +256,15 @@
 
     (define x
       (let ()
-        (define r1 (beta (and-elim X) (P)))
-        (define r2 (beta (r1 Y) (not (Q))))
-        (define s1 (beta (and-symmetric X) (P)))
-        (define s2 (beta (s1 Y) (not (Q))))
-        (define sr1 (beta (and-elim X) (not (Q))))
-        (define sr2 (beta (sr1 Y) (P)))
-        (define Abs-q (beta (Abs X) (Q)))
-        (define RAA-target (beta (RAA X) (and (P) (not (Q)))))
-        (define and-intro-q-notq (beta ((beta (and-intro X) (Q)) Y) (not (Q))))
+        (define r1 (map (if X (P)) and-elim))
+        (define r2 (map (if Y (not (Q))) r1))
+        (define s1 (map (if X (P)) and-symmetric))
+        (define s2 (map (if Y (not (Q))) s1))
+        (define sr1 (map (if X (not (Q))) and-elim))
+        (define sr2 (map (if Y (P)) sr1))
+        (define Abs-q (map (if X (Q)) Abs))
+        (define RAA-target (map (if X (and (P) (not (Q)))) RAA))
+        (define and-intro-q-notq (map (if Y (not (Q))) (map (if X (Q)) and-intro)))
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
@@ -310,17 +310,19 @@
 
     (define x
       (let ()
-        (define r1 (beta (and-elim X) (P)))
-        (define r2 (beta (r1 Y) (not (Q))))
-        (define s1 (beta (and-symmetric X) (P)))
-        (define s2 (beta (s1 Y) (not (Q))))
-        (define sr1 (beta (and-elim X) (not (Q))))
-        (define sr2 (beta (sr1 Y) (P)))
-        (define Abs-1 (beta (Abs X) (and (P) (not (Q)))))
-        (define RAA-target (beta (RAA X) (not (Q))))
-        (define DN-target (beta (DN X) (Q)))
-        (define and-intro-p-notq (beta ((beta (and-intro X) (P)) Y) (not (Q))))
-        (define and-intro-p-notq-premise-1 (beta ((beta (and-intro X) (and (P) (not (Q)))) Y) (not (and (P) (not (Q))))))
+        (define r1 (map (if X (P)) and-elim))
+        (define r2 (map (if Y (not (Q))) r1))
+        (define s1 (map (if X (P)) and-symmetric))
+        (define s2 (map (if Y (not (Q))) s1))
+        (define sr1 (map (if X (not (Q))) and-elim))
+        (define sr2 (map (if Y (P)) sr1))
+        (define Abs-1 (map (if X (and (P) (not (Q)))) Abs))
+        (define RAA-target (map (if X (not (Q))) RAA))
+        (define DN-target (map (if X (Q)) DN))
+        (define and-intro-p-notq (map (if Y (not (Q))) (map (if X (P)) and-intro)))
+        (define and-intro-p-notq-premise-1
+          (map (if Y (not (and (P) (not (Q)))))
+               (map (if X (and (P) (not (Q)))) and-intro)))
 
         (let ((p (P)))
           (define contr1
@@ -377,24 +379,23 @@
 
     (define x
       (let ()
-        (define and-intro-p-q (beta ((beta (and-intro X) (P)) Y) (Q)))
-        (define and-intro-p-r (beta ((beta (and-intro X) (P)) Y) (R)))
-        (define or-intro-p-q-p-r-1 (beta ((beta (or-intro-left X) (and (P) (Q))) Y) (and (P) (R))))
-        (define or-intro-p-q-p-r-2 (beta ((beta (or-intro-right X) (and (P) (Q))) Y) (and (P) (R))))
-        (define p (apply (beta ((beta (and-elim-left X) (P)) Y) (or (Q) (R)))
+        (define and-intro-p-q (map (if Y (Q)) (map (if X (P)) and-intro)))
+        (define and-intro-p-r (map (if Y (R)) (map (if X (P)) and-intro)))
+        (define or-intro-p-q-p-r-1 (map (if Y (and (P) (R))) (map (if X (and (P) (Q))) or-intro-left)))
+        (define or-intro-p-q-p-r-2 (map (if Y (and (P) (R))) (map (if X (and (P) (Q))) or-intro-right)))
+        (define p (apply (map (if Y (or (Q) (R))) (map (if X (P)) and-elim-left))
                          premise-1))
-        (define reversed (apply (beta ((beta (and-symmetric X) (P)) Y) (or (Q) (R)))
+        (define reversed (apply (map (if Y (or (Q) (R))) (map (if X (P)) and-symmetric))
                                 premise-1))
 
         (define or-elim-target
           (let ()
-            (define a (beta (or-elim X) (Q)))
-            (define b (beta (a Y) (R)))
-            (define c (beta (b Z) (or (and (P) (Q)) (and (P) (R)))))
+            (define a (map (if X (Q)) or-elim))
+            (define b (map (if Y (R)) a))
+            (define c (map (if Z (or (and (P) (Q)) (and (P) (R)))) b))
             c))
 
-        (define or-q-r (apply (beta ((beta (and-elim-left Y) (P)) X) (or (Q) (R)))
-                              reversed))
+        (define or-q-r (apply (map (if X (or (Q) (R))) (map (if Y (P)) and-elim-left)) reversed))
 
         (define q-><p-&-q/p-&-r>
           (let ((q (Q)))
@@ -462,39 +463,38 @@
       (let ()
 
         (define and-elim-left-notp-notq
-          (beta ((beta (and-elim-left X) (not P)) Y) (not Q)))
+          (map (if Y (not Q)) (map (if X (not P)) and-elim-left)))
 
         (define and-elim-left-p-notp
-          (beta ((beta (and-elim-left X) P) Y) (not P)))
+          (map (if Y (not P)) (map (if X P) and-elim-left)))
 
         (define and-elim-right-p-notp
-          (beta ((beta (and-elim-right X) P) Y) (not P)))
+          (map (if Y (not P)) (map (if X P) and-elim-right)))
 
         (define and-intro-p-notp
-          (beta ((beta (and-intro X) P) Y) (not P)))
+          (map (if Y (not P)) (map (if X P) and-intro)))
 
         (define abs-p
-          (beta (Abs X) P))
+          (map (if X P) Abs))
 
-        (define raa1-rule (beta (RAA X) (and (not P) (not Q))))
+        (define raa1-rule (map (if X (and (not P) (not Q))) RAA))
 
         (define and-intro-notp-notq
-          (= (beta ((beta (and-intro X) (not P)) Y) (not Q))
+          (= (map (if Y (not Q)) (map (if X (not P)) and-intro))
              (if (not P) (if (not Q) (and (not P) (not Q))))))
 
         (define and-intro-1
-          (= (beta ((beta (and-intro X) (and (not P) (not Q))) Y)
-                   (not (and (not P) (not Q))))
+          (= (map (if Y (not (and (not P) (not Q)))) (map (if X (and (not P) (not Q))) and-intro))
              (if (and (not P) (not Q))
                  (if (not (and (not P) (not Q)))
                      (and (and (not P) (not Q)) (not (and (not P) (not Q))))))))
 
         (define abs-1
-          (= (beta (Abs X) (and (not P) (not Q)))
+          (= (map (if X (and (not P) (not Q))) Abs)
              (if (and (and (not P) (not Q)) (not (and (not P) (not Q)))) (false))))
 
         (define notq-raa
-          (= (beta (RAA X) (not Q))
+          (= (map (if X (not Q)) RAA)
              (if (if (not Q) (false)) (not (not Q)))))
 
         (define DN-q
