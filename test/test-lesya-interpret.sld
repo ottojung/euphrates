@@ -4,15 +4,9 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debugs) debugs))
   (import
-    (only (euphrates euphrates-list-sort)
-          euphrates:list-sort))
-  (import
-    (only (euphrates hashmap) hashmap->alist))
-  (import
     (only (euphrates lesya-interpret)
           lesya:interpret))
   (import (only (euphrates raisu-fmt) raisu-fmt))
-  (import (only (euphrates tilda-s) ~s))
   (import
     (only (scheme base)
           =
@@ -28,7 +22,6 @@
           equal?
           error
           if
-          lambda
           let
           list
           map
@@ -36,7 +29,6 @@
           or
           quasiquote
           quote
-          string<?
           unless
           unquote
           values

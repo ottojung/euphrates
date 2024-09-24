@@ -14,7 +14,6 @@
 
 (define-type9 <lesya:struct>
   (lesya:language:state:struct:construct
-   mapping       ;; A hashmap that associates [top-level] names of constructed terms, with their syntactic representation.
    callstack     ;; Just names of variables being defined.
    supposedterms ;; The hypothetical terms introduced by `let` in this scope so far.
    escape        ;; Continuation that returns to the top.
@@ -22,7 +21,6 @@
 
   lesya:language:state:struct?
 
-  (mapping lesya:language:state:mapping)
   (callstack lesya:language:state:callstack)
   (supposedterms lesya:language:state:supposedterms)
   (escape lesya:language:state:escape)
@@ -31,11 +29,10 @@
 
 
 (define (lesya:language:state:make escape)
-  (define mapping (make-hashmap))
   (define callstack (stack-make))
   (define supposedterms (stack-make))
   (lesya:language:state:struct:construct
-   mapping callstack supposedterms escape))
+   callstack supposedterms escape))
 
 (define lesya:language:state/p
   (make-parameter #f))
@@ -48,7 +45,7 @@
         (define state (lesya:language:state:make k))
         (parameterize ((lesya:language:state/p state))
           (let () . bodies))
-        (cons 'ok (lesya:language:state:mapping state)))))))
+        (list 'ok))))))
 
 (define-syntax lesya:language:begin
   (syntax-rules ()
@@ -187,14 +184,10 @@
     ((_ name arg)
      (define name
        (let ()
-         (define state (lesya:language:state/p))
-         (define stack (lesya:language:state:callstack state))
-         (define mapping (lesya:language:state:mapping state))
+         (define stack (lesya:get-current-stack))
          (define _res (stack-push! stack (quasiquote name)))
          (define result arg)
          (stack-pop! stack)
-         (when (lesya:currently-at-toplevel?)
-           (hashmap-set! mapping (quasiquote name) result))
          result)))))
 
 (define-syntax lesya:language:let

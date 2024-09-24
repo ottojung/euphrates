@@ -20,10 +20,6 @@
   (import
     (only (euphrates define-type9) define-type9))
   (import
-    (only (euphrates hashmap)
-          hashmap-set!
-          make-hashmap))
-  (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import
@@ -69,8 +65,7 @@
           syntax-rules
           unless
           unquote
-          values
-          when))
+          values))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
