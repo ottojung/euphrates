@@ -1039,7 +1039,7 @@
 
 (test-case
  ;;
- ;;  Proof of negation rule for universal quantifier.
+ ;;  Proof of negation rule for existential quantifier.
  ;;
 
  '(begin
@@ -1202,6 +1202,341 @@
     (= theorem
        (if (exists (x) P)
            (not (forall (x) (not P)))))
+
+    )
+
+ 'ignore-ok)
+
+
+(test-case
+ ;;
+ ;;  Basic proof with quantifiers.
+ ;;  Taken from "First Order Logic and Automated Theorem Proving",
+ ;;     second edition, by Melvin Fitting, page 154.
+ ;;
+
+ '(begin
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Propositional axioms:
+    ;;
+
+    (define MP ;; The "modus ponens" law.
+      (axiom (if P (if (if P Q) Q))))
+    (define DN ;; The "double negation" law.
+      (axiom (if (not (not P)) P)))
+    (define EFQ ;; The "ex-falso-quodlibet" law.
+      (axiom (if (false) P)))
+    (define Abs ;; The "absurdity rule" law.
+      (axiom (if (and P (not P)) (false))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (axiom (if (if P (false)) (not P))))
+    (define CP ;; The "contraposition" law.
+      (axiom (if (if P Q) (if (not P) (not Q)))))
+    (define LEM ;; The "law of excluded middle".
+      (axiom (or P (not P))))
+
+    (define and-intro
+      (axiom (if P (if Q (and P Q)))))
+    (define and-elim-left
+      (axiom (if (and P Q) P)))
+    (define and-elim-right
+      (axiom (if (and P Q) Q)))
+
+    (define or-intro-left
+      (axiom (if P (or P Q))))
+    (define or-intro-right
+      (axiom (if Q (or P Q))))
+    (define or-elim
+      (axiom (if (or P Q) (if (if P R) (if (if Q R) R)))))
+
+    (define implication-intro
+      (axiom (if (or (not P) Q) (if P Q))))
+    (define implication-elim
+      (axiom (if (if P Q) (or (not P) Q))))
+
+    (define not-intro
+      RAA)
+    (define not-elim
+      DN)
+
+    (define true-intro
+      (axiom (if P (true))))
+    (define true-elim
+      (axiom (if (not (true)) (false))))
+    (define false-intro
+      Abs)
+    (define false-elim
+      EFQ)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Quantifier rules:
+    ;;
+
+    (define universal-instantiation
+      (axiom (if t (if (forall x B) (map (if x t) B)))))
+
+    (define universal-generalization
+      (axiom (if c (if (if x Q) (if (if x c) (map (if x c) (forall c Q)))))))
+
+    (define existential-generalization
+      (axiom (if c (if B (map (if t c) (exists c B))))))
+
+    (define existential-instantiation
+      (axiom (if (exists x B) (map (if x (exists x B)) B))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Useful theorems:
+    ;;
+
+    (define de-morgan-/
+      (axiom (if (not (or P Q)) (and (not P) (not Q)))))
+
+    (define if-negation
+      (axiom (if (not (if P Q)) (and P (not Q)))))
+
+    (define universal-negation
+      (axiom (if (not (forall (x) P))
+                 (exists (x) (not P)))))
+
+    (define existential-negation
+      (axiom (if (not (exists (x) P))
+                 (forall (x) (not P)))))
+
+    (define universal->existential
+      (axiom (if (forall (x) P)
+                 (not (exists (x) (not P))))))
+
+    (define existential->universal
+      (axiom (if (exists (x) P)
+                 (not (forall (x) (not P))))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Theorem:
+    ;;
+
+    (define theorem
+      (let ()
+
+        (define if-negation-1
+          (map (if Q (or (exists (x) (P (x))) (forall (x) (Q (x)))))
+               (map (if P (forall (x) (or (P (x)) (Q (x))))) if-negation)))
+
+        (define and-elim-left-1
+          (map (if Q (not (or (exists (x) (P (x)))
+                              (forall (x) (Q (x))))))
+               (map (if P (forall (x) (or (P (x)) (Q (x))))) and-elim-left)))
+
+        (define and-elim-right-1
+          (map (if Q (not (or (exists (x) (P (x)))
+                              (forall (x) (Q (x))))))
+               (map (if P (forall (x) (or (P (x)) (Q (x))))) and-elim-right)))
+
+        (define de-morgan-/-1
+          (=
+
+           (map (if Q (forall (x) (Q (x))))
+                (map (if P (exists (x) (P (x)))) de-morgan-/))
+
+           (if (not (or (exists (x) (P (x)))
+                        (forall (x) (Q (x)))))
+               (and (not (exists (x) (P (x))))
+                    (not (forall (x) (Q (x))))))))
+
+        (define and-elim-left-2
+          (map (if Q (not (forall (x) (Q (x)))))
+               (map (if P (not (exists (x) (P (x))))) and-elim-left)))
+
+        (define and-elim-right-2
+          (map (if Q (not (forall (x) (Q (x)))))
+               (map (if P (not (exists (x) (P (x))))) and-elim-right)))
+
+        (define negate-forall-q
+          (= (map (if P (Q (x))) universal-negation)
+             (if (not (forall (x) (Q (x))))
+                 (exists (x) (not (Q (x)))))))
+
+        (define existential-instantiation-1
+          (= (map (if x (x)) (map (if B (not (Q (x)))) existential-instantiation))
+             (if (exists (x) (not (Q (x))))
+                 (map (if (x) (exists (x) (not (Q (x)))))
+                      (not (Q (x)))))))
+
+        (define negate-exists-p
+          (= (map (if P (P (x))) existential-negation)
+             (if (not (exists (x) (P (x))))
+                 (forall (x) (not (P (x)))))))
+
+        (define universal-instantiation-1
+          (= (map (if t (exists (x) (not (Q (x)))))
+                  (map (if x (x))
+                       (map (if B (not (P (x)))) universal-instantiation)))
+             (if (exists (x) (not (Q (x))))
+                 (if (forall (x) (not (P (x))))
+                     (map (if (x) (exists (x) (not (Q (x)))))
+                          (not (P (x))))))))
+
+        (define universal-instantiation-2
+          (= (map (if t (exists (x) (not (Q (x)))))
+                  (map (if x (x))
+                       (map (if B (or (P (x)) (Q (x))))
+                            universal-instantiation)))
+             (if (exists (x) (not (Q (x))))
+                 (if (forall (x) (or (P (x)) (Q (x))))
+                     (map (if (x) (exists (x) (not (Q (x)))))
+                          (or (P (x)) (Q (x))))))))
+
+        (define and-intro-1
+          (map (if Q (not (P (exists (x) (not (Q (x)))))))
+               (map (if P (P (exists (x) (not (Q (x)))))) and-intro)))
+
+        (define abs-p<c>
+          (map (if P (P (exists (x) (not (Q (x)))))) Abs))
+
+        (define and-intro-2
+          (map (if Q (not (Q (exists (x) (not (Q (x)))))))
+               (map (if P (Q (exists (x) (not (Q (x)))))) and-intro)))
+
+        (define abs-q<c>
+          (map (if P (Q (exists (x) (not (Q (x)))))) Abs))
+
+        (define or-elim-1
+          (map (if R (false))
+               (map (if Q (Q (exists (x) (not (Q (x))))))
+                    (map (if P (P (exists (x) (not (Q (x))))))
+                         or-elim))))
+
+        (= or-elim-1
+           (if (or (P (exists (x) (not (Q (x)))))
+                   (Q (exists (x) (not (Q (x))))))
+               (if (if (P (exists (x) (not (Q (x))))) (false))
+                   (if (if (Q (exists (x) (not (Q (x))))) (false))
+                       (false)))))
+
+        (define raa-final
+          (map (if P (not (if (forall (x) (or (P (x)) (Q (x))))
+                              (or (exists (x) (P (x))) (forall (x) (Q (x)))))))
+               RAA))
+
+        (define dn-final
+          (map (if P (if (forall (x) (or (P (x)) (Q (x)))) (or (exists (x) (P (x))) (forall (x) (Q (x))))))
+               DN))
+
+        (define refutation
+          (let ((resolution-1
+                 (not (if (forall (x) (or (P (x)) (Q (x))))
+                          (or (exists (x) (P (x)))
+                              (forall (x) (Q (x))))))))
+
+            (define statement
+              (eval (list if-negation-1 resolution-1)))
+
+            (define resolution-2
+              (eval (list and-elim-left-1 statement)))
+
+            (= resolution-2
+               (forall (x) (or (P (x)) (Q (x)))))
+
+            (define resolution-3
+              (eval (list and-elim-right-1 statement)))
+
+            (= resolution-3
+               (not (or (exists (x) (P (x))) (forall (x) (Q (x))))))
+
+            (define de-morganed-1
+              (eval (list de-morgan-/-1 resolution-3)))
+
+            (= de-morganed-1
+               (and (not (exists (x) (P (x)))) (not (forall (x) (Q (x))))))
+
+            (define resolution-4
+              (= (eval (list and-elim-left-2 de-morganed-1))
+                 (not (exists (x) (P (x))))))
+
+            (define resolution-5
+              (= (eval (list and-elim-right-2 de-morganed-1))
+                 (not (forall (x) (Q (x))))))
+
+            (define exists-notq
+              (= (eval (list negate-forall-q resolution-5))
+                 (exists (x) (not (Q (x))))))
+
+            (define c exists-notq)
+
+            (define resolution-6/text
+              (= (eval (list existential-instantiation-1 exists-notq))
+                 (map (if (x) ,c)
+                      (not (Q (x))))))
+
+            (define resolution-6
+              (= (eval resolution-6/text)
+                 (not (Q ,c))))
+
+            (define forall-notp
+              (= (eval (list negate-exists-p resolution-4))
+                 (forall (x) (not (P (x))))))
+
+            (define resolution-7/text
+              (= (eval (list universal-instantiation-1 c forall-notp))
+                 (map (if (x) ,c) (not (P (x))))))
+
+            (define resolution-7
+              (= (eval resolution-7/text)
+                 (not (P ,c))))
+
+            (define resolution-8/text
+              (= (eval (list universal-instantiation-2 c resolution-2))
+                 (map (if (x) (exists (x) (not (Q (x)))))
+                      (or (P (x)) (Q (x))))))
+
+            (define resolution-8
+              (= (eval resolution-8/text)
+                 (or (P ,c) (Q ,c))))
+
+            (define first-case
+              (let ((p<c> (P ,c)))
+
+                (define tuple
+                  (eval (list and-intro-1 p<c> resolution-7)))
+
+                (define false
+                  (eval (list abs-p<c> tuple)))
+
+                false))
+
+            (define second-case
+              (let ((resolution-10 (Q ,c)))
+
+                (define tuple
+                  (eval (list and-intro-2 resolution-10 resolution-6)))
+
+                (define false
+                  (eval (list abs-q<c> tuple)))
+
+                false))
+
+            (define resolution-11
+              (eval (list or-elim-1 resolution-8 first-case second-case)))
+
+            (= resolution-11 (false))
+
+            resolution-11))
+
+        (define negated
+          (eval (list raa-final refutation)))
+
+        (define final
+          (eval (list dn-final negated)))
+
+        final))
+
+    (= theorem
+       (if (forall (x) (or (P (x)) (Q (x))))
+           (or (exists (x) (P (x))) (forall (x) (Q (x))))))
 
     )
 
