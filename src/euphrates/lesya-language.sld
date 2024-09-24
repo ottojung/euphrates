@@ -11,7 +11,6 @@
     lesya:language:list
     lesya:language:=
     lesya:language:apply
-    lesya:language:alpha
     lesya:language:beta
     lesya:language:let
     lesya:language:define)

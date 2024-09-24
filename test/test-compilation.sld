@@ -1157,7 +1157,6 @@
     (only (euphrates lesya-language)
           lesya:language
           lesya:language:=
-          lesya:language:alpha
           lesya:language:apply
           lesya:language:axiom
           lesya:language:begin

@@ -78,26 +78,6 @@
      (lesya:check-that-on-toplevel
       (quasiquote term)))))
 
-(define (lesya:language:alpha-convert initial-term qvarname qreplcement)
-  (unless (symbol? qvarname)
-    (lesya:error 'non-symbol-1-in-alpha-convert qvarname initial-term qreplcement))
-
-  (unless (symbol? qreplcement)
-    (lesya:error 'non-symbol-2-in-alpha-convert qreplcement initial-term qvarname))
-
-  (let loop ((term initial-term))
-    (cond
-     ((null? term)
-      term)
-     ((list? term)
-      (cons (car term) (map loop (cdr term))))
-     ((equal? term qreplcement)
-      (lesya:error 'replacement-object-found-in-the-replacement-subject qreplcement initial-term))
-     ((equal? term qvarname)
-      qreplcement)
-     (else
-      term))))
-
 (define (lesya:language:beta-reduce initial-term qvarname qreplcement)
   (let loop ((term initial-term))
     (cond
@@ -156,13 +136,6 @@
                        'endcontext:)))
 
   conclusion)
-
-(define-syntax lesya:language:alpha
-  (syntax-rules ()
-    ((_ (term varname) replacement)
-     (lesya:check-that-on-toplevel
-      (lesya:language:alpha-convert
-       term (quasiquote varname) (quasiquote replacement))))))
 
 (define-syntax lesya:language:beta
   (syntax-rules ()
