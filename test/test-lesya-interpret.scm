@@ -45,8 +45,6 @@
 ;;
 
 
-
-
 (test-case
  ;;
  ;; Basic proof.
@@ -106,11 +104,12 @@
     (define x
       (let ()
         (define and-intro-p-q
-          (map (if Y (Q)) (map (if X (P)) and-intro)))
+          (map (specify Y (Q))
+               (map (specify X (P)) and-intro)))
 
         (let ((y (P))
               (w (Q)))
-          (apply (apply and-intro-p-q y) w))))
+          (apply and-intro-p-q y w))))
 
     )
 
@@ -129,8 +128,8 @@
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
 
-    (define r1 (map (if X (P)) and-elim))
-    (define r2 (map (if Y (Q)) r1))
+    (define r1 (map (specify X (P)) and-elim))
+    (define r2 (map (specify Y (Q)) r1))
 
     (define x
       (let ((m (and (P) (Q))))
@@ -153,10 +152,10 @@
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
 
-    (define s1 (map (if X (P)) and-symmetric))
-    (define s2 (map (if Y (Q)) s1))
-    (define r1 (map (if X (Q)) and-elim))
-    (define r2 (map (if Y (P)) r1))
+    (define s1 (map (specify X (P)) and-symmetric))
+    (define s2 (map (specify Y (Q)) s1))
+    (define r1 (map (specify X (Q)) and-elim))
+    (define r2 (map (specify Y (P)) r1))
 
     (define x
       (let ((m (and (P) (Q))))
@@ -204,15 +203,15 @@
 
     (define x
       (let ()
-        (define r1 (map (if X (P)) and-elim))
-        (define r2 (map (if Y (not (Q))) r1))
-        (define s1 (map (if X (P)) and-symmetric))
-        (define s2 (map (if Y (not (Q))) s1))
-        (define sr1 (map (if X (not (Q))) and-elim))
-        (define sr2 (map (if Y (P)) sr1))
-        (define Abs-q (map (if X (Q)) Abs))
-        (define RAA-target (map (if X (and (P) (not (Q)))) RAA))
-        (define and-intro-q-notq (map (if Y (not (Q))) (map (if X (Q)) and-intro)))
+        (define r1 (map (specify X (P)) and-elim))
+        (define r2 (map (specify Y (not (Q))) r1))
+        (define s1 (map (specify X (P)) and-symmetric))
+        (define s2 (map (specify Y (not (Q))) s1))
+        (define sr1 (map (specify X (not (Q))) and-elim))
+        (define sr2 (map (specify Y (P)) sr1))
+        (define Abs-q (map (specify X (Q)) Abs))
+        (define RAA-target (map (specify X (and (P) (not (Q)))) RAA))
+        (define and-intro-q-notq (map (specify Y (not (Q))) (map (specify X (Q)) and-intro)))
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
@@ -256,15 +255,15 @@
 
     (define x
       (let ()
-        (define r1 (map (if X (P)) and-elim))
-        (define r2 (map (if Y (not (Q))) r1))
-        (define s1 (map (if X (P)) and-symmetric))
-        (define s2 (map (if Y (not (Q))) s1))
-        (define sr1 (map (if X (not (Q))) and-elim))
-        (define sr2 (map (if Y (P)) sr1))
-        (define Abs-q (map (if X (Q)) Abs))
-        (define RAA-target (map (if X (and (P) (not (Q)))) RAA))
-        (define and-intro-q-notq (map (if Y (not (Q))) (map (if X (Q)) and-intro)))
+        (define r1 (map (specify X (P)) and-elim))
+        (define r2 (map (specify Y (not (Q))) r1))
+        (define s1 (map (specify X (P)) and-symmetric))
+        (define s2 (map (specify Y (not (Q))) s1))
+        (define sr1 (map (specify X (not (Q))) and-elim))
+        (define sr2 (map (specify Y (P)) sr1))
+        (define Abs-q (map (specify X (Q)) Abs))
+        (define RAA-target (map (specify X (and (P) (not (Q)))) RAA))
+        (define and-intro-q-notq (map (specify Y (not (Q))) (map (specify X (Q)) and-intro)))
 
         (define tofalse
           (let ((m (and (P) (not (Q)))))
@@ -310,19 +309,19 @@
 
     (define x
       (let ()
-        (define r1 (map (if X (P)) and-elim))
-        (define r2 (map (if Y (not (Q))) r1))
-        (define s1 (map (if X (P)) and-symmetric))
-        (define s2 (map (if Y (not (Q))) s1))
-        (define sr1 (map (if X (not (Q))) and-elim))
-        (define sr2 (map (if Y (P)) sr1))
-        (define Abs-1 (map (if X (and (P) (not (Q)))) Abs))
-        (define RAA-target (map (if X (not (Q))) RAA))
-        (define DN-target (map (if X (Q)) DN))
-        (define and-intro-p-notq (map (if Y (not (Q))) (map (if X (P)) and-intro)))
+        (define r1 (map (specify X (P)) and-elim))
+        (define r2 (map (specify Y (not (Q))) r1))
+        (define s1 (map (specify X (P)) and-symmetric))
+        (define s2 (map (specify Y (not (Q))) s1))
+        (define sr1 (map (specify X (not (Q))) and-elim))
+        (define sr2 (map (specify Y (P)) sr1))
+        (define Abs-1 (map (specify X (and (P) (not (Q)))) Abs))
+        (define RAA-target (map (specify X (not (Q))) RAA))
+        (define DN-target (map (specify X (Q)) DN))
+        (define and-intro-p-notq (map (specify Y (not (Q))) (map (specify X (P)) and-intro)))
         (define and-intro-p-notq-premise-1
-          (map (if Y (not (and (P) (not (Q)))))
-               (map (if X (and (P) (not (Q)))) and-intro)))
+          (map (specify Y (not (and (P) (not (Q)))))
+               (map (specify X (and (P) (not (Q)))) and-intro)))
 
         (let ((p (P)))
           (define contr1
@@ -379,23 +378,23 @@
 
     (define x
       (let ()
-        (define and-intro-p-q (map (if Y (Q)) (map (if X (P)) and-intro)))
-        (define and-intro-p-r (map (if Y (R)) (map (if X (P)) and-intro)))
-        (define or-intro-p-q-p-r-1 (map (if Y (and (P) (R))) (map (if X (and (P) (Q))) or-intro-left)))
-        (define or-intro-p-q-p-r-2 (map (if Y (and (P) (R))) (map (if X (and (P) (Q))) or-intro-right)))
-        (define p (apply (map (if Y (or (Q) (R))) (map (if X (P)) and-elim-left))
+        (define and-intro-p-q (map (specify Y (Q)) (map (specify X (P)) and-intro)))
+        (define and-intro-p-r (map (specify Y (R)) (map (specify X (P)) and-intro)))
+        (define or-intro-p-q-p-r-1 (map (specify Y (and (P) (R))) (map (specify X (and (P) (Q))) or-intro-left)))
+        (define or-intro-p-q-p-r-2 (map (specify Y (and (P) (R))) (map (specify X (and (P) (Q))) or-intro-right)))
+        (define p (apply (map (specify Y (or (Q) (R))) (map (specify X (P)) and-elim-left))
                          premise-1))
-        (define reversed (apply (map (if Y (or (Q) (R))) (map (if X (P)) and-symmetric))
+        (define reversed (apply (map (specify Y (or (Q) (R))) (map (specify X (P)) and-symmetric))
                                 premise-1))
 
         (define or-elim-target
           (let ()
-            (define a (map (if X (Q)) or-elim))
-            (define b (map (if Y (R)) a))
-            (define c (map (if Z (or (and (P) (Q)) (and (P) (R)))) b))
+            (define a (map (specify X (Q)) or-elim))
+            (define b (map (specify Y (R)) a))
+            (define c (map (specify Z (or (and (P) (Q)) (and (P) (R)))) b))
             c))
 
-        (define or-q-r (apply (map (if X (or (Q) (R))) (map (if Y (P)) and-elim-left)) reversed))
+        (define or-q-r (apply (map (specify X (or (Q) (R))) (map (specify Y (P)) and-elim-left)) reversed))
 
         (define q-><p-&-q/p-&-r>
           (let ((q (Q)))
@@ -463,42 +462,42 @@
       (let ()
 
         (define and-elim-left-notp-notq
-          (map (if Y (not Q)) (map (if X (not P)) and-elim-left)))
+          (map (specify Y (not Q)) (map (specify X (not P)) and-elim-left)))
 
         (define and-elim-left-p-notp
-          (map (if Y (not P)) (map (if X P) and-elim-left)))
+          (map (specify Y (not P)) (map (specify X P) and-elim-left)))
 
         (define and-elim-right-p-notp
-          (map (if Y (not P)) (map (if X P) and-elim-right)))
+          (map (specify Y (not P)) (map (specify X P) and-elim-right)))
 
         (define and-intro-p-notp
-          (map (if Y (not P)) (map (if X P) and-intro)))
+          (map (specify Y (not P)) (map (specify X P) and-intro)))
 
         (define abs-p
-          (map (if X P) Abs))
+          (map (specify X P) Abs))
 
-        (define raa1-rule (map (if X (and (not P) (not Q))) RAA))
+        (define raa1-rule (map (specify X (and (not P) (not Q))) RAA))
 
         (define and-intro-notp-notq
-          (= (map (if Y (not Q)) (map (if X (not P)) and-intro))
+          (= (map (specify Y (not Q)) (map (specify X (not P)) and-intro))
              (if (not P) (if (not Q) (and (not P) (not Q))))))
 
         (define and-intro-1
-          (= (map (if Y (not (and (not P) (not Q)))) (map (if X (and (not P) (not Q))) and-intro))
+          (= (map (specify Y (not (and (not P) (not Q)))) (map (specify X (and (not P) (not Q))) and-intro))
              (if (and (not P) (not Q))
                  (if (not (and (not P) (not Q)))
                      (and (and (not P) (not Q)) (not (and (not P) (not Q))))))))
 
         (define abs-1
-          (= (map (if X (and (not P) (not Q))) Abs)
+          (= (map (specify X (and (not P) (not Q))) Abs)
              (if (and (and (not P) (not Q)) (not (and (not P) (not Q)))) (false))))
 
         (define notq-raa
-          (= (map (if X (not Q)) RAA)
+          (= (map (specify X (not Q)) RAA)
              (if (if (not Q) (false)) (not (not Q)))))
 
         (define DN-q
-          (map (if X Q) DN))
+          (map (specify X Q) DN))
 
         (let ((p-and-notp (and P (not P))))
 
@@ -577,9 +576,9 @@
     (define and-symmetric
       (axiom (if (and X Y) (and Y X))))
 
-    (define r1 (map (if X (P)) and-elim))
-    ;; (define r2 (map (if Y (Q)) r1)) ;; equivalent to one below:
-    (define r2 (eval (axiom (map (if Y (Q)) ,r1))))
+    (define r1 (map (specify X (P)) and-elim))
+    ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
+    (define r2 (eval (axiom (map (specify Y (Q)) ,r1))))
 
     (define x
       (let ((m (and (P) (Q))))
@@ -590,31 +589,31 @@
  `ignore-ok)
 
 
-(test-case
- ;;
- ;; Check error with `map` not on toplevel.
- ;;
+;; (test-case
+;;  ;;
+;;  ;; Check error with `map` not on toplevel.
+;;  ;;
 
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
 
-    (define r1 (map (if X (P)) and-elim))
-    ;; (define r2 (map (if Y (Q)) r1)) ;; equivalent to one below:
-    (define r2 (eval (axiom (map (if Y (Q)) ,r1))))
+;;     (define r1 (map (specify X (P)) and-elim))
+;;     ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
+;;     (define r2 (eval (axiom (map (specify Y (Q)) ,r1))))
 
-    (define x
-      (let ((m (and (P) (Q))))
-        (define r1-internal (map (if X (P)) and-elim))
-        (eval (list r2 m))))
+;;     (define x
+;;       (let ((m (and (P) (Q))))
+;;         (define r1-internal (map (specify X (P)) and-elim))
+;;         (eval (list r2 m))))
 
-    )
+;;     )
 
- `(error only-allowed-on-top-level
-         ("This operation is only allowed on toplevel: (let () (define-values (premise conclusion) (lesya:implication:destruct (quasiquote (if X (P))))) (unless (symbol? premise) (lesya:error (quote non-symbol-1-in-map) premise conclusion and-elim)) (lesya:language:beta-reduce and-elim premise conclusion)).")
-         (r1-internal x)))
+;;  `(error only-allowed-on-top-level
+;;          ("This operation is only allowed on toplevel: (let () (define-values (premise conclusion) (lesya:implication:destruct (quasiquote (if X (P))))) (unless (symbol? premise) (lesya:error (quote non-symbol-1-in-map) premise conclusion and-elim)) (lesya:language:beta-reduce and-elim premise conclusion)).")
+;;          (r1-internal x)))
 
 
 (test-case
@@ -716,16 +715,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (if x t) B)))))
+      (axiom (if t (if (forall x B) (map (specify x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (if x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (if t c) (exists c B))))))
+      (axiom (if c (if B (map (specify t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (if x (exists x B)) B))))
+      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -734,17 +733,17 @@
 
     (define de-morgan-&
       (let ()
-        (define contr-1a (map (if P (and P Q)) Abs))
-        (define abs-1a (map (if P Q) Abs))
-        (define and-intro-xy (map (if Q Y) (map (if P X) and-intro)))
-        (define and-intro-andpq (map (if Y (not (and P Q)))
-                                     (map (if X (and P Q)) and-intro-xy)))
-        (define or-intro-right-xy (map (if Q Y) (map (if P X) or-intro-right)))
-        (define or-intro-right-notq (map (if Y (not Q)) (map (if X (not P)) or-intro-right-xy)))
-        (define or-intro-left-xy (map (if Q Y) (map (if P X) or-intro-left)))
-        (define or-intro-left-notq (map (if Y (not Q)) (map (if X (not P)) or-intro-left-xy)))
-        (define raa-notq (map (if P Q) RAA))
-        (define ret (map (if R (or (not P) (not Q))) (map (if Q (not P)) or-elim)))
+        (define contr-1a (map (specify P (and P Q)) Abs))
+        (define abs-1a (map (specify P Q) Abs))
+        (define and-intro-xy (map (specify Q Y) (map (specify P X) and-intro)))
+        (define and-intro-andpq (map (specify Y (not (and P Q)))
+                                     (map (specify X (and P Q)) and-intro-xy)))
+        (define or-intro-right-xy (map (specify Q Y) (map (specify P X) or-intro-right)))
+        (define or-intro-right-notq (map (specify Y (not Q)) (map (specify X (not P)) or-intro-right-xy)))
+        (define or-intro-left-xy (map (specify Q Y) (map (specify P X) or-intro-left)))
+        (define or-intro-left-notq (map (specify Y (not Q)) (map (specify X (not P)) or-intro-left-xy)))
+        (define raa-notq (map (specify P Q) RAA))
+        (define ret (map (specify R (or (not P) (not Q))) (map (specify Q (not P)) or-elim)))
 
         (let ((premise (not (and P Q))))
 
@@ -853,16 +852,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (if x t) B)))))
+      (axiom (if t (if (forall x B) (map (specify x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (if x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (if t c) (exists c B))))))
+      (axiom (if c (if B (map (specify t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (if x (exists x B)) B))))
+      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -884,23 +883,23 @@
       (let ()
 
         (define universal-instantiation-1
-          (= (map (if t (exists (x) (not P)))
-                  (map (if x (x))
-                       (map (if B P)
+          (= (map (specify t (exists (x) (not P)))
+                  (map (specify x (x))
+                       (map (specify B P)
                             universal-instantiation)))
              (if (exists (x) (not P))
                  (if (forall (x) P)
-                     (map (if (x) (exists (x) (not P))) P)))))
+                     (map (specify (x) (exists (x) (not P))) P)))))
 
         (define existential-instantiation-1
-          (= (map (if x (x)) (map (if B (not P)) existential-instantiation))
+          (= (map (specify x (x)) (map (specify B (not P)) existential-instantiation))
              (if (exists (x) (not P))
-                 (map (if (x) (exists (x) (not P)))
+                 (map (specify (x) (exists (x) (not P)))
                       (not P)))))
 
         (define and-intro-1
-          (= (map (if Q (not P))
-                  (map (if P P)
+          (= (map (specify Q (not P))
+                  (map (specify P P)
                        and-intro))
              (if P
                  (if (not P)
@@ -908,13 +907,13 @@
                           (not P))))))
 
         (define abs-1
-          (= (map (if P P) Abs)
+          (= (map (specify P P) Abs)
              (if (and P
                       (not P))
                  (false))))
 
         (define raa-1
-          (= (map (if P (exists (x) (not P))) RAA)
+          (= (map (specify P (exists (x) (not P))) RAA)
              (if (if (exists (x) (not P)) (false))
                  (not (exists (x) (not P))))))
 
@@ -927,7 +926,7 @@
 
               (define instance/text
                 (= (eval (list existential-instantiation-1 not-conclusion))
-                   (map (if (x) (exists (x) (not P)))
+                   (map (specify (x) (exists (x) (not P)))
                         (not P))))
 
               (define instance
@@ -936,7 +935,7 @@
 
               (define instance-2/text
                 (= (eval (list universal-instantiation-1 c premise))
-                   (map (if (x) (exists (x) (not P))) P)))
+                   (map (specify (x) (exists (x) (not P))) P)))
 
               (define instance-2
                 (= (eval instance-2/text)
@@ -1028,16 +1027,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (if x t) B)))))
+      (axiom (if t (if (forall x B) (map (specify x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (if x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (if t c) (exists c B))))))
+      (axiom (if c (if B (map (specify t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (if x (exists x B)) B))))
+      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -1059,22 +1058,22 @@
       (let ()
 
         (define universal-instantiation-1
-          (= (map (if t P)
-                  (map (if x (x))
-                       (map (if B (not P))
+          (= (map (specify t P)
+                  (map (specify x (x))
+                       (map (specify B (not P))
                             universal-instantiation)))
              (if P
                  (if (forall (x) (not P))
-                     (map (if (x) P) (not P))))))
+                     (map (specify (x) P) (not P))))))
 
         (define existential-instantiation-1
-          (= (map (if x (x)) (map (if B P) existential-instantiation))
+          (= (map (specify x (x)) (map (specify B P) existential-instantiation))
              (if (exists (x) P)
-                 (map (if (x) (exists (x) P)) P))))
+                 (map (specify (x) (exists (x) P)) P))))
 
         (define and-intro-1
-          (= (map (if Q (not P))
-                  (map (if P P)
+          (= (map (specify Q (not P))
+                  (map (specify P P)
                        and-intro))
              (if P
                  (if (not P)
@@ -1082,13 +1081,13 @@
                           (not P))))))
 
         (define abs-1
-          (= (map (if P P) Abs)
+          (= (map (specify P P) Abs)
              (if (and P
                       (not P))
                  (false))))
 
         (define raa-1
-          (= (map (if P (forall (x) (not P))) RAA)
+          (= (map (specify P (forall (x) (not P))) RAA)
              (if (if (forall (x) (not P)) (false))
                  (not (forall (x) (not P))))))
 
@@ -1099,7 +1098,7 @@
 
               (define instance-2/text
                 (= (eval (list existential-instantiation-1 premise))
-                   (map (if (x) (exists (x) P)) P)))
+                   (map (specify (x) (exists (x) P)) P)))
 
               (define instance-2
                 (= (eval instance-2/text)
@@ -1107,7 +1106,7 @@
 
               (define instance/text
                 (= (eval (list universal-instantiation-1 instance-2 not-conclusion))
-                   (map (if (x) P) (not P))))
+                   (map (specify (x) P) (not P))))
 
               (define instance
                 (= (eval instance/text)
@@ -1201,16 +1200,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (if x t) B)))))
+      (axiom (if t (if (forall x B) (map (specify x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (if x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (if t c) (exists c B))))))
+      (axiom (if c (if B (map (specify t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (if x (exists x B)) B))))
+      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -1248,24 +1247,24 @@
       (let ()
 
         (define if-negation-1
-          (map (if Q (or (exists (x) (P (x))) (forall (x) (Q (x)))))
-               (map (if P (forall (x) (or (P (x)) (Q (x))))) if-negation)))
+          (map (specify Q (or (exists (x) (P (x))) (forall (x) (Q (x)))))
+               (map (specify P (forall (x) (or (P (x)) (Q (x))))) if-negation)))
 
         (define and-elim-left-1
-          (map (if Q (not (or (exists (x) (P (x)))
+          (map (specify Q (not (or (exists (x) (P (x)))
                               (forall (x) (Q (x))))))
-               (map (if P (forall (x) (or (P (x)) (Q (x))))) and-elim-left)))
+               (map (specify P (forall (x) (or (P (x)) (Q (x))))) and-elim-left)))
 
         (define and-elim-right-1
-          (map (if Q (not (or (exists (x) (P (x)))
+          (map (specify Q (not (or (exists (x) (P (x)))
                               (forall (x) (Q (x))))))
-               (map (if P (forall (x) (or (P (x)) (Q (x))))) and-elim-right)))
+               (map (specify P (forall (x) (or (P (x)) (Q (x))))) and-elim-right)))
 
         (define de-morgan-/-1
           (=
 
-           (map (if Q (forall (x) (Q (x))))
-                (map (if P (exists (x) (P (x)))) de-morgan-/))
+           (map (specify Q (forall (x) (Q (x))))
+                (map (specify P (exists (x) (P (x)))) de-morgan-/))
 
            (if (not (or (exists (x) (P (x)))
                         (forall (x) (Q (x)))))
@@ -1273,66 +1272,66 @@
                     (not (forall (x) (Q (x))))))))
 
         (define and-elim-left-2
-          (map (if Q (not (forall (x) (Q (x)))))
-               (map (if P (not (exists (x) (P (x))))) and-elim-left)))
+          (map (specify Q (not (forall (x) (Q (x)))))
+               (map (specify P (not (exists (x) (P (x))))) and-elim-left)))
 
         (define and-elim-right-2
-          (map (if Q (not (forall (x) (Q (x)))))
-               (map (if P (not (exists (x) (P (x))))) and-elim-right)))
+          (map (specify Q (not (forall (x) (Q (x)))))
+               (map (specify P (not (exists (x) (P (x))))) and-elim-right)))
 
         (define negate-forall-q
-          (= (map (if P (Q (x))) universal-negation)
+          (= (map (specify P (Q (x))) universal-negation)
              (if (not (forall (x) (Q (x))))
                  (exists (x) (not (Q (x)))))))
 
         (define existential-instantiation-1
-          (= (map (if x (x)) (map (if B (not (Q (x)))) existential-instantiation))
+          (= (map (specify x (x)) (map (specify B (not (Q (x)))) existential-instantiation))
              (if (exists (x) (not (Q (x))))
-                 (map (if (x) (exists (x) (not (Q (x)))))
+                 (map (specify (x) (exists (x) (not (Q (x)))))
                       (not (Q (x)))))))
 
         (define negate-exists-p
-          (= (map (if P (P (x))) existential-negation)
+          (= (map (specify P (P (x))) existential-negation)
              (if (not (exists (x) (P (x))))
                  (forall (x) (not (P (x)))))))
 
         (define universal-instantiation-1
-          (= (map (if t (exists (x) (not (Q (x)))))
-                  (map (if x (x))
-                       (map (if B (not (P (x)))) universal-instantiation)))
+          (= (map (specify t (exists (x) (not (Q (x)))))
+                  (map (specify x (x))
+                       (map (specify B (not (P (x)))) universal-instantiation)))
              (if (exists (x) (not (Q (x))))
                  (if (forall (x) (not (P (x))))
-                     (map (if (x) (exists (x) (not (Q (x)))))
+                     (map (specify (x) (exists (x) (not (Q (x)))))
                           (not (P (x))))))))
 
         (define universal-instantiation-2
-          (= (map (if t (exists (x) (not (Q (x)))))
-                  (map (if x (x))
-                       (map (if B (or (P (x)) (Q (x))))
+          (= (map (specify t (exists (x) (not (Q (x)))))
+                  (map (specify x (x))
+                       (map (specify B (or (P (x)) (Q (x))))
                             universal-instantiation)))
              (if (exists (x) (not (Q (x))))
                  (if (forall (x) (or (P (x)) (Q (x))))
-                     (map (if (x) (exists (x) (not (Q (x)))))
+                     (map (specify (x) (exists (x) (not (Q (x)))))
                           (or (P (x)) (Q (x))))))))
 
         (define and-intro-1
-          (map (if Q (not (P (exists (x) (not (Q (x)))))))
-               (map (if P (P (exists (x) (not (Q (x)))))) and-intro)))
+          (map (specify Q (not (P (exists (x) (not (Q (x)))))))
+               (map (specify P (P (exists (x) (not (Q (x)))))) and-intro)))
 
         (define abs-p<c>
-          (map (if P (P (exists (x) (not (Q (x)))))) Abs))
+          (map (specify P (P (exists (x) (not (Q (x)))))) Abs))
 
         (define and-intro-2
-          (map (if Q (not (Q (exists (x) (not (Q (x)))))))
-               (map (if P (Q (exists (x) (not (Q (x)))))) and-intro)))
+          (map (specify Q (not (Q (exists (x) (not (Q (x)))))))
+               (map (specify P (Q (exists (x) (not (Q (x)))))) and-intro)))
 
         (define abs-q<c>
-          (map (if P (Q (exists (x) (not (Q (x)))))) Abs))
+          (map (specify P (Q (exists (x) (not (Q (x)))))) Abs))
 
         (define or-elim-1
-          (map (if R (false))
-               (map (if Q (Q (exists (x) (not (Q (x))))))
-                    (map (if P (P (exists (x) (not (Q (x))))))
+          (map (specify R (false))
+               (map (specify Q (Q (exists (x) (not (Q (x))))))
+                    (map (specify P (P (exists (x) (not (Q (x))))))
                          or-elim))))
 
         (= or-elim-1
@@ -1343,12 +1342,12 @@
                        (false)))))
 
         (define raa-final
-          (map (if P (not (if (forall (x) (or (P (x)) (Q (x))))
+          (map (specify P (not (if (forall (x) (or (P (x)) (Q (x))))
                               (or (exists (x) (P (x))) (forall (x) (Q (x)))))))
                RAA))
 
         (define dn-final
-          (map (if P (if (forall (x) (or (P (x)) (Q (x)))) (or (exists (x) (P (x))) (forall (x) (Q (x))))))
+          (map (specify P (if (forall (x) (or (P (x)) (Q (x)))) (or (exists (x) (P (x))) (forall (x) (Q (x))))))
                DN))
 
         (define refutation
@@ -1394,7 +1393,7 @@
 
             (define resolution-6/text
               (= (eval (list existential-instantiation-1 exists-notq))
-                 (map (if (x) ,c)
+                 (map (specify (x) ,c)
                       (not (Q (x))))))
 
             (define resolution-6
@@ -1407,7 +1406,7 @@
 
             (define resolution-7/text
               (= (eval (list universal-instantiation-1 c forall-notp))
-                 (map (if (x) ,c) (not (P (x))))))
+                 (map (specify (x) ,c) (not (P (x))))))
 
             (define resolution-7
               (= (eval resolution-7/text)
@@ -1415,7 +1414,7 @@
 
             (define resolution-8/text
               (= (eval (list universal-instantiation-2 c resolution-2))
-                 (map (if (x) (exists (x) (not (Q (x)))))
+                 (map (specify (x) (exists (x) (not (Q (x)))))
                       (or (P (x)) (Q (x))))))
 
             (define resolution-8

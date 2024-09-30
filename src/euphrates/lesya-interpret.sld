@@ -13,7 +13,8 @@
           lesya:language:let
           lesya:language:list
           lesya:language:map
-          lesya:language:run))
+          lesya:language:run
+          lesya:language:specify))
   (import
     (only (scheme base)
           =

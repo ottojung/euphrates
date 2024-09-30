@@ -10,6 +10,7 @@
             (lesya:language:define define)
             (lesya:language:apply apply)
             (lesya:language:begin begin)
+            (lesya:language:specify specify)
             (lesya:language:let let)
             (lesya:language:= =)
             (lesya:language:map map)

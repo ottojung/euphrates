@@ -9,6 +9,7 @@
     lesya:language:map
     lesya:language:eval
     lesya:language:list
+    lesya:language:specify
     lesya:language:=
     lesya:language:apply
     lesya:language:let
@@ -56,6 +57,7 @@
           map
           not
           null?
+          or
           pair?
           parameterize
           quasiquote
@@ -64,7 +66,8 @@
           syntax-rules
           unless
           unquote
-          values))
+          values
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
