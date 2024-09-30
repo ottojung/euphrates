@@ -11,8 +11,6 @@
             (lesya:language:apply apply)
             (lesya:language:begin begin)
             (lesya:language:let let)
-            (lesya:language:specify specify)
-            (lesya:language:lift lift)
             (lesya:language:= =)
             (lesya:language:map map)
             (lesya:language:eval eval)

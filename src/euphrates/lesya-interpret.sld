@@ -11,11 +11,9 @@
           lesya:language:define
           lesya:language:eval
           lesya:language:let
-          lesya:language:lift
           lesya:language:list
           lesya:language:map
-          lesya:language:run
-          lesya:language:specify))
+          lesya:language:run))
   (import
     (only (scheme base)
           =

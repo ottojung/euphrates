@@ -34,10 +34,8 @@
   (lesya:language:state:struct:construct
    callstack supposedterms escape))
 
-
 (define lesya:language:state/p
   (make-parameter #f))
-
 
 (define-syntax lesya:language:run
   (syntax-rules ()
@@ -48,7 +46,6 @@
         (parameterize ((lesya:language:state/p state))
           (let () . bodies))
         (list 'ok))))))
-
 
 (define-syntax lesya:language:begin
   (syntax-rules ()
@@ -77,25 +74,9 @@
 
 (define-syntax lesya:language:axiom
   (syntax-rules ()
-    ((_ subterm)
+    ((_ term)
      (lesya:check-that-on-toplevel
-      `(term ,(quasiquote subterm))))))
-
-
-(define (lesya:term:unwrap object)
-  (unless (list? object)
-    (lesya:error 'not-a-term object))
-
-  (unless (pair? object)
-    (lesya:error 'null-where-term-is-expected object))
-
-  (unless (list-length= 2 object)
-    (lesya:error 'bad-of-term object))
-
-  (let ()
-    (define-tuple (predicate term) object)
-    term))
-
+      (quasiquote term)))))
 
 (define (lesya:language:beta-reduce initial-term qvarname qreplcement)
   (let loop ((term initial-term))
@@ -109,7 +90,6 @@
      (else
       term))))
 
-
 (define (lesya:error type . args)
   (define state (lesya:language:state/p))
   (define stack (lesya:language:state:callstack state))
@@ -117,34 +97,14 @@
 
   (escape (list 'error type args (stack->list stack))))
 
-
 (define lesya:implication:name
   'if)
-
-
-(define lesya:rule:name
-  'rule)
-
-
-(define lesya:term:name
-  'term)
-
 
 (define lesya:substitution:name
   'map)
 
-
-(define (lesya:term:make subterm)
-  `(,lesya:term:name ,subterm))
-
-
-(define (lesya:rule:make supposition conclusion)
-  `(,lesya:rule:name ,supposition ,conclusion))
-
-
 (define (lesya:implication:make supposition conclusion)
   `(,lesya:implication:name ,supposition ,conclusion))
-
 
 (define (lesya:implication:destruct implication)
   (unless (list? implication)
@@ -164,26 +124,6 @@
 
     (values premise conclusion)))
 
-
-(define (lesya:rule:destruct implication)
-  (unless (list? implication)
-    (lesya:error 'not-a-term-in-implication implication))
-
-  (unless (pair? implication)
-    (lesya:error 'null-in-implication implication))
-
-  (unless (list-length= 3 implication)
-    (lesya:error 'bad-length-of-implication-in-modus-ponens implication))
-
-  (let ()
-    (define-tuple (predicate premise conclusion) implication)
-
-    (unless (equal? predicate lesya:rule:name)
-      (lesya:error 'non-implication-in-modus-ponens implication))
-
-    (values premise conclusion)))
-
-
 (define (lesya:language:modus-ponens implication argument)
   (define-values (premise conclusion)
     (lesya:implication:destruct implication))
@@ -197,20 +137,13 @@
 
   conclusion)
 
-
-(define (lesya:language:apply+eval . arguments)
-  (list-fold/semigroup lesya:language:modus-ponens arguments))
-
-
 (define (lesya:language:apply . arguments)
-  (cons 'apply arguments))
-
+  (list-fold/semigroup lesya:language:modus-ponens arguments))
 
 (define (lesya:currently-at-toplevel?)
   (define stack (lesya:get-current-stack))
   (and (stack-empty? stack)
        (not (lesya:currently-hyphothetical?))))
-
 
 (define-syntax lesya:language:define
   (syntax-rules ()
@@ -223,37 +156,20 @@
          (stack-pop! stack)
          result)))))
 
-
-(define (lesya:specify qvarname qsubterm)
-  (unless (symbol? qvarname)
-    (lesya:error 'non-symbol-in-specify qvarname qsubterm))
-
-  (lesya:rule:make qvarname qsubterm))
-
-
-(define-syntax lesya:language:specify
-  (syntax-rules ()
-    ((_ varname subterm)
-     (lesya:specify (quasiquote varname) (quasiquote subterm)))))
-
-
 (define-syntax lesya:language:let
   (syntax-rules ()
     ((_ () . bodies)
      (let () . bodies))
 
-    ((_  ((name shape) . lets) . bodies)
+    ((_  ((x shape) . lets) . bodies)
      (let ()
-       (define subterm (quasiquote shape))
-       (define name (lesya:term:make subterm))
+       (define x (quasiquote shape))
        (define state (lesya:language:state/p))
        (define supposedterms (lesya:language:state:supposedterms state))
-       (define _re (stack-push! supposedterms name))
+       (define _re (stack-push! supposedterms x))
        (define result (lesya:language:let lets . bodies))
-       (define result/unwrapped (lesya:term:unwrap result))
        (stack-pop! supposedterms)
-       (lesya:term:make
-        (lesya:implication:make subterm result/unwrapped))))))
+       (lesya:implication:make x result)))))
 
 
 (define-syntax lesya:language:=
@@ -271,27 +187,38 @@
                   'endcontext:)))))))
 
 
-(define (lesya:language:map implication body)
-  (define-values (premise conclusion)
-    (lesya:rule:destruct implication))
+(define-syntax lesya:language:map
+  (syntax-rules ()
+    ((_ implication body)
+     (lesya:check-that-on-toplevel
+      (let ()
+        (define-values (premise conclusion)
+          (lesya:implication:destruct (quasiquote implication)))
 
-  (lesya:language:beta-reduce
-   body premise conclusion))
+        (unless (symbol? premise)
+          (lesya:error 'non-symbol-1-in-map premise conclusion body))
+
+        (lesya:language:beta-reduce
+         body premise conclusion))))))
 
 
-(define (lesya:language:lift object)
-  (define term
-    (lesya:term:unwrap object))
-  (define-values (premise conclusion)
-    (lesya:implication:destruct term))
+(define-type9 <lesya:list>
+  (lesya:language:list:constructor args) lesya:language:list?
+  (args lesya:language:list:args)
+  )
 
-  (lesya:rule:make
-   (lesya:term:make premise)
-   (lesya:term:make conclusion)))
+
+(define (lesya:language:list . args)
+  (lesya:language:list:constructor args))
 
 
 (define (lesya:language:eval expr)
   (cond
+   ((lesya:language:list? expr)
+    (let ()
+      (define arguments (lesya:language:list:args expr))
+      (apply lesya:language:apply arguments)))
+
    ((and (pair? expr) (list? expr))
     (let ()
       (define operation (car expr))
@@ -301,15 +228,10 @@
         (let ()
           (define-tuple (operation implication body) expr)
           (define-values (premise conclusion)
-            (lesya:rule:destruct implication))
+            (lesya:implication:destruct implication))
 
           (lesya:language:beta-reduce
            body premise conclusion)))
-
-       ((equal? operation lesya:term:name)
-        (let ()
-          (define term (lesya:term:unwrap expr))
-          (lesya:language:eval term)))
 
        (else
         (lesya:error 'unknown-operation-in-eval operation expr)))))

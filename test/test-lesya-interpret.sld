@@ -11,6 +11,7 @@
     (only (scheme base)
           =
           and
+          apply
           begin
           car
           cdr
@@ -22,12 +23,14 @@
           error
           if
           let
+          list
           map
           not
           or
           quasiquote
           quote
           unless
+          unquote
           values
           when))
   (import (only (scheme eval) eval))
