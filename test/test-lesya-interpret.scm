@@ -102,6 +102,202 @@
 
 
 
+(test-case
+ ;;
+ ;;  Proof of negation rule for existential quantifier.
+ ;;
+
+ '(begin
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Propositional axioms:
+    ;;
+
+    (define MP ;; The "modus ponens" law.
+      (lift (axiom (if P (if (if P Q) Q)))))
+    (define DN ;; The "double negation" law.
+      (lift (axiom (if (not (not P)) P))))
+    (define EFQ ;; The "ex-falso-quodlibet" law.
+      (lift (axiom (if (false) P))))
+    (define Abs ;; The "absurdity rule" law.
+      (lift (axiom (if (and P (not P)) (false)))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (lift (axiom (if (if P (false)) (not P)))))
+    (define CP ;; The "contraposition" law.
+      (lift (axiom (if (if P Q) (if (not P) (not Q))))))
+    (define LEM ;; The "law of excluded middle".
+      (axiom (or P (not P))))
+
+    (define and-intro
+      (lift (axiom (if P (if Q (and P Q))))))
+    (define and-elim-left
+      (lift (axiom (if (and P Q) P))))
+    (define and-elim-right
+      (lift (axiom (if (and P Q) Q))))
+
+    (define or-intro-left
+      (lift (axiom (if P (or P Q)))))
+    (define or-intro-right
+      (lift (axiom (if Q (or P Q)))))
+    (define or-elim
+      (lift (axiom (if (or P Q) (if (if P R) (if (if Q R) R))))))
+
+    (define implication-intro
+      (lift (axiom (if (or (not P) Q) (if P Q)))))
+    (define implication-elim
+      (lift (axiom (if (if P Q) (or (not P) Q)))))
+
+    (define not-intro
+      RAA)
+    (define not-elim
+      DN)
+
+    (define true-intro
+      (lift (axiom (if P (true)))))
+    (define true-elim
+      (lift (axiom (if (not (true)) (false)))))
+    (define false-intro
+      Abs)
+    (define false-elim
+      EFQ)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Quantifier rules:
+    ;;
+
+    (define universal-instantiation
+      (lift (axiom (if t (if (forall x B) (map (rule x t) B))))))
+
+    (define universal-generalization
+      (lift (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q))))))))
+
+    (define existential-generalization
+      (lift (axiom (if c (if B (map (rule t c) (exists c B)))))))
+
+    (define existential-instantiation
+      (lift (axiom (if (exists x B) (map (rule x (exists x B)) B)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Useful theorems:
+    ;;
+
+    (define de-morgan-/
+      (lift (axiom (if (not (or P Q)) (and (not P) (not Q))))))
+
+    (define if-negation
+      (lift (axiom (if (not (if P Q)) (and P (not Q))))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Theorem:
+    ;;
+
+    (define theorem
+      (let ()
+
+        (define spec1 (specify t P))
+        (define spec2 (specify x (x)))
+        (define spec3 (specify B (not P)))
+        (define spec4 (specify B P))
+
+        (define universal-instantiation-1
+          (= (map spec1
+                  (map spec2
+                       (map spec3
+                            universal-instantiation)))
+             (rule (term P)
+                   (term (if (forall (x) (not P))
+                             (map (rule (x) P) (not P)))))))
+
+        (define existential-instantiation-1
+          (= (map spec2 (map spec4 existential-instantiation))
+             (rule (term (exists (x) P))
+                   (term (map (rule (x) (exists (x) P)) P)))))
+
+        (define and-intro-1
+          (= (map (specify Q (not P))
+                  (map (specify P P)
+                       and-intro))
+
+             (rule (term P)
+                   (term (if (not P)
+                             (and P (not P)))))))
+
+        (define abs-1
+          (= (map (specify P P) Abs)
+             (rule (term (and P (not P)))
+                   (term (false)))))
+
+        (define raa-1
+          (= (map (specify P (forall (x) (not P))) RAA)
+             (rule (term (if (forall (x) (not P)) (false)))
+                   (term (not (forall (x) (not P)))))))
+
+        (let ((premise (exists (x) P)))
+
+          (define conclusion->false
+            (let ((not-conclusion (forall (x) (not P))))
+
+              (define instance-2/text
+                (= (map existential-instantiation-1 premise)
+                   (term (map (rule (x) (exists (x) P)) P))))
+
+              (define instance-2
+                (= (eval instance-2/text)
+                   P))
+
+        ;;       (define instance/text
+        ;;         (= (eval (list universal-instantiation-1 instance-2 not-conclusion))
+        ;;            (map (if (x) P) (not P))))
+
+              (define instance/text/1
+                (= (map universal-instantiation-1 instance-2)
+                   P))
+
+        ;;       (define instance
+        ;;         (= (eval instance/text)
+        ;;            (not P)))
+
+        ;;       (define both-instances
+        ;;         (eval (list and-intro-1 instance-2 instance)))
+
+        ;;       (define false
+        ;;         (= (eval (list abs-1 both-instances))
+        ;;            (false)))
+
+        ;;       false))
+
+        ;;   (eval (list raa-1 conclusion->false))
+
+              not-conclusion))
+
+          premise)
+
+        0
+
+          ))
+
+    ;; (= theorem
+    ;;    (if (exists (x) P)
+    ;;        (not (forall (x) (not P)))))
+
+    )
+
+ 'ignore-ok)
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;  Old inner model:
+;;
+
+
+
 ;; (test-case
 ;;  ;;
 ;;  ;; Basic proof.

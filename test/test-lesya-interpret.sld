@@ -23,11 +23,14 @@
           if
           let
           map
+          not
+          or
           quasiquote
           quote
           unless
           values
           when))
+  (import (only (scheme eval) eval))
   (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))

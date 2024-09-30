@@ -198,8 +198,12 @@
   conclusion)
 
 
-(define (lesya:language:apply . arguments)
+(define (lesya:language:apply+eval . arguments)
   (list-fold/semigroup lesya:language:modus-ponens arguments))
+
+
+(define (lesya:language:apply . arguments)
+  (cons 'apply arguments))
 
 
 (define (lesya:currently-at-toplevel?)
@@ -286,23 +290,8 @@
    (lesya:term:make conclusion)))
 
 
-(define-type9 <lesya:list>
-  (lesya:language:list:constructor args) lesya:language:list?
-  (args lesya:language:list:args)
-  )
-
-
-(define (lesya:language:list . args)
-  (lesya:language:list:constructor args))
-
-
 (define (lesya:language:eval expr)
   (cond
-   ((lesya:language:list? expr)
-    (let ()
-      (define arguments (lesya:language:list:args expr))
-      (apply lesya:language:apply arguments)))
-
    ((and (pair? expr) (list? expr))
     (let ()
       (define operation (car expr))
@@ -312,10 +301,15 @@
         (let ()
           (define-tuple (operation implication body) expr)
           (define-values (premise conclusion)
-            (lesya:implication:destruct implication))
+            (lesya:rule:destruct implication))
 
           (lesya:language:beta-reduce
            body premise conclusion)))
+
+       ((equal? operation lesya:term:name)
+        (let ()
+          (define term (lesya:term:unwrap expr))
+          (lesya:language:eval term)))
 
        (else
         (lesya:error 'unknown-operation-in-eval operation expr)))))
