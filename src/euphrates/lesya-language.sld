@@ -8,6 +8,8 @@
     lesya:language:axiom
     lesya:language:map
     lesya:language:eval
+    lesya:language:lift
+    lesya:language:specify
     lesya:language:list
     lesya:language:=
     lesya:language:apply
