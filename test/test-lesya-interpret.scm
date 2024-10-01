@@ -582,7 +582,7 @@
 
     (define x
       (let ((m (and (P) (Q))))
-        (eval (list r2 m))))
+        (apply r2 m)))
 
     )
 
@@ -607,7 +607,7 @@
     (define x
       (let ((m (and (P) (Q))))
         (define r1-internal (map (specify X (P)) and-elim))
-        (eval (list r2 m))))
+        (apply r2 m)))
 
     )
 
@@ -633,7 +633,7 @@
           (let ()
             (define thm3
               (let ((t (and X Y Z)))
-                (eval (list and-elim t))))
+                (apply and-elim t)))
             thm3))
         thm2))
 
@@ -753,28 +753,28 @@
               (define q->false
                 (let ((q Q))
                   (define andpq
-                    (eval (list and-intro p q)))
+                    (apply and-intro p q))
 
                   (define contr-1a-input
-                    (eval (list and-intro-andpq andpq premise)))
+                    (apply and-intro-andpq andpq premise))
 
-                  (eval (list contr-1a contr-1a-input))))
+                  (apply contr-1a contr-1a-input)))
 
               (define notq->ret
                 (let ((notq (not Q)))
-                  (eval (list or-intro-right-notq notq))))
+                  (apply or-intro-right-notq notq)))
 
               (define notq
-                (eval (list raa-notq q->false)))
+                (apply raa-notq q->false))
 
-              (eval (list notq->ret notq))))
+              (apply notq->ret notq)))
 
           (define y
             (let ((notp (not P)))
-              (eval (list or-intro-left-notq notp))))
+              (apply or-intro-left-notq notp)))
 
           (define z
-            (eval (list ret LEM x y)))
+            (apply ret LEM x y))
 
           z)))
 
@@ -925,7 +925,7 @@
               (define c not-conclusion)
 
               (define instance/text
-                (= (eval (list existential-instantiation-1 not-conclusion))
+                (= (apply existential-instantiation-1 not-conclusion)
                    (map (specify (x) (exists (x) (not P)))
                         (not P))))
 
@@ -934,7 +934,7 @@
                    (not P)))
 
               (define instance-2/text
-                (= (eval (list universal-instantiation-1 c premise))
+                (= (apply universal-instantiation-1 c premise)
                    (map (specify (x) (exists (x) (not P))) P)))
 
               (define instance-2
@@ -942,15 +942,15 @@
                    P))
 
               (define both-instances
-                (eval (list and-intro-1 instance-2 instance)))
+                (apply and-intro-1 instance-2 instance))
 
               (define false
-                (= (eval (list abs-1 both-instances))
+                (= (apply abs-1 both-instances)
                    (false)))
 
               false))
 
-          (eval (list raa-1 conclusion->false)))))
+          (apply raa-1 conclusion->false))))
 
     (= theorem
        (if (forall (x) P)
@@ -1097,7 +1097,7 @@
             (let ((not-conclusion (forall (x) (not P))))
 
               (define instance-2/text
-                (= (eval (list existential-instantiation-1 premise))
+                (= (apply existential-instantiation-1 premise)
                    (map (specify (x) (exists (x) P)) P)))
 
               (define instance-2
@@ -1105,7 +1105,7 @@
                    P))
 
               (define instance/text
-                (= (eval (list universal-instantiation-1 instance-2 not-conclusion))
+                (= (apply universal-instantiation-1 instance-2 not-conclusion)
                    (map (specify (x) P) (not P))))
 
               (define instance
@@ -1113,15 +1113,15 @@
                    (not P)))
 
               (define both-instances
-                (eval (list and-intro-1 instance-2 instance)))
+                (apply and-intro-1 instance-2 instance))
 
               (define false
-                (= (eval (list abs-1 both-instances))
+                (= (apply abs-1 both-instances)
                    (false)))
 
               false))
 
-          (eval (list raa-1 conclusion->false)))))
+          (apply raa-1 conclusion->false))))
 
     (= theorem
        (if (exists (x) P)
@@ -1357,42 +1357,42 @@
                               (forall (x) (Q (x))))))))
 
             (define statement
-              (eval (list if-negation-1 resolution-1)))
+              (apply if-negation-1 resolution-1))
 
             (define resolution-2
-              (eval (list and-elim-left-1 statement)))
+              (apply and-elim-left-1 statement))
 
             (= resolution-2
                (forall (x) (or (P (x)) (Q (x)))))
 
             (define resolution-3
-              (eval (list and-elim-right-1 statement)))
+              (apply and-elim-right-1 statement))
 
             (= resolution-3
                (not (or (exists (x) (P (x))) (forall (x) (Q (x))))))
 
             (define de-morganed-1
-              (eval (list de-morgan-/-1 resolution-3)))
+              (apply de-morgan-/-1 resolution-3))
 
             (= de-morganed-1
                (and (not (exists (x) (P (x)))) (not (forall (x) (Q (x))))))
 
             (define resolution-4
-              (= (eval (list and-elim-left-2 de-morganed-1))
+              (= (apply and-elim-left-2 de-morganed-1)
                  (not (exists (x) (P (x))))))
 
             (define resolution-5
-              (= (eval (list and-elim-right-2 de-morganed-1))
+              (= (apply and-elim-right-2 de-morganed-1)
                  (not (forall (x) (Q (x))))))
 
             (define exists-notq
-              (= (eval (list negate-forall-q resolution-5))
+              (= (apply negate-forall-q resolution-5)
                  (exists (x) (not (Q (x))))))
 
             (define c exists-notq)
 
             (define resolution-6/text
-              (= (eval (list existential-instantiation-1 exists-notq))
+              (= (apply existential-instantiation-1 exists-notq)
                  (map (specify (x) ,c)
                       (not (Q (x))))))
 
@@ -1401,11 +1401,11 @@
                  (not (Q ,c))))
 
             (define forall-notp
-              (= (eval (list negate-exists-p resolution-4))
+              (= (apply negate-exists-p resolution-4)
                  (forall (x) (not (P (x))))))
 
             (define resolution-7/text
-              (= (eval (list universal-instantiation-1 c forall-notp))
+              (= (apply universal-instantiation-1 c forall-notp)
                  (map (specify (x) ,c) (not (P (x))))))
 
             (define resolution-7
@@ -1413,7 +1413,7 @@
                  (not (P ,c))))
 
             (define resolution-8/text
-              (= (eval (list universal-instantiation-2 c resolution-2))
+              (= (apply universal-instantiation-2 c resolution-2)
                  (map (specify (x) (exists (x) (not (Q (x)))))
                       (or (P (x)) (Q (x))))))
 
@@ -1425,10 +1425,10 @@
               (let ((p<c> (P ,c)))
 
                 (define tuple
-                  (eval (list and-intro-1 p<c> resolution-7)))
+                  (apply and-intro-1 p<c> resolution-7))
 
                 (define false
-                  (eval (list abs-p<c> tuple)))
+                  (apply abs-p<c> tuple))
 
                 false))
 
@@ -1436,25 +1436,25 @@
               (let ((resolution-10 (Q ,c)))
 
                 (define tuple
-                  (eval (list and-intro-2 resolution-10 resolution-6)))
+                  (apply and-intro-2 resolution-10 resolution-6))
 
                 (define false
-                  (eval (list abs-q<c> tuple)))
+                  (apply abs-q<c> tuple))
 
                 false))
 
             (define resolution-11
-              (eval (list or-elim-1 resolution-8 first-case second-case)))
+              (apply or-elim-1 resolution-8 first-case second-case))
 
             (= resolution-11 (false))
 
             resolution-11))
 
         (define negated
-          (eval (list raa-final refutation)))
+          (apply raa-final refutation))
 
         (define final
-          (eval (list dn-final negated)))
+          (apply dn-final negated))
 
         final))
 

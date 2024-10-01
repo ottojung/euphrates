@@ -23,7 +23,6 @@
           error
           if
           let
-          list
           map
           not
           or
