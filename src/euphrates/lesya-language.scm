@@ -17,7 +17,7 @@
    callstack     ;; Just names of variables being defined.
    supposedterms ;; The hypothetical terms introduced by `let` in this scope so far.
    escape        ;; Continuation that returns to the top.
-   terms         ;; Set of constructed terms (including axioms).
+   axioms        ;; Set of assumed axioms.
    )
 
   lesya:language:state:struct?
@@ -25,7 +25,7 @@
   (callstack lesya:language:state:callstack)
   (supposedterms lesya:language:state:supposedterms)
   (escape lesya:language:state:escape)
-  (terms lesya:language:state:terms)
+  (axioms lesya:language:state:axioms)
 
   )
 
@@ -33,9 +33,9 @@
 (define (lesya:language:state:make escape)
   (define callstack (stack-make))
   (define supposedterms (stack-make))
-  (define terms (make-hashset))
+  (define axioms (make-hashset))
   (lesya:language:state:struct:construct
-   callstack supposedterms escape terms))
+   callstack supposedterms escape axioms))
 
 (define lesya:language:state/p
   (make-parameter #f))
@@ -78,10 +78,10 @@
 (define (lesya:register-axiom! term)
   (define state
     (lesya:language:state/p))
-  (define terms
-    (lesya:language:state:terms state))
+  (define axioms
+    (lesya:language:state:axioms state))
 
-  (hashset-add! terms term)
+  (hashset-add! axioms term)
   term)
 
 
@@ -264,6 +264,11 @@
 
 
 (define (lesya:language:map rule body)
+  (lesya:check-that-on-toplevel
+   (lesya:language:map/unsafe rule body)))
+
+
+(define (lesya:language:map/unsafe rule body)
   (define-values (premise conclusion)
     (cond
      ((lesya:implication? rule)
@@ -302,7 +307,7 @@
        ((equal? operation lesya:substitution:name)
         (let ()
           (define-tuple (operation rule body) expr)
-          (lesya:language:map rule body)))
+          (lesya:language:map/unsafe rule body)))
 
        (else
         (lesya:error 'unknown-operation-in-eval operation expr)))))

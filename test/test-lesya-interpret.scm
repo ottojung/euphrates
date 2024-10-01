@@ -589,31 +589,31 @@
  `ignore-ok)
 
 
-;; (test-case
-;;  ;;
-;;  ;; Check error with `map` not on toplevel.
-;;  ;;
+(test-case
+ ;;
+ ;; Check error with `map` not on toplevel.
+ ;;
 
-;;  '(begin
-;;     (define and-elim
-;;       (axiom (if (and X Y) X)))
-;;     (define and-symmetric
-;;       (axiom (if (and X Y) (and Y X))))
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
 
-;;     (define r1 (map (specify X (P)) and-elim))
-;;     ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
-;;     (define r2 (eval (axiom (map (specify Y (Q)) ,r1))))
+    (define r1 (map (specify X (P)) and-elim))
+    ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
+    (define r2 (eval (axiom (map (specify Y (Q)) ,r1))))
 
-;;     (define x
-;;       (let ((m (and (P) (Q))))
-;;         (define r1-internal (map (specify X (P)) and-elim))
-;;         (eval (list r2 m))))
+    (define x
+      (let ((m (and (P) (Q))))
+        (define r1-internal (map (specify X (P)) and-elim))
+        (eval (list r2 m))))
 
-;;     )
+    )
 
-;;  `(error only-allowed-on-top-level
-;;          ("This operation is only allowed on toplevel: (let () (define-values (premise conclusion) (lesya:implication:destruct (quasiquote (if X (P))))) (unless (symbol? premise) (lesya:error (quote non-symbol-1-in-map) premise conclusion and-elim)) (lesya:language:beta-reduce and-elim premise conclusion)).")
-;;          (r1-internal x)))
+ `(error only-allowed-on-top-level
+         ("This operation is only allowed on toplevel: (lesya:language:map/unsafe rule body).")
+         (r1-internal x)))
 
 
 (test-case
