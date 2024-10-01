@@ -11,7 +11,6 @@
           lesya:language:define
           lesya:language:eval
           lesya:language:let
-          lesya:language:list
           lesya:language:map
           lesya:language:run
           lesya:language:specify))
@@ -22,7 +21,6 @@
           begin
           define
           let
-          list
           map
           quasiquote
           quote

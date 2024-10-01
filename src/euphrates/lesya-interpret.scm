@@ -15,7 +15,6 @@
             (lesya:language:= =)
             (lesya:language:map map)
             (lesya:language:eval eval)
-            (lesya:language:list list)
             )))
 
 

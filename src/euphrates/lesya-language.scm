@@ -268,23 +268,8 @@
    body premise conclusion))
 
 
-(define-type9 <lesya:list>
-  (lesya:language:list:constructor args) lesya:language:list?
-  (args lesya:language:list:args)
-  )
-
-
-(define (lesya:language:list . args)
-  (lesya:language:list:constructor args))
-
-
 (define (lesya:language:eval expr)
   (cond
-   ((lesya:language:list? expr)
-    (let ()
-      (define arguments (lesya:language:list:args expr))
-      (apply lesya:language:apply arguments)))
-
    ((and (pair? expr) (list? expr))
     (let ()
       (define operation (car expr))
