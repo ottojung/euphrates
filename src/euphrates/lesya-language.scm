@@ -17,6 +17,7 @@
    callstack     ;; Just names of variables being defined.
    supposedterms ;; The hypothetical terms introduced by `let` in this scope so far.
    escape        ;; Continuation that returns to the top.
+   terms         ;; Set of constructed terms (including axioms).
    )
 
   lesya:language:state:struct?
@@ -24,6 +25,7 @@
   (callstack lesya:language:state:callstack)
   (supposedterms lesya:language:state:supposedterms)
   (escape lesya:language:state:escape)
+  (terms lesya:language:state:terms)
 
   )
 
@@ -31,8 +33,9 @@
 (define (lesya:language:state:make escape)
   (define callstack (stack-make))
   (define supposedterms (stack-make))
+  (define terms (make-hashset))
   (lesya:language:state:struct:construct
-   callstack supposedterms escape))
+   callstack supposedterms escape terms))
 
 (define lesya:language:state/p
   (make-parameter #f))
@@ -72,11 +75,23 @@
          body))))
 
 
+(define (lesya:register-axiom! term)
+  (define state
+    (lesya:language:state/p))
+  (define terms
+    (lesya:language:state:terms state))
+
+  (hashset-add! terms term)
+  term)
+
+
 (define-syntax lesya:language:axiom
   (syntax-rules ()
     ((_ term)
      (lesya:check-that-on-toplevel
-      (quasiquote term)))))
+      (lesya:register-axiom!
+       (quasiquote term))))))
+
 
 (define (lesya:language:beta-reduce initial-term qvarname qreplcement)
   (let loop ((term initial-term))

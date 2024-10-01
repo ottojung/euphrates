@@ -19,6 +19,10 @@
   (import
     (only (euphrates define-type9) define-type9))
   (import
+    (only (euphrates hashset)
+          hashset-add!
+          make-hashset))
+  (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import
