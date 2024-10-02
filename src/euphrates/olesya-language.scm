@@ -12,6 +12,7 @@
 ;;
 
 
+;; TODO: remove this struct.
 (define-type9 <olesya:struct>
   (olesya:language:state:struct:construct
    callstack     ;; Just names of variables being defined.
