@@ -6,10 +6,10 @@
   (environment
    '(only (scheme base) unquote)
    '(rename (euphrates olesya-language)
-            (olesya:language:axiom axiom)
+            (olesya:language:term term)
+            (olesya:language:rule rule)
             (olesya:language:define define)
             (olesya:language:begin begin)
-            (olesya:language:specify specify)
             (olesya:language:let let)
             (olesya:language:= =)
             (olesya:language:map map)

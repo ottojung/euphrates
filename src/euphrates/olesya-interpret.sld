@@ -5,14 +5,14 @@
   (import
     (only (euphrates olesya-language)
           olesya:language:=
-          olesya:language:axiom
           olesya:language:begin
           olesya:language:define
           olesya:language:eval
           olesya:language:let
           olesya:language:map
+          olesya:language:rule
           olesya:language:run
-          olesya:language:specify))
+          olesya:language:term))
   (import
     (only (scheme base)
           =

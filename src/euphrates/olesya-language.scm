@@ -73,10 +73,16 @@
          body))))
 
 
-(define-syntax olesya:language:axiom
+(define-syntax olesya:language:term
   (syntax-rules ()
     ((_ term)
-     (quote term))))
+     (list olesya:term:name (quote term)))))
+
+
+(define-syntax olesya:language:rule
+  (syntax-rules ()
+    ((_ premise consequence)
+     (list olesya:rule:name (quote premise) (quote consequence)))))
 
 
 (define (olesya:language:beta-reduce initial-term qvarname qreplcement)
@@ -101,53 +107,40 @@
 (define olesya:substitution:name
   'map)
 
-(define olesya:specify:name
+(define olesya:rule:name
   'rule)
 
-(define (olesya:specify:make supposition conclusion)
-  `(,olesya:specify:name ,supposition ,conclusion))
+(define olesya:term:name
+  'term)
 
 
-(define (olesya:specify:check specify)
+(define (olesya:rule:check rule)
   (or
-   (and (not (list? specify))
-        (list 'not-a-term-in-specify specify))
-   (and (not (pair? specify))
-        (olesya:error 'null-in-specify specify))
-   (and (not (list-length= 3 specify))
-        (list 'bad-length-of-specify-in-modus-ponens specify))
+   (and (not (list? rule))
+        (list 'not-a-term-in-rule rule))
+   (and (not (pair? rule))
+        (olesya:error 'null-in-rule rule))
+   (and (not (list-length= 3 rule))
+        (list 'bad-length-of-rule-in-modus-ponens rule))
    (let ()
-     (define-tuple (predicate premise conclusion) specify)
+     (define-tuple (predicate premise conclusion) rule)
 
-     (and (not (equal? predicate olesya:specify:name))
-          (list 'non-specify-in-modus-ponens specify)))))
-
-
-(define (olesya:specify? specify)
-  (not (olesya:specify:check specify)))
+     (and (not (equal? predicate olesya:rule:name))
+          (list 'non-rule-in-modus-ponens rule)))))
 
 
-(define (olesya:specify:destruct specify)
-  (define error (olesya:specify:check specify))
+(define (olesya:rule? rule)
+  (not (olesya:rule:check rule)))
+
+
+(define (olesya:rule:destruct rule)
+  (define error (olesya:rule:check rule))
   (when error
     (apply olesya:error error))
 
   (let ()
-    (define-tuple (predicate premise conclusion) specify)
+    (define-tuple (predicate premise conclusion) rule)
     (values premise conclusion)))
-
-
-(define (olesya:specify qvarname qsubterm)
-  (unless (symbol? qvarname)
-    (olesya:error 'non-symbol-in-specify qvarname qsubterm))
-
-  (olesya:specify:make qvarname qsubterm))
-
-
-(define-syntax olesya:language:specify
-  (syntax-rules ()
-    ((_ varname subterm)
-     (olesya:specify (quote varname) (quote subterm)))))
 
 
 (define-syntax olesya:language:let
@@ -185,7 +178,7 @@
 
 (define (olesya:language:map rule body)
   (define-values (premise conclusion)
-    (olesya:specify:destruct rule))
+    (olesya:rule:destruct rule))
 
   (olesya:language:beta-reduce
    body premise conclusion))

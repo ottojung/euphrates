@@ -4,10 +4,10 @@
   (export
     olesya:language:run
     olesya:language:begin
-    olesya:language:axiom
+    olesya:language:term
+    olesya:language:rule
     olesya:language:map
     olesya:language:eval
-    olesya:language:specify
     olesya:language:=
     olesya:language:let
     olesya:language:define)
@@ -54,12 +54,8 @@
           or
           pair?
           parameterize
-          quasiquote
           quote
-          symbol?
           syntax-rules
-          unless
-          unquote
           values
           when))
   (cond-expand

@@ -54,24 +54,24 @@
  '(begin
 
     (define x
-      (axiom (term (if (P) (Q)))))
+      (term (if (P) (Q))))
     (define y
-      (axiom (term (if (Q) (R)))))
+      (term (if (Q) (R))))
 
     (define implication-reflexive
-      (axiom (term (if P P))))
+      (term (if P P)))
     (define implication-transitive
-      (axiom (term (if (if P Q)
-                       (if (if Q R)
-                           (if P R))))))
+      (term (if (if P Q)
+                (if (if Q R)
+                    (if P R)))))
 
     (define promote
-      (axiom (rule (term (if P Q))
-                   (rule (term P) (term Q)))))
+      (rule (term (if P Q))
+            (rule (term P) (term Q))))
 
     (define promote-x
-      (map (specify Q (Q))
-           (map (specify P (P)) promote)))
+      (map (rule Q (Q))
+           (map (rule P (P)) promote)))
 
     (= promote-x
        (rule (term (if (P) (Q)))
@@ -83,8 +83,8 @@
     (= rule-x (rule (term (P)) (term (Q))))
 
     (define promote-y
-      (map (specify P (Q))
-           (map (specify Q (R)) promote)))
+      (map (rule P (Q))
+           (map (rule Q (R)) promote)))
 
     (= promote-y
        (rule (term (if (Q) (R)))
@@ -96,18 +96,18 @@
     (= rule-y (rule (term (Q)) (term (R))))
 
     (define refl-p
-      (= (map (specify P (P)) implication-reflexive)
+      (= (map (rule P (P)) implication-reflexive)
          (term (if (P) (P)))))
 
     (define tr
-      (= (map (specify P (P))
-              (map (specify Q (Q))
-                   (map (specify R (R)) implication-transitive)))
+      (= (map (rule P (P))
+              (map (rule Q (Q))
+                   (map (rule R (R)) implication-transitive)))
          (term (if (if (P) (Q)) (if (if (Q) (R)) (if (P) (R)))))))
 
     (define tr-rule
-      (= (map (specify P (if (P) (Q)))
-              (map (specify Q (if (if (Q) (R)) (if (P) (R)))) promote))
+      (= (map (rule P (if (P) (Q)))
+              (map (rule Q (if (if (Q) (R)) (if (P) (R)))) promote))
 
          (rule (term (if (if (P) (Q))
                          (if (if (Q) (R))
@@ -127,8 +127,8 @@
          (term (if (if (Q) (R)) (if (P) (R))))))
 
     (define prom-tr2
-      (= (map (specify P (if (Q) (R)))
-              (map (specify Q (if (P) (R))) promote))
+      (= (map (rule P (if (Q) (R)))
+              (map (rule Q (if (P) (R))) promote))
          (rule (term (if (if (Q) (R)) (if (P) (R))))
                (rule (term (if (Q) (R))) (term (if (P) (R)))))))
 
