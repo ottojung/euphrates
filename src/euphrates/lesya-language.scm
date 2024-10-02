@@ -105,7 +105,7 @@
   'map)
 
 (define lesya:specify:name
-  'specify)
+  'rule)
 
 (define (lesya:specify:make supposition conclusion)
   `(,lesya:specify:name ,supposition ,conclusion))

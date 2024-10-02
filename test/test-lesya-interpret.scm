@@ -578,7 +578,7 @@
 
     (define r1 (map (specify X (P)) and-elim))
     ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
-    (define r2 (eval (axiom (map (specify Y (Q)) ,r1))))
+    (define r2 (eval (axiom (map (rule Y (Q)) ,r1))))
 
     (define x
       (let ((m (and (P) (Q))))
@@ -602,7 +602,7 @@
 
     (define r1 (map (specify X (P)) and-elim))
     ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
-    (define r2 (eval (axiom (map (specify Y (Q)) ,r1))))
+    (define r2 (eval (axiom (map (rule Y (Q)) ,r1))))
 
     (define x
       (let ((m (and (P) (Q))))
@@ -715,16 +715,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (specify x t) B)))))
+      (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (specify t c) (exists c B))))))
+      (axiom (if c (if B (map (rule t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
+      (axiom (if (exists x B) (map (rule x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -852,16 +852,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (specify x t) B)))))
+      (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (specify t c) (exists c B))))))
+      (axiom (if c (if B (map (rule t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
+      (axiom (if (exists x B) (map (rule x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -889,12 +889,12 @@
                             universal-instantiation)))
              (if (exists (x) (not P))
                  (if (forall (x) P)
-                     (map (specify (x) (exists (x) (not P))) P)))))
+                     (map (rule (x) (exists (x) (not P))) P)))))
 
         (define existential-instantiation-1
           (= (map (specify x (x)) (map (specify B (not P)) existential-instantiation))
              (if (exists (x) (not P))
-                 (map (specify (x) (exists (x) (not P)))
+                 (map (rule (x) (exists (x) (not P)))
                       (not P)))))
 
         (define and-intro-1
@@ -926,7 +926,7 @@
 
               (define instance/text
                 (= (apply existential-instantiation-1 not-conclusion)
-                   (map (specify (x) (exists (x) (not P)))
+                   (map (rule (x) (exists (x) (not P)))
                         (not P))))
 
               (define instance
@@ -935,7 +935,7 @@
 
               (define instance-2/text
                 (= (apply universal-instantiation-1 c premise)
-                   (map (specify (x) (exists (x) (not P))) P)))
+                   (map (rule (x) (exists (x) (not P))) P)))
 
               (define instance-2
                 (= (eval instance-2/text)
@@ -1027,16 +1027,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (specify x t) B)))))
+      (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (specify t c) (exists c B))))))
+      (axiom (if c (if B (map (rule t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
+      (axiom (if (exists x B) (map (rule x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -1064,12 +1064,12 @@
                             universal-instantiation)))
              (if P
                  (if (forall (x) (not P))
-                     (map (specify (x) P) (not P))))))
+                     (map (rule (x) P) (not P))))))
 
         (define existential-instantiation-1
           (= (map (specify x (x)) (map (specify B P) existential-instantiation))
              (if (exists (x) P)
-                 (map (specify (x) (exists (x) P)) P))))
+                 (map (rule (x) (exists (x) P)) P))))
 
         (define and-intro-1
           (= (map (specify Q (not P))
@@ -1098,7 +1098,7 @@
 
               (define instance-2/text
                 (= (apply existential-instantiation-1 premise)
-                   (map (specify (x) (exists (x) P)) P)))
+                   (map (rule (x) (exists (x) P)) P)))
 
               (define instance-2
                 (= (eval instance-2/text)
@@ -1106,7 +1106,7 @@
 
               (define instance/text
                 (= (apply universal-instantiation-1 instance-2 not-conclusion)
-                   (map (specify (x) P) (not P))))
+                   (map (rule (x) P) (not P))))
 
               (define instance
                 (= (eval instance/text)
@@ -1200,16 +1200,16 @@
     ;;
 
     (define universal-instantiation
-      (axiom (if t (if (forall x B) (map (specify x t) B)))))
+      (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (specify x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
-      (axiom (if c (if B (map (specify t c) (exists c B))))))
+      (axiom (if c (if B (map (rule t c) (exists c B))))))
 
     (define existential-instantiation
-      (axiom (if (exists x B) (map (specify x (exists x B)) B))))
+      (axiom (if (exists x B) (map (rule x (exists x B)) B))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -1287,7 +1287,7 @@
         (define existential-instantiation-1
           (= (map (specify x (x)) (map (specify B (not (Q (x)))) existential-instantiation))
              (if (exists (x) (not (Q (x))))
-                 (map (specify (x) (exists (x) (not (Q (x)))))
+                 (map (rule (x) (exists (x) (not (Q (x)))))
                       (not (Q (x)))))))
 
         (define negate-exists-p
@@ -1301,7 +1301,7 @@
                        (map (specify B (not (P (x)))) universal-instantiation)))
              (if (exists (x) (not (Q (x))))
                  (if (forall (x) (not (P (x))))
-                     (map (specify (x) (exists (x) (not (Q (x)))))
+                     (map (rule (x) (exists (x) (not (Q (x)))))
                           (not (P (x))))))))
 
         (define universal-instantiation-2
@@ -1311,7 +1311,7 @@
                             universal-instantiation)))
              (if (exists (x) (not (Q (x))))
                  (if (forall (x) (or (P (x)) (Q (x))))
-                     (map (specify (x) (exists (x) (not (Q (x)))))
+                     (map (rule (x) (exists (x) (not (Q (x)))))
                           (or (P (x)) (Q (x))))))))
 
         (define and-intro-1
@@ -1393,7 +1393,7 @@
 
             (define resolution-6/text
               (= (apply existential-instantiation-1 exists-notq)
-                 (map (specify (x) ,c)
+                 (map (rule (x) ,c)
                       (not (Q (x))))))
 
             (define resolution-6
@@ -1406,7 +1406,7 @@
 
             (define resolution-7/text
               (= (apply universal-instantiation-1 c forall-notp)
-                 (map (specify (x) ,c) (not (P (x))))))
+                 (map (rule (x) ,c) (not (P (x))))))
 
             (define resolution-7
               (= (eval resolution-7/text)
@@ -1414,7 +1414,7 @@
 
             (define resolution-8/text
               (= (apply universal-instantiation-2 c resolution-2)
-                 (map (specify (x) (exists (x) (not (Q (x)))))
+                 (map (rule (x) (exists (x) (not (Q (x)))))
                       (or (P (x)) (Q (x))))))
 
             (define resolution-8
