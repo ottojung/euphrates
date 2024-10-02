@@ -1,13 +1,12 @@
 
 (define-library
   (euphrates olesya-interpret)
-  (export olesya:interpret)
+  (export olesya:interpret olesya:language:eval)
   (import
     (only (euphrates olesya-language)
           olesya:language:=
           olesya:language:begin
           olesya:language:define
-          olesya:language:eval
           olesya:language:let
           olesya:language:map
           olesya:language:rule

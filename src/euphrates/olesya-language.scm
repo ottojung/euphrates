@@ -182,22 +182,3 @@
 
   (olesya:language:beta-reduce
    body premise conclusion))
-
-
-(define (olesya:language:eval expr)
-  (cond
-   ((and (pair? expr) (list? expr))
-    (let ()
-      (define operation (car expr))
-
-      (cond
-       ((equal? operation olesya:substitution:name)
-        (let ()
-          (define-tuple (operation rule body) expr)
-          (olesya:language:map rule body)))
-
-       (else
-        (olesya:error 'unknown-operation-in-eval operation expr)))))
-
-   (else
-    (olesya:error 'non-expression-in-eval expr))))

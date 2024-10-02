@@ -7,7 +7,6 @@
     olesya:language:term
     olesya:language:rule
     olesya:language:map
-    olesya:language:eval
     olesya:language:=
     olesya:language:let
     olesya:language:define)
