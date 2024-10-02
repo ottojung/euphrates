@@ -75,8 +75,7 @@
 (define-syntax olesya:language:axiom
   (syntax-rules ()
     ((_ term)
-     (olesya:check-that-on-toplevel
-      (quasiquote term)))))
+     (quote term))))
 
 
 (define (olesya:language:beta-reduce initial-term qvarname qreplcement)
@@ -98,9 +97,6 @@
 
   (escape (list 'error type args (stack->list stack))))
 
-(define olesya:implication:name
-  'if)
-
 (define olesya:substitution:name
   'map)
 
@@ -109,38 +105,6 @@
 
 (define (olesya:specify:make supposition conclusion)
   `(,olesya:specify:name ,supposition ,conclusion))
-
-(define (olesya:implication:make supposition conclusion)
-  `(,olesya:implication:name ,supposition ,conclusion))
-
-
-(define (olesya:implication:check implication)
-  (or
-   (and (not (list? implication))
-        (list 'not-a-term-in-implication implication))
-   (and (not (pair? implication))
-        (olesya:error 'null-in-implication implication))
-   (and (not (list-length= 3 implication))
-        (list 'bad-length-of-implication-in-modus-ponens implication))
-   (let ()
-     (define-tuple (predicate premise conclusion) implication)
-
-     (and (not (equal? predicate olesya:implication:name))
-          (list 'non-implication-in-modus-ponens implication)))))
-
-
-(define (olesya:implication? implication)
-  (not (olesya:implication:check implication)))
-
-
-(define (olesya:implication:destruct implication)
-  (define error (olesya:implication:check implication))
-  (when error
-    (apply olesya:error error))
-
-  (let ()
-    (define-tuple (predicate premise conclusion) implication)
-    (values premise conclusion)))
 
 
 (define (olesya:specify:check specify)
@@ -172,28 +136,6 @@
     (values premise conclusion)))
 
 
-(define (olesya:language:modus-ponens implication argument)
-  (define-values (premise conclusion)
-    (olesya:specify:destruct implication))
-
-  (unless (equal? premise argument)
-    (olesya:error 'non-matching-modus-ponens
-                 (list 'context:
-                       'argument: argument
-                       'implication: implication
-                       'endcontext:)))
-
-  conclusion)
-
-(define (olesya:language:apply . arguments)
-  (list-fold/semigroup olesya:language:modus-ponens arguments))
-
-(define (olesya:currently-at-toplevel?)
-  (define stack (olesya:get-current-stack))
-  (and (stack-empty? stack)
-       (not (olesya:currently-hyphothetical?))))
-
-
 (define (olesya:specify qvarname qsubterm)
   (unless (symbol? qvarname)
     (olesya:error 'non-symbol-in-specify qvarname qsubterm))
@@ -204,7 +146,13 @@
 (define-syntax olesya:language:specify
   (syntax-rules ()
     ((_ varname subterm)
-     (olesya:specify (quasiquote varname) (quasiquote subterm)))))
+     (olesya:specify (quote varname) (quote subterm)))))
+
+
+(define-syntax olesya:language:let
+  (syntax-rules ()
+    ((_ () . bodies)
+     (let () . bodies))))
 
 
 (define-syntax olesya:language:define
@@ -213,25 +161,10 @@
      (define name
        (let ()
          (define stack (olesya:get-current-stack))
-         (define _res (stack-push! stack (quasiquote name)))
+         (define _res (stack-push! stack (quote name)))
          (define result arg)
          (stack-pop! stack)
          result)))))
-
-(define-syntax olesya:language:let
-  (syntax-rules ()
-    ((_ () . bodies)
-     (let () . bodies))
-
-    ((_  ((x shape) . lets) . bodies)
-     (let ()
-       (define x (quasiquote shape))
-       (define state (olesya:language:state/p))
-       (define supposedterms (olesya:language:state:supposedterms state))
-       (define _re (stack-push! supposedterms x))
-       (define result (olesya:language:let lets . bodies))
-       (stack-pop! supposedterms)
-       (olesya:implication:make x result)))))
 
 
 (define-syntax olesya:language:=
@@ -239,7 +172,7 @@
     ((_ a b)
      (let ()
        (define a* a)
-       (define b* (quasiquote b))
+       (define b* (quote b))
        (if (equal? a* b*) a*
            (olesya:error
             'terms-are-not-equal
@@ -250,17 +183,8 @@
 
 
 (define (olesya:language:map rule body)
-  (olesya:check-that-on-toplevel
-   (olesya:language:map/unsafe rule body)))
-
-
-(define (olesya:language:map/unsafe rule body)
   (define-values (premise conclusion)
-    (cond
-     ((olesya:specify? rule)
-      (olesya:specify:destruct rule))
-     (else
-      (olesya:error 'not-a-rule-in-substitution rule))))
+    (olesya:specify:destruct rule))
 
   (olesya:language:beta-reduce
    body premise conclusion))
@@ -276,7 +200,7 @@
        ((equal? operation olesya:substitution:name)
         (let ()
           (define-tuple (operation rule body) expr)
-          (olesya:language:map/unsafe rule body)))
+          (olesya:language:map rule body)))
 
        (else
         (olesya:error 'unknown-operation-in-eval operation expr)))))

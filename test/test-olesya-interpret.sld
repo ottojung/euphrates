@@ -9,8 +9,6 @@
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import
     (only (scheme base)
-          =
-          apply
           begin
           car
           cdr
@@ -21,7 +19,6 @@
           equal?
           error
           if
-          map
           quasiquote
           quote
           unless

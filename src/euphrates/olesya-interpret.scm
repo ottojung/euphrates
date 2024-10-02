@@ -8,7 +8,6 @@
    '(rename (euphrates olesya-language)
             (olesya:language:axiom axiom)
             (olesya:language:define define)
-            (olesya:language:apply apply)
             (olesya:language:begin begin)
             (olesya:language:specify specify)
             (olesya:language:let let)

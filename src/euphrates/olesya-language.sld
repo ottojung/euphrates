@@ -2,7 +2,6 @@
 (define-library
   (euphrates olesya-language)
   (export
-    olesya:language
     olesya:language:run
     olesya:language:begin
     olesya:language:axiom
@@ -10,16 +9,12 @@
     olesya:language:eval
     olesya:language:specify
     olesya:language:=
-    olesya:language:apply
     olesya:language:let
     olesya:language:define)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates define-type9) define-type9))
-  (import
-    (only (euphrates list-fold-semigroup)
-          list-fold/semigroup))
   (import
     (only (euphrates list-length-eq) list-length=))
   (import

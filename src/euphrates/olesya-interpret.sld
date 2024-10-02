@@ -5,7 +5,6 @@
   (import
     (only (euphrates olesya-language)
           olesya:language:=
-          olesya:language:apply
           olesya:language:axiom
           olesya:language:begin
           olesya:language:define
@@ -17,7 +16,6 @@
   (import
     (only (scheme base)
           =
-          apply
           begin
           define
           let
