@@ -50,7 +50,7 @@
 
 (define-syntax olesya:language:begin
   (syntax-rules ()
-    ((_ . args) (begin . args))))
+    ((_ . args) (let () . args))))
 
 
 (define (olesya:get-current-stack)
@@ -141,12 +141,6 @@
   (let ()
     (define-tuple (predicate premise conclusion) rule)
     (values premise conclusion)))
-
-
-(define-syntax olesya:language:let
-  (syntax-rules ()
-    ((_ () . bodies)
-     (let () . bodies))))
 
 
 (define-syntax olesya:language:define

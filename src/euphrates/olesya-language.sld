@@ -8,7 +8,6 @@
     olesya:language:rule
     olesya:language:map
     olesya:language:=
-    olesya:language:let
     olesya:language:define)
   (import
     (only (euphrates define-tuple) define-tuple))

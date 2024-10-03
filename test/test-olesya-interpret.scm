@@ -140,6 +140,8 @@
       (= (map tr2-rule y)
          (term (if (P) (R)))))
 
+    tr-res
+
     )
 
  `ignore-ok)
@@ -170,6 +172,8 @@
 
     (= result
        (term (triple (y) (y) (z))))
+
+    result
 
     )
 

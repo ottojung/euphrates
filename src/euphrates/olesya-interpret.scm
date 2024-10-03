@@ -14,7 +14,6 @@
             (olesya:language:term term)
             (olesya:language:rule rule)
             (olesya:language:define define)
-            (olesya:language:let let)
             (olesya:language:= =)
             (olesya:language:map map)
             (olesya:language:begin begin))))
