@@ -13,15 +13,7 @@
           olesya:language:run
           olesya:language:term))
   (import
-    (only (scheme base)
-          =
-          begin
-          define
-          let
-          map
-          quasiquote
-          quote
-          unquote))
+    (only (scheme base) = begin define let map quote))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

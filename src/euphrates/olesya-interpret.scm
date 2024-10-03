@@ -21,10 +21,5 @@
 
 
 (define (olesya:interpret program)
-  (define escaped
-    ;; Following escape is needed to not polute the toplevel environment of Olesya.
-    ;; Zero at the end is just to allow `program` to end with `define`.
-    `(let () ,program 0))
-
   (olesya:language:run
    (olesya:language:eval program)))
