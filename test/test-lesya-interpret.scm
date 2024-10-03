@@ -718,7 +718,7 @@
       (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if c x) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
       (axiom (if c (if B (map (rule t c) (exists c B))))))
@@ -855,7 +855,7 @@
       (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if c x) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
       (axiom (if c (if B (map (rule t c) (exists c B))))))
@@ -1030,7 +1030,7 @@
       (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if c x) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
       (axiom (if c (if B (map (rule t c) (exists c B))))))
@@ -1203,7 +1203,7 @@
       (axiom (if t (if (forall x B) (map (rule x t) B)))))
 
     (define universal-generalization
-      (axiom (if c (if (if x Q) (if (if x c) (map (rule x c) (forall c Q)))))))
+      (axiom (if c (if (if x Q) (if (if c x) (map (rule x c) (forall c Q)))))))
 
     (define existential-generalization
       (axiom (if c (if B (map (rule t c) (exists c B))))))
