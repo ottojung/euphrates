@@ -1,6 +1,6 @@
 (define-library
-  (euphrates lesya-eliminate-supposition)
-  (export lesya:eliminate-supposition)
+  (euphrates lesya-eliminate-suppositions)
+  (export lesya:eliminate-suppositions)
   (import
     (only (scheme base)
           >
@@ -15,5 +15,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/lesya-eliminate-supposition.scm")))
-    (else (include "lesya-eliminate-supposition.scm"))))
+               "euphrates/lesya-eliminate-suppositions.scm")))
+    (else (include "lesya-eliminate-suppositions.scm"))))
