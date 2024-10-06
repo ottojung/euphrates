@@ -2,6 +2,8 @@
 (define-library
   (euphrates olesya-language)
   (export
+    olesya:term:name
+    olesya:rule:name
     olesya:language:run
     olesya:language:begin
     olesya:language:term
