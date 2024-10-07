@@ -31,7 +31,7 @@
 
 
 (define (olesya:treeify:map . args)
-  (cons 'map args))
+  (cons olesya:substitution:name args))
 
 
 (define-syntax olesya:treeify:begin

@@ -4,6 +4,7 @@
   (export
     olesya:term:name
     olesya:rule:name
+    olesya:substitution:name
     olesya:language:run
     olesya:language:begin
     olesya:language:term

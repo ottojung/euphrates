@@ -11,17 +11,14 @@
     olesya:trace:eval
     olesya:trace:=
     olesya:trace:define
-    olesya:traced-object:trace
-    olesya:traced-object:value
+    olesya:traced-object:operation
+    olesya:traced-object:output
     olesya:traced-object?)
-  (import
-    (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates olesya-language)
           olesya:language:map
           olesya:language:rule
-          olesya:language:term
-          olesya:rule:name))
+          olesya:language:term))
   (import
     (only (euphrates olesya-treeify)
           olesya:treeify:map
@@ -31,6 +28,7 @@
     (only (scheme base)
           =
           _
+          and
           begin
           define
           define-syntax
@@ -39,7 +37,11 @@
           list
           map
           quote
-          syntax-rules))
+          syntax-rules
+          vector
+          vector-length
+          vector-ref
+          vector?))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

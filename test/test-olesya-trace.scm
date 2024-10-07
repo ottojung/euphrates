@@ -1,21 +1,12 @@
 
-(define (test-case program expected-value expected-trace)
+(define (test-case program expected)
   (define actual
     (olesya:trace program))
 
-  (define actual-value
-    (olesya:traced-object:value actual))
-  (define actual-trace
-    (olesya:traced-object:trace actual))
+  (unless (equal? actual expected)
+    (debugs (list 'quote actual)))
 
-  (unless (equal? actual-value expected-value)
-    (debugs actual-value))
-
-  (unless (equal? actual-trace expected-trace)
-    (debugs actual-trace))
-
-  (assert= actual-value expected-value)
-  (assert= actual-trace expected-trace)
+  (assert= actual expected)
   )
 
 
@@ -127,21 +118,63 @@
 
     )
 
- '(term (if (P) (R)))
-
- '(map (map (map (rule P (if (Q) (R)))
-                 (map (rule Q (if (P) (R)))
-                      (rule (term (if P Q)) (rule (term P) (term Q)))))
-            (map (map (map (rule P (if (P) (Q)))
-                           (map (rule Q (if (if (Q) (R)) (if (P) (R))))
-                                (rule (term (if P Q)) (rule (term P) (term Q)))))
-                      (map (rule P (P))
-                           (map (rule Q (Q))
-                                (map (rule R (R))
-                                     (term (if (if P Q)
-                                               (if (if Q R) (if P R))))))))
-                 (term (if (P) (Q)))))
-       (term (if (Q) (R)))))
+ '#((term (if (P) (R)))
+    (map #((rule (term (if (Q) (R))) (term (if (P) (R))))
+           (map #((rule (term (if (if (Q) (R)) (if (P) (R))))
+                        (rule (term (if (Q) (R))) (term (if (P) (R)))))
+                  (map #((rule P (if (Q) (R))) (rule P (if (Q) (R))))
+                       #((rule (term (if P (if (P) (R))))
+                               (rule (term P) (term (if (P) (R)))))
+                         (map #((rule Q (if (P) (R))) (rule Q (if (P) (R))))
+                              #((rule (term (if P Q)) (rule (term P) (term Q)))
+                                (rule (term (if P Q))
+                                      (rule (term P) (term Q))))))))
+                #((term (if (if (Q) (R)) (if (P) (R))))
+                  (map #((rule (term (if (P) (Q)))
+                               (term (if (if (Q) (R)) (if (P) (R)))))
+                         (map #((rule (term (if (if (P) (Q))
+                                                (if (if (Q) (R)) (if (P) (R)))))
+                                      (rule (term (if (P) (Q)))
+                                            (term (if (if (Q) (R))
+                                                      (if (P) (R))))))
+                                (map #((rule P (if (P) (Q)))
+                                       (rule P (if (P) (Q))))
+                                     #((rule (term (if P
+                                                       (if (if (Q) (R))
+                                                           (if (P) (R)))))
+                                             (rule (term P)
+                                                   (term (if (if (Q) (R))
+                                                             (if (P) (R))))))
+                                       (map #((rule Q
+                                                    (if (if (Q) (R))
+                                                        (if (P) (R))))
+                                              (rule Q
+                                                    (if (if (Q) (R))
+                                                        (if (P) (R)))))
+                                            #((rule (term (if P Q))
+                                                    (rule (term P) (term Q)))
+                                              (rule (term (if P Q))
+                                                    (rule (term P)
+                                                          (term Q))))))))
+                              #((term (if (if (P) (Q))
+                                          (if (if (Q) (R)) (if (P) (R)))))
+                                (map #((rule P (P)) (rule P (P)))
+                                     #((term (if (if P (Q))
+                                                 (if (if (Q) (R)) (if P (R)))))
+                                       (map #((rule Q (Q)) (rule Q (Q)))
+                                            #((term (if (if P Q)
+                                                        (if (if Q (R))
+                                                            (if P (R)))))
+                                              (map #((rule R (R)) (rule R (R)))
+                                                   #((term (if (if P Q)
+                                                               (if (if Q R)
+                                                                   (if P R))))
+                                                     (term (if (if P Q)
+                                                               (if (if Q R)
+                                                                   (if P
+                                                                       R)))))))))))))
+                       #((term (if (P) (Q))) (term (if (P) (Q))))))))
+         #((term (if (Q) (R))) (term (if (Q) (R)))))))
 
 
 (test-case
@@ -174,11 +207,20 @@
 
     )
 
- '(term (triple (y) (y) (z)))
-
- '(eval (map (map (rule P (triple (x) (y) (z)))
-                  (rule (term P) (map (rule (x) (y)) (term P))))
+ '#(#((term (triple (y) (y) (z)))
+      (map #((rule (x) (y)) (rule (x) (y)))
+           #((term (triple (x) (y) (z)))
              (term (triple (x) (y) (z))))))
+    (eval #((map (rule (x) (y)) (term (triple (x) (y) (z))))
+            (map #((rule (term (triple (x) (y) (z)))
+                         (map (rule (x) (y)) (term (triple (x) (y) (z)))))
+                   (map #((rule P (triple (x) (y) (z)))
+                          (rule P (triple (x) (y) (z))))
+                        #((rule (term P) (map (rule (x) (y)) (term P)))
+                          (rule (term P) (map (rule (x) (y)) (term P))))))
+                 #((term (triple (x) (y) (z)))
+                   (term (triple (x) (y) (z)))))))))
+
 
 (test-case
 
@@ -186,11 +228,19 @@
                   (rule (term P) (map (rule (x) (y)) (term P))))
              (term (triple (x) (y) (z)))))
 
- '(term (triple (y) (y) (z)))
-
- '(eval (map (map (rule P (triple (x) (y) (z)))
-                  (rule (term P) (map (rule (x) (y)) (term P))))
-             (term (triple (x) (y) (z))))))
+ '#(#((term (triple (y) (y) (z)))
+     (map #((rule (x) (y)) (rule (x) (y)))
+          #((term (triple (x) (y) (z)))
+            (term (triple (x) (y) (z))))))
+   (eval #((map (rule (x) (y)) (term (triple (x) (y) (z))))
+           (map #((rule (term (triple (x) (y) (z)))
+                        (map (rule (x) (y)) (term (triple (x) (y) (z)))))
+                  (map #((rule P (triple (x) (y) (z)))
+                         (rule P (triple (x) (y) (z))))
+                       #((rule (term P) (map (rule (x) (y)) (term P)))
+                         (rule (term P) (map (rule (x) (y)) (term P))))))
+                #((term (triple (x) (y) (z)))
+                  (term (triple (x) (y) (z)))))))))
 
 
 (test-case
@@ -237,9 +287,13 @@
 
     rule-x)
 
- '(rule (term (P)) (term (Q)))
-
- '(map (map (rule Q (Q))
-            (map (rule P (P))
-                 (rule (term (if P Q)) (rule (term P) (term Q)))))
-       (term (if (P) (Q)))))
+ '#((rule (term (P)) (term (Q)))
+    (map #((rule (term (if (P) (Q)))
+                 (rule (term (P)) (term (Q))))
+           (map #((rule Q (Q)) (rule Q (Q)))
+                #((rule (term (if (P) Q))
+                        (rule (term (P)) (term Q)))
+                  (map #((rule P (P)) (rule P (P)))
+                       #((rule (term (if P Q)) (rule (term P) (term Q)))
+                         (rule (term (if P Q)) (rule (term P) (term Q))))))))
+         #((term (if (P) (Q))) (term (if (P) (Q)))))))

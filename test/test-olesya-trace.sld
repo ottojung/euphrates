@@ -4,10 +4,7 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debugs) debugs))
   (import
-    (only (euphrates olesya-trace)
-          olesya:trace
-          olesya:traced-object:trace
-          olesya:traced-object:value))
+    (only (euphrates olesya-trace) olesya:trace))
   (import
     (only (scheme base)
           =
@@ -15,6 +12,7 @@
           define
           equal?
           if
+          list
           map
           quote
           unless))

@@ -14,6 +14,7 @@
   (import
     (only (euphrates olesya-language)
           olesya:rule:name
+          olesya:substitution:name
           olesya:term:name))
   (import
     (only (scheme base)
