@@ -21,11 +21,13 @@
       (let ()
         (define expr:value
           (olesya:traced-object:output expr))
+        (define output-of-eval
+          (olesya:trace:eval expr:value))
 
         (define operation
           (list 'eval expr))
         (define output
-          (olesya:trace:eval expr:value))
+          (olesya:traced-object:output output-of-eval))
 
         (define ret
           (olesya:traced-object:make

@@ -207,10 +207,7 @@
 
     )
 
- '#(#((term (triple (y) (y) (z)))
-      (map #((rule (x) (y)) (rule (x) (y)))
-           #((term (triple (x) (y) (z)))
-             (term (triple (x) (y) (z))))))
+ '#((term (triple (y) (y) (z)))
     (eval #((map (rule (x) (y)) (term (triple (x) (y) (z))))
             (map #((rule (term (triple (x) (y) (z)))
                          (map (rule (x) (y)) (term (triple (x) (y) (z)))))
@@ -228,19 +225,16 @@
                   (rule (term P) (map (rule (x) (y)) (term P))))
              (term (triple (x) (y) (z)))))
 
- '#(#((term (triple (y) (y) (z)))
-     (map #((rule (x) (y)) (rule (x) (y)))
-          #((term (triple (x) (y) (z)))
-            (term (triple (x) (y) (z))))))
-   (eval #((map (rule (x) (y)) (term (triple (x) (y) (z))))
-           (map #((rule (term (triple (x) (y) (z)))
-                        (map (rule (x) (y)) (term (triple (x) (y) (z)))))
-                  (map #((rule P (triple (x) (y) (z)))
-                         (rule P (triple (x) (y) (z))))
-                       #((rule (term P) (map (rule (x) (y)) (term P)))
-                         (rule (term P) (map (rule (x) (y)) (term P))))))
-                #((term (triple (x) (y) (z)))
-                  (term (triple (x) (y) (z)))))))))
+ '#((term (triple (y) (y) (z)))
+    (eval #((map (rule (x) (y)) (term (triple (x) (y) (z))))
+            (map #((rule (term (triple (x) (y) (z)))
+                         (map (rule (x) (y)) (term (triple (x) (y) (z)))))
+                   (map #((rule P (triple (x) (y) (z)))
+                          (rule P (triple (x) (y) (z))))
+                        #((rule (term P) (map (rule (x) (y)) (term P)))
+                          (rule (term P) (map (rule (x) (y)) (term P))))))
+                 #((term (triple (x) (y) (z)))
+                   (term (triple (x) (y) (z)))))))))
 
 
 (test-case
