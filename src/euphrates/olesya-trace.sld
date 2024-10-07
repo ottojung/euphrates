@@ -21,9 +21,7 @@
           olesya:language:term))
   (import
     (only (euphrates olesya-treeify)
-          olesya:treeify:map
-          olesya:treeify:rule
-          olesya:treeify:term))
+          olesya:treeify:map))
   (import
     (only (scheme base)
           =
@@ -32,16 +30,19 @@
           begin
           define
           define-syntax
+          equal?
           if
           let
           list
           map
+          or
           quote
           syntax-rules
           vector
           vector-length
           vector-ref
           vector?))
+  (import (only (scheme case-lambda) case-lambda))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

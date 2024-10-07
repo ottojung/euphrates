@@ -2,18 +2,25 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(define (olesya:traced-object:make operation output)
-  (vector output operation))
+(define olesya:traced-object:make
+  (case-lambda
+   ((output)
+    (vector output))
+   ((operation output)
+    (vector output operation))))
 
 (define (olesya:traced-object:operation obj)
-  (vector-ref obj 1))
+  (if (equal? (vector-length obj) 2)
+      (vector-ref obj 1)
+      (vector-ref obj 0)))
 
 (define (olesya:traced-object:output obj)
   (vector-ref obj 0))
 
 (define (olesya:traced-object? obj)
   (and (vector? obj)
-       (= 2 (vector-length obj))))
+       (or (= 2 (vector-length obj))
+           (= 1 (vector-length obj)))))
 
 
 (define (olesya:trace:eval expr)
@@ -41,18 +48,16 @@
   (syntax-rules ()
     ((_ term)
      (let ()
-       (define operation (olesya:treeify:term term))
        (define output (olesya:language:term term))
-       (olesya:traced-object:make operation output)))))
+       (olesya:traced-object:make output)))))
 
 
 (define-syntax olesya:trace:rule
   (syntax-rules ()
     ((_ premise consequence)
      (let ()
-       (define operation (olesya:treeify:rule premise consequence))
        (define output (olesya:language:rule premise consequence))
-       (olesya:traced-object:make operation output)))))
+       (olesya:traced-object:make output)))))
 
 
 (define-syntax olesya:trace:define
