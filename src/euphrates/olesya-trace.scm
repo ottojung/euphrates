@@ -16,7 +16,7 @@
   )
 
 
-(define (olesya:trace+interpret:eval expr)
+(define (olesya:trace:eval expr)
   (if (olesya:traced-object? expr)
       (let ()
         (define value
@@ -25,7 +25,7 @@
           (olesya:traced-object:trace expr))
 
         (define new-expr
-          (olesya:trace+interpret:eval value))
+          (olesya:trace:eval value))
 
         (define new-value
           (olesya:traced-object:value new-expr))
@@ -46,10 +46,10 @@
            ret-value ret-trace))
 
         ret)
-      (eval expr olesya:trace+interpret:environment)))
+      (eval expr olesya:trace:environment)))
 
 
-(define-syntax olesya:trace+interpret:term
+(define-syntax olesya:trace:term
   (syntax-rules ()
     ((_ term)
      (olesya:traced-object:make
@@ -57,7 +57,7 @@
       (olesya:treeify:term term)))))
 
 
-(define-syntax olesya:trace+interpret:rule
+(define-syntax olesya:trace:rule
   (syntax-rules ()
     ((_ premise consequence)
      (olesya:traced-object:make
@@ -65,13 +65,13 @@
       (olesya:treeify:rule premise consequence)))))
 
 
-(define-syntax olesya:trace+interpret:define
+(define-syntax olesya:trace:define
   (syntax-rules ()
     ((_ name value)
      (define name value))))
 
 
-(define-syntax olesya:trace+interpret:=
+(define-syntax olesya:trace:=
   (syntax-rules ()
     ((_ a b)
      a ;; TODO: check if `a` is equal to `b`.
@@ -79,7 +79,7 @@
 
 
 
-(define (olesya:trace+interpret:map rule body)
+(define (olesya:trace:map rule body)
   (define rule:value
     (olesya:traced-object:value rule))
   (define body:value
@@ -95,22 +95,22 @@
 
 
 
-(define-syntax olesya:trace+interpret:begin
+(define-syntax olesya:trace:begin
   (syntax-rules ()
     ((_ . args) (let () . args))))
 
 
-(define olesya:trace+interpret:environment
+(define olesya:trace:environment
   (environment
-   '(rename (euphrates olesya-trace+interpret)
-            (olesya:trace+interpret:eval eval)
-            (olesya:trace+interpret:term term)
-            (olesya:trace+interpret:rule rule)
-            (olesya:trace+interpret:define define)
-            (olesya:trace+interpret:= =)
-            (olesya:trace+interpret:map map)
-            (olesya:trace+interpret:begin begin))))
+   '(rename (euphrates olesya-trace)
+            (olesya:trace:eval eval)
+            (olesya:trace:term term)
+            (olesya:trace:rule rule)
+            (olesya:trace:define define)
+            (olesya:trace:= =)
+            (olesya:trace:map map)
+            (olesya:trace:begin begin))))
 
 
-(define (olesya:trace+interpret expr)
-  (olesya:trace+interpret:eval expr))
+(define (olesya:trace expr)
+  (olesya:trace:eval expr))

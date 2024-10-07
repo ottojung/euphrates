@@ -1,11 +1,11 @@
 
 (define-library
-  (test-olesya-trace+interpret)
+  (test-olesya-trace)
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debugs) debugs))
   (import
-    (only (euphrates olesya-trace+interpret)
-          olesya:trace+interpret
+    (only (euphrates olesya-trace)
+          olesya:trace
           olesya:traced-object:trace
           olesya:traced-object:value))
   (import
@@ -22,6 +22,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path
-               "test-olesya-trace+interpret.scm")))
-    (else (include "test-olesya-trace+interpret.scm"))))
+             (include-from-path "test-olesya-trace.scm")))
+    (else (include "test-olesya-trace.scm"))))

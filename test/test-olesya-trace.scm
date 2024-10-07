@@ -1,7 +1,7 @@
 
 (define (test-case program expected-value expected-trace)
   (define actual
-    (olesya:trace+interpret program))
+    (olesya:trace program))
 
   (define actual-value
     (olesya:traced-object:value actual))

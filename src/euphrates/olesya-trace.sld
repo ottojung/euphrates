@@ -1,16 +1,16 @@
 
 (define-library
-  (euphrates olesya-trace+interpret)
+  (euphrates olesya-trace)
   (export
-    olesya:trace+interpret
-    olesya:trace+interpret:run
-    olesya:trace+interpret:begin
-    olesya:trace+interpret:term
-    olesya:trace+interpret:rule
-    olesya:trace+interpret:map
-    olesya:trace+interpret:eval
-    olesya:trace+interpret:=
-    olesya:trace+interpret:define
+    olesya:trace
+    olesya:trace:run
+    olesya:trace:begin
+    olesya:trace:term
+    olesya:trace:rule
+    olesya:trace:map
+    olesya:trace:eval
+    olesya:trace:=
+    olesya:trace:define
     olesya:traced-object:trace
     olesya:traced-object:value
     olesya:traced-object?)
@@ -44,6 +44,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path
-               "euphrates/olesya-trace+interpret.scm")))
-    (else (include "olesya-trace+interpret.scm"))))
+             (include-from-path "euphrates/olesya-trace.scm")))
+    (else (include "olesya-trace.scm"))))
