@@ -23,10 +23,10 @@
           olesya:language:term
           olesya:rule:name))
   (import
-    (only (euphrates olesya-trace)
-          olesya:trace:map
-          olesya:trace:rule
-          olesya:trace:term))
+    (only (euphrates olesya-treeify)
+          olesya:treeify:map
+          olesya:treeify:rule
+          olesya:treeify:term))
   (import
     (only (scheme base)
           =

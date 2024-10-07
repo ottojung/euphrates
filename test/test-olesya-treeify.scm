@@ -1,7 +1,7 @@
 
 (define (test-case program expected)
   (define actual
-    (olesya:trace program))
+    (olesya:treeify program))
 
   (define (print-actual)
     (debugs actual)

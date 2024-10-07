@@ -54,7 +54,7 @@
     ((_ term)
      (olesya:traced-object:make
       (olesya:language:term term)
-      (olesya:trace:term term)))))
+      (olesya:treeify:term term)))))
 
 
 (define-syntax olesya:trace+interpret:rule
@@ -62,7 +62,7 @@
     ((_ premise consequence)
      (olesya:traced-object:make
       (olesya:language:rule premise consequence)
-      (olesya:trace:rule premise consequence)))))
+      (olesya:treeify:rule premise consequence)))))
 
 
 (define-syntax olesya:trace+interpret:define
@@ -91,7 +91,7 @@
 
   (olesya:traced-object:make
    (olesya:language:map rule:value body:value)
-   (olesya:trace:map rule:trace body:trace)))
+   (olesya:treeify:map rule:trace body:trace)))
 
 
 
