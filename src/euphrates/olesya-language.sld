@@ -21,9 +21,7 @@
     (only (euphrates stack)
           stack->list
           stack-empty?
-          stack-make
-          stack-pop!
-          stack-push!))
+          stack-make))
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)

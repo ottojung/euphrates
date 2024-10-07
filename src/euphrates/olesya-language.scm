@@ -85,8 +85,8 @@
      (list olesya:rule:name (quote premise) (quote consequence)))))
 
 
-(define (olesya:language:beta-reduce initial-term qvarname qreplcement)
-  (let loop ((term initial-term))
+(define (olesya:language:beta-reduce term qvarname qreplcement)
+  (let loop ((term term))
     (cond
      ((equal? term qvarname)
       qreplcement)
@@ -148,10 +148,10 @@
     ((_ name arg)
      (define name
        (let ()
-         (define stack (olesya:get-current-stack))
-         (define _res (stack-push! stack (quote name)))
+         ;; (define stack (olesya:get-current-stack))
+         ;; (define _res (stack-push! stack (quote name)))
          (define result arg)
-         (stack-pop! stack)
+         ;; (stack-pop! stack)
          result)))))
 
 

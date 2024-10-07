@@ -4,7 +4,7 @@
 
 (define (olesya:trace:eval expr)
   (define wrapped (list 'begin expr)) ;; need this to not polute the outer scope.
-  (eval wrapped olesya:trace:environment))
+  (list 'eval (eval wrapped olesya:trace:environment)))
 
 
 (define-syntax olesya:trace:term
@@ -52,4 +52,5 @@
 
 
 (define (olesya:trace expr)
-  (olesya:trace:eval expr))
+  (define wrapped (list 'begin expr)) ;; need this to not polute the outer scope.
+  (eval wrapped olesya:trace:environment))

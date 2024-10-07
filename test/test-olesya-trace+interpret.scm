@@ -1,16 +1,22 @@
 
-(define (test-case program expected)
+(define (test-case program expected-value expected-trace)
   (define actual
-    (olesya:trace program))
+    (olesya:trace+interpret program))
 
-  (define (print-actual)
-    (debugs actual)
-    (exit 1))
+  (define actual-value
+    (olesya:traced-object:value actual))
+  (define actual-trace
+    (olesya:traced-object:trace actual))
 
-  (unless (equal? actual expected)
-    (print-actual))
+  (unless (equal? actual-value expected-value)
+    (debugs actual-value))
 
-  (assert= actual expected))
+  (unless (equal? actual-trace expected-trace)
+    (debugs actual-trace))
+
+  (assert= actual-value expected-value)
+  (assert= actual-trace expected-trace)
+  )
 
 
 
@@ -121,6 +127,8 @@
 
     )
 
+ '(term (if (P) (R)))
+
  '(map (map (map (rule P (if (Q) (R)))
                  (map (rule Q (if (P) (R)))
                       (rule (term (if P Q)) (rule (term P) (term Q)))))
@@ -165,6 +173,20 @@
     result
 
     )
+
+ '(term (triple (y) (y) (z)))
+
+ '(eval (map (map (rule P (triple (x) (y) (z)))
+                  (rule (term P) (map (rule (x) (y)) (term P))))
+             (term (triple (x) (y) (z))))))
+
+(test-case
+
+ '(eval (map (map (rule P (triple (x) (y) (z)))
+                  (rule (term P) (map (rule (x) (y)) (term P))))
+             (term (triple (x) (y) (z)))))
+
+ '(term (triple (y) (y) (z)))
 
  '(eval (map (map (rule P (triple (x) (y) (z)))
                   (rule (term P) (map (rule (x) (y)) (term P))))
@@ -214,6 +236,8 @@
     ;;     0))
 
     rule-x)
+
+ '(rule (term (P)) (term (Q)))
 
  '(map (map (rule Q (Q))
             (map (rule P (P))
