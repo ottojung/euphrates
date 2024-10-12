@@ -2,62 +2,52 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(define olesya:traced-object:make
-  (case-lambda
-   ((output)
-    (vector output))
-   ((operation output)
-    (vector output operation))))
+(define olesya:trace:callback/p
+  (make-parameter (lambda _ (values))))
 
-(define (olesya:traced-object:operation obj)
-  (if (equal? (vector-length obj) 2)
-      (vector-ref obj 1)
-      (vector-ref obj 0)))
 
-(define (olesya:traced-object:output obj)
-  (vector-ref obj 0))
+(define-syntax olesya:trace:with-callback
+  (syntax-rules ()
+    ((_ callback . bodies)
+     (parameterize ((olesya:trace:callback/p callback))
+       (let () . bodies)))))
 
-(define (olesya:traced-object? obj)
-  (and (vector? obj)
-       (or (= 2 (vector-length obj))
-           (= 1 (vector-length obj)))))
+
+(define (olesya:trace:callback operation output)
+  (define fun (olesya:trace:callback/p))
+  (fun operation output))
 
 
 (define (olesya:trace:eval expr)
-  (if (olesya:traced-object? expr)
-      (let ()
-        (define expr:value
-          (olesya:traced-object:output expr))
-        (define output-of-eval
-          (olesya:trace:eval expr:value))
+  (define operation
+    (list 'eval expr))
 
-        (define operation
-          (list 'eval expr))
-        (define output
-          (olesya:traced-object:output output-of-eval))
+  (define output
+    (olesya:trace expr))
 
-        (define ret
-          (olesya:traced-object:make
-           operation output))
+  (olesya:trace:callback operation output)
 
-        ret)
-      (eval expr olesya:trace:environment)))
+  output)
 
 
 (define-syntax olesya:trace:term
   (syntax-rules ()
     ((_ term)
      (let ()
+       (define operation (olesya:treeify:term term))
        (define output (olesya:language:term term))
-       (olesya:traced-object:make output)))))
+       (olesya:trace:callback operation output)
+       output))))
 
 
 (define-syntax olesya:trace:rule
   (syntax-rules ()
     ((_ premise consequence)
      (let ()
+       (define operation (olesya:treeify:rule premise consequence))
        (define output (olesya:language:rule premise consequence))
-       (olesya:traced-object:make output)))))
+       (olesya:trace:callback operation output)
+       output))))
 
 
 (define-syntax olesya:trace:define
@@ -73,19 +63,15 @@
      )))
 
 
-
 (define (olesya:trace:map rule body)
-  (define rule:value
-    (olesya:traced-object:output rule))
-  (define body:value
-    (olesya:traced-object:output body))
   (define operation
     (olesya:treeify:map rule body))
   (define output
-    (olesya:language:map rule:value body:value))
+    (olesya:language:map rule body))
 
-  (olesya:traced-object:make
-   operation output))
+  (olesya:trace:callback operation output)
+
+  output)
 
 
 (define-syntax olesya:trace:begin
@@ -106,4 +92,4 @@
 
 
 (define (olesya:trace expr)
-  (olesya:trace:eval expr))
+  (eval expr olesya:trace:environment))

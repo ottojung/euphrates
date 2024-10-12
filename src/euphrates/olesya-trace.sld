@@ -3,17 +3,14 @@
   (euphrates olesya-trace)
   (export
     olesya:trace
-    olesya:trace:run
+    olesya:trace:with-callback
     olesya:trace:begin
     olesya:trace:term
     olesya:trace:rule
     olesya:trace:map
     olesya:trace:eval
     olesya:trace:=
-    olesya:trace:define
-    olesya:traced-object:operation
-    olesya:traced-object:output
-    olesya:traced-object?)
+    olesya:trace:define)
   (import
     (only (euphrates olesya-language)
           olesya:language:map
@@ -21,28 +18,25 @@
           olesya:language:term))
   (import
     (only (euphrates olesya-treeify)
-          olesya:treeify:map))
+          olesya:treeify:map
+          olesya:treeify:rule
+          olesya:treeify:term))
   (import
     (only (scheme base)
           =
           _
-          and
           begin
           define
           define-syntax
-          equal?
-          if
+          lambda
           let
           list
+          make-parameter
           map
-          or
+          parameterize
           quote
           syntax-rules
-          vector
-          vector-length
-          vector-ref
-          vector?))
-  (import (only (scheme case-lambda) case-lambda))
+          values))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

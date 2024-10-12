@@ -4,7 +4,17 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debugs) debugs))
   (import
-    (only (euphrates olesya-trace) olesya:trace))
+    (only (euphrates olesya-interpret)
+          olesya:language:eval))
+  (import
+    (only (euphrates olesya-trace)
+          olesya:trace
+          olesya:trace:with-callback))
+  (import
+    (only (euphrates stack)
+          stack->list
+          stack-make
+          stack-push!))
   (import
     (only (scheme base)
           =
@@ -12,9 +22,11 @@
           define
           equal?
           if
+          lambda
           list
           map
           quote
+          reverse
           unless))
   (import (only (scheme eval) eval))
   (cond-expand
