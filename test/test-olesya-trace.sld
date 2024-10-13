@@ -9,7 +9,6 @@
   (import
     (only (euphrates olesya-trace)
           olesya:trace
-          olesya:trace:let-stack
           olesya:trace:with-callback))
   (import
     (only (euphrates stack)
