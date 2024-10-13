@@ -154,14 +154,8 @@
 
 (define-syntax olesya:language:define
   (syntax-rules ()
-    ((_ name arg)
-     (define name
-       (let ()
-         ;; (define stack (olesya:get-current-stack))
-         ;; (define _res (stack-push! stack (quote name)))
-         (define result arg)
-         ;; (stack-pop! stack)
-         result)))))
+    ((_ name expr)
+     (define name expr))))
 
 
 (define-syntax olesya:language:let
@@ -169,11 +163,11 @@
     ((_ () . bodies)
      (let () . bodies))
 
-    ((_  ((x object) . lets) . bodies)
+    ((_  ((name expr) . lets) . bodies)
      (let ()
-       (define x object)
+       (define name expr)
        (define result (olesya:language:let lets . bodies))
-       (olesya:rule:make x result)))))
+       (olesya:rule:make name result)))))
 
 
 (define-syntax olesya:language:=
