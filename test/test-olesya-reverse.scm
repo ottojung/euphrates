@@ -322,5 +322,4 @@
    (rule Q (Q))
    (rule P (P))
    (rule P (Q))
-   (rule Q (R))
-   (term (P))))
+   (rule Q (R))))

@@ -18,6 +18,7 @@
   (import
     (only (euphrates olesya-trace)
           olesya:trace
+          olesya:trace:let-stack
           olesya:trace:with-callback))
   (import
     (only (euphrates stack)
@@ -27,10 +28,13 @@
   (import
     (only (scheme base)
           begin
+          cadr
           cond
           define
           define-values
           else
+          map
+          member
           quote
           reverse
           unless

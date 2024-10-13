@@ -45,6 +45,9 @@
     (define-values (rule subject)
       (olesya:substitution:destruct operation))
 
+    ;; (define letstack (olesya:trace:let-stack))
+    ;; (debugs letstack)
+
     (add-axiom! rule)
     (add-created! result)
 
@@ -54,8 +57,11 @@
     0)
 
   (define (callback/term operation result)
-    (add-axiom! result)
-    (add-created! result))
+    (define letstack (olesya:trace:let-stack))
+    (define supposedterms (map cadr letstack))
+    (unless (member result supposedterms)
+      (add-axiom! result)
+      (add-created! result)))
 
   (define (callback/rule operation result)
     (add-axiom! result)
