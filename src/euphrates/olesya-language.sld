@@ -9,6 +9,8 @@
     olesya:let:name
     olesya:begin:name
     olesya:rule:make
+    olesya:substitution?
+    olesya:substitution:destruct
     olesya:language:run
     olesya:language:begin
     olesya:language:term

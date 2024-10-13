@@ -139,9 +139,8 @@
         (list 'bad-length-of-rule-in-modus-ponens rule))
    (let ()
      (define-tuple (predicate premise conclusion) rule)
-
      (and (not (equal? predicate olesya:rule:name))
-          (list 'non-rule-in-modus-ponens rule)))))
+          (list 'wrong-constructor-for-rule rule)))))
 
 
 (define (olesya:rule? rule)
@@ -156,6 +155,34 @@
   (let ()
     (define-tuple (predicate premise conclusion) rule)
     (values premise conclusion)))
+
+
+(define (olesya:substitution:check substitution)
+  (or
+   (and (not (list? substitution))
+        (list 'not-a-term-in-substitution substitution))
+   (and (not (pair? substitution))
+        (olesya:error 'null-in-substitution substitution))
+   (and (not (list-length= 3 substitution))
+        (list 'bad-length-of-substitution-in-modus-ponens substitution))
+   (let ()
+     (define-tuple (predicate rule subject) substitution)
+     (and (not (equal? predicate olesya:substitution:name))
+          (list 'wrong-constructor-for-substitution substitution)))))
+
+
+(define (olesya:substitution? substitution)
+  (not (olesya:substitution:check substitution)))
+
+
+(define (olesya:substitution:destruct substitution)
+  (define error (olesya:substitution:check substitution))
+  (when error
+    (apply olesya:error error))
+
+  (let ()
+    (define-tuple (predicate rule subject) substitution)
+    (values rule subject)))
 
 
 (define-syntax olesya:language:define
