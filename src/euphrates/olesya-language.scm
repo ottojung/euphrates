@@ -125,6 +125,9 @@
 (define olesya:let:name
   'let)
 
+(define olesya:begin:name
+  'begin)
+
 
 (define (olesya:rule:check rule)
   (or

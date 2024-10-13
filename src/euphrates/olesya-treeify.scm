@@ -3,8 +3,9 @@
 
 
 (define (olesya:treeify:eval expr)
-  (define wrapped (list 'begin expr)) ;; need this to not polute the outer scope.
-  (list 'eval (eval wrapped olesya:treeify:environment)))
+  (define wrapped (list olesya:begin:name expr)) ;; need this to not polute the outer scope.
+  (list olesya:eval:name
+        (eval wrapped olesya:treeify:environment)))
 
 
 (define-syntax olesya:treeify:term
@@ -52,5 +53,5 @@
 
 
 (define (olesya:treeify expr)
-  (define wrapped (list 'begin expr)) ;; need this to not polute the outer scope.
+  (define wrapped (list olesya:begin:name expr)) ;; need this to not polute the outer scope.
   (eval wrapped olesya:treeify:environment))

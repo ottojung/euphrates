@@ -13,6 +13,8 @@
     olesya:treeify:define)
   (import
     (only (euphrates olesya-language)
+          olesya:begin:name
+          olesya:eval:name
           olesya:rule:name
           olesya:substitution:name
           olesya:term:name))

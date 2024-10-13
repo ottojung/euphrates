@@ -7,6 +7,7 @@
     olesya:eval:name
     olesya:substitution:name
     olesya:let:name
+    olesya:begin:name
     olesya:rule:make
     olesya:language:run
     olesya:language:begin
