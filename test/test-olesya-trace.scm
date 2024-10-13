@@ -372,3 +372,144 @@
                (rule (term (P)) (term (Q))))
          (term (if (P) (Q))))
     (rule (term (P)) (term (Q))))))
+
+
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
+
+ '(begin
+
+    (define x
+      (term (if (P) (Q))))
+    (define y
+      (term (if (Q) (R))))
+
+    (define implication-reflexive
+      (term (if P P)))
+    (define implication-transitive
+      (term (if (if P Q)
+                (if (if Q R)
+                    (if P R)))))
+
+    (define promote
+      (rule (term (if P Q))
+            (rule (term P) (term Q))))
+
+    (define lower
+      (rule (rule (term P) (term Q))
+            (term (if P Q))))
+
+    (define promote-x
+      (map (rule Q (Q))
+           (map (rule P (P)) promote)))
+
+    (= promote-x
+       (rule (term (if (P) (Q)))
+             (rule (term (P)) (term (Q)))))
+
+    (define rule-x
+      (map promote-x x))
+
+    (= rule-x (rule (term (P)) (term (Q))))
+
+    (define promote-y
+      (map (rule P (Q))
+           (map (rule Q (R)) promote)))
+
+    (= promote-y
+       (rule (term (if (Q) (R)))
+             (rule (term (Q)) (term (R)))))
+
+    (define rule-y
+      (map promote-y y))
+
+    (= rule-y (rule (term (Q)) (term (R))))
+
+    (define z
+      (let ((p (term (P))))
+        (define v1 (map rule-x p))
+        (define v2 (map rule-y v1))
+        v2))
+
+    (= z (rule (term (P)) (term (R))))
+
+    (define lower-p-r
+      (map (rule P (P))
+           (map (rule Q (R)) lower)))
+
+    (= lower-p-r
+       (rule (rule (term (P)) (term (R)))
+             (term (if (P) (R)))))
+
+    (define implication
+      (map lower-p-r z))
+
+    (define result implication)
+
+    (= result
+       (term (if (P) (R))))
+
+    result)
+
+ '(((term (if (P) (Q))) (term (if (P) (Q))))
+   ((term (if (Q) (R))) (term (if (Q) (R))))
+   ((term (if P P)) (term (if P P)))
+   ((term (if (if P Q) (if (if Q R) (if P R))))
+    (term (if (if P Q) (if (if Q R) (if P R)))))
+   ((rule (term (if P Q)) (rule (term P) (term Q)))
+    (rule (term (if P Q)) (rule (term P) (term Q))))
+   ((rule (rule (term P) (term Q)) (term (if P Q)))
+    (rule (rule (term P) (term Q)) (term (if P Q))))
+   ((rule Q (Q)) (rule Q (Q)))
+   ((rule P (P)) (rule P (P)))
+   ((map (rule P (P))
+         (rule (term (if P Q)) (rule (term P) (term Q))))
+    (rule (term (if (P) Q))
+          (rule (term (P)) (term Q))))
+   ((map (rule Q (Q))
+         (rule (term (if (P) Q))
+               (rule (term (P)) (term Q))))
+    (rule (term (if (P) (Q)))
+          (rule (term (P)) (term (Q)))))
+   ((map (rule (term (if (P) (Q)))
+               (rule (term (P)) (term (Q))))
+         (term (if (P) (Q))))
+    (rule (term (P)) (term (Q))))
+   ((rule P (Q)) (rule P (Q)))
+   ((rule Q (R)) (rule Q (R)))
+   ((map (rule Q (R))
+         (rule (term (if P Q)) (rule (term P) (term Q))))
+    (rule (term (if P (R)))
+          (rule (term P) (term (R)))))
+   ((map (rule P (Q))
+         (rule (term (if P (R)))
+               (rule (term P) (term (R)))))
+    (rule (term (if (Q) (R)))
+          (rule (term (Q)) (term (R)))))
+   ((map (rule (term (if (Q) (R)))
+               (rule (term (Q)) (term (R))))
+         (term (if (Q) (R))))
+    (rule (term (Q)) (term (R))))
+   ((term (P)) (term (P)))
+   ((map (rule (term (P)) (term (Q))) (term (P)))
+    (term (Q)))
+   ((map (rule (term (Q)) (term (R))) (term (Q)))
+    (term (R)))
+   ((rule P (P)) (rule P (P)))
+   ((rule Q (R)) (rule Q (R)))
+   ((map (rule Q (R))
+         (rule (rule (term P) (term Q)) (term (if P Q))))
+    (rule (rule (term P) (term (R)))
+          (term (if P (R)))))
+   ((map (rule P (P))
+         (rule (rule (term P) (term (R)))
+               (term (if P (R)))))
+    (rule (rule (term (P)) (term (R)))
+          (term (if (P) (R)))))
+   ((map (rule (rule (term (P)) (term (R)))
+               (term (if (P) (R))))
+         (rule (term (P)) (term (R))))
+    (term (if (P) (R))))))

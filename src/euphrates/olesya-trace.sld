@@ -9,6 +9,7 @@
     olesya:trace:rule
     olesya:trace:map
     olesya:trace:eval
+    olesya:trace:let
     olesya:trace:=
     olesya:trace:define)
   (import
@@ -16,7 +17,8 @@
           olesya:eval:name
           olesya:language:map
           olesya:language:rule
-          olesya:language:term))
+          olesya:language:term
+          olesya:rule:make))
   (import
     (only (euphrates olesya-treeify)
           olesya:treeify:map

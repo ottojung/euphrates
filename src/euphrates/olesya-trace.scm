@@ -56,6 +56,18 @@
      (define name value))))
 
 
+(define-syntax olesya:trace:let
+  (syntax-rules ()
+    ((_ () . bodies)
+     (let () . bodies))
+
+    ((_  ((name expr) . lets) . bodies)
+     (let ()
+       (define name expr)
+       (define result (olesya:trace:let lets . bodies))
+       (olesya:rule:make name result)))))
+
+
 (define-syntax olesya:trace:=
   (syntax-rules ()
     ((_ a b)
@@ -86,6 +98,7 @@
             (olesya:trace:term term)
             (olesya:trace:rule rule)
             (olesya:trace:define define)
+            (olesya:trace:let let)
             (olesya:trace:= =)
             (olesya:trace:map map)
             (olesya:trace:begin begin))))

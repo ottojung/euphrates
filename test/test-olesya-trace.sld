@@ -23,6 +23,7 @@
           equal?
           if
           lambda
+          let
           list
           map
           quote
