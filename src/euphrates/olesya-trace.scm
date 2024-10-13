@@ -20,7 +20,7 @@
 
 (define (olesya:trace:eval expr)
   (define operation
-    (list 'eval expr))
+    (list olesya:eval:name expr))
 
   (define output
     (olesya:trace expr))

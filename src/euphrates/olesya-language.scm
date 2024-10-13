@@ -79,10 +79,14 @@
      (list olesya:term:name (quote term)))))
 
 
+(define (olesya:rule:make premise consequence)
+  (list olesya:rule:name premise consequence))
+
+
 (define-syntax olesya:language:rule
   (syntax-rules ()
     ((_ premise consequence)
-     (list olesya:rule:name (quote premise) (quote consequence)))))
+     (olesya:rule:make (quote premise) (quote consequence)))))
 
 
 (define (olesya:language:beta-reduce term qvarname qreplcement)
@@ -97,6 +101,7 @@
      (else
       term))))
 
+
 (define (olesya:error type . args)
   (define state (olesya:language:state/p))
   (define stack (olesya:language:state:callstack state))
@@ -104,8 +109,12 @@
 
   (escape (list 'error type args (stack->list stack))))
 
+
 (define olesya:substitution:name
   'map)
+
+(define olesya:eval:name
+  'eval)
 
 (define olesya:rule:name
   'rule)
@@ -153,6 +162,18 @@
          (define result arg)
          ;; (stack-pop! stack)
          result)))))
+
+
+(define-syntax olesya:language:let
+  (syntax-rules ()
+    ((_ () . bodies)
+     (let () . bodies))
+
+    ((_  ((x shape) . lets) . bodies)
+     (let ()
+       (define x (quasiquote shape))
+       (define result (olesya:language:let lets . bodies))
+       (olesya:rule:make x result)))))
 
 
 (define-syntax olesya:language:=

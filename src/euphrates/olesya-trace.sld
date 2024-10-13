@@ -13,6 +13,7 @@
     olesya:trace:define)
   (import
     (only (euphrates olesya-language)
+          olesya:eval:name
           olesya:language:map
           olesya:language:rule
           olesya:language:term))

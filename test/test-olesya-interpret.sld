@@ -20,6 +20,7 @@
           equal?
           error
           if
+          let
           map
           quasiquote
           quote

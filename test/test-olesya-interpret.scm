@@ -178,3 +178,86 @@
     )
 
  `ignore-ok)
+
+
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
+
+ '(begin
+
+    (define x
+      (term (if (P) (Q))))
+    (define y
+      (term (if (Q) (R))))
+
+    (define implication-reflexive
+      (term (if P P)))
+    (define implication-transitive
+      (term (if (if P Q)
+                (if (if Q R)
+                    (if P R)))))
+
+    (define promote
+      (rule (term (if P Q))
+            (rule (term P) (term Q))))
+
+    (define lower
+      (rule (rule (term P) (term Q))
+            (term (if P Q))))
+
+    (define promote-x
+      (map (rule Q (Q))
+           (map (rule P (P)) promote)))
+
+    (= promote-x
+       (rule (term (if (P) (Q)))
+             (rule (term (P)) (term (Q)))))
+
+    (define rule-x
+      (map promote-x x))
+
+    (= rule-x (rule (term (P)) (term (Q))))
+
+    (define promote-y
+      (map (rule P (Q))
+           (map (rule Q (R)) promote)))
+
+    (= promote-y
+       (rule (term (if (Q) (R)))
+             (rule (term (Q)) (term (R)))))
+
+    (define rule-y
+      (map promote-y y))
+
+    (= rule-y (rule (term (Q)) (term (R))))
+
+    (define z
+      (let ((p (term (P))))
+        (define v1 (map rule-x p))
+        (define v2 (map rule-y v1))
+        v2))
+
+    (= z (rule (term (P)) (term (R))))
+
+    (define lower-p-r
+      (map (rule P (P))
+           (map (rule Q (R)) lower)))
+
+    (= lower-p-r
+       (rule (rule (term (P)) (term (R)))
+             (term (if (P) (R)))))
+
+    (define implication
+      (map lower-p-r z))
+
+    (define result implication)
+
+    (= result
+       (term (if (P) (R))))
+
+    result)
+
+ `ignore-ok)

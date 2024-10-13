@@ -4,11 +4,13 @@
   (export
     olesya:term:name
     olesya:rule:name
+    olesya:eval:name
     olesya:substitution:name
     olesya:language:run
     olesya:language:begin
     olesya:language:term
     olesya:language:rule
+    olesya:language:let
     olesya:language:map
     olesya:language:=
     olesya:language:define)
@@ -53,10 +55,12 @@
           or
           pair?
           parameterize
+          quasiquote
           quote
           syntax-rules
           values
           when))
+  (import (only (scheme eval) eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

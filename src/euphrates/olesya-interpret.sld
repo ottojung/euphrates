@@ -7,6 +7,7 @@
           olesya:language:=
           olesya:language:begin
           olesya:language:define
+          olesya:language:let
           olesya:language:map
           olesya:language:rule
           olesya:language:run
@@ -16,6 +17,7 @@
           =
           begin
           define
+          let
           list
           map
           quote))
