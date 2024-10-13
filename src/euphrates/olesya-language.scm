@@ -169,9 +169,9 @@
     ((_ () . bodies)
      (let () . bodies))
 
-    ((_  ((x shape) . lets) . bodies)
+    ((_  ((x object) . lets) . bodies)
      (let ()
-       (define x (quasiquote shape))
+       (define x object)
        (define result (olesya:language:let lets . bodies))
        (olesya:rule:make x result)))))
 

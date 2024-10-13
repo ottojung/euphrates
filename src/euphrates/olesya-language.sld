@@ -55,7 +55,6 @@
           or
           pair?
           parameterize
-          quasiquote
           quote
           syntax-rules
           values
