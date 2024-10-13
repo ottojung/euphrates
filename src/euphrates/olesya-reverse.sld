@@ -13,6 +13,8 @@
           olesya:substitution?))
   (import
     (only (euphrates olesya-syntax)
+          olesya:syntax:eval?
+          olesya:syntax:let?
           olesya:syntax:rule?
           olesya:syntax:term?))
   (import

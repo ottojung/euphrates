@@ -67,6 +67,12 @@
     (add-axiom! result)
     (add-created! result))
 
+  (define (callback/eval operation result)
+    (add-created! result))
+
+  (define (callback/let operation result)
+    (add-created! result))
+
   (define (callback operation result)
 
     ;; (debugs operation)
@@ -80,6 +86,10 @@
         (callback/term operation result))
        ((olesya:syntax:rule? operation)
         (callback/rule operation result))
+       ((olesya:syntax:eval? operation)
+        (callback/eval operation result))
+       ((olesya:syntax:let? operation)
+        (callback/let operation result))
        (else
         ;; (debugs operation)
         'TODO:support-other-operations))))
