@@ -58,6 +58,7 @@
             (olesya:treeify:term term)
             (olesya:treeify:rule rule)
             (olesya:treeify:define define)
+            (olesya:treeify:let let)
             (olesya:treeify:= =)
             (olesya:treeify:map map)
             (olesya:treeify:begin begin))))

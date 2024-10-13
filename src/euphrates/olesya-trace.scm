@@ -66,9 +66,7 @@
        (define name expr)
        (define result (olesya:trace:let lets . bodies))
        (define operation
-         (list olesya:let:name
-               (list (list (quote name) (quote expr)))
-               result))
+         (olesya:treeify:let ((name expr)) result))
        (define output
          (olesya:rule:make name result))
        (olesya:trace:callback operation output)
