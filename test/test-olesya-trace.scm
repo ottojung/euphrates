@@ -498,6 +498,8 @@
     (term (Q)))
    ((map (rule (term (Q)) (term (R))) (term (Q)))
     (term (R)))
+   ((let ((p (term (P)))) (term (R)))
+    (rule (term (P)) (term (R))))
    ((rule P (P)) (rule P (P)))
    ((rule Q (R)) (rule Q (R)))
    ((map (rule Q (R))

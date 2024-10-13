@@ -18,6 +18,7 @@
           olesya:language:map
           olesya:language:rule
           olesya:language:term
+          olesya:let:name
           olesya:rule:make))
   (import
     (only (euphrates olesya-treeify)

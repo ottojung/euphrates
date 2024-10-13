@@ -65,7 +65,14 @@
      (let ()
        (define name expr)
        (define result (olesya:trace:let lets . bodies))
-       (olesya:rule:make name result)))))
+       (define operation
+         (list olesya:let:name
+               (list (list (quote name) (quote expr)))
+               result))
+       (define output
+         (olesya:rule:make name result))
+       (olesya:trace:callback operation output)
+       output))))
 
 
 (define-syntax olesya:trace:=

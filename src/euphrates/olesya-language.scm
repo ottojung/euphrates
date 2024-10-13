@@ -122,6 +122,9 @@
 (define olesya:term:name
   'term)
 
+(define olesya:let:name
+  'let)
+
 
 (define (olesya:rule:check rule)
   (or
