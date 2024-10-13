@@ -74,10 +74,6 @@
     (add-created! result))
 
   (define (callback operation result)
-
-    ;; (debugs operation)
-    ;; (debugs result)
-
     (unless (olesya:trace:in-eval?)
       (cond
        ((olesya:substitution? operation)
@@ -91,8 +87,10 @@
        ((olesya:syntax:let? operation)
         (callback/let operation result))
        (else
-        ;; (debugs operation)
-        'TODO:support-other-operations))))
+        (raisu* :from "olesya:reverse"
+                :type 'unknown-operation
+                :message "Uknown operation in reverse."
+                :args (list operation result))))))
 
   (define (get-assumptions)
     (reverse

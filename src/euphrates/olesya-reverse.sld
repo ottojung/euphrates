@@ -23,6 +23,7 @@
           olesya:trace:in-eval?
           olesya:trace:let-stack
           olesya:trace:with-callback))
+  (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
           stack->list
@@ -36,6 +37,7 @@
           define
           define-values
           else
+          list
           map
           member
           quote
