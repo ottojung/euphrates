@@ -6,6 +6,8 @@
   (define value
     (olesya:trace:with-callback
      (lambda (op result)
+       (debugs result)
+       (debugs (olesya:trace:let-stack))
        (stack-push! actual/stack (list op result))
        (assert= (olesya:language:eval op) result))
 

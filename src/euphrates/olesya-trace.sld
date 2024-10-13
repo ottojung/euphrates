@@ -10,6 +10,7 @@
     olesya:trace:map
     olesya:trace:eval
     olesya:trace:let
+    olesya:trace:let-stack
     olesya:trace:=
     olesya:trace:define)
   (import
@@ -30,6 +31,7 @@
           =
           _
           begin
+          cons
           define
           define-syntax
           lambda

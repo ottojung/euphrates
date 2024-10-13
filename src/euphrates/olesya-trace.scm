@@ -56,21 +56,29 @@
      (define name value))))
 
 
+(define olesya:trace:let-stack
+  (make-parameter '()))
+
+
 (define-syntax olesya:trace:let
   (syntax-rules ()
     ((_ () . bodies)
      (let () . bodies))
 
     ((_  ((name expr) . lets) . bodies)
-     (let ()
-       (define name expr)
-       (define result (olesya:trace:let lets . bodies))
-       (define operation
-         (olesya:treeify:let ((name expr)) result))
-       (define output
-         (olesya:rule:make name result))
-       (olesya:trace:callback operation output)
-       output))))
+     (let ((name expr))
+       (parameterize ((olesya:trace:let-stack
+                       (cons
+                        (list (quote name) (quote expr))
+                        (olesya:trace:let-stack))))
+         (let ()
+           (define result (olesya:trace:let lets . bodies))
+           (define operation
+             (olesya:treeify:let ((name expr)) result))
+           (define output
+             (olesya:rule:make name result))
+           (olesya:trace:callback operation output)
+           output))))))
 
 
 (define-syntax olesya:trace:=
