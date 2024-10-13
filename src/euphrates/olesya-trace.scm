@@ -6,6 +6,10 @@
   (make-parameter (lambda _ (values))))
 
 
+(define olesya:trace:in-eval?
+  (make-parameter #f))
+
+
 (define-syntax olesya:trace:with-callback
   (syntax-rules ()
     ((_ callback . bodies)
@@ -23,7 +27,8 @@
     (list olesya:eval:name expr))
 
   (define output
-    (olesya:trace expr))
+    (parameterize ((olesya:trace:in-eval? #t))
+      (olesya:trace expr)))
 
   (olesya:trace:callback operation output)
 

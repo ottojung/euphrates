@@ -9,6 +9,7 @@
     olesya:trace:rule
     olesya:trace:map
     olesya:trace:eval
+    olesya:trace:in-eval?
     olesya:trace:let
     olesya:trace:let-stack
     olesya:trace:=

@@ -167,8 +167,7 @@
 
  '((term (triple (x) (y) (z)))
    (rule (term P) (map (rule (x) (y)) (term P)))
-   (rule P (triple (x) (y) (z)))
-   (rule (x) (y))))
+   (rule P (triple (x) (y) (z)))))
 
 
 (test-case
@@ -179,8 +178,7 @@
 
  '((rule P (triple (x) (y) (z)))
    (rule (term P) (map (rule (x) (y)) (term P)))
-   (term (triple (x) (y) (z)))
-   (rule (x) (y))))
+   (term (triple (x) (y) (z)))))
 
 
 (test-case

@@ -72,16 +72,17 @@
     ;; (debugs operation)
     ;; (debugs result)
 
-    (cond
-     ((olesya:substitution? operation)
-      (callback/substitution operation result))
-     ((olesya:syntax:term? operation)
-      (callback/term operation result))
-     ((olesya:syntax:rule? operation)
-      (callback/rule operation result))
-     (else
-      ;; (debugs operation)
-      'TODO:support-other-operations)))
+    (unless (olesya:trace:in-eval?)
+      (cond
+       ((olesya:substitution? operation)
+        (callback/substitution operation result))
+       ((olesya:syntax:term? operation)
+        (callback/term operation result))
+       ((olesya:syntax:rule? operation)
+        (callback/rule operation result))
+       (else
+        ;; (debugs operation)
+        'TODO:support-other-operations))))
 
   (define (get-assumptions)
     (reverse
