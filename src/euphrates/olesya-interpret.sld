@@ -4,6 +4,7 @@
   (export olesya:interpret olesya:language:eval)
   (import
     (only (euphrates olesya-language)
+          olesya:begin:name
           olesya:language:=
           olesya:language:begin
           olesya:language:define
