@@ -26,6 +26,17 @@
      (define name value))))
 
 
+(define-syntax olesya:treeify:let
+  (syntax-rules ()
+    ((_ () . bodies)
+     (olesya:treeify:begin . bodies))
+
+    ((_  ((name expr) . lets) . bodies)
+     (list olesya:let:name
+           (list (list (quote name) (quote expr)))
+           (olesya:treeify:let lets . bodies)))))
+
+
 (define-syntax olesya:treeify:=
   (syntax-rules ()
     ((_ a b) a)))

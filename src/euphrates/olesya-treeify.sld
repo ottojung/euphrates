@@ -9,12 +9,14 @@
     olesya:treeify:rule
     olesya:treeify:map
     olesya:treeify:eval
+    olesya:treeify:let
     olesya:treeify:=
     olesya:treeify:define)
   (import
     (only (euphrates olesya-language)
           olesya:begin:name
           olesya:eval:name
+          olesya:let:name
           olesya:rule:name
           olesya:substitution:name
           olesya:term:name))
