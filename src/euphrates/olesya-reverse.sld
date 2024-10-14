@@ -2,11 +2,16 @@
 (define-library
   (euphrates olesya-reverse)
   (export olesya:reverse)
+  (import (only (euphrates debug) debug))
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashset)
           hashset-add!
           hashset-has?
           make-hashset))
+  (import
+    (only (euphrates list-fold-semigroup)
+          list-fold/semigroup))
   (import
     (only (euphrates olesya-language)
           olesya:substitution:destruct
@@ -15,6 +20,8 @@
     (only (euphrates olesya-syntax)
           olesya:syntax:eval?
           olesya:syntax:let?
+          olesya:syntax:rule:destruct
+          olesya:syntax:rule:make
           olesya:syntax:rule?
           olesya:syntax:term?))
   (import
@@ -37,9 +44,12 @@
           define
           define-values
           else
+          lambda
+          let
           list
           map
           member
+          null?
           quote
           reverse
           unless

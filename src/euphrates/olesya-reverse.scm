@@ -45,8 +45,36 @@
     (define-values (rule subject)
       (olesya:substitution:destruct operation))
 
-    ;; (define letstack (olesya:trace:let-stack))
-    ;; (debugs letstack)
+    (define letstack (olesya:trace:let-stack))
+    (define supposedterms (map cadr letstack))
+    (unless (null? letstack)
+      (let ()
+        (debug "")
+        (debug "")
+        (debug "mapping")
+        (debugs letstack)
+        (debug "op: ~s" operation)
+        (debugs result)
+
+        (define prefix
+          (list-fold/semigroup
+           (lambda (acc cur)
+             (olesya:syntax:rule:make acc cur))
+           supposedterms))
+
+        (debugs prefix)
+
+        (define-values (premise consequence)
+          (olesya:syntax:rule:destruct rule 'impossible))
+
+        (define prefixed-rule
+          (olesya:syntax:rule:make
+           (olesya:syntax:rule:make prefix premise)
+           (olesya:syntax:rule:make prefix consequence)))
+
+        (debugs prefixed-rule)
+
+        ))
 
     (add-axiom! rule)
     (add-created! result)
