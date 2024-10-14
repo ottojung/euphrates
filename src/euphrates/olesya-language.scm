@@ -12,6 +12,37 @@
 ;;
 
 
+;;
+;; ===============================================
+;; TODO: implement following design:
+;;
+;; (let x (term P)
+;;      (rule x x))
+;;
+;; ->
+;;
+;; (map (rule x (term P))
+;;      (rule x x))
+;;
+;; via:
+;;
+;; - (let x T (rule T x))
+;; - (rule (let x T B) (map (rule x T) B))
+;;
+;; example transform:
+;;
+;; (rule (let x (term P) B)
+;;       (let x (term Q) B))
+;;
+;; via:
+;;
+;; (rule (rule P Q)
+;;       (rule (let x P B) (let x Q B)))
+;;
+;; ===============================================
+;;
+
+
 ;; TODO: remove this struct.
 (define-type9 <olesya:struct>
   (olesya:language:state:struct:construct
