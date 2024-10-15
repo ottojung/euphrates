@@ -24,22 +24,44 @@
 
 (define (olesya:reverse:make-analyzer)
 
-  (define created-objects-set
-    (make-hashset))
+  (define created-objects-map
+    (make-hashmap))
   (define axioms-stack
     (stack-make))
   (define axioms-set
     (make-hashset))
 
   (define (add-axiom! object)
-    (unless (hashset-has? created-objects-set object)
+    (unless (hashmap-has? created-objects-map object)
       (unless (hashset-has? axioms-set object)
         (hashset-add! axioms-set object)
         (stack-push! axioms-stack object))))
 
-  (define (add-created! object)
-    (unless (hashset-has? created-objects-set object)
-      (hashset-add! created-objects-set object)))
+  (define add-created!
+    (let ()
+      (define default (vector))
+      (lambda (object)
+        (define letstack (olesya:trace:let-stack))
+        (define current-level
+          (length letstack))
+        (define existing
+          (hashmap-ref created-objects-map object default))
+        (define found?
+          (not (equal? existing default)))
+
+        (if found?
+            (let ()
+              (define existing-level
+                (length existing))
+
+              (when (< current-level existing-level)
+                (let ()
+                  (define supposedterms (map cadr letstack))
+                  (hashmap-set! created-objects-map object supposedterms))))
+
+            (let ()
+              (define supposedterms (map cadr letstack))
+              (hashmap-set! created-objects-map object supposedterms))))))
 
   (define (callback/substitution operation result)
     (define-values (rule subject)

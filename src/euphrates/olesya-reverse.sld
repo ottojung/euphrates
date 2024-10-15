@@ -5,6 +5,12 @@
   (import (only (euphrates debug) debug))
   (import (only (euphrates debugs) debugs))
   (import
+    (only (euphrates hashmap)
+          hashmap-has?
+          hashmap-ref
+          hashmap-set!
+          make-hashmap))
+  (import
     (only (euphrates hashset)
           hashset-add!
           hashset-has?
@@ -38,22 +44,29 @@
           stack-push!))
   (import
     (only (scheme base)
+          <
           begin
           cadr
           cond
           define
           define-values
           else
+          equal?
+          if
           lambda
+          length
           let
           list
           map
           member
+          not
           null?
           quote
           reverse
           unless
-          values))
+          values
+          vector
+          when))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
