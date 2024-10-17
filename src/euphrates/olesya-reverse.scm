@@ -95,33 +95,13 @@
       (olesya:syntax:rule:destruct rule 'impossible))
 
     (olesya:syntax:rule:make
-     (olesya:syntax:rule:make prefix premise)
-     (olesya:syntax:rule:make prefix consequence)))
+     rule (olesya:syntax:rule:make prefix consequence)))
 
-  (define (generalization-rule? rule)
+  (define (assumption-safe-rule? rule subject)
     (define-values (premise consequence)
       (olesya:syntax:rule:destruct rule 'impossible))
 
-    (symbol? premise))
-
-  (define (term-rule? rule)
-    (define-values (premise consequence)
-      (olesya:syntax:rule:destruct rule 'impossible))
-
-    (olesya:syntax:term? premise))
-
-  (define (rule-rule? rule)
-    (define-values (premise consequence)
-      (olesya:syntax:rule:destruct rule 'impossible))
-
-    (olesya:syntax:rule? premise))
-
-  (define (assumption-safe-rule? rule)
-    (cond
-     ((term-rule? rule) #t)
-     ((rule-rule? rule) #t)
-     ((generalization-rule? rule) #f)
-     (else (raisu-fmt 'unknown-rule-kind@8123713 rule))))
+    (equal? premise subject))
 
   (define (callback/substitution operation result)
     (define-values (rule subject)
@@ -132,7 +112,7 @@
         (add-constructed! result))
 
     (when (assumed? subject)
-      (unless (assumption-safe-rule? rule)
+      (unless (assumption-safe-rule? rule subject)
         (add-axiom! (bring-rule-down rule)))))
 
   (define (callback/term operation result)

@@ -40,7 +40,6 @@
           olesya:trace:in-eval?
           olesya:trace:let-stack
           olesya:trace:with-callback))
-  (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -57,6 +56,7 @@
           define
           define-values
           else
+          equal?
           if
           lambda
           length
@@ -67,7 +67,6 @@
           quote
           reverse
           set!
-          symbol?
           unless
           values
           when))
