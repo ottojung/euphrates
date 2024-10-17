@@ -127,7 +127,7 @@
     (add-constructed! result))
 
   (define (callback/let operation result)
-    (add-assumed! result))
+    'pass)
 
   (define (callback operation result)
     (update-assumptions-depth!)
