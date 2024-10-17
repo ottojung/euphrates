@@ -5,6 +5,7 @@
     lexical-scope-make
     lexical-scope-set!
     lexical-scope-ref
+    lexical-scope-has?
     lexical-scope-stage!
     lexical-scope-unstage!
     lexical-scope-namespace)
@@ -29,17 +30,21 @@
           stack-push!))
   (import
     (only (scheme base)
+          _
           begin
           car
           cdr
           cons
           define
+          define-syntax
           eq?
           equal?
           if
+          lambda
           let
           null?
           quote
+          syntax-rules
           values))
   (import (only (scheme case-lambda) case-lambda))
   (cond-expand

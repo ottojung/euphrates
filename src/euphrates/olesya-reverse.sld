@@ -2,12 +2,9 @@
 (define-library
   (euphrates olesya-reverse)
   (export olesya:reverse)
-  (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates hashmap)
           hashmap-has?
-          hashmap-ref
           hashmap-set!
           make-hashmap))
   (import
@@ -15,6 +12,13 @@
           hashset-add!
           hashset-has?
           make-hashset))
+  (import
+    (only (euphrates lexical-scope)
+          lexical-scope-has?
+          lexical-scope-make
+          lexical-scope-set!
+          lexical-scope-stage!
+          lexical-scope-unstage!))
   (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
@@ -36,6 +40,7 @@
           olesya:trace:in-eval?
           olesya:trace:let-stack
           olesya:trace:with-callback))
+  (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu-star) raisu*))
   (import
     (only (euphrates stack)
@@ -45,27 +50,26 @@
   (import
     (only (scheme base)
           <
+          >
           begin
           cadr
           cond
           define
           define-values
           else
-          equal?
           if
           lambda
           length
-          let
           list
           map
           member
-          not
-          null?
+          or
           quote
           reverse
+          set!
+          symbol?
           unless
           values
-          vector
           when))
   (cond-expand
     (guile (import (only (guile) include-from-path))

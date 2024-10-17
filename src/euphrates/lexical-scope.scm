@@ -42,16 +42,35 @@
                   (values))
                 (loop (cdr lst)))))))))
 
-(define (lexical-scope-ref scope key default)
-  (define st (lexical-scope-unwrap scope))
-  (define lst (stack->list st))
-  (define unique (make-unique))
-  (let loop ((lst lst))
-    (if (null? lst) default
-        (let ((get (hashmap-ref (cdr (car lst)) key unique)))
-          (if (eq? get unique)
-              (loop (cdr lst))
-              get)))))
+(define-syntax lexical-scope-ref
+  (syntax-rules ()
+    ((_ scope key default)
+     (let ()
+       (define st (lexical-scope-unwrap scope))
+       (define lst (stack->list st))
+       (define unique (make-unique))
+       (let loop ((lst lst))
+         (if (null? lst) default
+             (let ((get (hashmap-ref (cdr (car lst)) key unique)))
+               (if (eq? get unique)
+                   (loop (cdr lst))
+                   get))))))))
+
+(define lexical-scope-has?
+  (let ()
+    (define unique (make-unique))
+    (lambda (scope key)
+      (define st (lexical-scope-unwrap scope))
+      (define lst (stack->list st))
+      (let loop ((lst lst))
+        (if (null? lst) #f
+            (let ()
+              (define get
+                (hashmap-ref (cdr (car lst)) key unique))
+
+              (if (eq? get unique)
+                  (loop (cdr lst))
+                  #t)))))))
 
 (define lexical-scope-stage!
   (case-lambda

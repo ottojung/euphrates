@@ -76,7 +76,8 @@
                       (list (quote name) (quote expr))
                       (olesya:trace:let-stack))))
        (let ((name expr))
-         (define result (olesya:trace:let lets . bodies))
+         (define result
+           (olesya:trace:let lets . bodies))
          (define operation
            (olesya:treeify:let ((name expr)) result))
          (define output

@@ -7,14 +7,17 @@
     (only (euphrates olesya-reverse) olesya:reverse))
   (import
     (only (scheme base)
+          =
           begin
           define
           equal?
+          if
           let
           list
           map
           quote
           unless))
+  (import (only (scheme eval) eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

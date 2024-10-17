@@ -24,106 +24,133 @@
 
 (define (olesya:reverse:make-analyzer)
 
-  (define created-objects-map
+  (define constructed-objects
     (make-hashmap))
   (define axioms-stack
     (stack-make))
   (define axioms-set
     (make-hashset))
+  (define assumed-objects
+    (lexical-scope-make))
+
+  (define (constructed? object)
+    (hashmap-has? constructed-objects object))
+
+  (define (postulated? object)
+    (hashset-has? axioms-set object))
+
+  (define (assumed? object)
+    (lexical-scope-has? assumed-objects object))
+
+  (define (add-constructed! object)
+    (unless (assumed? object)
+      (unless (postulated? object)
+        (hashmap-set! constructed-objects object #t))))
 
   (define (add-axiom! object)
-    (unless (hashmap-has? created-objects-map object)
-      (unless (hashset-has? axioms-set object)
-        (hashset-add! axioms-set object)
-        (stack-push! axioms-stack object))))
+    (if (member object (supposed-objects-list))
+        (add-assumed! object)
+        (unless (constructed? object)
+          (unless (assumed? object)
+            (add-constructed! object)
+            (hashset-add! axioms-set object)
+            (stack-push! axioms-stack object)))))
 
-  (define add-created!
-    (let ()
-      (define default (vector))
-      (lambda (object)
-        (define letstack (olesya:trace:let-stack))
-        (define current-level
-          (length letstack))
-        (define existing
-          (hashmap-ref created-objects-map object default))
-        (define found?
-          (not (equal? existing default)))
+  (define (add-assumed! object)
+    (unless (constructed? object)
+      (unless (postulated? object)
+        (lexical-scope-set! assumed-objects object #t))))
 
-        (if found?
-            (let ()
-              (define existing-level
-                (length existing))
+  (define last-assumptions-depth
+    0)
 
-              (when (< current-level existing-level)
-                (let ()
-                  (define supposedterms (map cadr letstack))
-                  (hashmap-set! created-objects-map object supposedterms))))
+  (define (current-assumptions-depth)
+    (define letstack (olesya:trace:let-stack))
+    (length letstack))
 
-            (let ()
-              (define supposedterms (map cadr letstack))
-              (hashmap-set! created-objects-map object supposedterms))))))
+  (define (update-assumptions-depth!)
+    (define new-depth
+      (current-assumptions-depth))
+
+    (cond
+     ((< new-depth last-assumptions-depth)
+      (lexical-scope-unstage! assumed-objects))
+     ((> new-depth last-assumptions-depth)
+      (lexical-scope-stage! assumed-objects)))
+
+    (set! last-assumptions-depth new-depth))
+
+  (define (supposed-objects-list)
+    (define letstack (olesya:trace:let-stack))
+    (map cadr letstack))
+
+  (define (bring-rule-down rule)
+    (define prefix
+      (list-fold/semigroup
+       (lambda (acc cur)
+         (olesya:syntax:rule:make acc cur))
+       (supposed-objects-list)))
+
+    (define-values (premise consequence)
+      (olesya:syntax:rule:destruct rule 'impossible))
+
+    (olesya:syntax:rule:make
+     (olesya:syntax:rule:make prefix premise)
+     (olesya:syntax:rule:make prefix consequence)))
+
+  (define (generalization-rule? rule)
+    (define-values (premise consequence)
+      (olesya:syntax:rule:destruct rule 'impossible))
+
+    (symbol? premise))
+
+  (define (term-rule? rule)
+    (define-values (premise consequence)
+      (olesya:syntax:rule:destruct rule 'impossible))
+
+    (olesya:syntax:term? premise))
+
+  (define (rule-rule? rule)
+    (define-values (premise consequence)
+      (olesya:syntax:rule:destruct rule 'impossible))
+
+    (olesya:syntax:rule? premise))
+
+  (define (assumption-safe-rule? rule)
+    (cond
+     ((term-rule? rule) #t)
+     ((rule-rule? rule) #t)
+     ((generalization-rule? rule) #f)
+     (else (raisu-fmt 'unknown-rule-kind@8123713 rule))))
 
   (define (callback/substitution operation result)
     (define-values (rule subject)
       (olesya:substitution:destruct operation))
 
-    (define letstack (olesya:trace:let-stack))
-    (define supposedterms (map cadr letstack))
-    (unless (null? letstack)
-      (let ()
-        (debug "")
-        (debug "")
-        (debug "mapping")
-        (debugs letstack)
-        (debug "op: ~s" operation)
-        (debugs result)
+    (if (or (assumed? subject) (assumed? rule))
+        (add-assumed! result)
+        (add-constructed! result))
 
-        (define prefix
-          (list-fold/semigroup
-           (lambda (acc cur)
-             (olesya:syntax:rule:make acc cur))
-           supposedterms))
-
-        (debugs prefix)
-
-        (define-values (premise consequence)
-          (olesya:syntax:rule:destruct rule 'impossible))
-
-        (define prefixed-rule
-          (olesya:syntax:rule:make
-           (olesya:syntax:rule:make prefix premise)
-           (olesya:syntax:rule:make prefix consequence)))
-
-        (debugs prefixed-rule)
-
-        ))
-
-    (add-axiom! rule)
-    (add-created! result)
-
-    ;; (debugs rule)
-    ;; (debugs subject)
-
-    0)
+    (when (assumed? subject)
+      (unless (assumption-safe-rule? rule)
+        (add-axiom! (bring-rule-down rule)))))
 
   (define (callback/term operation result)
     (define letstack (olesya:trace:let-stack))
     (define supposedterms (map cadr letstack))
-    (unless (member result supposedterms)
-      (add-axiom! result)
-      (add-created! result)))
+    (add-axiom! result))
 
   (define (callback/rule operation result)
-    (add-axiom! result)
-    (add-created! result))
+    (add-axiom! result))
 
   (define (callback/eval operation result)
-    (add-created! result))
+    (add-constructed! result))
 
   (define (callback/let operation result)
-    (add-created! result))
+    (add-assumed! result))
 
   (define (callback operation result)
+    (update-assumptions-depth!)
     (unless (olesya:trace:in-eval?)
       (cond
        ((olesya:substitution? operation)
