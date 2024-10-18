@@ -6,8 +6,6 @@
 ;; This function takes an Olesya program,
 ;; and returns all the axioms that the program relies on.
 ;;
-;; It also crashes when there are unexpected transformations.
-;;
 
 
 (define (olesya:reverse program)
