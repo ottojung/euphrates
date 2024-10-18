@@ -85,8 +85,7 @@
   (define (bring-rule-down rule)
     (define prefix
       (list-fold/semigroup
-       (lambda (acc cur)
-         (olesya:syntax:rule:make acc cur))
+       olesya:syntax:rule:make
        (supposed-objects-list)))
 
     (define-values (premise consequence)
