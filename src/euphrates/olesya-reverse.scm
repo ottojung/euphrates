@@ -103,15 +103,13 @@
 
     (equal? premise subject))
 
-  (define (specification-rule? rule)
-    (define-values (premise consequence)
-      (olesya:syntax:rule:destruct rule 'impossible))
-
-    (symbol? premise))
-
-  (define (dangerous-rule? object)
+  (define (specification-rule? object)
     (and (olesya:syntax:rule? object)
-         (specification-rule? object)))
+         (let ()
+           (define-values (premise consequence)
+             (olesya:syntax:rule:destruct object 'impossible))
+
+           (symbol? premise))))
 
   (define (callback/substitution operation result)
     (define-values (rule subject)
@@ -121,8 +119,8 @@
         (add-assumed! result)
         (add-constructed! result))
 
-    (when (dangerous-rule? subject)
-      (unless (dangerous-rule? result)
+    (when (specification-rule? subject)
+      (unless (specification-rule? result)
         (add-axiom! (olesya:syntax:rule:make subject result))))
 
     (when (assumed? subject)

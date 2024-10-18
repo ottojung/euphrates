@@ -61,6 +61,7 @@
           if
           lambda
           length
+          let
           list
           map
           member
