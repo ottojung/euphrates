@@ -50,6 +50,7 @@
     (only (scheme base)
           <
           >
+          and
           begin
           cadr
           cond
@@ -67,6 +68,7 @@
           quote
           reverse
           set!
+          symbol?
           unless
           values
           when))
