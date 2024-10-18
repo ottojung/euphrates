@@ -113,11 +113,9 @@
       (olesya:substitution:destruct operation))
 
     (define expanded-subject
-      (list-fold/semigroup
-       olesya:syntax:rule:make
-       (supposed-objects-list))
-      (olesya:syntax:rule:make
-       rule (olesya:syntax:rule:make prefix consequence)))
+      (if (assumed? subject)
+          (expand-assumed-object subject)
+          subject))
 
     (if (or (assumed? subject) (assumed? rule))
         (add-assumed! result)
