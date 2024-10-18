@@ -112,6 +112,13 @@
     (define-values (rule subject)
       (olesya:substitution:destruct operation))
 
+    (define expanded-subject
+      (list-fold/semigroup
+       olesya:syntax:rule:make
+       (supposed-objects-list))
+      (olesya:syntax:rule:make
+       rule (olesya:syntax:rule:make prefix consequence)))
+
     (if (or (assumed? subject) (assumed? rule))
         (add-assumed! result)
         (add-constructed! result))
