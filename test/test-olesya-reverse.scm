@@ -295,3 +295,28 @@
  '((rule R (term (W)))
    (rule (rule R (term (W)))
          (rule (term R) (term (W))))))
+
+
+(test-case
+ ;;
+ ;; Some proof with unjustified rewrite.
+ ;;
+
+ '(begin
+    (define ax1
+      (rule M (term (W))))
+    (define ax2
+      (map (rule M (term R)) ax1))
+
+    (define thm
+      (let ((x (term R)))
+        (map ax2 x)))
+
+    thm
+
+    )
+
+ '((rule M (term (W)))
+   (rule M (term R))
+   (rule (rule M (term (W)))
+         (rule (term R) (term (W))))))
