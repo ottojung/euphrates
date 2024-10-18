@@ -112,11 +112,6 @@
     (define-values (rule subject)
       (olesya:substitution:destruct operation))
 
-    (define expanded-subject
-      (if (assumed? subject)
-          (expand-assumed-object subject)
-          subject))
-
     (if (or (assumed? subject) (assumed? rule))
         (add-assumed! result)
         (add-constructed! result))
