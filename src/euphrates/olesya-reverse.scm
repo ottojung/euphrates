@@ -119,7 +119,7 @@
     (when (specification-rule? subject)
       (unless (specification-rule? result)
         (if (assumed? subject)
-            (add-axiom! (olesya:syntax:rule:make (bring-rule-down subject) result))
+            (add-axiom! (bring-rule-down (olesya:syntax:rule:make subject) result))
             (add-axiom! (olesya:syntax:rule:make subject result)))))
 
     (when (assumed? subject)
