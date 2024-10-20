@@ -32,9 +32,6 @@
               (equal? existing instance))
             (add-rule! template instance)))
 
-       ((symbol? instance)
-        #f)
-
        (else
         (and (pair? template)
              (pair? instance)
