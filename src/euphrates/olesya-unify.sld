@@ -31,6 +31,7 @@
           if
           length
           let
+          pair?
           quote
           reverse
           symbol?))

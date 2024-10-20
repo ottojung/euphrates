@@ -36,7 +36,9 @@
         #f)
 
        (else
-        (and (equal? (length template)
+        (and (pair? template)
+             (pair? instance)
+             (equal? (length template)
                      (length instance))
              (equal? (car template)
                      (car instance))
