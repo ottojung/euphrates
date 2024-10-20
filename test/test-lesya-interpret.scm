@@ -612,7 +612,7 @@
     )
 
  `(error only-allowed-on-top-level
-         ("This operation is only allowed on toplevel: (lesya:language:map/unsafe rule body).")
+         ("This operation is only allowed on toplevel: (lesya:interpret:map/unsafe rule body).")
          (r1-internal x)))
 
 

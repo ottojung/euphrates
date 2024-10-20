@@ -1,30 +1,72 @@
 
 (define-library
   (euphrates lesya-interpret)
-  (export lesya:interpret)
+  (export
+    lesya:interpret
+    lesya:interpret:axiom
+    lesya:interpret:define
+    lesya:interpret:apply
+    lesya:interpret:begin
+    lesya:interpret:specify
+    lesya:interpret:let
+    lesya:interpret:=
+    lesya:interpret:map
+    lesya:interpret:eval)
   (import
-    (only (euphrates lesya-language)
-          lesya:language:=
-          lesya:language:apply
-          lesya:language:axiom
-          lesya:language:begin
-          lesya:language:define
-          lesya:language:eval
-          lesya:language:let
-          lesya:language:map
-          lesya:language:run
-          lesya:language:specify))
+    (only (euphrates define-tuple) define-tuple))
+  (import
+    (only (euphrates define-type9) define-type9))
+  (import
+    (only (euphrates list-fold-semigroup)
+          list-fold/semigroup))
+  (import
+    (only (euphrates list-length-eq) list-length=))
+  (import
+    (only (euphrates stack)
+          stack->list
+          stack-empty?
+          stack-make
+          stack-pop!
+          stack-push!))
+  (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           =
+          _
+          and
           apply
           begin
+          call-with-current-continuation
+          car
+          cdr
+          cond
+          cons
           define
+          define-syntax
+          define-values
+          else
+          equal?
+          error
+          if
+          lambda
           let
+          list
+          list?
+          make-parameter
           map
+          not
+          null?
+          or
+          pair?
+          parameterize
           quasiquote
           quote
-          unquote))
+          symbol?
+          syntax-rules
+          unless
+          unquote
+          values
+          when))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))
