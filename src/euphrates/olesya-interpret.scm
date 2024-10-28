@@ -112,8 +112,7 @@
 (define olesya:environment
   (environment
    '(rename (euphrates olesya-interpret)
-            (olesya:interpret:eval eval))
-   '(rename (euphrates olesya-interpret)
+            (olesya:interpret:eval eval)
             (olesya:interpret:term term)
             (olesya:interpret:rule rule)
             (olesya:interpret:define define)
