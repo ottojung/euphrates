@@ -7,7 +7,7 @@
     (olesya:trace:with-callback
      (lambda (op result)
        (stack-push! actual/stack (list op result))
-       (assert= (olesya:language:eval op) result))
+       (assert= (olesya:interpret:eval op) result))
 
      (olesya:trace program)))
 

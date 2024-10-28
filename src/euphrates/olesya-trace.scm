@@ -40,7 +40,7 @@
     ((_ term)
      (let ()
        (define operation (olesya:treeify:term term))
-       (define output (olesya:language:term term))
+       (define output (olesya:interpret:term term))
        (olesya:trace:callback operation output)
        output))))
 
@@ -50,7 +50,7 @@
     ((_ premise consequence)
      (let ()
        (define operation (olesya:treeify:rule premise consequence))
-       (define output (olesya:language:rule premise consequence))
+       (define output (olesya:interpret:rule premise consequence))
        (olesya:trace:callback operation output)
        output))))
 
@@ -97,7 +97,7 @@
   (define operation
     (olesya:treeify:map rule body))
   (define output
-    (olesya:language:map rule body))
+    (olesya:interpret:map rule body))
 
   (olesya:trace:callback operation output)
 

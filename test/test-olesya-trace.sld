@@ -5,7 +5,7 @@
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates olesya-interpret)
-          olesya:language:eval))
+          olesya:interpret:eval))
   (import
     (only (euphrates olesya-trace)
           olesya:trace

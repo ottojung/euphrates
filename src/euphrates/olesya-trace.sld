@@ -15,10 +15,10 @@
     olesya:trace:=
     olesya:trace:define)
   (import
-    (only (euphrates olesya-language)
-          olesya:language:map
-          olesya:language:rule
-          olesya:language:term))
+    (only (euphrates olesya-interpret)
+          olesya:interpret:map
+          olesya:interpret:rule
+          olesya:interpret:term))
   (import
     (only (euphrates olesya-syntax)
           olesya:syntax:eval:make
