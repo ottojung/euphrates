@@ -23,16 +23,14 @@
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import
-    (only (euphrates olesya-language)
-          olesya:substitution:destruct
-          olesya:substitution?))
-  (import
     (only (euphrates olesya-syntax)
           olesya:syntax:eval?
           olesya:syntax:let?
           olesya:syntax:rule:destruct
           olesya:syntax:rule:make
           olesya:syntax:rule?
+          olesya:syntax:substitution:destruct
+          olesya:syntax:substitution?
           olesya:syntax:term?))
   (import
     (only (euphrates olesya-trace)

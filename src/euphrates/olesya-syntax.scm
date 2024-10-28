@@ -70,6 +70,40 @@
     (values premise consequence)))
 
 
+(define olesya:syntax:substitution:name
+  'map)
+
+
+(define (olesya:syntax:substitution:make premise consequence)
+  (list olesya:syntax:substitution:name premise consequence))
+
+
+(define (olesya:syntax:substitution:check object)
+  (or
+   (and (not (list? object))
+        (list 'not-a-constructor-for-substitution object))
+   (and (not (pair? object))
+        (list 'null-for-substitution object))
+   (and (not (list-length= 3 object))
+        (list 'bad-length-for-substitution object))
+   (and (not (equal? (car object) olesya:syntax:substitution:name))
+        (list 'wrong-constructor-for-substitution object))))
+
+
+(define (olesya:syntax:substitution? object)
+  (not (olesya:syntax:substitution:check object)))
+
+
+(define (olesya:syntax:substitution:destruct object on-error)
+  (define error (olesya:syntax:substitution:check object))
+  (when error
+    (apply on-error error))
+
+  (let ()
+    (define-tuple (predicate premise consequence) object)
+    (values premise consequence)))
+
+
 (define olesya:syntax:eval:name
   'eval)
 
@@ -134,3 +168,11 @@
     (apply on-error error))
 
   (apply values (cdr object)))
+
+
+(define olesya:syntax:begin:name
+  'begin)
+
+
+(define (olesya:syntax:begin:make . args)
+  (cons 'begin args))

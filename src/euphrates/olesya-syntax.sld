@@ -14,10 +14,15 @@
     olesya:syntax:rule?
     olesya:syntax:rule:check
     olesya:syntax:rule:destruct
+    olesya:syntax:substitution:make
+    olesya:syntax:substitution?
+    olesya:syntax:substitution:check
+    olesya:syntax:substitution:destruct
     olesya:syntax:term:make
     olesya:syntax:term?
     olesya:syntax:term:check
-    olesya:syntax:term:destruct)
+    olesya:syntax:term:destruct
+    olesya:syntax:begin:make)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -29,12 +34,14 @@
           begin
           car
           cdr
+          cons
           define
           equal?
           error
           let
           list
           list?
+          map
           not
           or
           pair?

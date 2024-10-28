@@ -4,7 +4,6 @@
   (export olesya:interpret olesya:language:eval)
   (import
     (only (euphrates olesya-language)
-          olesya:begin:name
           olesya:language:=
           olesya:language:begin
           olesya:language:define
@@ -14,14 +13,10 @@
           olesya:language:run
           olesya:language:term))
   (import
-    (only (scheme base)
-          =
-          begin
-          define
-          let
-          list
-          map
-          quote))
+    (only (euphrates olesya-syntax)
+          olesya:syntax:begin:make))
+  (import
+    (only (scheme base) = begin define let map quote))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

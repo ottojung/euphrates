@@ -3,21 +3,22 @@
 
 
 (define (olesya:treeify:eval expr)
-  (define wrapped (list olesya:begin:name expr)) ;; need this to not polute the outer scope.
-  (list olesya:eval:name
-        (eval wrapped olesya:treeify:environment)))
+  (define wrapped (olesya:syntax:begin:make expr)) ;; need this to not polute the outer scope.
+  (olesya:syntax:eval:make
+   (eval wrapped olesya:treeify:environment)))
 
 
 (define-syntax olesya:treeify:term
   (syntax-rules ()
     ((_ term)
-     (list olesya:term:name (quote term)))))
+     (olesya:syntax:term:make (quote term)))))
 
 
 (define-syntax olesya:treeify:rule
   (syntax-rules ()
     ((_ premise consequence)
-     (list olesya:rule:name (quote premise) (quote consequence)))))
+     (olesya:syntax:rule:make
+      (quote premise) (quote consequence)))))
 
 
 (define-syntax olesya:treeify:define
@@ -32,9 +33,9 @@
      (olesya:treeify:begin . bodies))
 
     ((_  ((name expr) . lets) . bodies)
-     (list olesya:let:name
-           (list (list (quote name) (quote expr)))
-           (olesya:treeify:let lets . bodies)))))
+     (olesya:syntax:let:make
+      (list (list (quote name) (quote expr)))
+      (olesya:treeify:let lets . bodies)))))
 
 
 (define-syntax olesya:treeify:=
@@ -42,8 +43,8 @@
     ((_ a b) a)))
 
 
-(define (olesya:treeify:map . args)
-  (cons olesya:substitution:name args))
+(define (olesya:treeify:map rule subject)
+  (olesya:syntax:substitution:make rule subject))
 
 
 (define-syntax olesya:treeify:begin
@@ -65,5 +66,5 @@
 
 
 (define (olesya:treeify expr)
-  (define wrapped (list olesya:begin:name expr)) ;; need this to not polute the outer scope.
+  (define wrapped (olesya:syntax:begin:make expr)) ;; need this to not polute the outer scope.
   (eval wrapped olesya:treeify:environment))

@@ -16,11 +16,13 @@
     olesya:trace:define)
   (import
     (only (euphrates olesya-language)
-          olesya:eval:name
           olesya:language:map
           olesya:language:rule
-          olesya:language:term
-          olesya:rule:make))
+          olesya:language:term))
+  (import
+    (only (euphrates olesya-syntax)
+          olesya:syntax:eval:make
+          olesya:syntax:rule:make))
   (import
     (only (euphrates olesya-treeify)
           olesya:treeify:let

@@ -11,7 +11,7 @@
 ;;
 ;;
 
-(define olesya:language:state/p
+(define olesya:language:escape/p
   (make-parameter #f))
 
 (define-syntax olesya:language:run
@@ -19,7 +19,7 @@
     ((_ . bodies)
      (call-with-current-continuation
       (lambda (k)
-        (parameterize ((olesya:language:state/p k))
+        (parameterize ((olesya:language:escape/p k))
           (let () . bodies))
         (list 'ok))))))
 
@@ -31,17 +31,13 @@
 (define-syntax olesya:language:term
   (syntax-rules ()
     ((_ term)
-     (list olesya:term:name (quote term)))))
-
-
-(define (olesya:rule:make premise consequence)
-  (list olesya:rule:name premise consequence))
+     (olesya:syntax:term:make (quote term)))))
 
 
 (define-syntax olesya:language:rule
   (syntax-rules ()
     ((_ premise consequence)
-     (olesya:rule:make (quote premise) (quote consequence)))))
+     (olesya:syntax:rule:make (quote premise) (quote consequence)))))
 
 
 (define (olesya:language:beta-reduce term qvarname qreplcement)
@@ -58,83 +54,8 @@
 
 
 (define (olesya:error type . args)
-  (define escape (olesya:language:state/p))
+  (define escape (olesya:language:escape/p))
   (escape (list 'error type args)))
-
-
-(define olesya:substitution:name
-  'map)
-
-(define olesya:eval:name
-  'eval)
-
-(define olesya:rule:name
-  'rule)
-
-(define olesya:term:name
-  'term)
-
-(define olesya:let:name
-  'let)
-
-(define olesya:begin:name
-  'begin)
-
-
-(define (olesya:rule:check rule)
-  (or
-   (and (not (list? rule))
-        (list 'not-a-term-in-rule rule))
-   (and (not (pair? rule))
-        (olesya:error 'null-in-rule rule))
-   (and (not (list-length= 3 rule))
-        (list 'bad-length-of-rule-in-modus-ponens rule))
-   (let ()
-     (define-tuple (predicate premise conclusion) rule)
-     (and (not (equal? predicate olesya:rule:name))
-          (list 'wrong-constructor-for-rule rule)))))
-
-
-(define (olesya:rule? rule)
-  (not (olesya:rule:check rule)))
-
-
-(define (olesya:rule:destruct rule)
-  (define error (olesya:rule:check rule))
-  (when error
-    (apply olesya:error error))
-
-  (let ()
-    (define-tuple (predicate premise conclusion) rule)
-    (values premise conclusion)))
-
-
-(define (olesya:substitution:check substitution)
-  (or
-   (and (not (list? substitution))
-        (list 'not-a-term-in-substitution substitution))
-   (and (not (pair? substitution))
-        (olesya:error 'null-in-substitution substitution))
-   (and (not (list-length= 3 substitution))
-        (list 'bad-length-of-substitution-in-modus-ponens substitution))
-   (let ()
-     (define-tuple (predicate rule subject) substitution)
-     (and (not (equal? predicate olesya:substitution:name))
-          (list 'wrong-constructor-for-substitution substitution)))))
-
-
-(define (olesya:substitution? substitution)
-  (not (olesya:substitution:check substitution)))
-
-
-(define (olesya:substitution:destruct substitution)
-  (define error (olesya:substitution:check substitution))
-  (when error
-    (apply olesya:error error))
-
-  (let ()
-    (define-tuple (predicate rule subject) substitution)
-    (values rule subject)))
 
 
 (define-syntax olesya:language:define
@@ -152,7 +73,7 @@
      (let ()
        (define name expr)
        (define result (olesya:language:let lets . bodies))
-       (olesya:rule:make name result)))))
+       (olesya:syntax:rule:make name result)))))
 
 
 (define-syntax olesya:language:=
@@ -171,8 +92,9 @@
 
 
 (define (olesya:language:map rule body)
+  (define escape (olesya:language:escape/p))
   (define-values (premise conclusion)
-    (olesya:rule:destruct rule))
+    (olesya:syntax:rule:destruct rule escape))
 
   (olesya:language:beta-reduce
    body premise conclusion))

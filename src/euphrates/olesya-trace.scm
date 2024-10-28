@@ -24,7 +24,7 @@
 
 (define (olesya:trace:eval expr)
   (define operation
-    (list olesya:eval:name expr))
+    (olesya:syntax:eval:make expr))
 
   (define output
     (parameterize ((olesya:trace:in-eval? #t))
@@ -81,7 +81,7 @@
          (define operation
            (olesya:treeify:let ((name expr)) result))
          (define output
-           (olesya:rule:make name result))
+           (olesya:syntax:rule:make name result))
          (olesya:trace:callback operation output)
          output)))))
 

@@ -3,7 +3,7 @@
 
 
 (define (olesya:language:eval expr)
-  (define wrapped (list olesya:begin:name expr)) ;; need this to not polute the outer scope.
+  (define wrapped (olesya:syntax:begin:make expr)) ;; need this to not polute the outer scope.
   (eval wrapped olesya:environment))
 
 

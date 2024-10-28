@@ -2,13 +2,6 @@
 (define-library
   (euphrates olesya-language)
   (export
-    olesya:term:name
-    olesya:rule:name
-    olesya:eval:name
-    olesya:substitution:name
-    olesya:let:name
-    olesya:begin:name
-    olesya:rule:make
     olesya:substitution?
     olesya:substitution:destruct
     olesya:language:run
@@ -20,14 +13,13 @@
     olesya:language:=
     olesya:language:define)
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
-    (only (euphrates list-length-eq) list-length=))
+    (only (euphrates olesya-syntax)
+          olesya:syntax:rule:destruct
+          olesya:syntax:rule:make
+          olesya:syntax:term:make))
   (import
     (only (scheme base)
           _
-          and
-          apply
           begin
           call-with-current-continuation
           car
@@ -47,16 +39,10 @@
           list?
           make-parameter
           map
-          not
           null?
-          or
-          pair?
           parameterize
           quote
-          syntax-rules
-          values
-          when))
-  (import (only (scheme eval) eval))
+          syntax-rules))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

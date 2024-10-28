@@ -13,19 +13,18 @@
     olesya:treeify:=
     olesya:treeify:define)
   (import
-    (only (euphrates olesya-language)
-          olesya:begin:name
-          olesya:eval:name
-          olesya:let:name
-          olesya:rule:name
-          olesya:substitution:name
-          olesya:term:name))
+    (only (euphrates olesya-syntax)
+          olesya:syntax:begin:make
+          olesya:syntax:eval:make
+          olesya:syntax:let:make
+          olesya:syntax:rule:make
+          olesya:syntax:substitution:make
+          olesya:syntax:term:make))
   (import
     (only (scheme base)
           =
           _
           begin
-          cons
           define
           define-syntax
           let

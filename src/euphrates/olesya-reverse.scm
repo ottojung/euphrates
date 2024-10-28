@@ -110,7 +110,7 @@
 
   (define (callback/substitution operation result)
     (define-values (rule subject)
-      (olesya:substitution:destruct operation))
+      (olesya:syntax:substitution:destruct operation 'impossible))
 
     (if (or (assumed? subject) (assumed? rule))
         (add-assumed! result)
@@ -142,7 +142,7 @@
     (update-assumptions-depth!)
     (unless (olesya:trace:in-eval?)
       (cond
-       ((olesya:substitution? operation)
+       ((olesya:syntax:substitution? operation)
         (callback/substitution operation result))
        ((olesya:syntax:term? operation)
         (callback/term operation result))
