@@ -22,15 +22,7 @@
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
-    (only (euphrates define-type9) define-type9))
-  (import
     (only (euphrates list-length-eq) list-length=))
-  (import
-    (only (euphrates stack)
-          stack->list
-          stack-empty?
-          stack-make))
-  (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
           _

@@ -11,61 +11,6 @@
 ;;
 ;;
 
-
-;;
-;; ===============================================
-;; TODO: implement following design:
-;;
-;; (let x (term P)
-;;      (rule x x))
-;;
-;; ->
-;;
-;; (map (rule x (term P))
-;;      (rule x x))
-;;
-;; via:
-;;
-;; - (let x T (rule T x))
-;; - (rule (let x T B) (map (rule x T) B))
-;;
-;; example transform:
-;;
-;; (rule (let x (term P) B)
-;;       (let x (term Q) B))
-;;
-;; via:
-;;
-;; (rule (rule P Q)
-;;       (rule (let x P B) (let x Q B)))
-;;
-;; ===============================================
-;;
-
-
-;; TODO: remove this struct.
-(define-type9 <olesya:struct>
-  (olesya:language:state:struct:construct
-   callstack     ;; Just names of variables being defined.
-   supposedterms ;; The hypothetical terms introduced by `let` in this scope so far.
-   escape        ;; Continuation that returns to the top.
-   )
-
-  olesya:language:state:struct?
-
-  (callstack olesya:language:state:callstack)
-  (supposedterms olesya:language:state:supposedterms)
-  (escape olesya:language:state:escape)
-
-  )
-
-
-(define (olesya:language:state:make escape)
-  (define callstack (stack-make))
-  (define supposedterms (stack-make))
-  (olesya:language:state:struct:construct
-   callstack supposedterms escape))
-
 (define olesya:language:state/p
   (make-parameter #f))
 
@@ -74,34 +19,13 @@
     ((_ . bodies)
      (call-with-current-continuation
       (lambda (k)
-        (define state (olesya:language:state:make k))
-        (parameterize ((olesya:language:state/p state))
+        (parameterize ((olesya:language:state/p k))
           (let () . bodies))
         (list 'ok))))))
 
 (define-syntax olesya:language:begin
   (syntax-rules ()
     ((_ . args) (let () . args))))
-
-
-(define (olesya:get-current-stack)
-  (define struct (olesya:language:state/p))
-  (olesya:language:state:callstack struct))
-
-
-(define (olesya:currently-hyphothetical?)
-  (define struct (olesya:language:state/p))
-  (define supposedterms (olesya:language:state:supposedterms struct))
-  (not (stack-empty? supposedterms)))
-
-
-(define-syntax olesya:check-that-on-toplevel
-  (syntax-rules ()
-    ((_ body)
-     (if (olesya:currently-hyphothetical?)
-         (olesya:error 'only-allowed-on-top-level
-                      (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
-         body))))
 
 
 (define-syntax olesya:language:term
@@ -134,11 +58,8 @@
 
 
 (define (olesya:error type . args)
-  (define state (olesya:language:state/p))
-  (define stack (olesya:language:state:callstack state))
-  (define escape (olesya:language:state:escape state))
-
-  (escape (list 'error type args (stack->list stack))))
+  (define escape (olesya:language:state/p))
+  (escape (list 'error type args)))
 
 
 (define olesya:substitution:name
