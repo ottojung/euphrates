@@ -77,6 +77,9 @@
        (olesya:syntax:rule:make name result)))))
 
 
+;;
+;; TODO: remove this. Instead use `(term (= a b))` and then check if the terms are equal during `olesya:reverse`.
+;;
 (define-syntax olesya:interpret:=
   (syntax-rules ()
     ((_ a b)
