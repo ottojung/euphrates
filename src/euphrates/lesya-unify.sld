@@ -1,7 +1,7 @@
 
 (define-library
-  (euphrates olesya-unify)
-  (export olesya:unify)
+  (euphrates lesya-unify)
+  (export lesya:unify)
   (import
     (only (euphrates hashmap)
           hashmap-has?
@@ -10,9 +10,6 @@
           make-hashmap))
   (import
     (only (euphrates list-and-map) list-and-map))
-  (import
-    (only (euphrates olesya-syntax)
-          olesya:syntax:rule:make))
   (import
     (only (euphrates stack)
           stack->list
@@ -38,5 +35,5 @@
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
-             (include-from-path "euphrates/olesya-unify.scm")))
-    (else (include "olesya-unify.scm"))))
+             (include-from-path "euphrates/lesya-unify.scm")))
+    (else (include "lesya-unify.scm"))))

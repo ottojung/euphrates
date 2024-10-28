@@ -8,7 +8,7 @@
 ;; Importantly: this is not the usual bi-directional unification that is usually performed in logical systems (ex Prolog).
 ;;
 
-(define (olesya:unify template instance)
+(define (lesya:unify template instance)
 
   (define mappings
     (make-hashmap))
@@ -16,7 +16,7 @@
     (stack-make))
   (define (add-rule! left right)
     (hashmap-set! mappings left right)
-    (stack-push! (olesya:syntax:rule:make left right))
+    (stack-push! (lesya:syntax:rule:make left right))
     #t)
 
   (define success?

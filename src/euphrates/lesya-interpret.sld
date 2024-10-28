@@ -13,14 +13,22 @@
     lesya:interpret:map
     lesya:interpret:eval)
   (import
-    (only (euphrates define-tuple) define-tuple))
-  (import
     (only (euphrates define-type9) define-type9))
+  (import
+    (only (euphrates lesya-syntax)
+          lesya:syntax:implication:destruct
+          lesya:syntax:implication:make
+          lesya:syntax:implication?
+          lesya:syntax:rule:destruct
+          lesya:syntax:rule?
+          lesya:syntax:specify:destruct
+          lesya:syntax:specify:make
+          lesya:syntax:specify?
+          lesya:syntax:substitution:destruct
+          lesya:syntax:substitution?))
   (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
-  (import
-    (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates stack)
           stack->list
@@ -56,7 +64,6 @@
           map
           not
           null?
-          or
           pair?
           parameterize
           quasiquote
@@ -64,9 +71,7 @@
           symbol?
           syntax-rules
           unless
-          unquote
-          values
-          when))
+          unquote))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

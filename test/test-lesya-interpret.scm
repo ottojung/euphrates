@@ -577,7 +577,7 @@
       (axiom (if (and X Y) (and Y X))))
 
     (define r1 (map (specify X (P)) and-elim))
-    ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
+    ;; (define r2 (map (rule Y (Q)) r1)) ;; equivalent to one below:
     (define r2 (eval (axiom (map (rule Y (Q)) ,r1))))
 
     (define x

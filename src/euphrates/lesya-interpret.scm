@@ -98,83 +98,9 @@
 
   (escape (list 'error type args (stack->list stack))))
 
-(define lesya:implication:name
-  'if)
-
-(define lesya:substitution:name
-  'map)
-
-(define lesya:specify:name
-  'rule)
-
-(define (lesya:specify:make supposition conclusion)
-  `(,lesya:specify:name ,supposition ,conclusion))
-
-(define (lesya:implication:make supposition conclusion)
-  `(,lesya:implication:name ,supposition ,conclusion))
-
-
-(define (lesya:implication:check implication)
-  (or
-   (and (not (list? implication))
-        (list 'not-a-term-in-implication implication))
-   (and (not (pair? implication))
-        (lesya:error 'null-in-implication implication))
-   (and (not (list-length= 3 implication))
-        (list 'bad-length-of-implication-in-modus-ponens implication))
-   (let ()
-     (define-tuple (predicate premise conclusion) implication)
-
-     (and (not (equal? predicate lesya:implication:name))
-          (list 'non-implication-in-modus-ponens implication)))))
-
-
-(define (lesya:implication? implication)
-  (not (lesya:implication:check implication)))
-
-
-(define (lesya:implication:destruct implication)
-  (define error (lesya:implication:check implication))
-  (when error
-    (apply lesya:error error))
-
-  (let ()
-    (define-tuple (predicate premise conclusion) implication)
-    (values premise conclusion)))
-
-
-(define (lesya:specify:check specify)
-  (or
-   (and (not (list? specify))
-        (list 'not-a-term-in-specify specify))
-   (and (not (pair? specify))
-        (lesya:error 'null-in-specify specify))
-   (and (not (list-length= 3 specify))
-        (list 'bad-length-of-specify-in-modus-ponens specify))
-   (let ()
-     (define-tuple (predicate premise conclusion) specify)
-
-     (and (not (equal? predicate lesya:specify:name))
-          (list 'non-specify-in-modus-ponens specify)))))
-
-
-(define (lesya:specify? specify)
-  (not (lesya:specify:check specify)))
-
-
-(define (lesya:specify:destruct specify)
-  (define error (lesya:specify:check specify))
-  (when error
-    (apply lesya:error error))
-
-  (let ()
-    (define-tuple (predicate premise conclusion) specify)
-    (values premise conclusion)))
-
-
 (define (lesya:interpret:modus-ponens implication argument)
   (define-values (premise conclusion)
-    (lesya:implication:destruct implication))
+    (lesya:syntax:implication:destruct implication lesya:error))
 
   (unless (equal? premise argument)
     (lesya:error 'non-matching-modus-ponens
@@ -194,17 +120,17 @@
        (not (lesya:currently-hyphothetical?))))
 
 
-(define (lesya:specify qvarname qsubterm)
+(define (lesya:syntax:specify qvarname qsubterm)
   (unless (symbol? qvarname)
     (lesya:error 'non-symbol-in-specify qvarname qsubterm))
 
-  (lesya:specify:make qvarname qsubterm))
+  (lesya:syntax:specify:make qvarname qsubterm))
 
 
 (define-syntax lesya:interpret:specify
   (syntax-rules ()
     ((_ varname subterm)
-     (lesya:specify (quasiquote varname) (quasiquote subterm)))))
+     (lesya:syntax:specify (quasiquote varname) (quasiquote subterm)))))
 
 
 (define-syntax lesya:interpret:define
@@ -231,7 +157,7 @@
        (define _re (stack-push! supposedterms x))
        (define result (lesya:interpret:let lets . bodies))
        (stack-pop! supposedterms)
-       (lesya:implication:make x result)))))
+       (lesya:syntax:implication:make x result)))))
 
 
 (define-syntax lesya:interpret:=
@@ -257,10 +183,12 @@
 (define (lesya:interpret:map/unsafe rule body)
   (define-values (premise conclusion)
     (cond
-     ((lesya:implication? rule)
-      (lesya:implication:destruct rule))
-     ((lesya:specify? rule)
-      (lesya:specify:destruct rule))
+     ((lesya:syntax:implication? rule)
+      (lesya:syntax:implication:destruct rule 'impossible))
+     ((lesya:syntax:specify? rule)
+      (lesya:syntax:specify:destruct rule 'impossible))
+     ((lesya:syntax:rule? rule)
+      (lesya:syntax:rule:destruct rule 'impossible))
      (else
       (lesya:error 'neither-an-implication-nor-specify-in-substitution rule))))
 
@@ -275,9 +203,10 @@
       (define operation (car expr))
 
       (cond
-       ((equal? operation lesya:substitution:name)
+       ((lesya:syntax:substitution? expr)
         (let ()
-          (define-tuple (operation rule body) expr)
+          (define-values (rule body)
+            (lesya:syntax:substitution:destruct expr 'impossible))
           (lesya:interpret:map/unsafe rule body)))
 
        (else
