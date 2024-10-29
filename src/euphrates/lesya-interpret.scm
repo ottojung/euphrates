@@ -28,29 +28,8 @@
   )
 
 
-(define (lesya:interpret:state:make escape)
-  (define callstack (stack-make))
-  (define supposedterms (stack-make))
-  (lesya:interpret:state:struct:construct
-   callstack supposedterms escape))
-
 (define lesya:interpret:state/p
   (make-parameter #f))
-
-(define-syntax lesya:interpret:run
-  (syntax-rules ()
-    ((_ . bodies)
-     (call-with-current-continuation
-      (lambda (k)
-        (define state (lesya:interpret:state:make k))
-        (parameterize ((lesya:interpret:state/p state))
-          (let () . bodies))
-        (list 'ok))))))
-
-(define-syntax lesya:interpret:begin
-  (syntax-rules ()
-    ((_ . args) (begin . args))))
-
 
 (define (lesya:get-current-stack)
   (define struct (lesya:interpret:state/p))
@@ -63,33 +42,12 @@
   (not (stack-empty? supposedterms)))
 
 
-(define-syntax lesya:check-that-on-toplevel
-  (syntax-rules ()
-    ((_ body)
-     (if (lesya:currently-hyphothetical?)
-         (lesya:error 'only-allowed-on-top-level
-                      (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
-         body))))
+(define (lesya:interpret:state:make escape)
+  (define callstack (stack-make))
+  (define supposedterms (stack-make))
+  (lesya:interpret:state:struct:construct
+   callstack supposedterms escape))
 
-
-(define-syntax lesya:interpret:axiom
-  (syntax-rules ()
-    ((_ term)
-     (lesya:check-that-on-toplevel
-      (quasiquote term)))))
-
-
-(define (lesya:interpret:beta-reduce initial-term qvarname qreplcement)
-  (let loop ((term initial-term))
-    (cond
-     ((equal? term qvarname)
-      qreplcement)
-     ((null? term)
-      term)
-     ((list? term)
-      (cons (car term) (map loop (cdr term))))
-     (else
-      term))))
 
 (define (lesya:error type . args)
   (define state (lesya:interpret:state/p))
@@ -111,8 +69,6 @@
 
   conclusion)
 
-(define (lesya:interpret:apply . arguments)
-  (list-fold/semigroup lesya:interpret:modus-ponens arguments))
 
 (define (lesya:currently-at-toplevel?)
   (define stack (lesya:get-current-stack))
@@ -120,17 +76,77 @@
        (not (lesya:currently-hyphothetical?))))
 
 
-(define (lesya:syntax:specify qvarname qsubterm)
-  (unless (symbol? qvarname)
-    (lesya:error 'non-symbol-in-specify qvarname qsubterm))
+(define (lesya:interpret:beta-reduce initial-term qvarname qreplcement)
+  (let loop ((term initial-term))
+    (cond
+     ((equal? term qvarname)
+      qreplcement)
+     ((null? term)
+      term)
+     ((list? term)
+      (cons (car term) (map loop (cdr term))))
+     (else
+      term))))
 
-  (lesya:syntax:specify:make qvarname qsubterm))
+
+(define (lesya:interpret:map/unsafe rule body)
+  (define-values (premise conclusion)
+    (cond
+     ((lesya:syntax:implication? rule)
+      (lesya:syntax:implication:destruct rule 'impossible))
+     ((lesya:syntax:specify? rule)
+      (lesya:syntax:specify:destruct rule 'impossible))
+     ((lesya:syntax:rule? rule)
+      (lesya:syntax:rule:destruct rule 'impossible))
+     (else
+      (lesya:error 'neither-an-implication-nor-specify-in-substitution rule))))
+
+  (lesya:interpret:beta-reduce
+   body premise conclusion))
+
+
+(define-syntax lesya:interpret:run
+  (syntax-rules ()
+    ((_ . bodies)
+     (call-with-current-continuation
+      (lambda (k)
+        (define state (lesya:interpret:state:make k))
+        (parameterize ((lesya:interpret:state/p state))
+          (let () . bodies))
+        (list 'ok))))))
+
+
+(define-syntax lesya:interpret:begin
+  (syntax-rules ()
+    ((_ . args) (begin . args))))
+
+
+(define-syntax lesya:check-that-on-toplevel
+  (syntax-rules ()
+    ((_ body)
+     (if (lesya:currently-hyphothetical?)
+         (lesya:error 'only-allowed-on-top-level
+                      (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
+         body))))
+
+
+(define-syntax lesya:interpret:axiom
+  (syntax-rules ()
+    ((_ term)
+     (lesya:check-that-on-toplevel
+      (quasiquote term)))))
+
+
+
+(define (lesya:interpret:apply . arguments)
+  (list-fold/semigroup lesya:interpret:modus-ponens arguments))
 
 
 (define-syntax lesya:interpret:specify
   (syntax-rules ()
     ((_ varname subterm)
-     (lesya:syntax:specify (quasiquote varname) (quasiquote subterm)))))
+     (lesya:syntax:specify:make
+      (quasiquote varname) (quasiquote subterm)))))
 
 
 (define-syntax lesya:interpret:define
@@ -178,22 +194,6 @@
 (define (lesya:interpret:map rule body)
   (lesya:check-that-on-toplevel
    (lesya:interpret:map/unsafe rule body)))
-
-
-(define (lesya:interpret:map/unsafe rule body)
-  (define-values (premise conclusion)
-    (cond
-     ((lesya:syntax:implication? rule)
-      (lesya:syntax:implication:destruct rule 'impossible))
-     ((lesya:syntax:specify? rule)
-      (lesya:syntax:specify:destruct rule 'impossible))
-     ((lesya:syntax:rule? rule)
-      (lesya:syntax:rule:destruct rule 'impossible))
-     (else
-      (lesya:error 'neither-an-implication-nor-specify-in-substitution rule))))
-
-  (lesya:interpret:beta-reduce
-   body premise conclusion))
 
 
 (define (lesya:interpret:eval expr)

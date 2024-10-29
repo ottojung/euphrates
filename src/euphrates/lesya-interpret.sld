@@ -68,7 +68,6 @@
           parameterize
           quasiquote
           quote
-          symbol?
           syntax-rules
           unless
           unquote))
