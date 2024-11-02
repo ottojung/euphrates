@@ -1,15 +1,173 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 (define (lesya:compile/->olesya program)
 
   
 
 
 
-  0)
+  'ignore-ok)
 
 
+
+(define lesya:compile/->olesya:environment/p
+  (make-parameter #f))
+
+
+
+(define (lesya:compile/->olesya/2 program)
+  (define code 'TODO)
+  (define interpretation 'TODO)
+  (values code interpretation))
+
+
+
+(define-syntax lesya:compile/->olesya:axiom
+  (syntax-rules ()
+    ((_ term)
+     (let ()
+       (define code
+         (olesya:syntax:term:make (quote term)))
+       (define interpretation
+         code)
+       (values code interpretation)))))
+
+
+(define-syntax lesya:compile/->olesya:specify
+  (syntax-rules ()
+    ((_ varname subterm)
+     (let ()
+       (define code
+         (olesya:syntax:rule:make
+          (quasiquote varname) (quasiquote subterm)))
+       (define interpretation
+         code)
+       (values code interpretation)))))
+
+
+(define-syntax lesya:compile/->olesya:begin
+  (syntax-rules ()
+    ((_ arg)
+     (lesya:compile/->olesya/2 arg))
+    ((_ arg . args)
+     (begin . args))))
+
+
+;;
+;;
+;;
+;; Throughout a lasting night of darkness
+;; Ne'er shall I rest my own eyes,
+;; Always searching for the guiding star,
+;; The bright empress of the dark night skies.
+;;
+;;
+
+
+(define-type9 <lesya:struct>
+  (lesya:interpret:state:struct:construct
+   callstack     ;; Just names of variables being defined.
+   supposedterms ;; The hypothetical terms introduced by `let` in this scope so far.
+   escape        ;; Continuation that returns to the top.
+   )
+
+  lesya:interpret:state:struct?
+
+  (callstack lesya:interpret:state:callstack)
+  (supposedterms lesya:interpret:state:supposedterms)
+  (escape lesya:interpret:state:escape)
+
+  )
+
+
+(define lesya:interpret:state/p
+  (make-parameter #f))
+
+(define (lesya:get-current-stack)
+  (define struct (lesya:interpret:state/p))
+  (lesya:interpret:state:callstack struct))
+
+
+(define (lesya:currently-hyphothetical?)
+  (define struct (lesya:interpret:state/p))
+  (define supposedterms (lesya:interpret:state:supposedterms struct))
+  (not (stack-empty? supposedterms)))
+
+
+(define (lesya:interpret:state:make escape)
+  (define callstack (stack-make))
+  (define supposedterms (stack-make))
+  (lesya:interpret:state:struct:construct
+   callstack supposedterms escape))
+
+
+(define (lesya:error type . args)
+  (define state (lesya:interpret:state/p))
+  (define stack (lesya:interpret:state:callstack state))
+  (define escape (lesya:interpret:state:escape state))
+
+  (escape (list 'error type args (stack->list stack))))
+
+(define (lesya:interpret:modus-ponens implication argument)
+  (define-values (premise conclusion)
+    (lesya:syntax:implication:destruct implication lesya:error))
+
+  (unless (equal? premise argument)
+    (lesya:error 'non-matching-modus-ponens
+                 (list 'context:
+                       'argument: argument
+                       'implication: implication
+                       'endcontext:)))
+
+  conclusion)
+
+
+(define (lesya:currently-at-toplevel?)
+  (define stack (lesya:get-current-stack))
+  (and (stack-empty? stack)
+       (not (lesya:currently-hyphothetical?))))
+
+
+(define (lesya:interpret:beta-reduce initial-term qvarname qreplcement)
+  (let loop ((term initial-term))
+    (cond
+     ((equal? term qvarname)
+      qreplcement)
+     ((null? term)
+      term)
+     ((list? term)
+      (cons (car term) (map loop (cdr term))))
+     (else
+      term))))
+
+
+(define (lesya:interpret:map/unsafe rule body)
+  (define-values (premise conclusion)
+    (cond
+     ((lesya:syntax:implication? rule)
+      (lesya:syntax:implication:destruct rule 'impossible))
+     ((lesya:syntax:specify? rule)
+      (lesya:syntax:specify:destruct rule 'impossible))
+     ((lesya:syntax:rule? rule)
+      (lesya:syntax:rule:destruct rule 'impossible))
+     (else
+      (lesya:error 'neither-an-implication-nor-specify-in-substitution rule))))
+
+  (lesya:interpret:beta-reduce
+   body premise conclusion))
+
+
+(define-syntax lesya:interpret:run
+  (syntax-rules ()
+    ((_ . bodies)
+     (call-with-current-continuation
+      (lambda (k)
+        (define state (lesya:interpret:state:make k))
+        (parameterize ((lesya:interpret:state/p state))
+          (let () . bodies))
+        (list 'ok))))))
 
 
 (define-syntax lesya:interpret:begin

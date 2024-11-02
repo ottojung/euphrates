@@ -22,23 +22,23 @@
 ;;
 
 
-;; (test-case
-;;  ;;
-;;  ;; Basic proof.
-;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
-;;  ;;
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
 
-;;  '(begin
+ '(begin
 
-;;     (define x
-;;       (axiom (if (P) (Q))))
-;;     (define y
-;;       (axiom (if (Q) (R))))
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (axiom (if (Q) (R))))
 
-;;     (define z
-;;       (let ((p (P)))
-;;         (define v1 (apply x p))
-;;         (define v2 (apply y v1))
-;;         v2)))
+    (define z
+      (let ((p (P)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2)))
 
-;;  `ignore-ok)
+ `ignore-ok)
