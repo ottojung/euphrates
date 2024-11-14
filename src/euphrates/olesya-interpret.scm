@@ -108,7 +108,7 @@
 
 
 (define (olesya:interpret:eval expr)
-  (eval expr (olesya:environment)))
+  (eval expr (interaction-environment)))
 
 
 (define (olesya:environment)
@@ -126,4 +126,4 @@
 
 (define (olesya:interpret program)
   (olesya:interpret:run
-   (olesya:interpret:eval program)))
+   (eval program  (olesya:environment))))

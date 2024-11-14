@@ -44,6 +44,8 @@
           quote
           syntax-rules))
   (import (only (scheme eval) environment eval))
+  (import
+    (only (scheme repl) interaction-environment))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
