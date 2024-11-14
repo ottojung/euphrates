@@ -12,8 +12,10 @@
 ;;
 ;;
 
+
 (define olesya:interpret:escape/p
   (make-parameter #f))
+
 
 (define-syntax olesya:interpret:run
   (syntax-rules ()
@@ -24,9 +26,10 @@
           (let () . bodies))
         (list 'ok))))))
 
+
 (define-syntax olesya:interpret:begin
   (syntax-rules ()
-    ((_ . args) (let () . args))))
+    ((_ . args) (begin . args))))
 
 
 (define-syntax olesya:interpret:term
@@ -105,11 +108,10 @@
 
 
 (define (olesya:interpret:eval expr)
-  (define wrapped (olesya:syntax:begin:make expr)) ;; need this to not polute the outer scope.
-  (eval wrapped olesya:environment))
+  (eval expr (olesya:environment)))
 
 
-(define olesya:environment
+(define (olesya:environment)
   (environment
    '(rename (euphrates olesya-interpret)
             (olesya:interpret:eval eval)

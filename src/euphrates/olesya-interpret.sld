@@ -13,7 +13,6 @@
     olesya:interpret:=)
   (import
     (only (euphrates olesya-syntax)
-          olesya:syntax:begin:make
           olesya:syntax:rule:destruct
           olesya:syntax:rule:make
           olesya:syntax:term:make))
