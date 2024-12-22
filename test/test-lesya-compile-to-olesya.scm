@@ -67,13 +67,13 @@
         (define z
           (let ((p (term (P))))
             (let ()
-              (begin
-                (define v1 (map x p))
-                (begin (define v2 (map y v1)) (map y v1))))))
+              (define v1 (map x p))
+              (define v2 (map y v1))
+              (map y v1))))
         (let ((p (term (P))))
           (let ()
-            (begin
-              (define v1 (map x p))
-              (begin (define v2 (map y v1)) (map y v1))))))))
+            (define v1 (map x p))
+            (define v2 (map y v1))
+            (map y v1))))))
 
  )

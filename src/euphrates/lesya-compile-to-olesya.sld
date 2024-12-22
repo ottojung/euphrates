@@ -27,6 +27,7 @@
           lexical-scope-set!
           lexical-scope-stage!
           lexical-scope-unstage!))
+  (import (only (euphrates list-last) list-last))
   (import
     (only (euphrates make-unique) make-unique))
   (import
@@ -48,6 +49,7 @@
           _
           apply
           begin
+          cons
           define
           define-syntax
           define-values

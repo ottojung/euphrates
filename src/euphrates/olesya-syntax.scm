@@ -181,8 +181,8 @@
   'let)
 
 
-(define (olesya:syntax:let:make supposition body)
-  (list olesya:syntax:let:name supposition body))
+(define (olesya:syntax:let:make supposition . bodies)
+  (cons olesya:syntax:let:name (cons supposition bodies)))
 
 
 (define (olesya:syntax:let:check object)

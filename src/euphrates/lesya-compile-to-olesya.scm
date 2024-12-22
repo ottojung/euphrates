@@ -149,19 +149,18 @@
          (private:env))
        (lexical-scope-stage! scope)
        (let ()
-         (define body/quoted
+         (define body-code
            (quote bodies))
-         (define body/wrapped
-           (local-eval
-            (apply olesya:syntax:begin:make body/quoted)))
-         (define-values (body-code body-interpretation)
-           (unwrap body/wrapped))
+         (define bodies/wrapped
+           (map local-eval body-code))
+         (define body-interpretation
+           (wrapped:interpretation (list-last bodies/wrapped)))
          (define supposition
            (list))
          (define body
            body-code)
          (define code
-           (olesya:syntax:let:make supposition body))
+           (apply olesya:syntax:let:make (cons supposition (map wrapped:code bodies/wrapped))))
          (define interpretation body-interpretation)
          (lexical-scope-unstage! scope)
          (wrap code interpretation))))
