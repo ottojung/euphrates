@@ -22,9 +22,10 @@
     ((_ . bodies)
      (call-with-current-continuation
       (lambda (k)
-        (parameterize ((olesya:interpret:escape/p k))
-          (let () . bodies))
-        (list 'ok))))))
+        (define result
+          (parameterize ((olesya:interpret:escape/p k))
+            (let () . bodies)))
+        (list 'ok result))))))
 
 
 (define-syntax olesya:interpret:begin

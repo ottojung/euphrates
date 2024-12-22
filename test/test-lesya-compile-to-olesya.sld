@@ -7,17 +7,13 @@
     (only (euphrates lesya-compile-to-olesya)
           lesya:compile/->olesya))
   (import
-    (only (scheme base)
-          apply
-          begin
-          define
-          equal?
-          if
-          let
-          map
-          quasiquote
-          quote
-          unless))
+    (only (euphrates lesya-interpret)
+          lesya:interpret))
+  (import
+    (only (euphrates olesya-interpret)
+          olesya:interpret))
+  (import
+    (only (scheme base) begin define equal? unless))
   (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))

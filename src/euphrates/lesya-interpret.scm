@@ -111,9 +111,10 @@
      (call-with-current-continuation
       (lambda (k)
         (define state (lesya:interpret:state:make k))
-        (parameterize ((lesya:interpret:state/p state))
-          (let () . bodies))
-        (list 'ok))))))
+        (define result
+          (parameterize ((lesya:interpret:state/p state))
+            (let () . bodies)))
+        (list 'ok result))))))
 
 
 (define-syntax lesya:interpret:begin
@@ -216,7 +217,7 @@
     (lesya:error 'non-expression-in-eval expr))))
 
 
-(define lesya:environment
+(define (lesya:environment)
   (environment
    '(only (scheme base) unquote)
    '(rename (euphrates lesya-interpret)
@@ -233,10 +234,5 @@
 
 
 (define (lesya:interpret program)
-  (define escaped
-    ;; Following escape is needed to not polute the toplevel environment of Lesya.
-    ;; Zero at the end is just to allow `program` to end with `define`.
-    `(let () ,program 0))
-
   (lesya:interpret:run
-   (eval escaped lesya:environment)))
+   (eval program (lesya:environment))))
