@@ -127,16 +127,6 @@
      (syntax-error "Not implemented yet."))))
 
 
-;; (define-syntax lesya:compile/->olesya:apply
-;;   (syntax-rules ()
-;;     ((_ . args)
-;;      (let ()
-;;        (define code
-;;          (cons 'apply (quote args)))
-;;        (define interpretation code)
-;;        (wrap code interpretation)))))
-
-
 (define-syntax lesya:compile/->olesya:begin
   (syntax-rules ()
     ((_ arg)
@@ -150,13 +140,6 @@
        (define code
          (olesya:syntax:begin:make code-1 code-rec))
        (wrap code interpretation)))))
-
-
-;; (define-syntax lesya:compile/->olesya:begin
-;;   (syntax-rules ()
-;;     ((_ . args)
-;;      (let ()
-;;        (quote args)))))
 
 
 (define-syntax lesya:compile/->olesya:specify
