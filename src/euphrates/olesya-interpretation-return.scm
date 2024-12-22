@@ -50,3 +50,17 @@
     (raisu-fmt
      'expected-ok-or-fail
      "Wrong type of object. Expected ok or fail, got ~s." object))))
+
+
+(define (olesya:return:map function object)
+  (cond
+   ((olesya:return:ok? object)
+    (olesya:return:ok (function (olesya:return:ok:value object))))
+
+   ((olesya:return:fail? object)
+    (olesya:return:fail (function (olesya:return:fail:value object))))
+
+   (else
+    (raisu-fmt
+     'expected-ok-or-fail
+     "Wrong type of object. Expected ok or fail, got ~s." object))))

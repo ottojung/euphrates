@@ -5,6 +5,7 @@
     olesya:return?
     olesya:return:value
     olesya:return:type
+    olesya:return:map
     olesya:return:ok
     olesya:return:ok?
     olesya:return:ok:value

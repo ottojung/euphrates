@@ -16,7 +16,17 @@
     (only (euphrates olesya-interpret)
           olesya:interpret))
   (import
-    (only (scheme base) begin define equal? unless))
+    (only (scheme base)
+          apply
+          begin
+          define
+          equal?
+          if
+          let
+          map
+          quasiquote
+          quote
+          unless))
   (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))

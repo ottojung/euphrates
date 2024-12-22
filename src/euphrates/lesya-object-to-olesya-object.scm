@@ -4,13 +4,18 @@
 
 (define (lesya-object->olesya-object object)
   (let loop ((object object))
-    (if (lesya:syntax:implication? object)
-        (let ()
-          (define-values (premise consequence)
-            (lesya:syntax:implication:destruct object 'impossible:must-be-implication))
+    (cond
+     ((olesya:return? object)
+      (olesya:return:map loop object))
 
-          (olesya:syntax:rule:make
-           (loop premise)
-           (loop consequence)))
+     ((lesya:syntax:implication? object)
+      (let ()
+        (define-values (premise consequence)
+          (lesya:syntax:implication:destruct object 'impossible:must-be-implication))
 
-        (olesya:syntax:term:make object))))
+        (olesya:syntax:rule:make
+         (loop premise)
+         (loop consequence))))
+
+     (else
+      (olesya:syntax:term:make object)))))

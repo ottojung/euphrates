@@ -7,15 +7,20 @@
           lesya:syntax:implication:destruct
           lesya:syntax:implication?))
   (import
+    (only (euphrates olesya-interpretation-return)
+          olesya:return:map
+          olesya:return?))
+  (import
     (only (euphrates olesya-syntax)
           olesya:syntax:rule:make
           olesya:syntax:term:make))
   (import
     (only (scheme base)
           begin
+          cond
           define
           define-values
-          if
+          else
           let
           quote))
   (cond-expand
