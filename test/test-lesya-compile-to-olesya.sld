@@ -14,6 +14,7 @@
           equal?
           if
           let
+          map
           quasiquote
           quote
           unless))

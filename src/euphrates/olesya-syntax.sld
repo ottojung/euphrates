@@ -14,6 +14,10 @@
     olesya:syntax:rule?
     olesya:syntax:rule:check
     olesya:syntax:rule:destruct
+    olesya:syntax:define:make
+    olesya:syntax:define?
+    olesya:syntax:define:check
+    olesya:syntax:define:destruct
     olesya:syntax:substitution:make
     olesya:syntax:substitution?
     olesya:syntax:substitution:check

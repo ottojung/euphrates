@@ -26,10 +26,10 @@
     lesya:syntax:specify?
     lesya:syntax:specify:check
     lesya:syntax:specify:destruct
-    lesya:syntax:term:make
-    lesya:syntax:term?
-    lesya:syntax:term:check
-    lesya:syntax:term:destruct
+    lesya:syntax:axiom:make
+    lesya:syntax:axiom?
+    lesya:syntax:axiom:check
+    lesya:syntax:axiom:destruct
     lesya:syntax:begin:make)
   (import
     (only (euphrates define-tuple) define-tuple))

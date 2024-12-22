@@ -2,6 +2,11 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+;;
+;; TODO: factor out common parts.
+;;
+
+
 (define olesya:syntax:term:name
   'term)
 
@@ -68,6 +73,40 @@
   (let ()
     (define-tuple (predicate premise consequence) object)
     (values premise consequence)))
+
+
+(define olesya:syntax:define:name
+  'define)
+
+
+(define (olesya:syntax:define:make name expr)
+  (list olesya:syntax:define:name name expr))
+
+
+(define (olesya:syntax:define:check object)
+  (or
+   (and (not (list? object))
+        (list 'not-a-constructor-for-define object))
+   (and (not (pair? object))
+        (list 'null-for-define object))
+   (and (not (list-length= 3 object))
+        (list 'bad-length-for-define object))
+   (and (not (equal? (car object) olesya:syntax:define:name))
+        (list 'wrong-constructor-for-define object))))
+
+
+(define (olesya:syntax:define? object)
+  (not (olesya:syntax:define:check object)))
+
+
+(define (olesya:syntax:define:destruct object on-error)
+  (define error (olesya:syntax:define:check object))
+  (when error
+    (apply on-error error))
+
+  (let ()
+    (define-tuple (predicate name expr) object)
+    (values name expr)))
 
 
 (define olesya:syntax:substitution:name

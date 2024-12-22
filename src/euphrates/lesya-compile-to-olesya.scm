@@ -1,139 +1,239 @@
 ;;;; Copyright (C) 2024  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+(define private:env
+  (make-parameter #f))
+
+
 (define (lesya:compile/->olesya program)
+  (define wrapped
+    (parameterize ((private:env (lexical-scope-make)))
+      (lesya:compile/->olesya:eval program)))
 
-  
-
-
-
-  0)
-
+  (wrapped:code wrapped))
 
 
-
-(define-syntax lesya:interpret:begin
-  (syntax-rules ()
-    ((_ . args) (begin . args))))
-
-
-(define-syntax lesya:check-that-on-toplevel
-  (syntax-rules ()
-    ((_ body)
-     (if (lesya:currently-hyphothetical?)
-         (lesya:error 'only-allowed-on-top-level
-                      (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
-         body))))
+(define (local-eval program)
+  (if (symbol? program)
+      (let ()
+        (define default (make-unique))
+        (define got (lexical-scope-ref (private:env) program default))
+        (if (eq? got default)
+            (raisu-fmt 'undefined-symbol "Undefined symbol ~s." (~a program))
+            got))
+      (eval program (lesya:compile/->olesya:environment))))
 
 
-(define-syntax lesya:interpret:axiom
-  (syntax-rules ()
-    ((_ term)
-     (lesya:check-that-on-toplevel
-      (quasiquote term)))))
+(define-type9 <wrapped>
+  (wrap code interpretation) wrapped?
+  (code wrapped:code)
+  (interpretation wrapped:interpretation)
+  )
 
 
-
-(define (lesya:interpret:apply . arguments)
-  (list-fold/semigroup lesya:interpret:modus-ponens arguments))
-
-
-(define-syntax lesya:interpret:specify
-  (syntax-rules ()
-    ((_ varname subterm)
-     (lesya:syntax:specify:make
-      (quasiquote varname) (quasiquote subterm)))))
+(define (unwrap wrapped)
+  (values
+   (wrapped:code wrapped)
+   (wrapped:interpretation wrapped)))
 
 
-(define-syntax lesya:interpret:define
-  (syntax-rules ()
-    ((_ name arg)
-     (define name
-       (let ()
-         (define stack (lesya:get-current-stack))
-         (define _res (stack-push! stack (quasiquote name)))
-         (define result arg)
-         (stack-pop! stack)
-         result)))))
-
-(define-syntax lesya:interpret:let
-  (syntax-rules ()
-    ((_ () . bodies)
-     (let () . bodies))
-
-    ((_  ((x shape) . lets) . bodies)
-     (let ()
-       (define x (quasiquote shape))
-       (define state (lesya:interpret:state/p))
-       (define supposedterms (lesya:interpret:state:supposedterms state))
-       (define _re (stack-push! supposedterms x))
-       (define result (lesya:interpret:let lets . bodies))
-       (stack-pop! supposedterms)
-       (lesya:syntax:implication:make x result)))))
-
-
-(define-syntax lesya:interpret:=
-  (syntax-rules ()
-    ((_ a b)
-     (let ()
-       (define a* a)
-       (define b* (quasiquote b))
-       (if (equal? a* b*) a*
-           (lesya:error
-            'terms-are-not-equal
-            (list 'context:
-                  'actual: a*
-                  'expected: b*
-                  'endcontext:)))))))
-
-
-(define (lesya:interpret:map rule body)
-  (lesya:check-that-on-toplevel
-   (lesya:interpret:map/unsafe rule body)))
-
-
-(define (lesya:interpret:eval expr)
-  (cond
-   ((and (pair? expr) (list? expr))
-    (let ()
-      (define operation (car expr))
-
-      (cond
-       ((lesya:syntax:substitution? expr)
-        (let ()
-          (define-values (rule body)
-            (lesya:syntax:substitution:destruct expr 'impossible))
-          (lesya:interpret:map/unsafe rule body)))
-
-       (else
-        (lesya:error 'unknown-operation-in-eval operation expr)))))
-
-   (else
-    (lesya:error 'non-expression-in-eval expr))))
-
-
-(define lesya:environment
+(define (lesya:compile/->olesya:environment)
   (environment
    '(only (scheme base) unquote)
-   '(rename (euphrates lesya-interpret)
-            (lesya:interpret:axiom axiom)
-            (lesya:interpret:define define)
-            (lesya:interpret:apply apply)
-            (lesya:interpret:begin begin)
-            (lesya:interpret:specify specify)
-            (lesya:interpret:let let)
-            (lesya:interpret:= =)
-            (lesya:interpret:map map)
-            (lesya:interpret:eval eval)
+   '(rename (euphrates lesya-compile-to-olesya)
+            (lesya:compile/->olesya:axiom axiom)
+            (lesya:compile/->olesya:define define)
+            (lesya:compile/->olesya:apply apply)
+            (lesya:compile/->olesya:begin begin)
+            (lesya:compile/->olesya:specify specify)
+            (lesya:compile/->olesya:let let)
+            (lesya:compile/->olesya:= =)
+            (lesya:compile/->olesya:map map)
+            (lesya:compile/->olesya:eval eval)
             )))
 
 
-(define (lesya:interpret program)
-  (define escaped
-    ;; Following escape is needed to not polute the toplevel environment of Lesya.
-    ;; Zero at the end is just to allow `program` to end with `define`.
-    `(let () ,program 0))
+;;;;;;;;;;;;;;;;;;
+;;
+;; Instructions:
+;;
 
-  (lesya:interpret:run
-   (eval escaped lesya:environment)))
 
+(define-syntax lesya:compile/->olesya:axiom
+  (syntax-rules ()
+    ((_ term)
+     (let ()
+       (define q-term (quote term))
+
+       (define (transform q-term)
+         (if (and
+              (list? q-term)
+              (equal? 3 (length q-term))
+              (equal? 'if (car q-term))
+              )
+
+             (olesya:syntax:rule:make
+              (transform (cadr q-term))
+              (transform (caddr q-term)))
+
+             (olesya:syntax:term:make q-term)))
+
+       (define code
+         (transform q-term))
+       (define interpretation
+         code)
+
+       (wrap code interpretation)))))
+
+
+(define-syntax lesya:compile/->olesya:define
+  (syntax-rules ()
+    ((_ name expr)
+     (begin
+       (define scope
+         (private:env))
+       (define evaluated
+         (local-eval (quote expr)))
+       (define-values (code-rec interpretation-rec)
+         (unwrap evaluated))
+       (define code
+         (olesya:syntax:define:make (quote name) code-rec))
+       (define interpretation
+         'impossible:return-values-of-define-should-not-be-used)
+       (lexical-scope-set! scope (quote name) evaluated)
+       (wrap code interpretation)))))
+
+
+(define-syntax lesya:compile/->olesya:apply
+  (syntax-rules ()
+    ((_ rule argument)
+     (let ()
+       (define code
+         (olesya:syntax:substitution:make
+          (quote rule) (quote argument)))
+
+       (define rule-i
+         (wrapped:interpretation (local-eval (quote rule))))
+       (define argument-i
+         (wrapped:interpretation (local-eval (quote argument))))
+
+       (define interpretation
+         (olesya:interpret:map rule-i argument-i))
+
+       (wrap code interpretation)))
+
+    ((_ rule argument . arguments)
+     (syntax-error "Not implemented yet."))))
+
+
+;; (define-syntax lesya:compile/->olesya:apply
+;;   (syntax-rules ()
+;;     ((_ . args)
+;;      (let ()
+;;        (define code
+;;          (cons 'apply (quote args)))
+;;        (define interpretation code)
+;;        (wrap code interpretation)))))
+
+
+(define-syntax lesya:compile/->olesya:begin
+  (syntax-rules ()
+    ((_ arg)
+     (local-eval (quote arg)))
+    ((_ arg . args)
+     (let ()
+       (define-values (code-1 interpretation-1)
+         (unwrap (local-eval (quote arg))))
+       (define-values (code-rec interpretation)
+         (unwrap (lesya:compile/->olesya:begin . args)))
+       (define code
+         (olesya:syntax:begin:make code-1 code-rec))
+       (wrap code interpretation)))))
+
+
+;; (define-syntax lesya:compile/->olesya:begin
+;;   (syntax-rules ()
+;;     ((_ . args)
+;;      (let ()
+;;        (quote args)))))
+
+
+(define-syntax lesya:compile/->olesya:specify
+  (syntax-rules ()
+    ((_ varname subterm)
+     (let ()
+       (define code
+         (olesya:syntax:rule:make
+          (quasiquote varname) (quasiquote subterm)))
+       (define interpretation
+         code)
+       (wrap code interpretation)))))
+
+
+(define-syntax lesya:compile/->olesya:let
+  (syntax-rules ()
+    ((_ () . bodies)
+     (let ()
+       (define scope
+         (private:env))
+       (lexical-scope-stage! scope)
+       (let ()
+         (define body/quoted
+           (quote bodies))
+         (define body/wrapped
+           (local-eval
+            (apply olesya:syntax:begin:make body/quoted)))
+         (define-values (body-code body-interpretation)
+           (unwrap body/wrapped))
+         (define supposition
+           (list))
+         (define body
+           body-code)
+         (define code
+           (olesya:syntax:let:make supposition body))
+         (define interpretation body-interpretation)
+         (lexical-scope-unstage! scope)
+         (wrap code interpretation))))
+
+    ((_  ((name shape) . lets) . bodies)
+     (let ()
+       (define scope
+         (private:env))
+       (lexical-scope-stage! scope)
+       (let ()
+         (define q-shape (quote shape))
+         (define evaluated
+           (local-eval (lesya:syntax:axiom:make q-shape)))
+         (define-values (shape-code shape-interpretation)
+           (unwrap evaluated))
+         (lexical-scope-set! scope (quote name) evaluated)
+         (let ()
+           (define recursive
+             (lesya:compile/->olesya:let lets . bodies))
+           (define-values (recursive-code recursive-interpretation)
+             (unwrap recursive))
+           (define supposition
+             (list (list (quote name) shape-code)))
+           (define body
+             recursive-code)
+           (define code
+             (olesya:syntax:let:make supposition body))
+           (define interpretation recursive-interpretation)
+           (lexical-scope-unstage! scope)
+           (wrap code interpretation)))))))
+
+
+(define-syntax lesya:compile/->olesya:=
+  (syntax-rules ()
+    ((_ a b) a)))
+
+
+(define-syntax lesya:compile/->olesya:map
+  (syntax-rules ()
+    ((_ rule body)
+     (raisu 'TODO:7126378))))
+
+
+(define (lesya:compile/->olesya:eval program)
+  (eval program (lesya:compile/->olesya:environment)))

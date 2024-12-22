@@ -2,38 +2,38 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(define lesya:syntax:term:name
-  'term)
+(define lesya:syntax:axiom:name
+  'axiom)
 
 
-(define (lesya:syntax:term:make object)
-  (list lesya:syntax:term:name object))
+(define (lesya:syntax:axiom:make object)
+  (list lesya:syntax:axiom:name object))
 
 
-(define (lesya:syntax:term:check object)
+(define (lesya:syntax:axiom:check object)
   (or
    (and (not (list? object))
-        (list 'not-a-constructor-for-term object))
+        (list 'not-a-constructor-for-axiom object))
    (and (not (pair? object))
-        (list 'null-for-term object))
+        (list 'null-for-axiom object))
    (and (not (list-length= 2 object))
-        (list 'bad-length-for-term object))
-   (and (not (equal? (car object) lesya:syntax:term:name))
-        (list 'wrong-constructor-for-term object))))
+        (list 'bad-length-for-axiom object))
+   (and (not (equal? (car object) lesya:syntax:axiom:name))
+        (list 'wrong-constructor-for-axiom object))))
 
 
-(define (lesya:syntax:term? object)
-  (not (lesya:syntax:term:check object)))
+(define (lesya:syntax:axiom? object)
+  (not (lesya:syntax:axiom:check object)))
 
 
-(define (lesya:syntax:term:destruct object on-error)
-  (define error (lesya:syntax:term:check object))
+(define (lesya:syntax:axiom:destruct object on-error)
+  (define error (lesya:syntax:axiom:check object))
   (when error
     (apply on-error error))
 
   (let ()
-    (define-tuple (predicate term) object)
-    term))
+    (define-tuple (predicate axiom) object)
+    axiom))
 
 
 (define lesya:syntax:rule:name
