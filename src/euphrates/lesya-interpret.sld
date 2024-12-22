@@ -30,6 +30,10 @@
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import
+    (only (euphrates olesya-interpretation-return)
+          olesya:return:fail
+          olesya:return:ok))
+  (import
     (only (euphrates stack)
           stack->list
           stack-empty?
@@ -54,7 +58,6 @@
           define-values
           else
           equal?
-          error
           if
           lambda
           let

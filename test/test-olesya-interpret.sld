@@ -6,19 +6,20 @@
   (import
     (only (euphrates olesya-interpret)
           olesya:interpret))
+  (import
+    (only (euphrates olesya-interpretation-return)
+          olesya:return:type
+          olesya:return:value))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import
     (only (scheme base)
           =
           begin
-          car
-          cdr
           cond
           define
           define-values
           else
           equal?
-          error
           if
           let
           map

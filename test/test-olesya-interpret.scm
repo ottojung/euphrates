@@ -5,7 +5,9 @@
     (olesya:interpret program))
 
   (define-values (type result)
-    (values (car result/wrapped) (cdr result/wrapped)))
+    (values
+     (olesya:return:type result/wrapped)
+     (olesya:return:value result/wrapped)))
 
   (define (print-actual)
     (debugs result/wrapped)
@@ -18,12 +20,12 @@
         (print-actual))
       (assert= type 'ok)
       #f)
-     ((equal? expected-mapping 'ignore-error)
-      (unless (equal? type 'error)
+     ((equal? expected-mapping 'ignore-fail)
+      (unless (equal? type 'fail)
         (print-actual))
-      (assert= type 'error)
+      (assert= type 'fail)
       #f)
-     ((equal? type 'error)
+     ((equal? type 'fail)
       result/wrapped)
      ((equal? type 'ok)
       result/wrapped)

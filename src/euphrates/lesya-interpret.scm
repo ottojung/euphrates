@@ -54,7 +54,9 @@
   (define stack (lesya:interpret:state:callstack state))
   (define escape (lesya:interpret:state:escape state))
 
-  (escape (list 'error type args (stack->list stack))))
+  (escape
+   (olesya:return:fail
+    (list type args (stack->list stack)))))
 
 (define (lesya:interpret:modus-ponens implication argument)
   (define-values (premise conclusion)
@@ -114,7 +116,7 @@
         (define result
           (parameterize ((lesya:interpret:state/p state))
             (let () . bodies)))
-        (list 'ok result))))))
+        (olesya:return:ok result))))))
 
 
 (define-syntax lesya:interpret:begin

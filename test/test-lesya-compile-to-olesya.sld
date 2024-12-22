@@ -10,6 +10,9 @@
     (only (euphrates lesya-interpret)
           lesya:interpret))
   (import
+    (only (euphrates lesya-object-to-olesya-object)
+          lesya-object->olesya-object))
+  (import
     (only (euphrates olesya-interpret)
           olesya:interpret))
   (import

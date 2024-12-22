@@ -66,21 +66,8 @@
      (let ()
        (define q-term (quote term))
 
-       (define (transform q-term)
-         (if (and
-              (list? q-term)
-              (equal? 3 (length q-term))
-              (equal? 'if (car q-term))
-              )
-
-             (olesya:syntax:rule:make
-              (transform (cadr q-term))
-              (transform (caddr q-term)))
-
-             (olesya:syntax:term:make q-term)))
-
        (define code
-         (transform q-term))
+         (lesya-object->olesya-object q-term))
        (define interpretation
          code)
 

@@ -1,10 +1,13 @@
 
 
 (define (test-case program expected-code)
-  (define expected-interpretation
+  (define lesya-interpretation
     (lesya:interpret program))
 
-  (debugs expected-interpretation)
+  (debugs lesya-interpretation)
+
+  (define expected-interpretation
+    (lesya-object->olesya-object lesya-interpretation))
 
   (define actual
     (lesya:compile/->olesya program))
@@ -31,10 +34,10 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;
-;;
-;;  Test cases:
-;;
+;; ;;;;;;;;;;;;;;;;;;;
+;; ;;
+;; ;;  Test cases:
+;; ;;
 
 
 ;; (test-case

@@ -12,6 +12,10 @@
     olesya:interpret:begin
     olesya:interpret:=)
   (import
+    (only (euphrates olesya-interpretation-return)
+          olesya:return:fail
+          olesya:return:ok))
+  (import
     (only (euphrates olesya-syntax)
           olesya:syntax:rule:destruct
           olesya:syntax:rule:make
@@ -31,7 +35,6 @@
           define-values
           else
           equal?
-          error
           if
           lambda
           let

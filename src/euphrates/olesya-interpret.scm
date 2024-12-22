@@ -25,7 +25,7 @@
         (define result
           (parameterize ((olesya:interpret:escape/p k))
             (let () . bodies)))
-        (list 'ok result))))))
+        (olesya:return:ok result))))))
 
 
 (define-syntax olesya:interpret:begin
@@ -60,7 +60,7 @@
 
 (define (olesya:error type . args)
   (define escape (olesya:interpret:escape/p))
-  (escape (list 'error type args)))
+  (escape (olesya:return:fail (list type args))))
 
 
 (define-syntax olesya:interpret:define

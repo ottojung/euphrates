@@ -15,6 +15,9 @@
   (import
     (only (euphrates define-type9) define-type9))
   (import
+    (only (euphrates lesya-object-to-olesya-object)
+          lesya-object->olesya-object))
+  (import
     (only (euphrates lesya-syntax)
           lesya:syntax:axiom:make))
   (import
@@ -35,8 +38,7 @@
           olesya:syntax:define:make
           olesya:syntax:let:make
           olesya:syntax:rule:make
-          olesya:syntax:substitution:make
-          olesya:syntax:term:make))
+          olesya:syntax:substitution:make))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates raisu) raisu))
   (import (only (euphrates tilda-a) ~a))
@@ -44,21 +46,15 @@
     (only (scheme base)
           =
           _
-          and
           apply
           begin
-          cadr
-          car
           define
           define-syntax
           define-values
           eq?
-          equal?
           if
-          length
           let
           list
-          list?
           make-parameter
           map
           parameterize
@@ -69,7 +65,6 @@
           syntax-rules
           unquote
           values))
-  (import (only (scheme cxr) caddr))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

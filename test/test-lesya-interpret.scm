@@ -5,7 +5,9 @@
     (lesya:interpret program))
 
   (define-values (type result)
-    (values (car result/wrapped) (cdr result/wrapped)))
+    (values
+     (olesya:return:type result/wrapped)
+     (olesya:return:value result/wrapped)))
 
   (define (print-actual)
     (debugs result/wrapped)
@@ -18,12 +20,12 @@
         (print-actual))
       (assert= type 'ok)
       #f)
-     ((equal? expected-mapping 'ignore-error)
-      (unless (equal? type 'error)
+     ((equal? expected-mapping 'ignore-fail)
+      (unless (equal? type 'fail)
         (print-actual))
-      (assert= type 'error)
+      (assert= type 'fail)
       #f)
-     ((equal? type 'error)
+     ((equal? type 'fail)
       result/wrapped)
      ((equal? type 'ok)
       result/wrapped)
@@ -591,7 +593,7 @@
 
 (test-case
  ;;
- ;; Check error with `map` not on toplevel.
+ ;; Check fail with `map` not on toplevel.
  ;;
 
  '(begin
@@ -611,9 +613,10 @@
 
     )
 
- `(error only-allowed-on-top-level
-         ("This operation is only allowed on toplevel: (lesya:interpret:map/unsafe rule body).")
-         (r1-internal x)))
+ (olesya:return:fail
+  `(only-allowed-on-top-level
+    ("This operation is only allowed on toplevel: (lesya:interpret:map/unsafe rule body).")
+    (r1-internal x))))
 
 
 (test-case
@@ -639,14 +642,15 @@
 
     )
 
- `(error non-matching-modus-ponens
-         ((context:
-           argument:
-           (and X Y Z)
-           implication:
-           (if (and X Y) X)
-           endcontext:))
-         (thm3 thm2 thm)))
+ (olesya:return:fail
+  `(non-matching-modus-ponens
+    ((context:
+      argument:
+      (and X Y Z)
+      implication:
+      (if (and X Y) X)
+      endcontext:))
+    (thm3 thm2 thm))))
 
 
 (test-case
