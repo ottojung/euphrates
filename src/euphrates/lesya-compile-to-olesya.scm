@@ -219,4 +219,4 @@
 
 
 (define (lesya:compile/->olesya:eval program)
-  (eval program (lesya:compile/->olesya:environment)))
+  (local-eval program))
