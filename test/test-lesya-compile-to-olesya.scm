@@ -64,10 +64,9 @@
     (define y (rule (term (Q)) (term (R))))
     (define z
       (let ((p (term (P))))
-        (let ()
-          (define v1 (map x p))
-          (define v2 (map y v1))
-          v2)))
+        (define v1 (map x p))
+        (define v2 (map y v1))
+        v2))
     z)
 
  )

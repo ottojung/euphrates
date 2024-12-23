@@ -13,6 +13,8 @@
     lesya:compile/->olesya:map
     lesya:compile/->olesya:eval)
   (import
+    (only (euphrates define-tuple) define-tuple))
+  (import
     (only (euphrates define-type9) define-type9))
   (import
     (only (euphrates lesya-object-to-olesya-object)
@@ -49,25 +51,33 @@
           _
           apply
           begin
+          car
+          cdr
           cons
           define
           define-syntax
           define-values
           eq?
           if
+          lambda
           let
           list
           make-parameter
           map
+          null?
           parameterize
           quasiquote
           quote
+          reverse
           symbol?
           syntax-error
           syntax-rules
           unquote
           values))
   (import (only (scheme eval) environment eval))
+  (cond-expand
+    (guile (import (only (srfi srfi-1) first)))
+    (else (import (only (srfi 1) first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -179,6 +179,29 @@
          result)))))
 
 
+(define (lesya:compile/->olesya:let:bind! lets continuation)
+  (let loop ((lets lets)
+             (suppositions (list)))
+
+    (if (null? lets)
+        (continuation (reverse suppositions))
+
+        (let ()
+          (define first (car lets))
+          (define-tuple (q-name q-shape) first)
+
+          (define evaluated
+            (local-eval (lesya:syntax:axiom:make q-shape)))
+          (define-values (shape-code shape-interpretation)
+            (unwrap evaluated))
+
+          (with-new-scope
+           (bind! (private:env) q-name evaluated)
+           (loop
+            (cdr lets)
+            (cons (list q-name shape-code) suppositions)))))))
+
+
 (define-syntax lesya:compile/->olesya:let
   (syntax-rules ()
     ((_ () . bodies)
@@ -191,26 +214,14 @@
         (apply olesya:syntax:let:make (cons supposition codes)))
       (wrap code interpretation)))
 
-    ((_  ((name shape) . lets) . bodies)
-     (with-new-scope
-      (define q-shape (quote shape))
-      (define evaluated
-        (local-eval (lesya:syntax:axiom:make q-shape)))
-      (define-values (shape-code shape-interpretation)
-        (unwrap evaluated))
-      (bind! (private:env) (quote name) evaluated)
-      (let ()
-        (define recursive
-          (lesya:compile/->olesya:let lets . bodies))
-        (define-values (recursive-code recursive-interpretation)
-          (unwrap recursive))
-        (define supposition
-          (list (list (quote name) shape-code)))
-        (define body
-          recursive-code)
+    ((_  lets . bodies)
+     (lesya:compile/->olesya:let:bind!
+      (quote lets)
+      (lambda (suppositions)
+        (define-values (codes interpretation)
+          (lesya:compile/->olesya:begin/core . bodies))
         (define code
-          (olesya:syntax:let:make supposition body))
-        (define interpretation recursive-interpretation)
+          (apply olesya:syntax:let:make (cons suppositions codes)))
         (wrap code interpretation))))))
 
 
