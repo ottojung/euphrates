@@ -128,7 +128,7 @@
      (syntax-error "Not implemented yet."))))
 
 
-(define-syntax lesya:compile/->olesya:begin
+(define-syntax lesya:compile/->olesya:begin/core
   (syntax-rules ()
     ((_ . bodies)
      (let ()
@@ -136,13 +136,21 @@
          (quote bodies))
        (define bodies/wrapped
          (map local-eval body-code))
-       (define body-interpretation
+       (define interpretation
          (wrapped:interpretation (list-last bodies/wrapped)))
-       (define body
-         body-code)
+       (define codes
+         (map wrapped:code bodies/wrapped))
+       (values codes interpretation)))))
+
+
+(define-syntax lesya:compile/->olesya:begin
+  (syntax-rules ()
+    ((_ . bodies)
+     (let ()
+       (define-values (codes interpretation)
+         (lesya:compile/->olesya:begin/core . bodies))
        (define code
-         (apply olesya:syntax:begin:make (map wrapped:code bodies/wrapped)))
-       (define interpretation body-interpretation)
+         (apply olesya:syntax:begin:make codes))
        (wrap code interpretation)))))
 
 
@@ -175,20 +183,12 @@
   (syntax-rules ()
     ((_ () . bodies)
      (with-new-scope
-      (define begin-result
-        (lesya:compile/->olesya:begin . bodies))
-      (define begin-code
-        (wrapped:code begin-result))
-      (define arguments
-        (call-with-values
-            (lambda _
-              (olesya:syntax:begin:destruct begin-code 'impossible:must-be-begin))
-          list))
+      (define-values (codes interpretation)
+        (lesya:compile/->olesya:begin/core . bodies))
       (define supposition
         (list))
       (define code
-        (apply olesya:syntax:let:make (cons supposition arguments)))
-      (define interpretation (wrapped:interpretation begin-result))
+        (apply olesya:syntax:let:make (cons supposition codes)))
       (wrap code interpretation)))
 
     ((_  ((name shape) . lets) . bodies)

@@ -35,7 +35,6 @@
           olesya:interpret:map))
   (import
     (only (euphrates olesya-syntax)
-          olesya:syntax:begin:destruct
           olesya:syntax:begin:make
           olesya:syntax:define:make
           olesya:syntax:let:make
@@ -50,14 +49,12 @@
           _
           apply
           begin
-          call-with-values
           cons
           define
           define-syntax
           define-values
           eq?
           if
-          lambda
           let
           list
           make-parameter
