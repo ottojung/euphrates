@@ -69,11 +69,7 @@
             (let ()
               (define v1 (map x p))
               (define v2 (map y v1))
-              (map y v1))))
-        (let ((p (term (P))))
-          (let ()
-            (define v1 (map x p))
-            (define v2 (map y v1))
-            (map y v1))))))
+              v2)))
+        z)))
 
  )

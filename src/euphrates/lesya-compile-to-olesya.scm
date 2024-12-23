@@ -54,6 +54,20 @@
             )))
 
 
+(define (wrapped-binding->wrapped-code name wrapped-binding)
+  (define code name)
+  (define interpretation
+    (wrapped:interpretation wrapped-binding))
+  (wrap code interpretation))
+
+
+(define (bind! scope name evaluated)
+  (define transformed
+    (wrapped-binding->wrapped-code name evaluated))
+  (lexical-scope-set! scope name transformed))
+
+
+
 ;;;;;;;;;;;;;;;;;;
 ;;
 ;; Instructions:
@@ -88,7 +102,7 @@
          (olesya:syntax:define:make (quote name) code-rec))
        (define interpretation
          'impossible:return-values-of-define-should-not-be-used)
-       (lexical-scope-set! scope (quote name) evaluated)
+       (bind! scope (quote name) evaluated)
        (wrap code interpretation)))))
 
 
@@ -176,7 +190,7 @@
            (local-eval (lesya:syntax:axiom:make q-shape)))
          (define-values (shape-code shape-interpretation)
            (unwrap evaluated))
-         (lexical-scope-set! scope (quote name) evaluated)
+         (bind! scope (quote name) evaluated)
          (let ()
            (define recursive
              (lesya:compile/->olesya:let lets . bodies))
