@@ -61,15 +61,13 @@
 
  `(begin
     (define x (rule (term (P)) (term (Q))))
-    (begin
-      (define y (rule (term (Q)) (term (R))))
-      (begin
-        (define z
-          (let ((p (term (P))))
-            (let ()
-              (define v1 (map x p))
-              (define v2 (map y v1))
-              v2)))
-        z)))
+    (define y (rule (term (Q)) (term (R))))
+    (define z
+      (let ((p (term (P))))
+        (let ()
+          (define v1 (map x p))
+          (define v2 (map y v1))
+          v2)))
+    z)
 
  )

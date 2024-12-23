@@ -130,16 +130,19 @@
 
 (define-syntax lesya:compile/->olesya:begin
   (syntax-rules ()
-    ((_ arg)
-     (local-eval (quote arg)))
-    ((_ arg . args)
+    ((_ . bodies)
      (let ()
-       (define-values (code-1 interpretation-1)
-         (unwrap (local-eval (quote arg))))
-       (define-values (code-rec interpretation)
-         (unwrap (lesya:compile/->olesya:begin . args)))
+       (define body-code
+         (quote bodies))
+       (define bodies/wrapped
+         (map local-eval body-code))
+       (define body-interpretation
+         (wrapped:interpretation (list-last bodies/wrapped)))
+       (define body
+         body-code)
        (define code
-         (olesya:syntax:begin:make code-1 code-rec))
+         (apply olesya:syntax:begin:make (map wrapped:code bodies/wrapped)))
+       (define interpretation body-interpretation)
        (wrap code interpretation)))))
 
 
