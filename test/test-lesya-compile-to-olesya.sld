@@ -18,6 +18,7 @@
           olesya:interpret))
   (import
     (only (scheme base)
+          =
           and
           apply
           begin

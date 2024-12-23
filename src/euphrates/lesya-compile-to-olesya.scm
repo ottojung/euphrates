@@ -22,7 +22,8 @@
         (if (eq? got default)
             (raisu-fmt 'undefined-symbol "Undefined symbol ~s." (~a program))
             got))
-      (eval program (lesya:compile/->olesya:environment))))
+      (ensure-wrapped
+       (eval program (lesya:compile/->olesya:environment)))))
 
 
 (define-type9 <wrapped>
@@ -30,6 +31,12 @@
   (code wrapped:code)
   (interpretation wrapped:interpretation)
   )
+
+
+(define (ensure-wrapped object)
+  (if (wrapped? object)
+      object
+      (wrap object object)))
 
 
 (define (unwrap wrapped)
@@ -147,6 +154,13 @@
       (quote arguments)))))
 
 
+(define is-empty-syntax?
+  (let ()
+    (define empty (olesya:syntax:begin:make))
+    (lambda (object)
+      (equal? empty object))))
+
+
 (define-syntax lesya:compile/->olesya:begin/core
   (syntax-rules ()
     ((_ . bodies)
@@ -157,8 +171,12 @@
          (map local-eval body-code))
        (define interpretation
          (wrapped:interpretation (list-last bodies/wrapped)))
-       (define codes
+       (define codes/0
          (map wrapped:code bodies/wrapped))
+       (define codes
+         (append
+          (filter (negate is-empty-syntax?) (list-init codes/0))
+          (list (list-last codes/0))))
        (values codes interpretation)))))
 
 
@@ -237,8 +255,14 @@
      (lesya:compile/->olesya:let:bind!
       (quote lets)
       (lambda (suppositions)
-        (define-values (codes interpretation)
+        (define-values (codes interpretation-0)
           (lesya:compile/->olesya:begin/core . bodies))
+        (define premises
+          (map cadr suppositions))
+        (define interpretation
+          (list-fold/semigroup
+           olesya:syntax:rule:make
+           (append premises (list interpretation-0))))
         (define code
           (apply olesya:syntax:let:make (cons suppositions codes)))
         (wrap code interpretation))))))
@@ -246,7 +270,22 @@
 
 (define-syntax lesya:compile/->olesya:=
   (syntax-rules ()
-    ((_ a b) a)))
+    ((_ a b)
+     (let ()
+       (define e-a (wrapped:interpretation (local-eval (quote a))))
+       (define e-b (lesya-object->olesya-object (quote b)))
+       (if (equal? e-a e-b)
+           (wrap (olesya:syntax:begin:make) e-a)
+           (let ()
+             (debugs
+              (list 'context:
+                    'actual: e-a
+                    'expected: e-b
+                    'endcontext:))
+
+             (raisu-fmt
+              'bad-interpretation
+              "Terms are not equal: ~s vs ~s" e-a e-b)))))))
 
 
 (define-syntax lesya:compile/->olesya:map

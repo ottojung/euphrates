@@ -44,6 +44,44 @@
 ;;
 
 
+
+
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
+
+ '(begin
+
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (axiom (if (Q) (R))))
+
+    (define z
+      (let ((p (P)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2))
+
+    (= z (if (P) (R)))
+
+    z)
+
+ `(begin
+    (define x (rule (term (P)) (term (Q))))
+    (define y (rule (term (Q)) (term (R))))
+    (define z
+      (let ((p (term (P))))
+        (define v1 (map x p))
+        (define v2 (map y v1))
+        v2))
+    z)
+
+ )
+
+
 (test-case
  ;;
  ;; Basic proof.

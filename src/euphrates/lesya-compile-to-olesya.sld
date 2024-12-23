@@ -12,6 +12,7 @@
     lesya:compile/->olesya:=
     lesya:compile/->olesya:map
     lesya:compile/->olesya:eval)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import
@@ -29,9 +30,14 @@
           lexical-scope-set!
           lexical-scope-stage!
           lexical-scope-unstage!))
+  (import
+    (only (euphrates list-fold-semigroup)
+          list-fold/semigroup))
+  (import (only (euphrates list-init) list-init))
   (import (only (euphrates list-last) list-last))
   (import
     (only (euphrates make-unique) make-unique))
+  (import (only (euphrates negate) negate))
   (import
     (only (euphrates olesya-interpret)
           olesya:interpret:map))
@@ -48,8 +54,10 @@
     (only (scheme base)
           =
           _
+          append
           apply
           begin
+          cadr
           car
           cdr
           cons
@@ -57,6 +65,7 @@
           define-syntax
           define-values
           eq?
+          equal?
           if
           lambda
           let
@@ -74,8 +83,8 @@
           values))
   (import (only (scheme eval) environment eval))
   (cond-expand
-    (guile (import (only (srfi srfi-1) first)))
-    (else (import (only (srfi 1) first))))
+    (guile (import (only (srfi srfi-1) filter first)))
+    (else (import (only (srfi 1) filter first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
