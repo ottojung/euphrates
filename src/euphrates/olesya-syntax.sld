@@ -26,7 +26,10 @@
     olesya:syntax:term?
     olesya:syntax:term:check
     olesya:syntax:term:destruct
-    olesya:syntax:begin:make)
+    olesya:syntax:begin:make
+    olesya:syntax:begin?
+    olesya:syntax:begin:check
+    olesya:syntax:begin:destruct)
   (import
     (only (euphrates define-tuple) define-tuple))
   (import

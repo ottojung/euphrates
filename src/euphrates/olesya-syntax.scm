@@ -215,3 +215,25 @@
 
 (define (olesya:syntax:begin:make . args)
   (cons 'begin args))
+
+
+(define (olesya:syntax:begin:check object)
+  (or
+   (and (not (list? object))
+        (list 'not-a-constructor-for-begin object))
+   (and (not (pair? object))
+        (list 'null-for-begin object))
+   (and (not (equal? (car object) olesya:syntax:begin:name))
+        (list 'wrong-constructor-for-begin object))))
+
+
+(define (olesya:syntax:begin? object)
+  (not (olesya:syntax:begin:check object)))
+
+
+(define (olesya:syntax:begin:destruct object on-error)
+  (define error (olesya:syntax:begin:check object))
+  (when error
+    (apply on-error error))
+
+  (apply values (cdr object)))

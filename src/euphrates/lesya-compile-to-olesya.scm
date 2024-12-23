@@ -158,29 +158,38 @@
        (wrap code interpretation)))))
 
 
-(define-syntax lesya:compile/->olesya:let
+(define-syntax with-new-scope
   (syntax-rules ()
-    ((_ () . bodies)
+    ((_ . bodies)
      (let ()
        (define scope
          (private:env))
        (lexical-scope-stage! scope)
        (let ()
-         (define body-code
-           (quote bodies))
-         (define bodies/wrapped
-           (map local-eval body-code))
-         (define body-interpretation
-           (wrapped:interpretation (list-last bodies/wrapped)))
-         (define supposition
-           (list))
-         (define body
-           body-code)
-         (define code
-           (apply olesya:syntax:let:make (cons supposition (map wrapped:code bodies/wrapped))))
-         (define interpretation body-interpretation)
+         (define result (let () . bodies))
          (lexical-scope-unstage! scope)
-         (wrap code interpretation))))
+         result)))))
+
+
+(define-syntax lesya:compile/->olesya:let
+  (syntax-rules ()
+    ((_ () . bodies)
+     (with-new-scope
+      (define begin-result
+        (lesya:compile/->olesya:begin . bodies))
+      (define begin-code
+        (wrapped:code begin-result))
+      (define arguments
+        (call-with-values
+            (lambda _
+              (olesya:syntax:begin:destruct begin-code 'impossible:must-be-begin))
+          list))
+      (define supposition
+        (list))
+      (define code
+        (apply olesya:syntax:let:make (cons supposition arguments)))
+      (define interpretation (wrapped:interpretation begin-result))
+      (wrap code interpretation)))
 
     ((_  ((name shape) . lets) . bodies)
      (let ()
