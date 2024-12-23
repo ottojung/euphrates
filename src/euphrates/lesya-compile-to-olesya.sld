@@ -69,7 +69,6 @@
           quote
           reverse
           symbol?
-          syntax-error
           syntax-rules
           unquote
           values))

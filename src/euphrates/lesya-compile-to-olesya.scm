@@ -106,29 +106,45 @@
        (wrap code interpretation)))))
 
 
+(define (lesya:compile/->olesya:apply:1-level
+         e-rule e-argument)
+
+  (define code
+    (olesya:syntax:substitution:make
+     (wrapped:code e-rule)
+     (wrapped:code e-argument)))
+
+  (define interpretation
+    (olesya:interpret:map
+     (wrapped:interpretation e-rule)
+     (wrapped:interpretation e-argument)))
+
+  (wrap code interpretation))
+
+
+(define (lesya:compile/->olesya:apply:quoted
+         q-rule q-arguments)
+
+  (define e-rule
+    (local-eval q-rule))
+
+  (let loop ((e-rule e-rule)
+             (q-arguments q-arguments))
+
+    (if (null? q-arguments) e-rule
+        (let ()
+          (define q-argument (car q-arguments))
+          (define e-argument (local-eval q-argument))
+          (define new-e-rule (lesya:compile/->olesya:apply:1-level e-rule e-argument))
+          (loop new-e-rule (cdr q-arguments))))))
+
+
 (define-syntax lesya:compile/->olesya:apply
   (syntax-rules ()
-    ((_ rule argument)
-     (let ()
-       (define e-rule
-         (local-eval (quote rule)))
-       (define e-argument
-         (local-eval (quote argument)))
-
-       (define code
-         (olesya:syntax:substitution:make
-          (wrapped:code e-rule)
-          (wrapped:code e-argument)))
-
-       (define interpretation
-         (olesya:interpret:map
-          (wrapped:interpretation e-rule)
-          (wrapped:interpretation e-argument)))
-
-       (wrap code interpretation)))
-
-    ((_ rule argument . arguments)
-     (syntax-error "Not implemented yet."))))
+    ((_ rule . arguments)
+     (lesya:compile/->olesya:apply:quoted
+      (quote rule)
+      (quote arguments)))))
 
 
 (define-syntax lesya:compile/->olesya:begin/core
