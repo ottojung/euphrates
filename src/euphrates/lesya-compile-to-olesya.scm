@@ -171,12 +171,8 @@
          (map local-eval body-code))
        (define interpretation
          (wrapped:interpretation (list-last bodies/wrapped)))
-       (define codes/0
-         (map wrapped:code bodies/wrapped))
        (define codes
-         (append
-          (filter (negate is-empty-syntax?) (list-init codes/0))
-          (list (list-last codes/0))))
+         (map wrapped:code bodies/wrapped))
        (values codes interpretation)))))
 
 
@@ -275,7 +271,7 @@
        (define e-a (wrapped:interpretation (local-eval (quote a))))
        (define e-b (lesya-object->olesya-object (quote b)))
        (if (equal? e-a e-b)
-           (wrap (olesya:syntax:begin:make) e-a)
+           (wrap e-a e-a)
            (let ()
              (debugs
               (list 'context:

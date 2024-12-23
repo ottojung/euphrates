@@ -33,11 +33,9 @@
   (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
-  (import (only (euphrates list-init) list-init))
   (import (only (euphrates list-last) list-last))
   (import
     (only (euphrates make-unique) make-unique))
-  (import (only (euphrates negate) negate))
   (import
     (only (euphrates olesya-interpret)
           olesya:interpret:map))
@@ -83,8 +81,8 @@
           values))
   (import (only (scheme eval) environment eval))
   (cond-expand
-    (guile (import (only (srfi srfi-1) filter first)))
-    (else (import (only (srfi 1) filter first))))
+    (guile (import (only (srfi srfi-1) first)))
+    (else (import (only (srfi 1) first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

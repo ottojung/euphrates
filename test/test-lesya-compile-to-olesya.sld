@@ -18,17 +18,9 @@
           olesya:interpret))
   (import
     (only (scheme base)
-          =
-          and
-          apply
           begin
           define
           equal?
-          if
-          let
-          map
-          not
-          quasiquote
           quote
           unless))
   (import (only (scheme process-context) exit))

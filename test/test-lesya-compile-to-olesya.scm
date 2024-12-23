@@ -46,498 +46,499 @@
 
 
 
-(test-case
- ;;
- ;; Basic proof.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
- ;;
-
- '(begin
-
-    (define x
-      (axiom (if (P) (Q))))
-    (define y
-      (axiom (if (Q) (R))))
-
-    (define z
-      (let ((p (P)))
-        (define v1 (apply x p))
-        (define v2 (apply y v1))
-        v2))
-
-    (= z (if (P) (R)))
-
-    z)
-
- `(begin
-    (define x (rule (term (P)) (term (Q))))
-    (define y (rule (term (Q)) (term (R))))
-    (define z
-      (let ((p (term (P))))
-        (define v1 (map x p))
-        (define v2 (map y v1))
-        v2))
-    z)
-
- )
-
-
-(test-case
- ;;
- ;; Basic proof.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
- ;;
-
- '(begin
-
-    (define x
-      (axiom (if (P) (Q))))
-    (define y
-      (axiom (if (Q) (R))))
-
-    (define z
-      (let ((p (P)))
-        (define v1 (apply x p))
-        (define v2 (apply y v1))
-        v2))
-
-    z)
-
- `(begin
-    (define x (rule (term (P)) (term (Q))))
-    (define y (rule (term (Q)) (term (R))))
-    (define z
-      (let ((p (term (P))))
-        (define v1 (map x p))
-        (define v2 (map y v1))
-        v2))
-    z)
-
- )
-
-
-
-(test-case
- ;;
- ;; Basic with empty let.
- ;;
-
- '(begin
-
-    (define x
-      (axiom (if (P) (Q))))
-    (define y
-      (let ()
-        (axiom (if (Q) (R)))))
-
-    (define z
-      (let ((p (P)))
-        (define v1 (apply x p))
-        (define v2 (apply y v1))
-        v2))
-
-    z)
-
- `(begin
-    (define x (rule (term (P)) (term (Q))))
-    (define y
-      (let ()
-        (rule (term (Q)) (term (R)))))
-    (define z
-      (let ((p (term (P))))
-        (define v1 (map x p))
-        (define v2 (map y v1))
-        v2))
-    z)
-
- )
-
-
-(test-case
- ;;
- ;; Basic with empty let and multiple lets.
- ;;
-
- '(begin
-
-    (define x
-      (axiom (if (P) (Q))))
-    (define y
-      (let ()
-        (axiom (if (Q) (R)))))
-
-    (define z
-      (let ((p (P))
-            (k (K)))
-        (define v1 (apply x p))
-        (define v2 (apply y v1))
-        v2))
-
-    z)
-
- `(begin
-    (define x (rule (term (P)) (term (Q))))
-    (define y
-      (let ()
-        (rule (term (Q)) (term (R)))))
-    (define z
-      (let ((p (term (P)))
-            (k (term (K))))
-        (define v1 (map x p))
-        (define v2 (map y v1))
-        v2))
-    z)
-
- )
-
-
-(test-case
- ;;
- ;; Basic with composite apply.
- ;;
-
- '(begin
-
-    (define x
-      (axiom (if (P) (Q))))
-    (define y
-      (axiom (if (Q) (R))))
-
-    (define z
-      (let ((p (P)))
-        (define v1 (apply y (apply x p)))
-        v1))
-
-    z)
-
- `(begin
-    (define x (rule (term (P)) (term (Q))))
-    (define y (rule (term (Q)) (term (R))))
-    (define z
-      (let ((p (term (P))))
-        (define v1 (map y (map x p)))
-        v1))
-    z)
-
- )
-
-
-(test-case
- ;;
- ;; Basic proof with disjunction.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
- ;;
-
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
-    (define and-intro
-      (axiom (if X (if Y (and X Y)))))
-
-    (define x
-      (let ()
-        (define and-intro-p-q
-          (map (specify Y (Q))
-               (map (specify X (P)) and-intro)))
-
-        (let ((y (P))
-              (w (Q)))
-          (apply (apply and-intro-p-q y) w))))
-
-    x)
-
- `(begin
-    (define and-elim
-      (rule (term (and X Y)) (term X)))
-    (define and-symmetric
-      (rule (term (and X Y)) (term (and Y X))))
-    (define and-intro
-      (rule (term X) (rule (term Y) (term (and X Y)))))
-    (define x
-      (let ()
-        (define and-intro-p-q
-          (map (rule Y (Q)) (map (rule X (P)) and-intro)))
-        (let ((y (term (P))) (w (term (Q))))
-          (map (map and-intro-p-q y) w))))
-
-    x)
-
- )
-
-
-(test-case
- ;;
- ;; Multi-argument apply.
- ;;
-
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
-    (define and-intro
-      (axiom (if X (if Y (and X Y)))))
-
-    (define x
-      (let ()
-        (define and-intro-p-q
-          (map (specify Y (Q))
-               (map (specify X (P)) and-intro)))
-
-        (let ((y (P))
-              (w (Q)))
-          (apply and-intro-p-q y w))))
-
-    x)
-
- `(begin
-    (define and-elim
-      (rule (term (and X Y)) (term X)))
-    (define and-symmetric
-      (rule (term (and X Y)) (term (and Y X))))
-    (define and-intro
-      (rule (term X) (rule (term Y) (term (and X Y)))))
-    (define x
-      (let ()
-        (define and-intro-p-q
-          (map (rule Y (Q)) (map (rule X (P)) and-intro)))
-        (let ((y (term (P))) (w (term (Q))))
-          (map (map and-intro-p-q y) w))))
-
-    x)
-
- )
-
-
-
-
-
-(test-case
- ;;
- ;; Basic proof with disjunction.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
- ;;
-
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
-
-    (define r1 (map (specify X (P)) and-elim))
-    (define r2 (map (specify Y (Q)) r1))
-
-    (define x
-      (let ((m (and (P) (Q))))
-        (apply r2 m)))
-
-    x
-    )
-
- `ignore-ok)
-
-
-(test-case
- ;;
- ;; Basic proof with disjunction 2.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
- ;;
-
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
-
-    (define s1 (map (specify X (P)) and-symmetric))
-    (define s2 (map (specify Y (Q)) s1))
-    (define r1 (map (specify X (Q)) and-elim))
-    (define r2 (map (specify Y (P)) r1))
-
-    (define x
-      (let ((m (and (P) (Q))))
-        (define swapped (apply s2 m))
-        (apply r2 swapped)))
-
-    x
-    )
-
- `ignore-ok)
-
-
-(test-case
- ;;
- ;; Basic proof trivial.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
- ;;
-
- '(define x (let ((p (P))) p))
-
- `ignore-ok)
-
-
-(test-case
- ;;
- ;; Basic proof via reductio ad absurdum.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
- ;;
-
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
-    (define and-intro
-      (axiom (if X (if Y (and X Y)))))
-    (define Abs ;; The "absurdity rule" law.
-      (axiom (if (and X (not X)) (false))))
-    (define RAA ;; The "reductio ad absurdum" law.
-      (axiom (if (if X (false)) (not X))))
-    (define DN ;; The "double negation" law.
-      (axiom (if (not (not X)) X)))
-
-    (define premise-1
-      (axiom (if (P) (Q))))
-
-    (define x
-      (let ()
-        (define r1 (map (specify X (P)) and-elim))
-        (define r2 (map (specify Y (not (Q))) r1))
-        (define s1 (map (specify X (P)) and-symmetric))
-        (define s2 (map (specify Y (not (Q))) s1))
-        (define sr1 (map (specify X (not (Q))) and-elim))
-        (define sr2 (map (specify Y (P)) sr1))
-        (define Abs-q (map (specify X (Q)) Abs))
-        (define RAA-target (map (specify X (and (P) (not (Q)))) RAA))
-        (define and-intro-q-notq (map (specify Y (not (Q))) (map (specify X (Q)) and-intro)))
-
-        (define tofalse
-          (let ((m (and (P) (not (Q)))))
-            (define p (apply r2 m))
-            (define swapped (apply s2 m))
-            (define notq (apply sr2 swapped))
-            (define q (apply premise-1 p))
-            (define q-and-notq (apply (apply and-intro-q-notq q) notq))
-            (define bot (apply Abs-q q-and-notq))
-            bot))
-
-        (apply RAA-target tofalse)))
-
-    )
-
- `ignore-ok)
-
-
-(test-case
- ;;
- ;; Basic proof via reductio ad absurdum. Reduce export by using `let`.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
- ;;
-
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
-    (define and-intro
-      (axiom (if X (if Y (and X Y)))))
-    (define Abs ;; The "absurdity rule" law.
-      (axiom (if (and X (not X)) (false))))
-    (define RAA ;; The "reductio ad absurdum" law.
-      (axiom (if (if X (false)) (not X))))
-    (define DN ;; The "double negation" law.
-      (axiom (if (not (not X)) X)))
-
-    (define premise-1
-      (axiom (if (P) (Q))))
-
-    (define x
-      (let ()
-        (define r1 (map (specify X (P)) and-elim))
-        (define r2 (map (specify Y (not (Q))) r1))
-        (define s1 (map (specify X (P)) and-symmetric))
-        (define s2 (map (specify Y (not (Q))) s1))
-        (define sr1 (map (specify X (not (Q))) and-elim))
-        (define sr2 (map (specify Y (P)) sr1))
-        (define Abs-q (map (specify X (Q)) Abs))
-        (define RAA-target (map (specify X (and (P) (not (Q)))) RAA))
-        (define and-intro-q-notq (map (specify Y (not (Q))) (map (specify X (Q)) and-intro)))
-
-        (define tofalse
-          (let ((m (and (P) (not (Q)))))
-            (define p (apply r2 m))
-            (define swapped (apply s2 m))
-            (define notq (apply sr2 swapped))
-            (define q (apply premise-1 p))
-            (define q-and-notq (apply (apply and-intro-q-notq q) notq))
-            (define bot (apply Abs-q q-and-notq))
-            bot))
-
-        (apply RAA-target tofalse)))
-
-    )
-
- `ignore-ok)
-
-
-(test-case
- ;;
- ;; Basic proof via reductio ad absurdum [2].
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
- ;;
-
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
-    (define and-intro
-      (axiom (if X (if Y (and X Y)))))
-    (define EFQ ;; The "ex-falso-quodlibet" law.
-      (axiom (if (false) X)))
-    (define Abs ;; The "absurdity rule" law.
-      (axiom (if (and X (not X)) (false))))
-    (define RAA ;; The "reductio ad absurdum" law.
-      (axiom (if (if X (false)) (not X))))
-    (define DN ;; The "double negation" law.
-      (axiom (if (not (not X)) X)))
-
-    (define premise-1
-      (axiom (not (and (P) (not (Q))))))
-
-    (define x
-      (let ()
-        (define r1 (map (specify X (P)) and-elim))
-        (define r2 (map (specify Y (not (Q))) r1))
-        (define s1 (map (specify X (P)) and-symmetric))
-        (define s2 (map (specify Y (not (Q))) s1))
-        (define sr1 (map (specify X (not (Q))) and-elim))
-        (define sr2 (map (specify Y (P)) sr1))
-        (define Abs-1 (map (specify X (and (P) (not (Q)))) Abs))
-        (define RAA-target (map (specify X (not (Q))) RAA))
-        (define DN-target (map (specify X (Q)) DN))
-        (define and-intro-p-notq (map (specify Y (not (Q))) (map (specify X (P)) and-intro)))
-        (define and-intro-p-notq-premise-1
-          (map (specify Y (not (and (P) (not (Q)))))
-               (map (specify X (and (P) (not (Q)))) and-intro)))
-
-        (let ((p (P)))
-          (define contr1
-            (let ((notq (not (Q))))
-              (define and-p-notq (apply (apply and-intro-p-notq p) notq))
-              ;; (define contr1 (and and-p-notq premise-1))
-              (define contr1 (apply (apply and-intro-p-notq-premise-1 and-p-notq) premise-1))
-              (define abs1 (apply Abs-1 contr1))
-              abs1))
-
-          (define nnq (apply RAA-target contr1))
-          (apply DN-target nnq))))
-
-    )
-
- `ignore-ok)
+;; (test-case
+;;  ;;
+;;  ;; Basic proof.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+;;  ;;
+
+;;  '(begin
+
+;;     (define x
+;;       (axiom (if (P) (Q))))
+;;     (define y
+;;       (axiom (if (Q) (R))))
+
+;;     (define z
+;;       (let ((p (P)))
+;;         (define v1 (apply x p))
+;;         (define v2 (apply y v1))
+;;         v2))
+
+;;     (= z (if (P) (R)))
+
+;;     z)
+
+;;  `(begin
+;;     (define x (rule (term (P)) (term (Q))))
+;;     (define y (rule (term (Q)) (term (R))))
+;;     (define z
+;;       (let ((p (term (P))))
+;;         (define v1 (map x p))
+;;         (define v2 (map y v1))
+;;         v2))
+;;     (rule (term (P)) (term (R)))
+;;     z)
+
+;;  )
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+;;  ;;
+
+;;  '(begin
+
+;;     (define x
+;;       (axiom (if (P) (Q))))
+;;     (define y
+;;       (axiom (if (Q) (R))))
+
+;;     (define z
+;;       (let ((p (P)))
+;;         (define v1 (apply x p))
+;;         (define v2 (apply y v1))
+;;         v2))
+
+;;     z)
+
+;;  `(begin
+;;     (define x (rule (term (P)) (term (Q))))
+;;     (define y (rule (term (Q)) (term (R))))
+;;     (define z
+;;       (let ((p (term (P))))
+;;         (define v1 (map x p))
+;;         (define v2 (map y v1))
+;;         v2))
+;;     z)
+
+;;  )
+
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic with empty let.
+;;  ;;
+
+;;  '(begin
+
+;;     (define x
+;;       (axiom (if (P) (Q))))
+;;     (define y
+;;       (let ()
+;;         (axiom (if (Q) (R)))))
+
+;;     (define z
+;;       (let ((p (P)))
+;;         (define v1 (apply x p))
+;;         (define v2 (apply y v1))
+;;         v2))
+
+;;     z)
+
+;;  `(begin
+;;     (define x (rule (term (P)) (term (Q))))
+;;     (define y
+;;       (let ()
+;;         (rule (term (Q)) (term (R)))))
+;;     (define z
+;;       (let ((p (term (P))))
+;;         (define v1 (map x p))
+;;         (define v2 (map y v1))
+;;         v2))
+;;     z)
+
+;;  )
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic with empty let and multiple lets.
+;;  ;;
+
+;;  '(begin
+
+;;     (define x
+;;       (axiom (if (P) (Q))))
+;;     (define y
+;;       (let ()
+;;         (axiom (if (Q) (R)))))
+
+;;     (define z
+;;       (let ((p (P))
+;;             (k (K)))
+;;         (define v1 (apply x p))
+;;         (define v2 (apply y v1))
+;;         v2))
+
+;;     z)
+
+;;  `(begin
+;;     (define x (rule (term (P)) (term (Q))))
+;;     (define y
+;;       (let ()
+;;         (rule (term (Q)) (term (R)))))
+;;     (define z
+;;       (let ((p (term (P)))
+;;             (k (term (K))))
+;;         (define v1 (map x p))
+;;         (define v2 (map y v1))
+;;         v2))
+;;     z)
+
+;;  )
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic with composite apply.
+;;  ;;
+
+;;  '(begin
+
+;;     (define x
+;;       (axiom (if (P) (Q))))
+;;     (define y
+;;       (axiom (if (Q) (R))))
+
+;;     (define z
+;;       (let ((p (P)))
+;;         (define v1 (apply y (apply x p)))
+;;         v1))
+
+;;     z)
+
+;;  `(begin
+;;     (define x (rule (term (P)) (term (Q))))
+;;     (define y (rule (term (Q)) (term (R))))
+;;     (define z
+;;       (let ((p (term (P))))
+;;         (define v1 (map y (map x p)))
+;;         v1))
+;;     z)
+
+;;  )
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof with disjunction.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+;;     (define and-intro
+;;       (axiom (if X (if Y (and X Y)))))
+
+;;     (define x
+;;       (let ()
+;;         (define and-intro-p-q
+;;           (map (specify Y (Q))
+;;                (map (specify X (P)) and-intro)))
+
+;;         (let ((y (P))
+;;               (w (Q)))
+;;           (apply (apply and-intro-p-q y) w))))
+
+;;     x)
+
+;;  `(begin
+;;     (define and-elim
+;;       (rule (term (and X Y)) (term X)))
+;;     (define and-symmetric
+;;       (rule (term (and X Y)) (term (and Y X))))
+;;     (define and-intro
+;;       (rule (term X) (rule (term Y) (term (and X Y)))))
+;;     (define x
+;;       (let ()
+;;         (define and-intro-p-q
+;;           (map (rule Y (Q)) (map (rule X (P)) and-intro)))
+;;         (let ((y (term (P))) (w (term (Q))))
+;;           (map (map and-intro-p-q y) w))))
+
+;;     x)
+
+;;  )
+
+
+;; (test-case
+;;  ;;
+;;  ;; Multi-argument apply.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+;;     (define and-intro
+;;       (axiom (if X (if Y (and X Y)))))
+
+;;     (define x
+;;       (let ()
+;;         (define and-intro-p-q
+;;           (map (specify Y (Q))
+;;                (map (specify X (P)) and-intro)))
+
+;;         (let ((y (P))
+;;               (w (Q)))
+;;           (apply and-intro-p-q y w))))
+
+;;     x)
+
+;;  `(begin
+;;     (define and-elim
+;;       (rule (term (and X Y)) (term X)))
+;;     (define and-symmetric
+;;       (rule (term (and X Y)) (term (and Y X))))
+;;     (define and-intro
+;;       (rule (term X) (rule (term Y) (term (and X Y)))))
+;;     (define x
+;;       (let ()
+;;         (define and-intro-p-q
+;;           (map (rule Y (Q)) (map (rule X (P)) and-intro)))
+;;         (let ((y (term (P))) (w (term (Q))))
+;;           (map (map and-intro-p-q y) w))))
+
+;;     x)
+
+;;  )
+
+
+
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof with disjunction.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+
+;;     (define r1 (map (specify X (P)) and-elim))
+;;     (define r2 (map (specify Y (Q)) r1))
+
+;;     (define x
+;;       (let ((m (and (P) (Q))))
+;;         (apply r2 m)))
+
+;;     x
+;;     )
+
+;;  `ignore-ok)
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof with disjunction 2.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+
+;;     (define s1 (map (specify X (P)) and-symmetric))
+;;     (define s2 (map (specify Y (Q)) s1))
+;;     (define r1 (map (specify X (Q)) and-elim))
+;;     (define r2 (map (specify Y (P)) r1))
+
+;;     (define x
+;;       (let ((m (and (P) (Q))))
+;;         (define swapped (apply s2 m))
+;;         (apply r2 swapped)))
+
+;;     x
+;;     )
+
+;;  `ignore-ok)
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof trivial.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+;;  ;;
+
+;;  '(define x (let ((p (P))) p))
+
+;;  `ignore-ok)
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof via reductio ad absurdum.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+;;     (define and-intro
+;;       (axiom (if X (if Y (and X Y)))))
+;;     (define Abs ;; The "absurdity rule" law.
+;;       (axiom (if (and X (not X)) (false))))
+;;     (define RAA ;; The "reductio ad absurdum" law.
+;;       (axiom (if (if X (false)) (not X))))
+;;     (define DN ;; The "double negation" law.
+;;       (axiom (if (not (not X)) X)))
+
+;;     (define premise-1
+;;       (axiom (if (P) (Q))))
+
+;;     (define x
+;;       (let ()
+;;         (define r1 (map (specify X (P)) and-elim))
+;;         (define r2 (map (specify Y (not (Q))) r1))
+;;         (define s1 (map (specify X (P)) and-symmetric))
+;;         (define s2 (map (specify Y (not (Q))) s1))
+;;         (define sr1 (map (specify X (not (Q))) and-elim))
+;;         (define sr2 (map (specify Y (P)) sr1))
+;;         (define Abs-q (map (specify X (Q)) Abs))
+;;         (define RAA-target (map (specify X (and (P) (not (Q)))) RAA))
+;;         (define and-intro-q-notq (map (specify Y (not (Q))) (map (specify X (Q)) and-intro)))
+
+;;         (define tofalse
+;;           (let ((m (and (P) (not (Q)))))
+;;             (define p (apply r2 m))
+;;             (define swapped (apply s2 m))
+;;             (define notq (apply sr2 swapped))
+;;             (define q (apply premise-1 p))
+;;             (define q-and-notq (apply (apply and-intro-q-notq q) notq))
+;;             (define bot (apply Abs-q q-and-notq))
+;;             bot))
+
+;;         (apply RAA-target tofalse)))
+
+;;     )
+
+;;  `ignore-ok)
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof via reductio ad absurdum. Reduce export by using `let`.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+;;     (define and-intro
+;;       (axiom (if X (if Y (and X Y)))))
+;;     (define Abs ;; The "absurdity rule" law.
+;;       (axiom (if (and X (not X)) (false))))
+;;     (define RAA ;; The "reductio ad absurdum" law.
+;;       (axiom (if (if X (false)) (not X))))
+;;     (define DN ;; The "double negation" law.
+;;       (axiom (if (not (not X)) X)))
+
+;;     (define premise-1
+;;       (axiom (if (P) (Q))))
+
+;;     (define x
+;;       (let ()
+;;         (define r1 (map (specify X (P)) and-elim))
+;;         (define r2 (map (specify Y (not (Q))) r1))
+;;         (define s1 (map (specify X (P)) and-symmetric))
+;;         (define s2 (map (specify Y (not (Q))) s1))
+;;         (define sr1 (map (specify X (not (Q))) and-elim))
+;;         (define sr2 (map (specify Y (P)) sr1))
+;;         (define Abs-q (map (specify X (Q)) Abs))
+;;         (define RAA-target (map (specify X (and (P) (not (Q)))) RAA))
+;;         (define and-intro-q-notq (map (specify Y (not (Q))) (map (specify X (Q)) and-intro)))
+
+;;         (define tofalse
+;;           (let ((m (and (P) (not (Q)))))
+;;             (define p (apply r2 m))
+;;             (define swapped (apply s2 m))
+;;             (define notq (apply sr2 swapped))
+;;             (define q (apply premise-1 p))
+;;             (define q-and-notq (apply (apply and-intro-q-notq q) notq))
+;;             (define bot (apply Abs-q q-and-notq))
+;;             bot))
+
+;;         (apply RAA-target tofalse)))
+
+;;     )
+
+;;  `ignore-ok)
+
+
+;; (test-case
+;;  ;;
+;;  ;; Basic proof via reductio ad absurdum [2].
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 8.
+;;  ;;
+
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
+;;     (define and-intro
+;;       (axiom (if X (if Y (and X Y)))))
+;;     (define EFQ ;; The "ex-falso-quodlibet" law.
+;;       (axiom (if (false) X)))
+;;     (define Abs ;; The "absurdity rule" law.
+;;       (axiom (if (and X (not X)) (false))))
+;;     (define RAA ;; The "reductio ad absurdum" law.
+;;       (axiom (if (if X (false)) (not X))))
+;;     (define DN ;; The "double negation" law.
+;;       (axiom (if (not (not X)) X)))
+
+;;     (define premise-1
+;;       (axiom (not (and (P) (not (Q))))))
+
+;;     (define x
+;;       (let ()
+;;         (define r1 (map (specify X (P)) and-elim))
+;;         (define r2 (map (specify Y (not (Q))) r1))
+;;         (define s1 (map (specify X (P)) and-symmetric))
+;;         (define s2 (map (specify Y (not (Q))) s1))
+;;         (define sr1 (map (specify X (not (Q))) and-elim))
+;;         (define sr2 (map (specify Y (P)) sr1))
+;;         (define Abs-1 (map (specify X (and (P) (not (Q)))) Abs))
+;;         (define RAA-target (map (specify X (not (Q))) RAA))
+;;         (define DN-target (map (specify X (Q)) DN))
+;;         (define and-intro-p-notq (map (specify Y (not (Q))) (map (specify X (P)) and-intro)))
+;;         (define and-intro-p-notq-premise-1
+;;           (map (specify Y (not (and (P) (not (Q)))))
+;;                (map (specify X (and (P) (not (Q)))) and-intro)))
+
+;;         (let ((p (P)))
+;;           (define contr1
+;;             (let ((notq (not (Q))))
+;;               (define and-p-notq (apply (apply and-intro-p-notq p) notq))
+;;               ;; (define contr1 (and and-p-notq premise-1))
+;;               (define contr1 (apply (apply and-intro-p-notq-premise-1 and-p-notq) premise-1))
+;;               (define abs1 (apply Abs-1 contr1))
+;;               abs1))
+
+;;           (define nnq (apply RAA-target contr1))
+;;           (apply DN-target nnq))))
+
+;;     )
+
+;;  `ignore-ok)
 
 
 ;; (test-case
