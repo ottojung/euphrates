@@ -70,3 +70,78 @@
     z)
 
  )
+
+
+
+(test-case
+ ;;
+ ;; Basic with empty let.
+ ;;
+
+ '(begin
+
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (let ()
+        (axiom (if (Q) (R)))))
+
+    (define z
+      (let ((p (P)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2))
+
+    z)
+
+ `(begin
+    (define x (rule (term (P)) (term (Q))))
+    (define y
+      (let ()
+        (rule (term (Q)) (term (R)))))
+    (define z
+      (let ((p (term (P))))
+        (define v1 (map x p))
+        (define v2 (map y v1))
+        v2))
+    z)
+
+ )
+
+
+(test-case
+ ;;
+ ;; Basic with empty let and multiple lets.
+ ;;
+
+ '(begin
+
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (let ()
+        (axiom (if (Q) (R)))))
+
+    (define z
+      (let ((p (P))
+            (k (K)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2))
+
+    z)
+
+ `(begin
+    (define x (rule (term (P)) (term (Q))))
+    (define y
+      (let ()
+        (rule (term (Q)) (term (R)))))
+    (define z
+      (let ((p (term (P)))
+            (k (term (K))))
+        (define v1 (map x p))
+        (define v2 (map y v1))
+        v2))
+    z)
+
+ )
