@@ -236,7 +236,23 @@
 (define-syntax lesya:compile/->olesya:map
   (syntax-rules ()
     ((_ rule body)
-     (raisu 'TODO:7126378))))
+     (let ()
+       (define e-rule
+         (local-eval (quote rule)))
+       (define e-body
+         (local-eval (quote body)))
+
+       (define code
+         (olesya:syntax:substitution:make
+          (wrapped:code e-rule)
+          (wrapped:code e-body)))
+
+       (define interpretation
+         (olesya:interpret:map
+          (wrapped:interpretation e-rule)
+          (wrapped:interpretation e-body)))
+
+       (wrap code interpretation)))))
 
 
 (define (lesya:compile/->olesya:eval program)

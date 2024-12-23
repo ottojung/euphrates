@@ -176,3 +176,50 @@
     z)
 
  )
+
+
+(test-case
+ ;;
+ ;; Basic proof with disjunction.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+    (define and-intro
+      (axiom (if X (if Y (and X Y)))))
+
+    (define x
+      (let ()
+        (define and-intro-p-q
+          (map (specify Y (Q))
+               (map (specify X (P)) and-intro)))
+
+        (let ((y (P))
+              (w (Q)))
+          (apply (apply and-intro-p-q y) w))))
+
+    x)
+
+ `(begin
+    (define and-elim
+      (rule (term (and X Y)) (term X)))
+    (define and-symmetric
+      (rule (term (and X Y)) (term (and Y X))))
+    (define and-intro
+      (rule (term X) (rule (term Y) (term (and X Y)))))
+    (define x
+      (let ()
+        (define and-intro-p-q
+          (map (rule Y (Q)) (map (rule X (P)) and-intro)))
+        (let ((y (term (P))) (w (term (Q))))
+          (map (map and-intro-p-q y) w))))
+
+    x)
+
+ )
+
+

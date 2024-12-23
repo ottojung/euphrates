@@ -43,7 +43,6 @@
           olesya:syntax:rule:make
           olesya:syntax:substitution:make))
   (import (only (euphrates raisu-fmt) raisu-fmt))
-  (import (only (euphrates raisu) raisu))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
