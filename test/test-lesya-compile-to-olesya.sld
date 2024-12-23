@@ -2,6 +2,7 @@
 (define-library
   (test-lesya-compile-to-olesya)
   (import (only (euphrates assert-equal) assert=))
+  (import (only (euphrates debug) debug))
   (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates lesya-compile-to-olesya)
@@ -25,6 +26,7 @@
           if
           let
           map
+          not
           quasiquote
           quote
           unless))

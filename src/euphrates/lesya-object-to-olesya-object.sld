@@ -22,7 +22,11 @@
           define-values
           else
           let
-          quote))
+          list?
+          null?
+          or
+          quote
+          symbol?))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

@@ -17,5 +17,7 @@
          (loop premise)
          (loop consequence))))
 
-     (else
-      (olesya:syntax:term:make object)))))
+     ((or (symbol? object) (list? object) (null? object))
+      (olesya:syntax:term:make object))
+
+     (else object))))
