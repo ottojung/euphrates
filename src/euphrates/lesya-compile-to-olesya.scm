@@ -110,20 +110,20 @@
   (syntax-rules ()
     ((_ rule argument)
      (let ()
+       (define e-rule
+         (local-eval (quote rule)))
+       (define e-argument
+         (local-eval (quote argument)))
+
        (define code
          (olesya:syntax:substitution:make
-          (wrapped:code
-           (local-eval (quote rule)))
-          (wrapped:code
-           (local-eval (quote argument)))))
-
-       (define rule-i
-         (wrapped:interpretation (local-eval (quote rule))))
-       (define argument-i
-         (wrapped:interpretation (local-eval (quote argument))))
+          (wrapped:code e-rule)
+          (wrapped:code e-argument)))
 
        (define interpretation
-         (olesya:interpret:map rule-i argument-i))
+         (olesya:interpret:map
+          (wrapped:interpretation e-rule)
+          (wrapped:interpretation e-argument)))
 
        (wrap code interpretation)))
 
