@@ -192,31 +192,26 @@
       (wrap code interpretation)))
 
     ((_  ((name shape) . lets) . bodies)
-     (let ()
-       (define scope
-         (private:env))
-       (lexical-scope-stage! scope)
-       (let ()
-         (define q-shape (quote shape))
-         (define evaluated
-           (local-eval (lesya:syntax:axiom:make q-shape)))
-         (define-values (shape-code shape-interpretation)
-           (unwrap evaluated))
-         (bind! scope (quote name) evaluated)
-         (let ()
-           (define recursive
-             (lesya:compile/->olesya:let lets . bodies))
-           (define-values (recursive-code recursive-interpretation)
-             (unwrap recursive))
-           (define supposition
-             (list (list (quote name) shape-code)))
-           (define body
-             recursive-code)
-           (define code
-             (olesya:syntax:let:make supposition body))
-           (define interpretation recursive-interpretation)
-           (lexical-scope-unstage! scope)
-           (wrap code interpretation)))))))
+     (with-new-scope
+      (define q-shape (quote shape))
+      (define evaluated
+        (local-eval (lesya:syntax:axiom:make q-shape)))
+      (define-values (shape-code shape-interpretation)
+        (unwrap evaluated))
+      (bind! (private:env) (quote name) evaluated)
+      (let ()
+        (define recursive
+          (lesya:compile/->olesya:let lets . bodies))
+        (define-values (recursive-code recursive-interpretation)
+          (unwrap recursive))
+        (define supposition
+          (list (list (quote name) shape-code)))
+        (define body
+          recursive-code)
+        (define code
+          (olesya:syntax:let:make supposition body))
+        (define interpretation recursive-interpretation)
+        (wrap code interpretation))))))
 
 
 (define-syntax lesya:compile/->olesya:=
