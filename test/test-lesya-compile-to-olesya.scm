@@ -145,3 +145,34 @@
     z)
 
  )
+
+
+(test-case
+ ;;
+ ;; Basic with composite apply.
+ ;;
+
+ '(begin
+
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (axiom (if (Q) (R))))
+
+    (define z
+      (let ((p (P)))
+        (define v1 (apply y (apply x p)))
+        v1))
+
+    z)
+
+ `(begin
+    (define x (rule (term (P)) (term (Q))))
+    (define y (rule (term (Q)) (term (R))))
+    (define z
+      (let ((p (term (P))))
+        (define v1 (map y (map x p)))
+        v1))
+    z)
+
+ )

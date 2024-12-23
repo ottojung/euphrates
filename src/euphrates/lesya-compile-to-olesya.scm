@@ -112,7 +112,10 @@
      (let ()
        (define code
          (olesya:syntax:substitution:make
-          (quote rule) (quote argument)))
+          (wrapped:code
+           (local-eval (quote rule)))
+          (wrapped:code
+           (local-eval (quote argument)))))
 
        (define rule-i
          (wrapped:interpretation (local-eval (quote rule))))
