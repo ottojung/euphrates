@@ -325,7 +325,7 @@
      (let ()
        (debugs (quote program))
        (define x (local-eval program))
-       (define interp (wrapped:code x))
+       (define interp (wrapped:interpretation x))
        (debugs interp)
        (define y (local-eval interp))
        (debugs y)
