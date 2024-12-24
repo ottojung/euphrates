@@ -57,7 +57,8 @@
       (axiom (if (and X Y) (and Y X))))
 
     (define r1 (map (specify X (P)) and-elim))
-    (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
+    ;; (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
+    (define r2 (eval (axiom (map (specify Y (Q)) (axiom (map (specify X (P)) and-elim))))))
 
     (define x
       (let ((m (and (P) (Q))))
