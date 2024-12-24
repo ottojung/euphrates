@@ -18,11 +18,17 @@
           olesya:interpret))
   (import
     (only (scheme base)
+          =
+          and
           begin
           define
           equal?
+          if
+          map
+          quasiquote
           quote
           unless))
+  (import (only (scheme eval) eval))
   (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))

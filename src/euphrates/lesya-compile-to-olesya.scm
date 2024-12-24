@@ -9,7 +9,7 @@
 (define (lesya:compile/->olesya program)
   (define wrapped
     (parameterize ((private:env (lexical-scope-make)))
-      (lesya:compile/->olesya:eval program)))
+      (local-eval program)))
 
   (wrapped:code wrapped))
 
@@ -47,7 +47,6 @@
 
 (define (lesya:compile/->olesya:environment)
   (environment
-   '(only (scheme base) unquote)
    '(rename (euphrates lesya-compile-to-olesya)
             (lesya:compile/->olesya:axiom axiom)
             (lesya:compile/->olesya:define define)
@@ -85,7 +84,21 @@
   (syntax-rules ()
     ((_ term)
      (let ()
-       (define q-term (quote term))
+       (define q-term-0 (quote term))
+       ;; (debugs q-term-0)
+
+       (define q-term
+         (let loop ((q-term-0 q-term-0))
+           (cond
+            ((symbol? q-term-0) q-term-0)
+            ((and (list? q-term-0)
+                  (list-length= 2 q-term-0)
+                  (equal? 'unquote (car q-term-0)))
+             (wrapped:interpretation
+              (local-eval (cadr q-term-0))))
+            (else (map loop q-term-0)))))
+
+       ;; (debugs q-term)
 
        (define code
          (lesya-object->olesya-object q-term))
@@ -306,5 +319,11 @@
        (wrap code interpretation)))))
 
 
-(define (lesya:compile/->olesya:eval program)
-  (local-eval program))
+(define-syntax lesya:compile/->olesya:eval
+  (syntax-rules ()
+    ((_ program)
+     (let ()
+       (define x (local-eval program))
+       (define interp (wrapped:code x))
+       (define y (local-eval interp))
+       y))))

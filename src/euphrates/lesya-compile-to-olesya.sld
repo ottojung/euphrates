@@ -35,6 +35,8 @@
           list-fold/semigroup))
   (import (only (euphrates list-last) list-last))
   (import
+    (only (euphrates list-length-eq) list-length=))
+  (import
     (only (euphrates make-unique) make-unique))
   (import
     (only (euphrates olesya-interpret)
@@ -52,22 +54,26 @@
     (only (scheme base)
           =
           _
+          and
           append
           apply
           begin
           cadr
           car
           cdr
+          cond
           cons
           define
           define-syntax
           define-values
+          else
           eq?
           equal?
           if
           lambda
           let
           list
+          list?
           make-parameter
           map
           null?

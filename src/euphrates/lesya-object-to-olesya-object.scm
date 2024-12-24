@@ -8,6 +8,9 @@
      ((olesya:return? object)
       (olesya:return:map loop object))
 
+     ((olesya:syntax:substitution? object)
+      object)
+
      ((lesya:syntax:implication? object)
       (let ()
         (define-values (premise consequence)

@@ -72,6 +72,10 @@
   conclusion)
 
 
+(define during-eval?/p
+  (make-parameter #f))
+
+
 (define (lesya:currently-at-toplevel?)
   (define stack (lesya:get-current-stack))
   (and (stack-empty? stack)
@@ -127,10 +131,12 @@
 (define-syntax lesya:check-that-on-toplevel
   (syntax-rules ()
     ((_ body)
-     (if (lesya:currently-hyphothetical?)
-         (lesya:error 'only-allowed-on-top-level
-                      (stringf "This operation is only allowed on toplevel: ~s." (quote body)))
-         body))))
+     (cond
+      ((during-eval?/p) body)
+      ((not (lesya:currently-hyphothetical?)) body)
+      (else
+       (lesya:error 'only-allowed-on-top-level
+                    (stringf "This operation is only allowed on toplevel: ~s." (quote body))))))))
 
 
 (define-syntax lesya:interpret:axiom
@@ -200,23 +206,8 @@
 
 
 (define (lesya:interpret:eval expr)
-  (cond
-   ((and (pair? expr) (list? expr))
-    (let ()
-      (define operation (car expr))
-
-      (cond
-       ((lesya:syntax:substitution? expr)
-        (let ()
-          (define-values (rule body)
-            (lesya:syntax:substitution:destruct expr 'impossible))
-          (lesya:interpret:map/unsafe rule body)))
-
-       (else
-        (lesya:error 'unknown-operation-in-eval operation expr)))))
-
-   (else
-    (lesya:error 'non-expression-in-eval expr))))
+  (parameterize ((during-eval?/p #t))
+    (eval expr (lesya:environment))))
 
 
 (define (lesya:environment)

@@ -23,9 +23,7 @@
           lesya:syntax:rule?
           lesya:syntax:specify:destruct
           lesya:syntax:specify:make
-          lesya:syntax:specify?
-          lesya:syntax:substitution:destruct
-          lesya:syntax:substitution?))
+          lesya:syntax:specify?))
   (import
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
@@ -67,7 +65,6 @@
           map
           not
           null?
-          pair?
           parameterize
           quasiquote
           quote

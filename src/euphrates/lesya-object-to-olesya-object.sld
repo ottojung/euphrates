@@ -13,6 +13,7 @@
   (import
     (only (euphrates olesya-syntax)
           olesya:syntax:rule:make
+          olesya:syntax:substitution?
           olesya:syntax:term:make))
   (import
     (only (scheme base)
