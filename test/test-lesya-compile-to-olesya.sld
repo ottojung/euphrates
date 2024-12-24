@@ -27,7 +27,8 @@
           map
           quasiquote
           quote
-          unless))
+          unless
+          unquote))
   (import (only (scheme eval) eval))
   (import (only (scheme process-context) exit))
   (cond-expand
