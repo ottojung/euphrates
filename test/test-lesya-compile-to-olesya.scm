@@ -44,11 +44,9 @@
 ;;
 
 
-
-
 (test-case
  ;;
- ;; Basic proof with disjunction. With `eval` style.
+ ;; Basic proof with disjunction. With `eval`.
  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
  ;;
 
@@ -59,18 +57,11 @@
       (axiom (if (and X Y) (and Y X))))
 
     (define r1 (map (specify X (P)) and-elim))
-    ;; (define r2 (map (specify Y (Q)) r1)) ;; equivalent to one below:
-    ;; (define r2 (eval (axiom (map (rule Y (Q)) ,r1))))
-    ;; (define r2 (eval (axiom (map (specify Y (Q)) ,r1))))
-    ;; (define r2 (map (specify Y (Q)) (axiom (if (and (P) Y) (P)))))
-    ;; (define r2 (eval (axiom (map (specify Y (Q)) (axiom (if (and (P) Y) (P)))))))
-    ;; (define r2 (eval (axiom (map (axiom (rule Y (Q))) (axiom ,r1)))))
+    (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
 
-    (= r2 (if (and (P) (Q)) (P)))
-
-    ;; (define x
-    ;;   (let ((m (and (P) (Q))))
-    ;;     (apply r2 m)))
+    (define x
+      (let ((m (and (P) (Q))))
+        (apply r2 m)))
 
     )
 

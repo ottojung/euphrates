@@ -18,12 +18,13 @@
           olesya:interpret))
   (import
     (only (scheme base)
-          =
           and
+          apply
           begin
           define
           equal?
           if
+          let
           map
           quasiquote
           quote
