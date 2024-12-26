@@ -30,6 +30,7 @@
     olesya:syntax:begin?
     olesya:syntax:begin:check
     olesya:syntax:begin:destruct)
+  (import (only (euphrates debugs) debugs))
   (import
     (only (euphrates define-tuple) define-tuple))
   (import

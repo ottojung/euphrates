@@ -9,6 +9,7 @@
   (import
     (only (euphrates olesya-interpretation-return)
           olesya:return:fail
+          olesya:return:ok
           olesya:return:type
           olesya:return:value))
   (import (only (euphrates raisu-fmt) raisu-fmt))

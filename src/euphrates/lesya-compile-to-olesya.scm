@@ -85,7 +85,6 @@
     ((_ term)
      (let ()
        (define q-term-0 (quote term))
-       ;; (debugs q-term-0)
 
        (define q-term
          (let loop ((q-term-0 q-term-0))
@@ -97,8 +96,6 @@
              (wrapped:interpretation
               (local-eval (cadr q-term-0))))
             (else (map loop q-term-0)))))
-
-       ;; (debugs q-term)
 
        (define code
          (lesya-object->olesya-object q-term))
@@ -135,9 +132,16 @@
      (wrapped:code e-argument)))
 
   (define interpretation
-    (olesya:interpret:map
-     (wrapped:interpretation e-rule)
-     (wrapped:interpretation e-argument)))
+    (olesya:interpret:with-error-possibility
+     (olesya:interpret:map
+      (wrapped:interpretation e-rule)
+      (wrapped:interpretation e-argument))))
+
+  (when (olesya:return:fail? interpretation)
+    (raisu-fmt
+     'failed-interpretation
+     "This should not happen, but interpretation failed with ~s."
+     interpretation))
 
   (wrap code interpretation))
 
@@ -312,9 +316,16 @@
           (wrapped:code e-body)))
 
        (define interpretation
-         (olesya:interpret:map
-          (wrapped:interpretation e-rule)
-          (wrapped:interpretation e-body)))
+         (olesya:interpret:with-error-possibility
+          (olesya:interpret:map
+           (wrapped:interpretation e-rule)
+           (wrapped:interpretation e-body))))
+
+       (when (olesya:return:fail? interpretation)
+         (raisu-fmt
+          'failed-interpretation
+          "This should not happen, but interpretation failed with ~s."
+          interpretation))
 
        (wrap code interpretation)))))
 
@@ -323,7 +334,20 @@
   (syntax-rules ()
     ((_ program)
      (let ()
-       (define x (local-eval program))
-       (define interp (wrapped:code x))
-       (define y (local-eval interp))
-       y))))
+       (define q-program (quote program))
+       ;; (debugs q-program)
+       (define x (local-eval q-program))
+       ;; (debugs x)
+       (define interp (wrapped:interpretation x))
+       (define z (local-eval interp))
+       ;; (debugs z)
+
+       (define code
+         (olesya:syntax:eval:make
+          (wrapped:code z)))
+       (define interpretation
+         (wrapped:interpretation z))
+
+       ;; (debugs code)
+
+       (wrap code interpretation)))))

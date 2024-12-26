@@ -17,15 +17,36 @@
   (make-parameter #f))
 
 
+(define (olesya:interpret:get-escape)
+  (define ret (olesya:interpret:escape/p))
+  (unless ret
+    (raisu-fmt 'no-escape-here "Expected value for escape/p."))
+  ret)
+
+
+(define-syntax olesya:interpret:with-error-possibility
+  (syntax-rules (:ok-wrapper)
+    ((_ :ok-wrapper ok-wrapper . bodies)
+     (if (olesya:interpret:escape/p)
+         (ok-wrapper (let () . bodies))
+         (call-with-current-continuation
+          (lambda (k)
+            (ok-wrapper
+             (parameterize ((olesya:interpret:escape/p k))
+               (let () . bodies)))))))
+
+    ((_ . bodies)
+     (olesya:interpret:with-error-possibility
+      :ok-wrapper identity
+      . bodies))))
+
+
 (define-syntax olesya:interpret:run
   (syntax-rules ()
     ((_ . bodies)
-     (call-with-current-continuation
-      (lambda (k)
-        (define result
-          (parameterize ((olesya:interpret:escape/p k))
-            (let () . bodies)))
-        (olesya:return:ok result))))))
+     (olesya:interpret:with-error-possibility
+      :ok-wrapper olesya:return:ok
+      . bodies))))
 
 
 (define-syntax olesya:interpret:begin
@@ -59,7 +80,7 @@
 
 
 (define (olesya:error type . args)
-  (define escape (olesya:interpret:escape/p))
+  (define escape (olesya:interpret:get-escape))
   (escape (olesya:return:fail (list type args))))
 
 
@@ -100,9 +121,8 @@
 
 
 (define (olesya:interpret:map rule body)
-  (define escape (olesya:interpret:escape/p))
   (define-values (premise conclusion)
-    (olesya:syntax:rule:destruct rule escape))
+    (olesya:syntax:rule:destruct rule olesya:error))
 
   (olesya:interpret:beta-reduce
    body premise conclusion))

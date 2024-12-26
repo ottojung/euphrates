@@ -20,14 +20,19 @@
     (only (scheme base)
           =
           and
+          apply
           begin
           define
           equal?
           if
+          let
           map
+          not
+          or
           quasiquote
           quote
-          unless))
+          unless
+          unquote))
   (import (only (scheme eval) eval))
   (import (only (scheme process-context) exit))
   (cond-expand

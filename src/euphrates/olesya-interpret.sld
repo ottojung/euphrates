@@ -3,6 +3,7 @@
   (euphrates olesya-interpret)
   (export
     olesya:interpret
+    olesya:interpret:with-error-possibility
     olesya:interpret:eval
     olesya:interpret:term
     olesya:interpret:rule
@@ -11,6 +12,7 @@
     olesya:interpret:define
     olesya:interpret:begin
     olesya:interpret:=)
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates olesya-interpretation-return)
           olesya:return:fail
@@ -20,6 +22,7 @@
           olesya:syntax:rule:destruct
           olesya:syntax:rule:make
           olesya:syntax:term:make))
+  (import (only (euphrates raisu-fmt) raisu-fmt))
   (import
     (only (scheme base)
           =
@@ -45,7 +48,8 @@
           null?
           parameterize
           quote
-          syntax-rules))
+          syntax-rules
+          unless))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (guile) include-from-path))

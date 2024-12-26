@@ -68,6 +68,7 @@
 (define (olesya:syntax:rule:destruct object on-error)
   (define error (olesya:syntax:rule:check object))
   (when error
+    (debugs error)
     (apply on-error error))
 
   (let ()

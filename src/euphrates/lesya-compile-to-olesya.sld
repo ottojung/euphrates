@@ -40,11 +40,16 @@
     (only (euphrates make-unique) make-unique))
   (import
     (only (euphrates olesya-interpret)
-          olesya:interpret:map))
+          olesya:interpret:map
+          olesya:interpret:with-error-possibility))
+  (import
+    (only (euphrates olesya-interpretation-return)
+          olesya:return:fail?))
   (import
     (only (euphrates olesya-syntax)
           olesya:syntax:begin:make
           olesya:syntax:define:make
+          olesya:syntax:eval:make
           olesya:syntax:let:make
           olesya:syntax:rule:make
           olesya:syntax:substitution:make))
@@ -84,7 +89,8 @@
           symbol?
           syntax-rules
           unquote
-          values))
+          values
+          when))
   (import (only (scheme eval) environment eval))
   (cond-expand
     (guile (import (only (srfi srfi-1) first)))

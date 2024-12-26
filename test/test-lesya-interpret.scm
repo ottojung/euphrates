@@ -627,7 +627,34 @@
       (axiom (if (and X Y) (and Y X))))
 
     (define r1 (map (specify X (P)) and-elim))
+    (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
+    (= r2 (if (and (P) (Q)) (P)))
+
+    (define x
+      (let ((m (and (P) (Q))))
+        (apply r2 m)))
+
+    x)
+
+ (olesya:return:ok
+  `(if (and (P) (Q)) (P))))
+
+
+(test-case
+ ;;
+ ;; Basic proof with disjunction. With `eval` and `unquote`.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define r1 (map (specify X (P)) and-elim))
     (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
+    (= r2 (if (and (P) (Q)) (P)))
 
     (define x
       (let ((m (and (P) (Q))))

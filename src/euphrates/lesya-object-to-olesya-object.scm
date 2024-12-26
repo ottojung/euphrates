@@ -8,7 +8,10 @@
      ((olesya:return? object)
       (olesya:return:map loop object))
 
-     ((olesya:syntax:substitution? object)
+     ((lesya:syntax:substitution? object)
+      object)
+
+     ((lesya:syntax:rule? object)
       object)
 
      ((lesya:syntax:implication? object)
