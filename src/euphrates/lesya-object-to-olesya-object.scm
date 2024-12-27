@@ -5,14 +5,20 @@
 (define (lesya-object->olesya-object object)
   (let loop ((object object))
     (cond
-     ((olesya:return? object)
+     ((olesya:return:ok? object)
       (olesya:return:map loop object))
-
-     ((lesya:syntax:substitution? object)
-      object)
 
      ((lesya:syntax:rule? object)
       object)
+
+     ((lesya:syntax:substitution? object)
+      (let ()
+        (define-values (rule argument)
+          (lesya:syntax:substitution:destruct object 'impossible:must-be-substitution))
+
+        (olesya:syntax:substitution:make
+         (loop rule)
+         (loop argument))))
 
      ((lesya:syntax:implication? object)
       (let ()
@@ -22,6 +28,11 @@
         (olesya:syntax:rule:make
          (loop premise)
          (loop consequence))))
+
+     ((lesya:syntax:axiom? object)
+      (let ()
+        (define obj (lesya:syntax:axiom:destruct object 'impossible:must-be-axiom))
+        (loop obj)))
 
      ((or (symbol? object) (list? object) (null? object))
       (olesya:syntax:term:make object))

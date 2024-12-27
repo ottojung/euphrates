@@ -17,6 +17,7 @@
     (only (euphrates define-tuple) define-tuple))
   (import
     (only (euphrates define-type9) define-type9))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates lesya-object-to-olesya-object)
           lesya-object->olesya-object))
@@ -40,11 +41,15 @@
     (only (euphrates make-unique) make-unique))
   (import
     (only (euphrates olesya-interpret)
+          olesya:interpret:eval
           olesya:interpret:map
           olesya:interpret:with-error-possibility))
   (import
     (only (euphrates olesya-interpretation-return)
           olesya:return:fail?))
+  (import
+    (only (euphrates olesya-syntax-get-referenced-names)
+          olesya:syntax:get-referenced-names))
   (import
     (only (euphrates olesya-syntax)
           olesya:syntax:begin:make
@@ -93,8 +98,8 @@
           when))
   (import (only (scheme eval) environment eval))
   (cond-expand
-    (guile (import (only (srfi srfi-1) first)))
-    (else (import (only (srfi 1) first))))
+    (guile (import (only (srfi srfi-1) filter first)))
+    (else (import (only (srfi 1) filter first))))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin

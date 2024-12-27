@@ -330,24 +330,64 @@
        (wrap code interpretation)))))
 
 
+;; (define-syntax lesya:compile/->olesya:eval
+;;   (syntax-rules ()
+;;     ((_ program)
+;;      (let ()
+;;        (define q-program (quote program))
+;;        (debugs q-program)
+;;        (define x (local-eval q-program))
+;;        (debugs x)
+;;        (define interp (wrapped:interpretation x))
+;;        (define z (local-eval interp))
+;;        (debugs z)
+
+;;        (define code
+;;          (olesya:syntax:eval:make
+;;           (wrapped:code z)))
+;;        (define interpretation
+;;          (wrapped:interpretation z))
+
+;;        (debugs code)
+
+;;        (wrap code interpretation)))))
+
+
 (define-syntax lesya:compile/->olesya:eval
   (syntax-rules ()
     ((_ program)
      (let ()
        (define q-program (quote program))
        ;; (debugs q-program)
-       (define x (local-eval q-program))
-       ;; (debugs x)
-       (define interp (wrapped:interpretation x))
-       (define z (local-eval interp))
-       ;; (debugs z)
+
+       (define scope (private:env))
+       (define (make-define to-define-obj)
+         (define got
+           (lexical-scope-ref scope to-define-obj #f))
+         (and got
+              (olesya:syntax:define:make
+               to-define-obj (wrapped:interpretation got))))
+
+       (define to-define
+         (olesya:syntax:get-referenced-names q-program))
+       (define aux-program
+         (apply
+          olesya:syntax:begin:make
+          (append
+           (filter
+            identity
+            (map make-define to-define))
+           (list q-program))))
+
+       ;; (debugs aux-program)
 
        (define code
          (olesya:syntax:eval:make
-          (wrapped:code z)))
+          q-program))
        (define interpretation
-         (wrapped:interpretation z))
+         (olesya:interpret:eval aux-program))
 
        ;; (debugs code)
+       ;; (debugs interpretation)
 
        (wrap code interpretation)))))

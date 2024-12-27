@@ -4,17 +4,21 @@
   (export lesya-object->olesya-object)
   (import
     (only (euphrates lesya-syntax)
+          lesya:syntax:axiom:destruct
+          lesya:syntax:axiom?
           lesya:syntax:implication:destruct
           lesya:syntax:implication?
           lesya:syntax:rule?
+          lesya:syntax:substitution:destruct
           lesya:syntax:substitution?))
   (import
     (only (euphrates olesya-interpretation-return)
           olesya:return:map
-          olesya:return?))
+          olesya:return:ok?))
   (import
     (only (euphrates olesya-syntax)
           olesya:syntax:rule:make
+          olesya:syntax:substitution:make
           olesya:syntax:term:make))
   (import
     (only (scheme base)

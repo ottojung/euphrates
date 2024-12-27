@@ -44,32 +44,32 @@
 ;;
 
 
-(test-case
- ;;
- ;; Basic proof with disjunction. With `eval`.
- ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
- ;;
+;; (test-case
+;;  ;;
+;;  ;; Basic proof with disjunction. With `eval`.
+;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+;;  ;;
 
- '(begin
-    (define and-elim
-      (axiom (if (and X Y) X)))
-    (define and-symmetric
-      (axiom (if (and X Y) (and Y X))))
+;;  '(begin
+;;     (define and-elim
+;;       (axiom (if (and X Y) X)))
+;;     (define and-symmetric
+;;       (axiom (if (and X Y) (and Y X))))
 
-    (define r1 (map (specify X (P)) and-elim))
-    ;; (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
-    (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
-    (= r2 (if (and (P) (Q)) (P)))
+;;     (define r1 (map (specify X (P)) and-elim))
+;;     ;; (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
+;;     (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
+;;     (= r2 (if (and (P) (Q)) (P)))
 
-    (define x
-      (let ((m (and (P) (Q))))
-        (apply r2 m)))
+;;     (define x
+;;       (let ((m (and (P) (Q))))
+;;         (apply r2 m)))
 
-    (= x (if (and (P) (Q)) (P)))
+;;     (= x (if (and (P) (Q)) (P)))
 
-    )
+;;     )
 
- `ignore-ok)
+;;  `ignore-ok)
 
 
 
@@ -964,9 +964,361 @@
  'ignore-ok)
 
 
+(test-case
+ ;;
+ ;;  Proof of negation rule for universal quantifier.
+ ;;
+
+ '(begin
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Propositional axioms:
+    ;;
+
+    (define MP ;; The "modus ponens" law.
+      (axiom (if P (if (if P Q) Q))))
+    (define DN ;; The "double negation" law.
+      (axiom (if (not (not P)) P)))
+    (define EFQ ;; The "ex-falso-quodlibet" law.
+      (axiom (if (false) P)))
+    (define Abs ;; The "absurdity rule" law.
+      (axiom (if (and P (not P)) (false))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (axiom (if (if P (false)) (not P))))
+    (define CP ;; The "contraposition" law.
+      (axiom (if (if P Q) (if (not P) (not Q)))))
+    (define LEM ;; The "law of excluded middle".
+      (axiom (or P (not P))))
+
+    (define and-intro
+      (axiom (if P (if Q (and P Q)))))
+    (define and-elim-left
+      (axiom (if (and P Q) P)))
+    (define and-elim-right
+      (axiom (if (and P Q) Q)))
+
+    (define or-intro-left
+      (axiom (if P (or P Q))))
+    (define or-intro-right
+      (axiom (if Q (or P Q))))
+    (define or-elim
+      (axiom (if (or P Q) (if (if P R) (if (if Q R) R)))))
+
+    (define implication-intro
+      (axiom (if (or (not P) Q) (if P Q))))
+    (define implication-elim
+      (axiom (if (if P Q) (or (not P) Q))))
+
+    (define not-intro
+      RAA)
+    (define not-elim
+      DN)
+
+    (define true-intro
+      (axiom (if P (true))))
+    (define true-elim
+      (axiom (if (not (true)) (false))))
+    (define false-intro
+      Abs)
+    (define false-elim
+      EFQ)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Quantifier rules:
+    ;;
+
+    (define universal-instantiation
+      (axiom (if t (if (forall x B) (map (axiom (rule x t)) (axiom B))))))
+
+    (define universal-generalization
+      (axiom (if c (if (if x Q) (if (if x c) (map (axiom (rule x c))
+                                                  (axiom (forall c Q))))))))
+
+    (define existential-generalization
+      (axiom (if c (if B (map (axiom (rule t c)) (axiom (exists c B)))))))
+
+    (define existential-instantiation
+      (axiom (if (exists x B) (map (axiom (rule x (exists x B))) (axiom B)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Useful theorems:
+    ;;
+
+    (define de-morgan-/
+      (axiom (if (not (or P Q)) (and (not P) (not Q)))))
+
+    (define if-negation
+      (axiom (if (not (if P Q)) (and P (not Q)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Theorem:
+    ;;
+
+    (define theorem
+      (let ()
+
+        (define universal-instantiation-1
+          (= (map (specify t (exists (x) (not P)))
+                  (map (specify x (x))
+                       (map (specify B P)
+                            universal-instantiation)))
+             (if (exists (x) (not P))
+                 (if (forall (x) P)
+                     (map (axiom (rule (x) (exists (x) (not P))))
+                          (axiom P))))))
+
+        (define existential-instantiation-1
+          (= (map (specify x (x)) (map (specify B (not P)) existential-instantiation))
+             (if (exists (x) (not P))
+                 (map (axiom (rule (x) (exists (x) (not P))))
+                      (axiom (not P))))))
+
+        (define and-intro-1
+          (= (map (specify Q (not P))
+                  (map (specify P P)
+                       and-intro))
+             (if P
+                 (if (not P)
+                     (and P
+                          (not P))))))
+
+        (define abs-1
+          (= (map (specify P P) Abs)
+             (if (and P
+                      (not P))
+                 (false))))
+
+        (define raa-1
+          (= (map (specify P (exists (x) (not P))) RAA)
+             (if (if (exists (x) (not P)) (false))
+                 (not (exists (x) (not P))))))
+
+        (let ((premise (forall (x) P)))
+
+          (define conclusion->false
+            (let ((not-conclusion (exists (x) (not P))))
+
+              (define c not-conclusion)
+
+              (define instance/text
+                (= (apply existential-instantiation-1 not-conclusion)
+                   (map (axiom (rule (x) (exists (x) (not P))))
+                        (axiom (not P)))))
+
+              (define instance
+                (= (eval instance/text)
+                   (not P)))
+
+              (define instance-2/text
+                (= (apply universal-instantiation-1 c premise)
+                   (map (axiom (rule (x) (exists (x) (not P))))
+                        (axiom P))))
+
+              (define instance-2
+                (= (eval instance-2/text)
+                   P))
+
+              (define both-instances
+                (apply and-intro-1 instance-2 instance))
+
+              (define false
+                (= (apply abs-1 both-instances)
+                   (false)))
+
+              false))
+
+          (apply raa-1 conclusion->false))))
+
+    (= theorem
+       (if (forall (x) P)
+           (not (exists (x) (not P)))))
+
+    )
+
+ 'ignore-ok)
+
+
+(test-case
+ ;;
+ ;;  Proof of negation rule for existential quantifier.
+ ;;
+
+ '(begin
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Propositional axioms:
+    ;;
+
+    (define MP ;; The "modus ponens" law.
+      (axiom (if P (if (if P Q) Q))))
+    (define DN ;; The "double negation" law.
+      (axiom (if (not (not P)) P)))
+    (define EFQ ;; The "ex-falso-quodlibet" law.
+      (axiom (if (false) P)))
+    (define Abs ;; The "absurdity rule" law.
+      (axiom (if (and P (not P)) (false))))
+    (define RAA ;; The "reductio ad absurdum" law.
+      (axiom (if (if P (false)) (not P))))
+    (define CP ;; The "contraposition" law.
+      (axiom (if (if P Q) (if (not P) (not Q)))))
+    (define LEM ;; The "law of excluded middle".
+      (axiom (or P (not P))))
+
+    (define and-intro
+      (axiom (if P (if Q (and P Q)))))
+    (define and-elim-left
+      (axiom (if (and P Q) P)))
+    (define and-elim-right
+      (axiom (if (and P Q) Q)))
+
+    (define or-intro-left
+      (axiom (if P (or P Q))))
+    (define or-intro-right
+      (axiom (if Q (or P Q))))
+    (define or-elim
+      (axiom (if (or P Q) (if (if P R) (if (if Q R) R)))))
+
+    (define implication-intro
+      (axiom (if (or (not P) Q) (if P Q))))
+    (define implication-elim
+      (axiom (if (if P Q) (or (not P) Q))))
+
+    (define not-intro
+      RAA)
+    (define not-elim
+      DN)
+
+    (define true-intro
+      (axiom (if P (true))))
+    (define true-elim
+      (axiom (if (not (true)) (false))))
+    (define false-intro
+      Abs)
+    (define false-elim
+      EFQ)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Quantifier rules:
+    ;;
+
+    (define universal-instantiation
+      (axiom (if t (if (forall x B) (map (axiom (rule x t)) (axiom B))))))
+
+    (define universal-generalization
+      (axiom (if c (if (if x Q) (if (if x c) (map (axiom (rule x c))
+                                                  (axiom (forall c Q))))))))
+
+    (define existential-generalization
+      (axiom (if c (if B (map (axiom (rule t c)) (axiom (exists c B)))))))
+
+    (define existential-instantiation
+      (axiom (if (exists x B) (map (axiom (rule x (exists x B))) (axiom B)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Useful theorems:
+    ;;
+
+    (define de-morgan-/
+      (axiom (if (not (or P Q)) (and (not P) (not Q)))))
+
+    (define if-negation
+      (axiom (if (not (if P Q)) (and P (not Q)))))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;
+    ;;  Theorem:
+    ;;
+
+    (define theorem
+      (let ()
+
+        (define universal-instantiation-1
+          (= (map (specify t P)
+                  (map (specify x (x))
+                       (map (specify B (not P))
+                            universal-instantiation)))
+             (if P
+                 (if (forall (x) (not P))
+                     (map (axiom (rule (x) P)) (axiom (not P)))))))
+
+        (define existential-instantiation-1
+          (= (map (specify x (x)) (map (specify B P) existential-instantiation))
+             (if (exists (x) P)
+                 (map (axiom (rule (x) (exists (x) P))) (axiom P)))))
+
+        (define and-intro-1
+          (= (map (specify Q (not P))
+                  (map (specify P P)
+                       and-intro))
+             (if P
+                 (if (not P)
+                     (and P
+                          (not P))))))
+
+        (define abs-1
+          (= (map (specify P P) Abs)
+             (if (and P
+                      (not P))
+                 (false))))
+
+        (define raa-1
+          (= (map (specify P (forall (x) (not P))) RAA)
+             (if (if (forall (x) (not P)) (false))
+                 (not (forall (x) (not P))))))
+
+        (let ((premise (exists (x) P)))
+
+          (define conclusion->false
+            (let ((not-conclusion (forall (x) (not P))))
+
+              (define instance-2/text
+                (= (apply existential-instantiation-1 premise)
+                   (map (axiom (rule (x) (exists (x) P))) (axiom P))))
+
+              (define instance-2
+                (= (eval instance-2/text)
+                   P))
+
+              (define instance/text
+                (= (apply universal-instantiation-1 instance-2 not-conclusion)
+                   (map (axiom (rule (x) P)) (axiom (not P)))))
+
+              (define instance
+                (= (eval instance/text)
+                   (not P)))
+
+              (define both-instances
+                (apply and-intro-1 instance-2 instance))
+
+              (define false
+                (= (apply abs-1 both-instances)
+                   (false)))
+
+              false))
+
+          (apply raa-1 conclusion->false))))
+
+    (= theorem
+       (if (exists (x) P)
+           (not (forall (x) (not P)))))
+
+    )
+
+ 'ignore-ok)
+
+
 ;; (test-case
 ;;  ;;
-;;  ;;  Proof of negation rule for universal quantifier.
+;;  ;;  Basic proof with quantifiers.
+;;  ;;  Taken from "First Order Logic and Automated Theorem Proving",
+;;  ;;     second edition, by Melvin Fitting, page 154.
 ;;  ;;
 
 ;;  '(begin
@@ -1053,6 +1405,22 @@
 ;;     (define if-negation
 ;;       (axiom (if (not (if P Q)) (and P (not Q)))))
 
+;;     (define universal-negation
+;;       (axiom (if (not (forall (x) P))
+;;                  (exists (x) (not P)))))
+
+;;     (define existential-negation
+;;       (axiom (if (not (exists (x) P))
+;;                  (forall (x) (not P)))))
+
+;;     (define universal->existential
+;;       (axiom (if (forall (x) P)
+;;                  (not (exists (x) (not P))))))
+
+;;     (define existential->universal
+;;       (axiom (if (exists (x) P)
+;;                  (not (forall (x) (not P))))))
+
 ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     ;;
 ;;     ;;  Theorem:
@@ -1061,591 +1429,223 @@
 ;;     (define theorem
 ;;       (let ()
 
-;;         (define universal-instantiation-1
-;;           (= (map (specify t (exists (x) (not P)))
-;;                   (map (specify x (x))
-;;                        (map (specify B P)
-;;                             universal-instantiation)))
-;;              (if (exists (x) (not P))
-;;                  (if (forall (x) P)
-;;                      (map (axiom (rule (x) (exists (x) (not P))))
-;;                           (axiom P))))))
+;;         (define if-negation-1
+;;           (map (specify Q (or (exists (x) (P (x))) (forall (x) (Q (x)))))
+;;                (map (specify P (forall (x) (or (P (x)) (Q (x))))) if-negation)))
+
+;;         (define and-elim-left-1
+;;           (map (specify Q (not (or (exists (x) (P (x)))
+;;                               (forall (x) (Q (x))))))
+;;                (map (specify P (forall (x) (or (P (x)) (Q (x))))) and-elim-left)))
+
+;;         (define and-elim-right-1
+;;           (map (specify Q (not (or (exists (x) (P (x)))
+;;                               (forall (x) (Q (x))))))
+;;                (map (specify P (forall (x) (or (P (x)) (Q (x))))) and-elim-right)))
+
+;;         (define de-morgan-/-1
+;;           (=
+
+;;            (map (specify Q (forall (x) (Q (x))))
+;;                 (map (specify P (exists (x) (P (x)))) de-morgan-/))
+
+;;            (if (not (or (exists (x) (P (x)))
+;;                         (forall (x) (Q (x)))))
+;;                (and (not (exists (x) (P (x))))
+;;                     (not (forall (x) (Q (x))))))))
+
+;;         (define and-elim-left-2
+;;           (map (specify Q (not (forall (x) (Q (x)))))
+;;                (map (specify P (not (exists (x) (P (x))))) and-elim-left)))
+
+;;         (define and-elim-right-2
+;;           (map (specify Q (not (forall (x) (Q (x)))))
+;;                (map (specify P (not (exists (x) (P (x))))) and-elim-right)))
+
+;;         (define negate-forall-q
+;;           (= (map (specify P (Q (x))) universal-negation)
+;;              (if (not (forall (x) (Q (x))))
+;;                  (exists (x) (not (Q (x)))))))
 
 ;;         (define existential-instantiation-1
-;;           (= (map (specify x (x)) (map (specify B (not P)) existential-instantiation))
-;;              (if (exists (x) (not P))
-;;                  (map (axiom (rule (x) (exists (x) (not P))))
-;;                       (axiom (not P))))))
+;;           (= (map (specify x (x)) (map (specify B (not (Q (x)))) existential-instantiation))
+;;              (if (exists (x) (not (Q (x))))
+;;                  (map (axiom (rule (x) (exists (x) (not (Q (x))))))
+;;                       (axiom (not (Q (x))))))))
+
+;;         (define negate-exists-p
+;;           (= (map (specify P (P (x))) existential-negation)
+;;              (if (not (exists (x) (P (x))))
+;;                  (forall (x) (not (P (x)))))))
+
+;;         (define universal-instantiation-1
+;;           (= (map (specify t (exists (x) (not (Q (x)))))
+;;                   (map (specify x (x))
+;;                        (map (specify B (not (P (x)))) universal-instantiation)))
+;;              (if (exists (x) (not (Q (x))))
+;;                  (if (forall (x) (not (P (x))))
+;;                      (map (axiom (rule (x) (exists (x) (not (Q (x))))))
+;;                           (axiom (not (P (x)))))))))
+
+;;         (define universal-instantiation-2
+;;           (= (map (specify t (exists (x) (not (Q (x)))))
+;;                   (map (specify x (x))
+;;                        (map (specify B (or (P (x)) (Q (x))))
+;;                             universal-instantiation)))
+;;              (if (exists (x) (not (Q (x))))
+;;                  (if (forall (x) (or (P (x)) (Q (x))))
+;;                      (map (axiom (rule (x) (exists (x) (not (Q (x))))))
+;;                           (axiom (or (P (x)) (Q (x)))))))))
 
 ;;         (define and-intro-1
-;;           (= (map (specify Q (not P))
-;;                   (map (specify P P)
-;;                        and-intro))
-;;              (if P
-;;                  (if (not P)
-;;                      (and P
-;;                           (not P))))))
+;;           (map (specify Q (not (P (exists (x) (not (Q (x)))))))
+;;                (map (specify P (P (exists (x) (not (Q (x)))))) and-intro)))
 
-;;         (define abs-1
-;;           (= (map (specify P P) Abs)
-;;              (if (and P
-;;                       (not P))
-;;                  (false))))
+;;         (define abs-p<c>
+;;           (map (specify P (P (exists (x) (not (Q (x)))))) Abs))
 
-;;         (define raa-1
-;;           (= (map (specify P (exists (x) (not P))) RAA)
-;;              (if (if (exists (x) (not P)) (false))
-;;                  (not (exists (x) (not P))))))
+;;         (define and-intro-2
+;;           (map (specify Q (not (Q (exists (x) (not (Q (x)))))))
+;;                (map (specify P (Q (exists (x) (not (Q (x)))))) and-intro)))
 
-;;         (let ((premise (forall (x) P)))
+;;         (define abs-q<c>
+;;           (map (specify P (Q (exists (x) (not (Q (x)))))) Abs))
 
-;;           (define conclusion->false
-;;             (let ((not-conclusion (exists (x) (not P))))
+;;         (define or-elim-1
+;;           (map (specify R (false))
+;;                (map (specify Q (Q (exists (x) (not (Q (x))))))
+;;                     (map (specify P (P (exists (x) (not (Q (x))))))
+;;                          or-elim))))
 
-;;               (define c not-conclusion)
+;;         (= or-elim-1
+;;            (if (or (P (exists (x) (not (Q (x)))))
+;;                    (Q (exists (x) (not (Q (x))))))
+;;                (if (if (P (exists (x) (not (Q (x))))) (false))
+;;                    (if (if (Q (exists (x) (not (Q (x))))) (false))
+;;                        (false)))))
 
-;;               (define instance/text
-;;                 (= (apply existential-instantiation-1 not-conclusion)
-;;                    (map (axiom (rule (x) (exists (x) (not P))))
-;;                         (axiom (not P)))))
+;;         (define raa-final
+;;           (map (specify P (not (if (forall (x) (or (P (x)) (Q (x))))
+;;                               (or (exists (x) (P (x))) (forall (x) (Q (x)))))))
+;;                RAA))
 
-;;               (define instance
-;;                 (= (eval instance/text)
-;;                    (not P)))
+;;         (define dn-final
+;;           (map (specify P (if (forall (x) (or (P (x)) (Q (x)))) (or (exists (x) (P (x))) (forall (x) (Q (x))))))
+;;                DN))
 
-;;               (define instance-2/text
-;;                 (= (apply universal-instantiation-1 c premise)
-;;                    (map (axiom (rule (x) (exists (x) (not P))))
-;;                         (axiom P))))
+;;         (define refutation
+;;           (let ((resolution-1
+;;                  (not (if (forall (x) (or (P (x)) (Q (x))))
+;;                           (or (exists (x) (P (x)))
+;;                               (forall (x) (Q (x))))))))
 
-;;               (define instance-2
-;;                 (= (eval instance-2/text)
-;;                    P))
+;;             (define statement
+;;               (apply if-negation-1 resolution-1))
 
-;;               (define both-instances
-;;                 (apply and-intro-1 instance-2 instance))
+;;             (define resolution-2
+;;               (apply and-elim-left-1 statement))
 
-;;               (define false
-;;                 (= (apply abs-1 both-instances)
-;;                    (false)))
+;;             (= resolution-2
+;;                (forall (x) (or (P (x)) (Q (x)))))
 
-;;               false))
+;;             (define resolution-3
+;;               (apply and-elim-right-1 statement))
 
-;;           (apply raa-1 conclusion->false))))
+;;             (= resolution-3
+;;                (not (or (exists (x) (P (x))) (forall (x) (Q (x))))))
+
+;;             (define de-morganed-1
+;;               (apply de-morgan-/-1 resolution-3))
+
+;;             (= de-morganed-1
+;;                (and (not (exists (x) (P (x)))) (not (forall (x) (Q (x))))))
+
+;;             (define resolution-4
+;;               (= (apply and-elim-left-2 de-morganed-1)
+;;                  (not (exists (x) (P (x))))))
+
+;;             (define resolution-5
+;;               (= (apply and-elim-right-2 de-morganed-1)
+;;                  (not (forall (x) (Q (x))))))
+
+;;             (define exists-notq
+;;               (= (apply negate-forall-q resolution-5)
+;;                  (exists (x) (not (Q (x))))))
+
+;;             (define c exists-notq)
+
+;;             (define resolution-6/text
+;;               (= (apply existential-instantiation-1 exists-notq)
+;;                  (map (axiom (rule (x) ,c))
+;;                       (axiom (not (Q (x)))))))
+
+;;             (define resolution-6
+;;               (= (eval resolution-6/text)
+;;                  (not (Q ,c))))
+
+;;             (define forall-notp
+;;               (= (apply negate-exists-p resolution-4)
+;;                  (forall (x) (not (P (x))))))
+
+;;             (define resolution-7/text
+;;               (= (apply universal-instantiation-1 c forall-notp)
+;;                  (map (axiom (rule (x) ,c))
+;;                       (axiom (not (P (x)))))))
+
+;;             (define resolution-7
+;;               (= (eval resolution-7/text)
+;;                  (not (P ,c))))
+
+;;             (define resolution-8/text
+;;               (= (apply universal-instantiation-2 c resolution-2)
+;;                  (map (axiom (rule (x) ,c))
+;;                       (axiom (or (P (x)) (Q (x)))))))
+
+;;             (define resolution-8
+;;               (= (eval resolution-8/text)
+;;                  (or (P ,c) (Q ,c))))
+
+;;             (define first-case
+;;               (let ((p<c> (P ,c)))
+
+;;                 (define tuple
+;;                   (apply and-intro-1 p<c> resolution-7))
+
+;;                 (define false
+;;                   (apply abs-p<c> tuple))
+
+;;                 false))
+
+;;             (define second-case
+;;               (let ((resolution-10 (Q ,c)))
+
+;;                 (define tuple
+;;                   (apply and-intro-2 resolution-10 resolution-6))
+
+;;                 (define false
+;;                   (apply abs-q<c> tuple))
+
+;;                 false))
+
+;;             (define resolution-11
+;;               (apply or-elim-1 resolution-8 first-case second-case))
+
+;;             (= resolution-11 (false))
+
+;;             resolution-11))
+
+;;         (define negated
+;;           (apply raa-final refutation))
+
+;;         (define final
+;;           (apply dn-final negated))
+
+;;         final))
 
 ;;     (= theorem
-;;        (if (forall (x) P)
-;;            (not (exists (x) (not P)))))
+;;        (if (forall (x) (or (P (x)) (Q (x))))
+;;            (or (exists (x) (P (x))) (forall (x) (Q (x))))))
 
 ;;     )
 
 ;;  'ignore-ok)
-
-
-;; ;; (test-case
-;; ;;  ;;
-;; ;;  ;;  Proof of negation rule for existential quantifier.
-;; ;;  ;;
-
-;; ;;  '(begin
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Propositional axioms:
-;; ;;     ;;
-
-;; ;;     (define MP ;; The "modus ponens" law.
-;; ;;       (axiom (if P (if (if P Q) Q))))
-;; ;;     (define DN ;; The "double negation" law.
-;; ;;       (axiom (if (not (not P)) P)))
-;; ;;     (define EFQ ;; The "ex-falso-quodlibet" law.
-;; ;;       (axiom (if (false) P)))
-;; ;;     (define Abs ;; The "absurdity rule" law.
-;; ;;       (axiom (if (and P (not P)) (false))))
-;; ;;     (define RAA ;; The "reductio ad absurdum" law.
-;; ;;       (axiom (if (if P (false)) (not P))))
-;; ;;     (define CP ;; The "contraposition" law.
-;; ;;       (axiom (if (if P Q) (if (not P) (not Q)))))
-;; ;;     (define LEM ;; The "law of excluded middle".
-;; ;;       (axiom (or P (not P))))
-
-;; ;;     (define and-intro
-;; ;;       (axiom (if P (if Q (and P Q)))))
-;; ;;     (define and-elim-left
-;; ;;       (axiom (if (and P Q) P)))
-;; ;;     (define and-elim-right
-;; ;;       (axiom (if (and P Q) Q)))
-
-;; ;;     (define or-intro-left
-;; ;;       (axiom (if P (or P Q))))
-;; ;;     (define or-intro-right
-;; ;;       (axiom (if Q (or P Q))))
-;; ;;     (define or-elim
-;; ;;       (axiom (if (or P Q) (if (if P R) (if (if Q R) R)))))
-
-;; ;;     (define implication-intro
-;; ;;       (axiom (if (or (not P) Q) (if P Q))))
-;; ;;     (define implication-elim
-;; ;;       (axiom (if (if P Q) (or (not P) Q))))
-
-;; ;;     (define not-intro
-;; ;;       RAA)
-;; ;;     (define not-elim
-;; ;;       DN)
-
-;; ;;     (define true-intro
-;; ;;       (axiom (if P (true))))
-;; ;;     (define true-elim
-;; ;;       (axiom (if (not (true)) (false))))
-;; ;;     (define false-intro
-;; ;;       Abs)
-;; ;;     (define false-elim
-;; ;;       EFQ)
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Quantifier rules:
-;; ;;     ;;
-
-;; ;;     (define universal-instantiation
-;; ;;       (axiom (if t (if (forall x B) (map (axiom (rule x t)) (axiom B))))))
-
-;; ;;     (define universal-generalization
-;; ;;       (axiom (if c (if (if x Q) (if (if x c) (map (axiom (rule x c))
-;; ;;                                                   (axiom (forall c Q))))))))
-
-;; ;;     (define existential-generalization
-;; ;;       (axiom (if c (if B (map (axiom (rule t c)) (axiom (exists c B)))))))
-
-;; ;;     (define existential-instantiation
-;; ;;       (axiom (if (exists x B) (map (axiom (rule x (exists x B))) (axiom B)))))
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Useful theorems:
-;; ;;     ;;
-
-;; ;;     (define de-morgan-/
-;; ;;       (axiom (if (not (or P Q)) (and (not P) (not Q)))))
-
-;; ;;     (define if-negation
-;; ;;       (axiom (if (not (if P Q)) (and P (not Q)))))
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Theorem:
-;; ;;     ;;
-
-;; ;;     (define theorem
-;; ;;       (let ()
-
-;; ;;         (define universal-instantiation-1
-;; ;;           (= (map (specify t P)
-;; ;;                   (map (specify x (x))
-;; ;;                        (map (specify B (not P))
-;; ;;                             universal-instantiation)))
-;; ;;              (if P
-;; ;;                  (if (forall (x) (not P))
-;; ;;                      (map (axiom (rule (x) P)) (axiom (not P)))))))
-
-;; ;;         (define existential-instantiation-1
-;; ;;           (= (map (specify x (x)) (map (specify B P) existential-instantiation))
-;; ;;              (if (exists (x) P)
-;; ;;                  (map (axiom (rule (x) (exists (x) P))) (axiom P)))))
-
-;; ;;         (define and-intro-1
-;; ;;           (= (map (specify Q (not P))
-;; ;;                   (map (specify P P)
-;; ;;                        and-intro))
-;; ;;              (if P
-;; ;;                  (if (not P)
-;; ;;                      (and P
-;; ;;                           (not P))))))
-
-;; ;;         (define abs-1
-;; ;;           (= (map (specify P P) Abs)
-;; ;;              (if (and P
-;; ;;                       (not P))
-;; ;;                  (false))))
-
-;; ;;         (define raa-1
-;; ;;           (= (map (specify P (forall (x) (not P))) RAA)
-;; ;;              (if (if (forall (x) (not P)) (false))
-;; ;;                  (not (forall (x) (not P))))))
-
-;; ;;         (let ((premise (exists (x) P)))
-
-;; ;;           (define conclusion->false
-;; ;;             (let ((not-conclusion (forall (x) (not P))))
-
-;; ;;               (define instance-2/text
-;; ;;                 (= (apply existential-instantiation-1 premise)
-;; ;;                    (map (axiom (rule (x) (exists (x) P))) (axiom P))))
-
-;; ;;               (define instance-2
-;; ;;                 (= (eval instance-2/text)
-;; ;;                    P))
-
-;; ;;               (define instance/text
-;; ;;                 (= (apply universal-instantiation-1 instance-2 not-conclusion)
-;; ;;                    (map (axiom (rule (x) P)) (axiom (not P)))))
-
-;; ;;               (define instance
-;; ;;                 (= (eval instance/text)
-;; ;;                    (not P)))
-
-;; ;;               (define both-instances
-;; ;;                 (apply and-intro-1 instance-2 instance))
-
-;; ;;               (define false
-;; ;;                 (= (apply abs-1 both-instances)
-;; ;;                    (false)))
-
-;; ;;               false))
-
-;; ;;           (apply raa-1 conclusion->false))))
-
-;; ;;     (= theorem
-;; ;;        (if (exists (x) P)
-;; ;;            (not (forall (x) (not P)))))
-
-;; ;;     )
-
-;; ;;  'ignore-ok)
-
-
-;; ;; (test-case
-;; ;;  ;;
-;; ;;  ;;  Basic proof with quantifiers.
-;; ;;  ;;  Taken from "First Order Logic and Automated Theorem Proving",
-;; ;;  ;;     second edition, by Melvin Fitting, page 154.
-;; ;;  ;;
-
-;; ;;  '(begin
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Propositional axioms:
-;; ;;     ;;
-
-;; ;;     (define MP ;; The "modus ponens" law.
-;; ;;       (axiom (if P (if (if P Q) Q))))
-;; ;;     (define DN ;; The "double negation" law.
-;; ;;       (axiom (if (not (not P)) P)))
-;; ;;     (define EFQ ;; The "ex-falso-quodlibet" law.
-;; ;;       (axiom (if (false) P)))
-;; ;;     (define Abs ;; The "absurdity rule" law.
-;; ;;       (axiom (if (and P (not P)) (false))))
-;; ;;     (define RAA ;; The "reductio ad absurdum" law.
-;; ;;       (axiom (if (if P (false)) (not P))))
-;; ;;     (define CP ;; The "contraposition" law.
-;; ;;       (axiom (if (if P Q) (if (not P) (not Q)))))
-;; ;;     (define LEM ;; The "law of excluded middle".
-;; ;;       (axiom (or P (not P))))
-
-;; ;;     (define and-intro
-;; ;;       (axiom (if P (if Q (and P Q)))))
-;; ;;     (define and-elim-left
-;; ;;       (axiom (if (and P Q) P)))
-;; ;;     (define and-elim-right
-;; ;;       (axiom (if (and P Q) Q)))
-
-;; ;;     (define or-intro-left
-;; ;;       (axiom (if P (or P Q))))
-;; ;;     (define or-intro-right
-;; ;;       (axiom (if Q (or P Q))))
-;; ;;     (define or-elim
-;; ;;       (axiom (if (or P Q) (if (if P R) (if (if Q R) R)))))
-
-;; ;;     (define implication-intro
-;; ;;       (axiom (if (or (not P) Q) (if P Q))))
-;; ;;     (define implication-elim
-;; ;;       (axiom (if (if P Q) (or (not P) Q))))
-
-;; ;;     (define not-intro
-;; ;;       RAA)
-;; ;;     (define not-elim
-;; ;;       DN)
-
-;; ;;     (define true-intro
-;; ;;       (axiom (if P (true))))
-;; ;;     (define true-elim
-;; ;;       (axiom (if (not (true)) (false))))
-;; ;;     (define false-intro
-;; ;;       Abs)
-;; ;;     (define false-elim
-;; ;;       EFQ)
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Quantifier rules:
-;; ;;     ;;
-
-;; ;;     (define universal-instantiation
-;; ;;       (axiom (if t (if (forall x B) (map (axiom (rule x t)) (axiom B))))))
-
-;; ;;     (define universal-generalization
-;; ;;       (axiom (if c (if (if x Q) (if (if x c) (map (axiom (rule x c))
-;; ;;                                                   (axiom (forall c Q))))))))
-
-;; ;;     (define existential-generalization
-;; ;;       (axiom (if c (if B (map (axiom (rule t c)) (axiom (exists c B)))))))
-
-;; ;;     (define existential-instantiation
-;; ;;       (axiom (if (exists x B) (map (axiom (rule x (exists x B))) (axiom B)))))
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Useful theorems:
-;; ;;     ;;
-
-;; ;;     (define de-morgan-/
-;; ;;       (axiom (if (not (or P Q)) (and (not P) (not Q)))))
-
-;; ;;     (define if-negation
-;; ;;       (axiom (if (not (if P Q)) (and P (not Q)))))
-
-;; ;;     (define universal-negation
-;; ;;       (axiom (if (not (forall (x) P))
-;; ;;                  (exists (x) (not P)))))
-
-;; ;;     (define existential-negation
-;; ;;       (axiom (if (not (exists (x) P))
-;; ;;                  (forall (x) (not P)))))
-
-;; ;;     (define universal->existential
-;; ;;       (axiom (if (forall (x) P)
-;; ;;                  (not (exists (x) (not P))))))
-
-;; ;;     (define existential->universal
-;; ;;       (axiom (if (exists (x) P)
-;; ;;                  (not (forall (x) (not P))))))
-
-;; ;;     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;;     ;;
-;; ;;     ;;  Theorem:
-;; ;;     ;;
-
-;; ;;     (define theorem
-;; ;;       (let ()
-
-;; ;;         (define if-negation-1
-;; ;;           (map (specify Q (or (exists (x) (P (x))) (forall (x) (Q (x)))))
-;; ;;                (map (specify P (forall (x) (or (P (x)) (Q (x))))) if-negation)))
-
-;; ;;         (define and-elim-left-1
-;; ;;           (map (specify Q (not (or (exists (x) (P (x)))
-;; ;;                               (forall (x) (Q (x))))))
-;; ;;                (map (specify P (forall (x) (or (P (x)) (Q (x))))) and-elim-left)))
-
-;; ;;         (define and-elim-right-1
-;; ;;           (map (specify Q (not (or (exists (x) (P (x)))
-;; ;;                               (forall (x) (Q (x))))))
-;; ;;                (map (specify P (forall (x) (or (P (x)) (Q (x))))) and-elim-right)))
-
-;; ;;         (define de-morgan-/-1
-;; ;;           (=
-
-;; ;;            (map (specify Q (forall (x) (Q (x))))
-;; ;;                 (map (specify P (exists (x) (P (x)))) de-morgan-/))
-
-;; ;;            (if (not (or (exists (x) (P (x)))
-;; ;;                         (forall (x) (Q (x)))))
-;; ;;                (and (not (exists (x) (P (x))))
-;; ;;                     (not (forall (x) (Q (x))))))))
-
-;; ;;         (define and-elim-left-2
-;; ;;           (map (specify Q (not (forall (x) (Q (x)))))
-;; ;;                (map (specify P (not (exists (x) (P (x))))) and-elim-left)))
-
-;; ;;         (define and-elim-right-2
-;; ;;           (map (specify Q (not (forall (x) (Q (x)))))
-;; ;;                (map (specify P (not (exists (x) (P (x))))) and-elim-right)))
-
-;; ;;         (define negate-forall-q
-;; ;;           (= (map (specify P (Q (x))) universal-negation)
-;; ;;              (if (not (forall (x) (Q (x))))
-;; ;;                  (exists (x) (not (Q (x)))))))
-
-;; ;;         (define existential-instantiation-1
-;; ;;           (= (map (specify x (x)) (map (specify B (not (Q (x)))) existential-instantiation))
-;; ;;              (if (exists (x) (not (Q (x))))
-;; ;;                  (map (axiom (rule (x) (exists (x) (not (Q (x))))))
-;; ;;                       (axiom (not (Q (x))))))))
-
-;; ;;         (define negate-exists-p
-;; ;;           (= (map (specify P (P (x))) existential-negation)
-;; ;;              (if (not (exists (x) (P (x))))
-;; ;;                  (forall (x) (not (P (x)))))))
-
-;; ;;         (define universal-instantiation-1
-;; ;;           (= (map (specify t (exists (x) (not (Q (x)))))
-;; ;;                   (map (specify x (x))
-;; ;;                        (map (specify B (not (P (x)))) universal-instantiation)))
-;; ;;              (if (exists (x) (not (Q (x))))
-;; ;;                  (if (forall (x) (not (P (x))))
-;; ;;                      (map (axiom (rule (x) (exists (x) (not (Q (x))))))
-;; ;;                           (axiom (not (P (x)))))))))
-
-;; ;;         (define universal-instantiation-2
-;; ;;           (= (map (specify t (exists (x) (not (Q (x)))))
-;; ;;                   (map (specify x (x))
-;; ;;                        (map (specify B (or (P (x)) (Q (x))))
-;; ;;                             universal-instantiation)))
-;; ;;              (if (exists (x) (not (Q (x))))
-;; ;;                  (if (forall (x) (or (P (x)) (Q (x))))
-;; ;;                      (map (axiom (rule (x) (exists (x) (not (Q (x))))))
-;; ;;                           (axiom (or (P (x)) (Q (x)))))))))
-
-;; ;;         (define and-intro-1
-;; ;;           (map (specify Q (not (P (exists (x) (not (Q (x)))))))
-;; ;;                (map (specify P (P (exists (x) (not (Q (x)))))) and-intro)))
-
-;; ;;         (define abs-p<c>
-;; ;;           (map (specify P (P (exists (x) (not (Q (x)))))) Abs))
-
-;; ;;         (define and-intro-2
-;; ;;           (map (specify Q (not (Q (exists (x) (not (Q (x)))))))
-;; ;;                (map (specify P (Q (exists (x) (not (Q (x)))))) and-intro)))
-
-;; ;;         (define abs-q<c>
-;; ;;           (map (specify P (Q (exists (x) (not (Q (x)))))) Abs))
-
-;; ;;         (define or-elim-1
-;; ;;           (map (specify R (false))
-;; ;;                (map (specify Q (Q (exists (x) (not (Q (x))))))
-;; ;;                     (map (specify P (P (exists (x) (not (Q (x))))))
-;; ;;                          or-elim))))
-
-;; ;;         (= or-elim-1
-;; ;;            (if (or (P (exists (x) (not (Q (x)))))
-;; ;;                    (Q (exists (x) (not (Q (x))))))
-;; ;;                (if (if (P (exists (x) (not (Q (x))))) (false))
-;; ;;                    (if (if (Q (exists (x) (not (Q (x))))) (false))
-;; ;;                        (false)))))
-
-;; ;;         (define raa-final
-;; ;;           (map (specify P (not (if (forall (x) (or (P (x)) (Q (x))))
-;; ;;                               (or (exists (x) (P (x))) (forall (x) (Q (x)))))))
-;; ;;                RAA))
-
-;; ;;         (define dn-final
-;; ;;           (map (specify P (if (forall (x) (or (P (x)) (Q (x)))) (or (exists (x) (P (x))) (forall (x) (Q (x))))))
-;; ;;                DN))
-
-;; ;;         (define refutation
-;; ;;           (let ((resolution-1
-;; ;;                  (not (if (forall (x) (or (P (x)) (Q (x))))
-;; ;;                           (or (exists (x) (P (x)))
-;; ;;                               (forall (x) (Q (x))))))))
-
-;; ;;             (define statement
-;; ;;               (apply if-negation-1 resolution-1))
-
-;; ;;             (define resolution-2
-;; ;;               (apply and-elim-left-1 statement))
-
-;; ;;             (= resolution-2
-;; ;;                (forall (x) (or (P (x)) (Q (x)))))
-
-;; ;;             (define resolution-3
-;; ;;               (apply and-elim-right-1 statement))
-
-;; ;;             (= resolution-3
-;; ;;                (not (or (exists (x) (P (x))) (forall (x) (Q (x))))))
-
-;; ;;             (define de-morganed-1
-;; ;;               (apply de-morgan-/-1 resolution-3))
-
-;; ;;             (= de-morganed-1
-;; ;;                (and (not (exists (x) (P (x)))) (not (forall (x) (Q (x))))))
-
-;; ;;             (define resolution-4
-;; ;;               (= (apply and-elim-left-2 de-morganed-1)
-;; ;;                  (not (exists (x) (P (x))))))
-
-;; ;;             (define resolution-5
-;; ;;               (= (apply and-elim-right-2 de-morganed-1)
-;; ;;                  (not (forall (x) (Q (x))))))
-
-;; ;;             (define exists-notq
-;; ;;               (= (apply negate-forall-q resolution-5)
-;; ;;                  (exists (x) (not (Q (x))))))
-
-;; ;;             (define c exists-notq)
-
-;; ;;             (define resolution-6/text
-;; ;;               (= (apply existential-instantiation-1 exists-notq)
-;; ;;                  (map (axiom (rule (x) ,c))
-;; ;;                       (axiom (not (Q (x)))))))
-
-;; ;;             (define resolution-6
-;; ;;               (= (eval resolution-6/text)
-;; ;;                  (not (Q ,c))))
-
-;; ;;             (define forall-notp
-;; ;;               (= (apply negate-exists-p resolution-4)
-;; ;;                  (forall (x) (not (P (x))))))
-
-;; ;;             (define resolution-7/text
-;; ;;               (= (apply universal-instantiation-1 c forall-notp)
-;; ;;                  (map (axiom (rule (x) ,c))
-;; ;;                       (axiom (not (P (x)))))))
-
-;; ;;             (define resolution-7
-;; ;;               (= (eval resolution-7/text)
-;; ;;                  (not (P ,c))))
-
-;; ;;             (define resolution-8/text
-;; ;;               (= (apply universal-instantiation-2 c resolution-2)
-;; ;;                  (map (axiom (rule (x) ,c))
-;; ;;                       (axiom (or (P (x)) (Q (x)))))))
-
-;; ;;             (define resolution-8
-;; ;;               (= (eval resolution-8/text)
-;; ;;                  (or (P ,c) (Q ,c))))
-
-;; ;;             (define first-case
-;; ;;               (let ((p<c> (P ,c)))
-
-;; ;;                 (define tuple
-;; ;;                   (apply and-intro-1 p<c> resolution-7))
-
-;; ;;                 (define false
-;; ;;                   (apply abs-p<c> tuple))
-
-;; ;;                 false))
-
-;; ;;             (define second-case
-;; ;;               (let ((resolution-10 (Q ,c)))
-
-;; ;;                 (define tuple
-;; ;;                   (apply and-intro-2 resolution-10 resolution-6))
-
-;; ;;                 (define false
-;; ;;                   (apply abs-q<c> tuple))
-
-;; ;;                 false))
-
-;; ;;             (define resolution-11
-;; ;;               (apply or-elim-1 resolution-8 first-case second-case))
-
-;; ;;             (= resolution-11 (false))
-
-;; ;;             resolution-11))
-
-;; ;;         (define negated
-;; ;;           (apply raa-final refutation))
-
-;; ;;         (define final
-;; ;;           (apply dn-final negated))
-
-;; ;;         final))
-
-;; ;;     (= theorem
-;; ;;        (if (forall (x) (or (P (x)) (Q (x))))
-;; ;;            (or (exists (x) (P (x))) (forall (x) (Q (x))))))
-
-;; ;;     )
-
-;; ;;  'ignore-ok)

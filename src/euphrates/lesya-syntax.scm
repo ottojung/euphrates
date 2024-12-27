@@ -100,8 +100,8 @@
     (apply on-error error))
 
   (let ()
-    (define-tuple (predicate premise consequence) object)
-    (values premise consequence)))
+    (define-tuple (predicate rule argument) object)
+    (values rule argument)))
 
 
 (define lesya:syntax:implication:name
