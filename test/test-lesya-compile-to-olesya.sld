@@ -17,6 +17,9 @@
     (only (euphrates olesya-interpret)
           olesya:interpret))
   (import
+    (only (euphrates olesya-interpretation-return)
+          olesya:return:fail?))
+  (import
     (only (scheme base)
           =
           and

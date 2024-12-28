@@ -9,6 +9,8 @@
           lesya:syntax:implication:destruct
           lesya:syntax:implication?
           lesya:syntax:rule?
+          lesya:syntax:specify:destruct
+          lesya:syntax:specify?
           lesya:syntax:substitution:destruct
           lesya:syntax:substitution?))
   (import

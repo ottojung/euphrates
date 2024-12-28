@@ -23,15 +23,16 @@
   (define interpretation
     (olesya:interpret actual))
 
-  (unless (equal? interpretation expected-interpretation)
-    (debug "----------------------------------")
-    (debug "Bad interpretation:")
-    (debugs interpretation)
-    (debug "Expected:")
-    (debugs expected-interpretation)
-    (exit 1))
+  (unless (olesya:return:fail? expected-interpretation)
+    (unless (equal? interpretation expected-interpretation)
+      (debug "----------------------------------")
+      (debug "Bad interpretation:")
+      (debugs interpretation)
+      (debug "Expected:")
+      (debugs expected-interpretation)
+      (exit 1))
 
-  (assert= interpretation expected-interpretation)
+    (assert= interpretation expected-interpretation))
 
   )
 
@@ -44,9 +45,47 @@
 ;;
 
 
+(test-case
+ ;;
+ ;; Basic proof with disjunction. With `eval`.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define r1 (map (specify X (P)) and-elim))
+    (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
+    (= r2 (if (and (P) (Q)) (P)))
+
+    (define x
+      (let ((m (and (P) (Q))))
+        (apply r2 m)))
+
+    x)
+
+ `(begin
+    (define and-elim
+      (rule (term (and X Y)) (term X)))
+    (define and-symmetric
+      (rule (term (and X Y)) (term (and Y X))))
+    (define r1 (map (rule X (P)) and-elim))
+    (define r2
+      (eval (map (rule Y (Q))
+                 (map (rule X (P))
+                      (rule (term (and X Y)) (term X))))))
+    (rule (term (and (P) (Q))) (term (P)))
+    (define x
+      (let ((m (term (and (P) (Q))))) (map r2 m)))
+    x))
+
+
 ;; (test-case
 ;;  ;;
-;;  ;; Basic proof with disjunction. With `eval`.
+;;  ;; Basic proof with disjunction. With `eval` and `unquote`.
 ;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
 ;;  ;;
 
@@ -57,19 +96,80 @@
 ;;       (axiom (if (and X Y) (and Y X))))
 
 ;;     (define r1 (map (specify X (P)) and-elim))
-;;     ;; (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
-;;     (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
+;;     (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
 ;;     (= r2 (if (and (P) (Q)) (P)))
 
 ;;     (define x
 ;;       (let ((m (and (P) (Q))))
 ;;         (apply r2 m)))
 
-;;     (= x (if (and (P) (Q)) (P)))
-
 ;;     )
 
 ;;  `ignore-ok)
+
+
+(test-case
+ ;;
+ ;; Check fail with `map` not on toplevel.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define r1 (map (specify X (P)) and-elim))
+    (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
+
+    (define x
+      (let ((m (and (P) (Q))))
+        (define r1-internal (map (specify X (P)) and-elim))
+        (apply r2 m)))
+
+    )
+
+ `(begin
+    (define and-elim
+      (rule (term (and X Y)) (term X)))
+    (define and-symmetric
+      (rule (term (and X Y)) (term (and Y X))))
+    (define r1 (map (rule X (P)) and-elim))
+    (define r2
+      (eval (map (rule Y (Q))
+                 (rule (term (and (P) Y)) (term (P))))))
+    (define x
+      (let ((m (term (and (P) (Q)))))
+        (define r1-internal (map (rule X (P)) and-elim))
+        (map r2 m)))))
+
+
+(test-case
+ ;;
+ ;; Basic proof with disjunction. With `eval`.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
+
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
+
+    (define r1 (map (specify X (P)) and-elim))
+    ;; (define r2 (eval (axiom (map (specify Y (Q)) (axiom ,r1)))))
+    (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
+    (= r2 (if (and (P) (Q)) (P)))
+
+    (define x
+      (let ((m (and (P) (Q))))
+        (apply r2 m)))
+
+    (= x (if (and (P) (Q)) (P)))
+
+    )
+
+ `ignore-ok)
 
 
 

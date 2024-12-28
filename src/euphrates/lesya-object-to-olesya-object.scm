@@ -11,6 +11,15 @@
      ((lesya:syntax:rule? object)
       object)
 
+     ((lesya:syntax:specify? object)
+      (let ()
+        (define-values (variable replacement)
+          (lesya:syntax:specify:destruct object 'impossible:must-be-specify))
+
+        (olesya:syntax:rule:make
+         variable
+         replacement)))
+
      ((lesya:syntax:substitution? object)
       (let ()
         (define-values (rule argument)
