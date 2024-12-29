@@ -345,6 +345,13 @@
        (define code
          (olesya:syntax:eval:make interp))
        (define interpretation
-          (olesya:interpret:eval interp))
+         (olesya:interpret:with-error-possibility
+          (olesya:interpret:eval interp)))
+
+       (when (olesya:return:fail? interpretation)
+         (raisu-fmt
+          'failed-interpretation
+          "This should not happen, but interpretation failed with ~s."
+          interpretation))
 
        (wrap code interpretation)))))
