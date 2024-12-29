@@ -171,13 +171,6 @@
       (quote arguments)))))
 
 
-(define is-empty-syntax?
-  (let ()
-    (define empty (olesya:syntax:begin:make))
-    (lambda (object)
-      (equal? empty object))))
-
-
 (define-syntax lesya:compile/->olesya:begin/core
   (syntax-rules ()
     ((_ . bodies)
