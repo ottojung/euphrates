@@ -84,21 +84,22 @@
   (syntax-rules ()
     ((_ term)
      (let ()
-       (define q-term-0 (quote term))
+       (define q-term (quote term))
 
-       (define q-term
-         (let loop ((q-term-0 q-term-0))
-           (cond
-            ((symbol? q-term-0) q-term-0)
-            ((and (list? q-term-0)
-                  (list-length= 2 q-term-0)
-                  (equal? 'unquote (car q-term-0)))
-             (wrapped:interpretation
-              (local-eval (cadr q-term-0))))
-            (else (map loop q-term-0)))))
+       (define (first-handler object)
+         (define check
+           (and (list? object)
+                (list-length= 2 object)
+                (equal? 'unquote (car object))))
+         (values check
+                 (and check
+                      (wrapped:interpretation
+                       (local-eval (cadr object))))))
 
        (define code
-         (lesya-object->olesya-object q-term))
+         (lesya-object->olesya-object/generic
+          first-handler q-term))
+
        (define interpretation
          code)
 

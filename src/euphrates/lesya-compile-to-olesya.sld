@@ -18,6 +18,9 @@
   (import
     (only (euphrates define-type9) define-type9))
   (import
+    (only (euphrates lesya-object-to-olesya-object-generic)
+          lesya-object->olesya-object/generic))
+  (import
     (only (euphrates lesya-object-to-olesya-object)
           lesya-object->olesya-object))
   (import
@@ -67,12 +70,10 @@
           cadr
           car
           cdr
-          cond
           cons
           define
           define-syntax
           define-values
-          else
           eq?
           equal?
           if
