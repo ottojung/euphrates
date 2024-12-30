@@ -18,11 +18,8 @@
   (import
     (only (euphrates define-type9) define-type9))
   (import
-    (only (euphrates lesya-object-to-olesya-object-generic)
-          lesya-object->olesya-object/generic))
-  (import
-    (only (euphrates lesya-object-to-olesya-object)
-          lesya-object->olesya-object))
+    (only (euphrates lesya-axiom-to-olesya-object)
+          lesya-axiom->olesya-object))
   (import
     (only (euphrates lesya-syntax)
           lesya:syntax:axiom:make))
@@ -37,8 +34,6 @@
     (only (euphrates list-fold-semigroup)
           list-fold/semigroup))
   (import (only (euphrates list-last) list-last))
-  (import
-    (only (euphrates list-length-eq) list-length=))
   (import
     (only (euphrates make-unique) make-unique))
   (import
@@ -63,7 +58,6 @@
     (only (scheme base)
           =
           _
-          and
           append
           apply
           begin
@@ -80,17 +74,14 @@
           lambda
           let
           list
-          list?
           make-parameter
           map
           null?
           parameterize
-          quasiquote
           quote
           reverse
           symbol?
           syntax-rules
-          unquote
           values
           when))
   (import (only (scheme eval) environment eval))

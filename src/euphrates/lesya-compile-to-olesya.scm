@@ -73,6 +73,22 @@
   (lexical-scope-set! scope name transformed))
 
 
+(define-syntax lesya:compile/->olesya:quasiquote
+  (syntax-rules ()
+    ((_ term)
+     (let ()
+       (define q-term (quote term))
+       (debugs q-term)
+
+       (define (on-unquote object)
+         (wrapped:interpretation
+          (local-eval (cadr object))))
+       (define code
+         (lesya-axiom->olesya-object
+          on-unquote q-term))
+
+       code))))
+
 
 ;;;;;;;;;;;;;;;;;;
 ;;
@@ -85,24 +101,16 @@
     ((_ term)
      (let ()
        (define q-term (quote term))
+       (debugs q-term)
 
-       (define (first-handler object)
-         (define check
-           (and (list? object)
-                (list-length= 2 object)
-                (equal? 'unquote (car object))))
-         (values check
-                 (and check
-                      (wrapped:interpretation
-                       (local-eval (cadr object))))))
-
+       (define (on-unquote object)
+         (wrapped:interpretation
+          (local-eval (cadr object))))
        (define code
-         (lesya-object->olesya-object/generic
-          first-handler q-term))
+         (lesya-axiom->olesya-object
+          on-unquote q-term))
 
-       (define interpretation
-         code)
-
+       (define interpretation code)
        (wrap code interpretation)))))
 
 
@@ -121,6 +129,7 @@
        (define interpretation
          'impossible:return-values-of-define-should-not-be-used)
        (bind! scope (quote name) evaluated)
+       (debugs (list (quote expr) evaluated))
        (wrap code interpretation)))))
 
 
@@ -138,9 +147,18 @@
       (wrapped:interpretation e-rule)
       (wrapped:interpretation e-argument))))
 
+  (when (equal? interpretation (wrapped:interpretation e-argument))
+    (debugs (wrapped:interpretation e-rule))
+    (debugs (wrapped:interpretation e-argument))
+
+    (raisu-fmt
+     'failed-interpretation:fail-apply-1
+     "This should not happen, but apply failed with unchanged ~s."
+     interpretation))
+
   (when (olesya:return:fail? interpretation)
     (raisu-fmt
-     'failed-interpretation
+     'failed-interpretation:fail-apply-2
      "This should not happen, but interpretation failed with ~s."
      interpretation))
 
@@ -204,7 +222,7 @@
      (let ()
        (define code
          (olesya:syntax:rule:make
-          (quasiquote varname) (quasiquote subterm)))
+          (quote varname) (quote subterm)))
        (define interpretation
          code)
        (wrap code interpretation)))))
@@ -278,9 +296,14 @@
 (define-syntax lesya:compile/->olesya:=
   (syntax-rules ()
     ((_ a b)
+
+     ;; (let ()
+     ;;   (define e-a (wrapped:interpretation (local-eval (quote a))))
+     ;;   (wrap e-a e-a)))))
+
      (let ()
        (define e-a (wrapped:interpretation (local-eval (quote a))))
-       (define e-b (lesya-object->olesya-object (quote b)))
+       (define e-b (lesya:compile/->olesya:quasiquote b))
        (if (equal? e-a e-b)
            (wrap e-a e-a)
            (let ()
@@ -289,7 +312,6 @@
                     'actual: e-a
                     'expected: e-b
                     'endcontext:))
-
              (raisu-fmt
               'bad-interpretation
               "Terms are not equal: ~s vs ~s" e-a e-b)))))))
