@@ -332,43 +332,48 @@
       ret-premise ret-conclusion)))
 
   (define ret-code
-    (olesya:syntax:let:make
-     (list)
+    (list
+     (olesya:syntax:let:make
+      (list)
 
-     (olesya:syntax:define:make
-      'original-axiom
-      (olesya:syntax:rule:make
+      (olesya:syntax:define:make
+       'original-axiom
        (olesya:syntax:rule:make
-        (olesya:syntax:term:make 'P)
-        (olesya:syntax:term:make 'Q))
-       (olesya:syntax:term:make
-        (lesya:syntax:implication:make 'P 'Q))))
+        (olesya:syntax:rule:make
+         (olesya:syntax:term:make 'P)
+         (olesya:syntax:term:make 'Q))
+        (olesya:syntax:term:make
+         (lesya:syntax:implication:make 'P 'Q))))
 
-     (olesya:syntax:define:make
-      'my-axiom
-      (olesya:syntax:substitution:make
-       (olesya:syntax:rule:make 'P ret-premise)
+      (olesya:syntax:define:make
+       'my-axiom
        (olesya:syntax:substitution:make
-        (olesya:syntax:rule:make 'Q ret-conclusion)
-        'original-axiom)))
+        (olesya:syntax:rule:make 'P ret-premise)
+        (olesya:syntax:substitution:make
+         (olesya:syntax:rule:make 'Q ret-conclusion)
+         'original-axiom)))
 
-     (olesya:syntax:substitution:make
-      'my-axiom
-      (apply
-       olesya:syntax:let:make
-       (cons
-        (list (list premise-name premise-code))
-        conclusion-code)))))
+      (olesya:syntax:substitution:make
+       'my-axiom
+       (apply
+        olesya:syntax:let:make
+        (cons
+         (list (list premise-name premise-code))
+         conclusion-code))))))
 
   (wrap ret-code ret-interpretation))
 
 
 (define (lesya:compile/->olesya:let:code
          suppositions code-0 interpretation-0)
-  (list-fold/semigroup
-   lesya:compile/->olesya:let:connect
-   (cons (wrap code-0 interpretation-0)
-         (reverse suppositions))))
+  (define ret
+    (list-fold/semigroup
+     lesya:compile/->olesya:let:connect
+     (cons (wrap code-0 interpretation-0)
+           (reverse suppositions))))
+
+  (wrap (car (wrapped:code ret))
+        (wrapped:interpretation ret)))
 
 
 (define-syntax lesya:compile/->olesya:let

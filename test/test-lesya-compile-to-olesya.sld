@@ -21,6 +21,7 @@
           olesya:return:fail?))
   (import
     (only (scheme base)
+          =
           apply
           begin
           define

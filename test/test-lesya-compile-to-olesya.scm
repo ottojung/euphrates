@@ -190,8 +190,6 @@
         (define v2 (apply y v1))
         v2))
 
-    ;; (= z (if (P) (R)))
-
     z)
 
  `(begin
@@ -230,113 +228,187 @@
  )
 
 
-;; (test-case
-;;  ;;
-;;  ;; Basic proof.
-;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
-;;  ;;
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
 
-;;  '(begin
+ '(begin
 
-;;     (define x
-;;       (axiom (if (P) (Q))))
-;;     (define y
-;;       (axiom (if (Q) (R))))
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (axiom (if (Q) (R))))
 
-;;     (define z
-;;       (let ((p (P)))
-;;         (define v1 (apply x p))
-;;         (define v2 (apply y v1))
-;;         v2))
+    (define z
+      (let ((p (P)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2))
 
-;;     z)
+    (= z (if (P) (R)))
 
-;;  `(begin
-;;     (define x (rule (term (P)) (term (Q))))
-;;     (define y (rule (term (Q)) (term (R))))
-;;     (define z
-;;       (let ((p (term (P))))
-;;         (define v1 (map x p))
-;;         (define v2 (map y v1))
-;;         v2))
-;;     z)
+    z)
 
-;;  )
+ `(begin
+    (define x (term (if (P) (Q))))
+    (define y (term (if (Q) (R))))
+    (define z
+      (let ()
+        (define original-axiom
+          (rule (rule (term P) (term Q)) (term (if P Q))))
+        (define my-axiom
+          (map (rule P (P))
+               (map (rule Q (R)) original-axiom)))
+        (map my-axiom
+             (let ((p (term (P))))
+               (define v1
+                 (let ()
+                   (define original-axiom
+                     (rule (term (if P Q)) (rule (term P) (term Q))))
+                   (define my-axiom
+                     (map (rule P (P))
+                          (map (rule Q (Q)) original-axiom)))
+                   (define new-rule (map my-axiom x))
+                   (map new-rule p)))
+               (define v2
+                 (let ()
+                   (define original-axiom
+                     (rule (term (if P Q)) (rule (term P) (term Q))))
+                   (define my-axiom
+                     (map (rule P (Q))
+                          (map (rule Q (R)) original-axiom)))
+                   (define new-rule (map my-axiom y))
+                   (map new-rule v1)))
+               v2))))
+    (term (if (P) (R)))
+    z)
 
-
-
-;; (test-case
-;;  ;;
-;;  ;; Basic with empty let.
-;;  ;;
-
-;;  '(begin
-
-;;     (define x
-;;       (axiom (if (P) (Q))))
-;;     (define y
-;;       (let ()
-;;         (axiom (if (Q) (R)))))
-
-;;     (define z
-;;       (let ((p (P)))
-;;         (define v1 (apply x p))
-;;         (define v2 (apply y v1))
-;;         v2))
-
-;;     z)
-
-;;  `(begin
-;;     (define x (rule (term (P)) (term (Q))))
-;;     (define y
-;;       (let ()
-;;         (rule (term (Q)) (term (R)))))
-;;     (define z
-;;       (let ((p (term (P))))
-;;         (define v1 (map x p))
-;;         (define v2 (map y v1))
-;;         v2))
-;;     z)
-
-;;  )
+ )
 
 
-;; (test-case
-;;  ;;
-;;  ;; Basic with empty let and multiple lets.
-;;  ;;
+(test-case
+ ;;
+ ;; Basic with empty let.
+ ;;
 
-;;  '(begin
+ '(begin
 
-;;     (define x
-;;       (axiom (if (P) (Q))))
-;;     (define y
-;;       (let ()
-;;         (axiom (if (Q) (R)))))
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (let ()
+        (axiom (if (Q) (R)))))
 
-;;     (define z
-;;       (let ((p (P))
-;;             (k (K)))
-;;         (define v1 (apply x p))
-;;         (define v2 (apply y v1))
-;;         v2))
+    (define z
+      (let ((p (P)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2))
 
-;;     z)
+    z)
 
-;;  `(begin
-;;     (define x (rule (term (P)) (term (Q))))
-;;     (define y
-;;       (let ()
-;;         (rule (term (Q)) (term (R)))))
-;;     (define z
-;;       (let ((p (term (P)))
-;;             (k (term (K))))
-;;         (define v1 (map x p))
-;;         (define v2 (map y v1))
-;;         v2))
-;;     z)
+ `(begin
+    (define x (term (if (P) (Q))))
+    (define y (let () (term (if (Q) (R)))))
+    (define z
+      (let ()
+        (define original-axiom
+          (rule (rule (term P) (term Q)) (term (if P Q))))
+        (define my-axiom
+          (map (rule P (P))
+               (map (rule Q (R)) original-axiom)))
+        (map my-axiom
+             (let ((p (term (P))))
+               (define v1
+                 (let ()
+                   (define original-axiom
+                     (rule (term (if P Q)) (rule (term P) (term Q))))
+                   (define my-axiom
+                     (map (rule P (P))
+                          (map (rule Q (Q)) original-axiom)))
+                   (define new-rule (map my-axiom x))
+                   (map new-rule p)))
+               (define v2
+                 (let ()
+                   (define original-axiom
+                     (rule (term (if P Q)) (rule (term P) (term Q))))
+                   (define my-axiom
+                     (map (rule P (Q))
+                          (map (rule Q (R)) original-axiom)))
+                   (define new-rule (map my-axiom y))
+                   (map new-rule v1)))
+               v2))))
+    z)
 
-;;  )
+ )
+
+
+(test-case
+ ;;
+ ;; Basic with empty let and multiple lets.
+ ;;
+
+ '(begin
+
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (let ()
+        (axiom (if (Q) (R)))))
+
+    (define z
+      (let ((p (P))
+            (k (K)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2))
+
+    z)
+
+ `(begin
+    (define x (term (if (P) (Q))))
+    (define y (let () (term (if (Q) (R)))))
+    (define z
+      (let ()
+        (define original-axiom
+          (rule (rule (term P) (term Q)) (term (if P Q))))
+        (define my-axiom
+          (map (rule P (P))
+               (map (rule Q (if (K) (R))) original-axiom)))
+        (map my-axiom
+             (let ((p (term (P))))
+               (let ()
+                 (define original-axiom
+                   (rule (rule (term P) (term Q)) (term (if P Q))))
+                 (define my-axiom
+                   (map (rule P (K))
+                        (map (rule Q (R)) original-axiom)))
+                 (map my-axiom
+                      (let ((k (term (K))))
+                        (define v1
+                          (let ()
+                            (define original-axiom
+                              (rule (term (if P Q)) (rule (term P) (term Q))))
+                            (define my-axiom
+                              (map (rule P (P))
+                                   (map (rule Q (Q)) original-axiom)))
+                            (define new-rule (map my-axiom x))
+                            (map new-rule p)))
+                        (define v2
+                          (let ()
+                            (define original-axiom
+                              (rule (term (if P Q)) (rule (term P) (term Q))))
+                            (define my-axiom
+                              (map (rule P (Q))
+                                   (map (rule Q (R)) original-axiom)))
+                            (define new-rule (map my-axiom y))
+                            (map new-rule v1)))
+                        v2)))))))
+    z)
+
+ )
 
 
 ;; (test-case
