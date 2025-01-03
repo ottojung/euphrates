@@ -441,28 +441,29 @@
        (wrap code interpretation)))))
 
 
+(define (lesya:compile/->olesya:eval/fun q-program)
+  (define evaled
+    (local-eval q-program))
+
+  (define interp
+    (wrapped:interpretation evaled))
+
+  (define code
+    (olesya:syntax:eval:make interp))
+  (define interpretation
+    (olesya:interpret:with-error-possibility
+     (olesya:interpret:eval interp)))
+
+  (when (olesya:return:fail? interpretation)
+    (raisu-fmt
+     'failed-interpretation
+     "This should not happen, but interpretation failed with ~s."
+     interpretation))
+
+  (wrap code interpretation))
+
+
 (define-syntax lesya:compile/->olesya:eval
   (syntax-rules ()
     ((_ program)
-     (let ()
-       (define q-program (quote program))
-
-       (define evaled
-         (local-eval q-program))
-
-       (define interp
-         (wrapped:interpretation evaled))
-
-       (define code
-         (olesya:syntax:eval:make interp))
-       (define interpretation
-         (olesya:interpret:with-error-possibility
-          (olesya:interpret:eval interp)))
-
-       (when (olesya:return:fail? interpretation)
-         (raisu-fmt
-          'failed-interpretation
-          "This should not happen, but interpretation failed with ~s."
-          interpretation))
-
-       (wrap code interpretation)))))
+     (lesya:compile/->olesya:eval/fun (quote program)))))
