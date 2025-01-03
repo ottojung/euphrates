@@ -22,6 +22,7 @@
   (import
     (only (scheme base)
           =
+          and
           apply
           begin
           define
@@ -32,6 +33,7 @@
           quasiquote
           quote
           unless))
+  (import (only (scheme eval) eval))
   (import (only (scheme process-context) exit))
   (cond-expand
     (guile (import (only (guile) include-from-path))

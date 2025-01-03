@@ -453,11 +453,22 @@
   (define interp
     (wrapped:interpretation evaled))
 
+  (define inner
+    (let ()
+      (unless (olesya:syntax:term? interp)
+        (raisu-fmt
+         'expected-a-term-here
+         "Expected a term but got this: ~s." rule-interp))
+      (olesya:syntax:term:destruct interp 'impossible:must-be-term)))
+
+  (define inner-interp
+    (wrapped:interpretation (local-eval inner)))
+
   (define code
-    (olesya:syntax:eval:make interp))
+    (olesya:syntax:eval:make inner-interp))
   (define interpretation
     (olesya:interpret:with-error-possibility
-     (olesya:interpret:eval interp)))
+     (olesya:interpret:eval inner-interp)))
 
   (when (olesya:return:fail? interpretation)
     (raisu-fmt

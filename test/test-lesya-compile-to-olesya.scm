@@ -45,39 +45,55 @@
 ;;
 
 
-;; (test-case
-;;  ;;
-;;  ;; Basic proof with disjunction. With `eval`.
-;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
-;;  ;;
+(test-case
+ ;;
+ ;; Basic proof with disjunction. With `eval`.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 7.
+ ;;
 
-;;  '(begin
-;;     (define and-elim
-;;       (axiom (if (and X Y) X)))
-;;     (define and-symmetric
-;;       (axiom (if (and X Y) (and Y X))))
+ '(begin
+    (define and-elim
+      (axiom (if (and X Y) X)))
+    (define and-symmetric
+      (axiom (if (and X Y) (and Y X))))
 
-;;     (define r1 (map (specify X (P)) and-elim))
-;;     (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
-;;     (= r2 (if (and (P) (Q)) (P)))
+    (define r1 (map (specify X (P)) and-elim))
+    (define r2 (eval (axiom (map (specify Y (Q)) (map (specify X (P)) (axiom (if (and X Y) X)))))))
+    (= r2 (if (and (P) (Q)) (P)))
 
-;;     (define x
-;;       (let ((m (and (P) (Q))))
-;;         (apply r2 m)))
+    (define x
+      (let ((m (and (P) (Q))))
+        (apply r2 m)))
 
-;;     x)
+    x)
 
-;;  `(begin
-;;     (define and-elim (rule (and X Y) X))
-;;     (define and-symmetric (rule (and X Y) (and Y X)))
-;;     (define r1 (map (rule X (P)) and-elim))
-;;     (define r2
-;;       (eval (map (rule Y (Q))
-;;                  (map (rule X (P)) (rule (and X Y) X)))))
-;;     (rule (and (P) (Q)) (P))
-;;     (define x
-;;       (let ((m (term (and (P) (Q))))) (map r2 m)))
-;;     x))
+ `(begin
+    (define and-elim (term (if (and X Y) X)))
+    (define and-symmetric
+      (term (if (and X Y) (and Y X))))
+    (define r1 (map (rule X (P)) and-elim))
+    (define r2 (eval (term (if (and (P) (Q)) (P)))))
+    (term (if (and (P) (Q)) (P)))
+    (define x
+      (let ()
+        (define original-axiom
+          (rule (rule (term P) (term Q)) (term (if P Q))))
+        (define my-axiom
+          (map (rule P (and (P) (Q)))
+               (map (rule Q (P)) original-axiom)))
+        (map my-axiom
+             (let ((m (term (and (P) (Q)))))
+               (let ()
+                 (define original-axiom
+                   (rule (term (if P Q)) (rule (term P) (term Q))))
+                 (define my-axiom
+                   (map (rule P (and (P) (Q)))
+                        (map (rule Q (P)) original-axiom)))
+                 (define new-rule (map my-axiom r2))
+                 (map new-rule m))))))
+    x)
+
+ )
 
 
 ;; (test-case
