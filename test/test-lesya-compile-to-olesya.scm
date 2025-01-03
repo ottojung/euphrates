@@ -4,8 +4,6 @@
   (define lesya-interpretation
     (lesya:interpret program))
 
-  (debugs lesya-interpretation)
-
   (define expected-interpretation
     (lesya-object->olesya-object 'not-possible-123798 lesya-interpretation))
 
@@ -41,10 +39,10 @@
 
 
 
-;; ;;;;;;;;;;;;;;;;;;;
-;; ;;
-;; ;;  Test cases:
-;; ;;
+;;;;;;;;;;;;;;;;;;;
+;;
+;;  Test cases:
+;;
 
 
 ;; (test-case
@@ -70,16 +68,13 @@
 ;;     x)
 
 ;;  `(begin
-;;     (define and-elim
-;;       (rule (term (and X Y)) (term X)))
-;;     (define and-symmetric
-;;       (rule (term (and X Y)) (term (and Y X))))
+;;     (define and-elim (rule (and X Y) X))
+;;     (define and-symmetric (rule (and X Y) (and Y X)))
 ;;     (define r1 (map (rule X (P)) and-elim))
 ;;     (define r2
 ;;       (eval (map (rule Y (Q))
-;;                  (map (rule X (P))
-;;                       (rule (term (and X Y)) (term X))))))
-;;     (rule (term (and (P) (Q))) (term (P)))
+;;                  (map (rule X (P)) (rule (and X Y) X)))))
+;;     (rule (and (P) (Q)) (P))
 ;;     (define x
 ;;       (let ((m (term (and (P) (Q))))) (map r2 m)))
 ;;     x))
@@ -176,41 +171,63 @@
 
 
 
-;; (test-case
-;;  ;;
-;;  ;; Basic proof.
-;;  ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
-;;  ;;
+(test-case
+ ;;
+ ;; Basic proof.
+ ;; Taken from https://www.logicmatters.net/resources/pdfs/ProofSystems.pdf, page 6.
+ ;;
 
-;;  '(begin
+ '(begin
 
-;;     (define x
-;;       (axiom (if (P) (Q))))
-;;     (define y
-;;       (axiom (if (Q) (R))))
+    (define x
+      (axiom (if (P) (Q))))
+    (define y
+      (axiom (if (Q) (R))))
 
-;;     (define z
-;;       (let ((p (P)))
-;;         (define v1 (apply x p))
-;;         (define v2 (apply y v1))
-;;         v2))
+    (define z
+      (let ((p (P)))
+        (define v1 (apply x p))
+        (define v2 (apply y v1))
+        v2))
 
-;;     (= z (if (P) (R)))
+    ;; (= z (if (P) (R)))
 
-;;     z)
+    z)
 
-;;  `(begin
-;;     (define x (rule (term (P)) (term (Q))))
-;;     (define y (rule (term (Q)) (term (R))))
-;;     (define z
-;;       (let ((p (term (P))))
-;;         (define v1 (map x p))
-;;         (define v2 (map y v1))
-;;         v2))
-;;     (rule (term (P)) (term (R)))
-;;     z)
+ `(begin
+    (define x (term (if (P) (Q))))
+    (define y (term (if (Q) (R))))
+    (define z
+      (let ()
+        (define original-axiom
+          (rule (rule (term P) (term Q)) (term (if P Q))))
+        (define my-axiom
+          (map (rule P (P))
+               (map (rule Q (R)) original-axiom)))
+        (map my-axiom
+             (let ((p (term (P))))
+               (define v1
+                 (let ()
+                   (define original-axiom
+                     (rule (term (if P Q)) (rule (term P) (term Q))))
+                   (define my-axiom
+                     (map (rule P (P))
+                          (map (rule Q (Q)) original-axiom)))
+                   (define new-rule (map my-axiom x))
+                   (map new-rule p)))
+               (define v2
+                 (let ()
+                   (define original-axiom
+                     (rule (term (if P Q)) (rule (term P) (term Q))))
+                   (define my-axiom
+                     (map (rule P (Q))
+                          (map (rule Q (R)) original-axiom)))
+                   (define new-rule (map my-axiom y))
+                   (map new-rule v1)))
+               v2))))
+    z)
 
-;;  )
+ )
 
 
 ;; (test-case

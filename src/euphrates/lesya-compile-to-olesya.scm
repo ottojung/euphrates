@@ -78,8 +78,6 @@
     ((_ term)
      (let ()
        (define q-term (quote term))
-       (debugs q-term)
-
        (define (on-unquote object)
          (wrapped:interpretation
           (local-eval (cadr object))))
@@ -101,8 +99,6 @@
     ((_ term)
      (let ()
        (define q-term (quote term))
-       (debugs q-term)
-
        (define (on-unquote object)
          (wrapped:interpretation
           (local-eval (cadr object))))
@@ -129,28 +125,75 @@
        (define interpretation
          'impossible:return-values-of-define-should-not-be-used)
        (bind! scope (quote name) evaluated)
-       (debugs (list (quote expr) evaluated))
        (wrap code interpretation)))))
 
 
 (define (lesya:compile/->olesya:apply:1-level
          e-rule e-argument)
 
+  (define rule-interp
+    (wrapped:interpretation e-rule))
+
+  (unless (olesya:syntax:term? rule-interp)
+    (raisu-fmt
+     'expected-a-term-here
+     "Expected a term but got this: ~s." rule-interp))
+
+  (define rule-inner
+    (olesya:syntax:term:destruct rule-interp 'impossible:must-be-term))
+
+  (unless (lesya:syntax:implication? rule-inner)
+    (raisu-fmt
+     'expected-a-term-here
+     "Expected an implication but got this: ~s." rule-inner))
+
+  (define-values (rule-premise rule-conclusion)
+    (lesya:syntax:implication:destruct rule-inner 'impossible:must-be-implication))
+
   (define code
-    (olesya:syntax:substitution:make
-     (wrapped:code e-rule)
-     (wrapped:code e-argument)))
+    ;; TODO: move let inside, so that it does not pollute the scope.
+
+    (olesya:syntax:let:make
+     (list)
+
+     (olesya:syntax:define:make
+      'original-axiom
+      (olesya:syntax:rule:make
+       (olesya:syntax:term:make
+        (lesya:syntax:implication:make 'P 'Q))
+       (olesya:syntax:rule:make
+        (olesya:syntax:term:make 'P)
+        (olesya:syntax:term:make 'Q))))
+
+     (olesya:syntax:define:make
+      'my-axiom
+      (olesya:syntax:substitution:make
+       (olesya:syntax:rule:make 'P rule-premise)
+       (olesya:syntax:substitution:make
+        (olesya:syntax:rule:make 'Q rule-conclusion)
+        'original-axiom)))
+
+     (olesya:syntax:define:make
+      'new-rule
+      (olesya:syntax:substitution:make
+       'my-axiom (wrapped:code e-rule)))
+
+     (olesya:syntax:substitution:make
+      'new-rule
+      (wrapped:code e-argument))))
+
+  (define rule-for-interpretation
+    (olesya:syntax:rule:make
+     (olesya:syntax:term:make rule-premise)
+     (olesya:syntax:term:make rule-conclusion)))
 
   (define interpretation
     (olesya:interpret:with-error-possibility
      (olesya:interpret:map
-      (wrapped:interpretation e-rule)
+      rule-for-interpretation
       (wrapped:interpretation e-argument))))
 
   (when (equal? interpretation (wrapped:interpretation e-argument))
-    (debugs (wrapped:interpretation e-rule))
-    (debugs (wrapped:interpretation e-argument))
-
     (raisu-fmt
      'failed-interpretation:fail-apply-1
      "This should not happen, but apply failed with unchanged ~s."
@@ -251,17 +294,81 @@
         (let ()
           (define first (car lets))
           (define-tuple (q-name q-shape) first)
-
           (define evaluated
             (local-eval (lesya:syntax:axiom:make q-shape)))
-          (define-values (shape-code shape-interpretation)
-            (unwrap evaluated))
 
           (with-new-scope
            (bind! (private:env) q-name evaluated)
            (loop
             (cdr lets)
-            (cons (list q-name shape-code) suppositions)))))))
+            (cons (list q-name evaluated) suppositions)))))))
+
+
+(define (lesya:compile/->olesya:let:connect conclusion new-premise)
+  (define (determine object)
+    (if (olesya:syntax:term? object)
+        (olesya:syntax:term:destruct object 'impossible:must-be-term)
+        object))
+
+  (define-tuple (premise-name premise-value) new-premise)
+  (define premise-code
+    (wrapped:code premise-value))
+  (define premise-interpretation
+    (wrapped:interpretation premise-value))
+
+  (define conclusion-code
+    (wrapped:code conclusion))
+  (define conclusion-interpretation
+    (wrapped:interpretation conclusion))
+
+  (define-values (ret-premise ret-conclusion)
+    (values
+     (determine premise-interpretation)
+     (determine conclusion-interpretation)))
+
+  (define ret-interpretation
+    (olesya:syntax:term:make
+     (lesya:syntax:implication:make
+      ret-premise ret-conclusion)))
+
+  (define ret-code
+    (olesya:syntax:let:make
+     (list)
+
+     (olesya:syntax:define:make
+      'original-axiom
+      (olesya:syntax:rule:make
+       (olesya:syntax:rule:make
+        (olesya:syntax:term:make 'P)
+        (olesya:syntax:term:make 'Q))
+       (olesya:syntax:term:make
+        (lesya:syntax:implication:make 'P 'Q))))
+
+     (olesya:syntax:define:make
+      'my-axiom
+      (olesya:syntax:substitution:make
+       (olesya:syntax:rule:make 'P ret-premise)
+       (olesya:syntax:substitution:make
+        (olesya:syntax:rule:make 'Q ret-conclusion)
+        'original-axiom)))
+
+     (olesya:syntax:substitution:make
+      'my-axiom
+      (apply
+       olesya:syntax:let:make
+       (cons
+        (list (list premise-name premise-code))
+        conclusion-code)))))
+
+  (wrap ret-code ret-interpretation))
+
+
+(define (lesya:compile/->olesya:let:code
+         suppositions code-0 interpretation-0)
+  (list-fold/semigroup
+   lesya:compile/->olesya:let:connect
+   (cons (wrap code-0 interpretation-0)
+         (reverse suppositions))))
 
 
 (define-syntax lesya:compile/->olesya:let
@@ -280,27 +387,15 @@
      (lesya:compile/->olesya:let:bind!
       (quote lets)
       (lambda (suppositions)
-        (define-values (codes interpretation-0)
+        (define-values (code-0 interpretation-0)
           (lesya:compile/->olesya:begin/core . bodies))
-        (define premises
-          (map cadr suppositions))
-        (define interpretation
-          (list-fold/semigroup
-           olesya:syntax:rule:make
-           (append premises (list interpretation-0))))
-        (define code
-          (apply olesya:syntax:let:make (cons suppositions codes)))
-        (wrap code interpretation))))))
+        (lesya:compile/->olesya:let:code
+         suppositions code-0 interpretation-0))))))
 
 
 (define-syntax lesya:compile/->olesya:=
   (syntax-rules ()
     ((_ a b)
-
-     ;; (let ()
-     ;;   (define e-a (wrapped:interpretation (local-eval (quote a))))
-     ;;   (wrap e-a e-a)))))
-
      (let ()
        (define e-a (wrapped:interpretation (local-eval (quote a))))
        (define e-b (lesya:compile/->olesya:quasiquote b))

@@ -21,9 +21,14 @@
           olesya:return:fail?))
   (import
     (only (scheme base)
+          apply
           begin
           define
           equal?
+          if
+          let
+          map
+          quasiquote
           quote
           unless))
   (import (only (scheme process-context) exit))

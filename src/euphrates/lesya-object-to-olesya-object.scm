@@ -5,41 +5,9 @@
   (define (axiom-loop object)
     (lesya-axiom->olesya-object on-unquote object))
 
-  (let loop ((object object))
-    (cond
-     ((olesya:return:ok? object)
-      (olesya:return:map axiom-loop object))
+  (cond
+   ((olesya:return:ok? object)
+    (olesya:return:map axiom-loop object))
 
-     ((lesya:syntax:rule? object)
-      (let ()
-        (define-values (variable replacement)
-          (lesya:syntax:rule:destruct object 'impossible:must-be-rule))
-
-        (olesya:syntax:rule:make
-         (loop variable)
-         (loop replacement))))
-
-     ((lesya:syntax:specify? object)
-      (let ()
-        (define-values (variable replacement)
-          (lesya:syntax:specify:destruct object 'impossible:must-be-specify))
-
-        (olesya:syntax:rule:make
-         variable
-         replacement)))
-
-     ((lesya:syntax:substitution? object)
-      (let ()
-        (define-values (rule argument)
-          (lesya:syntax:substitution:destruct object 'impossible:must-be-substitution))
-
-        (olesya:syntax:substitution:make
-         (loop rule)
-         (loop argument))))
-
-     ((lesya:syntax:axiom? object)
-      (let ()
-        (define obj (lesya:syntax:axiom:destruct object 'impossible:must-be-axiom))
-        (lesya-axiom->olesya-object on-unquote obj)))
-
-     (else object))))
+   (else
+    (lesya-axiom->olesya-object on-unquote object))))

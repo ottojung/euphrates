@@ -22,7 +22,10 @@
           lesya-axiom->olesya-object))
   (import
     (only (euphrates lesya-syntax)
-          lesya:syntax:axiom:make))
+          lesya:syntax:axiom:make
+          lesya:syntax:implication:destruct
+          lesya:syntax:implication:make
+          lesya:syntax:implication?))
   (import
     (only (euphrates lexical-scope)
           lexical-scope-make
@@ -51,14 +54,16 @@
           olesya:syntax:eval:make
           olesya:syntax:let:make
           olesya:syntax:rule:make
-          olesya:syntax:substitution:make))
+          olesya:syntax:substitution:make
+          olesya:syntax:term:destruct
+          olesya:syntax:term:make
+          olesya:syntax:term?))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
           =
           _
-          append
           apply
           begin
           cadr
@@ -82,6 +87,7 @@
           reverse
           symbol?
           syntax-rules
+          unless
           values
           when))
   (import (only (scheme eval) environment eval))
