@@ -8,7 +8,9 @@ steps:
       - make benchmark
       - find dist/benchmarks -type f -exec echo {} \; -exec cat {} \;
       - sh scripts/update-benchmarks-git-branch.sh
-    secrets: [ REPOLOGKEY ]
+    environment:
+      REPOLOGKEY:
+        from_secret: REPOLOGKEY
     when:
       - event: push
         branch: [master]
