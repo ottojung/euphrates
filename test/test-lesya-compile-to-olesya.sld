@@ -18,7 +18,12 @@
           olesya:interpret))
   (import
     (only (euphrates olesya-interpretation-return)
-          olesya:return:fail?))
+          olesya:return:fail?
+          olesya:return:map
+          olesya:return:ok))
+  (import
+    (only (euphrates olesya-syntax)
+          olesya:syntax:term:make))
   (import
     (only (scheme base)
           =
@@ -30,9 +35,12 @@
           if
           let
           map
+          not
+          or
           quasiquote
           quote
-          unless))
+          unless
+          when))
   (import (only (scheme eval) eval))
   (import (only (scheme process-context) exit))
   (cond-expand
