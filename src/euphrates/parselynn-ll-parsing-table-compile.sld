@@ -16,10 +16,16 @@
   (import
     (only (euphrates group-by-sequential)
           group-by/sequential))
-  (import (only (euphrates hashset) hashset->list))
+  (import
+    (only (euphrates hashset)
+          hashset->list
+          hashset-has?))
   (import
     (only (euphrates object-to-string)
           object->string))
+  (import
+    (only (euphrates parselynn-epsilon)
+          parselynn:epsilon))
   (import
     (only (euphrates
             parselynn-ll-compile-get-predictor-name)

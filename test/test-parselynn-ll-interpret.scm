@@ -581,27 +581,27 @@
   (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions and epsilon.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E c
-;;   ;; E -> a b | ε
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with two productions and epsilon.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E c
+  ;; E -> a b | ε
+  ;;
 
-;;   (define grammar
-;;     '((S (E c))
-;;       (E (a b) ())))
+  (define grammar
+    '((S (E c))
+      (E (a b) ())))
 
-;;   (define input
-;;     '(c))
+  (define input
+    '(c))
 
-;;   (define expected
-;;     `(S (E) c))
+  (define expected
+    `(S (E) c))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
 ;; (let ()

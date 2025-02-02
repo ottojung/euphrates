@@ -61,7 +61,11 @@
                    (object->string b)))))
 
     (define check-code
-      `(member look_ahead (quote ,sorted-candidates)))
+      (if (hashset-has? candidates parselynn:epsilon)
+          ;; NOTE: If has epsilon, then it accepts anything!
+          ;; TODO: Don't generate other branches of cond in this case.
+          #t
+          `(member look_ahead (quote ,sorted-candidates))))
 
     (define callback
       (assoc-or
