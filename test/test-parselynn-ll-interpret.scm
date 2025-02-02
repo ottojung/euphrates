@@ -159,46 +159,46 @@
   (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Minimal self referential grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> S
-;;   ;;
+(let ()
+  ;;
+  ;; Minimal self referential grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> S
+  ;;
 
-;;   (define grammar
-;;     '((S (S))))
+  (define grammar
+    '((S (S))))
 
-;;   (define input
-;;     '(S))
+  (define input
+    '(S))
 
-;;   (define expected
-;;     (parselynn:ll-reject-action:make))
+  (define expected
+    (parselynn:ll-reject-action:make))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Minimal grammar with empty production.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> ε
-;;   ;;
+(let ()
+  ;;
+  ;; Minimal grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
 
-;;   (define grammar
-;;     '((S ())))
+  (define grammar
+    '((S ())))
 
-;;   (define input
-;;     '())
+  (define input
+    '())
 
-;;   (define expected
-;;     `(S))
+  (define expected
+    `(S))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
 ;; (let ()

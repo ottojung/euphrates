@@ -14,6 +14,9 @@
     (only (euphrates list-find-first)
           list-find-first))
   (import
+    (only (euphrates parselynn-end-of-input)
+          parselynn:end-of-input))
+  (import
     (only (euphrates parselynn-epsilon)
           parselynn:epsilon))
   (import (only (euphrates raisu-fmt) raisu-fmt))

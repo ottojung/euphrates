@@ -33,6 +33,8 @@
     (cond
      ((terminal? this)
       (yield! this))
+     ((equal? parselynn:end-of-input this)
+      (yield! this))
      ((nonterminal? this)
       (let ()
         (define this-set
