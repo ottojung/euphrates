@@ -201,130 +201,130 @@
   (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Minimal grammar with empty production.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> ε
-;;   ;;
+(let ()
+  ;;
+  ;; Minimal grammar with empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
 
-;;   (define grammar
-;;     '((S ())))
+  (define grammar
+    '((S ())))
 
-;;   (define input
-;;     '(a))
+  (define input
+    '(a))
 
-;;   (define expected
-;;     (parselynn:ll-reject-action:make))
+  (define expected
+    (parselynn:ll-reject-action:make))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with single production.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> a
-;;   ;;
-
-;;   (define grammar
-;;     '((S (a))))
-
-;;   (define input
-;;     '(a))
-
-;;   (define expected
-;;     '(S a))
-
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with single production.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> a
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with single production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;;
 
-;;   (define grammar
-;;     '((S (a))))
+  (define grammar
+    '((S (a))))
 
-;;   (define input
-;;     '(b))
+  (define input
+    '(a))
 
-;;   (define expected
-;;     (parselynn:ll-reject-action:make))
+  (define expected
+    '(S a))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with single production.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> a
-;;   ;;
-
-;;   (define grammar
-;;     '((S (a))))
-
-;;   (define input
-;;     '())
-
-;;   (define expected
-;;     (parselynn:ll-reject-action:make))
-
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> a b
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with single production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;;
 
-;;   (define grammar
-;;     '((S (a b))))
+  (define grammar
+    '((S (a))))
 
-;;   (define input
-;;     '(a b))
+  (define input
+    '(b))
 
-;;   (define expected
-;;     `(S a b))
+  (define expected
+    (parselynn:ll-reject-action:make))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> a b c
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with single production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a
+  ;;
 
-;;   (define grammar
-;;     '((S (a b c))))
+  (define grammar
+    '((S (a))))
 
-;;   (define input
-;;     '(a b c))
+  (define input
+    '())
 
-;;   (define expected
-;;     `(S a b c))
+  (define expected
+    (parselynn:ll-reject-action:make))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a b
+  ;;
+
+  (define grammar
+    '((S (a b))))
+
+  (define input
+    '(a b))
+
+  (define expected
+    `(S a b))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> a b c
+  ;;
+
+  (define grammar
+    '((S (a b c))))
+
+  (define input
+    '(a b c))
+
+  (define expected
+    `(S a b c))
+
+  (test-case grammar input expected))
 
 
 ;; (let ()
@@ -375,210 +375,210 @@
 ;;    (test-case grammar input expected)))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Self referential grammar [2].
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> x
-;;   ;; S -> S
-;;   ;;
+(let ()
+  ;;
+  ;; Self referential grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> x
+  ;; S -> S
+  ;;
 
-;;   (define grammar
-;;     '((S (x) (S))))
+  (define grammar
+    '((S (x) (S))))
 
-;;   (define input
-;;     '())
+  (define input
+    '())
 
-;;   (define expected
-;;     (parselynn:ll-reject-action:make))
+  (define expected
+    (parselynn:ll-reject-action:make))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E
-;;   ;; E -> a
-;;   ;;
-
-;;   (define grammar
-;;     '((S (E))
-;;       (E (a))))
-
-;;   (define input
-;;     '(a))
-
-;;   (define expected
-;;     `(S (E a)))
-
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E
-;;   ;; E -> a b
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E
+  ;; E -> a
+  ;;
 
-;;   (define grammar
-;;     '((S (E))
-;;       (E (a b))))
+  (define grammar
+    '((S (E))
+      (E (a))))
 
-;;   (define input
-;;     '(a b))
+  (define input
+    '(a))
 
-;;   (define expected
-;;     `(S (E a b)))
+  (define expected
+    `(S (E a)))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E b
-;;   ;; E -> a
-;;   ;;
-
-;;   (define grammar
-;;     '((S (E b))
-;;       (E (a))))
-
-;;   (define input
-;;     '(a b))
-
-;;   (define expected
-;;     `(S (E a) b))
-
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E c
-;;   ;; E -> a b
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E
+  ;; E -> a b
+  ;;
 
-;;   (define grammar
-;;     '((S (E c))
-;;       (E (a b))))
+  (define grammar
+    '((S (E))
+      (E (a b))))
 
-;;   (define input
-;;     '(a b c))
+  (define input
+    '(a b))
 
-;;   (define expected
-;;     `(S (E a b) c))
+  (define expected
+    `(S (E a b)))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E E
-;;   ;; E -> a b
-;;   ;;
-
-;;   (define grammar
-;;     '((S (E E))
-;;       (E (a b))))
-
-;;   (define input
-;;     '(a b a b))
-
-;;   (define expected
-;;     `(S (E a b) (E a b)))
-
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E E
-;;   ;; E -> a b
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E b
+  ;; E -> a
+  ;;
 
-;;   (define grammar
-;;     '((S (E E))
-;;       (E (a b))))
+  (define grammar
+    '((S (E b))
+      (E (a))))
 
-;;   (define input
-;;     '(a b a b))
+  (define input
+    '(a b))
 
-;;   (define expected
-;;     `(S (E a b) (E a b)))
+  (define expected
+    `(S (E a) b))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E E E
-;;   ;; E -> a b
-;;   ;;
-
-;;   (define grammar
-;;     '((S (E E E))
-;;       (E (a b))))
-
-;;   (define input
-;;     '(a b a b a b))
-
-;;   (define expected
-;;     `(S (E a b) (E a b) (E a b)))
-
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple grammar with two productions and epsilon.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> E c
-;;   ;; E -> a b | ε
-;;   ;;
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E c
+  ;; E -> a b
+  ;;
 
-;;   (define grammar
-;;     '((S (E c))
-;;       (E (a b) ())))
+  (define grammar
+    '((S (E c))
+      (E (a b))))
 
-;;   (define input
-;;     '(a b c))
+  (define input
+    '(a b c))
 
-;;   (define expected
-;;     `(S (E a b) c))
+  (define expected
+    `(S (E a b) c))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E E
+  ;; E -> a b
+  ;;
+
+  (define grammar
+    '((S (E E))
+      (E (a b))))
+
+  (define input
+    '(a b a b))
+
+  (define expected
+    `(S (E a b) (E a b)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E E
+  ;; E -> a b
+  ;;
+
+  (define grammar
+    '((S (E E))
+      (E (a b))))
+
+  (define input
+    '(a b a b))
+
+  (define expected
+    `(S (E a b) (E a b)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with two productions.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E E E
+  ;; E -> a b
+  ;;
+
+  (define grammar
+    '((S (E E E))
+      (E (a b))))
+
+  (define input
+    '(a b a b a b))
+
+  (define expected
+    `(S (E a b) (E a b) (E a b)))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple grammar with two productions and epsilon.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> E c
+  ;; E -> a b | ε
+  ;;
+
+  (define grammar
+    '((S (E c))
+      (E (a b) ())))
+
+  (define input
+    '(a b c))
+
+  (define expected
+    `(S (E a b) c))
+
+  (test-case grammar input expected))
 
 
 ;; (let ()

@@ -52,6 +52,6 @@
     (get-first (car symbols))
     (not got-epsilon?))
 
-  (list-find-first fun symbols)
+  (list-find-first fun #f symbols)
 
   ret)
