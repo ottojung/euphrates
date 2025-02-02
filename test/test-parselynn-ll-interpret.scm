@@ -34,10 +34,15 @@
          ((parselynn:ll-interpret table callback-alist)
           input-iterator error-procedure))
 
-       (unless (equal? result expected)
+       (define to-compare
+         (if (equal? #f result)
+             (parselynn:ll-reject-action:make)
+             result))
+
+       (unless (equal? to-compare expected)
          (debug "\n\n\n----------------------------------\nactual:\n~s\n\n" result))
 
-       (assert= result expected)))))
+       (assert= to-compare expected)))))
 
 
 ;;;;;;;;;;;;;;;;;
@@ -47,23 +52,23 @@
 
 
 
-;; (let ()
-;;   ;;
-;;   ;; Empty grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
+(let ()
+  ;;
+  ;; Empty grammar.
+  ;;
+  ;;   Grammar:
+  ;;
 
-;;   (define grammar
-;;     '())
+  (define grammar
+    '())
 
-;;   (define input
-;;     '(a b c d))
+  (define input
+    '(a b c d))
 
-;;   (define expected
-;;     (parselynn:ll-reject-action:make))
+  (define expected
+    (parselynn:ll-reject-action:make))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
 (let ()

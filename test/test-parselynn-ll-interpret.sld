@@ -14,6 +14,7 @@
           parselynn:ll-interpret))
   (import
     (only (euphrates parselynn-ll-reject-action)
+          parselynn:ll-reject-action:make
           parselynn:ll-reject-action?))
   (import
     (only (euphrates parselynn-token)
@@ -30,6 +31,7 @@
           define
           define-syntax
           equal?
+          if
           lambda
           let
           make-parameter
