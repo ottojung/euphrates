@@ -15,9 +15,9 @@
        (define expected expected*)
        (define callback-alist (callback-alist/p))
        (define error-procedure
-         (lambda _
+         (lambda args
            (unless (parselynn:ll-reject-action? expected)
-             (raisu 'error-called-16263))))
+             (raisu 'error-called-16263 args))))
 
        (define table
          (parselynn:ll-compute-parsing-table grammar))
@@ -1646,141 +1646,141 @@
 ;;   (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> X X
-;;   ;; X -> a X
-;;   ;; X -> b
-;;   ;;
+(let ()
+  ;;
+  ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
 
-;;   (define grammar
-;;     '((S (X X))
-;;       (X (a X)
-;;          (b))))
+  (define grammar
+    '((S (X X))
+      (X (a X)
+         (b))))
 
-;;   (define input
-;;     `(a b a b))
+  (define input
+    `(a b a b))
 
-;;   (define expected
-;;     `(S (X a (X b)) (X a (X b))))
+  (define expected
+    `(S (X a (X b)) (X a (X b))))
 
-;;   (test-case grammar input expected))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; S -> X X
-;;   ;; X -> a X
-;;   ;; X -> b
-;;   ;;
-
-;;   (define grammar
-;;     '((S (X X))
-;;       (X (a X)
-;;          (b))))
-
-;;   (define input
-;;     `(a a a b a b))
-
-;;   (define expected
-;;     `(S (X a (X a (X a (X b)))) (X a (X b))))
-
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Nested grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; Y -> W | c
-;;   ;; W -> S S
-;;   ;; S -> X X
-;;   ;; X -> a X
-;;   ;; X -> b
-;;   ;;
+(let ()
+  ;;
+  ;; Youtube grammar. (https://invidious.reallyaweso.me/watch?v=sh_X56otRdU)
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
 
-;;   (define grammar
-;;     '((Y (W) (c))
-;;       (W (S S))
-;;       (S (X X))
-;;       (X (a X)
-;;          (b))))
+  (define grammar
+    '((S (X X))
+      (X (a X)
+         (b))))
 
-;;   (define input
-;;     `(c))
+  (define input
+    `(a a a b a b))
 
-;;   (define expected
-;;     `(Y c))
+  (define expected
+    `(S (X a (X a (X a (X b)))) (X a (X b))))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Nested grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; Y -> W | c
-;;   ;; W -> S S
-;;   ;; S -> X X
-;;   ;; X -> a X
-;;   ;; X -> b
-;;   ;;
+(let ()
+  ;;
+  ;; Nested grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; Y -> W | c
+  ;; W -> S S
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
 
-;;   (define grammar
-;;     '((Y (W) (c))
-;;       (W (S S))
-;;       (S (X X))
-;;       (X (a X)
-;;          (b))))
+  (define grammar
+    '((Y (W) (c))
+      (W (S S))
+      (S (X X))
+      (X (a X)
+         (b))))
 
-;;   (define input
-;;     `(a b a b a b a b))
+  (define input
+    `(c))
 
-;;   (define expected
-;;     `(Y (W (S (X a (X b)) (X a (X b))) (S (X a (X b)) (X a (X b))))))
+  (define expected
+    `(Y c))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Nested grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; Y -> W | c
-;;   ;; W -> S S
-;;   ;; S -> X X
-;;   ;; X -> a X
-;;   ;; X -> b
-;;   ;;
+(let ()
+  ;;
+  ;; Nested grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; Y -> W | c
+  ;; W -> S S
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
 
-;;   (define grammar
-;;     '((Y (W) (c))
-;;       (W (S S))
-;;       (S (X X))
-;;       (X (a X)
-;;          (b))))
+  (define grammar
+    '((Y (W) (c))
+      (W (S S))
+      (S (X X))
+      (X (a X)
+         (b))))
 
-;;   (define input
-;;     `(a b a a a a b a b a b))
+  (define input
+    `(a b a b a b a b))
 
-;;   (define expected
-;;     `(Y (W (S (X a (X b)) (X a (X a (X a (X a (X b)))))) (S (X a (X b)) (X a (X b))))))
+  (define expected
+    `(Y (W (S (X a (X b)) (X a (X b))) (S (X a (X b)) (X a (X b))))))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Nested grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; Y -> W | c
+  ;; W -> S S
+  ;; S -> X X
+  ;; X -> a X
+  ;; X -> b
+  ;;
+
+  (define grammar
+    '((Y (W) (c))
+      (W (S S))
+      (S (X X))
+      (X (a X)
+         (b))))
+
+  (define input
+    `(a b a a a a b a b a b))
+
+  (define expected
+    `(Y (W (S (X a (X b)) (X a (X a (X a (X a (X b)))))) (S (X a (X b)) (X a (X b))))))
+
+  (test-case grammar input expected))
 
 
 ;; (let ()
@@ -1811,30 +1811,30 @@
 ;;    (test-case grammar input expected)))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Simple arithmetic expression grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; E -> T
-;;   ;; E -> < E >
-;;   ;; E -> T + E
-;;   ;; E -> T * E
-;;   ;; T -> x | y | z
-;;   ;;
+(let ()
+  ;;
+  ;; Simple arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
+  ;; E -> + T E
+  ;; E -> * T E
+  ;; T -> x | y | z
+  ;;
 
-;;   (define grammar
-;;     `((E (T) (< E >) (T + E) (T * E))
-;;       (T (x) (y) (z))))
+  (define grammar
+    `((E (T) (< E >) (+ T E) (* T E))
+      (T (x) (y) (z))))
 
-;;   (define input
-;;     `(x + y))
+  (define input
+    `(+ x y))
 
-;;   (define expected
-;;     `(E (T x) + (E (T y))))
+  (define expected
+    `(E + (T x) (E (T y))))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
 ;; (let ()
@@ -1993,27 +1993,30 @@
 ;;   (test-case grammar input expected))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Arithmetic expression grammar [2].
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; E -> T | T + E
-;;   ;; T -> n0 | n1 | n2 | n3 | n4 | n5 | n6 | n7 | n8 | n9
-;;   ;;
+(let ()
+  ;;
+  ;; Arithmetic expression grammar [2].
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T E^
+  ;; E^ -> + E |
+  ;; T -> n0 | n1 | n2 | n3 | n4 | n5 | n6 | n7 | n8 | n9
+  ;;
 
-;;   (define grammar
-;;     `((E (T) (T + E))
-;;       (T (n0) (n1) (n2) (n3) (n4) (n5) (n6) (n7) (n8) (n9))))
+  (define grammar
+    `((E (T E^))
+      (E^ (+ E) ())
+      (T (n0) (n1) (n2) (n3) (n4) (n5) (n6) (n7) (n8) (n9))))
 
-;;   (define input
-;;     `(n0 + n1 + n2 + n3))
+  (define input
+    `(n0 + n1 + n2 + n3))
 
-;;   (define expected
-;;     `(E (T n0) + (E (T n1) + (E (T n2) + (E (T n3))))))
+  (define expected
+    `(E (T n0)
+        (E^ + (E (T n1) (E^ + (E (T n2) (E^ + (E (T n3) (E^)))))))))
 
-;;   (test-case grammar input expected))
+  (test-case grammar input expected))
 
 
 ;; (let ()
@@ -2155,35 +2158,35 @@
 ;;     (test-case grammar input expected)))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Attributed arithmetic expression grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; E -> T
-;;   ;; E -> T + E
-;;   ;; E -> T * E
-;;   ;; T -> x | y | z
-;;   ;; T -> < E >
-;;   ;;
+(let ()
+  ;;
+  ;; Attributed arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> + E E
+  ;; E -> * E E
+  ;; E -> < E >
+  ;; T -> x | y | z
+  ;;
 
-;;   (define grammar
-;;     `((E (T) (T + E) (T * E))
-;;       (T (x) (y) (z) (< E >))))
+  (define grammar
+    `((E (T) (+ E E) (* E E) (< E >))
+      (T (x) (y) (z))))
 
-;;   (define callback-alist
-;;     (list
-;;      (cons '(T (x)) '((lambda _ 5)))))
+  (define callback-alist
+    (list
+     (cons '(T (x)) '((lambda _ 5)))))
 
-;;   (define input
-;;     `(< x + y > + y + z))
+  (define input
+    `(+ < + < + x y > y > z))
 
-;;   (define expected
-;;     `(E (T < (E 5 + (E (T y))) >) + (E (T y) + (E (T z)))))
+  (define expected
+    `(E + (E < (E + (E < (E + (E 5) (E (T y))) >) (E (T y))) >) (E (T z))))
 
-;;   (parameterize ((callback-alist/p callback-alist))
-;;     (test-case grammar input expected)))
+  (parameterize ((callback-alist/p callback-alist))
+    (test-case grammar input expected)))
 
 
 ;; (let ()
@@ -2220,6 +2223,42 @@
 ;;     (test-case grammar input expected)))
 
 
+(let ()
+  ;;
+  ;; Attributed arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> + E E
+  ;; E -> * E E
+  ;; E -> < E >
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (+ E E) (* E E) (< E >))
+      (T (x) (y) (z))))
+
+  (define callback-alist
+    (list
+     (cons '(T (x)) '((lambda _ 5)))
+     (cons '(T (y)) '((lambda _ 7)))
+     (cons '(T (z)) '((lambda _ 3)))
+     (cons '(E (T)) '((lambda _ $1)))
+     (cons '(T (< E >)) '((lambda _ $2)))
+     ))
+
+  (define input
+    `(+ < + < + x y > y > z))
+
+  (define expected
+    `(E + (E < (E + (E < (E + 5 7) >) 7) >) 3))
+
+  (parameterize ((callback-alist/p callback-alist))
+    (test-case grammar input expected)))
+
+
 ;; (let ()
 ;;   ;;
 ;;   ;; Attributed arithmetic expression grammar.
@@ -2239,11 +2278,11 @@
 
 ;;   (define callback-alist
 ;;     (list
-;;      (cons '(T (x)) '((lambda _ 5)))
-;;      (cons '(T (y)) '((lambda _ 7)))
-;;      (cons '(T (z)) '((lambda _ 3)))
-;;      (cons '(E (T)) '((lambda _ $1)))
-;;      (cons '(T (< E >)) '((lambda _ $2)))
+;;      (cons '(T (x)) '5)
+;;      (cons '(T (y)) '7)
+;;      (cons '(T (z)) '3)
+;;      (cons '(E (T)) '$1)
+;;      (cons '(T (< E >)) '$2)
 ;;      ))
 
 ;;   (define input
@@ -2256,151 +2295,77 @@
 ;;     (test-case grammar input expected)))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Attributed arithmetic expression grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; E -> T
-;;   ;; E -> T + E
-;;   ;; E -> T * E
-;;   ;; T -> x | y | z
-;;   ;; T -> < E >
-;;   ;;
+(let ()
+  ;;
+  ;; Attributed arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> + E E
+  ;; E -> * E E
+  ;; E -> < E >
+  ;; T -> x | y | z
+  ;;
 
-;;   (define grammar
-;;     `((E (T) (T + E) (T * E))
-;;       (T (x) (y) (z) (< E >))))
+  (define grammar
+    `((E (T) (+ E E) (* E E) (< E >))
+      (T (x) (y) (z))))
 
-;;   (define callback-alist
-;;     (list
-;;      (cons '(T (x)) '5)
-;;      (cons '(T (y)) '7)
-;;      (cons '(T (z)) '3)
-;;      (cons '(E (T)) '$1)
-;;      (cons '(T (< E >)) '$2)
-;;      ))
+  (define callback-alist
+    (list
+     (cons '(T (x)) '5)
+     (cons '(T (y)) '7)
+     (cons '(T (z)) '3)
+     (cons '(E (T)) '$1)
+     (cons '(E (< E >)) '$2)
+     (cons '(E (+ E E)) '(+ $2 $3))
+     (cons '(E (* E E)) '(* $2 $3))
+     ))
 
-;;   (define input
-;;     `(< x + y > + y + z))
+  (define input
+    `(+ < + < + x y > y > z))
 
-;;   (define expected
-;;     `(E (E 5 + 7) + (E 7 + 3)))
+  (define expected
+    22)
 
-;;   (parameterize ((callback-alist/p callback-alist))
-;;     (test-case grammar input expected)))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Attributed arithmetic expression grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; E -> T
-;;   ;; E -> T + E
-;;   ;; E -> T * E
-;;   ;; T -> x | y | z
-;;   ;; T -> < E >
-;;   ;;
-
-;;   (define grammar
-;;     `((E (T) (T + E) (T * E))
-;;       (T (x) (y) (z) (< E >))))
-
-;;   (define callback-alist
-;;     (list
-;;      (cons '(T (x)) '5)
-;;      (cons '(T (y)) '7)
-;;      (cons '(T (z)) '3)
-;;      (cons '(E (T)) '$1)
-;;      (cons '(T (< E >)) '$2)
-;;      (cons '(E (T + E)) '(+ $1 $3))
-;;      (cons '(E (T * E)) '(* $1 $3))
-;;      ))
-
-;;   (define input
-;;     `(< x + y > + y + z))
-
-;;   (define expected
-;;     22)
-
-;;   (parameterize ((callback-alist/p callback-alist))
-;;     (test-case grammar input expected)))
+  (parameterize ((callback-alist/p callback-alist))
+    (test-case grammar input expected)))
 
 
-;; (let ()
-;;   ;;
-;;   ;; Attributed arithmetic expression grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; E -> T
-;;   ;; E -> T + E
-;;   ;; E -> T * E
-;;   ;; T -> x | y | z
-;;   ;; T -> < E >
-;;   ;;
+(let ()
+  ;;
+  ;; Attributed arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> + E E
+  ;; E -> * E E
+  ;; E -> < E >
+  ;; T -> x | y | z
+  ;;
 
-;;   (define grammar
-;;     `((E (T) (T + E) (T * E))
-;;       (T (x) (y) (z) (< E >))))
+  (define grammar
+    `((E (T) (+ E E) (* E E) (< E >))
+      (T (x) (y) (z))))
 
-;;   (define callback-alist
-;;     (list
-;;      (cons '(T (x)) '5)
-;;      (cons '(T (y)) '7)
-;;      (cons '(T (z)) '3)
-;;      (cons '(E (T)) '$1)
-;;      (cons '(T (< E >)) '$2)
-;;      (cons '(E (T + E)) '(list '+ $1 $3))
-;;      (cons '(E (T * E)) '(list '* $1 $3))
-;;      ))
+  (define callback-alist
+    (list
+     (cons '(T (x)) '5)
+     (cons '(T (y)) '7)
+     (cons '(T (z)) '3)
+     (cons '(E (T)) '$1)
+     (cons '(E (< E >)) '$2)
+     (cons '(E (+ E E)) '(list '+ $2 $3))
+     (cons '(E (* E E)) '(list '* $2 $3))
+     ))
 
-;;   (define input
-;;     `(< x + y > + y + < z * y + < y + x > >))
+  (define input
+    `(+ < + < + x y > y > z))
 
-;;   (define expected
-;;     `(+ (+ 5 7) (+ 7 (* 3 (+ 7 (+ 7 5))))))
+  (define expected
+    `(+ (+ (+ 5 7) 7) 3))
 
-;;   (parameterize ((callback-alist/p callback-alist))
-;;     (test-case grammar input expected)))
-
-
-;; (let ()
-;;   ;;
-;;   ;; Attributed arithmetic expression grammar.
-;;   ;;
-;;   ;;   Grammar:
-;;   ;;
-;;   ;; E -> T
-;;   ;; E -> T + E
-;;   ;; E -> T * E
-;;   ;; T -> x | y | z
-;;   ;; T -> < E >
-;;   ;;
-
-;;   (define grammar
-;;     `((E (T) (T + E) (T * E))
-;;       (T (x) (y) (z) (< E >))))
-
-;;   (define callback-alist
-;;     (list
-;;      (cons '(T (x)) '5)
-;;      (cons '(T (y)) '7)
-;;      (cons '(T (z)) '3)
-;;      (cons '(E (T)) '$1)
-;;      (cons '(T (< E >)) '$2)
-;;      (cons '(E (T + E)) '(+ $1 $3))
-;;      (cons '(E (T * E)) '(* $1 $3))
-;;      ))
-
-;;   (define input
-;;     `(< x + y > + y + < z * y + < y + x > >))
-
-;;   (define expected
-;;     76)
-
-;;   (parameterize ((callback-alist/p callback-alist))
-;;     (test-case grammar input expected)))
+  (parameterize ((callback-alist/p callback-alist))
+    (test-case grammar input expected)))

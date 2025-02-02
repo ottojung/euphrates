@@ -35,8 +35,10 @@
           if
           lambda
           let
+          list
           make-parameter
           map
+          parameterize
           quasiquote
           quote
           string->symbol
