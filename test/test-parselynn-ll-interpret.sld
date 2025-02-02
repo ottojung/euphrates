@@ -28,6 +28,7 @@
           >
           _
           begin
+          cons
           define
           define-syntax
           equal?
@@ -38,8 +39,10 @@
           map
           quasiquote
           quote
+          string->symbol
           syntax-rules
-          unless))
+          unless
+          unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
