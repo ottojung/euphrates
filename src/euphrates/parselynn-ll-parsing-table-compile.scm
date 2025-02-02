@@ -113,7 +113,8 @@
   (define (group->definition tagged-group)
     (define tag (car tagged-group))
     (define group (cdr tagged-group))
-    `(define (,tag) (cond ,@group)))
+    `(define (,tag)
+       (cond ,@group (else (throw-reject)))))
 
   (define definitions
     (map group->definition grouped))

@@ -11,7 +11,7 @@
 
   (define starting-predictor
     (if (null? (parselynn:ll-parsing-table:clauses parsing-table))
-        '(lambda _ 42)
+        '(lambda _ #f)
         (parselynn:ll-compile:get-predictor-name
          (parselynn:ll-parsing-table:starting-nonterminal parsing-table))))
 
@@ -68,6 +68,9 @@
              'unexpected-token "Syntax error: unexpected token: ~s" token))
         reject)
 
+      (define (throw-reject)
+        (error "unexpected token 172319392713" 'euphrates-ll-mismatch))
+
       (define (get-input)
         (iterator:next input-tokens-iterator parselynn:end-of-input))
 
@@ -80,10 +83,20 @@
 
       ,@table-based-code
 
+      (define (with-catch thunk)
+        (guard
+         (e ((and (error-object? e)
+                  (equal?
+                   '(euphrates-ll-mismatch)
+                   (error-object-irritants e)))
+             (do-reject)))
+         (thunk)))
+
       (define result
-        (begin
-          (advance!)
-          (,starting-predictor)))
+        (with-catch
+         (lambda _
+           (advance!)
+           (,starting-predictor))))
 
       (if (equal? token parselynn:end-of-input)
           result

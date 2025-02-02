@@ -30,10 +30,15 @@
   (import
     (only (scheme base)
           _
+          and
           begin
           define
           define-syntax
           equal?
+          error
+          error-object-irritants
+          error-object?
+          guard
           if
           lambda
           null?
