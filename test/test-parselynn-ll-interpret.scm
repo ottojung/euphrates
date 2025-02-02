@@ -28,12 +28,7 @@
          (parselynn:token:make category source value))
 
        (define input-iterator
-         (let ()
-           ;; FIXME: just handle iterators.
-           (define iter
-             (list->iterator (map make-token input)))
-           (lambda _
-             (iterator:next iter parselynn:end-of-input))))
+         (list->iterator (map make-token input)))
 
        (define result
          ((parselynn:ll-interpret table callback-alist)

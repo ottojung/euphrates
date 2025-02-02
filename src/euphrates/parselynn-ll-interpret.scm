@@ -11,4 +11,10 @@
   (define evaled
     (eval code (parselynn:get-compilation-environment)))
 
-  evaled)
+  (define handling-iterator
+    (lambda (___scanner ___errorp)
+      (define iter
+        (lambda _ (iterator:next ___scanner parselynn:end-of-input)))
+      (evaled iter ___errorp)))
+
+  handling-iterator)

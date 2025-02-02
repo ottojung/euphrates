@@ -4,13 +4,8 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debug) debug))
   (import
-    (only (euphrates iterator) iterator:next))
-  (import
     (only (euphrates list-to-iterator)
           list->iterator))
-  (import
-    (only (euphrates parselynn-end-of-input)
-          parselynn:end-of-input))
   (import
     (only (euphrates parselynn-ll-compute-parsing-table)
           parselynn:ll-compute-parsing-table))
