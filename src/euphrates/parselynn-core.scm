@@ -1,4 +1,4 @@
-;; Copyright 2023, 2024  Otto Jung <otto.jung@vauplace.com>
+;; Copyright 2023, 2024, 2025  Otto Jung <otto.jung@vauplace.com>
 ;; Copyright 2014  Jan Nieuwenhuizen <janneke@gnu.org>
 ;; Copyright 1993, 2010 Dominique Boucher
 ;;
@@ -16,7 +16,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;;
-;;;; An Efficient and Portable LALR(1) Parser Generator for Scheme
+;;;; An Efficient and Portable Parser Generator for Scheme
 ;;;
 
 (define *lalr-scm-version* "3.0.0")
@@ -2089,6 +2089,7 @@
   (define driver-normalized-name->type-alist
     `((lr-driver lr)
       (glr-driver glr)
+      (ll-1-driver (LL 1))
       (lr-1-driver (LR 1))))
 
   (define driver-user-name->normalized-name-alist

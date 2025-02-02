@@ -3,7 +3,7 @@
 
 ;;
 ;; The right-hand-side of a production (single alternative).
-;; Example: bnf-alist:production:hls(E -> E + E) = E + E
+;; Example: bnf-alist:production:rhs(E -> E + E) = E + E
 ;;
 (define (bnf-alist:production:rhs production)
   (cadr production))

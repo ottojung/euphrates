@@ -1763,6 +1763,32 @@
   ;;
   ;; E -> T
   ;; E -> < E >
+  ;; E -> + T E
+  ;; E -> * T E
+  ;; T -> x | y | z
+  ;;
+
+  (define grammar
+    `((E (T) (< E >) (+ T E) (* T E))
+      (T (x) (y) (z))))
+
+  (define input
+    `(+ x y))
+
+  (define expected
+    `(E + (T x) (E (T y))))
+
+  (test-case grammar input expected))
+
+
+(let ()
+  ;;
+  ;; Simple arithmetic expression grammar.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; E -> T
+  ;; E -> < E >
   ;; E -> T + E
   ;; E -> T * E
   ;; T -> x | y | z
