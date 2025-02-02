@@ -27,7 +27,7 @@
                (begin
                  (advance!)
                  ,expected)
-               (error "Unexpected token!" look_ahead ,expected))))
+               (throw-reject))))
 
        ((parselynn:ll-predict-action? action)
         (let ()

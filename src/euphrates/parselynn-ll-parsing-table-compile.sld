@@ -57,7 +57,6 @@
           define
           else
           equal?
-          error
           for-each
           if
           lambda
