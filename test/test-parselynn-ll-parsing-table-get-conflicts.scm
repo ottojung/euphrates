@@ -452,3 +452,21 @@
       (M (x "M← x" "M← x y"))))
 
   (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Multiple conflicting candidates.
+  ;;
+  ;; Grammar:
+  ;;   S → a b | a c | e f | e g | x
+  ;;
+
+  (define grammar
+    '((S (a b) (a c) (e f) (e g) (x))))
+
+  (define expected
+    `((S (a "S← a b" "S← a c"))
+      (S (e "S← e f" "S← e g"))))
+
+  (test-case grammar expected))
