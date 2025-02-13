@@ -31,7 +31,8 @@
     (hashset-foreach (comp (handle-candidate hash production)) candidates))
 
   (define (handle-hash hash)
-    (define alist (hashmap->alist hash))
+    (define alist/reversed (hashmap->alist hash))
+    (define alist (map (fn-cons identity reverse) alist/reversed))
     (define filtered
       (filter (lambda (p)
                 (define candidate (car p))

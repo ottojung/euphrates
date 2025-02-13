@@ -30,7 +30,6 @@
 ;;
 
 
-;; Adapt the empty grammar test case for FOLLOW
 (let ()
   ;;
   ;; Empty grammar.
@@ -41,6 +40,28 @@
 
   (define expected-follow
     `())
+
+  (test-follow grammar expected-follow))
+
+
+(let ()
+  ;;
+  ;; Grammar with single empty production.
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
+  ;;   Expected FOLLOW sets:
+  ;;
+  ;; FOLLOW(S) = { ε }
+  ;;
+
+  (define grammar
+    '((S ())))
+
+  (define expected-follow
+    `((S ,end-of-input)))
 
   (test-follow grammar expected-follow))
 

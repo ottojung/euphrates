@@ -10,6 +10,7 @@
   (import
     (only (euphrates euphrates-list-sort)
           euphrates:list-sort))
+  (import (only (euphrates fn-cons) fn-cons))
   (import
     (only (euphrates hashmap)
           hashmap->alist
@@ -18,6 +19,7 @@
           make-hashmap))
   (import
     (only (euphrates hashset) hashset-foreach))
+  (import (only (euphrates identity) identity))
   (import
     (only (euphrates list-group-by) list-group-by))
   (import
@@ -48,6 +50,7 @@
           map
           null?
           quote
+          reverse
           string<?))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))

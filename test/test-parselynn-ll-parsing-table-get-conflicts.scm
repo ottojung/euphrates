@@ -45,6 +45,39 @@
 ;;
 
 
+(let ()
+  ;;
+  ;; Empty grammar
+  ;;
+  ;;   Grammar:
+  ;;
+
+  (define grammar
+    '())
+
+  (define expected
+    '())
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Empty production
+  ;;
+  ;;   Grammar:
+  ;;
+  ;; S -> ε
+  ;;
+
+  (define grammar
+    '((S ())))
+
+  (define expected
+    '())
+
+  (test-case grammar expected))
+
 
 (let ()
   ;;
@@ -81,7 +114,7 @@
     '((S (num a) (num b))))
 
   (define expected
-    `((S (num "S← num b" "S← num a"))))
+    `((S (num "S← num a" "S← num b"))))
 
   (test-case grammar expected))
 
@@ -103,7 +136,7 @@
     '((S (num a b c) (num d e f))))
 
   (define expected
-    `((S (num "S← num d e f" "S← num a b c"))))
+    `((S (num "S← num a b c" "S← num d e f"))))
 
   (test-case grammar expected))
 
@@ -154,7 +187,26 @@
       (R (num) (num space R))))
 
   (define expected
-    `((L (num "L← num space L" "L← num"))
-      (R (num "R← num space R" "R← num"))))
+    `((L (num "L← num" "L← num space L"))
+      (R (num "R← num" "R← num space R"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Grammar for S:
+  ;;
+  ;;   S → id op id
+  ;;   S → id op id op id
+  ;;   S → id
+  ;;
+  ;; Expected: the conflict on the common prefix "id" in nonterminal S.
+  ;;
+
+  (define grammar
+    '((S (id op id) (id op id op id) (id))))
+  (define expected
+    `((S (id "S← id op id" "S← id op id op id" "S← id"))))
 
   (test-case grammar expected))
