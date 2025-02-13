@@ -37,6 +37,8 @@
   (import
     (only (scheme base)
           <
+          append
+          apply
           begin
           car
           cdr

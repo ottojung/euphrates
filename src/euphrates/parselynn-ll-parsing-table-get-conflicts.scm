@@ -69,7 +69,25 @@
   (define wraped
     (map wrap-conflict collected))
 
+  (define (conflict-grouper conflict)
+    (define state (car conflict))
+    state)
+
+  (define (drop-nonterminal-2 grouped-conflicts)
+    (define nonterminal (car grouped-conflicts))
+    (define group (cdr grouped-conflicts))
+    group)
+
+  (define (drop-nonterminal grouped-conflicts)
+    (define nonterminal (car grouped-conflicts))
+    (define group (cdr grouped-conflicts))
+    (cons nonterminal (apply append (map drop-nonterminal-2 group))))
+
+  (define grouped-wraped
+    (map drop-nonterminal
+         (list-group-by conflict-grouper wraped)))
+
   (define result
-    wraped)
+    grouped-wraped)
 
   result)

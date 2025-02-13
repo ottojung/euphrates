@@ -466,7 +466,7 @@
     '((S (a b) (a c) (e f) (e g) (x))))
 
   (define expected
-    `((S (a "S← a b" "S← a c"))
-      (S (e "S← e f" "S← e g"))))
+    `((S (a "S← a b" "S← a c")
+         (e "S← e f" "S← e g"))))
 
   (test-case grammar expected))
