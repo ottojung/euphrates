@@ -195,18 +195,260 @@
 
 (let ()
   ;;
-  ;; Grammar for S:
+  ;; More than two alternatives, issues with left-factoring.
   ;;
-  ;;   S → id op id
-  ;;   S → id op id op id
-  ;;   S → id
+  ;;   Grammar:
   ;;
-  ;; Expected: the conflict on the common prefix "id" in nonterminal S.
+  ;; S → id op id
+  ;; S → xx op id op id
+  ;; S → id
   ;;
 
   (define grammar
-    '((S (id op id) (id op id op id) (id))))
+    '((S (id op id) (xx op id op id) (id))))
   (define expected
-    `((S (id "S← id op id" "S← id op id op id" "S← id"))))
+    `((S (id "S← id op id" "S← id"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Grammar with conflict in a non-start nonterminal.
+  ;;
+  ;; Grammar:
+  ;;   S → A d | b
+  ;;   A → a | a A
+  ;;
+  ;; Explanation:
+  ;; The alternatives for A start with the same terminal 'a',
+  ;; so the LL(1) parsing table for A should report a conflict on key ‘a’,
+  ;; with the two actions being "A← a" and "A← a A".
+  ;;
+
+  (define grammar
+    '((S (A d) (b))
+      (A (a) (a A))))
+
+  (define expected
+    '((A (a "A← a" "A← a A"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Conflict in the start nonterminal.
+  ;;
+  ;; Grammar:
+  ;;   S → a B | a C
+  ;;   B → b
+  ;;   C → c
+  ;;
+  ;; Expected conflict on S with key a.
+  ;;
+
+  (define grammar
+    '((S (a B) (a C))
+      (B (b))
+      (C (c))))
+
+  (define expected
+    `((S (a "S← a B" "S← a C"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Indirect conflict in a non–start nonterminal.
+  ;;
+  ;; Grammar:
+  ;;   S → A | b
+  ;;   A → a | a c
+  ;;
+  ;; Expected conflict on A with key a.
+  ;;
+
+  (define grammar
+    '((S (A) (b))
+      (A (a) (a c))))
+
+  (define expected
+    `((A (a "A← a" "A← a c"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Conflict in a recursive nonterminal.
+  ;;
+  ;; Grammar:
+  ;;   S → A | b
+  ;;   A → a B | a C
+  ;;   B → d
+  ;;   C → e
+  ;;
+  ;; Expected conflict in A on key a.
+  ;;
+
+  (define grammar
+    '((S (A) (b))
+      (A (a B) (a C))
+      (B (d))
+      (C (e))))
+
+  (define expected
+    `((A (a "A← a B" "A← a C"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Three alternatives sharing the same first token.
+  ;;
+  ;; Grammar:
+  ;;   S → x y | x z | x t
+  ;;
+  ;; Expected conflict on S with key x and three conflicting actions.
+  ;;
+
+  (define grammar
+    '((S (x y) (x z) (x t))))
+
+  (define expected
+    `((S (x "S← x y" "S← x z" "S← x t"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Fully left-factored grammar (should yield no conflicts).
+  ;;
+  ;; Grammar:
+  ;;   S → x S'
+  ;;   S' → y | z
+  ;;
+  ;; Expected: no conflicts.
+  ;;
+
+  (define grammar
+    '((S (x S'))
+      (S' (y) (z))))
+
+  (define expected
+    '())
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Conflict in a helper nonterminal used inside S.
+  ;;
+  ;; Grammar:
+  ;;   S → A B
+  ;;   A → p q | p r s
+  ;;   B → t
+  ;;
+  ;; Expected conflict in A on key p.
+  ;;
+
+  (define grammar
+    '((S (A B))
+      (A (p q) (p r s))
+      (B (t))))
+
+  (define expected
+    `((A (p "A← p q" "A← p r s"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Multiple nonterminals having conflicts.
+  ;;
+  ;; Grammar:
+  ;;   S → A B
+  ;;   A → k | k m
+  ;;   B → n | n o
+  ;;
+  ;; Expected conflicts in A on key k and in B on key n.
+  ;;
+
+  (define grammar
+    '((S (A B))
+      (A (k) (k m))
+      (B (n) (n o))))
+
+  (define expected
+    `((A (k "A← k" "A← k m"))
+      (B (n "B← n" "B← n o"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Conflict in a self–recursive nonterminal.
+  ;;
+  ;; Grammar:
+  ;;   S → T
+  ;;   T → a | a T
+  ;;
+  ;; Expected conflict in T on key a.
+  ;;
+
+  (define grammar
+    '((S (T))
+      (T (a) (a T))))
+
+  (define expected
+    `((T (a "T← a" "T← a T"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Test Case 9: Conflict from productions with similar but not identical right–sides.
+  ;;
+  ;; Grammar:
+  ;;   S → c d e | c d f
+  ;;
+  ;; Expected conflict in S on key c.
+  ;;
+
+  (define grammar
+    '((S (c d e) (c d f))))
+
+  (define expected
+    `((S (c "S← c d e" "S← c d f"))))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; Conflict in a nonterminal used in multiple places.
+  ;;
+  ;; Grammar:
+  ;;   S → M a | M b
+  ;;   M → x | x y
+  ;;
+  ;; Expected conflict in M on key x, and, transitively on S.
+  ;;
+
+  (define grammar
+    '((S (M a) (M b))
+      (M (x) (x y))))
+
+  (define expected
+    `((S (x "S← M a" "S← M b"))
+      (M (x "M← x" "M← x y"))))
 
   (test-case grammar expected))
