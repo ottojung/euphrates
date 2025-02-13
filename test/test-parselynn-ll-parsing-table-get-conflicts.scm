@@ -261,7 +261,7 @@
 
 (let ()
   ;;
-  ;; Indirect conflict in a non–start nonterminal.
+  ;; Indirect conflict in a non-start nonterminal.
   ;;
   ;; Grammar:
   ;;   S → A | b
@@ -394,7 +394,7 @@
 
 (let ()
   ;;
-  ;; Conflict in a self–recursive nonterminal.
+  ;; Conflict in a self-recursive nonterminal.
   ;;
   ;; Grammar:
   ;;   S → T
@@ -415,7 +415,7 @@
 
 (let ()
   ;;
-  ;; Test Case 9: Conflict from productions with similar but not identical right–sides.
+  ;; Conflict from productions with similar but not identical right-sides.
   ;;
   ;; Grammar:
   ;;   S → c d e | c d f
