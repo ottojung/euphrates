@@ -110,6 +110,7 @@
     (cons tag (map cdr group)))
 
   (define grouped
+    ;; TODO: use regular list-group-by to reduce all of this boilerplate.
     (map remove-tags
          (map add-tag
               (group-by/sequential grouper cases-alist))))
