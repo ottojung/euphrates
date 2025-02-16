@@ -17,20 +17,12 @@
        (define result/raw
          (parselynn:ll-parsing-table:get-conflicts table))
 
-       (define (action->string action)
+       (define (show-conflict conflict)
          (with-output-stringified
-          (parselynn:ll-action:print action)))
+          (parselynn:ll-parse-conflict:print conflict)))
 
        (define result
-         (map (lambda (p)
-                (define-pair (state conflicts) p)
-                (cons state
-                      (map
-                       (lambda (x)
-                         (define-pair (key actions) x)
-                         (cons key (map action->string actions)))
-                       conflicts)))
-              result/raw))
+         (map show-conflict result/raw))
 
        (unless (equal? result expected)
          (debug "\nexpected:\n~s\n\n" expected)
@@ -114,7 +106,7 @@
     '((S (num a) (num b))))
 
   (define expected
-    `((S (num "S← num a" "S← num b"))))
+    `("Conflict between productions \"S ➔ num a\" and \"S ➔ num b\". All of them derive token \"num\" first."))
 
   (test-case grammar expected))
 
@@ -136,7 +128,7 @@
     '((S (num a b c) (num d e f))))
 
   (define expected
-    `((S (num "S← num a b c" "S← num d e f"))))
+    `("Conflict between productions \"S ➔ num a b c\" and \"S ➔ num d e f\". All of them derive token \"num\" first."))
 
   (test-case grammar expected))
 
@@ -187,8 +179,8 @@
       (R (num) (num space R))))
 
   (define expected
-    `((L (num "L← num" "L← num space L"))
-      (R (num "R← num" "R← num space R"))))
+    `("Conflict between productions \"L ➔ num\" and \"L ➔ num space L\". All of them derive token \"num\" first."
+      "Conflict between productions \"R ➔ num\" and \"R ➔ num space R\". All of them derive token \"num\" first."))
 
   (test-case grammar expected))
 
@@ -207,7 +199,7 @@
   (define grammar
     '((S (id op id) (xx op id op id) (id))))
   (define expected
-    `((S (id "S← id op id" "S← id"))))
+    `("Conflict between productions \"S ➔ id op id\" and \"S ➔ id\". All of them derive token \"id\" first."))
 
   (test-case grammar expected))
 
@@ -231,7 +223,7 @@
       (A (a) (a A))))
 
   (define expected
-    '((A (a "A← a" "A← a A"))))
+    `("Conflict between productions \"A ➔ a\" and \"A ➔ a A\". All of them derive token \"a\" first."))
 
   (test-case grammar expected))
 
@@ -254,7 +246,7 @@
       (C (c))))
 
   (define expected
-    `((S (a "S← a B" "S← a C"))))
+    `("Conflict between productions \"S ➔ a B\" and \"S ➔ a C\". All of them derive token \"a\" first."))
 
   (test-case grammar expected))
 
@@ -275,7 +267,7 @@
       (A (a) (a c))))
 
   (define expected
-    `((A (a "A← a" "A← a c"))))
+    `("Conflict between productions \"A ➔ a\" and \"A ➔ a c\". All of them derive token \"a\" first."))
 
   (test-case grammar expected))
 
@@ -300,7 +292,7 @@
       (C (e))))
 
   (define expected
-    `((A (a "A← a B" "A← a C"))))
+    `("Conflict between productions \"A ➔ a B\" and \"A ➔ a C\". All of them derive token \"a\" first."))
 
   (test-case grammar expected))
 
@@ -319,7 +311,7 @@
     '((S (x y) (x z) (x t))))
 
   (define expected
-    `((S (x "S← x y" "S← x z" "S← x t"))))
+    `("Conflict between productions \"S ➔ x y\", \"S ➔ x z\" and \"S ➔ x t\". All of them derive token \"x\" first."))
 
   (test-case grammar expected))
 
@@ -363,7 +355,7 @@
       (B (t))))
 
   (define expected
-    `((A (p "A← p q" "A← p r s"))))
+    `("Conflict between productions \"A ➔ p q\" and \"A ➔ p r s\". All of them derive token \"p\" first."))
 
   (test-case grammar expected))
 
@@ -386,8 +378,8 @@
       (B (n) (n o))))
 
   (define expected
-    `((A (k "A← k" "A← k m"))
-      (B (n "B← n" "B← n o"))))
+    `("Conflict between productions \"A ➔ k\" and \"A ➔ k m\". All of them derive token \"k\" first."
+      "Conflict between productions \"B ➔ n\" and \"B ➔ n o\". All of them derive token \"n\" first."))
 
   (test-case grammar expected))
 
@@ -408,7 +400,7 @@
       (T (a) (a T))))
 
   (define expected
-    `((T (a "T← a" "T← a T"))))
+    `("Conflict between productions \"T ➔ a\" and \"T ➔ a T\". All of them derive token \"a\" first."))
 
   (test-case grammar expected))
 
@@ -427,7 +419,7 @@
     '((S (c d e) (c d f))))
 
   (define expected
-    `((S (c "S← c d e" "S← c d f"))))
+    `("Conflict between productions \"S ➔ c d e\" and \"S ➔ c d f\". All of them derive token \"c\" first."))
 
   (test-case grammar expected))
 
@@ -448,8 +440,8 @@
       (M (x) (x y))))
 
   (define expected
-    `((S (x "S← M a" "S← M b"))
-      (M (x "M← x" "M← x y"))))
+    `("Conflict between productions \"S ➔ M a\" and \"S ➔ M b\". All of them derive token \"x\" first."
+      "Conflict between productions \"M ➔ x\" and \"M ➔ x y\". All of them derive token \"x\" first."))
 
   (test-case grammar expected))
 
@@ -466,7 +458,24 @@
     '((S (a b) (a c) (e f) (e g) (x))))
 
   (define expected
-    `((S (a "S← a b" "S← a c")
-         (e "S← e f" "S← e g"))))
+    `("Conflict between productions \"S ➔ a b\" and \"S ➔ a c\". All of them derive token \"a\" first."
+      "Conflict between productions \"S ➔ e f\" and \"S ➔ e g\". All of them derive token \"e\" first."))
+
+  (test-case grammar expected))
+
+
+(let ()
+  ;;
+  ;; More than two conflicting productions.
+  ;;
+  ;; Grammar:
+  ;;   S → a b | a c | a d | a e
+  ;;
+
+  (define grammar
+    '((S (a b) (a c) (a d) (a e))))
+
+  (define expected
+    `("Conflict between productions \"S ➔ a b\", \"S ➔ a c\", \"S ➔ a d\" and \"S ➔ a e\". All of them derive token \"a\" first."))
 
   (test-case grammar expected))

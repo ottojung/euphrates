@@ -4,13 +4,11 @@
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debug) debug))
   (import
-    (only (euphrates define-pair) define-pair))
-  (import
-    (only (euphrates parselynn-ll-action-print)
-          parselynn:ll-action:print))
-  (import
     (only (euphrates parselynn-ll-compute-parsing-table)
           parselynn:ll-compute-parsing-table))
+  (import
+    (only (euphrates parselynn-ll-parse-conflict-print)
+          parselynn:ll-parse-conflict:print))
   (import
     (only (euphrates
             parselynn-ll-parsing-table-get-conflicts)
@@ -22,11 +20,9 @@
     (only (scheme base)
           _
           begin
-          cons
           define
           define-syntax
           equal?
-          lambda
           let
           map
           quasiquote

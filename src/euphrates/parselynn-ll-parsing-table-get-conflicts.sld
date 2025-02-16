@@ -26,8 +26,8 @@
     (only (euphrates list-map-flatten)
           list-map/flatten))
   (import
-    (only (euphrates parselynn-ll-choose-action)
-          parselynn:ll-choose-action:make))
+    (only (euphrates parselynn-ll-parse-conflict)
+          parselynn:ll-parse-first-first-conflict:make))
   (import
     (only (euphrates parselynn-ll-parsing-table)
           parselynn:ll-parsing-table-clause:candidates
@@ -37,8 +37,6 @@
   (import
     (only (scheme base)
           <
-          append
-          apply
           begin
           car
           cdr
@@ -48,7 +46,6 @@
           if
           lambda
           length
-          list
           map
           null?
           quote

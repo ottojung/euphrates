@@ -20,16 +20,6 @@
        "~s"
        (parselynn:ll-predict-action:nonterminal action)))
 
-     ((parselynn:ll-choose-action? action)
-      (let ()
-        (define production
-          (parselynn:ll-choose-action:production action))
-        (fprintf port
-                 "~s← ~a"
-                 (bnf-alist:production:lhs production)
-                 (words->string
-                  (map ~s (bnf-alist:production:rhs production))))))
-
      ((parselynn:ll-accept-action? action)
       (display "ACC" port))
 
