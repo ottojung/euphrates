@@ -23,9 +23,9 @@
           hashset-has?
           make-hashset))
   (import (only (euphrates identity) identity))
+  (import (only (euphrates thunk) thunk))
   (import
     (only (scheme base)
-          _
           begin
           cons
           define

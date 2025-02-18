@@ -10,7 +10,7 @@
   (define mapping
     (alist->hashmap
      (map
-      (compose-under cons identity (lambda _ (make-hashset)))
+      (compose-under cons identity (thunk (make-hashset)))
       nonterminals)))
 
   ;; Phase 1: For every production of each nonterminal, add each symbol
