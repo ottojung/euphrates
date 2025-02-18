@@ -1,13 +1,12 @@
 
 (define-library
-  (euphrates list-take-while)
-  (export list-take-while)
+  (euphrates list-drop-until)
+  (export list-drop-until)
   (import
     (only (euphrates define-pair) define-pair))
   (import
     (only (scheme base)
           begin
-          cons
           define
           if
           let
@@ -20,5 +19,5 @@
     (guile (import (only (guile) include-from-path))
            (begin
              (include-from-path
-               "euphrates/list-take-while.scm")))
-    (else (include "list-take-while.scm"))))
+               "euphrates/list-drop-until.scm")))
+    (else (include "list-drop-until.scm"))))
