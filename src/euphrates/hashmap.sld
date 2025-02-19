@@ -12,6 +12,7 @@
     multi-alist->hashmap
     hashmap-has?
     hashmap-ref
+    hashmap-doref
     hashmap-set!
     hashmap-clear!
     hashmap-count

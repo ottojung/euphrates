@@ -56,6 +56,22 @@
            default
            get)))))
 
+(define-syntax hashmap-doref
+  (syntax-rules (:key :default :bind)
+    ((_ H :key key :bind get . bodies)
+     (let ()
+       (define key^ key)
+       (hashmap-doref
+        H :key key^ :default (raisu 'hashmap-key-not-found key^)
+        :bind get . bodies)))
+    ((_ H :key key :default default :bind get . bodies)
+     (let ()
+       (define get
+         (hashmap-true-ref H key hashmap-ref-default-value))
+       (if (eq? get hashmap-ref-default-value)
+           default
+           (let () . bodies))))))
+
 ;; multi-alist example:
 ;;    '((a . 3) (b . 2) (a . 4))
 ;; which is equivalent to this alist:

@@ -14,6 +14,7 @@
   (import
     (only (euphrates hashmap)
           alist->hashmap
+          hashmap-doref
           hashmap-foreach
           hashmap-ref))
   (import

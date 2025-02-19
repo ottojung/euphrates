@@ -30,16 +30,15 @@
       (hashset-foreach
 
        (lambda (y)
-         (define reachable-from-y
-           (hashmap-ref mapping y #f))
-
-         (when reachable-from-y
-           (hashset-foreach
-            (lambda (z)
-              (unless (hashset-has? reachable-set z)
-                (hashset-add! reachable-set z)
-                (set! changed #t)))
-            reachable-from-y)))
+         (hashmap-doref
+          mapping :key y :default #f
+          :bind reachable-from-y
+          (hashset-foreach
+           (lambda (z)
+             (unless (hashset-has? reachable-set z)
+               (hashset-add! reachable-set z)
+               (set! changed #t)))
+           reachable-from-y)))
 
        reachable-set))
 
