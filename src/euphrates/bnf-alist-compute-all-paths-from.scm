@@ -24,10 +24,11 @@
   ;; production), we include the symbol 'parselynn:epsilon in its place.
   ;;
   (define nonterminals
-    (bnf-alist:nonterminals bnf-alist))
+    (list->hashset
+     (bnf-alist:nonterminals bnf-alist)))
 
   (define (nonterminal? sym)
-    (member sym nonterminals))
+    (hashset-has? nonterminals sym))
 
   (define (productions-for nt)
     (cdr (assoc nt bnf-alist)))

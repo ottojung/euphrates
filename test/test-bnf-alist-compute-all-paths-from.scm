@@ -180,3 +180,27 @@
                      (S A a B b)
                      (S C ,parselynn:epsilon)))
   (test-all-paths-case bnf 'S expected))
+
+;; Recursive path.
+;;    Grammar:
+;;      S → A
+;;      A → B
+;;      B → S
+(let ()
+  (define bnf '((S (A))
+                (A (B))
+                (B (S))))
+  (define expected '((S A B S)))
+  (test-all-paths-case bnf 'S expected))
+
+;; Recursive path.
+;;    Grammar:
+;;      S → A
+;;      A → B
+;;      B → S | A
+(let ()
+  (define bnf '((S (A))
+                (A (B))
+                (B (S) (A))))
+  (define expected '((S A B A) (S A B S)))
+  (test-all-paths-case bnf 'S expected))

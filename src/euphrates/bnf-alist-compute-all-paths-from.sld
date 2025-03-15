@@ -6,6 +6,10 @@
     (only (euphrates bnf-alist-nonterminals)
           bnf-alist:nonterminals))
   (import
+    (only (euphrates hashset)
+          hashset-has?
+          list->hashset))
+  (import
     (only (euphrates parselynn-epsilon)
           parselynn:epsilon))
   (import
