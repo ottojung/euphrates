@@ -6,6 +6,9 @@
     (only (euphrates bnf-alist-nonterminals)
           bnf-alist:nonterminals))
   (import
+    (only (euphrates parselynn-epsilon)
+          parselynn:epsilon))
+  (import
     (only (scheme base)
           and
           append

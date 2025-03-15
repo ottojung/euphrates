@@ -25,7 +25,7 @@
 
 ;; Test cases:
 
-;; 1. Single production: S → a.
+;; Single production: S → a.
 ;;    Expected: only one derivation: (S a)
 (let ()
   (define bnf '((S (a))))
@@ -120,7 +120,7 @@
 ;;    Expected derivation from S: (S)
 (let ()
   (define bnf '((S ())))
-  (define expected '((S)))
+  (define expected `((S ,parselynn:epsilon)))
   (test-all-paths-case bnf 'S expected))
 
 ;; A nonterminal dependent on one that produces epsilon.
@@ -131,7 +131,7 @@
 (let ()
   (define bnf '((S (A))
                 (A ())))
-  (define expected '((S A)))
+  (define expected `((S A ,parselynn:epsilon)))
   (test-all-paths-case bnf 'S expected))
 
 ;; Epsilon production in a sequence.
@@ -145,7 +145,7 @@
   (define bnf '((S (A B))
                 (A ())
                 (B (b))))
-  (define expected '((S A B b)))
+  (define expected `((S A ,parselynn:epsilon B b)))
   (test-all-paths-case bnf 'S expected))
 
 ;; A nonterminal with alternatives, one of which is epsilon.
@@ -153,8 +153,8 @@
 ;;       S → ε | a
 ;;    Expected derivations from S: one from the epsilon alternative, and one from the non-epsilon alternative.
 (let ()
-  (define bnf '((S (() (a)))))
-  (define expected '((S () (a))))
+  (define bnf '((S () (a))))
+  (define expected `((S ,parselynn:epsilon) (S a)))
   (test-all-paths-case bnf 'S expected))
 
 ;; A more elaborate example mixing epsilon and non-epsilon alternatives.
@@ -173,8 +173,10 @@
 ;;           (S A B b) , (S A a B b) , (S C)
 (let ()
   (define bnf '((S (A B) (C))
-                (A (() (a)))
+                (A () (a))
                 (B (b))
                 (C ())))
-  (define expected '((S A () (a) B b) (S C)))
+  (define expected `((S A ,parselynn:epsilon B b)
+                     (S A a B b)
+                     (S C ,parselynn:epsilon)))
   (test-all-paths-case bnf 'S expected))

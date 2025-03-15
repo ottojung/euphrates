@@ -17,51 +17,54 @@
 ;; the symbol is a terminal (or a nonterminal having productions) we expand it.
 ;; Finally, the overall procedure returns just the paths (dropping the visited sets).
 (define (bnf-alist:compute-all-paths-from bnf-alist starting-nonterminal)
-  ;; Get the nonterminals from the grammar (assume this helper exists)
-  (define nonterminals (bnf-alist:nonterminals bnf-alist))
+  ;;
+  ;; This procedure returns a list of derivation paths.
+  ;; Each derivation path is a list of symbols derived from the starting
+  ;; nonterminal. In this version, if a production is empty (an epsilon
+  ;; production), we include the symbol 'parselynn:epsilon in its place.
+  ;;
+  (define nonterminals
+    (bnf-alist:nonterminals bnf-alist))
 
-  ;; predicate: is symbol a nonterminal?
   (define (nonterminal? sym)
     (member sym nonterminals))
 
-  ;; Given a nonterminal, return its productions.
-  ;; Our bnf-alist is assumed to have the form:
-  ;;   ((S p1 p2 ...) (A p3 ... ) …)
-  ;; where each p is a production (a list of symbols).
   (define (productions-for nt)
     (cdr (assoc nt bnf-alist)))
 
-  ;; derive-sym takes a symbol and a visited set (list of nonterminals already seen)
-  ;; and returns a list of pairs (path . visited-out).
+  ;; derive-sym expands a single symbol with a given visited list.
+  ;; It returns a list of pairs (path . visited-out) where "path" is a list of symbols.
   (define (derive-sym sym visited)
     (if (and (nonterminal? sym) (member sym visited))
-        ;; Already seen this nonterminal: halt expansion and return just sym.
+        ;; Already visited: stop expanding to avoid cycles.
         (list (cons (list sym) visited))
         (if (nonterminal? sym)
             (let ((new-visited (cons sym visited)))
               (let ((prods (productions-for sym)))
                 (if (null? prods)
-                    ;; Edge case: nonterminal with no productions: return only itself.
+                    ;; If no productions, just return symbol.
                     (list (cons (list sym) new-visited))
-                    ;; For every production alternative, expand it.
                     (apply append
                            (map (lambda (prod)
-                                  (map (lambda (pair)
-                                         ;; pair: (derived-path . visited-after-prod)
-                                         ;; Prepend the current nonterminal.
-                                         (cons (cons sym (car pair)) (cdr pair)))
-                                       (derive-prod prod new-visited)))
+                                  (if (null? prod)
+                                      ;; Explicit epsilon production: record epsilon marker.
+                                      (list (cons (list sym parselynn:epsilon) new-visited))
+                                      ;; Otherwise, expand the production.
+                                      (map (lambda (pair)
+                                             (cons (cons sym (car pair))
+                                                   (cdr pair)))
+                                           (derive-prod prod new-visited))))
                                 prods)))))
-            ;; Else sym is not a nonterminal; treat it as a terminal.
+            ;; Terminal: return the symbol as is.
             (list (cons (list sym) visited)))))
 
-  ;; derive-prod takes a list of symbols (a production alternative) and a visited set.
-  ;; It returns a list of pairs (path . visited) for expanding the whole production.
+  ;; derive-prod expands a (nonempty) sequence of symbols.
+  ;; When the production becomes empty, we return an empty continuation (i.e. no extra marker).
   (define (derive-prod prod visited)
     (if (null? prod)
         (list (cons '() visited))
         (let* ((first (car prod))
-               (rest (cdr prod))
+               (rest  (cdr prod))
                (first-results (derive-sym first visited)))
           (apply append
                  (map (lambda (pair)
@@ -73,5 +76,5 @@
                                (derive-prod rest visited-after-first))))
                       first-results)))))
 
-  ;; Start the derivation from the starting-nonterminal and discard visited sets.
+  ;; Start expanding the starting nonterminal.
   (map car (derive-sym starting-nonterminal '())))

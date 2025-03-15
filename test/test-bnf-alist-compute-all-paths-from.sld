@@ -9,6 +9,9 @@
   (import
     (only (euphrates euphrates-list-sort)
           euphrates:list-sort))
+  (import
+    (only (euphrates parselynn-epsilon)
+          parselynn:epsilon))
   (import (only (euphrates tilda-a) ~a))
   (import
     (only (scheme base)
@@ -22,11 +25,13 @@
           let
           let*
           map
+          quasiquote
           quote
           string-append
           string<?
           syntax-rules
-          unless))
+          unless
+          unquote))
   (cond-expand
     (guile (import (only (guile) include-from-path))
            (begin
