@@ -176,7 +176,7 @@
 ;; This is the missing case. Here a nonterminal has two different productions.
 ;;
 ;; Grammar:
-;;    S → A | B
+;;    S → A | B
 ;;    A → x
 ;;    B → y z
 ;;
