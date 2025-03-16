@@ -20,8 +20,8 @@
   ;;
   ;; This procedure returns a list of derivation paths.
   ;; Each derivation path is a list of symbols derived from the starting
-  ;; nonterminal. In this version, if a production is empty (an epsilon
-  ;; production), we include the symbol 'parselynn:epsilon in its place.
+  ;; nonterminal. If a production is empty (an epsilon
+  ;; production), we include parselynn:epsilon in its place.
   ;;
   (define nonterminals
     (list->hashset
