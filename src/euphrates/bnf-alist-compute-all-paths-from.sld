@@ -22,11 +22,11 @@
           apply
           assoc
           begin
+          cadr
           car
           cdr
           cons
           define
-          equal?
           if
           lambda
           let
@@ -36,6 +36,7 @@
           member
           null?
           quote))
+  (import (only (scheme cxr) caddr))
   (cond-expand
     (guile (import (only (srfi srfi-1) first)))
     (else (import (only (srfi 1) first))))

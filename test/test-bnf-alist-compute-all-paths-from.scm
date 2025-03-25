@@ -215,3 +215,28 @@
   (define bnf '((S (S a) (S b))))
   (define expected '((S S)))
   (test-all-paths-case bnf 'S expected))
+
+;; Multiple left–recursive alternatives from the same nonterminal.
+;;
+;; Grammar:
+;;     S → S a  | A
+;;     A → S b  | a
+;;
+;; Analysis:
+;;   • Starting from S:
+;;        – Production (S a) leads immediately to a cycle.
+;;          • S → S a yields derivation: (S S a)
+;;
+;;        – Production (A) expands A (with visited updated to (S)) and then uses
+;;          alternative (S b); here, when expanding S the fact that S is already
+;;          in the visited list causes a cycle:
+;;          • S → A, A → S b yields derivation: (S A S b)
+;;
+;; Expected left recursion for S: two structures, one for cycle (S S a) and one for (S A S b).
+(let ()
+  (define bnf '((S (S a) (A))
+                (A (S b) (a))))
+  (define expected '((A S A)
+                     (A S S)
+                     (A a)))
+  (test-all-paths-case bnf 'A expected))

@@ -33,54 +33,66 @@
   (define (productions-for nt)
     (cdr (assoc nt bnf-alist)))
 
-  ;; derive-sym expands one symbol with a given visited list.
-  ;; Returns a list of pairs (path . visited-out).
+  ;; A triple is represented as (list path visited halted?)
+  (define (make-triple path visited halted?)
+    (list path visited halted?))
+  (define (triple-path triple) (car triple))
+  (define (triple-visited triple) (cadr triple))
+  (define (triple-halted? triple) (caddr triple))
+
+  ;; derive-sym: expand a single symbol with a current visited list.
+  ;; Returns a list of triples (path, visited-out, halted?).
   (define (derive-sym sym visited)
     (if (and (nonterminal? sym) (member sym visited))
-        ;; Already visited: halt expansion.
-        (list (cons (list sym) visited))
+        ;; Cycle detected: do not expand further.
+        (list (make-triple (list sym) visited #t))
         (if (nonterminal? sym)
             (let ((new-visited (cons sym visited)))
               (let ((prods (productions-for sym)))
                 (if (null? prods)
-                    (list (cons (list sym) new-visited))
+                    ;; If there are no productions, return the symbol as‐is.
+                    (list (make-triple (list sym) new-visited #f))
                     (apply append
                            (map (lambda (prod)
                                   (if (null? prod)
-                                      ;; epsilon production: record the epsilon marker.
-                                      (list (cons (list sym parselynn:epsilon) new-visited))
-                                      (map (lambda (pair)
-                                             (cons (cons sym (car pair)) (cdr pair)))
+                                      ;; Epsilon production: include epsilon marker.
+                                      (list (make-triple (list sym parselynn:epsilon) new-visited #f))
+                                      ;; Otherwise, expand the production.
+                                      (map (lambda (triple)
+                                             ;; Prepend the current nonterminal.
+                                             (make-triple (cons sym (triple-path triple))
+                                                          (triple-visited triple)
+                                                          (triple-halted? triple)))
                                            (derive-prod prod new-visited))))
                                 prods)))))
-            ;; Terminal: just return it.
-            (list (cons (list sym) visited)))))
+            ;; Terminal: return the symbol as is.
+            (list (make-triple (list sym) visited #f)))))
 
-  ;; derive-prod expands a production (list of symbols) in left-to-right order.
-  ;; If one of the symbols was halted (because it was already visited),
-  ;; stop expanding that production further.
+  ;; derive-prod: expand a production (list of symbols) left–to–right given visited.
+  ;; If at any point a symbol’s expansion is halted (cyclic) then we stop expanding
+  ;; the rest of that production.
   (define (derive-prod prod visited)
     (if (null? prod)
-        (list (cons '() visited))
+        (list (make-triple '() visited #f))
         (let* ((first (car prod))
                (rest  (cdr prod))
                (first-results (derive-sym first visited)))
           (apply append
-                 (map (lambda (pair)
-                        (let* ((first-path (car pair))
-                               (visited-after-first (cdr pair))
-                               ;; Check whether the expansion was halted.
-                               (halted? (and (nonterminal? first)
-                                             (equal? visited-after-first visited))))
-                          (if halted?
-                              ;; Stop expansion if halted.
-                              (list (cons first-path visited-after-first))
-                              ;; Otherwise, continue with the rest of the production.
-                              (map (lambda (pair2)
-                                     (cons (append first-path (car pair2))
-                                           (cdr pair2)))
-                                   (derive-prod rest visited-after-first)))))
+                 (map (lambda (triple)
+                        (if (triple-halted? triple)
+                            ;; If the expansion of the first symbol was halted,
+                            ;; do not expand the rest of the production.
+                            (list triple)
+                            ;; Otherwise, expand the rest.
+                            (map (lambda (triple2)
+                                   (make-triple (append (triple-path triple)
+                                                        (triple-path triple2))
+                                                (triple-visited triple2)
+                                                (triple-halted? triple2))
+                                   )
+                                 (derive-prod rest (triple-visited triple)))))
                       first-results)))))
 
-  ;; Start the expansion and deduplicate the paths (we ignore the visited sets).
-  (list-deduplicate (map car (derive-sym starting-nonterminal '()))))
+  ;; Start expansion from the starting nonterminal; we ignore visited info
+  ;; and also the halted? flags (it has impacted the derivation already).
+  (list-deduplicate (map triple-path (derive-sym starting-nonterminal '()))))
