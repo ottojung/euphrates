@@ -33,34 +33,32 @@
   (define (productions-for nt)
     (cdr (assoc nt bnf-alist)))
 
-  ;; derive-sym expands a single symbol with a given visited list.
-  ;; It returns a list of pairs (path . visited-out) where "path" is a list of symbols.
+  ;; derive-sym expands one symbol with a given visited list.
+  ;; Returns a list of pairs (path . visited-out).
   (define (derive-sym sym visited)
     (if (and (nonterminal? sym) (member sym visited))
-        ;; Already visited: stop expanding to avoid cycles.
+        ;; Already visited: halt expansion.
         (list (cons (list sym) visited))
         (if (nonterminal? sym)
             (let ((new-visited (cons sym visited)))
               (let ((prods (productions-for sym)))
                 (if (null? prods)
-                    ;; If no productions, just return symbol.
                     (list (cons (list sym) new-visited))
                     (apply append
                            (map (lambda (prod)
                                   (if (null? prod)
-                                      ;; Explicit epsilon production: record epsilon marker.
+                                      ;; epsilon production: record the epsilon marker.
                                       (list (cons (list sym parselynn:epsilon) new-visited))
-                                      ;; Otherwise, expand the production.
                                       (map (lambda (pair)
-                                             (cons (cons sym (car pair))
-                                                   (cdr pair)))
+                                             (cons (cons sym (car pair)) (cdr pair)))
                                            (derive-prod prod new-visited))))
                                 prods)))))
-            ;; Terminal: return the symbol as is.
+            ;; Terminal: just return it.
             (list (cons (list sym) visited)))))
 
-  ;; derive-prod expands a (nonempty) sequence of symbols.
-  ;; When the production becomes empty, we return an empty continuation (i.e. no extra marker).
+  ;; derive-prod expands a production (list of symbols) in left-to-right order.
+  ;; If one of the symbols was halted (because it was already visited),
+  ;; stop expanding that production further.
   (define (derive-prod prod visited)
     (if (null? prod)
         (list (cons '() visited))
@@ -69,13 +67,20 @@
                (first-results (derive-sym first visited)))
           (apply append
                  (map (lambda (pair)
-                        (let ((first-path (car pair))
-                              (visited-after-first (cdr pair)))
-                          (map (lambda (pair2)
-                                 (cons (append first-path (car pair2))
-                                       (cdr pair2)))
-                               (derive-prod rest visited-after-first))))
+                        (let* ((first-path (car pair))
+                               (visited-after-first (cdr pair))
+                               ;; Check whether the expansion was halted.
+                               (halted? (and (nonterminal? first)
+                                             (equal? visited-after-first visited))))
+                          (if halted?
+                              ;; Stop expansion if halted.
+                              (list (cons first-path visited-after-first))
+                              ;; Otherwise, continue with the rest of the production.
+                              (map (lambda (pair2)
+                                     (cons (append first-path (car pair2))
+                                           (cdr pair2)))
+                                   (derive-prod rest visited-after-first)))))
                       first-results)))))
 
-  ;; Start expanding the starting nonterminal.
-  (map car (derive-sym starting-nonterminal '())))
+  ;; Start the expansion and deduplicate the paths (we ignore the visited sets).
+  (list-deduplicate (map car (derive-sym starting-nonterminal '()))))

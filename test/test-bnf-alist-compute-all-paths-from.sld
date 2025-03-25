@@ -12,22 +12,21 @@
   (import
     (only (euphrates parselynn-epsilon)
           parselynn:epsilon))
-  (import (only (euphrates tilda-a) ~a))
+  (import (only (euphrates tilda-s) ~s))
+  (import
+    (only (euphrates words-to-string) words->string))
   (import
     (only (scheme base)
           _
-          apply
           begin
           define
           define-syntax
           equal?
-          lambda
           let
           let*
           map
           quasiquote
           quote
-          string-append
           string<?
           syntax-rules
           unless

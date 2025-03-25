@@ -10,6 +10,9 @@
           hashset-has?
           list->hashset))
   (import
+    (only (euphrates list-deduplicate)
+          list-deduplicate))
+  (import
     (only (euphrates parselynn-epsilon)
           parselynn:epsilon))
   (import
@@ -23,6 +26,7 @@
           cdr
           cons
           define
+          equal?
           if
           lambda
           let

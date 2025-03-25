@@ -2,7 +2,7 @@
 
 ;; convert a path (a list of symbols) to a string; we assume every symbol can be converted by ~a.
 (define (string-of-path path)
-  (apply string-append (map (lambda (s) (string-append (~a s) " ")) path)))
+  (words->string (map ~s path)))
 
 ;; Compare two paths lexicographically.
 (define (compare-paths p1 p2)
@@ -203,4 +203,15 @@
                 (A (B))
                 (B (S) (A))))
   (define expected '((S A B A) (S A B S)))
+  (test-all-paths-case bnf 'S expected))
+
+;; Grammar with multiple left–recursive alternatives.
+;;    Grammar:
+;;       S → S a   | S b
+;;    Expected:
+;;       Two left–recursive derivations from S:
+;;         (S S a) and (S S b)
+(let ()
+  (define bnf '((S (S a) (S b))))
+  (define expected '((S S)))
   (test-all-paths-case bnf 'S expected))
