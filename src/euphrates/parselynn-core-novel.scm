@@ -11,125 +11,155 @@
   (define (lr-1-driver?)
     (equal? driver-normalized-name 'lr-1-driver))
 
-  (define (lr-1-driver-code all-lexer-code rules results-mode)
-    (cond
-     ((equal? results-mode 'first) 'fine)
-     ((equal? results-mode 'all)
-      (parselynn:core:grammar-error
-       "Invalid option: ~s because LR(1) parser can only output a single result, so choose ~s ~s for it."
-       (~a results-mode) 'results: 'first))
-     (else (raisu 'impossible 'expected-all-or-first results-mode)))
+  (define (ll-1-driver?)
+    (equal? driver-normalized-name 'll-1-driver))
 
-    (define (rules->bnf-alist rules)
+  (define lr-1-driver-code
+    (generic-driver-code
+     "LR(1)"
+     parselynn:lr-compute-parsing-table
+     parselynn:lr-parsing-table:get-conflicts
+     parselynn:lr-1-compile/for-core
+     ))
 
-      (define something
+  (define ll-1-driver-code
+    (generic-driver-code
+     "LL(1)"
+     parselynn:ll-compute-parsing-table
+     parselynn:ll-parsing-table:get-conflicts
+     parselynn:ll-1-compile/for-core
+     ))
+
+  (define (generic-driver-code
+           name
+           compute-parsing-table
+           get-conflicts
+           compile/for-core
+           )
+    (define (continuation all-lexer-code rules results-mode)
+      (cond
+       ((equal? results-mode 'first) 'fine)
+       ((equal? results-mode 'all)
+        (parselynn:core:grammar-error
+         "Invalid option: ~s because LR(1) parser can only output a single result, so choose ~s ~s for it."
+         (~a results-mode) 'results: 'first))
+       (else (raisu 'impossible 'expected-all-or-first results-mode)))
+
+      (define (rules->bnf-alist rules)
+
+        (define something
+
+          (bnf-alist:map-grouped-productions
+           (lambda (name)
+             (lambda (group)
+               (let loop ((group group))
+                 (if (null? group) group
+                     (let ()
+                       (define production (car group))
+                       (if (equal? ': production)
+                           (loop (cdr (cdr group)))
+                           (cons production (loop (cdr group)))))))))
+
+           rules))
+
+        something)
+
+      (define (rules->callback-alist rules)
+        (define H (make-hashmap))
 
         (bnf-alist:map-grouped-productions
          (lambda (name)
            (lambda (group)
-             (let loop ((group group))
-               (if (null? group) group
+             (unless (null? group)
+               (let loop ((group (cdr group))
+                          (prev (car group)))
+                 (unless (null? group)
                    (let ()
-                     (define production (car group))
-                     (if (equal? ': production)
-                         (loop (cdr (cdr group)))
-                         (cons production (loop (cdr group)))))))))
+                     (define current (car group))
+                     (when (equal? ': current)
+                       (hashmap-set!
+                        H (list name prev)
+                        (car (cdr group))))
 
-         rules))
+                     (loop (cdr group) current)))))))
 
-      something)
+         rules)
 
-    (define (rules->callback-alist rules)
-      (define H (make-hashmap))
+        (hashmap->alist H))
 
-      (bnf-alist:map-grouped-productions
-       (lambda (name)
-         (lambda (group)
-           (unless (null? group)
-             (let loop ((group (cdr group))
-                        (prev (car group)))
-               (unless (null? group)
-                 (let ()
-                   (define current (car group))
-                   (when (equal? ': current)
-                     (hashmap-set!
-                      H (list name prev)
-                      (car (cdr group))))
+      (define bnf-alist
+        (rules->bnf-alist rules))
 
-                   (loop (cdr group) current)))))))
+      (define callback-alist
+        (rules->callback-alist rules))
 
-       rules)
+      (define table
+        (compute-parsing-table bnf-alist))
 
-      (hashmap->alist H))
+      (define conflicts
+        (get-conflicts table))
 
-    (define bnf-alist
-      (rules->bnf-alist rules))
+      (define _reported
+        (for-each
+         (lambda (conflict)
+           (define state (car conflict))
+           (define symbol-alist (cdr conflict))
+           (for-each
+            (lambda (symbol-actions-pair)
+              (define-pair (symbol actions) symbol-actions-pair)
+              (define first2 (list-take-n 2 actions))
+              (define-tuple (action1 action2) first2)
 
-    (define callback-alist
-      (rules->callback-alist rules))
+              (define (get-type action)
+                (cond
+                 ((parselynn:lr-shift-action? action)
+                  "shift")
+                 ((parselynn:lr-reduce-action? action)
+                  "reduce")
+                 (else
+                  (raisu-fmt 'impossible-6123513 "Expected either shift or reduce here, but got ~s." action))))
 
-    (define table
-      (parselynn:lr-compute-parsing-table bnf-alist))
+              (define type1
+                (get-type action1))
+              (define type2
+                (get-type action2))
+              (define overall-type
+                (string->symbol
+                 (string-append type1 "/" type2)))
+              (define new
+                (with-output-stringified
+                 (parselynn:lr-action:print action1)))
+              (define current
+                (with-output-stringified
+                 (parselynn:lr-action:print action2)))
 
-    (define conflicts
-      (parselynn:lr-parsing-table:get-conflicts table))
+              (parselynn:core:signal-conflict overall-type new current symbol state))
+            symbol-alist))
 
-    (define _reported
-      (for-each
-       (lambda (conflict)
-         (define state (car conflict))
-         (define symbol-alist (cdr conflict))
-         (for-each
-          (lambda (symbol-actions-pair)
-            (define-pair (symbol actions) symbol-actions-pair)
-            (define first2 (list-take-n 2 actions))
-            (define-tuple (action1 action2) first2)
+         conflicts))
 
-            (define (get-type action)
-              (cond
-               ((parselynn:lr-shift-action? action)
-                "shift")
-               ((parselynn:lr-reduce-action? action)
-                "reduce")
-               (else
-                (raisu-fmt 'impossible-6123513 "Expected either shift or reduce here, but got ~s." action))))
+      (define get-next-token-code
+        `((define get-next-token
+            (let () ,@all-lexer-code))))
 
-            (define type1
-              (get-type action1))
-            (define type2
-              (get-type action2))
-            (define overall-type
-              (string->symbol
-               (string-append type1 "/" type2)))
-            (define new
-              (with-output-stringified
-               (parselynn:lr-action:print action1)))
-            (define current
-              (with-output-stringified
-               (parselynn:lr-action:print action2)))
+      (define code
+        (parameterize ((parselynn:core:conflict-handler/p (lambda _ 0)))
+          (compile/for-core
+           get-next-token-code
+           table callback-alist)))
 
-            (parselynn:core:signal-conflict overall-type new current symbol state))
-          symbol-alist))
+      `(let ()
+         (lambda (actions)
+           ,@code)))
 
-       conflicts))
-
-    (define get-next-token-code
-      `((define get-next-token
-          (let () ,@all-lexer-code))))
-
-    (define code
-      (parameterize ((parselynn:core:conflict-handler/p (lambda _ 0)))
-        (parselynn:lr-1-compile/for-core
-         get-next-token-code
-         table callback-alist)))
-
-    `(let ()
-       (lambda (actions)
-         ,@code)))
+    continuation)
 
   (cond
    ((lr-1-driver?)
     (lr-1-driver-code all-lexer-code rules results-mode))
+
+   ((ll-1-driver?)
+    (ll-1-driver-code all-lexer-code rules results-mode))
 
    (else
     (raisu-fmt

@@ -15,9 +15,6 @@
     (only (euphrates parselynn-simple-diff)
           parselynn:simple:diff))
   (import
-    (only (euphrates parselynn-simple-join1)
-          parselynn:simple:join1))
-  (import
     (only (euphrates
             parselynn-simple-run-with-error-handler)
           parselynn:simple:run/with-error-handler))
@@ -31,7 +28,6 @@
   (import (only (euphrates stringf) stringf))
   (import
     (only (scheme base)
-          +
           /
           =
           _
@@ -44,7 +40,6 @@
           define-syntax
           eof-object
           equal?
-          even?
           if
           lambda
           let
@@ -55,14 +50,11 @@
           negative?
           not
           null?
-          odd?
           or
           positive?
           quasiquote
           quote
           set!
-          string
-          string->number
           string-append
           string?
           syntax-rules
@@ -70,8 +62,8 @@
           unquote))
   (import (only (scheme process-context) exit))
   (cond-expand
-    (guile (import (only (srfi srfi-1) any delete filter)))
-    (else (import (only (srfi 1) any delete filter))))
+    (guile (import (only (srfi srfi-1) delete filter)))
+    (else (import (only (srfi 1) delete filter))))
   (cond-expand
     (guile (import (only (srfi srfi-41) stream)))
     (else (import (only (srfi 41) stream))))

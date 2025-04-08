@@ -33,6 +33,16 @@
     (only (euphrates parselynn-core-signal-conflict)
           parselynn:core:signal-conflict))
   (import
+    (only (euphrates parselynn-ll-1-compile-for-core)
+          parselynn:ll-1-compile/for-core))
+  (import
+    (only (euphrates parselynn-ll-compute-parsing-table)
+          parselynn:ll-compute-parsing-table))
+  (import
+    (only (euphrates
+            parselynn-ll-parsing-table-get-conflicts)
+          parselynn:ll-parsing-table:get-conflicts))
+  (import
     (only (euphrates parselynn-lr-1-compile-for-core)
           parselynn:lr-1-compile/for-core))
   (import
