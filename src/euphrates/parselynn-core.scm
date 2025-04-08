@@ -24,9 +24,6 @@
 (define (parselynn:core arguments)
   (define *bits-per-word* 28)
 
-  (define (grammar-error message-fmt . args)
-    (apply raisu-fmt (cons 'type-error (cons message-fmt args))))
-
   (define common-definitions-code
     `((define (cadar l) (car (cdr (car l))))
       (define (drop l n)
@@ -70,126 +67,6 @@
 
       ))
 
-;;;
-;;;;  LR(1) driver
-;;;
-
-  (define (lr-1-driver-code all-lexer-code rules results-mode)
-    (cond
-     ((equal? results-mode 'first) 'fine)
-     ((equal? results-mode 'all)
-      (grammar-error
-       "Invalid option: ~s because LR(1) parser can only output a single result, so choose ~s ~s for it."
-       (~a results-mode) 'results: 'first))
-     (else (raisu 'impossible 'expected-all-or-first results-mode)))
-
-    (define (rules->bnf-alist rules)
-
-      (define something
-
-        (bnf-alist:map-grouped-productions
-         (lambda (name)
-           (lambda (group)
-             (let loop ((group group))
-               (if (null? group) group
-                   (let ()
-                     (define production (car group))
-                     (if (equal? ': production)
-                         (loop (cdr (cdr group)))
-                         (cons production (loop (cdr group)))))))))
-
-         rules))
-
-      something)
-
-    (define (rules->callback-alist rules)
-      (define H (make-hashmap))
-
-      (bnf-alist:map-grouped-productions
-       (lambda (name)
-         (lambda (group)
-           (unless (null? group)
-             (let loop ((group (cdr group))
-                        (prev (car group)))
-               (unless (null? group)
-                 (let ()
-                   (define current (car group))
-                   (when (equal? ': current)
-                     (hashmap-set!
-                      H (list name prev)
-                      (car (cdr group))))
-
-                   (loop (cdr group) current)))))))
-
-       rules)
-
-      (hashmap->alist H))
-
-    (define bnf-alist
-      (rules->bnf-alist rules))
-
-    (define callback-alist
-      (rules->callback-alist rules))
-
-    (define table
-      (parselynn:lr-compute-parsing-table bnf-alist))
-
-    (define conflicts
-      (parselynn:lr-parsing-table:get-conflicts table))
-
-    (define _reported
-      (for-each
-       (lambda (conflict)
-         (define state (car conflict))
-         (define symbol-alist (cdr conflict))
-         (for-each
-          (lambda (symbol-actions-pair)
-            (define-pair (symbol actions) symbol-actions-pair)
-            (define first2 (list-take-n 2 actions))
-            (define-tuple (action1 action2) first2)
-
-            (define (get-type action)
-              (cond
-               ((parselynn:lr-shift-action? action)
-                "shift")
-               ((parselynn:lr-reduce-action? action)
-                "reduce")
-               (else
-                (raisu-fmt 'impossible-6123513 "Expected either shift or reduce here, but got ~s." action))))
-
-            (define type1
-              (get-type action1))
-            (define type2
-              (get-type action2))
-            (define overall-type
-              (string->symbol
-               (string-append type1 "/" type2)))
-            (define new
-              (with-output-stringified
-               (parselynn:lr-action:print action1)))
-            (define current
-              (with-output-stringified
-               (parselynn:lr-action:print action2)))
-
-            (signal-conflict overall-type new current symbol state))
-          symbol-alist))
-
-       conflicts))
-
-    (define get-next-token-code
-      `((define get-next-token
-          (let () ,@all-lexer-code))))
-
-    (define code
-      (parameterize ((parselynn:core:conflict-handler/p (lambda _ 0)))
-        (parselynn:lr-1-compile/for-core
-         get-next-token-code
-         table callback-alist)))
-
-    `(let ()
-       (lambda (actions)
-         ,@code)))
-
 
 ;;;
 ;;;;  LR-driver
@@ -199,7 +76,7 @@
     (cond
      ((equal? results-mode 'first) 'fine)
      ((equal? results-mode 'all)
-      (grammar-error
+      (parselynn:core:grammar-error
        "Invalid option: ~s because LR parser can only output a single result, so choose ~s ~s for it."
        (~a results-mode) 'results: 'first))
      (else (raisu 'impossible 'expected-all-or-first results-mode)))
@@ -675,8 +552,6 @@
     (equal? driver-normalized-name 'glr-driver))
   (define (lr-driver?)
     (equal? driver-normalized-name 'lr-driver))
-  (define (lr-1-driver?)
-    (equal? driver-normalized-name 'lr-1-driver))
 
   (define (gen-tables! tokens gram )
     (initialize-all)
@@ -1486,21 +1361,6 @@
                     (loop i1 (get-symbol-precedence (- item nvars)))
                     (loop i1 prec)))))))))
 
-  (define (signal-conflict type new current on-symbol in-state)
-    (define-values (type/print action1 action2)
-      (cond
-       ((equal? type 'reduce/reduce) (values "Reduce/Reduce" 'reduce 'reduce))
-       ((equal? type 'shift/reduce) (values "Shift/Reduce" 'shift 'reduce))
-       (else (raisu-fmt 'logic-error "Expected only ~s and ~s, but got ~s"
-                        (~a 'reduce/reduce) (~a 'shift/reduce) (~a type/print)))))
-
-    (define message
-      (stringf "%% ~a conflict (~a ~a, ~a ~a) on '~a in state ~s"
-               type/print action1 new action2 current on-symbol in-state))
-
-    (apply conflict-handler
-           (cons message (list type new current on-symbol in-state))))
-
   ;; ----------------------------------------------------------------------
   ;; Build the various tables
   ;; ----------------------------------------------------------------------
@@ -1526,7 +1386,7 @@
     (define (log-conflicts)
       (for-each
        (lambda (args)
-         (apply signal-conflict args))
+         (apply parselynn:core:signal-conflict args))
        conflict-messages))
 
     ;; --- Add an action to the action table
@@ -1673,9 +1533,9 @@
     (define (check-terminal term terms)
       (cond
        ((not (valid-terminal? term))
-        (grammar-error "Invalid terminal: ~s" term))
+        (parselynn:core:grammar-error "Invalid terminal: ~s" term))
        ((member term terms)
-        (grammar-error "Duplicate definition of terminal: ~s" term))))
+        (parselynn:core:grammar-error "Duplicate definition of terminal: ~s" term))))
 
     (define (prec->type prec)
       (cdr (assq prec '((left:     . left)
@@ -1685,9 +1545,9 @@
     (cond
      ;; --- a few error conditions
      ((not (list? tokens))
-      (grammar-error "Invalid token list: ~s" tokens))
+      (parselynn:core:grammar-error "Invalid token list: ~s" tokens))
      ((not (pair? grammar))
-      (grammar-error "Grammar definition must have a non-empty list of productions"))
+      (parselynn:core:grammar-error "Grammar definition must have a non-empty list of productions"))
 
      (else
       ;; --- check the terminals
@@ -1715,7 +1575,7 @@
                                (cons term rev-terms)
                                (cons (list term optype prec) rev-terms/prec))))))
 
-                    (grammar-error "Invalid operator precedence specification: ~s" term)))
+                    (parselynn:core:grammar-error "Invalid operator precedence specification: ~s" term)))
 
                (else
                 (check-terminal term rev-terms)
@@ -1729,13 +1589,13 @@
               (if (pair? lst)
                   (let ((def (car lst)))
                     (if (not (pair? def))
-                        (grammar-error "Nonterminal definition must be a non-empty list")
+                        (parselynn:core:grammar-error "Nonterminal definition must be a non-empty list")
                         (let ((nonterm (car def)))
                           (cond ((not (valid-nonterminal? nonterm))
-                                 (grammar-error "Invalid nonterminal: ~s" nonterm))
+                                 (parselynn:core:grammar-error "Invalid nonterminal: ~s" nonterm))
                                 ((or (member nonterm rev-terms)
                                      (assoc nonterm rev-nonterm-defs))
-                                 (grammar-error "Nonterminal previously defined: ~s" nonterm))
+                                 (parselynn:core:grammar-error "Nonterminal previously defined: ~s" nonterm))
                                 (else
                                  (loop2 (cdr lst)
                                         (cons def rev-nonterm-defs)))))))
@@ -1744,7 +1604,7 @@
                          (nonterm-defs (reverse rev-nonterm-defs))
                          (nonterms     (cons '*start* (map car nonterm-defs))))
                     (if (= (length nonterms) 1)
-                        (grammar-error "Grammar must contain at least one nonterminal")
+                        (parselynn:core:grammar-error "Grammar must contain at least one nonterminal")
                         (let loop-defs ((defs      (cons `(*start* (,(cadr nonterms) ,eoi) : $1)
                                                          nonterm-defs))
                                         (ruleno    0)
@@ -1779,7 +1639,7 @@
             (let ((PosInT (pos-in-list x terms)))
               (if PosInT
                   (+ No-NT PosInT)
-                  (grammar-error "Undefined symbol: ~s" x))))))
+                  (parselynn:core:grammar-error "Undefined symbol: ~s" x))))))
 
     (define (process-prec-directive rhs ruleno)
       (let loop ((l rhs))
@@ -1799,10 +1659,10 @@
                         (begin
                           (add-rule-precedence! ruleno (pos-in-list (cadr first) terms))
                           (loop rest))
-                        (grammar-error "Invalid prec position: directive should be at end of rule: ~s" rhs))
-                    (grammar-error "Invalid prec: directive: ~s" first)))
+                        (parselynn:core:grammar-error "Invalid prec position: directive should be at end of rule: ~s" rhs))
+                    (parselynn:core:grammar-error "Invalid prec: directive: ~s" first)))
                (else
-                (grammar-error "Invalid terminal or nonterminal: ~s" first)))))))
+                (parselynn:core:grammar-error "Invalid terminal or nonterminal: ~s" first)))))))
 
     (define (check-error-production rhs)
       (let loop ((rhs rhs))
@@ -1811,7 +1671,7 @@
                      (or (null? (cdr rhs))
                          (not (member (cadr rhs) terms))
                          (not (null? (cddr rhs)))))
-            (grammar-error "Invalid 'error' production. A single terminal symbol must follow the 'error' token: ~s" rhs))
+            (parselynn:core:grammar-error "Invalid 'error' production. A single terminal symbol must follow the 'error' token: ~s" rhs))
           (loop (cdr rhs)))))
 
     (define (serialize-action action)
@@ -1823,7 +1683,7 @@
                   (define index actions-list-length)
 
                   (unless (procedure? proc)
-                    (grammar-error
+                    (parselynn:core:grammar-error
                      "Expected procedure as action, but got something else: ~s (context: ~s)"
                      proc action))
 
@@ -1832,7 +1692,7 @@
                   (cons 'external (cons index (cdr action))))))))
 
     (if (not (pair? (cdr nonterm-def)))
-        (grammar-error "At least one production needed for nonterminal: ~s" (car nonterm-def))
+        (parselynn:core:grammar-error "At least one production needed for nonterminal: ~s" (car nonterm-def))
         (let ((name (symbol->string (car nonterm-def))))
           (let loop1 ((lst (cdr nonterm-def))
                       (i 1)
@@ -1845,7 +1705,7 @@
                   ;; -- check for undefined tokens
                   (for-each (lambda (x)
                               (unless (or (member x terms) (member x nonterms))
-                                (grammar-error "Invalid terminal or nonterminal: ~s" x)))
+                                (parselynn:core:grammar-error "Invalid terminal or nonterminal: ~s" x)))
                             rhs)
                   ;; -- check 'error' productions
                   (check-error-production rhs)
@@ -2086,14 +1946,8 @@
 
   ;; Options
 
-  (define driver-normalized-name->type-alist
-    `((lr-driver lr)
-      (glr-driver glr)
-      (ll-1-driver (LL 1))
-      (lr-1-driver (LR 1))))
-
   (define driver-user-name->normalized-name-alist
-    (map reverse driver-normalized-name->type-alist))
+    (map reverse parselynn:core:driver-normalized-name->type/alist))
 
   (define valid-driver-user-names
     (map car driver-user-name->normalized-name-alist))
@@ -2125,9 +1979,9 @@
      (lambda (option)
        (define p (assq-or (car option) *valid-options*))
        (unless p
-         (grammar-error "Invalid option: ~s" option))
+         (parselynn:core:grammar-error "Invalid option: ~s" option))
        (unless (p option)
-         (grammar-error "Option ~s has invalid format: ~s"
+         (parselynn:core:grammar-error "Option ~s has invalid format: ~s"
                         (~a (car option))
                         option)))
      options))
@@ -2169,11 +2023,11 @@
 
   (define (options-get-rules options)
     (assq-or 'rules: options
-             (grammar-error "Missing required option ~s" (~a 'rules:))))
+             (parselynn:core:grammar-error "Missing required option ~s" (~a 'rules:))))
 
   (define (options-get-tokens options)
     (assq-or 'tokens: options
-             (grammar-error "Missing required option ~s" (~a 'tokens:))))
+             (parselynn:core:grammar-error "Missing required option ~s" (~a 'tokens:))))
 
   (define (options-get-results-mode options)
     (assq-or 'results: options 'all))
@@ -2195,10 +2049,10 @@
                  (fkeyword? (car p)))
             (loop (cons p options) (cdr lst)))
            (else
-            (grammar-error "Invalid option: ~s" (~a p))))))
+            (parselynn:core:grammar-error "Invalid option: ~s" (~a p))))))
        ((null? lst) options)
        (else
-        (grammar-error "Malformed parselynn form: ~s" lst)))))
+        (parselynn:core:grammar-error "Malformed parselynn form: ~s" lst)))))
 
 
   (define (get-code-actions)
@@ -2251,17 +2105,12 @@
         (legacy-code
          (glr-driver-code results-mode)))
 
-       ((lr-1-driver?)
-        (lr-1-driver-code all-lexer-code rules results-mode))
-
        (else
-        (raisu-fmt
-         'logic-error "Expected either of ~a but got ~s somehow."
-         (apply
-          string-append
-          (list-intersperse
-           ", " (map ~s (map car driver-normalized-name->type-alist))))
-         driver-normalized-name))))
+        (parselynn:core:novel
+         driver-normalized-name
+         all-lexer-code
+         rules
+         results-mode))))
 
     (define _output
       (begin
