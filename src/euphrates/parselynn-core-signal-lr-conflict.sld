@@ -3,12 +3,8 @@
   (euphrates parselynn-core-signal-lr-conflict)
   (export parselynn:core:signal-lr-conflict)
   (import
-    (only (euphrates
-            parselynn-core-conflict-handler-default)
-          parselynn:core:conflict-handler/default))
-  (import
-    (only (euphrates parselynn-core-conflict-handler-p)
-          parselynn:core:conflict-handler/p))
+    (only (euphrates parselynn-core-signal-conflict)
+          parselynn:core:signal-conflict))
   (import (only (euphrates raisu-fmt) raisu-fmt))
   (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
@@ -17,13 +13,11 @@
           apply
           begin
           cond
-          cons
           define
           define-values
           else
           equal?
           list
-          or
           quote
           values))
   (cond-expand
