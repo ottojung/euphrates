@@ -2,6 +2,7 @@
 (define-library
   (euphrates parselynn-core-novel)
   (export parselynn:core:novel)
+  (import (only (euphrates assoc-or) assoc-or))
   (import
     (only (euphrates bnf-alist-map-grouped-productions)
           bnf-alist:map-grouped-productions))

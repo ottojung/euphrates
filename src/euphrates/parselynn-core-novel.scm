@@ -16,7 +16,6 @@
 
   (define lr-1-driver-code
     (generic-driver-code
-     "LR(1)"
      parselynn:lr-compute-parsing-table
      parselynn:lr-parsing-table:get-conflicts
      parselynn:lr-1-compile/for-core
@@ -24,25 +23,28 @@
 
   (define ll-1-driver-code
     (generic-driver-code
-     "LL(1)"
      parselynn:ll-compute-parsing-table
      parselynn:ll-parsing-table:get-conflicts
      parselynn:ll-1-compile/for-core
      ))
 
   (define (generic-driver-code
-           name
            compute-parsing-table
            get-conflicts
            compile/for-core
            )
     (define (continuation all-lexer-code rules results-mode)
+      (define name
+        (assoc-or
+         driver-normalized-name
+         parselynn:core:driver-normalized-name->type/alist))
+
       (cond
        ((equal? results-mode 'first) 'fine)
        ((equal? results-mode 'all)
         (parselynn:core:grammar-error
-         "Invalid option: ~s because LR(1) parser can only output a single result, so choose ~s ~s for it."
-         (~a results-mode) 'results: 'first))
+         "Invalid option: ~s because ~s parser can only output a single result, so choose ~s ~s for it."
+         (~a results-mode) name 'results: 'first))
        (else (raisu 'impossible 'expected-all-or-first results-mode)))
 
       (define (rules->bnf-alist rules)
