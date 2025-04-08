@@ -14,4 +14,4 @@
              type/print action1 new action2 current on-symbol in-state))
 
   (apply parselynn:core:signal-conflict
-         (list message type new current on-symbol in-state)))
+         (list type message new current on-symbol in-state)))
