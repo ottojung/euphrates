@@ -133,7 +133,7 @@
                 (with-output-stringified
                  (parselynn:lr-action:print action2)))
 
-              (parselynn:core:signal-conflict overall-type new current symbol state))
+              (parselynn:core:signal-lr-conflict overall-type new current symbol state))
             symbol-alist))
 
          conflicts))

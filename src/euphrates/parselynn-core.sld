@@ -31,8 +31,8 @@
     (only (euphrates parselynn-core-output-table-port-p)
           parselynn:core:output-table-port/p))
   (import
-    (only (euphrates parselynn-core-signal-conflict)
-          parselynn:core:signal-conflict))
+    (only (euphrates parselynn-core-signal-lr-conflict)
+          parselynn:core:signal-lr-conflict))
   (import
     (only (euphrates parselynn-core-struct)
           make-parselynn:core:struct))

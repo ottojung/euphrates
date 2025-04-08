@@ -30,8 +30,8 @@
     (only (euphrates parselynn-core-grammar-error)
           parselynn:core:grammar-error))
   (import
-    (only (euphrates parselynn-core-signal-conflict)
-          parselynn:core:signal-conflict))
+    (only (euphrates parselynn-core-signal-lr-conflict)
+          parselynn:core:signal-lr-conflict))
   (import
     (only (euphrates parselynn-ll-1-compile-for-core)
           parselynn:ll-1-compile/for-core))

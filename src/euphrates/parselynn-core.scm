@@ -1386,7 +1386,7 @@
     (define (log-conflicts)
       (for-each
        (lambda (args)
-         (apply parselynn:core:signal-conflict args))
+         (apply parselynn:core:signal-lr-conflict args))
        conflict-messages))
 
     ;; --- Add an action to the action table
