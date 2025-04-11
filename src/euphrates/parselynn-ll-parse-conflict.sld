@@ -24,6 +24,9 @@
   (import
     (only (euphrates define-type9) define-type9))
   (import
+    (only (euphrates define-union-type)
+          define-union-type))
+  (import
     (only (euphrates list-and-map) list-and-map))
   (import (only (euphrates raisu-star) raisu*))
   (import (only (euphrates stringf) stringf))
