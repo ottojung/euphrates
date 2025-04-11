@@ -3,14 +3,21 @@
 
 (define-type9 <parse-conflict>
   (parselynn:lr-parse-conflict:constructor
-   actions-stack)
+   state
+   symbol
+   actions-stack
+   )
 
   parselynn:lr-parse-conflict?
 
-  (actions-stack parselynn:lr-parse-conflict:actions-stack))
+  (state parselynn:lr-parse-conflict:state)
+  (symbol parselynn:lr-parse-conflict:symbol)
+  (actions-stack parselynn:lr-parse-conflict:actions-stack)
+  )
 
 
-(define (parselynn:lr-parse-conflict:make action1 action2)
+(define (parselynn:lr-parse-conflict:make
+         state symbol action1 action2)
   (define actions-stack (stack-make))
   (stack-push! actions-stack action1)
   (stack-push! actions-stack action2)
@@ -21,7 +28,8 @@
             :message "Actions in parse conflict must be not equal to each other."
             :args (list action1 action2)))
 
-  (parselynn:lr-parse-conflict:constructor actions-stack))
+  (parselynn:lr-parse-conflict:constructor
+   state symbol actions-stack))
 
 
 (define (parselynn:lr-parse-conflict:add! conflict action)

@@ -3,15 +3,17 @@
   (test-parselynn-lr-parsing-table-get-conflicts)
   (import (only (euphrates assert-equal) assert=))
   (import (only (euphrates debug) debug))
-  (import (only (euphrates debugs) debugs))
-  (import
-    (only (euphrates define-pair) define-pair))
   (import
     (only (euphrates parselynn-lr-action-print)
           parselynn:lr-action:print))
   (import
     (only (euphrates parselynn-lr-compute-parsing-table)
           parselynn:lr-compute-parsing-table))
+  (import
+    (only (euphrates parselynn-lr-parse-conflict)
+          parselynn:lr-parse-conflict:actions
+          parselynn:lr-parse-conflict:state
+          parselynn:lr-parse-conflict:symbol))
   (import
     (only (euphrates
             parselynn-lr-parsing-table-get-conflicts)
@@ -30,6 +32,7 @@
           equal?
           lambda
           let
+          list
           map
           quasiquote
           quote

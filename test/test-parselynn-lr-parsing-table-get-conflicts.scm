@@ -22,17 +22,15 @@
           (parselynn:lr-action:print action)))
 
        (define result
-         (map (lambda (p)
-                (define-pair (state conflicts) p)
-                (cons state
-                      (map
-                       (lambda (x)
-                         (define-pair (key actions) x)
-                         (cons key (map action->string actions)))
-                       conflicts)))
+         (map (lambda (conflict)
+                (define state (parselynn:lr-parse-conflict:state conflict))
+                (define key (parselynn:lr-parse-conflict:symbol conflict))
+                (define actions (parselynn:lr-parse-conflict:actions conflict))
+                (list state (cons key (map action->string actions))))
               result/raw))
 
        (unless (equal? result expected)
+         (debug "\nexpected:\n~s" expected)
          (debug "\nactual:\n~s\n\n" result))
 
        (assert= result expected)))))

@@ -10,10 +10,7 @@
       (parselynn:lr-parsing-table:action:ref table state key))
 
     (and (parselynn:lr-parse-conflict? action)
-         (let ()
-           (define actions
-             (parselynn:lr-parse-conflict:actions action))
-           (cons key actions))))
+         action))
 
   (define conflicts
     (filter

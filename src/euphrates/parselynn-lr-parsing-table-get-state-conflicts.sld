@@ -7,20 +7,13 @@
   (import (only (euphrates identity) identity))
   (import
     (only (euphrates parselynn-lr-parse-conflict)
-          parselynn:lr-parse-conflict:actions
           parselynn:lr-parse-conflict?))
   (import
     (only (euphrates parselynn-lr-parsing-table)
           parselynn:lr-parsing-table:action:list
           parselynn:lr-parsing-table:action:ref))
   (import
-    (only (scheme base)
-          and
-          begin
-          cons
-          define
-          let
-          map))
+    (only (scheme base) and begin define map))
   (cond-expand
     (guile (import (only (srfi srfi-1) filter)))
     (else (import (only (srfi 1) filter))))

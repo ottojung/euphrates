@@ -5,6 +5,8 @@
     parselynn:lr-parse-conflict:make
     parselynn:lr-parse-conflict?
     parselynn:lr-parse-conflict:add!
+    parselynn:lr-parse-conflict:state
+    parselynn:lr-parse-conflict:symbol
     parselynn:lr-parse-conflict:actions)
   (import
     (only (euphrates define-type9) define-type9))

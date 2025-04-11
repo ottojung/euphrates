@@ -129,7 +129,7 @@
     (hashmap-set!
      action-table hash-key
      (parselynn:lr-parse-conflict:make
-      existing action))))
+      state key existing action))))
 
   (define existing-list
     (hashmap-ref action-lists state '()))

@@ -6,14 +6,8 @@
     (parselynn:lr-parsing-table:state:keys table))
 
   (define (get-state-conflicts state)
-    (define conflicts
-      (parselynn:lr-parsing-table:get-state-conflicts table state))
+    (parselynn:lr-parsing-table:get-state-conflicts table state))
 
-    (if (null? conflicts) '()
-        (cons state conflicts)))
-
-  (filter
-   (negate null?)
-   (map
-    get-state-conflicts
-    states)))
+  (list-map/flatten
+   get-state-conflicts
+   states))
