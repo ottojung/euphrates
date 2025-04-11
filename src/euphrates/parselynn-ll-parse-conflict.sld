@@ -10,7 +10,8 @@
     parselynn:ll-parse-first-first-conflict:nonterminal
     parselynn:ll-parse-recursion-conflict:make
     parselynn:ll-parse-recursion-conflict?
-    parselynn:ll-parse-recursion-conflict:productions)
+    parselynn:ll-parse-recursion-conflict:nonterminal
+    parselynn:ll-parse-recursion-conflict:cycle)
   (import
     (only (euphrates bnf-alist-leaf-huh)
           bnf-alist:leaf?))

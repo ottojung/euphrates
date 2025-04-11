@@ -53,11 +53,12 @@
 
 (define-type9 <recursion-conflict>
   (parselynn:ll-parse-recursion-conflict:make
-   production)
+   nonterminal cycle)
 
   parselynn:ll-parse-recursion-conflict?
 
-  (production parselynn:ll-parse-recursion-conflict:production)
+  (nonterminal parselynn:ll-parse-recursion-conflict:nonterminal)
+  (cycle parselynn:ll-parse-recursion-conflict:cycle)
   )
 
 

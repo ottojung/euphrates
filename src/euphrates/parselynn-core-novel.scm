@@ -14,10 +14,74 @@
   (define (ll-1-driver?)
     (equal? driver-normalized-name 'll-1-driver))
 
+  (define (report-lr-conflict conflict)
+    (define state (parselynn:lr-parse-conflict:state conflict))
+    (define symbol (parselynn:lr-parse-conflict:symbol conflict))
+    (define actions (parselynn:lr-parse-conflict:actions conflict))
+    (define first2 (list-take-n 2 actions))
+    (define-tuple (action1 action2) first2)
+
+    (define (get-type action)
+      (cond
+       ((parselynn:lr-shift-action? action)
+        "shift")
+       ((parselynn:lr-reduce-action? action)
+        "reduce")
+       (else
+        (raisu-fmt 'impossible-6123513 "Expected either shift or reduce here, but got ~s." action))))
+
+    (define type1
+      (get-type action1))
+    (define type2
+      (get-type action2))
+    (define overall-type
+      (string->symbol
+       (string-append type1 "/" type2)))
+    (define new
+      (with-output-stringified
+       (parselynn:lr-action:print action1)))
+    (define current
+      (with-output-stringified
+       (parselynn:lr-action:print action2)))
+
+    (parselynn:core:signal-lr-conflict overall-type new current symbol state))
+
+  (define (report-ll-conflict conflict)
+    (cond
+     ((parselynn:ll-parse-first-first-conflict? conflict)
+      (let ()
+        (define candidate
+          (parselynn:ll-parse-first-first-conflict:candidate conflict))
+        (define productions
+          (parselynn:ll-parse-first-first-conflict:candidate productions))
+
+        (define type 'll-first/first-conflict)
+        (define message
+          (with-output-stringified
+           (parselynn:ll-parse-conflict:print conflict)))
+
+        (parselynn:core:signal-conflict type message conflict)))
+
+     ((parselynn:ll-parse-recursion-conflict? conflict)
+      (let ()
+        (define type 'll-left-recursion)
+        (define message
+          (with-output-stringified
+           (parselynn:ll-parse-conflict:print conflict)))
+
+        (parselynn:core:signal-conflict type message conflict)))
+
+     (else
+      (raisu* :from "parselynn:core:novel"
+              :type 'unknown-type-7162376781326
+              :message (stringf "Unknown type of conflict in ~s." conflict)
+              :args (list conflict)))))
+
   (define lr-1-driver-code
     (generic-driver-code
      parselynn:lr-compute-parsing-table
      parselynn:lr-parsing-table:get-conflicts
+     report-lr-conflict
      parselynn:lr-1-compile/for-core
      ))
 
@@ -25,12 +89,14 @@
     (generic-driver-code
      parselynn:ll-compute-parsing-table
      parselynn:ll-parsing-table:get-conflicts
+     report-ll-conflict
      parselynn:ll-1-compile/for-core
      ))
 
   (define (generic-driver-code
            compute-parsing-table
            get-conflicts
+           report-conflict
            compile/for-core
            )
     (define (continuation all-lexer-code rules results-mode)
@@ -102,40 +168,7 @@
         (get-conflicts table))
 
       (define _reported
-        (for-each
-         (lambda (conflict)
-           (define state (parselynn:lr-parse-conflict:state conflict))
-           (define symbol (parselynn:lr-parse-conflict:symbol conflict))
-           (define actions (parselynn:lr-parse-conflict:actions conflict))
-           (define first2 (list-take-n 2 actions))
-           (define-tuple (action1 action2) first2)
-
-           (define (get-type action)
-             (cond
-              ((parselynn:lr-shift-action? action)
-               "shift")
-              ((parselynn:lr-reduce-action? action)
-               "reduce")
-              (else
-               (raisu-fmt 'impossible-6123513 "Expected either shift or reduce here, but got ~s." action))))
-
-           (define type1
-             (get-type action1))
-           (define type2
-             (get-type action2))
-           (define overall-type
-             (string->symbol
-              (string-append type1 "/" type2)))
-           (define new
-             (with-output-stringified
-              (parselynn:lr-action:print action1)))
-           (define current
-             (with-output-stringified
-              (parselynn:lr-action:print action2)))
-
-           (parselynn:core:signal-lr-conflict overall-type new current symbol state))
-
-         conflicts))
+        (for-each report-conflict conflicts))
 
       (define get-next-token-code
         `((define get-next-token
