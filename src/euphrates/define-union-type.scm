@@ -1,18 +1,55 @@
 ;;;; Copyright (C) 2025  Otto Jung
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; FIXME: reverse alternatives.
+
+(define (define-union-type:no-alternative-error:default object)
+  (raisu* :from 'define-union-type
+          :type 'no-alternative
+          :message "Object does not satisfy any of the alternatives."
+          :args (list object)))
+
+
+(define define-union-type:no-alternative-error:p
+  (make-parameter #f))
+
+
+(define (define-union-type:no-alternative-error object)
+  (define fun
+    (or (define-union-type:no-alternative-error:p)
+        define-union-type:no-alternative-error:default))
+  (fun object))
+
+
+(define-syntax define-union-type/helper3
+  (syntax-rules ()
+    ((_ (name object cond-buffer) match-buffer)
+     (define-syntax name
+       (syntax-rules ()
+         ((_ var . match-buffer)
+          ((lambda (object)
+             (cond . cond-buffer)) var))
+
+         ((_ . rest)
+          (syntax-error "Invalid alternatives in case of define-union-type."
+                        name match-buffer)))))))
+
+
+(define-syntax define-union-type/helper2
+  (syntax-rules ()
+    ((_ (name object match-buffer) cond-buffer)
+     (syntax-reverse
+      (define-union-type/helper3 (name object cond-buffer))
+      match-buffer))))
+
+
 (define-syntax define-union-type/helper1
   (syntax-rules ()
     ((_ object name all-alternatives match-buffer cond-buffer ())
-     (define-syntax name
-       (syntax-rules all-alternatives
-         ((_ var . match-buffer)
-          ((lambda (object)
-             (cond . cond-buffer)) var)) ;; FIXME: add else condition.
-         ((_ . rest)
-          (syntax-error "Invalid alternatives in case of define-union-type."
-                        name all-alternatives)))))
+     (syntax-reverse
+      (define-union-type/helper2 (name object match-buffer))
+
+      ((else (define-union-type:no-alternative-error object))
+       . cond-buffer)))
 
     ((_ object name all-alternatives match-buffer cond-buffer (first-alternative . rest-alternatives))
      (define-union-type/helper1
@@ -28,9 +65,8 @@
         :case case
         :alternatives . alternatives)
 
-     ;; (begin
-     ;;   (define predicate
-     ;;     (compose-under or . alternatives))
+     (begin
+       (define predicate
+         (compose-under or . alternatives))
 
-     (define-union-type/helper1 object case alternatives () () alternatives))))
-
+       (define-union-type/helper1 object case alternatives () () alternatives)))))
