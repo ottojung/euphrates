@@ -62,11 +62,6 @@
   )
 
 
-(define (parselynn:ll-parse-conflict? object)
-  (or (parselynn:ll-parse-first-first-conflict? object)
-      (parselynn:ll-parse-recursion-conflict? object)))
-
-
 (define-union-type
   :predicate parselynn:ll-parse-conflict?
   :case parselynn:ll-parse-conflict:case

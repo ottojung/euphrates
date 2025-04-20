@@ -6,42 +6,37 @@
    ((conflict)
     (parselynn:ll-parse-conflict:print conflict (current-output-port)))
    ((conflict port)
-    (cond
-     ((parselynn:ll-parse-first-first-conflict? conflict)
-      (let ()
-        (define candidate
-          (parselynn:ll-parse-first-first-conflict:candidate conflict))
-        (define productions
-          (parselynn:ll-parse-first-first-conflict:productions conflict))
+    (parselynn:ll-parse-conflict:case
+     conflict
 
-        (define show-production
-          (compose ~s (compose-under with-output-stringified bnf-alist:production:print)))
-        (define initial-productions
-          (list-init productions))
-        (define last-production
-          (list-last productions))
-        (define printed-productions
-          (apply
-           string-append
-           (append
-            (list-intersperse
-             ", " (map show-production initial-productions))
-            (list " and "
-                  (show-production last-production)))))
+     (parselynn:ll-parse-first-first-conflict?
+      (define candidate
+        (parselynn:ll-parse-first-first-conflict:candidate conflict))
+      (define productions
+        (parselynn:ll-parse-first-first-conflict:productions conflict))
 
-        (fprintf
-         port
-         "Conflict between productions ~a. All of them derive token ~s first."
-         printed-productions (~a candidate))))
+      (define show-production
+        (compose ~s (compose-under with-output-stringified bnf-alist:production:print)))
+      (define initial-productions
+        (list-init productions))
+      (define last-production
+        (list-last productions))
+      (define printed-productions
+        (apply
+         string-append
+         (append
+          (list-intersperse
+           ", " (map show-production initial-productions))
+          (list " and "
+                (show-production last-production)))))
 
-     ((parselynn:ll-parse-recursion-conflict? conflict)
+      (fprintf
+       port
+       "Conflict between productions ~a. All of them derive token ~s first."
+       printed-productions (~a candidate)))
+
+     (parselynn:ll-parse-recursion-conflict?
       (raisu* :from "parselynn:ll-parse-conflict:print"
               :type 'TODO
               :message "TODO"
-              :args (list conflict)))
-
-     (else
-      (raisu* :from "parselynn:ll-parse-conflict:print"
-              :type 'unknown-type-6481764387126
-              :message (stringf "Unknown type of conflict in ~s." conflict)
               :args (list conflict)))))))

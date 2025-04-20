@@ -16,12 +16,12 @@
   (import (only (euphrates list-last) list-last))
   (import
     (only (euphrates parselynn-ll-parse-conflict)
+          parselynn:ll-parse-conflict:case
           parselynn:ll-parse-first-first-conflict:candidate
           parselynn:ll-parse-first-first-conflict:productions
           parselynn:ll-parse-first-first-conflict?
           parselynn:ll-parse-recursion-conflict?))
   (import (only (euphrates raisu-star) raisu*))
-  (import (only (euphrates stringf) stringf))
   (import (only (euphrates tilda-a) ~a))
   (import (only (euphrates tilda-s) ~s))
   (import
@@ -32,11 +32,8 @@
           append
           apply
           begin
-          cond
           current-output-port
           define
-          else
-          let
           list
           map
           quote

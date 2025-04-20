@@ -2,22 +2,12 @@
 ;;;; This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 3 of the License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-(define (define-union-type:no-alternative-error:default object)
+
+(define (define-union-type:no-alternative-error object)
   (raisu* :from 'define-union-type
           :type 'no-alternative
           :message "Object does not satisfy any of the alternatives."
           :args (list object)))
-
-
-(define define-union-type:no-alternative-error:p
-  (make-parameter #f))
-
-
-(define (define-union-type:no-alternative-error object)
-  (define fun
-    (or (define-union-type:no-alternative-error:p)
-        define-union-type:no-alternative-error:default))
-  (fun object))
 
 
 (define-syntax define-union-type/helper3
@@ -55,7 +45,7 @@
      (define-union-type/helper1
        object name all-alternatives
        ((first-alternative . bodies) . match-buffer)
-       (((first-alternative object) . bodies) . cond-buffer)
+       (((first-alternative object) (let () . bodies)) . cond-buffer)
        rest-alternatives))))
 
 

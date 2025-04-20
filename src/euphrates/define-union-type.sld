@@ -1,9 +1,7 @@
 
 (define-library
   (euphrates define-union-type)
-  (export
-    define-union-type
-    define-union-type:no-alternative-error:p)
+  (export define-union-type)
   (import
     (only (euphrates compose-under) compose-under))
   (import (only (euphrates raisu-star) raisu*))
@@ -19,8 +17,8 @@
           define-syntax
           else
           lambda
+          let
           list
-          make-parameter
           or
           quote
           syntax-error

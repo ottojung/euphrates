@@ -3,13 +3,14 @@
   (euphrates parselynn-ll-parse-conflict)
   (export
     parselynn:ll-parse-conflict?
-    parselynn:ll-parse-first-first-conflict:make
+    parselynn:ll-parse-conflict:case
     parselynn:ll-parse-first-first-conflict?
+    parselynn:ll-parse-first-first-conflict:make
     parselynn:ll-parse-first-first-conflict:candidate
     parselynn:ll-parse-first-first-conflict:productions
     parselynn:ll-parse-first-first-conflict:nonterminal
-    parselynn:ll-parse-recursion-conflict:make
     parselynn:ll-parse-recursion-conflict?
+    parselynn:ll-parse-recursion-conflict:make
     parselynn:ll-parse-recursion-conflict:nonterminal
     parselynn:ll-parse-recursion-conflict:cycle)
   (import
@@ -38,7 +39,6 @@
           list
           list?
           null?
-          or
           quote
           unless
           when))
